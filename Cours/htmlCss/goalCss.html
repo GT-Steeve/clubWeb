@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Résumé CSS simple</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="book">
+
+    <h1>Résumé : CSS en HTML</h1>
+
+    <div class="page">
+        <h2>1. CSS interne</h2>
+        <p>Le CSS interne est défini dans la balise &lt;style&gt; dans le HTML.</p>
+
+        <pre><code>
+&lt;style&gt;
+h1 {
+    color: blue;
+}
+&lt;/style&gt;
+        </code></pre>
+    </div>
+
+    <div class="page">
+        <h2>2. CSS inline</h2>
+        <p>Le CSS inline s’applique directement sur un élément HTML.</p>
+
+        <pre><code>
+&lt;h1 style="color: red;"&gt;Titre rouge&lt;/h1&gt;
+        </code></pre>
+    </div>
+
+    <div class="page">
+        <h2>3. CSS externe</h2>
+        <p>Le CSS externe est écrit dans un fichier séparé.</p>
+
+        <pre><code>
+/* style.css */
+p {
+    color: green;
+}
+        </code></pre>
+
+        <pre><code>
+&lt;link rel="stylesheet" href="style.css"&gt;
+        </code></pre>
+    </div>
+
+    <div class="button-container">
+        <button onclick="window.location.href='goal.html'">Retour</button>
+    </div>
+
+    <div class="footer">
+    </div>
+
+</div>
+
+</body>
+</html>

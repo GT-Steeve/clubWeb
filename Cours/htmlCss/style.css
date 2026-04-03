@@ -55,3 +55,42 @@ ul {
 .button-container button:hover {
     background-color: #555;
 }
+
+/* Style pour les liens en bouton */
+.button-container a {
+    display: inline-block;
+    background-color: #3a3a3a;
+    color: white;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.button-container a:hover {
+    background-color: #555;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+pre {
+    background-color: #1e1e1e;
+    color: #dcdcdc;
+    padding: 15px;
+    border-left: 5px solid #3a3a3a;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+code {
+    font-family: Consolas, monospace;
+}
