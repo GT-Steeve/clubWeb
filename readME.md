@@ -2,6 +2,9 @@
 
 ## 🎯 Objectif du dépôt
 
+Lien du projet
+https://gt-steeve.github.io/clubWeb/
+
 Ce dépôt regroupe des supports de cours autour du développement web, notamment :
 
 * HTML
