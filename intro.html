@@ -4,71 +4,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil</title>
-
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            /* Image de fond */
-            background: url("https://images.unsplash.com/photo-1498050108023-c5249f4df085") no-repeat center center/cover;
-        }
-
-        /* Overlay sombre */
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 0;
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        a {
-            display: inline-block;
-            text-decoration: none;
-            background: #4facfe;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
-        a:hover {
-            background: #0077ff;
-            transform: scale(1.05);
-        }
-    </style>
+    <title>Club Web — Méthodologie</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="intro.css">
 </head>
 
 <body>
-    <div class="container">
-        <h1>Bienvenue au Club Web</h1>
-        <a href="Cours/index.html">Voir les cours</a>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-tag">// Club informatique — méthode & programme</div>
+            <h1>Apprendre<br><em>autrement.</em></h1>
+            <p class="hero-sub">
+                Pas de cours magistraux. Pas de théorie à vide. On manipule, on comprend, on construit — dans cet ordre.
+            </p>
+            <div class="hero-cta">
+                <a href="index.html" class="btn-secondary">← Retour accueil</a>
+                <a href="#methodo" class="btn-primary">Méthodologie ↓</a>
+                <a href="Cours/index.html" class="btn-primary">Voir les cours →</a>
+            </div>
+        </div>
+        <div class="scroll-hint">
+            <span>Défiler</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- PHASE BAR -->
+    <div class="phase-bar">
+        <div class="phase-item">
+            <div class="phase-num">4</div>
+            <div class="phase-label">Principes clés</div>
+        </div>
+        <div class="phase-divider"></div>
+        <div class="phase-item">
+            <div class="phase-num">3</div>
+            <div class="phase-label">Phases d'évolution</div>
+        </div>
+        <div class="phase-divider"></div>
+        <div class="phase-item">
+            <div class="phase-num">0</div>
+            <div class="phase-label">Prérequis</div>
+        </div>
+        <div class="phase-divider"></div>
+        <div class="phase-item">
+            <div class="phase-num">∞</div>
+            <div class="phase-label">Projets possibles</div>
+        </div>
     </div>
+
+    <!-- MÉTHODOLOGIE -->
+    <section class="methodo-section" id="methodo">
+        <div class="section-tag">// 01 — approche</div>
+        <h2 class="section-title">🧠 Méthodologie <span>d'apprentissage</span></h2>
+        <p class="section-sub">Une méthode volontairement différente des approches classiques. Ici, on comprend en
+            faisant.</p>
+
+        <div class="methodo-grid">
+
+            <div class="methodo-card">
+                <div class="methodo-card-num">01 — fondation</div>
+                <div class="methodo-icon">🧩</div>
+                <h3>Priorité aux soft skills</h3>
+                <p>Avant la technique pure, on développe ce qui dure vraiment.</p>
+                <ul class="methodo-list">
+                    <li>Compréhension globale</li>
+                    <li>Logique et raisonnement</li>
+                    <li>Lire et manipuler du code existant</li>
+                    <li>Esprit critique face au code généré</li>
+                </ul>
+            </div>
+
+            <div class="methodo-card">
+                <div class="methodo-card-num">02 — exploration</div>
+                <div class="methodo-icon">🤖</div>
+                <h3>Apprendre à partir de code généré (IA)</h3>
+                <p>L'apprentissage commence par l'observation et l'expérimentation.</p>
+                <ul class="methodo-list">
+                    <li>Observer le code</li>
+                    <li>Le tester</li>
+                    <li>Le modifier</li>
+                    <li>Comprendre son fonctionnement</li>
+                </ul>
+                <span class="goal-tag">👉 Se familiariser avec des structures réelles</span>
+            </div>
+
+            <div class="methodo-card">
+                <div class="methodo-card-num">03 — amélioration</div>
+                <div class="methodo-icon">🔧</div>
+                <h3>Réorganisation et amélioration</h3>
+                <p>Une fois le code compris, on passe à la maîtrise progressive.</p>
+                <ul class="methodo-list">
+                    <li>Restructurer</li>
+                    <li>Optimiser</li>
+                    <li>Rendre plus lisible</li>
+                    <li>Améliorer style et architecture</li>
+                </ul>
+                <span class="goal-tag">👉 Du simple usage à la maîtrise</span>
+            </div>
+
+            <div class="methodo-card">
+                <div class="methodo-card-num">04 — autonomie</div>
+                <div class="methodo-icon">🚀</div>
+                <h3>Objectif final</h3>
+                <p>Pas seulement savoir coder — comprendre ce qu'on fait.</p>
+                <ul class="methodo-list">
+                    <li>Comprendre chaque décision de code</li>
+                    <li>Améliorer un code existant</li>
+                    <li>Développer une vraie logique développeur</li>
+                    <li>Concevoir des solutions complètes</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- PARCOURS ÉVOLUTION -->
+    <section class="parcours-section" id="parcours">
+        <div class="section-tag">// 02 — évolution</div>
+        <h2 class="section-title" style="color:var(--blanc);">Du <em style="font-style:normal;color:var(--jaune)">Vibe
+                Coding</em><br>au code autonome</h2>
+        <p class="section-sub">Le parcours suit une progression naturelle — de l'expérimentation à la maîtrise totale.
+        </p>
+
+        <div class="evolution-track">
+            <div class="evo-step active">
+                <div class="evo-num">01</div>
+                <h4>Vibe Coding</h4>
+                <p>Manipuler et expérimenter sans pression.</p>
+                <ul class="evo-list">
+                    <li>Utiliser du code généré par IA</li>
+                    <li>Expérimenter librement</li>
+                    <li>Comprendre par la pratique</li>
+                </ul>
+            </div>
+            <div class="evo-step active">
+                <div class="evo-num">02</div>
+                <h4>Appropriation</h4>
+                <p>Modifier en profondeur et s'approprier le code.</p>
+                <ul class="evo-list">
+                    <li>Modifier en profondeur</li>
+                    <li>Corriger et améliorer</li>
+                    <li>Comprendre chaque ligne</li>
+                </ul>
+            </div>
+            <div class="evo-step active">
+                <div class="evo-num">03</div>
+                <h4>Autonomie</h4>
+                <p>Écrire, structurer et concevoir ses propres projets.</p>
+                <ul class="evo-list">
+                    <li>Écrire son propre code</li>
+                    <li>Structurer ses projets</li>
+                    <li>Concevoir des solutions complètes</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENU -->
+    <section class="contenu-section" id="contenu">
+        <div class="section-tag">// 03 — programme</div>
+        <h2 class="section-title">📂 Contenu <span>du club</span></h2>
+        <p class="section-sub">Un programme évolutif qui grandit avec les membres. Ce qui est là aujourd'hui, et ce qui
+            arrive bientôt.</p>
+
+        <div class="contenu-grid">
+            <div class="contenu-col">
+                <h4>// Disponible maintenant</h4>
+                <div class="contenu-items">
+                    <div class="contenu-item">
+                        <div class="dot"></div>
+                        Bases HTML
+                        <span class="badge">Dispo</span>
+                    </div>
+                    <div class="contenu-item">
+                        <div class="dot"></div>
+                        Mise en forme avec CSS
+                        <span class="badge">Dispo</span>
+                    </div>
+                    <div class="contenu-item">
+                        <div class="dot"></div>
+                        Introduction à Django
+                        <span class="badge">Dispo</span>
+                    </div>
+                    <div class="contenu-item">
+                        <div class="dot"></div>
+                        Exercices pratiques
+                        <span class="badge">Dispo</span>
+                    </div>
+                </div>
+            </div>
+            <div class="contenu-col">
+                <h4>// 🔮 À venir</h4>
+                <div class="contenu-items">
+                    <div class="contenu-item">
+                        <div class="dot soon"></div>
+                        JavaScript
+                        <span class="badge coming">Bientôt</span>
+                    </div>
+                    <div class="contenu-item">
+                        <div class="dot soon"></div>
+                        Backend avancé
+                        <span class="badge coming">Bientôt</span>
+                    </div>
+                    <div class="contenu-item">
+                        <div class="dot soon"></div>
+                        Clean code & architecture
+                        <span class="badge coming">Bientôt</span>
+                    </div>
+                    <div class="contenu-item">
+                        <div class="dot soon"></div>
+                        Projets complets
+                        <span class="badge coming">Bientôt</span>
+                    </div>
+                    <div class="contenu-item">
+                        <div class="dot"></div>
+                        Projets guidés
+                        <span class="badge coming">Bientôt</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHILOSOPHIE -->
+    <section class="philo-section" id="philo">
+        <div class="section-tag" style="color:#5a4a00;">// 04 — philosophie</div>
+        <div class="philo-quote">
+            "Comprendre en manipulant,<br>puis maîtriser en construisant."
+        </div>
+        <p style="font-size:0.9rem; color:#5a4a00; max-width:460px; margin:0 auto 2rem; line-height:1.7;">
+            Ce dépôt est évolutif. Les suggestions et améliorations sont les bienvenues. Ensemble, on construit quelque
+            chose qui dure.
+        </p>
+
+        <div class="philo-steps">
+            <div class="philo-step">
+                <span class="philo-step-num">01</span>
+                Manipuler
+                <div class="philo-arrow">→</div>
+            </div>
+            <div class="philo-step">
+                <span class="philo-step-num">02</span>
+                Comprendre
+                <div class="philo-arrow">→</div>
+            </div>
+            <div class="philo-step">
+                <span class="philo-step-num">03</span>
+                Améliorer
+                <div class="philo-arrow">→</div>
+            </div>
+            <div class="philo-step">
+                <span class="philo-step-num">04</span>
+                Créer
+                <div class="philo-arrow">→</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div>&lt;<span>club</span>.web&gt; — tous droits réservés</div>
+        <div>Fait avec du code, du café et de la patience ☕</div>
+    </footer>
+
 </body>
 
 </html>
