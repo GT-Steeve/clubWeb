@@ -1,0 +1,400 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: #f5f4f0;
+    color: #2C2C2A;
+    padding: 1.5rem;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.hero {
+    text-align: center;
+    padding: 2.5rem 1rem 2rem;
+}
+
+.hero h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.hero p {
+    font-size: 1.05rem;
+    color: #5F5E5A;
+    margin-top: 0.5rem;
+}
+
+.badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 1.2rem;
+}
+
+.badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+}
+
+.b-teal {
+    background: #E1F5EE;
+    color: #0F6E56;
+}
+
+.b-purple {
+    background: #EEEDFE;
+    color: #3C3489;
+}
+
+.b-amber {
+    background: #FAEEDA;
+    color: #633806;
+}
+
+.card {
+    border-radius: 16px;
+    border: 0.5px solid #D3D1C7;
+    background: #ffffff;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.stitle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 0.8rem;
+}
+
+.pill {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.teal {
+    background: #9FE1CB;
+    color: #085041;
+}
+
+.purple {
+    background: #CECBF6;
+    color: #3C3489;
+}
+
+.coral {
+    background: #F5C4B3;
+    color: #712B13;
+}
+
+.amber {
+    background: #FAC775;
+    color: #633806;
+}
+
+.blue {
+    background: #B5D4F4;
+    color: #0C447C;
+}
+
+.green {
+    background: #C0DD97;
+    color: #3B6D11;
+}
+
+.pink {
+    background: #F4C0D1;
+    color: #72243E;
+}
+
+.red {
+    background: #F7C1C1;
+    color: #791F1F;
+}
+
+.gray {
+    background: #D3D1C7;
+    color: #444441;
+}
+
+.desc {
+    font-size: 0.94rem;
+    color: #5F5E5A;
+    line-height: 1.7;
+    margin-bottom: 0.9rem;
+}
+
+.code-block {
+    background: #F1EFE8;
+    border: 0.5px solid #B4B2A9;
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.84rem;
+    line-height: 1.8;
+    white-space: pre;
+    overflow-x: auto;
+    color: #2C2C2A;
+}
+
+.tag {
+    color: #185FA5;
+}
+
+.attr {
+    color: #854F0B;
+}
+
+.val {
+    color: #0F6E56;
+}
+
+.cm {
+    color: #888780;
+    font-style: italic;
+}
+
+.tip {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: #E1F5EE;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.9rem;
+    font-size: 0.88rem;
+    color: #085041;
+    line-height: 1.5;
+}
+
+.tip-warn {
+    background: #FAEEDA;
+    color: #633806;
+}
+
+.tip-purple {
+    background: #EEEDFE;
+    color: #3C3489;
+}
+
+.tip-i {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.result-box {
+    border-radius: 10px;
+    border: 0.5px dashed #B4B2A9;
+    background: #F1EFE8;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.94rem;
+    margin-top: 0.8rem;
+    line-height: 1.7;
+}
+
+.rl {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #888780;
+    margin-bottom: 6px;
+}
+
+.sgrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 0.8rem;
+}
+
+.tc {
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.tc code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.page-demo {
+    border-radius: 12px;
+    border: 0.5px solid #B4B2A9;
+    overflow: hidden;
+    margin-top: 0.8rem;
+    font-size: 0.88rem;
+}
+
+.dh {
+    background: #B5D4F4;
+    color: #042C53;
+    padding: 0.7rem 1rem;
+    font-weight: 700;
+}
+
+.dn {
+    background: #85B7EB;
+    color: #042C53;
+    padding: 0.4rem 1rem;
+    font-size: 0.82rem;
+    display: flex;
+    gap: 14px;
+}
+
+.dn span {
+    font-weight: 600;
+}
+
+.dm {
+    background: #F1EFE8;
+    padding: 0.9rem 1rem;
+    color: #5F5E5A;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    min-height: 56px;
+}
+
+.df {
+    background: #2C2C2A;
+    color: #D3D1C7;
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.kbd {
+    display: inline-block;
+    background: #F1EFE8;
+    border: 0.5px solid #B4B2A9;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    color: #2C2C2A;
+}
+
+.sc-box {
+    border-radius: 12px;
+    background: #EEEDFE;
+    border: 0.5px solid #AFA9EC;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 0.9rem;
+}
+
+.sc-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 0;
+    border-bottom: 0.5px solid #CECBF6;
+    font-size: 0.88rem;
+    color: #26215C;
+}
+
+.sc-row:last-child {
+    border-bottom: none;
+}
+
+.sc-keys {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+    min-width: 190px;
+    flex-wrap: wrap;
+}
+
+.sep {
+    font-size: 11px;
+    color: #888780;
+    padding: 0 2px;
+}
+
+.imb-demo {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 0.5px solid #B4B2A9;
+    margin-top: 0.8rem;
+}
+
+.imb-row {
+    padding: 5px 12px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+}
+
+.tag-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.2rem;
+}
+
+.cta-wrap {
+    text-align: center;
+    padding: 2rem 1rem 2.5rem;
+}
+
+.cta-btn {
+    display: inline-block;
+    background: #CECBF6;
+    color: #26215C;
+    border: 0.5px solid #AFA9EC;
+    border-radius: 14px;
+    padding: 1rem 2.2rem;
+    font-size: 1.05rem;
+    font-weight: 800;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.cta-btn:hover {
+    background: #AFA9EC;
+}
+
+.cta-sub {
+    font-size: 0.85rem;
+    color: #888780;
+    margin-top: 0.7rem;
+}
+
+@media (max-width: 500px) {
+
+    .sgrid,
+    .tag-compare,
+    .sc-keys {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 1.6rem;
+    }
+
+    .sc-keys {
+        min-width: unset;
+    }
+}

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices CSS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #712B13;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #FAECE7; border: 0.5px solid #F0997B;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .back-link:hover { background: #F5C4B3; }
+
+    .card {
+      border-radius: 16px;
+      border: 0.5px solid #D3D1C7;
+      background: #ffffff;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .stitle {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+    }
+    .pill {
+      width: 32px; height: 32px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; flex-shrink: 0;
+    }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+
+    .code-block {
+      background: #F1EFE8;
+      border: 0.5px solid #B4B2A9;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      line-height: 1.8;
+      white-space: pre;
+      overflow-x: auto;
+      color: #2C2C2A;
+    }
+    .sel  { color: #993C1D; }
+    .prop { color: #185FA5; }
+    .val  { color: #0F6E56; }
+    .err  { color: #E24B4A; font-weight: 700; }
+    .punc { color: #888780; }
+    .cm   { color: #888780; font-style: italic; }
+
+    .rl {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #888780; margin-bottom: 6px;
+    }
+
+    .tip {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #E1F5EE; border-radius: 10px;
+      padding: 0.75rem 1rem; margin-top: 0.9rem;
+      font-size: 0.88rem; color: #085041; line-height: 1.5;
+    }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .kbd {
+      display: inline-block;
+      background: #F1EFE8;
+      border: 0.5px solid #B4B2A9;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      color: #2C2C2A;
+    }
+
+    /* --- EXERCICE 1 : glisser-d&eacute;poser d'associations --- */
+    .match-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 0.8rem;
+    }
+    .match-col-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #888780; margin-bottom: 8px;
+    }
+    .match-item {
+      background: #F1EFE8;
+      border: 0.5px solid #B4B2A9;
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+      user-select: none;
+    }
+    .match-item:hover { background: #D3D1C7; }
+    .match-item.selected { background: #CECBF6; border-color: #7F77DD; color: #26215C; }
+    .match-item.matched-ok { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+    .match-item.matched-ko { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+    .match-item.disabled { cursor: default; opacity: 0.5; }
+
+    .match-feedback { font-size: 0.88rem; min-height: 1.4em; font-weight: 700; margin-top: 0.6rem; }
+    .feedback-ok { color: #0F6E56; }
+    .feedback-ko { color: #A32D2D; }
+
+    .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.4s; width: 0%; }
+    .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+    .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+    .chip-ok { background: #E1F5EE; color: #085041; }
+    .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+    /* --- EXERCICE 2 : corriger du CSS cass&eacute; --- */
+    .broken-block {
+      background: #F1EFE8;
+      border: 0.5px solid #B4B2A9;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      line-height: 1.9;
+      margin-bottom: 0.8rem;
+    }
+    .broken-line { display: flex; align-items: center; gap: 8px; }
+    .broken-line .err-icon { color: #E24B4A; font-size: 13px; flex-shrink: 0; }
+    .broken-line .ok-icon  { color: #1D9E75; font-size: 13px; flex-shrink: 0; width: 14px; }
+
+    .choices { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.7rem 0 0.4rem; }
+    .choice-btn {
+      border: 0.5px solid #B4B2A9;
+      background: #F1EFE8;
+      color: #2C2C2A;
+      border-radius: 8px;
+      padding: 5px 14px;
+      font-size: 0.85rem;
+      font-family: 'Fira Code', monospace;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .choice-btn:hover  { background: #D3D1C7; }
+    .choice-btn.correct { background: #E1F5EE; color: #085041; border-color: #5DCAA5; }
+    .choice-btn.wrong   { background: #FCEBEB; color: #791F1F; border-color: #F09595; }
+    .choice-btn:disabled { cursor: default; }
+    .q-feedback { font-size: 0.88rem; min-height: 1.3em; font-weight: 700; }
+    .q-feedback.ok { color: #0F6E56; }
+    .q-feedback.ko { color: #A32D2D; }
+
+    /* --- EXERCICE 3 : &eacute;diteur CSS en direct --- */
+    .live-editor-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+    .live-textarea {
+      width: 100%;
+      min-height: 180px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      line-height: 1.8;
+      background: #F1EFE8;
+      border: 0.5px solid #B4B2A9;
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      color: #2C2C2A;
+      resize: vertical;
+      outline: none;
+    }
+    .live-textarea:focus { border-color: #888780; }
+    .live-preview {
+      border-radius: 10px;
+      border: 0.5px solid #B4B2A9;
+      background: #ffffff;
+      padding: 1rem;
+      min-height: 180px;
+      overflow: auto;
+    }
+    .btn-row { display: flex; gap: 8px; margin-top: 0.8rem; flex-wrap: wrap; }
+    .action-btn {
+      border: 0.5px solid #B4B2A9;
+      background: #ffffff;
+      color: #2C2C2A;
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 0.88rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .action-btn:hover { background: #F1EFE8; }
+    .action-btn.primary { background: #FAECE7; color: #712B13; border-color: #F0997B; }
+    .action-btn.primary:hover { background: #F5C4B3; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+
+    @media (max-width: 560px) {
+      .match-grid, .live-editor-wrap { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="cours-css.html">&larr; Retour au cours CSS</a>
+
+  <div class="hero">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">🎨</div>
+    <h1>Exercices CSS</h1>
+    <p>Mets en pratique ce que tu as appris !</p>
+    <div class="badge-row">
+      <span class="badge b-coral">3 exercices</span>
+      <span class="badge b-purple">Interactif</span>
+    </div>
+  </div>
+
+  <!-- EXERCICE 1 : ASSOCIER -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">1</div>Exercice 1 &mdash; Associe la propri&eacute;t&eacute; &agrave; sa description</div>
+    <p class="desc">Clique d'abord sur une <strong>propri&eacute;t&eacute; CSS</strong> &agrave; gauche, puis sur la <strong>description</strong> qui lui correspond &agrave; droite.</p>
+
+    <div class="match-grid">
+      <div>
+        <div class="match-col-title">Propri&eacute;t&eacute;s CSS</div>
+        <div class="match-item" id="prop-color"       onclick="selectProp(this,'color')">color</div>
+        <div class="match-item" id="prop-bg"          onclick="selectProp(this,'background-color')">background-color</div>
+        <div class="match-item" id="prop-fontsize"    onclick="selectProp(this,'font-size')">font-size</div>
+        <div class="match-item" id="prop-margin"      onclick="selectProp(this,'margin')">margin</div>
+        <div class="match-item" id="prop-border"      onclick="selectProp(this,'border')">border</div>
+        <div class="match-item" id="prop-display"     onclick="selectProp(this,'display')">display</div>
+      </div>
+      <div>
+        <div class="match-col-title">Descriptions</div>
+        <div class="match-item" id="desc-fontsize"    onclick="selectDesc(this,'font-size')">Taille du texte</div>
+        <div class="match-item" id="desc-color"       onclick="selectDesc(this,'color')">Couleur du texte</div>
+        <div class="match-item" id="desc-display"     onclick="selectDesc(this,'display')">Mode d'affichage</div>
+        <div class="match-item" id="desc-border"      onclick="selectDesc(this,'border')">Contour de la bo&icirc;te</div>
+        <div class="match-item" id="desc-bg"          onclick="selectDesc(this,'background-color')">Couleur de fond</div>
+        <div class="match-item" id="desc-margin"      onclick="selectDesc(this,'margin')">Espace ext&eacute;rieur</div>
+      </div>
+    </div>
+
+    <div class="match-feedback" id="match-feedback"></div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-match"></div></div>
+    <div class="score-row" id="score-match"></div>
+  </div>
+
+  <!-- EXERCICE 2 : CORRIGER LE CSS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">2</div>Exercice 2 &mdash; Trouve l'erreur dans chaque r&egrave;gle CSS</div>
+    <p class="desc">Chaque bloc CSS ci-dessous contient <strong>une erreur</strong>. Clique sur la correction qui convient !</p>
+
+    <div style="margin-bottom:1.3rem;">
+      <div class="rl">Erreur 1 &mdash; il manque quelque chose &agrave; la fin de la d&eacute;claration :</div>
+      <div class="broken-block"><span class="sel">h1</span> <span class="punc">{</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="val">red</span><span class="err">  ???</span>
+<span class="punc">}</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="q2answer(this,'q2-1',false)">:</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-1',false)">{</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-1',true)">;</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-1',false)">/</button>
+      </div>
+      <div class="q-feedback" id="fb-q2-1"></div>
+    </div>
+
+    <div style="margin-bottom:1.3rem;">
+      <div class="rl">Erreur 2 &mdash; le s&eacute;lecteur de classe est mal &eacute;crit :</div>
+      <div class="broken-block"><span class="err">titre</span> <span class="punc">{</span>
+  <span class="prop">font-size</span><span class="punc">:</span> <span class="val">24px</span><span class="punc">;</span>
+<span class="punc">}</span>
+<span class="cm">/* On voulait cibler la classe "titre" */</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="q2answer(this,'q2-2',false)">#titre</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-2',true)">.titre</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-2',false)">@titre</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-2',false)">*titre</button>
+      </div>
+      <div class="q-feedback" id="fb-q2-2"></div>
+    </div>
+
+    <div style="margin-bottom:1.3rem;">
+      <div class="rl">Erreur 3 &mdash; la valeur de couleur est incorrecte :</div>
+      <div class="broken-block"><span class="sel">p</span> <span class="punc">{</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="err">185FA5</span><span class="punc">;</span>   <span class="cm">&larr; code hexa incomplet</span>
+<span class="punc">}</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="q2answer(this,'q2-3',false)">185FA5px</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-3',false)">rgb(185FA5)</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-3',true)">#185FA5</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-3',false)">"185FA5"</button>
+      </div>
+      <div class="q-feedback" id="fb-q2-3"></div>
+    </div>
+
+    <div style="margin-bottom:1.3rem;">
+      <div class="rl">Erreur 4 &mdash; il manque les accolades :</div>
+      <div class="broken-block"><span class="sel">body</span>
+  <span class="prop">background-color</span><span class="punc">:</span> <span class="val">#F1EFE8</span><span class="punc">;</span>
+  <span class="prop">font-family</span><span class="punc">:</span> <span class="val">Arial</span><span class="punc">;</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="q2answer(this,'q2-4',false)">Ajouter ( ) apr&egrave;s body</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-4',true)">Ajouter { } autour des propri&eacute;t&eacute;s</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-4',false)">Ajouter ; apr&egrave;s body</button>
+      </div>
+      <div class="q-feedback" id="fb-q2-4"></div>
+    </div>
+
+    <div>
+      <div class="rl">Erreur 5 &mdash; la propri&eacute;t&eacute; n'existe pas, laquelle est correcte ?</div>
+      <div class="broken-block"><span class="sel">.boite</span> <span class="punc">{</span>
+  <span class="err">text-color</span><span class="punc">:</span> <span class="val">white</span><span class="punc">;</span>   <span class="cm">&larr; cette propri&eacute;t&eacute; n'existe pas !</span>
+<span class="punc">}</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="q2answer(this,'q2-5',false)">font-color</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-5',true)">color</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-5',false)">txt-color</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-5',false)">writing-color</button>
+      </div>
+      <div class="q-feedback" id="fb-q2-5"></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="prog-q2"></div></div>
+    <div class="score-row" id="score-q2"></div>
+  </div>
+
+  <!-- EXERCICE 3 : EDITEUR EN DIRECT -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">3</div>Exercice 3 &mdash; L'&eacute;diteur CSS en direct !</div>
+    <p class="desc">Modifie le CSS &agrave; gauche et vois le r&eacute;sultat apparaitre en direct &agrave; droite. Essaie de changer les couleurs, la taille du texte, le padding...</p>
+    <p class="desc" style="margin-bottom:0.4rem;"><strong>D&eacute;fi :</strong> Rends le titre rouge, le fond de la bo&icirc;te bleu clair, et ajoute un beau border-radius !</p>
+
+    <div class="live-editor-wrap">
+      <div>
+        <div class="rl">Ton CSS :</div>
+        <textarea class="live-textarea" id="live-css" oninput="updatePreview()" spellcheck="false">h1 {
+  color: #2C2C2A;
+  font-size: 1.4rem;
+}
+
+.boite {
+  background-color: #F1EFE8;
+  padding: 16px;
+  border: 2px solid #B4B2A9;
+  border-radius: 4px;
+}
+
+p {
+  color: #5F5E5A;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}</textarea>
+      </div>
+      <div>
+        <div class="rl">R&eacute;sultat en direct :</div>
+        <div class="live-preview" id="live-preview">
+          <style id="live-style"></style>
+          <h1>Mon super titre</h1>
+          <div class="boite">
+            <p>Je suis une bo&icirc;te avec du contenu &agrave; l'int&eacute;rieur. Modifie le CSS pour me rendre plus jolie !</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="action-btn primary" onclick="resetLive()">R&eacute;initialiser</button>
+      <button class="action-btn" onclick="showDefi()">Voir une solution</button>
+    </div>
+
+    <div class="tip tip-purple" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span>Dans un vrai projet, utilise <span class="kbd">Shift</span>+<span class="kbd">Alt</span>+<span class="kbd">F</span> pour formater ton CSS automatiquement. Et <span class="kbd">Ctrl</span>+<span class="kbd">S</span> pour sauvegarder !</span>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Bravo d'avoir fait les exercices CSS ! 🎨<br>
+    <span style="font-size:0.82rem;">Tu peux maintenant commencer &agrave; styliser tes propres pages HTML !</span><br><br>
+    <a href="cours-css.html" style="color:#712B13;font-weight:700;text-decoration:none;">&larr; Retour au cours CSS</a>
+    &nbsp;&nbsp;
+    <a href="cours-html.html" style="color:#185FA5;font-weight:700;text-decoration:none;">&larr; Retour au cours HTML</a>
+  </div>
+
+  <script>
+    /* ---- EXERCICE 1 : matching ---- */
+    var selectedProp = null;
+    var selectedDesc = null;
+    var matchScore = 0;
+    var matchDone  = 0;
+    var matchTotal = 6;
+
+    var ok_msgs = ['Parfait !', 'Bravo !', "C'est \u00e7a !", 'Excellent !'];
+    var ko_msgs = ['Pas tout \u00e0 fait...', 'Essaie encore !', 'Presque !'];
+    function rnd(a) { return a[Math.floor(Math.random() * a.length)]; }
+
+    function selectProp(el, key) {
+      if (el.classList.contains('matched-ok') || el.classList.contains('disabled')) return;
+      document.querySelectorAll('[id^="prop-"]').forEach(function(e) { e.classList.remove('selected'); });
+      el.classList.add('selected');
+      selectedProp = key;
+      if (selectedDesc) tryMatch();
+    }
+
+    function selectDesc(el, key) {
+      if (el.classList.contains('matched-ok') || el.classList.contains('disabled')) return;
+      document.querySelectorAll('[id^="desc-"]').forEach(function(e) { e.classList.remove('selected'); });
+      el.classList.add('selected');
+      selectedDesc = key;
+      if (selectedProp) tryMatch();
+    }
+
+    function tryMatch() {
+      var propEl = document.getElementById('prop-' + selectedProp);
+      var descEl = document.getElementById('desc-' + selectedDesc);
+      var fb = document.getElementById('match-feedback');
+      matchDone++;
+      if (selectedProp === selectedDesc) {
+        matchScore++;
+        propEl.classList.remove('selected');
+        descEl.classList.remove('selected');
+        propEl.classList.add('matched-ok');
+        descEl.classList.add('matched-ok');
+        fb.className = 'match-feedback feedback-ok';
+        fb.textContent = rnd(ok_msgs) + ' \u2713';
+      } else {
+        propEl.classList.remove('selected');
+        descEl.classList.remove('selected');
+        propEl.classList.add('matched-ko');
+        descEl.classList.add('matched-ko');
+        fb.className = 'match-feedback feedback-ko';
+        fb.textContent = rnd(ko_msgs) + ' Essaie une autre combinaison.';
+        setTimeout(function() {
+          propEl.classList.remove('matched-ko');
+          descEl.classList.remove('matched-ko');
+          fb.textContent = '';
+        }, 1000);
+        matchDone--;
+      }
+      selectedProp = null;
+      selectedDesc = null;
+      updateMatchScore();
+    }
+
+    function updateMatchScore() {
+      var pct = Math.round(matchScore / matchTotal * 100);
+      document.getElementById('prog-match').style.width = pct + '%';
+      var row = document.getElementById('score-match');
+      row.innerHTML = '';
+      if (matchScore > 0) {
+        var c = document.createElement('span');
+        c.className = 'chip chip-ok';
+        c.textContent = matchScore + ' / ' + matchTotal + ' association' + (matchScore > 1 ? 's' : '') + ' trouv\u00e9' + (matchScore > 1 ? 'es' : 'e');
+        row.appendChild(c);
+      }
+    }
+
+    /* ---- EXERCICE 2 : correction CSS ---- */
+    var q2state = { 'q2-1': null, 'q2-2': null, 'q2-3': null, 'q2-4': null, 'q2-5': null };
+
+    function q2answer(btn, qId, isCorrect) {
+      if (q2state[qId] !== null) return;
+      q2state[qId] = isCorrect;
+      btn.closest('.choices').querySelectorAll('.choice-btn').forEach(function(b) { b.disabled = true; });
+      btn.classList.add(isCorrect ? 'correct' : 'wrong');
+      var fb = document.getElementById('fb-' + qId);
+      fb.className = 'q-feedback ' + (isCorrect ? 'ok' : 'ko');
+      fb.textContent = isCorrect ? rnd(ok_msgs) + ' \u2713' : rnd(ko_msgs);
+      updateQ2Score();
+    }
+
+    function updateQ2Score() {
+      var vals = Object.values(q2state);
+      var done = vals.filter(function(v) { return v !== null; }).length;
+      var good = vals.filter(function(v) { return v === true; }).length;
+      document.getElementById('prog-q2').style.width = (done / 5 * 100) + '%';
+      var row = document.getElementById('score-q2');
+      row.innerHTML = '';
+      if (done > 0) {
+        var c = document.createElement('span');
+        c.className = 'chip chip-ok';
+        c.textContent = good + ' bonne' + (good > 1 ? 's' : '') + ' r\u00e9ponse' + (good > 1 ? 's' : '');
+        row.appendChild(c);
+        if (done - good > 0) {
+          var e = document.createElement('span');
+          e.className = 'chip chip-ko';
+          e.textContent = (done - good) + ' erreur' + (done - good > 1 ? 's' : '');
+          row.appendChild(e);
+        }
+      }
+    }
+
+    /* ---- EXERCICE 3 : &eacute;diteur en direct ---- */
+    var defaultCSS = 'h1 {\n  color: #2C2C2A;\n  font-size: 1.4rem;\n}\n\n.boite {\n  background-color: #F1EFE8;\n  padding: 16px;\n  border: 2px solid #B4B2A9;\n  border-radius: 4px;\n}\n\np {\n  color: #5F5E5A;\n  font-size: 0.9rem;\n  margin-top: 8px;\n}';
+
+    var defiCSS = 'h1 {\n  color: #D85A30;\n  font-size: 1.6rem;\n  font-weight: 800;\n}\n\n.boite {\n  background-color: #B5D4F4;\n  padding: 20px;\n  border: 2px solid #185FA5;\n  border-radius: 16px;\n}\n\np {\n  color: #0C447C;\n  font-size: 0.95rem;\n  margin-top: 10px;\n}';
+
+    function updatePreview() {
+      var css = document.getElementById('live-css').value;
+      var styleTag = document.getElementById('live-style');
+      var scopedCSS = css
+        .replace(/h1\s*\{/g, '#live-preview h1 {')
+        .replace(/\.boite\s*\{/g, '#live-preview .boite {')
+        .replace(/p\s*\{/g, '#live-preview p {')
+        .replace(/body\s*\{/g, '#live-preview {');
+      styleTag.textContent = scopedCSS;
+    }
+
+    function resetLive() {
+      document.getElementById('live-css').value = defaultCSS;
+      updatePreview();
+    }
+
+    function showDefi() {
+      document.getElementById('live-css').value = defiCSS;
+      updatePreview();
+    }
+
+    updatePreview();
+  </script>
+
+</body>
+</html>

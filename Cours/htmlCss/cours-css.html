@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apprends le CSS !</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .card {
+      border-radius: 16px;
+      border: 0.5px solid #D3D1C7;
+      background: #ffffff;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .stitle {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+    }
+    .pill {
+      width: 32px; height: 32px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; flex-shrink: 0;
+    }
+    .teal   { background: #9FE1CB; color: #085041; }
+    .purple { background: #CECBF6; color: #3C3489; }
+    .coral  { background: #F5C4B3; color: #712B13; }
+    .amber  { background: #FAC775; color: #633806; }
+    .blue   { background: #B5D4F4; color: #0C447C; }
+    .green  { background: #C0DD97; color: #3B6D11; }
+    .pink   { background: #F4C0D1; color: #72243E; }
+    .red    { background: #F7C1C1; color: #791F1F; }
+    .gray   { background: #D3D1C7; color: #444441; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+
+    .code-block {
+      background: #F1EFE8;
+      border: 0.5px solid #B4B2A9;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      line-height: 1.8;
+      white-space: pre;
+      overflow-x: auto;
+      color: #2C2C2A;
+    }
+    .sel  { color: #993C1D; }
+    .prop { color: #185FA5; }
+    .val  { color: #0F6E56; }
+    .cm   { color: #888780; font-style: italic; }
+    .punc { color: #888780; }
+    .tag  { color: #185FA5; }
+
+    .tip {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #E1F5EE; border-radius: 10px;
+      padding: 0.75rem 1rem; margin-top: 0.9rem;
+      font-size: 0.88rem; color: #085041; line-height: 1.5;
+    }
+    .tip-coral  { background: #FAECE7; color: #712B13; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .result-box {
+      border-radius: 10px;
+      border: 0.5px dashed #B4B2A9;
+      background: #F1EFE8;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.94rem;
+      margin-top: 0.8rem;
+      line-height: 1.7;
+    }
+    .rl {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #888780; margin-bottom: 6px;
+    }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+    .tc { border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.88rem; font-weight: 600; }
+    .tc code { font-family: 'Fira Code', monospace; font-size: 0.82rem; display: block; margin-bottom: 3px; font-weight: 500; }
+
+    /* Demo boxes for CSS visual results */
+    .demo-wrap {
+      border-radius: 10px;
+      border: 0.5px dashed #B4B2A9;
+      background: #F1EFE8;
+      padding: 1rem 1.2rem;
+      margin-top: 0.8rem;
+    }
+
+    .demo-h1   { font-size: 1.6rem; font-weight: 800; color: #D85A30; font-family: Georgia, serif; }
+    .demo-p    { font-size: 1rem; color: #185FA5; font-family: 'Nunito', sans-serif; line-height: 1.6; }
+    .demo-box  { background: #B5D4F4; width: 120px; height: 60px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #0C447C; font-weight: 700; }
+    .demo-box2 { background: #F5C4B3; border: 3px solid #D85A30; width: 140px; height: 70px; border-radius: 0; display: flex; align-items: center; justify-content: center; font-size: 0.82rem; color: #712B13; font-weight: 700; }
+    .demo-padded { background: #C0DD97; padding: 20px; display: inline-block; border-radius: 6px; font-size: 0.85rem; color: #27500A; font-weight: 700; }
+    .demo-margin-wrap { background: #FAEEDA; padding: 12px; border-radius: 8px; display: inline-block; }
+    .demo-margin-inner { background: #FAC775; padding: 8px 16px; border-radius: 4px; font-size: 0.85rem; color: #633806; font-weight: 700; }
+
+    .selector-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 0.6rem; }
+    .selector-table th { text-align: left; padding: 6px 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #888780; border-bottom: 0.5px solid #D3D1C7; }
+    .selector-table td { padding: 7px 10px; border-bottom: 0.5px solid #F1EFE8; vertical-align: top; }
+    .selector-table tr:last-child td { border-bottom: none; }
+    .selector-table code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 2px 6px; border-radius: 4px; }
+
+    .color-swatch-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.7rem; }
+    .swatch { width: 40px; height: 40px; border-radius: 8px; border: 0.5px solid #B4B2A9; }
+    .swatch-label { font-size: 0.75rem; font-family: 'Fira Code', monospace; color: #5F5E5A; margin-top: 3px; text-align: center; }
+    .swatch-item { display: flex; flex-direction: column; align-items: center; }
+
+    .box-model-demo {
+      position: relative;
+      background: #FAEEDA;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 0.8rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .bm-margin-label { color: #854F0B; margin-bottom: 6px; }
+    .bm-border { background: #F5C4B3; border: 3px solid #D85A30; padding: 10px; border-radius: 4px; }
+    .bm-border-label { color: #712B13; margin-bottom: 6px; font-size: 0.8rem; font-weight: 700; }
+    .bm-padding { background: #C0DD97; padding: 10px; border-radius: 2px; }
+    .bm-padding-label { color: #27500A; margin-bottom: 6px; font-size: 0.8rem; font-weight: 700; }
+    .bm-content { background: #B5D4F4; padding: 8px; border-radius: 2px; text-align: center; color: #0C447C; font-size: 0.82rem; font-weight: 700; }
+
+    .kbd {
+      display: inline-block;
+      background: #F1EFE8;
+      border: 0.5px solid #B4B2A9;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      color: #2C2C2A;
+    }
+
+    .tag-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.2rem; }
+
+    .cta-wrap { text-align: center; padding: 2rem 1rem 2.5rem; }
+    .cta-btn {
+      display: inline-block;
+      background: #F5C4B3;
+      color: #4A1B0C;
+      border: 0.5px solid #F0997B;
+      border-radius: 14px;
+      padding: 1rem 2.2rem;
+      font-size: 1.05rem;
+      font-weight: 800;
+      font-family: 'Nunito', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #F0997B; }
+    .cta-sub { font-size: 0.85rem; color: #888780; margin-top: 0.7rem; }
+
+    @media (max-width: 500px) {
+      .two-col, .tag-compare { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="nav-prev" href="cours-html.html">&larr; Retour au cours HTML</a>
+
+  <div class="hero">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">🎨</div>
+    <h1>Apprends le CSS !</h1>
+    <p>Le langage pour donner du style &agrave; tes pages web</p>
+    <div class="badge-row">
+      <span class="badge b-coral">D&eacute;butant</span>
+      <span class="badge b-purple">Complet</span>
+      <span class="badge b-amber">Amusant</span>
+    </div>
+  </div>
+
+  <!-- C'EST QUOI LE CSS -->
+  <div class="card">
+    <div class="stitle"><div class="pill teal">?</div>C'est quoi le CSS ?</div>
+    <p class="desc">Si le HTML est le <strong>squelette</strong> de ta page (la structure), le <strong>CSS</strong> (Cascading Style Sheets) en est l'<strong>habit</strong> : il d&eacute;finit les couleurs, les tailles, les polices, les espacements... Tout ce qui rend ta page belle !<br><br>Sans CSS, toutes les pages seraient du texte noir sur fond blanc. Avec CSS, tu peux tout personnaliser !</p>
+    <div class="two-col">
+      <div>
+        <div class="rl">Sans CSS</div>
+        <div style="background:#ffffff;border:0.5px solid #D3D1C7;border-radius:10px;padding:0.8rem 1rem;font-size:0.88rem;line-height:1.7;">
+          <div style="font-size:1.1rem;font-weight:800;">Mon titre</div>
+          <div>Un paragraphe de texte tout simple.</div>
+          <div style="color:#185FA5;text-decoration:underline;font-size:0.88rem;">Un lien</div>
+        </div>
+      </div>
+      <div>
+        <div class="rl">Avec CSS</div>
+        <div style="background:#1D1D1B;border-radius:10px;padding:0.8rem 1rem;font-size:0.88rem;line-height:1.7;">
+          <div style="font-size:1.1rem;font-weight:800;color:#FAC775;font-family:Georgia,serif;">Mon titre</div>
+          <div style="color:#D3D1C7;">Un paragraphe de texte tout simple.</div>
+          <div style="color:#9FE1CB;font-weight:700;font-size:0.88rem;">Un lien</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMENT LIER LE CSS AU HTML -->
+  <div class="card">
+    <div class="stitle"><div class="pill blue">L</div>Comment lier le CSS &agrave; ma page HTML ?</div>
+    <p class="desc">Il y a trois fa&ccedil;ons d'ajouter du CSS. La meilleure pour commencer : cr&eacute;er un fichier <strong>style.css</strong> s&eacute;par&eacute; et le lier dans le <code style="font-family:'Fira Code',monospace;font-size:0.88rem;background:#F1EFE8;padding:2px 6px;border-radius:4px;">&lt;head&gt;</code> de ton HTML.</p>
+    <div class="code-block"><span class="cm">&lt;!-- Dans ton fichier HTML, dans le &lt;head&gt; : --&gt;</span>
+<span class="tag">&lt;link</span> <span style="color:#854F0B;">rel</span>=<span style="color:#0F6E56;">"stylesheet"</span> <span style="color:#854F0B;">href</span>=<span style="color:#0F6E56;">"style.css"</span><span class="tag">&gt;</span></div>
+    <div class="two-col" style="margin-top:0.9rem;">
+      <div class="tc" style="background:#E6F1FB;color:#0C447C;">
+        <code>fichier .html</code>
+        La structure de ta page
+      </div>
+      <div class="tc" style="background:#FAECE7;color:#712B13;">
+        <code>fichier .css</code>
+        Le style de ta page
+      </div>
+    </div>
+    <div class="tip"><span class="tip-i">💡</span><span>Tu peux aussi &eacute;crire le CSS directement dans le HTML avec la balise <strong>&lt;style&gt;</strong> dans le &lt;head&gt;. C'est pratique pour les petits projets !</span></div>
+  </div>
+
+  <!-- LA SYNTAXE CSS -->
+  <div class="card">
+    <div class="stitle"><div class="pill coral">S</div>La syntaxe CSS : s&eacute;lecteur + propri&eacute;t&eacute;s</div>
+    <p class="desc">Une r&egrave;gle CSS se compose toujours de la m&ecirc;me fa&ccedil;on : d'abord le <strong>s&eacute;lecteur</strong> (qui cibler ?), puis entre accolades les <strong>propri&eacute;t&eacute;s</strong> (quoi changer ?) et leur <strong>valeur</strong> (comment ?).</p>
+    <div class="code-block"><span class="sel">h1</span> <span class="punc">{</span>                    <span class="cm">&larr; s&eacute;lecteur : on cible tous les &lt;h1&gt;</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="val">red</span><span class="punc">;</span>          <span class="cm">&larr; propri&eacute;t&eacute; : valeur ;</span>
+  <span class="prop">font-size</span><span class="punc">:</span> <span class="val">32px</span><span class="punc">;</span>
+<span class="punc">}</span>
+
+<span class="sel">p</span> <span class="punc">{</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="val">#5F5E5A</span><span class="punc">;</span>
+  <span class="prop">line-height</span><span class="punc">:</span> <span class="val">1.6</span><span class="punc">;</span>
+<span class="punc">}</span></div>
+    <div class="tip tip-coral"><span class="tip-i">⚠</span><span>N'oublie jamais le <strong>point-virgule ;</strong> &agrave; la fin de chaque d&eacute;claration, et les <strong>accolades { }</strong> autour des propri&eacute;t&eacute;s. Ce sont les erreurs les plus courantes !</span></div>
+  </div>
+
+  <!-- LES SELECTEURS -->
+  <div class="card">
+    <div class="stitle"><div class="pill purple">S</div>Les s&eacute;lecteurs : qui cibler ?</div>
+    <p class="desc">Le s&eacute;lecteur d&eacute;cide <strong>quels &eacute;l&eacute;ments HTML</strong> vont recevoir le style. Il en existe plusieurs types :</p>
+    <table class="selector-table">
+      <thead>
+        <tr><th>S&eacute;lecteur</th><th>Cible</th><th>Exemple</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>balise</code></td>
+          <td>Tous les &eacute;l&eacute;ments de ce type</td>
+          <td><code>p { color: blue; }</code></td>
+        </tr>
+        <tr>
+          <td><code>.classe</code></td>
+          <td>Les &eacute;l&eacute;ments avec cette classe</td>
+          <td><code>.titre { font-size: 24px; }</code></td>
+        </tr>
+        <tr>
+          <td><code>#identifiant</code></td>
+          <td>L'&eacute;l&eacute;ment avec cet id (unique)</td>
+          <td><code>#menu { background: black; }</code></td>
+        </tr>
+        <tr>
+          <td><code>*</code></td>
+          <td>Tous les &eacute;l&eacute;ments de la page</td>
+          <td><code>* { margin: 0; }</code></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="code-block" style="margin-top:0.9rem;"><span class="cm">&lt;!-- Dans le HTML --&gt;</span>
+<span class="tag">&lt;p</span> <span style="color:#854F0B;">class</span>=<span style="color:#0F6E56;">"important"</span><span class="tag">&gt;</span>Ce texte est important.<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;p&gt;</span>Ce texte est normal.<span class="tag">&lt;/p&gt;</span>
+
+<span class="cm">/* Dans le CSS */</span>
+<span class="sel">.important</span> <span class="punc">{</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="val">red</span><span class="punc">;</span>
+  <span class="prop">font-weight</span><span class="punc">:</span> <span class="val">bold</span><span class="punc">;</span>
+<span class="punc">}</span></div>
+    <div class="tip tip-purple"><span class="tip-i">💡</span><span>La <strong>classe</strong> (avec un .) est la plus utilis&eacute;e : on peut l'appliquer &agrave; plusieurs &eacute;l&eacute;ments. L'<strong>identifiant</strong> (avec #) doit &ecirc;tre unique sur toute la page.</span></div>
+  </div>
+
+  <!-- COULEURS -->
+  <div class="card">
+    <div class="stitle"><div class="pill amber">C</div>Les couleurs</div>
+    <p class="desc">En CSS, les couleurs peuvent s'&eacute;crire de plusieurs fa&ccedil;ons. Les plus courantes sont le <strong>nom en anglais</strong>, le <strong>code hexad&eacute;cimal</strong> (# suivi de 6 chiffres/lettres) et le format <strong>rgb()</strong>.</p>
+    <div class="code-block"><span class="sel">h1</span> <span class="punc">{</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="val">red</span><span class="punc">;</span>            <span class="cm">&larr; nom anglais</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="val">#E24B4A</span><span class="punc">;</span>       <span class="cm">&larr; code hexad&eacute;cimal</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="val">rgb(226,75,74)</span><span class="punc">;</span> <span class="cm">&larr; rouge, vert, bleu</span>
+<span class="punc">}</span>
+
+<span class="sel">body</span> <span class="punc">{</span>
+  <span class="prop">background-color</span><span class="punc">:</span> <span class="val">#F1EFE8</span><span class="punc">;</span> <span class="cm">&larr; fond de la page</span>
+<span class="punc">}</span></div>
+    <div class="color-swatch-row">
+      <div class="swatch-item"><div class="swatch" style="background:#E24B4A;"></div><div class="swatch-label">#E24B4A</div></div>
+      <div class="swatch-item"><div class="swatch" style="background:#185FA5;"></div><div class="swatch-label">#185FA5</div></div>
+      <div class="swatch-item"><div class="swatch" style="background:#1D9E75;"></div><div class="swatch-label">#1D9E75</div></div>
+      <div class="swatch-item"><div class="swatch" style="background:#BA7517;"></div><div class="swatch-label">#BA7517</div></div>
+      <div class="swatch-item"><div class="swatch" style="background:#7F77DD;"></div><div class="swatch-label">#7F77DD</div></div>
+      <div class="swatch-item"><div class="swatch" style="background:#2C2C2A;"></div><div class="swatch-label">#2C2C2A</div></div>
+      <div class="swatch-item"><div class="swatch" style="background:#F1EFE8;"></div><div class="swatch-label">#F1EFE8</div></div>
+    </div>
+    <div class="tip"><span class="tip-i">💡</span><span>Sur internet, cherche <strong>"color picker"</strong> pour trouver le code hexad&eacute;cimal de n'importe quelle couleur en cliquant dessus !</span></div>
+  </div>
+
+  <!-- TEXTE ET POLICES -->
+  <div class="card">
+    <div class="stitle"><div class="pill pink">T</div>Le texte et les polices</div>
+    <p class="desc">CSS donne un grand contr&ocirc;le sur l'apparence du texte : famille de police, taille, graisse, alignement, espacement...</p>
+    <div class="code-block"><span class="sel">h1</span> <span class="punc">{</span>
+  <span class="prop">font-family</span><span class="punc">:</span> <span class="val">Georgia, serif</span><span class="punc">;</span>  <span class="cm">&larr; police</span>
+  <span class="prop">font-size</span><span class="punc">:</span> <span class="val">2rem</span><span class="punc">;</span>          <span class="cm">&larr; taille</span>
+  <span class="prop">font-weight</span><span class="punc">:</span> <span class="val">bold</span><span class="punc">;</span>        <span class="cm">&larr; gras</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="val">#D85A30</span><span class="punc">;</span>          <span class="cm">&larr; couleur</span>
+<span class="punc">}</span>
+
+<span class="sel">p</span> <span class="punc">{</span>
+  <span class="prop">font-size</span><span class="punc">:</span> <span class="val">1rem</span><span class="punc">;</span>
+  <span class="prop">line-height</span><span class="punc">:</span> <span class="val">1.6</span><span class="punc">;</span>        <span class="cm">&larr; hauteur de ligne</span>
+  <span class="prop">text-align</span><span class="punc">:</span> <span class="val">center</span><span class="punc">;</span>     <span class="cm">&larr; center / left / right</span>
+  <span class="prop">text-decoration</span><span class="punc">:</span> <span class="val">underline</span><span class="punc">;</span>
+<span class="punc">}</span></div>
+    <div class="demo-wrap">
+      <div class="rl">R&eacute;sultat dans le navigateur</div>
+      <div class="demo-h1">Mon super titre !</div>
+      <div class="demo-p" style="margin-top:6px;">Un paragraphe avec du texte bleu et bien espac&eacute;.</div>
+    </div>
+    <div class="tip"><span class="tip-i">💡</span><span><strong>rem</strong> et <strong>px</strong> sont des unit&eacute;s de taille. <strong>1rem</strong> = taille de base du navigateur (g&eacute;n&eacute;ralement 16px). Pr&eacute;f&egrave;re rem pour que ta page s'adapte &agrave; tous les &eacute;crans !</span></div>
+  </div>
+
+  <!-- LARGEUR HAUTEUR FOND -->
+  <div class="card">
+    <div class="stitle"><div class="pill blue">D</div>Dimensions et fond</div>
+    <p class="desc">On peut contr&ocirc;ler la taille d'un &eacute;l&eacute;ment et sa couleur de fond avec ces propri&eacute;t&eacute;s :</p>
+    <div class="code-block"><span class="sel">.boite</span> <span class="punc">{</span>
+  <span class="prop">width</span><span class="punc">:</span> <span class="val">200px</span><span class="punc">;</span>            <span class="cm">&larr; largeur</span>
+  <span class="prop">height</span><span class="punc">:</span> <span class="val">100px</span><span class="punc">;</span>           <span class="cm">&larr; hauteur</span>
+  <span class="prop">background-color</span><span class="punc">:</span> <span class="val">#B5D4F4</span><span class="punc">;</span>
+  <span class="prop">border-radius</span><span class="punc">:</span> <span class="val">12px</span><span class="punc">;</span>    <span class="cm">&larr; coins arrondis</span>
+<span class="punc">}</span></div>
+    <div class="demo-wrap">
+      <div class="rl">R&eacute;sultat dans le navigateur</div>
+      <div class="demo-box">Une bo&icirc;te bleue</div>
+    </div>
+    <div class="tip"><span class="tip-i">💡</span><span><strong>border-radius: 50%</strong> transforme n'importe quelle bo&icirc;te en cercle parfait ! Essaie sur une bo&icirc;te carr&eacute;e.</span></div>
+  </div>
+
+  <!-- BORDURES -->
+  <div class="card">
+    <div class="stitle"><div class="pill coral">B</div>Les bordures</div>
+    <p class="desc">La propri&eacute;t&eacute; <strong>border</strong> ajoute un contour autour d'un &eacute;l&eacute;ment. Elle prend trois valeurs : l'&eacute;paisseur, le style et la couleur.</p>
+    <div class="code-block"><span class="sel">.cadre</span> <span class="punc">{</span>
+  <span class="prop">border</span><span class="punc">:</span> <span class="val">3px solid #D85A30</span><span class="punc">;</span>  <span class="cm">&larr; &eacute;paisseur style couleur</span>
+  <span class="prop">border-radius</span><span class="punc">:</span> <span class="val">0px</span><span class="punc">;</span>
+<span class="punc">}</span>
+
+<span class="cm">/* Styles possibles : solid | dashed | dotted */</span>
+<span class="sel">.tirets</span> <span class="punc">{</span> <span class="prop">border</span><span class="punc">:</span> <span class="val">2px dashed #1D9E75</span><span class="punc">;</span> <span class="punc">}</span>
+<span class="sel">.pointilles</span> <span class="punc">{</span> <span class="prop">border</span><span class="punc">:</span> <span class="val">2px dotted #7F77DD</span><span class="punc">;</span> <span class="punc">}</span></div>
+    <div class="demo-wrap">
+      <div class="rl">R&eacute;sultat dans le navigateur</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+        <div style="border:3px solid #D85A30;padding:8px 16px;font-size:0.85rem;font-weight:700;color:#712B13;">solid</div>
+        <div style="border:2px dashed #1D9E75;padding:8px 16px;font-size:0.85rem;font-weight:700;color:#085041;">dashed</div>
+        <div style="border:2px dotted #7F77DD;padding:8px 16px;font-size:0.85rem;font-weight:700;color:#3C3489;">dotted</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LE BOX MODEL -->
+  <div class="card">
+    <div class="stitle"><div class="pill green">M</div>Le mod&egrave;le de bo&icirc;te : margin et padding</div>
+    <p class="desc">Chaque &eacute;l&eacute;ment HTML est une bo&icirc;te. Autour de son contenu, il y a deux espaces essentiels &agrave; conna&icirc;tre :</p>
+    <div class="two-col">
+      <div class="tc" style="background:#EAF3DE;color:#27500A;">
+        <code>padding</code>
+        Espace &agrave; l'int&eacute;rieur de la bo&icirc;te (entre le contenu et la bordure)
+      </div>
+      <div class="tc" style="background:#FAEEDA;color:#633806;">
+        <code>margin</code>
+        Espace &agrave; l'ext&eacute;rieur de la bo&icirc;te (entre la bo&icirc;te et les voisins)
+      </div>
+    </div>
+    <div class="box-model-demo">
+      <div class="bm-margin-label">margin (espace ext&eacute;rieur)</div>
+      <div class="bm-border">
+        <div class="bm-border-label">border (bordure)</div>
+        <div class="bm-padding">
+          <div class="bm-padding-label">padding (espace int&eacute;rieur)</div>
+          <div class="bm-content">contenu</div>
+        </div>
+      </div>
+    </div>
+    <div class="code-block" style="margin-top:0.9rem;"><span class="sel">.bouton</span> <span class="punc">{</span>
+  <span class="prop">padding</span><span class="punc">:</span> <span class="val">10px 20px</span><span class="punc">;</span>    <span class="cm">&larr; haut/bas  gauche/droite</span>
+  <span class="prop">margin</span><span class="punc">:</span> <span class="val">16px</span><span class="punc">;</span>          <span class="cm">&larr; 16px sur les 4 c&ocirc;t&eacute;s</span>
+  <span class="prop">margin-top</span><span class="punc">:</span> <span class="val">8px</span><span class="punc">;</span>      <span class="cm">&larr; un seul c&ocirc;t&eacute;</span>
+<span class="punc">}</span></div>
+    <div class="tip tip-amber"><span class="tip-i">💡</span><span>Une astuce classique pour centrer un bloc : <strong>margin: 0 auto</strong> (haut/bas = 0, gauche/droite = automatique). &Ccedil;a ne marche que si l'&eacute;l&eacute;ment a une largeur d&eacute;finie !</span></div>
+  </div>
+
+  <!-- DISPLAY -->
+  <div class="card">
+    <div class="stitle"><div class="pill purple">D</div>display : comment les &eacute;l&eacute;ments se placent</div>
+    <p class="desc">La propri&eacute;t&eacute; <strong>display</strong> contr&ocirc;le comment un &eacute;l&eacute;ment s'affiche et se place par rapport &agrave; ses voisins. C'est l'une des propri&eacute;t&eacute;s les plus importantes du CSS !</p>
+    <div class="code-block"><span class="sel">.bloc</span>   <span class="punc">{</span> <span class="prop">display</span><span class="punc">:</span> <span class="val">block</span><span class="punc">;</span> <span class="punc">}</span>   <span class="cm">&larr; prend toute la largeur, passe &agrave; la ligne</span>
+<span class="sel">.inline</span> <span class="punc">{</span> <span class="prop">display</span><span class="punc">:</span> <span class="val">inline</span><span class="punc">;</span> <span class="punc">}</span>  <span class="cm">&larr; reste sur la m&ecirc;me ligne</span>
+<span class="sel">.flex</span>   <span class="punc">{</span> <span class="prop">display</span><span class="punc">:</span> <span class="val">flex</span><span class="punc">;</span> <span class="punc">}</span>    <span class="cm">&larr; aligne les enfants en ligne</span>
+<span class="sel">.cache</span>  <span class="punc">{</span> <span class="prop">display</span><span class="punc">:</span> <span class="val">none</span><span class="punc">;</span> <span class="punc">}</span>    <span class="cm">&larr; cache l'&eacute;l&eacute;ment</span></div>
+    <div class="demo-wrap">
+      <div class="rl">display: flex — les enfants se placent en ligne</div>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <div style="background:#9FE1CB;padding:8px 14px;border-radius:6px;font-size:0.85rem;font-weight:700;color:#085041;">Enfant 1</div>
+        <div style="background:#B5D4F4;padding:8px 14px;border-radius:6px;font-size:0.85rem;font-weight:700;color:#0C447C;">Enfant 2</div>
+        <div style="background:#F5C4B3;padding:8px 14px;border-radius:6px;font-size:0.85rem;font-weight:700;color:#712B13;">Enfant 3</div>
+      </div>
+    </div>
+    <div class="tip"><span class="tip-i">💡</span><span><strong>display: flex</strong> est tr&egrave;s puissant pour aligner des &eacute;l&eacute;ments. Ajoute <strong>gap: 10px</strong> pour espacer les enfants, et <strong>justify-content: center</strong> pour les centrer !</span></div>
+  </div>
+
+  <!-- EXEMPLE COMPLET -->
+  <div class="card">
+    <div class="stitle"><div class="pill coral">E</div>Exemple complet : styliser une page</div>
+    <p class="desc">Voici un fichier CSS complet pour une page HTML simple. C'est un bon point de d&eacute;part !</p>
+    <div class="code-block"><span class="cm">/* style.css */</span>
+
+<span class="sel">* </span><span class="punc">{</span>
+  <span class="prop">box-sizing</span><span class="punc">:</span> <span class="val">border-box</span><span class="punc">;</span>
+  <span class="prop">margin</span><span class="punc">:</span> <span class="val">0</span><span class="punc">;</span>
+  <span class="prop">padding</span><span class="punc">:</span> <span class="val">0</span><span class="punc">;</span>
+<span class="punc">}</span>
+
+<span class="sel">body</span> <span class="punc">{</span>
+  <span class="prop">font-family</span><span class="punc">:</span> <span class="val">Arial, sans-serif</span><span class="punc">;</span>
+  <span class="prop">background-color</span><span class="punc">:</span> <span class="val">#F1EFE8</span><span class="punc">;</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="val">#2C2C2A</span><span class="punc">;</span>
+  <span class="prop">padding</span><span class="punc">:</span> <span class="val">1rem</span><span class="punc">;</span>
+<span class="punc">}</span>
+
+<span class="sel">header</span> <span class="punc">{</span>
+  <span class="prop">background-color</span><span class="punc">:</span> <span class="val">#2C2C2A</span><span class="punc">;</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="val">#FAC775</span><span class="punc">;</span>
+  <span class="prop">padding</span><span class="punc">:</span> <span class="val">1rem 2rem</span><span class="punc">;</span>
+  <span class="prop">display</span><span class="punc">:</span> <span class="val">flex</span><span class="punc">;</span>
+  <span class="prop">justify-content</span><span class="punc">:</span> <span class="val">space-between</span><span class="punc">;</span>
+<span class="punc">}</span>
+
+<span class="sel">h1</span> <span class="punc">{</span>
+  <span class="prop">font-size</span><span class="punc">:</span> <span class="val">2rem</span><span class="punc">;</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="val">#D85A30</span><span class="punc">;</span>
+  <span class="prop">margin-bottom</span><span class="punc">:</span> <span class="val">1rem</span><span class="punc">;</span>
+<span class="punc">}</span>
+
+<span class="sel">p</span> <span class="punc">{</span>
+  <span class="prop">line-height</span><span class="punc">:</span> <span class="val">1.6</span><span class="punc">;</span>
+  <span class="prop">margin-bottom</span><span class="punc">:</span> <span class="val">0.8rem</span><span class="punc">;</span>
+<span class="punc">}</span>
+
+<span class="sel">footer</span> <span class="punc">{</span>
+  <span class="prop">text-align</span><span class="punc">:</span> <span class="val">center</span><span class="punc">;</span>
+  <span class="prop">padding</span><span class="punc">:</span> <span class="val">1rem</span><span class="punc">;</span>
+  <span class="prop">font-size</span><span class="punc">:</span> <span class="val">0.85rem</span><span class="punc">;</span>
+  <span class="prop">color</span><span class="punc">:</span> <span class="val">#888780</span><span class="punc">;</span>
+<span class="punc">}</span></div>
+  </div>
+
+  <!-- RECAP -->
+  <div class="tag-compare">
+    <div class="tc" style="background:#FAECE7;color:#712B13;"><code>color</code>Couleur du texte</div>
+    <div class="tc" style="background:#E6F1FB;color:#0C447C;"><code>background-color</code>Couleur de fond</div>
+    <div class="tc" style="background:#EAF3DE;color:#27500A;"><code>padding / margin</code>Espacement int&eacute;rieur / ext&eacute;rieur</div>
+    <div class="tc" style="background:#EEEDFE;color:#3C3489;"><code>font-size / font-family</code>Taille et police du texte</div>
+    <div class="tc" style="background:#FAEEDA;color:#633806;"><code>border</code>Bordure (taille style couleur)</div>
+    <div class="tc" style="background:#F1EFE8;color:#444441;"><code>display</code>Mode d'affichage (flex, block...)</div>
+  </div>
+
+  <!-- RACCOURCI -->
+  <div class="card">
+    <div class="stitle"><div class="pill purple">✦</div>Le raccourci magique dans VS Code</div>
+    <p class="desc">Comme pour le HTML, pense &agrave; formater ton CSS r&eacute;guli&egrave;rement pour qu'il reste lisible. Dans VS Code :</p>
+    <div style="border-radius:12px;background:#EEEDFE;border:0.5px solid #AFA9EC;padding:0.9rem 1.1rem;margin-bottom:0.9rem;">
+      <div style="display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:0.5px solid #CECBF6;font-size:0.88rem;color:#26215C;">
+        <div style="display:flex;gap:4px;flex-shrink:0;min-width:190px;flex-wrap:wrap;"><span class="kbd">Shift</span><span style="font-size:11px;color:#888780;padding:0 2px;">+</span><span class="kbd">Alt</span><span style="font-size:11px;color:#888780;padding:0 2px;">+</span><span class="kbd">F</span></div>
+        <span>Formater tout le fichier CSS</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:7px 0;font-size:0.88rem;color:#26215C;">
+        <div style="display:flex;gap:4px;flex-shrink:0;min-width:190px;"><span class="kbd">Ctrl</span><span style="font-size:11px;color:#888780;padding:0 2px;">+</span><span class="kbd">/</span></div>
+        <span>Commenter / d&eacute;commenter une ligne</span>
+      </div>
+    </div>
+    <div class="tip tip-purple"><span class="tip-i">💡</span><span>Les <strong>commentaires CSS</strong> s'&eacute;crivent entre <strong>/* et */</strong>. Ils ne s'affichent pas dans le navigateur mais t'aident &agrave; te souvenir &agrave; quoi sert chaque r&egrave;gle !</span></div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <p style="font-size:0.95rem;color:#5F5E5A;margin-bottom:1.2rem;">Tu as lu tout le cours CSS ? Bravo ! 🎉<br>Maintenant entra&icirc;ne-toi avec les exercices !</p>
+    <a class="cta-btn" href="exercices-css.html">Passer aux exercices CSS &rarr;</a>
+    <p class="cta-sub">Exercice 1 : associer propri&eacute;t&eacute;s et valeurs<br>Exercice 2 : corriger du CSS cass&eacute;</p>
+  </div>
+
+</body>
+</html>

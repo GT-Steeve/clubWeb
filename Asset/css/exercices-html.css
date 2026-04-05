@@ -1,0 +1,395 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: #f5f4f0;
+    color: #2C2C2A;
+    padding: 1.5rem;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.hero {
+    text-align: center;
+    padding: 2.5rem 1rem 2rem;
+}
+
+.hero h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.hero p {
+    font-size: 1rem;
+    color: #5F5E5A;
+    margin-top: 0.5rem;
+}
+
+.badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 1.2rem;
+}
+
+.badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+}
+
+.b-blue {
+    background: #E6F1FB;
+    color: #0C447C;
+}
+
+.b-purple {
+    background: #EEEDFE;
+    color: #3C3489;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #3C3489;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    background: #EEEDFE;
+    border: 0.5px solid #AFA9EC;
+    border-radius: 8px;
+    padding: 6px 14px;
+    transition: background 0.15s;
+}
+
+.back-link:hover {
+    background: #CECBF6;
+}
+
+.card {
+    border-radius: 16px;
+    border: 0.5px solid #D3D1C7;
+    background: #ffffff;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.stitle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 0.8rem;
+}
+
+.pill {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.p-blue {
+    background: #B5D4F4;
+    color: #0C447C;
+}
+
+.p-purple {
+    background: #CECBF6;
+    color: #3C3489;
+}
+
+.p-teal {
+    background: #9FE1CB;
+    color: #085041;
+}
+
+.p-amber {
+    background: #FAC775;
+    color: #633806;
+}
+
+.desc {
+    font-size: 0.94rem;
+    color: #5F5E5A;
+    line-height: 1.7;
+    margin-bottom: 0.9rem;
+}
+
+.code-block {
+    background: #F1EFE8;
+    border: 0.5px solid #B4B2A9;
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.84rem;
+    line-height: 1.8;
+    white-space: pre;
+    overflow-x: auto;
+    color: #2C2C2A;
+}
+
+.tag {
+    color: #185FA5;
+}
+
+.attr {
+    color: #854F0B;
+}
+
+.val {
+    color: #0F6E56;
+}
+
+.err {
+    color: #E24B4A;
+    font-weight: 700;
+}
+
+.rl {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #888780;
+    margin-bottom: 6px;
+}
+
+.tip {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: #E1F5EE;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.9rem;
+    font-size: 0.88rem;
+    color: #085041;
+    line-height: 1.5;
+}
+
+.tip-purple {
+    background: #EEEDFE;
+    color: #3C3489;
+}
+
+.tip-i {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.kbd {
+    display: inline-block;
+    background: #F1EFE8;
+    border: 0.5px solid #B4B2A9;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    color: #2C2C2A;
+}
+
+/* Exercice 1 */
+.question {
+    margin-bottom: 1.3rem;
+}
+
+.question:last-of-type {
+    margin-bottom: 0;
+}
+
+.choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0.7rem 0 0.5rem;
+}
+
+.choice-btn {
+    border: 0.5px solid #B4B2A9;
+    background: #F1EFE8;
+    color: #2C2C2A;
+    border-radius: 8px;
+    padding: 5px 14px;
+    font-size: 0.85rem;
+    font-family: 'Fira Code', monospace;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+
+.choice-btn:hover {
+    background: #D3D1C7;
+}
+
+.choice-btn.correct {
+    background: #E1F5EE;
+    color: #085041;
+    border-color: #5DCAA5;
+}
+
+.choice-btn.wrong {
+    background: #FCEBEB;
+    color: #791F1F;
+    border-color: #F09595;
+}
+
+.choice-btn:disabled {
+    cursor: default;
+}
+
+.feedback {
+    font-size: 0.88rem;
+    min-height: 1.4em;
+    font-weight: 700;
+}
+
+.feedback.ok {
+    color: #0F6E56;
+}
+
+.feedback.ko {
+    color: #A32D2D;
+}
+
+.progress-wrap {
+    height: 7px;
+    background: #D3D1C7;
+    border-radius: 10px;
+    margin: 1.2rem 0 0;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #5DCAA5;
+    border-radius: 10px;
+    transition: width 0.4s;
+    width: 0%;
+}
+
+.score-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.chip {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.chip-ok {
+    background: #E1F5EE;
+    color: #085041;
+}
+
+.chip-ko {
+    background: #FCEBEB;
+    color: #791F1F;
+}
+
+/* Exercice 2 */
+.indent-code {
+    width: 100%;
+    min-height: 200px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.84rem;
+    line-height: 1.8;
+    background: #F1EFE8;
+    border: 0.5px solid #B4B2A9;
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    color: #2C2C2A;
+    resize: vertical;
+    outline: none;
+}
+
+.indent-code:focus {
+    border-color: #888780;
+}
+
+.btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    border: 0.5px solid #B4B2A9;
+    background: #ffffff;
+    color: #2C2C2A;
+    border-radius: 8px;
+    padding: 7px 16px;
+    font-size: 0.88rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+
+.action-btn:hover {
+    background: #F1EFE8;
+}
+
+.action-btn.primary {
+    background: #E1F5EE;
+    color: #085041;
+    border-color: #5DCAA5;
+}
+
+.action-btn.primary:hover {
+    background: #9FE1CB;
+}
+
+.indent-feedback {
+    font-size: 0.9rem;
+    margin-top: 0.9rem;
+    line-height: 1.6;
+    font-weight: 700;
+    min-height: 1.4em;
+}
+
+.indent-feedback.ok {
+    color: #0F6E56;
+}
+
+.indent-feedback.ko {
+    color: #A32D2D;
+}
+
+.indent-feedback.mid {
+    color: #854F0B;
+}
+
+.footer-note {
+    text-align: center;
+    padding: 2rem 1rem 2.5rem;
+    color: #888780;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 500px) {
+    .hero h1 {
+        font-size: 1.6rem;
+    }
+}
