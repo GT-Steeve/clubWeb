@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture de projet &amp; chemins de fichiers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-green  { background: #EAF3DE; color: #3B6D11; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+
+    .nav-row {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem;
+    }
+    .nav-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.85rem; font-weight: 700;
+      text-decoration: none;
+      border-radius: 8px; padding: 6px 13px;
+      border: 0.5px solid;
+      transition: background 0.15s;
+    }
+    .nav-html  { color: #185FA5; background: #E6F1FB; border-color: #85B7EB; }
+    .nav-html:hover  { background: #B5D4F4; }
+    .nav-css   { color: #712B13; background: #FAECE7; border-color: #F0997B; }
+    .nav-css:hover   { background: #F5C4B3; }
+
+    .card {
+      border-radius: 16px;
+      border: 0.5px solid #D3D1C7;
+      background: #ffffff;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .stitle {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+    }
+    .pill {
+      width: 32px; height: 32px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; flex-shrink: 0;
+    }
+    .teal   { background: #9FE1CB; color: #085041; }
+    .purple { background: #CECBF6; color: #3C3489; }
+    .coral  { background: #F5C4B3; color: #712B13; }
+    .amber  { background: #FAC775; color: #633806; }
+    .blue   { background: #B5D4F4; color: #0C447C; }
+    .green  { background: #C0DD97; color: #3B6D11; }
+    .pink   { background: #F4C0D1; color: #72243E; }
+    .red    { background: #F7C1C1; color: #791F1F; }
+    .gray   { background: #D3D1C7; color: #444441; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+
+    .code-block {
+      background: #F1EFE8;
+      border: 0.5px solid #B4B2A9;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      line-height: 1.8;
+      white-space: pre;
+      overflow-x: auto;
+      color: #2C2C2A;
+    }
+    .tag  { color: #185FA5; }
+    .attr { color: #854F0B; }
+    .val  { color: #0F6E56; }
+    .cm   { color: #888780; font-style: italic; }
+    .hl   { color: #D85A30; font-weight: 700; }
+
+    .tip {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #E1F5EE; border-radius: 10px;
+      padding: 0.75rem 1rem; margin-top: 0.9rem;
+      font-size: 0.88rem; color: #085041; line-height: 1.5;
+    }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-coral  { background: #FAECE7; color: #712B13; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .rl {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #888780; margin-bottom: 6px;
+    }
+
+    /* --- ARBRE DE FICHIERS --- */
+    .tree {
+      background: #1D1D1B;
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.86rem;
+      color: #D3D1C7;
+      margin-top: 0.8rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .tl { display: flex; align-items: baseline; padding: 2px 0; white-space: pre; }
+    .tree-folder    { color: #FAC775; font-weight: 700; }
+    .tree-file-html { color: #85B7EB; }
+    .tree-file-css  { color: #9FE1CB; }
+    .tree-file-js   { color: #FAC775; }
+    .tree-file-img  { color: #F4C0D1; }
+    .tree-ln        { color: #5F5E5A; }
+    .tree-root      { color: #ffffff; font-weight: 700; }
+    .tree-comment   { color: #5F5E5A; font-style: italic; }
+
+    /* --- CHEMIN VISUEL --- */
+    .path-demo {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 0.8rem 0 0.4rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+    }
+    .path-seg {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+    .path-sep { color: #888780; padding: 0 2px; font-weight: 400; }
+    .seg-root   { background: #F1EFE8; color: #444441; }
+    .seg-folder { background: #FAEEDA; color: #633806; }
+    .seg-file   { background: #E6F1FB; color: #0C447C; }
+    .seg-up     { background: #FAECE7; color: #712B13; }
+
+    /* --- TABLEAU COMPARATIF --- */
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 0.8rem; }
+    .compare-table th {
+      text-align: left; padding: 8px 12px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; color: #888780;
+      border-bottom: 0.5px solid #D3D1C7;
+    }
+    .compare-table td { padding: 8px 12px; border-bottom: 0.5px solid #F1EFE8; vertical-align: top; line-height: 1.5; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table code {
+      font-family: 'Fira Code', monospace; font-size: 0.82rem;
+      background: #F1EFE8; padding: 2px 6px; border-radius: 4px;
+    }
+
+    /* --- CHEMIN CARDS --- */
+    .path-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+    .path-card { border-radius: 12px; padding: 1rem 1.1rem; }
+    .path-card-title { font-size: 0.82rem; font-weight: 800; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .path-card code { font-family: 'Fira Code', monospace; font-size: 0.84rem; display: block; margin: 4px 0; font-weight: 700; }
+    .path-card p { font-size: 0.84rem; line-height: 1.5; margin-top: 4px; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+    .tc { border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.88rem; font-weight: 600; }
+    .tc code { font-family: 'Fira Code', monospace; font-size: 0.82rem; display: block; margin-bottom: 3px; }
+
+    .tag-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.2rem; }
+
+    .kbd {
+      display: inline-block; background: #F1EFE8;
+      border: 0.5px solid #B4B2A9; border-radius: 6px;
+      padding: 2px 8px; font-family: 'Fira Code', monospace;
+      font-size: 0.82rem; color: #2C2C2A;
+    }
+
+    .cta-wrap { text-align: center; padding: 2rem 1rem 2.5rem; }
+    .cta-btn {
+      display: inline-block; background: #C0DD97; color: #173404;
+      border: 0.5px solid #97C459; border-radius: 14px;
+      padding: 1rem 2.2rem; font-size: 1.05rem; font-weight: 800;
+      font-family: 'Nunito', sans-serif; cursor: pointer;
+      text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #97C459; }
+    .cta-sub { font-size: 0.85rem; color: #888780; margin-top: 0.7rem; }
+
+    @media (max-width: 520px) {
+      .path-cards, .two-col, .tag-compare { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav-row">
+    <a class="nav-link nav-html" href="cours-html.html">&larr; Cours HTML</a>
+    <a class="nav-link nav-css"  href="cours-css.html">&larr; Cours CSS</a>
+  </div>
+
+  <div class="hero">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">📁</div>
+    <h1>Architecture &amp; chemins de fichiers</h1>
+    <p>Apprends &agrave; bien ranger ton projet et &agrave; naviguer entre les fichiers</p>
+    <div class="badge-row">
+      <span class="badge b-green">D&eacute;butant</span>
+      <span class="badge b-purple">Essentiel</span>
+      <span class="badge b-amber">Pratique</span>
+    </div>
+  </div>
+
+  <!-- C'EST QUOI -->
+  <div class="card">
+    <div class="stitle"><div class="pill teal">?</div>Pourquoi bien organiser ses fichiers ?</div>
+    <p class="desc">Un site web, c'est rarement un seul fichier. On a du HTML, du CSS, du JavaScript, des images... Si tout est m&eacute;lang&eacute; au m&ecirc;me endroit, c'est le bazar ! Bien organiser ses fichiers dans des <strong>dossiers</strong>, c'est comme ranger sa chambre : on retrouve tout facilement, et on ne casse rien en cherchant.</p>
+    <div class="two-col">
+      <div>
+        <div class="rl">D&eacute;sorganis&eacute; 😵</div>
+        <div class="tree" style="font-size:0.78rem;">
+<div class="tl"><span class="tree-file-html">index.html</span></div>
+<div class="tl"><span class="tree-file-css">style.css</span></div>
+<div class="tl"><span class="tree-file-js">script.js</span></div>
+<div class="tl"><span class="tree-file-img">photo.jpg</span></div>
+<div class="tl"><span class="tree-file-img">logo.png</span></div>
+<div class="tl"><span class="tree-file-css">contact.css</span></div>
+<div class="tl"><span class="tree-file-html">contact.html</span></div>
+<div class="tl"><span class="tree-file-img">banniere.jpg</span></div>
+<div class="tl"><span class="tree-comment">&larr; tout m&eacute;lang&eacute; !</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="rl">Bien rang&eacute; 😎</div>
+        <div class="tree" style="font-size:0.78rem;">
+<div class="tl"><span class="tree-file-html">index.html</span></div>
+<div class="tl"><span class="tree-file-html">contact.html</span></div>
+<div class="tl"><span class="tree-folder">📁 Assets/</span></div>
+<div class="tl"><span class="tree-ln">  </span><span class="tree-folder">📁 css/</span></div>
+<div class="tl"><span class="tree-ln">  </span><span class="tree-folder">📁 js/</span></div>
+<div class="tl"><span class="tree-ln">  </span><span class="tree-folder">📁 img/</span></div>
+<div class="tl"><span class="tree-comment">&larr; clair et propre !</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE CLASSIQUE -->
+  <div class="card">
+    <div class="stitle"><div class="pill green">A</div>L'architecture classique d'un projet web</div>
+    <p class="desc">Voici la structure la plus utilis&eacute;e quand on commence un site web. C'est une convention : la plupart des d&eacute;veloppeurs organisent leurs projets de cette fa&ccedil;on, ce qui permet de s'y retrouver facilement m&ecirc;me sur le projet d'un autre !</p>
+
+    <div class="tree">
+<div class="tl"><span class="tree-root">mon-site/</span><span class="tree-comment">                    &larr; ton dossier de projet</span></div>
+<div class="tl"><span class="tree-ln">│</span></div>
+<div class="tl"><span class="tree-ln">├── </span><span class="tree-file-html">index.html</span><span class="tree-comment">              &larr; ta page principale</span></div>
+<div class="tl"><span class="tree-ln">├── </span><span class="tree-file-html">contact.html</span><span class="tree-comment">            &larr; autre page HTML</span></div>
+<div class="tl"><span class="tree-ln">│</span></div>
+<div class="tl"><span class="tree-ln">└── </span><span class="tree-folder">📁 Assets/</span><span class="tree-comment">              &larr; tous les fichiers de support</span></div>
+<div class="tl"><span class="tree-ln">    ├── </span><span class="tree-folder">📁 css/</span></div>
+<div class="tl"><span class="tree-ln">    │   ├── </span><span class="tree-file-css">style.css</span><span class="tree-comment">       &larr; styles principaux</span></div>
+<div class="tl"><span class="tree-ln">    │   └── </span><span class="tree-file-css">contact.css</span><span class="tree-comment">     &larr; styles de contact.html</span></div>
+<div class="tl"><span class="tree-ln">    │</span></div>
+<div class="tl"><span class="tree-ln">    ├── </span><span class="tree-folder">📁 js/</span></div>
+<div class="tl"><span class="tree-ln">    │   └── </span><span class="tree-file-js">script.js</span><span class="tree-comment">       &larr; code JavaScript</span></div>
+<div class="tl"><span class="tree-ln">    │</span></div>
+<div class="tl"><span class="tree-ln">    └── </span><span class="tree-folder">📁 img/</span></div>
+<div class="tl"><span class="tree-ln">        ├── </span><span class="tree-file-img">logo.png</span><span class="tree-comment">        &larr; logo du site</span></div>
+<div class="tl"><span class="tree-ln">        ├── </span><span class="tree-file-img">banniere.jpg</span><span class="tree-comment">    &larr; image d'en-t&ecirc;te</span></div>
+<div class="tl"><span class="tree-ln">        └── </span><span class="tree-file-img">photo-equipe.jpg</span><span class="tree-comment"> &larr; photo</span></div>
+    </div>
+
+    <div class="tip"><span class="tip-i">💡</span><span><strong>index.html</strong> est toujours le nom de la page d'accueil. C'est une convention universelle : quand un navigateur ouvre un dossier, il cherche automatiquement un fichier nomm&eacute; <strong>index.html</strong> !</span></div>
+  </div>
+
+  <!-- C'EST QUOI UN CHEMIN -->
+  <div class="card">
+    <div class="stitle"><div class="pill amber">C</div>C'est quoi un chemin de fichier ?</div>
+    <p class="desc">Un <strong>chemin</strong> (ou <em>path</em> en anglais) indique o&ugrave; se trouve un fichier, comme une adresse. Il y a deux types de chemins : <strong>absolu</strong> (l'adresse compl&egrave;te depuis la racine) et <strong>relatif</strong> (l'adresse depuis l'endroit o&ugrave; tu te trouves).</p>
+
+    <div class="path-cards">
+      <div class="path-card" style="background:#FAEEDA;border:0.5px solid #FAC775;">
+        <div class="path-card-title" style="color:#633806;">Chemin absolu</div>
+        <code style="color:#854F0B;">C:/mon-site/Assets/css/style.css</code>
+        <p style="color:#633806;">L'adresse compl&egrave;te depuis le d&eacute;but. Fonctionne partout, mais inutilisable sur un autre ordinateur ou en ligne.</p>
+      </div>
+      <div class="path-card" style="background:#EAF3DE;border:0.5px solid #C0DD97;">
+        <div class="path-card-title" style="color:#3B6D11;">Chemin relatif ✓</div>
+        <code style="color:#27500A;">Assets/css/style.css</code>
+        <p style="color:#3B6D11;">L'adresse depuis le fichier actuel. Fonctionne partout, m&ecirc;me en ligne. C'est celui qu'on utilise toujours !</p>
+      </div>
+    </div>
+
+    <div class="tip tip-coral" style="margin-top:0.9rem;"><span class="tip-i">⚠</span><span>En d&eacute;veloppement web, on utilise <strong>toujours les chemins relatifs</strong>. Les chemins absolus comme <code style="font-family:'Fira Code',monospace;font-size:0.88em;">C:/Users/...</code> ne fonctionneront pas quand ton site sera mis en ligne !</span></div>
+  </div>
+
+  <!-- LIRE UN CHEMIN -->
+  <div class="card">
+    <div class="stitle"><div class="pill blue">L</div>Comment lire et &eacute;crire un chemin ?</div>
+    <p class="desc">Le chemin se lit comme des indications sur un plan : <strong>chaque &eacute;l&eacute;ment s&eacute;par&eacute; par un /</strong> est soit un dossier &agrave; traverser, soit le fichier final &agrave; atteindre.</p>
+
+    <div class="rl">D&eacute;composition du chemin : Assets/css/style.css</div>
+    <div class="path-demo">
+      <span class="path-seg seg-folder">Assets</span>
+      <span class="path-sep">/</span>
+      <span class="path-seg seg-folder">css</span>
+      <span class="path-sep">/</span>
+      <span class="path-seg seg-file">style.css</span>
+    </div>
+    <div style="font-size:0.85rem;color:#5F5E5A;line-height:1.7;margin-top:0.5rem;">
+      &rarr; Entrer dans le dossier <strong>Assets</strong>, puis dans le dossier <strong>css</strong>, puis prendre le fichier <strong>style.css</strong>.
+    </div>
+
+    <div style="margin-top:1.1rem;">
+      <div class="rl">D&eacute;composition du chemin : Assets/img/logo.png</div>
+      <div class="path-demo">
+        <span class="path-seg seg-folder">Assets</span>
+        <span class="path-sep">/</span>
+        <span class="path-seg seg-folder">img</span>
+        <span class="path-sep">/</span>
+        <span class="path-seg seg-file">logo.png</span>
+      </div>
+      <div style="font-size:0.85rem;color:#5F5E5A;line-height:1.7;margin-top:0.5rem;">
+        &rarr; Entrer dans le dossier <strong>Assets</strong>, puis dans le dossier <strong>img</strong>, puis prendre le fichier <strong>logo.png</strong>.
+      </div>
+    </div>
+
+    <div class="code-block" style="margin-top:1rem;"><span class="cm">&lt;!-- Dans index.html (au niveau racine) --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="val">"stylesheet"</span> <span class="attr">href</span>=<span class="val">"<span class="hl">Assets/css/style.css</span>"</span><span class="tag">&gt;</span>
+
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"<span class="hl">Assets/img/logo.png</span>"</span> <span class="attr">alt</span>=<span class="val">"Logo"</span><span class="tag">&gt;</span>
+
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="val">"<span class="hl">Assets/js/script.js</span>"</span><span class="tag">&gt;&lt;/script&gt;</span></div>
+    <div class="tip"><span class="tip-i">💡</span><span>Quand le fichier HTML est <strong>au m&ecirc;me niveau</strong> que le dossier Assets, le chemin commence directement par <strong>Assets/</strong>. Pas besoin d'&eacute;crire le nom du dossier du projet !</span></div>
+  </div>
+
+  <!-- LES DEUX POINTS -->
+  <div class="card">
+    <div class="stitle"><div class="pill coral">.. </div>Monter d'un niveau avec ..</div>
+    <p class="desc">Que se passe-t-il si ton fichier HTML n'est <strong>pas</strong> &agrave; la racine du projet, mais dans un sous-dossier ? Il faut alors <strong>remonter</strong> d'un niveau avant de descendre vers Assets. C'est &agrave; &ccedil;a que sert <strong>..</strong> (deux points) !</p>
+
+    <div class="tree" style="margin-bottom:0.9rem;">
+<div class="tl"><span class="tree-root">mon-site/</span></div>
+<div class="tl"><span class="tree-ln">├── </span><span class="tree-file-html">index.html</span><span class="tree-comment">          &larr; page racine</span></div>
+<div class="tl"><span class="tree-ln">├── </span><span class="tree-folder">📁 pages/</span></div>
+<div class="tl"><span class="tree-ln">│   └── </span><span class="tree-file-html">contact.html</span><span class="tree-comment">    &larr; page dans un sous-dossier</span></div>
+<div class="tl"><span class="tree-ln">└── </span><span class="tree-folder">📁 Assets/</span></div>
+<div class="tl"><span class="tree-ln">    └── </span><span class="tree-folder">📁 css/</span></div>
+<div class="tl"><span class="tree-ln">        └── </span><span class="tree-file-css">style.css</span></div>
+    </div>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Depuis quel fichier ?</th>
+          <th>Chemin vers style.css</th>
+          <th>Pourquoi ?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>index.html</code><br><span style="font-size:0.8rem;color:#888780;">(racine du projet)</span></td>
+          <td><code>Assets/css/style.css</code></td>
+          <td style="font-size:0.85rem;">Assets est juste &agrave; c&ocirc;t&eacute;, on y va directement.</td>
+        </tr>
+        <tr>
+          <td><code>pages/contact.html</code><br><span style="font-size:0.8rem;color:#888780;">(dans le dossier pages/)</span></td>
+          <td><code>../Assets/css/style.css</code></td>
+          <td style="font-size:0.85rem;"><strong>..</strong> remonte dans mon-site/, puis on entre dans Assets/.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="rl" style="margin-top:1rem;">D&eacute;composition de ../Assets/css/style.css</div>
+    <div class="path-demo">
+      <span class="path-seg seg-up">..</span>
+      <span class="path-sep">/</span>
+      <span class="path-seg seg-folder">Assets</span>
+      <span class="path-sep">/</span>
+      <span class="path-seg seg-folder">css</span>
+      <span class="path-sep">/</span>
+      <span class="path-seg seg-file">style.css</span>
+    </div>
+    <div style="font-size:0.85rem;color:#5F5E5A;line-height:1.7;margin-top:0.5rem;">
+      &rarr; <strong>Remonter</strong> d'un dossier (..), puis entrer dans <strong>Assets</strong>, puis dans <strong>css</strong>, puis prendre <strong>style.css</strong>.
+    </div>
+
+    <div class="code-block" style="margin-top:1rem;"><span class="cm">&lt;!-- Dans pages/contact.html --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="val">"stylesheet"</span> <span class="attr">href</span>=<span class="val">"<span class="hl">../Assets/css/style.css</span>"</span><span class="tag">&gt;</span>
+
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"<span class="hl">../Assets/img/logo.png</span>"</span> <span class="attr">alt</span>=<span class="val">"Logo"</span><span class="tag">&gt;</span>
+
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="val">"<span class="hl">../Assets/js/script.js</span>"</span><span class="tag">&gt;&lt;/script&gt;</span></div>
+
+    <div class="tip tip-purple"><span class="tip-i">💡</span><span>Chaque <strong>..</span> remonte d'un niveau. Si ton fichier est deux niveaux trop bas, tu &eacute;crirai <strong>../../Assets/...</strong> pour remonter deux fois !</span></div>
+  </div>
+
+  <!-- TABLEAU RECAPITULATIF NOTATIONS -->
+  <div class="card">
+    <div class="stitle"><div class="pill purple">R</div>Les notations &agrave; conna&icirc;tre</div>
+    <p class="desc">Voici les trois &eacute;critures utilis&eacute;es dans les chemins relatifs :</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Notation</th><th>Signification</th><th>Exemple</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>Assets/</code></td>
+          <td>Descendre dans le dossier Assets (qui est au m&ecirc;me niveau)</td>
+          <td><code>Assets/css/style.css</code></td>
+        </tr>
+        <tr>
+          <td><code>./</code></td>
+          <td>Le dossier actuel (optionnel, rarement utilis&eacute;)</td>
+          <td><code>./Assets/css/style.css</code></td>
+        </tr>
+        <tr>
+          <td><code>../</code></td>
+          <td>Remonter d'un dossier parent</td>
+          <td><code>../Assets/css/style.css</code></td>
+        </tr>
+        <tr>
+          <td><code>../../</code></td>
+          <td>Remonter de deux dossiers parents</td>
+          <td><code>../../Assets/img/logo.png</code></td>
+        </tr>
+        <tr>
+          <td><code>/</code></td>
+          <td>La racine du serveur (d&eacute;but absolu)</td>
+          <td><code>/Assets/css/style.css</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- EXEMPLE COMPLET AVEC LIENS HTML -->
+  <div class="card">
+    <div class="stitle"><div class="pill green">E</div>Exemple complet : naviguer entre les pages</div>
+    <p class="desc">Les chemins relatifs servent aussi pour les liens entre pages HTML avec la balise <strong>&lt;a&gt;</strong>. Voici comment lier les pages selon leur position :</p>
+
+    <div class="tree" style="margin-bottom:0.9rem;">
+<div class="tl"><span class="tree-root">mon-site/</span></div>
+<div class="tl"><span class="tree-ln">├── </span><span class="tree-file-html">index.html</span></div>
+<div class="tl"><span class="tree-ln">├── </span><span class="tree-folder">📁 pages/</span></div>
+<div class="tl"><span class="tree-ln">│   ├── </span><span class="tree-file-html">contact.html</span></div>
+<div class="tl"><span class="tree-ln">│   └── </span><span class="tree-file-html">apropos.html</span></div>
+<div class="tl"><span class="tree-ln">└── </span><span class="tree-folder">📁 Assets/</span></div>
+<div class="tl"><span class="tree-ln">    ├── </span><span class="tree-folder">📁 css/  </span><span class="tree-file-css">style.css</span></div>
+<div class="tl"><span class="tree-ln">    ├── </span><span class="tree-folder">📁 js/   </span><span class="tree-file-js">script.js</span></div>
+<div class="tl"><span class="tree-ln">    └── </span><span class="tree-folder">📁 img/  </span><span class="tree-file-img">logo.png</span></div>
+    </div>
+
+    <div class="code-block"><span class="cm">&lt;!-- Dans index.html &rarr; vers les sous-pages --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"<span class="hl">pages/contact.html</span>"</span><span class="tag">&gt;</span>Contact<span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"<span class="hl">pages/apropos.html</span>"</span><span class="tag">&gt;</span>&Agrave; propos<span class="tag">&lt;/a&gt;</span>
+
+<span class="cm">&lt;!-- Dans pages/contact.html &rarr; retour &agrave; l'accueil --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"<span class="hl">../index.html</span>"</span><span class="tag">&gt;</span>Accueil<span class="tag">&lt;/a&gt;</span>
+
+<span class="cm">&lt;!-- Dans pages/contact.html &rarr; vers apropos (m&ecirc;me dossier) --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"<span class="hl">apropos.html</span>"</span><span class="tag">&gt;</span>&Agrave; propos<span class="tag">&lt;/a&gt;</span></div>
+
+    <div class="tip tip-amber"><span class="tip-i">💡</span><span>Deux fichiers dans le <strong>m&ecirc;me dossier</strong> se lient directement par leur nom : <code style="font-family:'Fira Code',monospace;font-size:0.88em;">apropos.html</code>, sans aucun chemin. C'est le cas le plus simple !</span></div>
+  </div>
+
+  <!-- RECAP VISUEL -->
+  <div class="tag-compare">
+    <div class="tc" style="background:#EAF3DE;color:#27500A;"><code>Assets/css/style.css</code>Depuis la racine : descendre directement</div>
+    <div class="tc" style="background:#FAECE7;color:#712B13;"><code>../Assets/css/style.css</code>Depuis un sous-dossier : remonter d'abord</div>
+    <div class="tc" style="background:#FAEEDA;color:#633806;"><code>pages/contact.html</code>Lien vers une page dans un sous-dossier</div>
+    <div class="tc" style="background:#EEEDFE;color:#3C3489;"><code>../index.html</code>Lien vers la page parente</div>
+  </div>
+
+  <!-- ERREURS COURANTES -->
+  <div class="card">
+    <div class="stitle"><div class="pill red">!</div>Les erreurs les plus courantes</div>
+    <p class="desc">Voici les fautes que tout le monde fait au d&eacute;but — et comment les &eacute;viter !</p>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:0.4rem;">
+
+      <div style="background:#FCEBEB;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.6;">
+        <div style="font-weight:800;color:#791F1F;margin-bottom:4px;">❌ Majuscules/minuscules incorrectes</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#A32D2D;">href="assets/css/style.css"  &larr; faux si le dossier s'appelle "Assets"</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#0F6E56;margin-top:3px;">href="Assets/css/style.css"  &larr; correct</div>
+        <div style="color:#791F1F;margin-top:4px;">Les noms de fichiers et dossiers sont sensibles &agrave; la casse. <strong>Assets</strong> &ne; <strong>assets</strong>.</div>
+      </div>
+
+      <div style="background:#FCEBEB;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.6;">
+        <div style="font-weight:800;color:#791F1F;margin-bottom:4px;">❌ Oublier le .. quand on est dans un sous-dossier</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#A32D2D;">href="Assets/css/style.css"   &larr; faux depuis pages/contact.html</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#0F6E56;margin-top:3px;">href="../Assets/css/style.css" &larr; correct</div>
+        <div style="color:#791F1F;margin-top:4px;">Si le fichier est dans un sous-dossier, il faut remonter avec <strong>..</strong> avant d'aller chercher Assets.</div>
+      </div>
+
+      <div style="background:#FCEBEB;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.6;">
+        <div style="font-weight:800;color:#791F1F;margin-bottom:4px;">❌ Espaces dans les noms de fichiers</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#A32D2D;">src="Assets/img/ma photo.jpg"  &larr; l'espace pose probl&egrave;me</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#0F6E56;margin-top:3px;">src="Assets/img/ma-photo.jpg"  &larr; utiliser des tirets</div>
+        <div style="color:#791F1F;margin-top:4px;">Ne mets <strong>jamais d'espaces</strong> dans les noms de fichiers ou de dossiers. Utilise des <strong>tirets</strong> ou des <strong>underscores</strong>.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RECAP ARCHITECTURE -->
+  <div class="card">
+    <div class="stitle"><div class="pill gray">✓</div>R&eacute;sum&eacute; : l'architecture &agrave; retenir</div>
+    <p class="desc">Cr&eacute;e toujours ton projet avec cette structure. Tu peux la copier &agrave; chaque nouveau projet !</p>
+    <div class="tree">
+<div class="tl"><span class="tree-root">mon-site/</span><span class="tree-comment">                      &larr; page d'accueil (toujours index.html)</span></div>
+<div class="tl"><span class="tree-ln">├── </span><span class="tree-file-html">index.html</span></div>
+<div class="tl"><span class="tree-ln">│</span></div>
+<div class="tl"><span class="tree-ln">└── </span><span class="tree-folder">📁 Assets/</span></div>
+<div class="tl"><span class="tree-ln">    ├── </span><span class="tree-folder">📁 css/</span></div>
+<div class="tl"><span class="tree-ln">    │   └── </span><span class="tree-file-css">style.css</span><span class="tree-comment">       &larr; lier avec : Assets/css/style.css</span></div>
+<div class="tl"><span class="tree-ln">    ├── </span><span class="tree-folder">📁 js/</span></div>
+<div class="tl"><span class="tree-ln">    │   └── </span><span class="tree-file-js">script.js</span><span class="tree-comment">       &larr; lier avec : Assets/js/script.js</span></div>
+<div class="tl"><span class="tree-ln">    └── </span><span class="tree-folder">📁 img/</span></div>
+<div class="tl"><span class="tree-ln">        └── </span><span class="tree-file-img">logo.png</span><span class="tree-comment">        &larr; utiliser avec : Assets/img/logo.png</span></div>
+    </div>
+    <div class="tip"><span class="tip-i">💡</span><span>Dans VS Code, tu vois l'arbre de tes fichiers dans la colonne de gauche. Clique droit sur un dossier pour cr&eacute;er un nouveau fichier ou un nouveau sous-dossier directement !</span></div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <p style="font-size:0.95rem;color:#5F5E5A;margin-bottom:1.2rem;">Tu as compris comment organiser un projet ? Bravo ! 🎉<br>Teste tes connaissances avec les exercices !</p>
+    <a class="cta-btn" href="exercices-architecture.html">Passer aux exercices &rarr;</a>
+    <p class="cta-sub">Exercice 1 : reconstruire l'arbre de fichiers<br>Exercice 2 : &eacute;crire le bon chemin selon la position</p>
+  </div>
+
+</body>
+</html>
