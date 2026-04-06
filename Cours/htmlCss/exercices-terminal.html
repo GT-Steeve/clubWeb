@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exercices &mdash; Le Terminal</title>
+  <title>Exercices &mdash; Le Terminal CMD</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,11 +36,8 @@
     .back-link:hover { background: #9FE1CB; }
 
     .card {
-      border-radius: 16px;
-      border: 0.5px solid #D3D1C7;
-      background: #ffffff;
-      padding: 1.4rem 1.5rem;
-      margin-bottom: 1.2rem;
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
     }
 
     .stitle {
@@ -58,7 +55,7 @@
     .p-blue   { background: #B5D4F4; color: #0C447C; }
 
     .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
-    .rl   { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
 
     .tip {
       display: flex; gap: 10px; align-items: flex-start;
@@ -67,32 +64,39 @@
       font-size: 0.88rem; color: #085041; line-height: 1.5;
     }
     .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
     .tip-i { font-size: 16px; flex-shrink: 0; }
 
-    /* Terminal simulation */
-    .term-sim {
-      background: #1D1D1B; border-radius: 12px;
-      padding: 0 0 0; font-family: 'Fira Code', monospace;
-      font-size: 0.84rem; overflow: hidden; margin: 0.8rem 0;
+    /* CMD window sim */
+    .cmd-window {
+      border-radius: 10px; overflow: hidden;
+      border: 1px solid #3A3A3A; margin: 0.8rem 0;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
     }
-    .term-bar {
-      background: #2C2C2A; padding: 8px 14px;
-      display: flex; align-items: center; gap: 6px;
+    .cmd-titlebar {
+      background: #1C1C1C; padding: 7px 14px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .term-dot { width: 11px; height: 11px; border-radius: 50%; }
-    .td-r { background: #F09595; }
-    .td-y { background: #FAC775; }
-    .td-g { background: #9FE1CB; }
-    .term-title { font-size: 0.75rem; color: #888780; margin-left: 8px; font-family: 'Nunito', sans-serif; }
-    .term-body { padding: 1rem 1.2rem; line-height: 1.9; color: #D3D1C7; }
-    .t-prompt { color: #5DCAA5; font-weight: 700; }
-    .t-cmd    { color: #FAC775; }
-    .t-arg    { color: #85B7EB; }
-    .t-out    { color: #888780; }
-    .t-hi     { color: #F5C4B3; font-weight: 700; }
-    .t-cm     { color: #5F5E5A; font-style: italic; }
-    .t-folder { color: #FAC775; font-weight: 700; }
-    .t-file   { color: #85B7EB; }
+    .cmd-titlebar-left { display: flex; align-items: center; gap: 8px; }
+    .cmd-title-text { font-size: 0.78rem; color: #AAAAAA; font-family: 'Nunito', sans-serif; }
+    .cmd-titlebar-btns { display: flex; gap: 6px; }
+    .tw-btn { width: 11px; height: 11px; border-radius: 50%; }
+    .tw-min { background: #FAC775; } .tw-max { background: #9FE1CB; } .tw-cls { background: #F09595; }
+    .cmd-body {
+      background: #0C0C0C; padding: 0.9rem 1.2rem;
+      font-family: 'Fira Code', monospace; font-size: 0.83rem;
+      line-height: 1.95; color: #C8C8C8; white-space: pre; overflow-x: auto;
+    }
+    .p  { color: #FAC775; }
+    .pa { color: #C8C8C8; }
+    .kw { color: #ffffff; font-weight: 700; }
+    .ar { color: #85B7EB; }
+    .ou { color: #C8C8C8; }
+    .di { color: #555; }
+    .cm { color: #4E9A4E; font-style: italic; }
+    .ok { color: #9FE1CB; }
+    .er { color: #F09595; }
+    .hi { color: #FAC775; font-weight: 700; }
 
     /* QCM */
     .qcm-block { margin-bottom: 1.6rem; padding-bottom: 1.4rem; border-bottom: 0.5px solid #F1EFE8; }
@@ -100,13 +104,13 @@
     .qcm-question { font-size: 0.96rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.7rem; }
     .choices { display: flex; flex-wrap: wrap; gap: 8px; }
     .choice-btn {
-      border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A;
+      border: 0.5px solid #3A3A3A; background: #141414; color: #FAC775;
       border-radius: 8px; padding: 6px 14px; font-size: 0.84rem;
       font-family: 'Fira Code', monospace; cursor: pointer; transition: background 0.12s;
     }
-    .choice-btn:hover   { background: #D3D1C7; }
-    .choice-btn.correct { background: #D0F4EA; color: #085041; border-color: #5DCAA5; }
-    .choice-btn.wrong   { background: #FCEBEB; color: #791F1F; border-color: #F09595; }
+    .choice-btn:hover   { background: #2C2C2A; }
+    .choice-btn.correct { background: #0C2A20; color: #9FE1CB; border-color: #5DCAA5; }
+    .choice-btn.wrong   { background: #2A0C0C; color: #F09595; border-color: #F09595; }
     .choice-btn:disabled { cursor: default; }
     .q-feedback { font-size: 0.88rem; min-height: 1.3em; font-weight: 700; margin-top: 6px; }
     .q-feedback.ok { color: #0F6E56; }
@@ -120,22 +124,36 @@
     .chip-ok { background: #D0F4EA; color: #085041; }
     .chip-ko { background: #FCEBEB; color: #791F1F; }
 
-    /* Path builder */
-    .path-builder {
+    /* Sequence builder */
+    .seq-builder {
       display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
-      background: #1D1D1B; border-radius: 10px; padding: 0.8rem 1rem; min-height: 50px;
-      margin: 0.7rem 0; font-family: 'Fira Code', monospace;
+      background: #0C0C0C; border: 1px solid #3A3A3A; border-radius: 10px;
+      padding: 0.8rem 1rem; min-height: 52px; margin: 0.7rem 0;
     }
-    .path-piece {
-      background: #CECBF6; color: #26215C;
-      border: 0.5px solid #7F77DD; border-radius: 6px;
-      padding: 4px 10px; font-family: 'Fira Code', monospace;
+    .seq-piece {
+      background: #1F1F1F; color: #FAC775;
+      border: 0.5px solid #555; border-radius: 6px;
+      padding: 5px 12px; font-family: 'Fira Code', monospace;
       font-size: 0.84rem; cursor: pointer; font-weight: 700;
       transition: background 0.12s;
     }
-    .path-piece:hover { background: #AFA9EC; }
-    .path-piece.placed { background: #D0F4EA; border-color: #5DCAA5; color: #085041; cursor: default; }
-    .path-sep { color: #5DCAA5; font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 700; }
+    .seq-piece:hover { background: #2C2C2A; border-color: #FAC775; }
+    .seq-piece.placed { background: #0C2A20; border-color: #5DCAA5; color: #9FE1CB; cursor: default; }
+    .seq-arrow { color: #555; font-family: 'Fira Code', monospace; font-size: 0.9rem; padding: 0 2px; }
+
+    /* Fill-in blanks */
+    .fill-block { margin-bottom: 1.4rem; padding-bottom: 1.4rem; border-bottom: 0.5px solid #F1EFE8; }
+    .fill-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .blank-choices { display: flex; flex-wrap: wrap; gap: 7px; margin: 0.7rem 0; }
+    .blank-btn {
+      border: 0.5px solid #3A3A3A; background: #141414; color: #FAC775;
+      border-radius: 7px; padding: 5px 13px; font-size: 0.84rem;
+      font-family: 'Fira Code', monospace; cursor: pointer; transition: background 0.12s;
+    }
+    .blank-btn:hover { background: #2C2C2A; }
+    .blank-btn.correct { background: #0C2A20; color: #9FE1CB; border-color: #5DCAA5; }
+    .blank-btn.wrong   { background: #2A0C0C; color: #F09595; border-color: #F09595; }
+    .blank-btn:disabled { cursor: default; }
 
     .btn-row { display: flex; gap: 8px; margin-top: 0.8rem; flex-wrap: wrap; }
     .action-btn {
@@ -148,306 +166,269 @@
     .action-btn.primary { background: #D0F4EA; color: #085041; border-color: #5DCAA5; }
     .action-btn.primary:hover { background: #9FE1CB; }
 
-    /* Type matching game */
-    .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0.8rem 0; }
-    .match-col-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: #888780; margin-bottom: 8px; text-align: center; }
-    .match-item {
-      background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 8px;
-      padding: 8px 12px; font-size: 0.88rem; text-align: center; cursor: pointer;
-      transition: all 0.12s; font-family: 'Fira Code', monospace;
-    }
-    .match-item:hover { background: #D3D1C7; }
-    .match-item.selected-a { background: #EEEDFE; border-color: #7F77DD; color: #26215C; font-weight: 700; }
-    .match-item.selected-b { background: #FAEEDA; border-color: #FAC775; color: #633806; font-weight: 700; }
-    .match-item.matched-ok { background: #D0F4EA; border-color: #5DCAA5; color: #085041; font-weight: 700; cursor: default; }
-    .match-item.matched-ko { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+    code { font-family: 'Fira Code', monospace; background: #141414; color: #FAC775; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; }
 
     .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
 
-    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; }
-
-    @media (max-width: 520px) {
-      .hero h1 { font-size: 1.6rem; }
-      .match-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 520px) { .hero h1 { font-size: 1.6rem; } }
   </style>
 </head>
 <body>
 
-  <a class="back-link" href="cours-terminal.html">← Retour au cours Terminal</a>
+  <a class="back-link" href="cours-terminal.html">← Retour au cours Terminal CMD</a>
 
   <div class="hero">
-    <div style="font-size:2.5rem;margin-bottom:0.5rem;">🖥️</div>
-    <h1>Exercices &mdash; Le Terminal</h1>
-    <p>Mets en pratique la navigation dans ton PC avec le terminal !</p>
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">⬛</div>
+    <h1>Exercices &mdash; Le Terminal CMD</h1>
+    <p>Mets en pratique l'Invite de commandes Windows !</p>
     <div class="badge-row">
       <span class="badge b-teal">3 exercices</span>
       <span class="badge b-purple">Interactif</span>
     </div>
   </div>
 
-  <!-- EXERCICE 1 : QCM commandes -->
+  <!-- EXERCICE 1 : QCM commandes CMD -->
   <div class="card">
-    <div class="stitle"><div class="pill p-teal">1</div>Exercice 1 &mdash; Quelle commande utiliser ?</div>
-    <p class="desc">Pour chaque situation, choisis la bonne commande à taper dans le terminal.</p>
+    <div class="stitle"><div class="pill p-teal">1</div>Exercice 1 &mdash; Quelle commande CMD utiliser ?</div>
+    <p class="desc">Pour chaque situation, choisis la bonne commande à taper dans l'Invite de commandes.</p>
 
     <!-- Q1 -->
     <div class="qcm-block">
-      <div class="term-sim" style="margin-bottom:0.7rem;">
-        <div class="term-bar"><div class="term-dot td-r"></div><div class="term-dot td-y"></div><div class="term-dot td-g"></div><div class="term-title">Terminal</div></div>
-        <div class="term-body"><span class="t-prompt">alice@pc</span> <span class="t-out">~</span> <span class="t-prompt">$</span> <span style="opacity:0.4;">█</span></div>
+      <div class="cmd-window">
+        <div class="cmd-titlebar"><div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de commandes</span></div><div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div></div>
+        <div class="cmd-body"><span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span style="opacity:0.4;">█</span></div>
       </div>
-      <div class="qcm-question">Tu veux savoir <strong>dans quel dossier tu te trouves</strong> actuellement. Quelle commande tapes-tu ?</div>
+      <div class="qcm-question">Tu veux <strong>voir tous les fichiers et dossiers</strong> qui se trouvent à cet endroit. Quelle commande tapes-tu ?</div>
       <div class="choices">
         <button class="choice-btn" onclick="qcm(this,'q1',false)">ls</button>
-        <button class="choice-btn" onclick="qcm(this,'q1',true)">pwd</button>
         <button class="choice-btn" onclick="qcm(this,'q1',false)">cd</button>
-        <button class="choice-btn" onclick="qcm(this,'q1',false)">clear</button>
+        <button class="choice-btn" onclick="qcm(this,'q1',true)">dir</button>
+        <button class="choice-btn" onclick="qcm(this,'q1',false)">show</button>
       </div>
       <div class="q-feedback" id="fb-q1"></div>
     </div>
 
     <!-- Q2 -->
     <div class="qcm-block">
-      <div class="term-sim" style="margin-bottom:0.7rem;">
-        <div class="term-bar"><div class="term-dot td-r"></div><div class="term-dot td-y"></div><div class="term-dot td-g"></div><div class="term-title">Terminal</div></div>
-        <div class="term-body"><span class="t-prompt">$</span> <span class="t-out">?</span><br><span class="t-folder">Documents</span>   <span class="t-folder">Photos</span>   <span class="t-file">index.html</span>   <span class="t-file">style.css</span></div>
+      <div class="cmd-window">
+        <div class="cmd-titlebar"><div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de commandes</span></div><div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div></div>
+        <div class="cmd-body"><span class="p">C:\Users\alice\Documents\Projets\mon-site</span><span class="pa">&gt;</span> <span style="opacity:0.4;">█</span></div>
       </div>
-      <div class="qcm-question">Tu viens de voir ce résultat s'afficher. Quelle commande as-tu tapée pour voir la <strong>liste des fichiers</strong> ?</div>
+      <div class="qcm-question">Tu es dans <strong>mon-site</strong> et tu veux <strong>remonter dans le dossier Projets</strong>. Quelle commande tapes-tu ?</div>
       <div class="choices">
-        <button class="choice-btn" onclick="qcm(this,'q2',false)">pwd</button>
-        <button class="choice-btn" onclick="qcm(this,'q2',false)">cd Documents</button>
-        <button class="choice-btn" onclick="qcm(this,'q2',true)">ls</button>
-        <button class="choice-btn" onclick="qcm(this,'q2',false)">cd ..</button>
+        <button class="choice-btn" onclick="qcm(this,'q2',false)">cd Projets</button>
+        <button class="choice-btn" onclick="qcm(this,'q2',true)">cd ..</button>
+        <button class="choice-btn" onclick="qcm(this,'q2',false)">dir ..</button>
+        <button class="choice-btn" onclick="qcm(this,'q2',false)">cd ~</button>
       </div>
       <div class="q-feedback" id="fb-q2"></div>
     </div>
 
     <!-- Q3 -->
     <div class="qcm-block">
-      <div class="qcm-question">Tu es dans ton dossier personnel. Tu veux <strong>entrer dans le dossier "Projets"</strong>. Quelle commande tapes-tu ?</div>
+      <div class="qcm-question">Tu veux <strong>créer un nouveau dossier</strong> appelé <code>mon-projet</code> dans le dossier actuel. Quelle commande tapes-tu ?</div>
       <div class="choices">
-        <button class="choice-btn" onclick="qcm(this,'q3',false)">ls Projets</button>
-        <button class="choice-btn" onclick="qcm(this,'q3',true)">cd Projets</button>
-        <button class="choice-btn" onclick="qcm(this,'q3',false)">cd ..</button>
-        <button class="choice-btn" onclick="qcm(this,'q3',false)">open Projets</button>
+        <button class="choice-btn" onclick="qcm(this,'q3',false)">cd mon-projet</button>
+        <button class="choice-btn" onclick="qcm(this,'q3',false)">dir mon-projet</button>
+        <button class="choice-btn" onclick="qcm(this,'q3',true)">mkdir mon-projet</button>
+        <button class="choice-btn" onclick="qcm(this,'q3',false)">new mon-projet</button>
       </div>
       <div class="q-feedback" id="fb-q3"></div>
     </div>
 
     <!-- Q4 -->
     <div class="qcm-block">
-      <div class="term-sim" style="margin-bottom:0.7rem;">
-        <div class="term-bar"><div class="term-dot td-r"></div><div class="term-dot td-y"></div><div class="term-dot td-g"></div><div class="term-title">Terminal</div></div>
-        <div class="term-body"><span class="t-prompt">$</span> <span class="t-cmd">pwd</span><br><span class="t-out">/Users/alice/Documents/Projets/mon-site</span></div>
+      <div class="cmd-window">
+        <div class="cmd-titlebar"><div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de commandes</span></div><div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div></div>
+        <div class="cmd-body"><span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span class="kw">dir</span>
+<span class="di"> Répertoire de C:\Users\alice
+
+</span><span class="ou">15/01/2025  08:00    &lt;DIR&gt;          Documents
+15/01/2025  08:00    &lt;DIR&gt;          Bureau
+15/01/2025  08:00    &lt;DIR&gt;          Téléchargements
+               0 fichier(s)              0 octets</span></div>
       </div>
-      <div class="qcm-question">Tu es dans <strong>mon-site</strong> et tu veux <strong>remonter dans Projets</strong>. Quelle commande tapes-tu ?</div>
+      <div class="qcm-question">Tu vois ce résultat. Tu veux <strong>entrer dans le dossier Documents</strong>. Quelle commande tapes-tu ?</div>
       <div class="choices">
-        <button class="choice-btn" onclick="qcm(this,'q4',false)">cd Projets</button>
-        <button class="choice-btn" onclick="qcm(this,'q4',false)">cd ~</button>
-        <button class="choice-btn" onclick="qcm(this,'q4',true)">cd ..</button>
-        <button class="choice-btn" onclick="qcm(this,'q4',false)">cd ../../</button>
+        <button class="choice-btn" onclick="qcm(this,'q4',false)">dir Documents</button>
+        <button class="choice-btn" onclick="qcm(this,'q4',true)">cd Documents</button>
+        <button class="choice-btn" onclick="qcm(this,'q4',false)">open Documents</button>
+        <button class="choice-btn" onclick="qcm(this,'q4',false)">go Documents</button>
       </div>
       <div class="q-feedback" id="fb-q4"></div>
     </div>
 
     <!-- Q5 -->
-    <div class="qcm-block" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
-      <div class="qcm-question">Le terminal est rempli de texte et tu veux l'<strong>effacer pour avoir un écran propre</strong>. Quelle commande tapes-tu sur Mac ?</div>
+    <div class="qcm-block">
+      <div class="qcm-question">L'écran CMD est plein de texte et tu veux l'<strong>effacer pour avoir un écran vide et propre</strong>. Quelle commande tapes-tu ?</div>
       <div class="choices">
-        <button class="choice-btn" onclick="qcm(this,'q5',false)">cls</button>
+        <button class="choice-btn" onclick="qcm(this,'q5',false)">clear</button>
+        <button class="choice-btn" onclick="qcm(this,'q5',true)">cls</button>
         <button class="choice-btn" onclick="qcm(this,'q5',false)">reset</button>
-        <button class="choice-btn" onclick="qcm(this,'q5',true)">clear</button>
         <button class="choice-btn" onclick="qcm(this,'q5',false)">erase</button>
       </div>
       <div class="q-feedback" id="fb-q5"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="qcm-block" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
+      <div class="cmd-window">
+        <div class="cmd-titlebar"><div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de commandes</span></div><div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div></div>
+        <div class="cmd-body"><span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span style="opacity:0.4;">█</span>
+<span class="cm">                          ← tu as une clé USB branchée sur D:</span></div>
+      </div>
+      <div class="qcm-question">Tu es sur <strong>C:</strong> et tu veux <strong>aller sur ta clé USB D:</strong>. Quelle commande tapes-tu ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'q6',false)">cd D:\</button>
+        <button class="choice-btn" onclick="qcm(this,'q6',false)">goto D:</button>
+        <button class="choice-btn" onclick="qcm(this,'q6',true)">D:</button>
+        <button class="choice-btn" onclick="qcm(this,'q6',false)">cd D:</button>
+      </div>
+      <div class="q-feedback" id="fb-q6"></div>
     </div>
 
     <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
     <div class="score-row" id="score-qcm"></div>
   </div>
 
-  <!-- EXERCICE 2 : Association commande ↔ système -->
+  <!-- EXERCICE 2 : Lire une session CMD -->
   <div class="card">
-    <div class="stitle"><div class="pill p-purple">2</div>Exercice 2 &mdash; Associe la commande à son système</div>
-    <p class="desc">Clique sur une commande à gauche, puis sur le système d'exploitation correspondant à droite. Certaines commandes fonctionnent partout !</p>
+    <div class="stitle"><div class="pill p-purple">2</div>Exercice 2 &mdash; Lis la session CMD et réponds</div>
+    <p class="desc">Observe attentivement la session CMD ci-dessous, puis réponds aux questions en cliquant sur la bonne réponse.</p>
 
-    <div id="match-container"></div>
+    <div class="cmd-window" style="margin-bottom:1rem;">
+      <div class="cmd-titlebar"><div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de commandes</span></div><div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div></div>
+      <div class="cmd-body"><span class="p">C:\Users\bob</span><span class="pa">&gt;</span> <span class="kw">dir</span> <span class="ar">/B</span>
+<span class="ou">Documents
+Bureau
+Projets
+notes.txt</span>
 
-    <div class="btn-row">
-      <button class="action-btn primary" onclick="checkMatch()">Vérifier</button>
-      <button class="action-btn" onclick="resetMatch()">Recommencer</button>
+<span class="p">C:\Users\bob</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">Projets</span>
+<span class="p">C:\Users\bob\Projets</span><span class="pa">&gt;</span> <span class="kw">dir</span> <span class="ar">/B</span>
+<span class="ou">site-perso
+jeu-python</span>
+
+<span class="p">C:\Users\bob\Projets</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">site-perso</span>
+<span class="p">C:\Users\bob\Projets\site-perso</span><span class="pa">&gt;</span> <span class="kw">mkdir</span> <span class="ar">css</span>
+<span class="p">C:\Users\bob\Projets\site-perso</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">..</span>
+<span class="p">C:\Users\bob\Projets</span><span class="pa">&gt;</span></div>
     </div>
-    <div class="progress-wrap"><div class="progress-fill" id="prog-match"></div></div>
-    <div class="score-row" id="score-match"></div>
 
-    <div class="tip tip-purple"><span class="tip-i">💡</span><span>Sur PowerShell (Windows), tu peux aussi utiliser <code>ls</code> et <code>pwd</code> comme sur Mac. PowerShell est plus flexible !</span></div>
+    <!-- Qs sur la session -->
+    <div class="fill-block">
+      <div class="qcm-question">Au tout début, dans quel dossier se trouve Bob ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'s1',false)">C:\Users\bob\Projets</button>
+        <button class="choice-btn" onclick="qcm(this,'s1',true)">C:\Users\bob</button>
+        <button class="choice-btn" onclick="qcm(this,'s1',false)">C:\Users\bob\Documents</button>
+      </div>
+      <div class="q-feedback" id="fb-s1"></div>
+    </div>
+
+    <div class="fill-block">
+      <div class="qcm-question">Combien de dossiers Bob a-t-il dans son dossier <strong>Projets</strong> ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'s2',false)">1</button>
+        <button class="choice-btn" onclick="qcm(this,'s2',true)">2</button>
+        <button class="choice-btn" onclick="qcm(this,'s2',false)">3</button>
+        <button class="choice-btn" onclick="qcm(this,'s2',false)">4</button>
+      </div>
+      <div class="q-feedback" id="fb-s2"></div>
+    </div>
+
+    <div class="fill-block">
+      <div class="qcm-question">Quelle commande Bob a-t-il utilisée pour <strong>créer le dossier css</strong> ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'s3',false)">cd css</button>
+        <button class="choice-btn" onclick="qcm(this,'s3',false)">dir css</button>
+        <button class="choice-btn" onclick="qcm(this,'s3',true)">mkdir css</button>
+      </div>
+      <div class="q-feedback" id="fb-s3"></div>
+    </div>
+
+    <div class="fill-block" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
+      <div class="qcm-question">À la toute fin de la session, dans quel dossier se trouve Bob ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'s4',false)">C:\Users\bob\Projets\site-perso</button>
+        <button class="choice-btn" onclick="qcm(this,'s4',true)">C:\Users\bob\Projets</button>
+        <button class="choice-btn" onclick="qcm(this,'s4',false)">C:\Users\bob</button>
+      </div>
+      <div class="q-feedback" id="fb-s4"></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="prog-session"></div></div>
+    <div class="score-row" id="score-session"></div>
   </div>
 
-  <!-- EXERCICE 3 : Reconstituer la séquence de commandes -->
+  <!-- EXERCICE 3 : Séquences de commandes -->
   <div class="card">
-    <div class="stitle"><div class="pill p-amber">3</div>Exercice 3 &mdash; Remets les commandes dans l'ordre</div>
-    <p class="desc">Pour chaque mission, clique sur les commandes dans le <strong>bon ordre</strong> pour arriver au résultat attendu.</p>
+    <div class="stitle"><div class="pill p-amber">3</div>Exercice 3 &mdash; Remets les commandes CMD dans l'ordre</div>
+    <p class="desc">Pour chaque mission, clique sur les commandes dans le <strong>bon ordre</strong> pour accomplir la tâche demandée.</p>
 
     <div id="seq-container"></div>
   </div>
 
   <div class="footer-note">
-    🎉 Bravo ! Tu maîtrises les bases du terminal.<br>
-    <a href="cours-git.html" style="color:#085041;font-weight:700;">Passe au cours Git →</a>
+    🎉 Bravo ! Tu maîtrises l'Invite de commandes Windows.<br>
+    <a href="cours-git.html" style="color:#085041;font-weight:700;">Passe au cours Git → utilise CMD pour versionner ton code !</a>
   </div>
 
   <script>
-    /* ===== Messages de félicitations ===== */
     var okMsgs = ['Excellent !', 'Parfait !', 'Bravo !', 'Très bien !', 'Correct !'];
     function rnd(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
 
-    /* ===== EXERCICE 1 : QCM ===== */
-    var qcmDone = {}, qcmScore = 0, qcmTotal = 5;
+    /* ===== QCM shared ===== */
+    var qcmDone = {}, qcmScore = 0, qcmTotal = 6;
+    var sessionDone = {}, sessionScore = 0, sessionTotal = 4;
 
     function qcm(btn, qid, correct) {
-      if (qcmDone[qid]) return;
-      qcmDone[qid] = true;
+      var isSession = qid.startsWith('s');
+      var doneObj = isSession ? sessionDone : qcmDone;
+      if (doneObj[qid]) return;
+      doneObj[qid] = true;
+
       var fb = document.getElementById('fb-' + qid);
       btn.classList.add(correct ? 'correct' : 'wrong');
       btn.closest('.choices').querySelectorAll('.choice-btn').forEach(function(b) { b.disabled = true; });
       if (correct) {
-        fb.className = 'q-feedback ok';
-        fb.textContent = rnd(okMsgs) + ' ✓';
-        qcmScore++;
+        fb.className = 'q-feedback ok'; fb.textContent = rnd(okMsgs) + ' ✓';
+        if (isSession) sessionScore++; else qcmScore++;
       } else {
-        fb.className = 'q-feedback ko';
-        fb.textContent = 'Pas tout à fait ! Relis le cours et réessaie 😊';
+        fb.className = 'q-feedback ko'; fb.textContent = 'Pas tout à fait ! Relis le cours et réessaie 😊';
       }
-      updateQcmScore();
-    }
 
-    function updateQcmScore() {
-      var done = Object.keys(qcmDone).length;
-      document.getElementById('prog-qcm').style.width = (done / qcmTotal * 100) + '%';
-      if (done === qcmTotal) {
-        var row = document.getElementById('score-qcm');
-        row.innerHTML = '';
-        var ok = document.createElement('span');
-        ok.className = 'chip chip-ok';
-        ok.textContent = qcmScore + ' bonne' + (qcmScore > 1 ? 's' : '') + ' réponse' + (qcmScore > 1 ? 's' : '');
-        row.appendChild(ok);
-        if (qcmTotal - qcmScore > 0) {
-          var ko = document.createElement('span');
-          ko.className = 'chip chip-ko';
-          ko.textContent = (qcmTotal - qcmScore) + ' erreur' + (qcmTotal - qcmScore > 1 ? 's' : '');
-          row.appendChild(ko);
-        }
-      }
-    }
-
-    /* ===== EXERCICE 2 : Association ===== */
-    var matchData = [
-      { cmd: 'pwd',   os: 'Mac / Linux' },
-      { cmd: 'cls',   os: 'Windows (CMD)' },
-      { cmd: 'clear', os: 'Mac / Linux' },
-      { cmd: 'dir',   os: 'Windows (CMD)' },
-      { cmd: 'cd ..', os: 'Tous les systèmes' },
-      { cmd: 'ls',    os: 'Tous les systèmes' },
-    ];
-    var matchSelected = null, matchSide = null, matchDone = {}, matchScore = 0;
-
-    function buildMatch() {
-      var container = document.getElementById('match-container');
-      var osOptions = [...new Set(matchData.map(function(d) { return d.os; }))];
-
-      var html = '<div class="match-grid">';
-      html += '<div><div class="match-col-title">Commande</div>';
-      matchData.forEach(function(d, i) {
-        html += '<div class="match-item" id="ma-' + i + '" onclick="selectMatch(this,\'a\',' + i + ')" style="margin-bottom:6px;">' + d.cmd + '</div>';
-      });
-      html += '</div>';
-
-      html += '<div><div class="match-col-title">Système</div>';
-      var shuffled = matchData.slice().sort(function() { return Math.random()-0.5; });
-      shuffled.forEach(function(d, i) {
-        html += '<div class="match-item" id="mb-' + i + '" onclick="selectMatch(this,\'b\',' + i + ')" data-os="' + d.os + '" style="margin-bottom:6px;">' + d.os + '</div>';
-      });
-      html += '</div></div>';
-      container.innerHTML = html;
-    }
-
-    function selectMatch(el, side, idx) {
-      if (el.classList.contains('matched-ok')) return;
-      if (side === 'a') {
-        document.querySelectorAll('.match-item').forEach(function(e) {
-          if (!e.classList.contains('matched-ok')) { e.classList.remove('selected-a','selected-b'); }
-        });
-        el.classList.add('selected-a');
-        matchSelected = idx; matchSide = 'a';
-      } else if (matchSide === 'a' && matchSelected !== null) {
-        var cmdData = matchData[matchSelected];
-        var clickedOs = el.getAttribute('data-os');
-        var aEl = document.getElementById('ma-' + matchSelected);
-        if (cmdData.os === clickedOs) {
-          aEl.classList.remove('selected-a'); aEl.classList.add('matched-ok');
-          el.classList.remove('selected-b');  el.classList.add('matched-ok');
-          matchDone[matchSelected] = true; matchScore++;
-        } else {
-          aEl.classList.add('matched-ko'); el.classList.add('matched-ko');
-          setTimeout(function() {
-            aEl.classList.remove('selected-a','matched-ko');
-            el.classList.remove('selected-b','matched-ko');
-          }, 700);
-        }
-        matchSelected = null; matchSide = null;
-        updateMatchScore();
-      }
-    }
-
-    function checkMatch() {
-      var done = Object.keys(matchDone).length;
-      document.getElementById('prog-match').style.width = (done / matchData.length * 100) + '%';
-      var row = document.getElementById('score-match');
-      row.innerHTML = '';
-      if (done === matchData.length) {
-        var ok = document.createElement('span');
-        ok.className = 'chip chip-ok';
-        ok.textContent = 'Toutes les paires trouvées ! 🎉';
-        row.appendChild(ok);
+      if (isSession) {
+        var done = Object.keys(sessionDone).length;
+        document.getElementById('prog-session').style.width = (done / sessionTotal * 100) + '%';
+        if (done === sessionTotal) showScore('score-session', sessionScore, sessionTotal);
       } else {
-        var c = document.createElement('span');
-        c.className = 'chip chip-ok';
-        c.textContent = done + ' / ' + matchData.length + ' paires trouvées';
-        row.appendChild(c);
+        var done2 = Object.keys(qcmDone).length;
+        document.getElementById('prog-qcm').style.width = (done2 / qcmTotal * 100) + '%';
+        if (done2 === qcmTotal) showScore('score-qcm', qcmScore, qcmTotal);
       }
     }
 
-    function updateMatchScore() {
-      var done = Object.keys(matchDone).length;
-      document.getElementById('prog-match').style.width = (done / matchData.length * 100) + '%';
-      if (done === matchData.length) {
-        var row = document.getElementById('score-match');
-        row.innerHTML = '<span class="chip chip-ok">Toutes les paires trouvées ! 🎉</span>';
-      }
-    }
-
-    function resetMatch() {
-      matchSelected = null; matchSide = null; matchDone = {}; matchScore = 0;
-      document.getElementById('prog-match').style.width = '0%';
-      document.getElementById('score-match').innerHTML = '';
-      buildMatch();
+    function showScore(id, score, total) {
+      var row = document.getElementById(id);
+      row.innerHTML = '<span class="chip chip-ok">' + score + ' bonne' + (score > 1 ? 's' : '') + ' réponse' + (score > 1 ? 's' : '') + ' sur ' + total + '</span>';
+      if (total - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (total-score) + ' erreur' + (total-score>1?'s':'') + '</span>';
     }
 
     /* ===== EXERCICE 3 : Séquences ===== */
     var seqData = [
       {
-        mission: 'Tu veux <strong>entrer dans le dossier "Projets"</strong> qui se trouve dans "Documents", puis <strong>voir son contenu</strong>.',
-        context: 'Tu es dans ton dossier personnel <code style="background:#1D1D1B;color:#9FE1CB;padding:1px 5px;border-radius:3px;">/Users/alice</code>',
-        solution: ['cd Documents', 'cd Projets', 'ls'],
-        choices: ['ls', 'cd Documents', 'pwd', 'cd Projets', 'cd ..', 'clear'],
+        mission: 'Tu veux <strong>naviguer jusqu\'à ton dossier de projet "mon-site"</strong> qui se trouve dans <code>Documents\Projets</code>, puis <strong>voir son contenu</strong>.',
+        context: 'Tu commences dans : <code>C:\\Users\\alice&gt;</code>',
+        solution: ['cd Documents', 'cd Projets', 'cd mon-site', 'dir /B'],
+        choices: ['dir /B', 'cd Documents', 'cls', 'cd Projets', 'cd mon-site', 'cd ..'],
         id: 'seq1'
       },
       {
-        mission: 'Tu veux <strong>savoir où tu es</strong>, puis <strong>remonter deux niveaux</strong> vers le haut, puis <strong>voir le contenu</strong>.',
-        context: 'Tu es dans <code style="background:#1D1D1B;color:#9FE1CB;padding:1px 5px;border-radius:3px;">/Users/alice/Documents/Projets</code>',
-        solution: ['pwd', 'cd ..', 'cd ..', 'ls'],
-        choices: ['ls', 'pwd', 'cd Documents', 'cd ..', 'clear', 'cd ~'],
+        mission: 'Tu veux <strong>créer un dossier "web-project"</strong>, <strong>y entrer</strong>, puis <strong>créer trois sous-dossiers</strong> css, js et img.',
+        context: 'Tu commences dans : <code>C:\\Users\\alice\\Documents&gt;</code>',
+        solution: ['mkdir web-project', 'cd web-project', 'mkdir css js img'],
+        choices: ['mkdir css js img', 'cd web-project', 'dir /B', 'mkdir web-project', 'cls', 'cd ..'],
         id: 'seq2'
       }
     ];
@@ -459,13 +440,13 @@
         var div = document.createElement('div');
         div.style.marginBottom = '1.6rem';
         div.style.paddingBottom = '1.4rem';
-        if (idx < seqData.length - 1) div.style.borderBottom = '0.5px solid #F1EFE8';
+        if (idx < seqData.length-1) div.style.borderBottom = '0.5px solid #F1EFE8';
 
         div.innerHTML = '<div class="rl">Mission ' + (idx+1) + ' sur ' + seqData.length + '</div>'
-          + '<p style="font-size:0.92rem;color:#2C2C2A;margin-bottom:0.4rem;">' + ex.mission + '</p>'
-          + '<p style="font-size:0.85rem;color:#888780;margin-bottom:0.7rem;">' + ex.context + '</p>'
-          + '<div class="path-builder" id="builder-' + ex.id + '">'
-          + '<span style="font-size:0.8rem;color:#5F5E5A;">Clique sur les commandes dans l\'ordre...</span>'
+          + '<p style="font-size:0.92rem;color:#2C2C2A;margin-bottom:0.3rem;">' + ex.mission + '</p>'
+          + '<p style="font-size:0.84rem;color:#888780;margin-bottom:0.7rem;">' + ex.context + '</p>'
+          + '<div class="seq-builder" id="builder-' + ex.id + '">'
+          + '<span style="font-size:0.79rem;color:#555;font-family:\'Fira Code\',monospace;">Clique sur les commandes dans l\'ordre...</span>'
           + '</div>'
           + '<div style="display:flex;flex-wrap:wrap;gap:6px;margin:0.6rem 0;" id="pieces-' + ex.id + '"></div>'
           + '<div class="q-feedback" id="fb-' + ex.id + '"></div>'
@@ -476,7 +457,7 @@
         var shuffled = ex.choices.slice().sort(function() { return Math.random()-0.5; });
         shuffled.forEach(function(piece) {
           var btn = document.createElement('span');
-          btn.className = 'path-piece';
+          btn.className = 'seq-piece';
           btn.textContent = piece;
           btn.dataset.value = piece;
           btn.onclick = function() { addSeqPiece(this, ex); };
@@ -497,19 +478,19 @@
     function renderBuilder(ex) {
       var builder = document.getElementById('builder-' + ex.id);
       if (ex._built.length === 0) {
-        builder.innerHTML = '<span style="font-size:0.8rem;color:#5F5E5A;">Clique sur les commandes dans l\'ordre...</span>';
+        builder.innerHTML = '<span style="font-size:0.79rem;color:#555;font-family:\'Fira Code\',monospace;">Clique sur les commandes dans l\'ordre...</span>';
         return;
       }
       builder.innerHTML = '';
       ex._built.forEach(function(seg, i) {
         if (i > 0) {
           var arr = document.createElement('span');
-          arr.style.cssText = 'color:#5DCAA5;font-family:Fira Code,monospace;font-size:0.9rem;padding:0 4px;';
+          arr.className = 'seq-arrow';
           arr.textContent = '→';
           builder.appendChild(arr);
         }
         var s = document.createElement('span');
-        s.className = 'path-piece placed';
+        s.className = 'seq-piece placed';
         s.textContent = seg;
         s.dataset.idx = i;
         s.onclick = function() { removeSeqPiece(parseInt(this.dataset.idx), ex); };
@@ -520,10 +501,8 @@
     function removeSeqPiece(idx, ex) {
       var removed = ex._built.splice(idx);
       removed.forEach(function(val) {
-        document.querySelectorAll('#pieces-' + ex.id + ' .path-piece').forEach(function(btn) {
-          if (btn.dataset.value === val && btn.classList.contains('placed')) {
-            btn.classList.remove('placed');
-          }
+        document.querySelectorAll('#pieces-' + ex.id + ' .seq-piece').forEach(function(b) {
+          if (b.dataset.value === val && b.classList.contains('placed')) b.classList.remove('placed');
         });
       });
       renderBuilder(ex);
@@ -537,19 +516,18 @@
       if (built.length < sol.length) { fb.textContent = ''; fb.className = 'q-feedback'; return; }
       var correct = built.length === sol.length && built.every(function(v,i) { return v === sol[i]; });
       fb.className = 'q-feedback ' + (correct ? 'ok' : 'ko');
-      fb.textContent = correct ? rnd(okMsgs) + ' ✓ Séquence correcte !' : 'Pas tout à fait… vérifie l\'ordre et les commandes, puis recommence !';
+      fb.textContent = correct ? rnd(okMsgs) + ' ✓ Séquence correcte !' : 'Pas tout à fait… vérifie l\'ordre et recommence !';
     }
 
     function resetSeq(exId) {
       var ex = seqData.find(function(e) { return e.id === exId; });
       ex._built = [];
-      document.querySelectorAll('#pieces-' + exId + ' .path-piece').forEach(function(b) { b.classList.remove('placed'); });
+      document.querySelectorAll('#pieces-' + exId + ' .seq-piece').forEach(function(b) { b.classList.remove('placed'); });
       renderBuilder(ex);
       document.getElementById('fb-' + exId).textContent = '';
       document.getElementById('fb-' + exId).className = 'q-feedback';
     }
 
-    buildMatch();
     buildSequences();
   </script>
 

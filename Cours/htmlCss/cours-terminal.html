@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Le Terminal &mdash; Naviguer dans son PC</title>
+  <title>Le Terminal CMD &mdash; L'Invite de commandes</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,10 +35,10 @@
       border: 0.5px solid;
       transition: background 0.15s;
     }
-    .nav-git   { color: #712B13; background: #FAECE7; border-color: #F0997B; }
-    .nav-git:hover   { background: #F5C4B3; }
-    .nav-ex    { color: #085041; background: #D0F4EA; border-color: #5DCAA5; }
-    .nav-ex:hover    { background: #9FE1CB; }
+    .nav-git { color: #712B13; background: #FAECE7; border-color: #F0997B; }
+    .nav-git:hover { background: #F5C4B3; }
+    .nav-ex  { color: #085041; background: #D0F4EA; border-color: #5DCAA5; }
+    .nav-ex:hover  { background: #9FE1CB; }
 
     .card {
       border-radius: 16px;
@@ -69,25 +69,47 @@
 
     .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
 
-    .code-block {
-      background: #1D1D1B;
+    /* CMD fenêtre simulée */
+    .cmd-window {
       border-radius: 10px;
-      padding: 0.9rem 1.1rem;
+      overflow: hidden;
+      border: 1px solid #3A3A3A;
+      margin: 0.8rem 0;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    }
+    .cmd-titlebar {
+      background: #1C1C1C;
+      padding: 7px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .cmd-titlebar-left { display: flex; align-items: center; gap: 8px; }
+    .cmd-icon { font-size: 13px; }
+    .cmd-title-text { font-size: 0.78rem; color: #AAAAAA; font-family: 'Nunito', sans-serif; }
+    .cmd-titlebar-btns { display: flex; gap: 6px; }
+    .tw-btn { width: 11px; height: 11px; border-radius: 50%; }
+    .tw-min { background: #FAC775; }
+    .tw-max { background: #9FE1CB; }
+    .tw-cls { background: #F09595; }
+    .cmd-body {
+      background: #0C0C0C;
+      padding: 0.95rem 1.2rem;
       font-family: 'Fira Code', monospace;
-      font-size: 0.84rem;
-      line-height: 1.9;
+      font-size: 0.83rem;
+      line-height: 2;
+      color: #C8C8C8;
       white-space: pre;
       overflow-x: auto;
-      color: #D3D1C7;
-      margin: 0.7rem 0;
     }
-    .prompt  { color: #5DCAA5; font-weight: 700; }
-    .cmd     { color: #FAC775; }
-    .arg     { color: #85B7EB; }
-    .out     { color: #D3D1C7; }
-    .cm      { color: #5F5E5A; font-style: italic; }
-    .hl      { color: #F5C4B3; font-weight: 700; }
-    .err     { color: #F09595; }
+    .p  { color: #FAC775; }   /* prompt path */
+    .pa { color: #C8C8C8; }   /* > character */
+    .kw { color: #ffffff; font-weight: 700; } /* command keyword */
+    .ar { color: #85B7EB; }   /* argument */
+    .ou { color: #C8C8C8; }   /* output */
+    .di { color: #666; }      /* dimmed output */
+    .cm { color: #4E9A4E; font-style: italic; } /* comment */
+    .ok { color: #9FE1CB; }   /* success output */
+    .er { color: #F09595; }   /* error output */
+    .hi { color: #F5C4B3; font-weight: 700; } /* highlight */
 
     .tip {
       display: flex; gap: 10px; align-items: flex-start;
@@ -106,59 +128,61 @@
       letter-spacing: 0.05em; color: #888780; margin-bottom: 6px;
     }
 
-    /* Terminal types grid */
+    /* Grille des terminaux */
     .term-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
       gap: 10px;
       margin: 0.8rem 0;
     }
-    .term-card {
-      border-radius: 12px;
-      padding: 1rem 1.1rem;
-      border: 0.5px solid;
-    }
-    .term-win  { background: #E6F1FB; border-color: #85B7EB; }
-    .term-mac  { background: #D0F4EA; border-color: #5DCAA5; }
-    .term-linux { background: #FAEEDA; border-color: #FAC775; }
+    .term-card { border-radius: 12px; padding: 1rem 1.1rem; border: 0.5px solid; position: relative; }
+    .term-win-cmd { background: #141414; border-color: #444; }
+    .term-win-ps  { background: #E6F1FB; border-color: #85B7EB; }
+    .term-mac     { background: #D0F4EA; border-color: #5DCAA5; }
+    .term-linux   { background: #FAEEDA; border-color: #FAC775; }
     .term-card-title { font-weight: 800; font-size: 0.95rem; margin-bottom: 0.3rem; }
-    .term-card-os    { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; opacity: 0.7; margin-bottom: 0.5rem; }
-    .term-card-names { font-size: 0.84rem; font-family: 'Fira Code', monospace; line-height: 1.8; }
+    .term-card-os    { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; opacity: 0.6; margin-bottom: 0.5rem; }
+    .term-card-body  { font-size: 0.83rem; line-height: 1.65; }
+    .star-badge {
+      position: absolute; top: -9px; right: 8px;
+      background: #FAC775; color: #633806;
+      font-size: 10px; font-weight: 800; padding: 2px 9px;
+      border-radius: 10px; text-transform: uppercase; letter-spacing: 0.04em;
+    }
 
-    /* Command reference table */
+    /* Tableau commandes */
     .cmd-table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.88rem; }
     .cmd-table th {
-      background: #F1EFE8; text-align: left;
-      padding: 7px 12px; font-weight: 800;
-      border-bottom: 1.5px solid #D3D1C7;
-      font-size: 0.8rem;
+      background: #141414; color: #C8C8C8; text-align: left;
+      padding: 8px 12px; font-weight: 800;
+      border-bottom: 1.5px solid #3A3A3A; font-size: 0.8rem;
     }
-    .cmd-table td { padding: 7px 12px; border-bottom: 0.5px solid #F1EFE8; vertical-align: top; }
+    .cmd-table td { padding: 8px 12px; border-bottom: 0.5px solid #F1EFE8; vertical-align: top; }
     .cmd-table tr:last-child td { border-bottom: none; }
     .cmd-table tr:hover td { background: #FAFAF8; }
-    .cmd-name { font-family: 'Fira Code', monospace; font-weight: 700; color: #633806; }
-    .cmd-win  { font-family: 'Fira Code', monospace; font-size: 0.82rem; color: #0C447C; }
-    .cmd-mac  { font-family: 'Fira Code', monospace; font-size: 0.82rem; color: #085041; }
+    .cmd-tag  { font-family: 'Fira Code', monospace; font-weight: 700; color: #FAC775; background: #141414; border-radius: 5px; padding: 2px 8px; font-size: 0.84rem; }
+    .cmd-desc { color: #5F5E5A; }
+    .cmd-ex   { color: #888780; font-size: 0.78rem; font-style: italic; font-family: 'Fira Code', monospace; }
 
-    /* Analogy box */
+    /* Analogy */
     .analogy {
       display: flex; gap: 14px; align-items: flex-start;
       background: #EEEDFE; border-radius: 12px; padding: 1rem 1.1rem;
       margin: 0.8rem 0; border: 0.5px solid #CECBF6;
     }
     .analogy-icon { font-size: 2rem; flex-shrink: 0; }
-    .analogy-text { font-size: 0.9rem; color: #3C3489; line-height: 1.6; }
+    .analogy-text { font-size: 0.9rem; color: #3C3489; line-height: 1.65; }
     .analogy-text strong { font-weight: 800; }
 
     /* Steps */
     .steps { display: flex; flex-direction: column; gap: 8px; margin: 0.8rem 0; }
-    .step  {
+    .step {
       display: flex; gap: 12px; align-items: flex-start;
       background: #F5F4F0; border-radius: 10px; padding: 0.75rem 1rem;
     }
     .step-num {
       width: 26px; height: 26px; border-radius: 50%;
-      background: #9FE1CB; color: #085041;
+      background: #B5D4F4; color: #0C447C;
       display: flex; align-items: center; justify-content: center;
       font-size: 13px; font-weight: 800; flex-shrink: 0;
     }
@@ -167,16 +191,15 @@
     /* CTA */
     .cta-wrap { text-align: center; padding: 2rem 1rem 2.5rem; }
     .cta-btn {
-      display: inline-block; background: #085041; color: #ffffff;
+      display: inline-block; background: #141414; color: #FAC775;
       font-family: 'Nunito', sans-serif; font-weight: 800;
       font-size: 1rem; padding: 13px 32px; border-radius: 12px;
-      text-decoration: none; transition: background 0.15s;
+      text-decoration: none; border: 1px solid #3A3A3A; transition: background 0.15s;
     }
-    .cta-btn:hover { background: #0F6E56; }
+    .cta-btn:hover { background: #2C2C2A; }
     .cta-sub { font-size: 0.82rem; color: #888780; margin-top: 0.8rem; }
 
-    /* Inline code */
-    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; }
+    code { font-family: 'Fira Code', monospace; background: #141414; color: #FAC775; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; }
 
     @media (max-width: 520px) {
       .hero h1 { font-size: 1.6rem; }
@@ -187,260 +210,396 @@
 </head>
 <body>
 
-  <!-- Navigation -->
   <div class="nav-row">
     <a class="nav-git" href="cours-git.html">🌿 Cours Git →</a>
     <a class="nav-ex"  href="exercices-terminal.html">✏️ Exercices Terminal →</a>
   </div>
 
-  <!-- Hero -->
   <div class="hero">
-    <div style="font-size:2.8rem;margin-bottom:0.5rem;">🖥️</div>
-    <h1>Le Terminal &mdash;<br>Parler à ton PC !</h1>
-    <p>Apprends à naviguer dans ton ordinateur comme un vrai développeur.</p>
+    <div style="font-size:2.8rem;margin-bottom:0.5rem;">⬛</div>
+    <h1>Le Terminal CMD &mdash;<br>L'Invite de commandes !</h1>
+    <p>Apprends à parler à ton PC Windows en tapant des commandes.</p>
     <div class="badge-row">
       <span class="badge b-teal">Débutant</span>
-      <span class="badge b-amber">Windows &amp; Mac &amp; Linux</span>
-      <span class="badge b-blue">5 commandes essentielles</span>
+      <span class="badge b-amber">Windows — CMD</span>
+      <span class="badge b-blue">8 commandes essentielles</span>
     </div>
   </div>
 
-  <!-- C'est quoi un terminal -->
+  <!-- C'est quoi CMD -->
   <div class="card">
-    <div class="stitle"><div class="pill teal">?</div>C'est quoi un terminal ?</div>
-    <p class="desc">Tu connais l'explorateur de fichiers : la fenêtre où tu vois tes dossiers et tu cliques dessus pour les ouvrir. Le <strong>terminal</strong>, c'est exactement la même chose, mais au lieu de cliquer, tu <strong>tapes des commandes</strong> au clavier !</p>
+    <div class="stitle"><div class="pill blue">?</div>C'est quoi le terminal CMD ?</div>
+    <p class="desc">Le <strong>CMD</strong> — aussi appelé <strong>Invite de commandes</strong> ou <strong>Prompt</strong> — est la fenêtre noire de Windows où tu peux taper des textes (des <strong>commandes</strong>) pour contrôler ton PC. C'est comme avoir une conversation écrite directement avec ton ordinateur !</p>
 
     <div class="analogy">
-      <div class="analogy-icon">🗺️</div>
+      <div class="analogy-icon">🤖</div>
       <div class="analogy-text">
-        <strong>Imagine que ton PC est une maison géante.</strong> L'explorateur de fichiers, c'est comme te balader dans la maison en regardant les pièces. Le terminal, c'est comme avoir un <strong>assistant</strong> à qui tu peux dire "va dans la cuisine", "montre-moi ce qu'il y a dans le frigo", "crée un nouveau tiroir". C'est plus rapide quand on sait s'en servir !
+        <strong>Imagine que ton PC a un robot assistant invisible.</strong> Avec l'explorateur Windows, tu lui montres les dossiers en cliquant avec ta souris. Avec CMD, tu lui <strong>parles directement en texte</strong> : "va dans Documents", "liste les fichiers", "crée un dossier". C'est plus direct, plus rapide, et <strong>indispensable pour utiliser Git</strong> !
       </div>
     </div>
 
-    <div class="tip"><span class="tip-i">💡</span><span>Au début ça fait peur, mais c'est comme apprendre des mots magiques. Une fois qu'on connaît 5 commandes, on peut déjà faire plein de choses !</span></div>
+    <div class="cmd-window">
+      <div class="cmd-titlebar">
+        <div class="cmd-titlebar-left">
+          <span class="cmd-icon">⬛</span>
+          <span class="cmd-title-text">Invite de commandes — C:\Users\alice</span>
+        </div>
+        <div class="cmd-titlebar-btns">
+          <div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div>
+        </div>
+      </div>
+      <div class="cmd-body"><span class="di">Microsoft Windows [version 10.0.22621.3880]
+(c) Microsoft Corporation. Tous droits réservés.
+
+</span><span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span style="opacity:0.45;color:#C8C8C8;">█</span>   <span class="cm">← c'est ici que tu tapes tes commandes !</span></div>
+    </div>
+
+    <div class="tip tip-amber"><span class="tip-i">💡</span><span>Le texte <code>C:\Users\alice&gt;</code> s'appelle l'<strong>invite de commandes</strong> (ou "prompt"). Il te montre dans quel dossier tu es en ce moment. Le <code>&gt;</code> à la fin veut dire "je suis prêt, tape ta commande !"</span></div>
   </div>
 
   <!-- Les différents terminaux -->
   <div class="card">
-    <div class="stitle"><div class="pill amber">T</div>Les différents types de terminaux</div>
-    <p class="desc">Il existe plusieurs "modèles" de terminal selon ton système d'exploitation. Ils font la même chose, mais les commandes ont parfois des petites différences !</p>
+    <div class="stitle"><div class="pill amber">T</div>Les différents terminaux : lequel utiliser ?</div>
+    <p class="desc">Il existe plusieurs terminaux. On se concentre sur <strong>CMD</strong>, mais voici les autres pour que tu comprennes les différences si tu en entends parler :</p>
 
     <div class="term-grid">
-      <div class="term-card term-win">
-        <div class="term-card-os">🪟 Windows</div>
-        <div class="term-card-title" style="color:#0C447C;">PowerShell</div>
-        <div class="term-card-names" style="color:#185FA5;">Le plus moderne &amp; recommandé.<br>Préinstallé sur Windows 10/11.<br>Tape <code>powershell</code> dans la barre de recherche.</div>
+      <div class="term-card term-win-cmd">
+        <div class="star-badge">⭐ Ce cours</div>
+        <div class="term-card-os" style="color:#777;">🪟 Windows</div>
+        <div class="term-card-title" style="color:#FAC775;">CMD</div>
+        <div class="term-card-body" style="color:#C8C8C8;">L'<strong style="color:#fff;">Invite de commandes</strong>.<br>Terminal classique Windows.<br>Prompt noir avec <code style="background:transparent;color:#FAC775;">C:\&gt;</code><br>Parfait pour débuter et Git.</div>
       </div>
-      <div class="term-card term-win" style="opacity:0.8;">
-        <div class="term-card-os">🪟 Windows (ancien)</div>
-        <div class="term-card-title" style="color:#0C447C;">CMD (Invite de commandes)</div>
-        <div class="term-card-names" style="color:#185FA5;">L'ancien terminal Windows.<br>Commandes un peu différentes.<br>Tape <code>cmd</code> dans la recherche.</div>
+      <div class="term-card term-win-ps">
+        <div class="term-card-os" style="color:#185FA5;">🪟 Windows</div>
+        <div class="term-card-title" style="color:#0C447C;">PowerShell</div>
+        <div class="term-card-body" style="color:#185FA5;">Version plus moderne.<br>Prompt bleu ou violet.<br>Commandes différentes de CMD.<br>Aussi pré-installé sur Windows.</div>
       </div>
       <div class="term-card term-mac">
-        <div class="term-card-os">🍎 macOS</div>
-        <div class="term-card-title" style="color:#085041;">Terminal</div>
-        <div class="term-card-names" style="color:#0F6E56;">Préinstallé sur Mac.<br>Recherche "Terminal" dans Spotlight.<br>Ou : Applications → Utilitaires.</div>
+        <div class="term-card-os" style="color:#0F6E56;">🍎 macOS</div>
+        <div class="term-card-title" style="color:#085041;">Terminal / Zsh</div>
+        <div class="term-card-body" style="color:#085041;">Le terminal des Mac.<br>Utilise des commandes<br>différentes de CMD<br>(ls, pwd, clear…)</div>
       </div>
       <div class="term-card term-linux">
-        <div class="term-card-os">🐧 Linux</div>
-        <div class="term-card-title" style="color:#633806;">Bash / Zsh</div>
-        <div class="term-card-names" style="color:#854F0B;">Préinstallé, souvent appelé "Konsole" ou "Terminal".<br>Raccourci : Ctrl+Alt+T.</div>
+        <div class="term-card-os" style="color:#854F0B;">🐧 Linux</div>
+        <div class="term-card-title" style="color:#633806;">Bash / Terminal</div>
+        <div class="term-card-body" style="color:#854F0B;">Terminal Linux.<br>Raccourci : Ctrl+Alt+T.<br>Commandes similaires à Mac,<br>différentes de CMD.</div>
       </div>
     </div>
 
-    <div class="tip tip-purple"><span class="tip-i">🌟</span><span><strong>Bonne nouvelle :</strong> si tu utilises <strong>VS Code</strong>, il y a un terminal intégré ! Clique sur "Terminal" dans le menu en haut, puis "Nouveau terminal". C'est souvent le plus pratique pour coder.</span></div>
+    <div class="tip tip-purple"><span class="tip-i">🌟</span><span><strong>Dans VS Code</strong>, tu peux choisir ton terminal ! Clique sur la petite flèche ▾ à côté du <code>+</code> dans le terminal intégré, puis choisis <strong>"Command Prompt"</strong> pour avoir CMD directement dans VS Code.</span></div>
   </div>
 
-  <!-- Ouvrir le terminal -->
+  <!-- Ouvrir CMD -->
   <div class="card">
-    <div class="stitle"><div class="pill blue">→</div>Comment ouvrir son terminal ?</div>
+    <div class="stitle"><div class="pill teal">→</div>Comment ouvrir l'Invite de commandes ?</div>
+    <p class="desc">Il y a plusieurs façons d'ouvrir CMD sur Windows. Voici les trois plus pratiques :</p>
 
-    <div class="rl">Sur Windows</div>
-    <div class="steps" style="margin-bottom:1rem;">
-      <div class="step"><div class="step-num">1</div><div class="step-body">Appuie sur la touche <strong>Windows</strong> (⊞) et tape <code>powershell</code></div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-body">Clique sur "Windows PowerShell" dans les résultats</div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-body">Une fenêtre noire (ou bleue) avec du texte s'ouvre — c'est bon !</div></div>
+    <div class="rl">Méthode 1 — Recherche Windows (la plus simple)</div>
+    <div class="steps" style="margin-bottom:1.2rem;">
+      <div class="step"><div class="step-num">1</div><div class="step-body">Appuie sur la touche <strong>Windows ⊞</strong> de ton clavier</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">Tape <code>cmd</code> dans la barre de recherche</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">Clique sur <strong>"Invite de commandes"</strong> dans les résultats → la fenêtre noire s'ouvre !</div></div>
     </div>
 
-    <div class="rl">Sur Mac</div>
-    <div class="steps" style="margin-bottom:1rem;">
-      <div class="step"><div class="step-num">1</div><div class="step-body">Appuie sur <strong>Cmd + Espace</strong> pour ouvrir Spotlight</div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-body">Tape <code>Terminal</code> et appuie sur Entrée</div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-body">Une fenêtre avec un fond blanc ou noir apparaît — c'est bon !</div></div>
+    <div class="rl">Méthode 2 — Raccourci Windows + R</div>
+    <div class="steps" style="margin-bottom:1.2rem;">
+      <div class="step"><div class="step-num">1</div><div class="step-body">Appuie sur <strong>⊞ Windows + R</strong> en même temps (ouvre la boîte "Exécuter")</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">Tape <code>cmd</code> dans le champ et appuie sur <strong>Entrée</strong></div></div>
     </div>
 
-    <div class="rl">Dans VS Code (tous les systèmes)</div>
+    <div class="rl">Méthode 3 — Depuis l'explorateur (la plus pratique pour coder !)</div>
     <div class="steps">
-      <div class="step"><div class="step-num">1</div><div class="step-body">Ouvre VS Code</div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-body">Dans le menu en haut : <strong>Terminal → Nouveau terminal</strong></div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-body">Le terminal apparaît en bas de la fenêtre</div></div>
+      <div class="step"><div class="step-num">1</div><div class="step-body">Dans l'explorateur de fichiers, navigue jusqu'au dossier de ton projet</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">Clique dans la <strong>barre d'adresse</strong> en haut (là où il y a le chemin comme <code>Ce PC &gt; Documents &gt; Projets</code>)</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">Tape <code>cmd</code> et appuie sur Entrée — CMD s'ouvre <strong>directement dans ce dossier</strong> !</div></div>
     </div>
 
-    <div class="tip tip-amber"><span class="tip-i">⚠️</span><span>Quand le terminal est ouvert, tu vois une <strong>invite de commandes</strong> : un texte qui se termine par <code>&gt;</code> ou <code>$</code>. C'est là que tu tapes tes commandes !</span></div>
+    <div class="tip"><span class="tip-i">🌟</span><span>La <strong>méthode 3</strong> est la plus pratique pour les projets : CMD s'ouvre directement dans le bon dossier, sans avoir à naviguer ensuite !</span></div>
   </div>
 
-  <!-- Se repérer dans le terminal -->
+  <!-- dir -->
   <div class="card">
-    <div class="stitle"><div class="pill green">📍</div>Se repérer : où suis-je ?</div>
-    <p class="desc">Quand tu ouvres le terminal, tu te trouves quelque part dans ton PC (souvent dans ton dossier personnel). La première chose à apprendre, c'est savoir <strong>où tu es</strong> !</p>
+    <div class="stitle"><div class="pill teal">👀</div>Voir le contenu d'un dossier : <code>dir</code></div>
+    <p class="desc">La commande <code>dir</code> ("directory" = dossier en anglais) liste tous les fichiers et sous-dossiers de l'endroit où tu te trouves. C'est comme ouvrir un dossier dans l'explorateur, mais en texte !</p>
 
-    <div class="rl">Afficher le dossier actuel</div>
-    <div class="code-block"><span class="prompt">$</span> <span class="cmd">pwd</span>                    <span class="cm"># Mac/Linux : "Print Working Directory"</span>
-<span class="out">/Users/alice/Documents</span>
+    <div class="cmd-window">
+      <div class="cmd-titlebar">
+        <div class="cmd-titlebar-left"><span class="cmd-icon">⬛</span><span class="cmd-title-text">Invite de commandes</span></div>
+        <div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div>
+      </div>
+      <div class="cmd-body"><span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span class="kw">dir</span>
 
-<span class="prompt">></span> <span class="cmd">cd</span>                    <span class="cm"># Windows PowerShell : tape "cd" sans argument</span>
-<span class="out">C:\Users\alice\Documents</span></div>
+<span class="di"> Volume dans le lecteur C s'appelle Windows
+ Numéro de série du volume : AB12-CD34
+ Répertoire de C:\Users\alice
 
-    <div class="tip"><span class="tip-i">💡</span><span><code>pwd</code> te dit exactement où tu te trouves. C'est comme demander "Dans quelle pièce de la maison je suis ?"</span></div>
+</span><span class="ou">14/01/2025  10:32    &lt;DIR&gt;          Documents
+14/01/2025  09:15    &lt;DIR&gt;          Photos
+14/01/2025  11:00    &lt;DIR&gt;          Projets
+12/01/2025  14:22             3 251 index.html
+12/01/2025  14:22             1 820 style.css
+               2 fichier(s)            5 071 octets
+               3 Rép(s)</span></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:7px;margin:0.8rem 0 0.4rem;">
+      <div style="background:#F5F4F0;border-radius:8px;padding:0.65rem 1rem;font-size:0.88rem;display:flex;gap:10px;align-items:center;">
+        <span style="font-family:'Fira Code',monospace;background:#141414;color:#9FE1CB;padding:2px 8px;border-radius:4px;font-size:0.82rem;white-space:nowrap;">&lt;DIR&gt;</span>
+        <span style="color:#5F5E5A;">= c'est un <strong>dossier</strong></span>
+      </div>
+      <div style="background:#F5F4F0;border-radius:8px;padding:0.65rem 1rem;font-size:0.88rem;display:flex;gap:10px;align-items:center;">
+        <span style="font-family:'Fira Code',monospace;background:#141414;color:#85B7EB;padding:2px 8px;border-radius:4px;font-size:0.82rem;white-space:nowrap;">3 251</span>
+        <span style="color:#5F5E5A;">= c'est un <strong>fichier</strong>, le nombre = sa taille en octets</span>
+      </div>
+    </div>
+
+    <div class="rl" style="margin-top:1rem;">Options utiles</div>
+    <div class="cmd-window">
+      <div class="cmd-titlebar">
+        <div class="cmd-titlebar-left"><span class="cmd-icon">⬛</span><span class="cmd-title-text">Invite de commandes</span></div>
+        <div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div>
+      </div>
+      <div class="cmd-body"><span class="cm">:: Affichage simple (juste les noms)</span>
+<span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span class="kw">dir</span> <span class="ar">/B</span>
+<span class="ou">Documents
+Photos
+Projets
+index.html
+style.css</span>
+
+<span class="cm">:: Voir uniquement les dossiers</span>
+<span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span class="kw">dir</span> <span class="ar">/AD /B</span>
+<span class="ou">Documents
+Photos
+Projets</span></div>
+    </div>
+
+    <div class="tip"><span class="tip-i">💡</span><span><code>dir /B</code> est très pratique : il affiche juste les noms, sans toutes les informations de date et taille. Beaucoup plus lisible !</span></div>
   </div>
 
-  <!-- Voir le contenu d'un dossier -->
+  <!-- cd : navigation -->
   <div class="card">
-    <div class="stitle"><div class="pill teal">👀</div>Voir le contenu d'un dossier</div>
-    <p class="desc">Pour voir ce qu'il y a dans le dossier où tu te trouves, tu utilises une commande qui liste tous les fichiers et sous-dossiers.</p>
+    <div class="stitle"><div class="pill coral">📂</div>Se déplacer dans les dossiers : <code>cd</code></div>
+    <p class="desc">La commande <code>cd</code> (Change Directory = changer de dossier) est la <strong>plus importante</strong> à maîtriser ! Elle te permet de naviguer dans toute l'arborescence de ton PC, exactement comme si tu cliquais sur des dossiers dans l'explorateur.</p>
 
-    <div class="rl">Lister les fichiers</div>
-    <div class="code-block"><span class="cm"># Sur Mac/Linux :</span>
-<span class="prompt">$</span> <span class="cmd">ls</span>
-<span class="out">Documents    Photos    Projets    index.html    style.css</span>
+    <div class="cmd-window">
+      <div class="cmd-titlebar">
+        <div class="cmd-titlebar-left"><span class="cmd-icon">⬛</span><span class="cmd-title-text">Invite de commandes</span></div>
+        <div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div>
+      </div>
+      <div class="cmd-body"><span class="cm">:: Entrer dans un sous-dossier</span>
+<span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">Documents</span>
+<span class="p">C:\Users\alice\Documents</span><span class="pa">&gt;</span>
 
-<span class="cm"># Sur Windows PowerShell :</span>
-<span class="prompt">></span> <span class="cmd">ls</span>                    <span class="cm"># fonctionne aussi dans PowerShell !</span>
-<span class="out">    Répertoire : C:\Users\alice</span>
-<span class="out">Mode         Nom</span>
-<span class="out">----         ---</span>
-<span class="out">d----        Documents</span>
-<span class="out">d----        Photos</span>
-<span class="out">-a---        index.html</span>
+<span class="cm">:: Entrer dans plusieurs dossiers en une fois</span>
+<span class="p">C:\Users\alice\Documents</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">Projets\mon-site</span>
+<span class="p">C:\Users\alice\Documents\Projets\mon-site</span><span class="pa">&gt;</span>
 
-<span class="cm"># Voir PLUS de détails (taille, date) :</span>
-<span class="prompt">$</span> <span class="cmd">ls</span> <span class="arg">-l</span>               <span class="cm"># Mac/Linux</span>
-<span class="prompt">></span> <span class="cmd">dir</span>                  <span class="cm"># Windows CMD (commande alternative)</span></div>
+<span class="cm">:: Remonter D'UN dossier vers le parent</span>
+<span class="p">C:\Users\alice\Documents\Projets\mon-site</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">..</span>
+<span class="p">C:\Users\alice\Documents\Projets</span><span class="pa">&gt;</span>
 
-    <div class="tip"><span class="tip-i">💡</span><span><code>ls</code> vient de "list". C'est comme ouvrir un dossier dans l'explorateur et voir tous les fichiers à l'intérieur !</span></div>
+<span class="cm">:: Remonter de DEUX dossiers</span>
+<span class="p">C:\Users\alice\Documents\Projets</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">..\..</span>
+<span class="p">C:\Users\alice</span><span class="pa">&gt;</span>
+
+<span class="cm">:: cd sans argument = afficher le dossier actuel</span>
+<span class="p">C:\Users\alice\Documents</span><span class="pa">&gt;</span> <span class="kw">cd</span>
+<span class="ou">C:\Users\alice\Documents</span></div>
+    </div>
+
+    <div class="tip tip-purple"><span class="tip-i">🌟</span><span><strong>Astuce Tab !</strong> Tape les premières lettres d'un nom de dossier puis appuie sur <strong>Tab ↹</strong> : CMD complète le nom automatiquement. Appuie plusieurs fois sur Tab pour faire défiler les options. Exemple : <code>cd Doc</code> + Tab → <code>cd Documents</code>.</span></div>
+
+    <div class="tip tip-amber" style="margin-top:0.6rem;"><span class="tip-i">⚠️</span><span>Sur CMD, le séparateur de dossiers est le <strong>backslash \</strong> et non le slash <code>/</code>. On écrit donc <code>cd Documents\Projets</code>. Le <code>\</code> se tape avec <strong>Alt Gr + 8</strong> sur la plupart des claviers français.</span></div>
   </div>
 
-  <!-- Se déplacer : cd -->
+  <!-- Changer de disque -->
   <div class="card">
-    <div class="stitle"><div class="pill coral">📂</div>Se déplacer entre les dossiers</div>
-    <p class="desc">La commande <code>cd</code> (Change Directory) te permet de <strong>changer de dossier</strong>. C'est la commande la plus utilisée dans le terminal !</p>
+    <div class="stitle"><div class="pill blue">💿</div>Changer de disque (C:, D:, E:…)</div>
+    <p class="desc">Sur Windows, les disques durs ont des lettres : le disque principal est toujours <strong>C:</strong>, et les disques supplémentaires (clé USB, disque externe…) ont d'autres lettres comme D:, E:. Pour passer de l'un à l'autre dans CMD, c'est une commande spéciale !</p>
 
-    <div class="code-block"><span class="cm"># Entrer dans un sous-dossier</span>
-<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">Documents</span>
-<span class="prompt">$</span> <span class="cmd">pwd</span>
-<span class="out">/Users/alice/Documents</span>
+    <div class="cmd-window">
+      <div class="cmd-titlebar">
+        <div class="cmd-titlebar-left"><span class="cmd-icon">⬛</span><span class="cmd-title-text">Invite de commandes</span></div>
+        <div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div>
+      </div>
+      <div class="cmd-body"><span class="cm">:: Je suis sur C:, je veux aller sur D: (clé USB, par exemple)</span>
+<span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span class="kw">D:</span>
+<span class="p">D:\</span><span class="pa">&gt;</span>
 
-<span class="cm"># Entrer dans un dossier encore plus profond</span>
-<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">Projets/mon-site</span>
-<span class="out"># Tu es maintenant dans /Users/alice/Documents/Projets/mon-site</span>
+<span class="cm">:: Revenir sur C:</span>
+<span class="p">D:\</span><span class="pa">&gt;</span> <span class="kw">C:</span>
+<span class="p">C:\Users\alice</span><span class="pa">&gt;</span>
 
-<span class="cm"># Remonter d'UN dossier (aller au parent)</span>
-<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">..</span>
-<span class="out"># Tu es maintenant dans /Users/alice/Documents/Projets</span>
+<span class="cm">:: ATTENTION : cd seul ne change PAS de disque !</span>
+<span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">D:\</span>   <span class="cm">← ne fait rien de spécial</span>
+<span class="p">C:\Users\alice</span><span class="pa">&gt;</span>            <span class="cm">← toujours sur C: !</span></div>
+    </div>
 
-<span class="cm"># Remonter de DEUX dossiers</span>
-<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">../..</span>
-<span class="out"># Tu es maintenant dans /Users/alice/Documents</span>
-
-<span class="cm"># Aller directement à la racine de ton dossier perso</span>
-<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">~</span>              <span class="cm"># ~ = dossier personnel (Mac/Linux/PowerShell)</span></div>
-
-    <div class="tip tip-purple"><span class="tip-i">🌟</span><span><strong>Astuce !</strong> Tape les premières lettres d'un dossier puis appuie sur <strong>Tab ↹</strong> : le terminal complète automatiquement le nom ! Par exemple tape <code>cd Doc</code> puis Tab → ça devient <code>cd Documents</code>.</span></div>
-
-    <div class="tip tip-amber"><span class="tip-i">💡</span><span>Le <code>..</code> signifie "le dossier parent" — exactement comme dans les chemins HTML ! Si tu as compris le cours sur l'architecture, tu connais déjà ce concept.</span></div>
+    <div class="tip tip-coral"><span class="tip-i">⚠️</span><span>Pour changer de disque, tape juste la <strong>lettre du disque suivie de deux-points</strong> (<code>D:</code>, <code>E:</code>…) et appuie sur Entrée. On n'utilise pas <code>cd</code> pour ça !</span></div>
   </div>
 
-  <!-- Tableau récapitulatif des commandes -->
+  <!-- mkdir et cls -->
   <div class="card">
-    <div class="stitle"><div class="pill purple">R</div>Les 5 commandes à retenir</div>
-    <p class="desc">Voici les commandes essentielles. Certaines ont un nom différent selon Windows ou Mac/Linux :</p>
+    <div class="stitle"><div class="pill green">🛠️</div>Autres commandes utiles : <code>mkdir</code> et <code>cls</code></div>
+
+    <div class="rl">Créer un dossier : mkdir</div>
+    <p class="desc"><code>mkdir</code> (Make Directory) crée un nouveau dossier sans passer par l'explorateur.</p>
+    <div class="cmd-window">
+      <div class="cmd-titlebar">
+        <div class="cmd-titlebar-left"><span class="cmd-icon">⬛</span><span class="cmd-title-text">Invite de commandes</span></div>
+        <div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div>
+      </div>
+      <div class="cmd-body"><span class="cm">:: Créer un dossier "mon-projet"</span>
+<span class="p">C:\Users\alice\Documents</span><span class="pa">&gt;</span> <span class="kw">mkdir</span> <span class="ar">mon-projet</span>
+
+<span class="cm">:: Vérifier qu'il est là</span>
+<span class="p">C:\Users\alice\Documents</span><span class="pa">&gt;</span> <span class="kw">dir</span> <span class="ar">/B</span>
+<span class="ok">mon-projet</span>
+
+<span class="cm">:: Créer plusieurs dossiers d'un coup</span>
+<span class="p">C:\Users\alice\Documents\mon-projet</span><span class="pa">&gt;</span> <span class="kw">mkdir</span> <span class="ar">css js img</span></div>
+    </div>
+
+    <div class="rl" style="margin-top:1rem;">Effacer l'écran : cls</div>
+    <p class="desc"><code>cls</code> (CLear Screen) efface tout le texte affiché dans CMD pour avoir un écran propre.</p>
+    <div class="cmd-window">
+      <div class="cmd-titlebar">
+        <div class="cmd-titlebar-left"><span class="cmd-icon">⬛</span><span class="cmd-title-text">Invite de commandes</span></div>
+        <div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div>
+      </div>
+      <div class="cmd-body"><span class="cm">:: L'écran est plein de texte, on efface tout</span>
+<span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span class="kw">cls</span>
+
+<span class="di">[l'écran devient vide et propre]</span>
+
+<span class="p">C:\Users\alice</span><span class="pa">&gt;</span></div>
+    </div>
+
+    <div class="tip"><span class="tip-i">💡</span><span><code>cls</code> n'efface que l'affichage — il ne supprime aucun fichier et ne change pas ta position dans les dossiers. Utilise-le quand l'écran est trop encombré !</span></div>
+  </div>
+
+  <!-- Tableau récapitulatif -->
+  <div class="card">
+    <div class="stitle"><div class="pill purple">R</div>Les 8 commandes CMD à retenir</div>
+    <p class="desc">Voici toutes les commandes essentielles de l'Invite de commandes Windows :</p>
 
     <table class="cmd-table">
       <thead>
-        <tr>
-          <th>Ce que ça fait</th>
-          <th>Mac / Linux</th>
-          <th>Windows (PowerShell)</th>
-        </tr>
+        <tr><th>Commande</th><th>Ce que ça fait</th><th>Exemple</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td>Où suis-je ?</td>
-          <td><span class="cmd-mac">pwd</span></td>
-          <td><span class="cmd-win">pwd</span> <span style="color:#888780;font-size:0.8em;">ou cd (sans argument)</span></td>
+          <td><span class="cmd-tag">dir</span></td>
+          <td class="cmd-desc">Lister le contenu du dossier actuel</td>
+          <td class="cmd-ex">dir /B → affichage simple</td>
         </tr>
         <tr>
-          <td>Voir le contenu du dossier</td>
-          <td><span class="cmd-mac">ls</span></td>
-          <td><span class="cmd-win">ls</span> <span style="color:#888780;font-size:0.8em;">ou dir</span></td>
+          <td><span class="cmd-tag">cd nom</span></td>
+          <td class="cmd-desc">Entrer dans un sous-dossier</td>
+          <td class="cmd-ex">cd Documents</td>
         </tr>
         <tr>
-          <td>Aller dans un dossier</td>
-          <td><span class="cmd-mac">cd nom-dossier</span></td>
-          <td><span class="cmd-win">cd nom-dossier</span></td>
+          <td><span class="cmd-tag">cd ..</span></td>
+          <td class="cmd-desc">Remonter au dossier parent</td>
+          <td class="cmd-ex">cd ..\.. pour remonter deux fois</td>
         </tr>
         <tr>
-          <td>Remonter au dossier parent</td>
-          <td><span class="cmd-mac">cd ..</span></td>
-          <td><span class="cmd-win">cd ..</span></td>
+          <td><span class="cmd-tag">cd</span></td>
+          <td class="cmd-desc">Afficher le dossier où je suis</td>
+          <td class="cmd-ex">Répond : C:\Users\alice\...</td>
         </tr>
         <tr>
-          <td>Effacer l'écran du terminal</td>
-          <td><span class="cmd-mac">clear</span></td>
-          <td><span class="cmd-win">cls</span></td>
+          <td><span class="cmd-tag">D:</span></td>
+          <td class="cmd-desc">Changer de disque dur</td>
+          <td class="cmd-ex">D: → E: → C: …</td>
+        </tr>
+        <tr>
+          <td><span class="cmd-tag">mkdir</span></td>
+          <td class="cmd-desc">Créer un nouveau dossier</td>
+          <td class="cmd-ex">mkdir mon-projet</td>
+        </tr>
+        <tr>
+          <td><span class="cmd-tag">cls</span></td>
+          <td class="cmd-desc">Effacer l'affichage de l'écran</td>
+          <td class="cmd-ex">CLS = CLear Screen</td>
+        </tr>
+        <tr>
+          <td><span class="cmd-tag">help</span></td>
+          <td class="cmd-desc">Afficher la liste de toutes les commandes</td>
+          <td class="cmd-ex">dir /? → aide sur dir</td>
         </tr>
       </tbody>
     </table>
 
-    <div class="tip"><span class="tip-i">💡</span><span>Dans VS Code avec PowerShell, tu peux utiliser les commandes Mac/Linux comme <code>ls</code> et <code>pwd</code> — pratique pour ne pas avoir à tout mémoriser en double !</span></div>
+    <div class="tip tip-blue"><span class="tip-i">💡</span><span>Pour avoir l'aide sur n'importe quelle commande, tape le nom de la commande suivi de <code>/?</code>. Par exemple <code>dir /?</code> affiche toutes les options possibles de <code>dir</code>.</span></div>
   </div>
 
-  <!-- Lien avec Git -->
+  <!-- CMD + Git -->
   <div class="card">
-    <div class="stitle"><div class="pill green">🌿</div>Pourquoi le terminal est utile pour Git ?</div>
-    <p class="desc">Tu vas bientôt apprendre <strong>Git</strong>, un outil pour sauvegarder et partager ton code. Git s'utilise principalement dans le terminal ! Voici pourquoi maîtriser le terminal d'abord est important :</p>
+    <div class="stitle"><div class="pill amber">🌿</div>CMD + Git : ils vont ensemble !</div>
+    <p class="desc">Git s'utilise directement dans CMD. C'est pour ça qu'apprendre CMD d'abord est si important : toutes les commandes Git se tapent dans cette même fenêtre noire !</p>
 
     <div class="steps">
-      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Vérifier si Git est installé :</strong> tu taperas une commande dans le terminal pour le savoir</div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Se placer dans le bon dossier :</strong> avant de faire quoi que ce soit avec Git, tu dois naviguer dans ton projet avec <code>cd</code></div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Toutes les commandes Git</strong> se tapent dans le terminal : <code>git add</code>, <code>git commit</code>, <code>git push</code>…</div></div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Vérifier si Git est installé :</strong> dans CMD, tape <code>git --version</code></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Se placer dans son projet</strong> avec <code>cd</code> avant toute commande Git</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Taper les commandes Git</strong> : <code>git add</code>, <code>git commit</code>, <code>git push</code>… toujours dans CMD !</div></div>
     </div>
 
-    <div class="code-block"><span class="cm"># Exemple : je veux travailler sur mon projet "mon-site"</span>
-<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">Documents/Projets/mon-site</span>
-<span class="prompt">$</span> <span class="cmd">ls</span>
-<span class="out">index.html    Assets/    pages/</span>
+    <div class="cmd-window">
+      <div class="cmd-titlebar">
+        <div class="cmd-titlebar-left"><span class="cmd-icon">⬛</span><span class="cmd-title-text">Invite de commandes</span></div>
+        <div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div>
+      </div>
+      <div class="cmd-body"><span class="cm">:: Je veux travailler sur mon projet "mon-site"</span>
+<span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">Documents\Projets\mon-site</span>
+<span class="p">C:\Users\alice\Documents\Projets\mon-site</span><span class="pa">&gt;</span> <span class="kw">dir</span> <span class="ar">/B</span>
+<span class="ou">index.html
+style.css
+Assets</span>
 
-<span class="cm"># Parfait, je suis dans le bon dossier. Maintenant je peux utiliser Git !</span>
-<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">status</span></div>
+<span class="cm">:: Parfait ! Dans le bon dossier. Maintenant Git :</span>
+<span class="p">C:\Users\alice\Documents\Projets\mon-site</span><span class="pa">&gt;</span> <span class="kw">git</span> <span class="ar">status</span>
+<span class="ok">On branch main
+nothing to commit, working tree clean</span></div>
+    </div>
 
-    <div class="tip tip-blue"><span class="tip-i">🚀</span><span>Le terminal et Git vont <strong>ensemble</strong> : plus tu t'entraînes à naviguer dans le terminal, plus Git sera simple à utiliser ensuite !</span></div>
+    <div class="tip tip-coral"><span class="tip-i">🚀</span><span>La routine complète : ouvre CMD → utilise <code>cd</code> pour aller dans ton projet → utilise Git pour sauvegarder ton code. Les deux se tapent dans la <strong>même fenêtre noire</strong> !</span></div>
   </div>
 
   <!-- Erreurs courantes -->
   <div class="card">
-    <div class="stitle"><div class="pill red">!</div>Les erreurs courantes</div>
-    <p class="desc">Tout le monde fait ces erreurs au début — c'est normal !</p>
+    <div class="stitle"><div class="pill red">!</div>Les erreurs courantes dans CMD</div>
+    <p class="desc">Tout le monde fait ces erreurs au début — c'est tout à fait normal !</p>
 
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:0.4rem;">
+
       <div style="background:#FCEBEB;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.6;">
-        <div style="font-weight:800;color:#791F1F;margin-bottom:4px;">❌ Le dossier n'existe pas</div>
-        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#A32D2D;">cd Documants   ← faute de frappe !</div>
-        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#A32D2D;">bash: cd: Documants: No such file or directory</div>
-        <div style="color:#791F1F;margin-top:4px;">Vérifie l'orthographe avec <code>ls</code> d'abord, ou utilise la touche <strong>Tab</strong> pour auto-compléter.</div>
+        <div style="font-weight:800;color:#791F1F;margin-bottom:6px;">❌ Le dossier est introuvable</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;background:#0C0C0C;color:#F09595;padding:6px 10px;border-radius:6px;margin-bottom:6px;">C:\Users\alice&gt; cd Documants
+Le système ne peut pas trouver le chemin d'accès spécifié.</div>
+        <div style="color:#791F1F;">Faute de frappe ! Utilise <code>dir</code> d'abord pour voir les vrais noms, ou <strong>Tab</strong> pour auto-compléter. (<code>Documants</code> → <code>Documents</code>)</div>
       </div>
 
       <div style="background:#FCEBEB;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.6;">
-        <div style="font-weight:800;color:#791F1F;margin-bottom:4px;">❌ Majuscules/minuscules incorrectes</div>
-        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#A32D2D;">cd documents   ← si le dossier s'appelle "Documents"</div>
-        <div style="color:#791F1F;margin-top:4px;">Sur Mac et Linux, <strong>Documents</strong> ≠ <strong>documents</strong>. Sur Windows, c'est plus tolérant, mais prends l'habitude d'être précis.</div>
+        <div style="font-weight:800;color:#791F1F;margin-bottom:6px;">❌ Utiliser / au lieu de \ dans les chemins</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;background:#0C0C0C;color:#F09595;padding:6px 10px;border-radius:6px;margin-bottom:6px;">C:\Users\alice&gt; cd Documents/Projets     ← slash incorrect</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;background:#0C0C0C;color:#9FE1CB;padding:6px 10px;border-radius:6px;margin-bottom:6px;">C:\Users\alice&gt; cd Documents\Projets     ← backslash correct ✓</div>
+        <div style="color:#791F1F;">Sur CMD, on utilise toujours le <strong>backslash \</strong>. Sur Mac/Linux c'est le slash /. Attention à ne pas les confondre !</div>
       </div>
 
       <div style="background:#FCEBEB;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.6;">
-        <div style="font-weight:800;color:#791F1F;margin-bottom:4px;">❌ Dossier avec des espaces</div>
-        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#A32D2D;">cd Mon Projet   ← le terminal croit que ce sont deux dossiers !</div>
-        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#0F6E56;margin-top:3px;">cd "Mon Projet"   ← utilise des guillemets</div>
-        <div style="color:#791F1F;margin-top:4px;">C'est pour ça qu'on évite les espaces dans les noms de dossiers et fichiers de projets !</div>
+        <div style="font-weight:800;color:#791F1F;margin-bottom:6px;">❌ Nom de dossier avec des espaces</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;background:#0C0C0C;color:#F09595;padding:6px 10px;border-radius:6px;margin-bottom:6px;">C:\Users\alice&gt; cd Mon Projet     ← CMD croit que ce sont deux arguments !</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;background:#0C0C0C;color:#9FE1CB;padding:6px 10px;border-radius:6px;margin-bottom:6px;">C:\Users\alice&gt; cd "Mon Projet"   ← guillemets obligatoires ✓</div>
+        <div style="color:#791F1F;">Quand un nom contient des espaces, entoure-le de <strong>guillemets doubles</strong>. Conseil : utilise des tirets dans tes noms de projets : <code>mon-projet</code> plutôt que <code>mon projet</code>.</div>
+      </div>
+
+      <div style="background:#FCEBEB;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.6;">
+        <div style="font-weight:800;color:#791F1F;margin-bottom:6px;">❌ Essayer cd pour changer de disque</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;background:#0C0C0C;color:#F09595;padding:6px 10px;border-radius:6px;margin-bottom:6px;">C:\Users\alice&gt; cd D:\     ← ne change pas de disque !</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;background:#0C0C0C;color:#9FE1CB;padding:6px 10px;border-radius:6px;margin-bottom:6px;">C:\Users\alice&gt; D:         ← tape juste la lettre du disque ✓</div>
+        <div style="color:#791F1F;">Pour changer de disque, tape juste la lettre suivie de deux-points, sans <code>cd</code>.</div>
       </div>
     </div>
   </div>
@@ -449,19 +608,20 @@
   <div class="card">
     <div class="stitle"><div class="pill gray">✓</div>Résumé : ce qu'il faut retenir</div>
     <div style="display:flex;flex-direction:column;gap:8px;margin-top:0.4rem;">
-      <div style="background:#D0F4EA;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#085041;">✅ Le terminal = parler à son PC en tapant des commandes</div>
-      <div style="background:#D0F4EA;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#085041;">✅ PowerShell (Windows), Terminal (Mac), Bash (Linux) — tous font la même chose</div>
-      <div style="background:#D0F4EA;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#085041;">✅ <code style="background:rgba(0,0,0,0.08)">ls</code> = voir le contenu &nbsp;|&nbsp; <code style="background:rgba(0,0,0,0.08)">cd</code> = se déplacer &nbsp;|&nbsp; <code style="background:rgba(0,0,0,0.08)">pwd</code> = où suis-je ?</div>
-      <div style="background:#D0F4EA;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#085041;">✅ <code style="background:rgba(0,0,0,0.08)">cd ..</code> = remonter d'un dossier parent</div>
-      <div style="background:#D0F4EA;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#085041;">✅ Tab ↹ = auto-complétion magique !</div>
+      <div style="background:#141414;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#C8C8C8;border:0.5px solid #3A3A3A;">✅ CMD = l'Invite de commandes — la <strong style="color:#FAC775;">fenêtre noire</strong> de Windows</div>
+      <div style="background:#141414;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#C8C8C8;border:0.5px solid #3A3A3A;">✅ <code style="color:#FAC775;background:transparent;">dir</code> = voir le contenu &nbsp;|&nbsp; <code style="color:#FAC775;background:transparent;">dir /B</code> = affichage simple</div>
+      <div style="background:#141414;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#C8C8C8;border:0.5px solid #3A3A3A;">✅ <code style="color:#FAC775;background:transparent;">cd nom</code> = entrer dans un dossier &nbsp;|&nbsp; <code style="color:#FAC775;background:transparent;">cd ..</code> = remonter</div>
+      <div style="background:#141414;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#C8C8C8;border:0.5px solid #3A3A3A;">✅ <code style="color:#FAC775;background:transparent;">mkdir</code> = créer un dossier &nbsp;|&nbsp; <code style="color:#FAC775;background:transparent;">cls</code> = effacer l'écran</div>
+      <div style="background:#141414;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#C8C8C8;border:0.5px solid #3A3A3A;">✅ Pour changer de disque : tape <code style="color:#FAC775;background:transparent;">D:</code> (sans cd !)</div>
+      <div style="background:#141414;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#C8C8C8;border:0.5px solid #3A3A3A;">✅ Tab ↹ = auto-complétion &nbsp;|&nbsp; ↑↓ = naviguer dans l'historique des commandes</div>
+      <div style="background:#141414;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#C8C8C8;border:0.5px solid #3A3A3A;">✅ Les chemins CMD utilisent <code style="color:#FAC775;background:transparent;">\</code> (backslash), pas <code style="color:#F09595;background:transparent;">/</code> !</div>
     </div>
   </div>
 
-  <!-- CTA -->
   <div class="cta-wrap">
-    <p style="font-size:0.95rem;color:#5F5E5A;margin-bottom:1.2rem;">Tu connais le terminal ? Excellent ! 🎉<br>Mets en pratique avec les exercices !</p>
+    <p style="font-size:0.95rem;color:#5F5E5A;margin-bottom:1.2rem;">Tu maîtrises CMD ? Excellent ! 🎉<br>Mets en pratique avec les exercices !</p>
     <a class="cta-btn" href="exercices-terminal.html">Passer aux exercices →</a>
-    <p class="cta-sub">Exercice 1 : reconnaître la bonne commande<br>Exercice 2 : suivre un chemin dans le terminal</p>
+    <p class="cta-sub">Exercice 1 : identifier la bonne commande CMD<br>Exercice 2 : lire et compléter des sessions CMD</p>
   </div>
 
 </body>

@@ -9,12 +9,14 @@ v1.01.2 = explication méthodologie
 v1.01.3 = refonte cours + exercice html / css
 v1.01.4 = ajout cours arborescente dossier + navigation 
 v1.01.5 = ajout cours git + terminal 
+v1.01.6 = rectif cours terminal axé CMD
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
 
 ** Next step ** 
-Revoir le cours terminal pour inclure les commande terminal type cmd (Command Prompt Defaut)
+Revoir l'exercice 3 question 1 uniquement !
+bonne pratique, patchNote + readME.md + activer PAGE sur github
 Faire une éval, Transformer où modifier une fichier html, css
 Sur une même structure html, prévoir plusieur css et les switch
 Mettre les base en footer en bas via le css 
