@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices &mdash; Git &amp; GitHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #712B13;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #FAECE7; border: 0.5px solid #F0997B;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .back-link:hover { background: #F5C4B3; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+    }
+    .pill {
+      width: 32px; height: 32px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; flex-shrink: 0;
+    }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    .tip {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #FAECE7; border-radius: 10px;
+      padding: 0.75rem 1rem; margin-top: 0.9rem;
+      font-size: 0.88rem; color: #712B13; line-height: 1.5;
+    }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-teal   { background: #D0F4EA; color: #085041; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Terminal sim */
+    .term-sim {
+      background: #1D1D1B; border-radius: 12px;
+      padding: 0; font-family: 'Fira Code', monospace;
+      font-size: 0.84rem; overflow: hidden; margin: 0.8rem 0;
+    }
+    .term-bar {
+      background: #2C2C2A; padding: 8px 14px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .term-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .td-r { background: #F09595; } .td-y { background: #FAC775; } .td-g { background: #9FE1CB; }
+    .term-title { font-size: 0.75rem; color: #888780; margin-left: 8px; font-family: 'Nunito', sans-serif; }
+    .term-body { padding: 1rem 1.2rem; line-height: 1.9; color: #D3D1C7; white-space: pre; overflow-x: auto; }
+    .t-prompt { color: #5DCAA5; font-weight: 700; }
+    .t-cmd    { color: #FAC775; }
+    .t-arg    { color: #85B7EB; }
+    .t-str    { color: #9FE1CB; }
+    .t-out    { color: #888780; }
+    .t-ok     { color: #9FE1CB; }
+    .t-hi     { color: #F5C4B3; font-weight: 700; }
+    .t-cm     { color: #5F5E5A; font-style: italic; }
+
+    /* QCM */
+    .qcm-block { margin-bottom: 1.6rem; padding-bottom: 1.4rem; border-bottom: 0.5px solid #F1EFE8; }
+    .qcm-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .qcm-question { font-size: 0.96rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.7rem; }
+    .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+    .choice-btn {
+      border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A;
+      border-radius: 8px; padding: 6px 14px; font-size: 0.84rem;
+      font-family: 'Fira Code', monospace; cursor: pointer; transition: background 0.12s;
+    }
+    .choice-btn:hover   { background: #D3D1C7; }
+    .choice-btn.correct { background: #D0F4EA; color: #085041; border-color: #5DCAA5; }
+    .choice-btn.wrong   { background: #FCEBEB; color: #791F1F; border-color: #F09595; }
+    .choice-btn:disabled { cursor: default; }
+    .q-feedback { font-size: 0.88rem; min-height: 1.3em; font-weight: 700; margin-top: 6px; }
+    .q-feedback.ok { color: #0F6E56; }
+    .q-feedback.ko { color: #A32D2D; }
+
+    /* Progress */
+    .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1rem 0 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: #F5C4B3; border-radius: 10px; transition: width 0.4s; width: 0%; }
+    .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+    .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+    .chip-ok { background: #D0F4EA; color: #085041; }
+    .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+    /* Sequence builder */
+    .seq-builder {
+      display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+      background: #1D1D1B; border-radius: 10px; padding: 0.8rem 1rem; min-height: 52px;
+      margin: 0.7rem 0;
+    }
+    .seq-piece {
+      background: #F5C4B3; color: #4A1A08;
+      border: 0.5px solid #D85A30; border-radius: 6px;
+      padding: 5px 12px; font-family: 'Fira Code', monospace;
+      font-size: 0.84rem; cursor: pointer; font-weight: 700;
+      transition: background 0.12s;
+    }
+    .seq-piece:hover { background: #F0997B; }
+    .seq-piece.placed { background: #D0F4EA; border-color: #5DCAA5; color: #085041; cursor: default; }
+    .seq-arrow { color: #FAC775; font-family: 'Fira Code', monospace; font-size: 0.9rem; padding: 0 2px; font-weight: 700; }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 0.8rem; flex-wrap: wrap; }
+    .action-btn {
+      border: 0.5px solid #B4B2A9; background: #ffffff; color: #2C2C2A;
+      border-radius: 8px; padding: 7px 16px; font-size: 0.88rem;
+      font-family: 'Nunito', sans-serif; font-weight: 700; cursor: pointer;
+      transition: background 0.12s;
+    }
+    .action-btn:hover { background: #F1EFE8; }
+    .action-btn.primary { background: #FAECE7; color: #712B13; border-color: #F0997B; }
+    .action-btn.primary:hover { background: #F5C4B3; }
+
+    /* Git vocab matching */
+    .vocab-grid { display: flex; flex-direction: column; gap: 8px; margin: 0.8rem 0; }
+    .vocab-row { display: grid; grid-template-columns: 140px 1fr; gap: 10px; align-items: center; }
+    .vocab-term {
+      background: #FAECE7; border: 0.5px solid #F0997B; border-radius: 8px;
+      padding: 7px 12px; font-family: 'Fira Code', monospace; font-size: 0.88rem;
+      font-weight: 700; color: #712B13; text-align: center;
+    }
+    .vocab-choices-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .vocab-choice {
+      background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 7px;
+      padding: 5px 11px; font-size: 0.84rem; cursor: pointer; transition: background 0.12s;
+    }
+    .vocab-choice:hover { background: #D3D1C7; }
+    .vocab-choice.correct { background: #D0F4EA; color: #085041; border-color: #5DCAA5; font-weight: 700; }
+    .vocab-choice.wrong   { background: #FCEBEB; color: #791F1F; border-color: #F09595; }
+    .vocab-choice:disabled { cursor: default; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.6rem; }
+      .vocab-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="cours-git.html">← Retour au cours Git</a>
+
+  <div class="hero">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">🌿</div>
+    <h1>Exercices &mdash; Git &amp; GitHub</h1>
+    <p>Mets en pratique les commandes Git et le versioning !</p>
+    <div class="badge-row">
+      <span class="badge b-coral">3 exercices</span>
+      <span class="badge b-purple">Interactif</span>
+    </div>
+  </div>
+
+  <!-- EXERCICE 1 : QCM commandes Git -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">1</div>Exercice 1 &mdash; Quelle commande Git utiliser ?</div>
+    <p class="desc">Pour chaque situation, choisis la bonne commande Git à taper dans le terminal.</p>
+
+    <!-- Q1 -->
+    <div class="qcm-block">
+      <div class="qcm-question">Tu veux <strong>vérifier si Git est installé</strong> sur ton PC. Quelle commande tapes-tu ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'gq1',false)">git init</button>
+        <button class="choice-btn" onclick="qcm(this,'gq1',true)">git --version</button>
+        <button class="choice-btn" onclick="qcm(this,'gq1',false)">git status</button>
+        <button class="choice-btn" onclick="qcm(this,'gq1',false)">git check</button>
+      </div>
+      <div class="q-feedback" id="fb-gq1"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="qcm-block">
+      <div class="qcm-question">Tu veux <strong>créer un nouveau dépôt Git</strong> dans ton dossier de projet. Quelle commande tapes-tu ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'gq2',false)">git clone</button>
+        <button class="choice-btn" onclick="qcm(this,'gq2',false)">git start</button>
+        <button class="choice-btn" onclick="qcm(this,'gq2',true)">git init</button>
+        <button class="choice-btn" onclick="qcm(this,'gq2',false)">git push</button>
+      </div>
+      <div class="q-feedback" id="fb-gq2"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="qcm-block">
+      <div class="term-sim" style="margin-bottom:0.7rem;">
+        <div class="term-bar"><div class="term-dot td-r"></div><div class="term-dot td-y"></div><div class="term-dot td-g"></div><div class="term-title">Terminal</div></div>
+        <div class="term-body"><span class="t-prompt">$</span> <span class="t-cmd">git</span> <span class="t-arg">status</span>
+<span class="t-out">On branch main</span>
+<span class="t-hi">modified:   index.html</span>
+<span class="t-hi">modified:   style.css</span></div>
+      </div>
+      <div class="qcm-question">Tu vois que deux fichiers ont été modifiés. Tu veux <strong>tout préparer pour un commit d'un seul coup</strong>. Quelle commande utilises-tu ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'gq3',false)">git add index.html</button>
+        <button class="choice-btn" onclick="qcm(this,'gq3',true)">git add .</button>
+        <button class="choice-btn" onclick="qcm(this,'gq3',false)">git commit -m "."</button>
+        <button class="choice-btn" onclick="qcm(this,'gq3',false)">git push .</button>
+      </div>
+      <div class="q-feedback" id="fb-gq3"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="qcm-block">
+      <div class="qcm-question">Tu veux <strong>télécharger pour la première fois un projet</strong> depuis GitHub sur ton PC. Quelle commande utilises-tu ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'gq4',false)">git pull</button>
+        <button class="choice-btn" onclick="qcm(this,'gq4',false)">git init</button>
+        <button class="choice-btn" onclick="qcm(this,'gq4',true)">git clone</button>
+        <button class="choice-btn" onclick="qcm(this,'gq4',false)">git download</button>
+      </div>
+      <div class="q-feedback" id="fb-gq4"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="qcm-block">
+      <div class="qcm-question">Tu travailles sur un projet en équipe. Quelqu'un a fait des modifications sur GitHub. Tu veux <strong>récupérer ses changements</strong>. Quelle commande utilises-tu ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'gq5',false)">git clone</button>
+        <button class="choice-btn" onclick="qcm(this,'gq5',false)">git push</button>
+        <button class="choice-btn" onclick="qcm(this,'gq5',true)">git pull</button>
+        <button class="choice-btn" onclick="qcm(this,'gq5',false)">git get</button>
+      </div>
+      <div class="q-feedback" id="fb-gq5"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="qcm-block" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
+      <div class="qcm-question">Tu as fait <code>git add .</code>. Maintenant tu veux <strong>créer la sauvegarde</strong> avec le message "Ajout du formulaire". Quelle commande ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'gq6',false)">git save "Ajout du formulaire"</button>
+        <button class="choice-btn" onclick="qcm(this,'gq6',true)">git commit -m "Ajout du formulaire"</button>
+        <button class="choice-btn" onclick="qcm(this,'gq6',false)">git push "Ajout du formulaire"</button>
+        <button class="choice-btn" onclick="qcm(this,'gq6',false)">git add -m "Ajout du formulaire"</button>
+      </div>
+      <div class="q-feedback" id="fb-gq6"></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="score-row" id="score-qcm"></div>
+  </div>
+
+  <!-- EXERCICE 2 : Vocabulaire Git -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">2</div>Exercice 2 &mdash; Connais-tu le vocabulaire Git ?</div>
+    <p class="desc">Associe chaque terme Git à sa définition en cliquant sur la bonne réponse.</p>
+
+    <div class="vocab-grid" id="vocab-container"></div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="prog-vocab"></div></div>
+    <div class="score-row" id="score-vocab"></div>
+  </div>
+
+  <!-- EXERCICE 3 : Remettre le flux Git dans l'ordre -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">3</div>Exercice 3 &mdash; Remets le flux Git dans l'ordre</div>
+    <p class="desc">Pour chaque mission, clique sur les commandes dans le <strong>bon ordre</strong> pour accomplir la tâche.</p>
+
+    <div id="seq-container"></div>
+  </div>
+
+  <div class="footer-note">
+    🎉 Bravo ! Tu connais les bases de Git et GitHub.<br>
+    Tu peux maintenant versionner tous tes projets comme un vrai développeur !<br>
+    <a href="cours-terminal.html" style="color:#712B13;font-weight:700;display:inline-block;margin-top:6px;">← Revoir le Terminal</a>
+    &nbsp;&nbsp;
+    <a href="cours-git.html" style="color:#712B13;font-weight:700;display:inline-block;margin-top:6px;">← Revoir Git</a>
+  </div>
+
+  <script>
+    var okMsgs = ['Excellent !', 'Parfait !', 'Bravo !', 'Très bien !', 'Correct !'];
+    function rnd(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+    /* ===== EXERCICE 1 : QCM ===== */
+    var qcmDone = {}, qcmScore = 0, qcmTotal = 6;
+
+    function qcm(btn, qid, correct) {
+      if (qcmDone[qid]) return;
+      qcmDone[qid] = true;
+      var fb = document.getElementById('fb-' + qid);
+      btn.classList.add(correct ? 'correct' : 'wrong');
+      btn.closest('.choices').querySelectorAll('.choice-btn').forEach(function(b) { b.disabled = true; });
+      if (correct) {
+        fb.className = 'q-feedback ok'; fb.textContent = rnd(okMsgs) + ' ✓';
+        qcmScore++;
+      } else {
+        fb.className = 'q-feedback ko'; fb.textContent = 'Pas tout à fait ! Relis le cours et réessaie 😊';
+      }
+      var done = Object.keys(qcmDone).length;
+      document.getElementById('prog-qcm').style.width = (done / qcmTotal * 100) + '%';
+      if (done === qcmTotal) {
+        var row = document.getElementById('score-qcm');
+        row.innerHTML = '<span class="chip chip-ok">' + qcmScore + ' bonne' + (qcmScore > 1 ? 's' : '') + ' réponse' + (qcmScore > 1 ? 's' : '') + '</span>';
+        if (qcmTotal - qcmScore > 0) row.innerHTML += '<span class="chip chip-ko">' + (qcmTotal-qcmScore) + ' erreur' + (qcmTotal-qcmScore>1?'s':'') + '</span>';
+      }
+    }
+
+    /* ===== EXERCICE 2 : Vocabulaire ===== */
+    var vocabData = [
+      { term: 'commit',     defs: ['Créer une sauvegarde', 'Envoyer sur GitHub', 'Télécharger un projet', 'Voir les fichiers modifiés'], correct: 'Créer une sauvegarde' },
+      { term: 'git push',   defs: ['Télécharger un projet', 'Récupérer les mises à jour', 'Envoyer ses commits sur GitHub', 'Initialiser un dépôt'], correct: 'Envoyer ses commits sur GitHub' },
+      { term: 'git pull',   defs: ['Envoyer sur GitHub', 'Créer une sauvegarde', 'Récupérer les mises à jour de GitHub', 'Supprimer un fichier'], correct: 'Récupérer les mises à jour de GitHub' },
+      { term: 'git clone',  defs: ['Fusionner deux branches', 'Télécharger un projet depuis GitHub', 'Créer un dépôt local', 'Voir l\'historique'], correct: 'Télécharger un projet depuis GitHub' },
+      { term: 'repository', defs: ['Un fichier de configuration', 'Un dépôt : dossier suivi par Git', 'Un message de commit', 'Une branche Git'], correct: 'Un dépôt : dossier suivi par Git' },
+    ];
+    var vocabDone = {}, vocabScore = 0;
+
+    function buildVocab() {
+      var container = document.getElementById('vocab-container');
+      container.innerHTML = '';
+      vocabData.forEach(function(d, idx) {
+        var row = document.createElement('div');
+        row.className = 'vocab-row';
+        var termEl = document.createElement('div');
+        termEl.className = 'vocab-term';
+        termEl.textContent = d.term;
+        var choicesDiv = document.createElement('div');
+        choicesDiv.className = 'vocab-choices-row';
+        var shuffled = d.defs.slice().sort(function() { return Math.random()-0.5; });
+        shuffled.forEach(function(def) {
+          var btn = document.createElement('button');
+          btn.className = 'vocab-choice';
+          btn.textContent = def;
+          btn.onclick = function() { answerVocab(btn, idx, def === d.correct); };
+          choicesDiv.appendChild(btn);
+        });
+        row.appendChild(termEl);
+        row.appendChild(choicesDiv);
+        container.appendChild(row);
+      });
+    }
+
+    function answerVocab(btn, idx, correct) {
+      if (vocabDone[idx]) return;
+      vocabDone[idx] = true;
+      btn.classList.add(correct ? 'correct' : 'wrong');
+      btn.closest('.vocab-choices-row').querySelectorAll('.vocab-choice').forEach(function(b) { b.disabled = true; });
+      if (correct) vocabScore++;
+      var done = Object.keys(vocabDone).length;
+      document.getElementById('prog-vocab').style.width = (done / vocabData.length * 100) + '%';
+      if (done === vocabData.length) {
+        var row = document.getElementById('score-vocab');
+        row.innerHTML = '<span class="chip chip-ok">' + vocabScore + ' / ' + vocabData.length + ' correctes</span>';
+        if (vocabData.length - vocabScore > 0) row.innerHTML += '<span class="chip chip-ko">' + (vocabData.length-vocabScore) + ' erreur' + (vocabData.length-vocabScore>1?'s':'') + '</span>';
+      }
+    }
+
+    /* ===== EXERCICE 3 : Séquences ===== */
+    var seqData = [
+      {
+        mission: 'Tu as modifié <strong>index.html</strong>. Tu veux <strong>créer une sauvegarde et l\'envoyer sur GitHub</strong> avec le message "Correction du titre".',
+        solution: ['git add .', 'git commit -m "Correction du titre"', 'git push'],
+        choices: ['git add .', 'git commit -m "Correction du titre"', 'git push', 'git pull', 'git init', 'git status'],
+        id: 'gseq1'
+      },
+      {
+        mission: 'Tu arrives sur un <strong>nouveau PC</strong>. Tu veux <strong>télécharger ton projet depuis GitHub</strong>, puis voir ce qu\'il contient.',
+        solution: ['git clone https://github.com/toi/projet.git', 'cd projet', 'ls'],
+        choices: ['ls', 'git pull', 'cd projet', 'git init', 'git clone https://github.com/toi/projet.git', 'git status'],
+        id: 'gseq2'
+      }
+    ];
+
+    function buildSequences() {
+      var container = document.getElementById('seq-container');
+      container.innerHTML = '';
+      seqData.forEach(function(ex, idx) {
+        var div = document.createElement('div');
+        div.style.marginBottom = '1.6rem';
+        div.style.paddingBottom = '1.4rem';
+        if (idx < seqData.length-1) div.style.borderBottom = '0.5px solid #F1EFE8';
+
+        div.innerHTML = '<div class="rl">Mission ' + (idx+1) + ' sur ' + seqData.length + '</div>'
+          + '<p style="font-size:0.92rem;color:#2C2C2A;margin-bottom:0.7rem;">' + ex.mission + '</p>'
+          + '<div class="seq-builder" id="builder-' + ex.id + '">'
+          + '<span style="font-size:0.8rem;color:#5F5E5A;font-family:\'Fira Code\',monospace;">Clique sur les commandes dans l\'ordre...</span>'
+          + '</div>'
+          + '<div style="display:flex;flex-wrap:wrap;gap:6px;margin:0.6rem 0;" id="pieces-' + ex.id + '"></div>'
+          + '<div class="q-feedback" id="fb-' + ex.id + '"></div>'
+          + '<div class="btn-row"><button class="action-btn" onclick="resetSeq(\'' + ex.id + '\')">Recommencer</button></div>';
+        container.appendChild(div);
+
+        var piecesDiv = div.querySelector('#pieces-' + ex.id);
+        var shuffled = ex.choices.slice().sort(function() { return Math.random()-0.5; });
+        shuffled.forEach(function(piece) {
+          var btn = document.createElement('span');
+          btn.className = 'seq-piece';
+          btn.textContent = piece;
+          btn.dataset.value = piece;
+          btn.onclick = function() { addSeqPiece(this, ex); };
+          piecesDiv.appendChild(btn);
+        });
+        ex._built = [];
+      });
+    }
+
+    function addSeqPiece(btn, ex) {
+      if (btn.classList.contains('placed')) return;
+      btn.classList.add('placed');
+      ex._built.push(btn.dataset.value);
+      renderBuilder(ex);
+      checkSeqSoFar(ex);
+    }
+
+    function renderBuilder(ex) {
+      var builder = document.getElementById('builder-' + ex.id);
+      if (ex._built.length === 0) {
+        builder.innerHTML = '<span style="font-size:0.8rem;color:#5F5E5A;font-family:\'Fira Code\',monospace;">Clique sur les commandes dans l\'ordre...</span>';
+        return;
+      }
+      builder.innerHTML = '';
+      ex._built.forEach(function(seg, i) {
+        if (i > 0) {
+          var arr = document.createElement('span');
+          arr.className = 'seq-arrow';
+          arr.textContent = '→';
+          builder.appendChild(arr);
+        }
+        var s = document.createElement('span');
+        s.className = 'seq-piece placed';
+        s.textContent = seg;
+        s.dataset.idx = i;
+        s.onclick = function() { removeSeqPiece(parseInt(this.dataset.idx), ex); };
+        builder.appendChild(s);
+      });
+    }
+
+    function removeSeqPiece(idx, ex) {
+      var removed = ex._built.splice(idx);
+      removed.forEach(function(val) {
+        document.querySelectorAll('#pieces-' + ex.id + ' .seq-piece').forEach(function(b) {
+          if (b.dataset.value === val && b.classList.contains('placed')) b.classList.remove('placed');
+        });
+      });
+      renderBuilder(ex);
+      document.getElementById('fb-' + ex.id).textContent = '';
+      document.getElementById('fb-' + ex.id).className = 'q-feedback';
+    }
+
+    function checkSeqSoFar(ex) {
+      var fb = document.getElementById('fb-' + ex.id);
+      var built = ex._built, sol = ex.solution;
+      if (built.length < sol.length) { fb.textContent = ''; fb.className = 'q-feedback'; return; }
+      var correct = built.length === sol.length && built.every(function(v,i) { return v === sol[i]; });
+      fb.className = 'q-feedback ' + (correct ? 'ok' : 'ko');
+      fb.textContent = correct ? rnd(okMsgs) + ' ✓ Séquence correcte !' : 'Pas tout à fait… vérifie l\'ordre des commandes et recommence !';
+    }
+
+    function resetSeq(exId) {
+      var ex = seqData.find(function(e) { return e.id === exId; });
+      ex._built = [];
+      document.querySelectorAll('#pieces-' + exId + ' .seq-piece').forEach(function(b) { b.classList.remove('placed'); });
+      renderBuilder(ex);
+      document.getElementById('fb-' + exId).textContent = '';
+      document.getElementById('fb-' + exId).className = 'q-feedback';
+    }
+
+    buildVocab();
+    buildSequences();
+  </script>
+
+</body>
+</html>

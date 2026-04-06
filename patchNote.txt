@@ -8,12 +8,13 @@ v1.01.1 = séparation CSS index.html acceuil parent
 v1.01.2 = explication méthodologie
 v1.01.3 = refonte cours + exercice html / css
 v1.01.4 = ajout cours arborescente dossier + navigation 
+v1.01.5 = ajout cours git + terminal 
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
 
 ** Next step ** 
-faire un cours sur GIT et l'utilisation du terminal
+Revoir le cours terminal pour inclure les commande terminal type cmd (Command Prompt Defaut)
 Faire une éval, Transformer où modifier une fichier html, css
 Sur une même structure html, prévoir plusieur css et les switch
 Mettre les base en footer en bas via le css 

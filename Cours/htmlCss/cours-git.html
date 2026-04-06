@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git &amp; GitHub &mdash; Sauvegarder son code</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+    .b-green  { background: #EAF3DE; color: #3B6D11; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+
+    .nav-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .nav-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.85rem; font-weight: 700;
+      text-decoration: none; border-radius: 8px; padding: 6px 13px;
+      border: 0.5px solid; transition: background 0.15s;
+    }
+    .nav-term  { color: #085041; background: #D0F4EA; border-color: #5DCAA5; }
+    .nav-term:hover  { background: #9FE1CB; }
+    .nav-ex    { color: #712B13; background: #FAECE7; border-color: #F0997B; }
+    .nav-ex:hover    { background: #F5C4B3; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+    }
+    .pill {
+      width: 32px; height: 32px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; flex-shrink: 0;
+    }
+    .teal   { background: #9FE1CB; color: #085041; }
+    .purple { background: #CECBF6; color: #3C3489; }
+    .coral  { background: #F5C4B3; color: #712B13; }
+    .amber  { background: #FAC775; color: #633806; }
+    .blue   { background: #B5D4F4; color: #0C447C; }
+    .green  { background: #C0DD97; color: #3B6D11; }
+    .pink   { background: #F4C0D1; color: #72243E; }
+    .red    { background: #F7C1C1; color: #791F1F; }
+    .gray   { background: #D3D1C7; color: #444441; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+
+    .code-block {
+      background: #1D1D1B; border-radius: 10px;
+      padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace;
+      font-size: 0.84rem; line-height: 1.9; white-space: pre;
+      overflow-x: auto; color: #D3D1C7; margin: 0.7rem 0;
+    }
+    .prompt  { color: #5DCAA5; font-weight: 700; }
+    .cmd     { color: #FAC775; }
+    .arg     { color: #85B7EB; }
+    .str     { color: #9FE1CB; }
+    .out     { color: #888780; }
+    .cm      { color: #5F5E5A; font-style: italic; }
+    .hl      { color: #F5C4B3; font-weight: 700; }
+    .ok      { color: #9FE1CB; }
+
+    .tip {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #D0F4EA; border-radius: 10px;
+      padding: 0.75rem 1rem; margin-top: 0.9rem;
+      font-size: 0.88rem; color: #085041; line-height: 1.5;
+    }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-coral  { background: #FAECE7; color: #712B13; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .rl {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #888780; margin-bottom: 6px;
+    }
+
+    /* Analogy box */
+    .analogy {
+      display: flex; gap: 14px; align-items: flex-start;
+      background: #EEEDFE; border-radius: 12px; padding: 1rem 1.1rem;
+      margin: 0.8rem 0; border: 0.5px solid #CECBF6;
+    }
+    .analogy-icon { font-size: 2rem; flex-shrink: 0; }
+    .analogy-text { font-size: 0.9rem; color: #3C3489; line-height: 1.6; }
+    .analogy-text strong { font-weight: 800; }
+
+    /* Versioning timeline */
+    .timeline { display: flex; flex-direction: column; gap: 0; margin: 0.8rem 0; }
+    .tl-item { display: flex; gap: 14px; align-items: flex-start; }
+    .tl-dot-col { display: flex; flex-direction: column; align-items: center; }
+    .tl-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #9FE1CB; border: 2px solid #085041; flex-shrink: 0; margin-top: 4px;
+    }
+    .tl-line { width: 2px; background: #D3D1C7; flex: 1; min-height: 20px; }
+    .tl-content { padding-bottom: 16px; }
+    .tl-tag {
+      display: inline-block; font-size: 0.78rem; font-weight: 800;
+      background: #9FE1CB; color: #085041; border-radius: 6px; padding: 2px 8px; margin-bottom: 4px;
+      font-family: 'Fira Code', monospace;
+    }
+    .tl-msg { font-size: 0.88rem; color: #2C2C2A; font-weight: 700; }
+    .tl-detail { font-size: 0.82rem; color: #5F5E5A; margin-top: 2px; }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 8px; margin: 0.8rem 0; }
+    .step {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: #F5F4F0; border-radius: 10px; padding: 0.75rem 1rem;
+    }
+    .step-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: #F5C4B3; color: #712B13;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; flex-shrink: 0;
+    }
+    .step-body { font-size: 0.9rem; color: #2C2C2A; line-height: 1.6; }
+
+    /* Command cards */
+    .cmd-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0.8rem 0; }
+    .cmd-card {
+      border-radius: 12px; padding: 1rem 1.1rem; border: 0.5px solid;
+    }
+    .cc-orange { background: #FAEEDA; border-color: #FAC775; }
+    .cc-teal   { background: #D0F4EA; border-color: #5DCAA5; }
+    .cc-blue   { background: #E6F1FB; border-color: #85B7EB; }
+    .cc-purple { background: #EEEDFE; border-color: #CECBF6; }
+    .cc-pink   { background: #FDE8EF; border-color: #F4C0D1; }
+    .cc-green  { background: #EAF3DE; border-color: #C0DD97; }
+    .cmd-card-name { font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .cmd-card-desc { font-size: 0.85rem; line-height: 1.5; }
+    .cc-orange .cmd-card-name { color: #633806; }
+    .cc-teal   .cmd-card-name { color: #085041; }
+    .cc-blue   .cmd-card-name { color: #0C447C; }
+    .cc-purple .cmd-card-name { color: #3C3489; }
+    .cc-pink   .cmd-card-name { color: #72243E; }
+    .cc-green  .cmd-card-name { color: #3B6D11; }
+
+    /* Schema Git flow */
+    .git-flow {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; margin: 1rem 0; flex-wrap: wrap;
+    }
+    .gf-box {
+      border-radius: 10px; padding: 10px 14px; text-align: center;
+      font-size: 0.82rem; font-weight: 800; border: 0.5px solid; min-width: 90px;
+    }
+    .gf-local  { background: #E6F1FB; border-color: #85B7EB; color: #0C447C; }
+    .gf-staged { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+    .gf-commit { background: #D0F4EA; border-color: #5DCAA5; color: #085041; }
+    .gf-remote { background: #FAECE7; border-color: #F5C4B3; color: #712B13; }
+    .gf-arrow  { font-size: 1.2rem; color: #888780; padding: 0 4px; font-weight: 700; }
+    .gf-label  { font-size: 10px; font-weight: 700; color: #888780; text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-top: 3px; }
+
+    /* CTA */
+    .cta-wrap { text-align: center; padding: 2rem 1rem 2.5rem; }
+    .cta-btn {
+      display: inline-block; background: #712B13; color: #ffffff;
+      font-family: 'Nunito', sans-serif; font-weight: 800;
+      font-size: 1rem; padding: 13px 32px; border-radius: 12px;
+      text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #D85A30; }
+    .cta-sub { font-size: 0.82rem; color: #888780; margin-top: 0.8rem; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.6rem; }
+      .cmd-cards { grid-template-columns: 1fr; }
+      .git-flow { gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <div class="nav-row">
+    <a class="nav-term" href="cours-terminal.html">← Cours Terminal</a>
+    <a class="nav-ex"   href="exercices-git.html">✏️ Exercices Git →</a>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div style="font-size:2.8rem;margin-bottom:0.5rem;">🌿</div>
+    <h1>Git &amp; GitHub &mdash;<br>Sauvegarde ton code !</h1>
+    <p>Apprends à ne jamais perdre ton travail et à collaborer avec d'autres développeurs.</p>
+    <div class="badge-row">
+      <span class="badge b-coral">Débutant</span>
+      <span class="badge b-green">Versioning</span>
+      <span class="badge b-purple">Terminal requis</span>
+    </div>
+  </div>
+
+  <!-- Pourquoi Git -->
+  <div class="card">
+    <div class="stitle"><div class="pill purple">?</div>Pourquoi utiliser Git ?</div>
+    <p class="desc">Imagine que tu travailles sur un projet de site web depuis des semaines. Un jour, tu modifies le code et… tout se casse ! Si tu n'as pas de sauvegarde, tu dois tout refaire. <strong>Git résout ce problème.</strong></p>
+
+    <div class="analogy">
+      <div class="analogy-icon">🎮</div>
+      <div class="analogy-text">
+        <strong>Git, c'est comme des points de sauvegarde dans un jeu vidéo.</strong> Avant chaque moment important, tu crées une sauvegarde. Si quelque chose tourne mal, tu peux revenir exactement à ce point. La différence avec Git, c'est que tu peux avoir <strong>des centaines de sauvegardes</strong>, voir ce qui a changé entre chacune, et même travailler à plusieurs sur le même projet !
+      </div>
+    </div>
+  </div>
+
+  <!-- Git vs GitHub -->
+  <div class="card">
+    <div class="stitle"><div class="pill coral">≠</div>Git vs GitHub : c'est pas pareil !</div>
+    <p class="desc">Beaucoup de débutants confondent les deux. Voici la différence :</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0.8rem 0;">
+      <div style="background:#FAEEDA;border-radius:12px;padding:1rem;border:0.5px solid #FAC775;">
+        <div style="font-size:1.4rem;margin-bottom:0.4rem;">🖥️</div>
+        <div style="font-weight:800;color:#633806;margin-bottom:0.3rem;">Git</div>
+        <div style="font-size:0.87rem;color:#854F0B;line-height:1.5;">Un logiciel installé <strong>sur ton PC</strong>. Il gère les sauvegardes de ton projet localement.</div>
+      </div>
+      <div style="background:#FAECE7;border-radius:12px;padding:1rem;border:0.5px solid #F5C4B3;">
+        <div style="font-size:1.4rem;margin-bottom:0.4rem;">☁️</div>
+        <div style="font-weight:800;color:#712B13;margin-bottom:0.3rem;">GitHub</div>
+        <div style="font-size:0.87rem;color:#8F3B1F;line-height:1.5;">Un <strong>site web</strong> (github.com) qui stocke tes sauvegardes en ligne et permet le partage.</div>
+      </div>
+    </div>
+
+    <div class="tip tip-purple"><span class="tip-i">💡</span><span>Résumé : <strong>Git</strong> = le logiciel sur ton PC. <strong>GitHub</strong> = le site web pour stocker et partager. Tu utilises Git pour créer des sauvegardes, et GitHub pour les mettre en ligne.</span></div>
+  </div>
+
+  <!-- Le versioning expliqué -->
+  <div class="card">
+    <div class="stitle"><div class="pill teal">V</div>Le versioning : garder l'historique</div>
+    <p class="desc">Avec Git, chaque sauvegarde s'appelle un <strong>commit</strong>. Voici à quoi ressemble l'historique de ton projet :</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <span class="tl-tag">v1 — commit #1</span>
+          <div class="tl-msg">✨ Création du projet</div>
+          <div class="tl-detail">index.html créé avec le titre et le header</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <span class="tl-tag">v2 — commit #2</span>
+          <div class="tl-msg">🎨 Ajout du style CSS</div>
+          <div class="tl-detail">style.css créé, couleurs et polices définies</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <span class="tl-tag">v3 — commit #3</span>
+          <div class="tl-msg">🐛 Correction du menu</div>
+          <div class="tl-detail">Bug du menu mobile corrigé</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot-col"><div class="tl-dot" style="background:#F5C4B3;border-color:#712B13;"></div></div>
+        <div class="tl-content" style="padding-bottom:0;">
+          <span class="tl-tag" style="background:#F5C4B3;color:#712B13;">v4 — maintenant</span>
+          <div class="tl-msg">❌ Le code plante !</div>
+          <div class="tl-detail">Tu peux revenir à n'importe quel commit précédent 😌</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip"><span class="tip-i">💡</span><span>Le versioning est aussi très pratique en équipe : si plusieurs personnes travaillent sur le même projet, Git permet de <strong>fusionner les modifications</strong> sans tout écraser !</span></div>
+  </div>
+
+  <!-- Installer Git et vérifier -->
+  <div class="card">
+    <div class="stitle"><div class="pill amber">⚙️</div>Installer Git &amp; vérifier qu'il est présent</div>
+    <p class="desc">Avant d'utiliser Git, il faut l'installer sur ton PC. Voici comment faire et comment vérifier qu'il est bien installé (dans le terminal !).</p>
+
+    <div class="rl">Vérifier si Git est déjà installé (terminal)</div>
+    <div class="code-block"><span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">--version</span>
+<span class="ok">git version 2.43.0</span>       <span class="cm"># ✅ Git est installé !</span>
+
+<span class="cm"># Si tu vois ce message à la place, Git n'est pas installé :</span>
+<span class="out">bash: git: command not found</span></div>
+
+    <div class="rl" style="margin-top:1rem;">Installer Git</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">🪟</div><div class="step-body"><strong>Windows :</strong> Va sur <strong>git-scm.com</strong>, clique "Download for Windows" et lance l'installeur. Laisse toutes les options par défaut.</div></div>
+      <div class="step"><div class="step-num">🍎</div><div class="step-body"><strong>Mac :</strong> Dans le terminal, tape <code>git --version</code>. Si non installé, macOS propose automatiquement de l'installer via Xcode Tools. Clique "Installer".</div></div>
+      <div class="step"><div class="step-num">🐧</div><div class="step-body"><strong>Linux (Ubuntu) :</strong> Dans le terminal : <code>sudo apt install git</code> puis Entrée.</div></div>
+    </div>
+
+    <div class="code-block"><span class="cm"># Après installation, configure ton nom et email (une seule fois) :</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">config</span> --global user.name <span class="str">"Ton Prénom"</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">config</span> --global user.email <span class="str">"ton@email.com"</span></div>
+
+    <div class="tip tip-amber"><span class="tip-i">⚠️</span><span>Tu vois l'utilité du terminal ? Pour vérifier si Git est installé, et pour configurer Git, on utilise des <strong>commandes dans le terminal</strong>. C'est pour ça qu'on l'a appris d'abord !</span></div>
+  </div>
+
+  <!-- Créer un dépôt -->
+  <div class="card">
+    <div class="stitle"><div class="pill green">📁</div>Créer un dépôt : git init</div>
+    <p class="desc">Un <strong>dépôt</strong> (ou "repository") est un dossier suivi par Git. Pour créer un dépôt, tu te places dans ton dossier de projet dans le terminal, puis tu tapes <code>git init</code>.</p>
+
+    <div class="code-block"><span class="cm"># 1. Se placer dans son projet avec le terminal</span>
+<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">Documents/Projets/mon-site</span>
+
+<span class="cm"># 2. Initialiser Git dans ce dossier</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">init</span>
+<span class="ok">Initialized empty Git repository in /Documents/Projets/mon-site/.git/</span>
+
+<span class="cm"># 3. Vérifier l'état du dépôt</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">status</span>
+<span class="out">On branch main</span>
+<span class="out">No commits yet</span>
+<span class="out">Untracked files: index.html, style.css</span></div>
+
+    <div class="tip"><span class="tip-i">💡</span><span>Un dossier caché <code>.git</code> est créé dans ton projet. C'est là que Git stocke tout l'historique. Ne le supprime surtout pas !</span></div>
+  </div>
+
+  <!-- Faire un commit -->
+  <div class="card">
+    <div class="stitle"><div class="pill coral">💾</div>Sauvegarder ses modifications : commit</div>
+    <p class="desc">Pour créer un point de sauvegarde, il faut faire deux étapes : <strong>ajouter</strong> les fichiers modifiés, puis <strong>valider</strong> avec un message.</p>
+
+    <div class="git-flow">
+      <div class="gf-box gf-local">Fichiers modifiés<span class="gf-label">Ton code</span></div>
+      <div class="gf-arrow">→</div>
+      <div class="gf-box gf-staged">Zone de prépa<span class="gf-label">git add</span></div>
+      <div class="gf-arrow">→</div>
+      <div class="gf-box gf-commit">Historique<span class="gf-label">git commit</span></div>
+      <div class="gf-arrow">→</div>
+      <div class="gf-box gf-remote">GitHub<span class="gf-label">git push</span></div>
+    </div>
+
+    <div class="code-block"><span class="cm"># Voir quels fichiers ont été modifiés</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">status</span>
+
+<span class="cm"># Ajouter UN fichier à la sauvegarde</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">add</span> index.html
+
+<span class="cm"># Ajouter TOUS les fichiers modifiés d'un coup</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">add</span> <span class="hl">.</span>        <span class="cm"># le . signifie "tout"</span>
+
+<span class="cm"># Créer la sauvegarde avec un message descriptif</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">commit</span> -m <span class="str">"Ajout de la page d'accueil"</span>
+<span class="ok">[main (root-commit) 4f2a1b3] Ajout de la page d'accueil</span>
+<span class="ok"> 2 files changed, 35 insertions(+)</span></div>
+
+    <div class="tip tip-purple"><span class="tip-i">🌟</span><span>Le message du commit doit être <strong>court et clair</strong> pour qu'on comprenne ce qui a été fait. Bonne pratique : commence par un verbe — "Ajout de", "Correction de", "Mise à jour de"…</span></div>
+  </div>
+
+  <!-- Les commandes Git essentielles -->
+  <div class="card">
+    <div class="stitle"><div class="pill blue">⚡</div>Les commandes Git essentielles</div>
+    <p class="desc">Voici toutes les commandes à connaître pour travailler avec Git et GitHub :</p>
+
+    <div class="cmd-cards">
+      <div class="cmd-card cc-orange">
+        <div class="cmd-card-name">git init</div>
+        <div class="cmd-card-desc" style="color:#854F0B;">Créer un nouveau dépôt Git dans le dossier actuel.</div>
+      </div>
+      <div class="cmd-card cc-teal">
+        <div class="cmd-card-name">git status</div>
+        <div class="cmd-card-desc" style="color:#085041;">Voir quels fichiers ont été modifiés depuis le dernier commit.</div>
+      </div>
+      <div class="cmd-card cc-blue">
+        <div class="cmd-card-name">git add .</div>
+        <div class="cmd-card-desc" style="color:#0C447C;">Préparer tous les fichiers modifiés pour le prochain commit.</div>
+      </div>
+      <div class="cmd-card cc-green">
+        <div class="cmd-card-name">git commit -m</div>
+        <div class="cmd-card-desc" style="color:#3B6D11;">Créer une sauvegarde avec un message descriptif.</div>
+      </div>
+      <div class="cmd-card cc-pink">
+        <div class="cmd-card-name">git push</div>
+        <div class="cmd-card-desc" style="color:#72243E;">Envoyer ses commits vers GitHub (en ligne).</div>
+      </div>
+      <div class="cmd-card cc-purple">
+        <div class="cmd-card-name">git pull</div>
+        <div class="cmd-card-desc" style="color:#3C3489;">Récupérer les dernières modifications depuis GitHub.</div>
+      </div>
+      <div class="cmd-card cc-orange" style="background:#EAF3DE;border-color:#C0DD97;">
+        <div class="cmd-card-name" style="color:#3B6D11;">git clone</div>
+        <div class="cmd-card-desc" style="color:#3B6D11;">Télécharger un projet entier depuis GitHub sur son PC.</div>
+      </div>
+      <div class="cmd-card cc-teal" style="background:#F1EFE8;border-color:#D3D1C7;">
+        <div class="cmd-card-name" style="color:#444441;">git log</div>
+        <div class="cmd-card-desc" style="color:#5F5E5A;">Voir l'historique de tous les commits du projet.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Push : envoyer sur GitHub -->
+  <div class="card">
+    <div class="stitle"><div class="pill pink">☁️</div>Envoyer son code sur GitHub : push</div>
+    <p class="desc">Pour partager ton code en ligne, tu dois d'abord créer un dépôt sur github.com, puis le connecter à ton projet local.</p>
+
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">Va sur <strong>github.com</strong> et crée un compte gratuit.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">Clique sur le bouton <strong>"New repository"</strong> (nouveau dépôt). Donne-lui un nom.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">GitHub t'affiche des commandes à copier dans ton terminal — colle-les !</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body">Ensuite, à chaque fois que tu veux mettre à jour, tu fais <code>git add .</code> + <code>git commit -m "..."</code> + <code>git push</code>.</div></div>
+    </div>
+
+    <div class="code-block"><span class="cm"># Connecter son projet local à GitHub (1 seule fois)</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">remote add origin</span> https://github.com/tonpseudo/mon-site.git
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">push</span> -u origin main
+<span class="ok">Branch 'main' set up to track remote branch 'main' from 'origin'.</span>
+
+<span class="cm"># Ensuite, pour chaque mise à jour :</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">add</span> .
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">commit</span> -m <span class="str">"Mise à jour du footer"</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">push</span></div>
+  </div>
+
+  <!-- Pull et Clone -->
+  <div class="card">
+    <div class="stitle"><div class="pill teal">⬇️</div>Récupérer du code : pull &amp; clone</div>
+
+    <div class="rl">git pull — récupérer les mises à jour</div>
+    <p class="desc">Si quelqu'un d'autre a modifié le projet sur GitHub, ou si tu travailles sur deux ordinateurs, <code>git pull</code> permet de récupérer les derniers changements :</p>
+    <div class="code-block"><span class="cm"># Récupérer les dernières mises à jour depuis GitHub</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">pull</span>
+<span class="ok">Updating 4f2a1b3..9c8d2e1</span>
+<span class="ok">Fast-forward</span>
+<span class="ok"> style.css | 5 ++++</span></div>
+
+    <div class="rl" style="margin-top:1rem;">git clone — télécharger un projet existant</div>
+    <p class="desc">Pour télécharger un projet GitHub sur ton PC (le tien ou celui de quelqu'un d'autre) :</p>
+    <div class="code-block"><span class="cm"># Cloner (télécharger) un projet depuis GitHub</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">clone</span> https://github.com/utilisateur/nom-du-projet.git
+<span class="ok">Cloning into 'nom-du-projet'...</span>
+<span class="ok">done.</span>
+
+<span class="cm"># Un dossier "nom-du-projet" est créé automatiquement !</span>
+<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">nom-du-projet</span>
+<span class="prompt">$</span> <span class="cmd">ls</span></div>
+
+    <div class="tip tip-blue"><span class="tip-i">💡</span><span><strong>clone</strong> = télécharger un projet pour la première fois. <strong>pull</strong> = mettre à jour un projet que tu as déjà téléchargé. Ce sont deux choses différentes !</span></div>
+  </div>
+
+  <!-- Récap flux complet -->
+  <div class="card">
+    <div class="stitle"><div class="pill gray">✓</div>Le flux complet : du code à GitHub</div>
+    <p class="desc">Voici la routine à suivre à chaque fois que tu travailles sur ton projet :</p>
+
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><code>cd mon-projet</code> — Se placer dans son dossier dans le terminal</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><code>git pull</code> — Récupérer les éventuelles mises à jour (si tu travailles en équipe)</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">✏️ Modifier ses fichiers dans VS Code</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><code>git add .</code> — Préparer tous les fichiers modifiés</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><code>git commit -m "Description courte"</code> — Créer la sauvegarde</div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-body"><code>git push</code> — Envoyer sur GitHub</div></div>
+    </div>
+
+    <div class="tip tip-amber"><span class="tip-i">🚀</span><span>Avec juste ces 3 commandes — <strong>add</strong>, <strong>commit</strong>, <strong>push</strong> — tu peux déjà travailler professionnellement sur tes projets ! Le reste viendra avec la pratique.</span></div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <p style="font-size:0.95rem;color:#5F5E5A;margin-bottom:1.2rem;">Tu connais les bases de Git ? Parfait ! 🎉<br>Mets en pratique avec les exercices !</p>
+    <a class="cta-btn" href="exercices-git.html">Passer aux exercices Git →</a>
+    <p class="cta-sub">Exercice 1 : identifier la bonne commande Git<br>Exercice 2 : remettre le flux Git dans l'ordre</p>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices &mdash; Le Terminal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-teal   { background: #D0F4EA; color: #085041; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #085041;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #D0F4EA; border: 0.5px solid #5DCAA5;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .back-link:hover { background: #9FE1CB; }
+
+    .card {
+      border-radius: 16px;
+      border: 0.5px solid #D3D1C7;
+      background: #ffffff;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .stitle {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+    }
+    .pill {
+      width: 32px; height: 32px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; flex-shrink: 0;
+    }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .rl   { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    .tip {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #D0F4EA; border-radius: 10px;
+      padding: 0.75rem 1rem; margin-top: 0.9rem;
+      font-size: 0.88rem; color: #085041; line-height: 1.5;
+    }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Terminal simulation */
+    .term-sim {
+      background: #1D1D1B; border-radius: 12px;
+      padding: 0 0 0; font-family: 'Fira Code', monospace;
+      font-size: 0.84rem; overflow: hidden; margin: 0.8rem 0;
+    }
+    .term-bar {
+      background: #2C2C2A; padding: 8px 14px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .term-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .td-r { background: #F09595; }
+    .td-y { background: #FAC775; }
+    .td-g { background: #9FE1CB; }
+    .term-title { font-size: 0.75rem; color: #888780; margin-left: 8px; font-family: 'Nunito', sans-serif; }
+    .term-body { padding: 1rem 1.2rem; line-height: 1.9; color: #D3D1C7; }
+    .t-prompt { color: #5DCAA5; font-weight: 700; }
+    .t-cmd    { color: #FAC775; }
+    .t-arg    { color: #85B7EB; }
+    .t-out    { color: #888780; }
+    .t-hi     { color: #F5C4B3; font-weight: 700; }
+    .t-cm     { color: #5F5E5A; font-style: italic; }
+    .t-folder { color: #FAC775; font-weight: 700; }
+    .t-file   { color: #85B7EB; }
+
+    /* QCM */
+    .qcm-block { margin-bottom: 1.6rem; padding-bottom: 1.4rem; border-bottom: 0.5px solid #F1EFE8; }
+    .qcm-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .qcm-question { font-size: 0.96rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.7rem; }
+    .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+    .choice-btn {
+      border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A;
+      border-radius: 8px; padding: 6px 14px; font-size: 0.84rem;
+      font-family: 'Fira Code', monospace; cursor: pointer; transition: background 0.12s;
+    }
+    .choice-btn:hover   { background: #D3D1C7; }
+    .choice-btn.correct { background: #D0F4EA; color: #085041; border-color: #5DCAA5; }
+    .choice-btn.wrong   { background: #FCEBEB; color: #791F1F; border-color: #F09595; }
+    .choice-btn:disabled { cursor: default; }
+    .q-feedback { font-size: 0.88rem; min-height: 1.3em; font-weight: 700; margin-top: 6px; }
+    .q-feedback.ok { color: #0F6E56; }
+    .q-feedback.ko { color: #A32D2D; }
+
+    /* Progress */
+    .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1rem 0 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.4s; width: 0%; }
+    .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+    .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+    .chip-ok { background: #D0F4EA; color: #085041; }
+    .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+    /* Path builder */
+    .path-builder {
+      display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+      background: #1D1D1B; border-radius: 10px; padding: 0.8rem 1rem; min-height: 50px;
+      margin: 0.7rem 0; font-family: 'Fira Code', monospace;
+    }
+    .path-piece {
+      background: #CECBF6; color: #26215C;
+      border: 0.5px solid #7F77DD; border-radius: 6px;
+      padding: 4px 10px; font-family: 'Fira Code', monospace;
+      font-size: 0.84rem; cursor: pointer; font-weight: 700;
+      transition: background 0.12s;
+    }
+    .path-piece:hover { background: #AFA9EC; }
+    .path-piece.placed { background: #D0F4EA; border-color: #5DCAA5; color: #085041; cursor: default; }
+    .path-sep { color: #5DCAA5; font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 700; }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 0.8rem; flex-wrap: wrap; }
+    .action-btn {
+      border: 0.5px solid #B4B2A9; background: #ffffff; color: #2C2C2A;
+      border-radius: 8px; padding: 7px 16px; font-size: 0.88rem;
+      font-family: 'Nunito', sans-serif; font-weight: 700; cursor: pointer;
+      transition: background 0.12s;
+    }
+    .action-btn:hover { background: #F1EFE8; }
+    .action-btn.primary { background: #D0F4EA; color: #085041; border-color: #5DCAA5; }
+    .action-btn.primary:hover { background: #9FE1CB; }
+
+    /* Type matching game */
+    .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0.8rem 0; }
+    .match-col-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: #888780; margin-bottom: 8px; text-align: center; }
+    .match-item {
+      background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 8px;
+      padding: 8px 12px; font-size: 0.88rem; text-align: center; cursor: pointer;
+      transition: all 0.12s; font-family: 'Fira Code', monospace;
+    }
+    .match-item:hover { background: #D3D1C7; }
+    .match-item.selected-a { background: #EEEDFE; border-color: #7F77DD; color: #26215C; font-weight: 700; }
+    .match-item.selected-b { background: #FAEEDA; border-color: #FAC775; color: #633806; font-weight: 700; }
+    .match-item.matched-ok { background: #D0F4EA; border-color: #5DCAA5; color: #085041; font-weight: 700; cursor: default; }
+    .match-item.matched-ko { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.6rem; }
+      .match-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="cours-terminal.html">← Retour au cours Terminal</a>
+
+  <div class="hero">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">🖥️</div>
+    <h1>Exercices &mdash; Le Terminal</h1>
+    <p>Mets en pratique la navigation dans ton PC avec le terminal !</p>
+    <div class="badge-row">
+      <span class="badge b-teal">3 exercices</span>
+      <span class="badge b-purple">Interactif</span>
+    </div>
+  </div>
+
+  <!-- EXERCICE 1 : QCM commandes -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">1</div>Exercice 1 &mdash; Quelle commande utiliser ?</div>
+    <p class="desc">Pour chaque situation, choisis la bonne commande à taper dans le terminal.</p>
+
+    <!-- Q1 -->
+    <div class="qcm-block">
+      <div class="term-sim" style="margin-bottom:0.7rem;">
+        <div class="term-bar"><div class="term-dot td-r"></div><div class="term-dot td-y"></div><div class="term-dot td-g"></div><div class="term-title">Terminal</div></div>
+        <div class="term-body"><span class="t-prompt">alice@pc</span> <span class="t-out">~</span> <span class="t-prompt">$</span> <span style="opacity:0.4;">█</span></div>
+      </div>
+      <div class="qcm-question">Tu veux savoir <strong>dans quel dossier tu te trouves</strong> actuellement. Quelle commande tapes-tu ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'q1',false)">ls</button>
+        <button class="choice-btn" onclick="qcm(this,'q1',true)">pwd</button>
+        <button class="choice-btn" onclick="qcm(this,'q1',false)">cd</button>
+        <button class="choice-btn" onclick="qcm(this,'q1',false)">clear</button>
+      </div>
+      <div class="q-feedback" id="fb-q1"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="qcm-block">
+      <div class="term-sim" style="margin-bottom:0.7rem;">
+        <div class="term-bar"><div class="term-dot td-r"></div><div class="term-dot td-y"></div><div class="term-dot td-g"></div><div class="term-title">Terminal</div></div>
+        <div class="term-body"><span class="t-prompt">$</span> <span class="t-out">?</span><br><span class="t-folder">Documents</span>   <span class="t-folder">Photos</span>   <span class="t-file">index.html</span>   <span class="t-file">style.css</span></div>
+      </div>
+      <div class="qcm-question">Tu viens de voir ce résultat s'afficher. Quelle commande as-tu tapée pour voir la <strong>liste des fichiers</strong> ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'q2',false)">pwd</button>
+        <button class="choice-btn" onclick="qcm(this,'q2',false)">cd Documents</button>
+        <button class="choice-btn" onclick="qcm(this,'q2',true)">ls</button>
+        <button class="choice-btn" onclick="qcm(this,'q2',false)">cd ..</button>
+      </div>
+      <div class="q-feedback" id="fb-q2"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="qcm-block">
+      <div class="qcm-question">Tu es dans ton dossier personnel. Tu veux <strong>entrer dans le dossier "Projets"</strong>. Quelle commande tapes-tu ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'q3',false)">ls Projets</button>
+        <button class="choice-btn" onclick="qcm(this,'q3',true)">cd Projets</button>
+        <button class="choice-btn" onclick="qcm(this,'q3',false)">cd ..</button>
+        <button class="choice-btn" onclick="qcm(this,'q3',false)">open Projets</button>
+      </div>
+      <div class="q-feedback" id="fb-q3"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="qcm-block">
+      <div class="term-sim" style="margin-bottom:0.7rem;">
+        <div class="term-bar"><div class="term-dot td-r"></div><div class="term-dot td-y"></div><div class="term-dot td-g"></div><div class="term-title">Terminal</div></div>
+        <div class="term-body"><span class="t-prompt">$</span> <span class="t-cmd">pwd</span><br><span class="t-out">/Users/alice/Documents/Projets/mon-site</span></div>
+      </div>
+      <div class="qcm-question">Tu es dans <strong>mon-site</strong> et tu veux <strong>remonter dans Projets</strong>. Quelle commande tapes-tu ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'q4',false)">cd Projets</button>
+        <button class="choice-btn" onclick="qcm(this,'q4',false)">cd ~</button>
+        <button class="choice-btn" onclick="qcm(this,'q4',true)">cd ..</button>
+        <button class="choice-btn" onclick="qcm(this,'q4',false)">cd ../../</button>
+      </div>
+      <div class="q-feedback" id="fb-q4"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="qcm-block" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
+      <div class="qcm-question">Le terminal est rempli de texte et tu veux l'<strong>effacer pour avoir un écran propre</strong>. Quelle commande tapes-tu sur Mac ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'q5',false)">cls</button>
+        <button class="choice-btn" onclick="qcm(this,'q5',false)">reset</button>
+        <button class="choice-btn" onclick="qcm(this,'q5',true)">clear</button>
+        <button class="choice-btn" onclick="qcm(this,'q5',false)">erase</button>
+      </div>
+      <div class="q-feedback" id="fb-q5"></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="score-row" id="score-qcm"></div>
+  </div>
+
+  <!-- EXERCICE 2 : Association commande ↔ système -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">2</div>Exercice 2 &mdash; Associe la commande à son système</div>
+    <p class="desc">Clique sur une commande à gauche, puis sur le système d'exploitation correspondant à droite. Certaines commandes fonctionnent partout !</p>
+
+    <div id="match-container"></div>
+
+    <div class="btn-row">
+      <button class="action-btn primary" onclick="checkMatch()">Vérifier</button>
+      <button class="action-btn" onclick="resetMatch()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-match"></div></div>
+    <div class="score-row" id="score-match"></div>
+
+    <div class="tip tip-purple"><span class="tip-i">💡</span><span>Sur PowerShell (Windows), tu peux aussi utiliser <code>ls</code> et <code>pwd</code> comme sur Mac. PowerShell est plus flexible !</span></div>
+  </div>
+
+  <!-- EXERCICE 3 : Reconstituer la séquence de commandes -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">3</div>Exercice 3 &mdash; Remets les commandes dans l'ordre</div>
+    <p class="desc">Pour chaque mission, clique sur les commandes dans le <strong>bon ordre</strong> pour arriver au résultat attendu.</p>
+
+    <div id="seq-container"></div>
+  </div>
+
+  <div class="footer-note">
+    🎉 Bravo ! Tu maîtrises les bases du terminal.<br>
+    <a href="cours-git.html" style="color:#085041;font-weight:700;">Passe au cours Git →</a>
+  </div>
+
+  <script>
+    /* ===== Messages de félicitations ===== */
+    var okMsgs = ['Excellent !', 'Parfait !', 'Bravo !', 'Très bien !', 'Correct !'];
+    function rnd(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+    /* ===== EXERCICE 1 : QCM ===== */
+    var qcmDone = {}, qcmScore = 0, qcmTotal = 5;
+
+    function qcm(btn, qid, correct) {
+      if (qcmDone[qid]) return;
+      qcmDone[qid] = true;
+      var fb = document.getElementById('fb-' + qid);
+      btn.classList.add(correct ? 'correct' : 'wrong');
+      btn.closest('.choices').querySelectorAll('.choice-btn').forEach(function(b) { b.disabled = true; });
+      if (correct) {
+        fb.className = 'q-feedback ok';
+        fb.textContent = rnd(okMsgs) + ' ✓';
+        qcmScore++;
+      } else {
+        fb.className = 'q-feedback ko';
+        fb.textContent = 'Pas tout à fait ! Relis le cours et réessaie 😊';
+      }
+      updateQcmScore();
+    }
+
+    function updateQcmScore() {
+      var done = Object.keys(qcmDone).length;
+      document.getElementById('prog-qcm').style.width = (done / qcmTotal * 100) + '%';
+      if (done === qcmTotal) {
+        var row = document.getElementById('score-qcm');
+        row.innerHTML = '';
+        var ok = document.createElement('span');
+        ok.className = 'chip chip-ok';
+        ok.textContent = qcmScore + ' bonne' + (qcmScore > 1 ? 's' : '') + ' réponse' + (qcmScore > 1 ? 's' : '');
+        row.appendChild(ok);
+        if (qcmTotal - qcmScore > 0) {
+          var ko = document.createElement('span');
+          ko.className = 'chip chip-ko';
+          ko.textContent = (qcmTotal - qcmScore) + ' erreur' + (qcmTotal - qcmScore > 1 ? 's' : '');
+          row.appendChild(ko);
+        }
+      }
+    }
+
+    /* ===== EXERCICE 2 : Association ===== */
+    var matchData = [
+      { cmd: 'pwd',   os: 'Mac / Linux' },
+      { cmd: 'cls',   os: 'Windows (CMD)' },
+      { cmd: 'clear', os: 'Mac / Linux' },
+      { cmd: 'dir',   os: 'Windows (CMD)' },
+      { cmd: 'cd ..', os: 'Tous les systèmes' },
+      { cmd: 'ls',    os: 'Tous les systèmes' },
+    ];
+    var matchSelected = null, matchSide = null, matchDone = {}, matchScore = 0;
+
+    function buildMatch() {
+      var container = document.getElementById('match-container');
+      var osOptions = [...new Set(matchData.map(function(d) { return d.os; }))];
+
+      var html = '<div class="match-grid">';
+      html += '<div><div class="match-col-title">Commande</div>';
+      matchData.forEach(function(d, i) {
+        html += '<div class="match-item" id="ma-' + i + '" onclick="selectMatch(this,\'a\',' + i + ')" style="margin-bottom:6px;">' + d.cmd + '</div>';
+      });
+      html += '</div>';
+
+      html += '<div><div class="match-col-title">Système</div>';
+      var shuffled = matchData.slice().sort(function() { return Math.random()-0.5; });
+      shuffled.forEach(function(d, i) {
+        html += '<div class="match-item" id="mb-' + i + '" onclick="selectMatch(this,\'b\',' + i + ')" data-os="' + d.os + '" style="margin-bottom:6px;">' + d.os + '</div>';
+      });
+      html += '</div></div>';
+      container.innerHTML = html;
+    }
+
+    function selectMatch(el, side, idx) {
+      if (el.classList.contains('matched-ok')) return;
+      if (side === 'a') {
+        document.querySelectorAll('.match-item').forEach(function(e) {
+          if (!e.classList.contains('matched-ok')) { e.classList.remove('selected-a','selected-b'); }
+        });
+        el.classList.add('selected-a');
+        matchSelected = idx; matchSide = 'a';
+      } else if (matchSide === 'a' && matchSelected !== null) {
+        var cmdData = matchData[matchSelected];
+        var clickedOs = el.getAttribute('data-os');
+        var aEl = document.getElementById('ma-' + matchSelected);
+        if (cmdData.os === clickedOs) {
+          aEl.classList.remove('selected-a'); aEl.classList.add('matched-ok');
+          el.classList.remove('selected-b');  el.classList.add('matched-ok');
+          matchDone[matchSelected] = true; matchScore++;
+        } else {
+          aEl.classList.add('matched-ko'); el.classList.add('matched-ko');
+          setTimeout(function() {
+            aEl.classList.remove('selected-a','matched-ko');
+            el.classList.remove('selected-b','matched-ko');
+          }, 700);
+        }
+        matchSelected = null; matchSide = null;
+        updateMatchScore();
+      }
+    }
+
+    function checkMatch() {
+      var done = Object.keys(matchDone).length;
+      document.getElementById('prog-match').style.width = (done / matchData.length * 100) + '%';
+      var row = document.getElementById('score-match');
+      row.innerHTML = '';
+      if (done === matchData.length) {
+        var ok = document.createElement('span');
+        ok.className = 'chip chip-ok';
+        ok.textContent = 'Toutes les paires trouvées ! 🎉';
+        row.appendChild(ok);
+      } else {
+        var c = document.createElement('span');
+        c.className = 'chip chip-ok';
+        c.textContent = done + ' / ' + matchData.length + ' paires trouvées';
+        row.appendChild(c);
+      }
+    }
+
+    function updateMatchScore() {
+      var done = Object.keys(matchDone).length;
+      document.getElementById('prog-match').style.width = (done / matchData.length * 100) + '%';
+      if (done === matchData.length) {
+        var row = document.getElementById('score-match');
+        row.innerHTML = '<span class="chip chip-ok">Toutes les paires trouvées ! 🎉</span>';
+      }
+    }
+
+    function resetMatch() {
+      matchSelected = null; matchSide = null; matchDone = {}; matchScore = 0;
+      document.getElementById('prog-match').style.width = '0%';
+      document.getElementById('score-match').innerHTML = '';
+      buildMatch();
+    }
+
+    /* ===== EXERCICE 3 : Séquences ===== */
+    var seqData = [
+      {
+        mission: 'Tu veux <strong>entrer dans le dossier "Projets"</strong> qui se trouve dans "Documents", puis <strong>voir son contenu</strong>.',
+        context: 'Tu es dans ton dossier personnel <code style="background:#1D1D1B;color:#9FE1CB;padding:1px 5px;border-radius:3px;">/Users/alice</code>',
+        solution: ['cd Documents', 'cd Projets', 'ls'],
+        choices: ['ls', 'cd Documents', 'pwd', 'cd Projets', 'cd ..', 'clear'],
+        id: 'seq1'
+      },
+      {
+        mission: 'Tu veux <strong>savoir où tu es</strong>, puis <strong>remonter deux niveaux</strong> vers le haut, puis <strong>voir le contenu</strong>.',
+        context: 'Tu es dans <code style="background:#1D1D1B;color:#9FE1CB;padding:1px 5px;border-radius:3px;">/Users/alice/Documents/Projets</code>',
+        solution: ['pwd', 'cd ..', 'cd ..', 'ls'],
+        choices: ['ls', 'pwd', 'cd Documents', 'cd ..', 'clear', 'cd ~'],
+        id: 'seq2'
+      }
+    ];
+
+    function buildSequences() {
+      var container = document.getElementById('seq-container');
+      container.innerHTML = '';
+      seqData.forEach(function(ex, idx) {
+        var div = document.createElement('div');
+        div.style.marginBottom = '1.6rem';
+        div.style.paddingBottom = '1.4rem';
+        if (idx < seqData.length - 1) div.style.borderBottom = '0.5px solid #F1EFE8';
+
+        div.innerHTML = '<div class="rl">Mission ' + (idx+1) + ' sur ' + seqData.length + '</div>'
+          + '<p style="font-size:0.92rem;color:#2C2C2A;margin-bottom:0.4rem;">' + ex.mission + '</p>'
+          + '<p style="font-size:0.85rem;color:#888780;margin-bottom:0.7rem;">' + ex.context + '</p>'
+          + '<div class="path-builder" id="builder-' + ex.id + '">'
+          + '<span style="font-size:0.8rem;color:#5F5E5A;">Clique sur les commandes dans l\'ordre...</span>'
+          + '</div>'
+          + '<div style="display:flex;flex-wrap:wrap;gap:6px;margin:0.6rem 0;" id="pieces-' + ex.id + '"></div>'
+          + '<div class="q-feedback" id="fb-' + ex.id + '"></div>'
+          + '<div class="btn-row"><button class="action-btn" onclick="resetSeq(\'' + ex.id + '\')">Recommencer</button></div>';
+        container.appendChild(div);
+
+        var piecesDiv = div.querySelector('#pieces-' + ex.id);
+        var shuffled = ex.choices.slice().sort(function() { return Math.random()-0.5; });
+        shuffled.forEach(function(piece) {
+          var btn = document.createElement('span');
+          btn.className = 'path-piece';
+          btn.textContent = piece;
+          btn.dataset.value = piece;
+          btn.onclick = function() { addSeqPiece(this, ex); };
+          piecesDiv.appendChild(btn);
+        });
+        ex._built = [];
+      });
+    }
+
+    function addSeqPiece(btn, ex) {
+      if (btn.classList.contains('placed')) return;
+      btn.classList.add('placed');
+      ex._built.push(btn.dataset.value);
+      renderBuilder(ex);
+      checkSeqSoFar(ex);
+    }
+
+    function renderBuilder(ex) {
+      var builder = document.getElementById('builder-' + ex.id);
+      if (ex._built.length === 0) {
+        builder.innerHTML = '<span style="font-size:0.8rem;color:#5F5E5A;">Clique sur les commandes dans l\'ordre...</span>';
+        return;
+      }
+      builder.innerHTML = '';
+      ex._built.forEach(function(seg, i) {
+        if (i > 0) {
+          var arr = document.createElement('span');
+          arr.style.cssText = 'color:#5DCAA5;font-family:Fira Code,monospace;font-size:0.9rem;padding:0 4px;';
+          arr.textContent = '→';
+          builder.appendChild(arr);
+        }
+        var s = document.createElement('span');
+        s.className = 'path-piece placed';
+        s.textContent = seg;
+        s.dataset.idx = i;
+        s.onclick = function() { removeSeqPiece(parseInt(this.dataset.idx), ex); };
+        builder.appendChild(s);
+      });
+    }
+
+    function removeSeqPiece(idx, ex) {
+      var removed = ex._built.splice(idx);
+      removed.forEach(function(val) {
+        document.querySelectorAll('#pieces-' + ex.id + ' .path-piece').forEach(function(btn) {
+          if (btn.dataset.value === val && btn.classList.contains('placed')) {
+            btn.classList.remove('placed');
+          }
+        });
+      });
+      renderBuilder(ex);
+      document.getElementById('fb-' + ex.id).textContent = '';
+      document.getElementById('fb-' + ex.id).className = 'q-feedback';
+    }
+
+    function checkSeqSoFar(ex) {
+      var fb = document.getElementById('fb-' + ex.id);
+      var built = ex._built, sol = ex.solution;
+      if (built.length < sol.length) { fb.textContent = ''; fb.className = 'q-feedback'; return; }
+      var correct = built.length === sol.length && built.every(function(v,i) { return v === sol[i]; });
+      fb.className = 'q-feedback ' + (correct ? 'ok' : 'ko');
+      fb.textContent = correct ? rnd(okMsgs) + ' ✓ Séquence correcte !' : 'Pas tout à fait… vérifie l\'ordre et les commandes, puis recommence !';
+    }
+
+    function resetSeq(exId) {
+      var ex = seqData.find(function(e) { return e.id === exId; });
+      ex._built = [];
+      document.querySelectorAll('#pieces-' + exId + ' .path-piece').forEach(function(b) { b.classList.remove('placed'); });
+      renderBuilder(ex);
+      document.getElementById('fb-' + exId).textContent = '';
+      document.getElementById('fb-' + exId).className = 'q-feedback';
+    }
+
+    buildMatch();
+    buildSequences();
+  </script>
+
+</body>
+</html>

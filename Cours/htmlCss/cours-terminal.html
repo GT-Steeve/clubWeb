@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Terminal &mdash; Naviguer dans son PC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-teal   { background: #D0F4EA; color: #085041; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+
+    .nav-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .nav-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.85rem; font-weight: 700;
+      text-decoration: none;
+      border-radius: 8px; padding: 6px 13px;
+      border: 0.5px solid;
+      transition: background 0.15s;
+    }
+    .nav-git   { color: #712B13; background: #FAECE7; border-color: #F0997B; }
+    .nav-git:hover   { background: #F5C4B3; }
+    .nav-ex    { color: #085041; background: #D0F4EA; border-color: #5DCAA5; }
+    .nav-ex:hover    { background: #9FE1CB; }
+
+    .card {
+      border-radius: 16px;
+      border: 0.5px solid #D3D1C7;
+      background: #ffffff;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .stitle {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+    }
+    .pill {
+      width: 32px; height: 32px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; flex-shrink: 0;
+    }
+    .teal   { background: #9FE1CB; color: #085041; }
+    .purple { background: #CECBF6; color: #3C3489; }
+    .coral  { background: #F5C4B3; color: #712B13; }
+    .amber  { background: #FAC775; color: #633806; }
+    .blue   { background: #B5D4F4; color: #0C447C; }
+    .green  { background: #C0DD97; color: #3B6D11; }
+    .pink   { background: #F4C0D1; color: #72243E; }
+    .red    { background: #F7C1C1; color: #791F1F; }
+    .gray   { background: #D3D1C7; color: #444441; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+
+    .code-block {
+      background: #1D1D1B;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      line-height: 1.9;
+      white-space: pre;
+      overflow-x: auto;
+      color: #D3D1C7;
+      margin: 0.7rem 0;
+    }
+    .prompt  { color: #5DCAA5; font-weight: 700; }
+    .cmd     { color: #FAC775; }
+    .arg     { color: #85B7EB; }
+    .out     { color: #D3D1C7; }
+    .cm      { color: #5F5E5A; font-style: italic; }
+    .hl      { color: #F5C4B3; font-weight: 700; }
+    .err     { color: #F09595; }
+
+    .tip {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #D0F4EA; border-radius: 10px;
+      padding: 0.75rem 1rem; margin-top: 0.9rem;
+      font-size: 0.88rem; color: #085041; line-height: 1.5;
+    }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-coral  { background: #FAECE7; color: #712B13; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .rl {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #888780; margin-bottom: 6px;
+    }
+
+    /* Terminal types grid */
+    .term-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      margin: 0.8rem 0;
+    }
+    .term-card {
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      border: 0.5px solid;
+    }
+    .term-win  { background: #E6F1FB; border-color: #85B7EB; }
+    .term-mac  { background: #D0F4EA; border-color: #5DCAA5; }
+    .term-linux { background: #FAEEDA; border-color: #FAC775; }
+    .term-card-title { font-weight: 800; font-size: 0.95rem; margin-bottom: 0.3rem; }
+    .term-card-os    { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; opacity: 0.7; margin-bottom: 0.5rem; }
+    .term-card-names { font-size: 0.84rem; font-family: 'Fira Code', monospace; line-height: 1.8; }
+
+    /* Command reference table */
+    .cmd-table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.88rem; }
+    .cmd-table th {
+      background: #F1EFE8; text-align: left;
+      padding: 7px 12px; font-weight: 800;
+      border-bottom: 1.5px solid #D3D1C7;
+      font-size: 0.8rem;
+    }
+    .cmd-table td { padding: 7px 12px; border-bottom: 0.5px solid #F1EFE8; vertical-align: top; }
+    .cmd-table tr:last-child td { border-bottom: none; }
+    .cmd-table tr:hover td { background: #FAFAF8; }
+    .cmd-name { font-family: 'Fira Code', monospace; font-weight: 700; color: #633806; }
+    .cmd-win  { font-family: 'Fira Code', monospace; font-size: 0.82rem; color: #0C447C; }
+    .cmd-mac  { font-family: 'Fira Code', monospace; font-size: 0.82rem; color: #085041; }
+
+    /* Analogy box */
+    .analogy {
+      display: flex; gap: 14px; align-items: flex-start;
+      background: #EEEDFE; border-radius: 12px; padding: 1rem 1.1rem;
+      margin: 0.8rem 0; border: 0.5px solid #CECBF6;
+    }
+    .analogy-icon { font-size: 2rem; flex-shrink: 0; }
+    .analogy-text { font-size: 0.9rem; color: #3C3489; line-height: 1.6; }
+    .analogy-text strong { font-weight: 800; }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 8px; margin: 0.8rem 0; }
+    .step  {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: #F5F4F0; border-radius: 10px; padding: 0.75rem 1rem;
+    }
+    .step-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: #9FE1CB; color: #085041;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; flex-shrink: 0;
+    }
+    .step-body { font-size: 0.9rem; color: #2C2C2A; line-height: 1.6; }
+
+    /* CTA */
+    .cta-wrap { text-align: center; padding: 2rem 1rem 2.5rem; }
+    .cta-btn {
+      display: inline-block; background: #085041; color: #ffffff;
+      font-family: 'Nunito', sans-serif; font-weight: 800;
+      font-size: 1rem; padding: 13px 32px; border-radius: 12px;
+      text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #0F6E56; }
+    .cta-sub { font-size: 0.82rem; color: #888780; margin-top: 0.8rem; }
+
+    /* Inline code */
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.6rem; }
+      .term-grid { grid-template-columns: 1fr; }
+      .cmd-table th:last-child, .cmd-table td:last-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <div class="nav-row">
+    <a class="nav-git" href="cours-git.html">🌿 Cours Git →</a>
+    <a class="nav-ex"  href="exercices-terminal.html">✏️ Exercices Terminal →</a>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div style="font-size:2.8rem;margin-bottom:0.5rem;">🖥️</div>
+    <h1>Le Terminal &mdash;<br>Parler à ton PC !</h1>
+    <p>Apprends à naviguer dans ton ordinateur comme un vrai développeur.</p>
+    <div class="badge-row">
+      <span class="badge b-teal">Débutant</span>
+      <span class="badge b-amber">Windows &amp; Mac &amp; Linux</span>
+      <span class="badge b-blue">5 commandes essentielles</span>
+    </div>
+  </div>
+
+  <!-- C'est quoi un terminal -->
+  <div class="card">
+    <div class="stitle"><div class="pill teal">?</div>C'est quoi un terminal ?</div>
+    <p class="desc">Tu connais l'explorateur de fichiers : la fenêtre où tu vois tes dossiers et tu cliques dessus pour les ouvrir. Le <strong>terminal</strong>, c'est exactement la même chose, mais au lieu de cliquer, tu <strong>tapes des commandes</strong> au clavier !</p>
+
+    <div class="analogy">
+      <div class="analogy-icon">🗺️</div>
+      <div class="analogy-text">
+        <strong>Imagine que ton PC est une maison géante.</strong> L'explorateur de fichiers, c'est comme te balader dans la maison en regardant les pièces. Le terminal, c'est comme avoir un <strong>assistant</strong> à qui tu peux dire "va dans la cuisine", "montre-moi ce qu'il y a dans le frigo", "crée un nouveau tiroir". C'est plus rapide quand on sait s'en servir !
+      </div>
+    </div>
+
+    <div class="tip"><span class="tip-i">💡</span><span>Au début ça fait peur, mais c'est comme apprendre des mots magiques. Une fois qu'on connaît 5 commandes, on peut déjà faire plein de choses !</span></div>
+  </div>
+
+  <!-- Les différents terminaux -->
+  <div class="card">
+    <div class="stitle"><div class="pill amber">T</div>Les différents types de terminaux</div>
+    <p class="desc">Il existe plusieurs "modèles" de terminal selon ton système d'exploitation. Ils font la même chose, mais les commandes ont parfois des petites différences !</p>
+
+    <div class="term-grid">
+      <div class="term-card term-win">
+        <div class="term-card-os">🪟 Windows</div>
+        <div class="term-card-title" style="color:#0C447C;">PowerShell</div>
+        <div class="term-card-names" style="color:#185FA5;">Le plus moderne &amp; recommandé.<br>Préinstallé sur Windows 10/11.<br>Tape <code>powershell</code> dans la barre de recherche.</div>
+      </div>
+      <div class="term-card term-win" style="opacity:0.8;">
+        <div class="term-card-os">🪟 Windows (ancien)</div>
+        <div class="term-card-title" style="color:#0C447C;">CMD (Invite de commandes)</div>
+        <div class="term-card-names" style="color:#185FA5;">L'ancien terminal Windows.<br>Commandes un peu différentes.<br>Tape <code>cmd</code> dans la recherche.</div>
+      </div>
+      <div class="term-card term-mac">
+        <div class="term-card-os">🍎 macOS</div>
+        <div class="term-card-title" style="color:#085041;">Terminal</div>
+        <div class="term-card-names" style="color:#0F6E56;">Préinstallé sur Mac.<br>Recherche "Terminal" dans Spotlight.<br>Ou : Applications → Utilitaires.</div>
+      </div>
+      <div class="term-card term-linux">
+        <div class="term-card-os">🐧 Linux</div>
+        <div class="term-card-title" style="color:#633806;">Bash / Zsh</div>
+        <div class="term-card-names" style="color:#854F0B;">Préinstallé, souvent appelé "Konsole" ou "Terminal".<br>Raccourci : Ctrl+Alt+T.</div>
+      </div>
+    </div>
+
+    <div class="tip tip-purple"><span class="tip-i">🌟</span><span><strong>Bonne nouvelle :</strong> si tu utilises <strong>VS Code</strong>, il y a un terminal intégré ! Clique sur "Terminal" dans le menu en haut, puis "Nouveau terminal". C'est souvent le plus pratique pour coder.</span></div>
+  </div>
+
+  <!-- Ouvrir le terminal -->
+  <div class="card">
+    <div class="stitle"><div class="pill blue">→</div>Comment ouvrir son terminal ?</div>
+
+    <div class="rl">Sur Windows</div>
+    <div class="steps" style="margin-bottom:1rem;">
+      <div class="step"><div class="step-num">1</div><div class="step-body">Appuie sur la touche <strong>Windows</strong> (⊞) et tape <code>powershell</code></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">Clique sur "Windows PowerShell" dans les résultats</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">Une fenêtre noire (ou bleue) avec du texte s'ouvre — c'est bon !</div></div>
+    </div>
+
+    <div class="rl">Sur Mac</div>
+    <div class="steps" style="margin-bottom:1rem;">
+      <div class="step"><div class="step-num">1</div><div class="step-body">Appuie sur <strong>Cmd + Espace</strong> pour ouvrir Spotlight</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">Tape <code>Terminal</code> et appuie sur Entrée</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">Une fenêtre avec un fond blanc ou noir apparaît — c'est bon !</div></div>
+    </div>
+
+    <div class="rl">Dans VS Code (tous les systèmes)</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">Ouvre VS Code</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">Dans le menu en haut : <strong>Terminal → Nouveau terminal</strong></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">Le terminal apparaît en bas de la fenêtre</div></div>
+    </div>
+
+    <div class="tip tip-amber"><span class="tip-i">⚠️</span><span>Quand le terminal est ouvert, tu vois une <strong>invite de commandes</strong> : un texte qui se termine par <code>&gt;</code> ou <code>$</code>. C'est là que tu tapes tes commandes !</span></div>
+  </div>
+
+  <!-- Se repérer dans le terminal -->
+  <div class="card">
+    <div class="stitle"><div class="pill green">📍</div>Se repérer : où suis-je ?</div>
+    <p class="desc">Quand tu ouvres le terminal, tu te trouves quelque part dans ton PC (souvent dans ton dossier personnel). La première chose à apprendre, c'est savoir <strong>où tu es</strong> !</p>
+
+    <div class="rl">Afficher le dossier actuel</div>
+    <div class="code-block"><span class="prompt">$</span> <span class="cmd">pwd</span>                    <span class="cm"># Mac/Linux : "Print Working Directory"</span>
+<span class="out">/Users/alice/Documents</span>
+
+<span class="prompt">></span> <span class="cmd">cd</span>                    <span class="cm"># Windows PowerShell : tape "cd" sans argument</span>
+<span class="out">C:\Users\alice\Documents</span></div>
+
+    <div class="tip"><span class="tip-i">💡</span><span><code>pwd</code> te dit exactement où tu te trouves. C'est comme demander "Dans quelle pièce de la maison je suis ?"</span></div>
+  </div>
+
+  <!-- Voir le contenu d'un dossier -->
+  <div class="card">
+    <div class="stitle"><div class="pill teal">👀</div>Voir le contenu d'un dossier</div>
+    <p class="desc">Pour voir ce qu'il y a dans le dossier où tu te trouves, tu utilises une commande qui liste tous les fichiers et sous-dossiers.</p>
+
+    <div class="rl">Lister les fichiers</div>
+    <div class="code-block"><span class="cm"># Sur Mac/Linux :</span>
+<span class="prompt">$</span> <span class="cmd">ls</span>
+<span class="out">Documents    Photos    Projets    index.html    style.css</span>
+
+<span class="cm"># Sur Windows PowerShell :</span>
+<span class="prompt">></span> <span class="cmd">ls</span>                    <span class="cm"># fonctionne aussi dans PowerShell !</span>
+<span class="out">    Répertoire : C:\Users\alice</span>
+<span class="out">Mode         Nom</span>
+<span class="out">----         ---</span>
+<span class="out">d----        Documents</span>
+<span class="out">d----        Photos</span>
+<span class="out">-a---        index.html</span>
+
+<span class="cm"># Voir PLUS de détails (taille, date) :</span>
+<span class="prompt">$</span> <span class="cmd">ls</span> <span class="arg">-l</span>               <span class="cm"># Mac/Linux</span>
+<span class="prompt">></span> <span class="cmd">dir</span>                  <span class="cm"># Windows CMD (commande alternative)</span></div>
+
+    <div class="tip"><span class="tip-i">💡</span><span><code>ls</code> vient de "list". C'est comme ouvrir un dossier dans l'explorateur et voir tous les fichiers à l'intérieur !</span></div>
+  </div>
+
+  <!-- Se déplacer : cd -->
+  <div class="card">
+    <div class="stitle"><div class="pill coral">📂</div>Se déplacer entre les dossiers</div>
+    <p class="desc">La commande <code>cd</code> (Change Directory) te permet de <strong>changer de dossier</strong>. C'est la commande la plus utilisée dans le terminal !</p>
+
+    <div class="code-block"><span class="cm"># Entrer dans un sous-dossier</span>
+<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">Documents</span>
+<span class="prompt">$</span> <span class="cmd">pwd</span>
+<span class="out">/Users/alice/Documents</span>
+
+<span class="cm"># Entrer dans un dossier encore plus profond</span>
+<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">Projets/mon-site</span>
+<span class="out"># Tu es maintenant dans /Users/alice/Documents/Projets/mon-site</span>
+
+<span class="cm"># Remonter d'UN dossier (aller au parent)</span>
+<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">..</span>
+<span class="out"># Tu es maintenant dans /Users/alice/Documents/Projets</span>
+
+<span class="cm"># Remonter de DEUX dossiers</span>
+<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">../..</span>
+<span class="out"># Tu es maintenant dans /Users/alice/Documents</span>
+
+<span class="cm"># Aller directement à la racine de ton dossier perso</span>
+<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">~</span>              <span class="cm"># ~ = dossier personnel (Mac/Linux/PowerShell)</span></div>
+
+    <div class="tip tip-purple"><span class="tip-i">🌟</span><span><strong>Astuce !</strong> Tape les premières lettres d'un dossier puis appuie sur <strong>Tab ↹</strong> : le terminal complète automatiquement le nom ! Par exemple tape <code>cd Doc</code> puis Tab → ça devient <code>cd Documents</code>.</span></div>
+
+    <div class="tip tip-amber"><span class="tip-i">💡</span><span>Le <code>..</code> signifie "le dossier parent" — exactement comme dans les chemins HTML ! Si tu as compris le cours sur l'architecture, tu connais déjà ce concept.</span></div>
+  </div>
+
+  <!-- Tableau récapitulatif des commandes -->
+  <div class="card">
+    <div class="stitle"><div class="pill purple">R</div>Les 5 commandes à retenir</div>
+    <p class="desc">Voici les commandes essentielles. Certaines ont un nom différent selon Windows ou Mac/Linux :</p>
+
+    <table class="cmd-table">
+      <thead>
+        <tr>
+          <th>Ce que ça fait</th>
+          <th>Mac / Linux</th>
+          <th>Windows (PowerShell)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Où suis-je ?</td>
+          <td><span class="cmd-mac">pwd</span></td>
+          <td><span class="cmd-win">pwd</span> <span style="color:#888780;font-size:0.8em;">ou cd (sans argument)</span></td>
+        </tr>
+        <tr>
+          <td>Voir le contenu du dossier</td>
+          <td><span class="cmd-mac">ls</span></td>
+          <td><span class="cmd-win">ls</span> <span style="color:#888780;font-size:0.8em;">ou dir</span></td>
+        </tr>
+        <tr>
+          <td>Aller dans un dossier</td>
+          <td><span class="cmd-mac">cd nom-dossier</span></td>
+          <td><span class="cmd-win">cd nom-dossier</span></td>
+        </tr>
+        <tr>
+          <td>Remonter au dossier parent</td>
+          <td><span class="cmd-mac">cd ..</span></td>
+          <td><span class="cmd-win">cd ..</span></td>
+        </tr>
+        <tr>
+          <td>Effacer l'écran du terminal</td>
+          <td><span class="cmd-mac">clear</span></td>
+          <td><span class="cmd-win">cls</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="tip"><span class="tip-i">💡</span><span>Dans VS Code avec PowerShell, tu peux utiliser les commandes Mac/Linux comme <code>ls</code> et <code>pwd</code> — pratique pour ne pas avoir à tout mémoriser en double !</span></div>
+  </div>
+
+  <!-- Lien avec Git -->
+  <div class="card">
+    <div class="stitle"><div class="pill green">🌿</div>Pourquoi le terminal est utile pour Git ?</div>
+    <p class="desc">Tu vas bientôt apprendre <strong>Git</strong>, un outil pour sauvegarder et partager ton code. Git s'utilise principalement dans le terminal ! Voici pourquoi maîtriser le terminal d'abord est important :</p>
+
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Vérifier si Git est installé :</strong> tu taperas une commande dans le terminal pour le savoir</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Se placer dans le bon dossier :</strong> avant de faire quoi que ce soit avec Git, tu dois naviguer dans ton projet avec <code>cd</code></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Toutes les commandes Git</strong> se tapent dans le terminal : <code>git add</code>, <code>git commit</code>, <code>git push</code>…</div></div>
+    </div>
+
+    <div class="code-block"><span class="cm"># Exemple : je veux travailler sur mon projet "mon-site"</span>
+<span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">Documents/Projets/mon-site</span>
+<span class="prompt">$</span> <span class="cmd">ls</span>
+<span class="out">index.html    Assets/    pages/</span>
+
+<span class="cm"># Parfait, je suis dans le bon dossier. Maintenant je peux utiliser Git !</span>
+<span class="prompt">$</span> <span class="cmd">git</span> <span class="arg">status</span></div>
+
+    <div class="tip tip-blue"><span class="tip-i">🚀</span><span>Le terminal et Git vont <strong>ensemble</strong> : plus tu t'entraînes à naviguer dans le terminal, plus Git sera simple à utiliser ensuite !</span></div>
+  </div>
+
+  <!-- Erreurs courantes -->
+  <div class="card">
+    <div class="stitle"><div class="pill red">!</div>Les erreurs courantes</div>
+    <p class="desc">Tout le monde fait ces erreurs au début — c'est normal !</p>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:0.4rem;">
+      <div style="background:#FCEBEB;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.6;">
+        <div style="font-weight:800;color:#791F1F;margin-bottom:4px;">❌ Le dossier n'existe pas</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#A32D2D;">cd Documants   ← faute de frappe !</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#A32D2D;">bash: cd: Documants: No such file or directory</div>
+        <div style="color:#791F1F;margin-top:4px;">Vérifie l'orthographe avec <code>ls</code> d'abord, ou utilise la touche <strong>Tab</strong> pour auto-compléter.</div>
+      </div>
+
+      <div style="background:#FCEBEB;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.6;">
+        <div style="font-weight:800;color:#791F1F;margin-bottom:4px;">❌ Majuscules/minuscules incorrectes</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#A32D2D;">cd documents   ← si le dossier s'appelle "Documents"</div>
+        <div style="color:#791F1F;margin-top:4px;">Sur Mac et Linux, <strong>Documents</strong> ≠ <strong>documents</strong>. Sur Windows, c'est plus tolérant, mais prends l'habitude d'être précis.</div>
+      </div>
+
+      <div style="background:#FCEBEB;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.6;">
+        <div style="font-weight:800;color:#791F1F;margin-bottom:4px;">❌ Dossier avec des espaces</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#A32D2D;">cd Mon Projet   ← le terminal croit que ce sont deux dossiers !</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.82rem;color:#0F6E56;margin-top:3px;">cd "Mon Projet"   ← utilise des guillemets</div>
+        <div style="color:#791F1F;margin-top:4px;">C'est pour ça qu'on évite les espaces dans les noms de dossiers et fichiers de projets !</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Résumé -->
+  <div class="card">
+    <div class="stitle"><div class="pill gray">✓</div>Résumé : ce qu'il faut retenir</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:0.4rem;">
+      <div style="background:#D0F4EA;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#085041;">✅ Le terminal = parler à son PC en tapant des commandes</div>
+      <div style="background:#D0F4EA;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#085041;">✅ PowerShell (Windows), Terminal (Mac), Bash (Linux) — tous font la même chose</div>
+      <div style="background:#D0F4EA;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#085041;">✅ <code style="background:rgba(0,0,0,0.08)">ls</code> = voir le contenu &nbsp;|&nbsp; <code style="background:rgba(0,0,0,0.08)">cd</code> = se déplacer &nbsp;|&nbsp; <code style="background:rgba(0,0,0,0.08)">pwd</code> = où suis-je ?</div>
+      <div style="background:#D0F4EA;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#085041;">✅ <code style="background:rgba(0,0,0,0.08)">cd ..</code> = remonter d'un dossier parent</div>
+      <div style="background:#D0F4EA;border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;color:#085041;">✅ Tab ↹ = auto-complétion magique !</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <p style="font-size:0.95rem;color:#5F5E5A;margin-bottom:1.2rem;">Tu connais le terminal ? Excellent ! 🎉<br>Mets en pratique avec les exercices !</p>
+    <a class="cta-btn" href="exercices-terminal.html">Passer aux exercices →</a>
+    <p class="cta-sub">Exercice 1 : reconnaître la bonne commande<br>Exercice 2 : suivre un chemin dans le terminal</p>
+  </div>
+
+</body>
+</html>
