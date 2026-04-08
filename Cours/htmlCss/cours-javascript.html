@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript — Les bases &amp; intégration HTML</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-yellow { background: #FEF9C3; color: #854D0E; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+
+    .nav-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .nav-link { display: inline-flex; align-items: center; gap: 5px; font-size: 0.85rem; font-weight: 700; text-decoration: none; border-radius: 8px; padding: 6px 13px; border: 0.5px solid; transition: background 0.15s; }
+    .nav-canvas { color: #712B13; background: #FAECE7; border-color: #F0997B; }
+    .nav-canvas:hover { background: #F5C4B3; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .teal   { background: #9FE1CB; color: #085041; }
+    .purple { background: #CECBF6; color: #3C3489; }
+    .coral  { background: #F5C4B3; color: #712B13; }
+    .amber  { background: #FAC775; color: #633806; }
+    .blue   { background: #B5D4F4; color: #0C447C; }
+    .green  { background: #C0DD97; color: #3B6D11; }
+    .yellow { background: #FEF08A; color: #854D0E; }
+    .pink   { background: #F4C0D1; color: #72243E; }
+    .red    { background: #F7C1C1; color: #791F1F; }
+    .gray   { background: #D3D1C7; color: #444441; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    /* JS code blocks — yellow theme */
+    .js-block {
+      background: #1A1A1A;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.83rem;
+      line-height: 1.95;
+      white-space: pre;
+      overflow-x: auto;
+      color: #D4D4D4;
+      margin: 0.7rem 0;
+      border-left: 3px solid #EAB308;
+    }
+    .js-block-html {
+      background: #1A1A1A;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.83rem;
+      line-height: 1.95;
+      white-space: pre;
+      overflow-x: auto;
+      color: #D4D4D4;
+      margin: 0.7rem 0;
+      border-left: 3px solid #85B7EB;
+    }
+    /* Syntax tokens */
+    .kw  { color: #C084FC; font-weight: 700; } /* keyword: let, const, function, if… */
+    .fn  { color: #60A5FA; }                   /* function name */
+    .str { color: #86EFAC; }                   /* string */
+    .num { color: #FB923C; }                   /* number */
+    .cm  { color: #6B7280; font-style: italic;} /* comment */
+    .op  { color: #F472B6; }                   /* operator */
+    .var { color: #FCD34D; }                   /* variable */
+    .tag { color: #85B7EB; }                   /* HTML tag */
+    .atr { color: #FAC775; }                   /* HTML attribute */
+    .val { color: #86EFAC; }                   /* HTML attr value */
+    .hl  { color: #FCD34D; font-weight: 700; } /* highlight */
+    .dom { color: #67E8F9; }                   /* DOM method */
+    .boo { color: #FB923C; font-weight: 700; } /* boolean */
+
+    /* Split pane : html | result */
+    .split-pane { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0.8rem 0; }
+    .pane { border-radius: 10px; overflow: hidden; border: 0.5px solid; }
+    .pane-code { border-color: #3A3A3A; }
+    .pane-result { border-color: #D3D1C7; background: #fff; }
+    .pane-header { padding: 6px 12px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; }
+    .ph-js   { background: #292524; color: #EAB308; }
+    .ph-html { background: #1E2A3A; color: #85B7EB; }
+    .ph-res  { background: #F1EFE8; color: #888780; }
+    .pane-body { padding: 0.8rem 1rem; font-family: 'Fira Code', monospace; font-size: 0.8rem; line-height: 1.9; background: #1A1A1A; color: #D4D4D4; white-space: pre; overflow-x: auto; }
+    .pane-result-body { padding: 0.8rem 1rem; font-size: 0.88rem; background: #fff; }
+
+    /* Concept cards grid */
+    .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0.8rem 0; }
+    .concept-card { border-radius: 12px; padding: 1rem 1.1rem; border: 0.5px solid; }
+    .cc-yellow { background: #FEFCE8; border-color: #FEF08A; }
+    .cc-blue   { background: #EFF6FF; border-color: #BFDBFE; }
+    .cc-purple { background: #F5F3FF; border-color: #DDD6FE; }
+    .cc-green  { background: #F0FDF4; border-color: #BBF7D0; }
+    .cc-red    { background: #FFF5F5; border-color: #FED7D7; }
+    .cc-teal   { background: #F0FDFA; border-color: #99F6E4; }
+    .cc-title { font-weight: 800; font-size: 0.95rem; margin-bottom: 0.35rem; }
+    .cc-code  { font-family: 'Fira Code', monospace; font-size: 0.8rem; margin-bottom: 0.3rem; }
+    .cc-desc  { font-size: 0.83rem; line-height: 1.5; }
+
+    /* Analogy */
+    .analogy { display: flex; gap: 14px; align-items: flex-start; background: #EEEDFE; border-radius: 12px; padding: 1rem 1.1rem; margin: 0.8rem 0; border: 0.5px solid #CECBF6; }
+    .analogy-icon { font-size: 2rem; flex-shrink: 0; }
+    .analogy-text { font-size: 0.9rem; color: #3C3489; line-height: 1.65; }
+    .analogy-text strong { font-weight: 800; }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 8px; margin: 0.8rem 0; }
+    .step { display: flex; gap: 12px; align-items: flex-start; background: #F5F4F0; border-radius: 10px; padding: 0.75rem 1rem; }
+    .step-num { width: 26px; height: 26px; border-radius: 50%; background: #FEF08A; color: #854D0E; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
+    .step-body { font-size: 0.9rem; color: #2C2C2A; line-height: 1.6; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #FEFCE8; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #854D0E; line-height: 1.5; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-green  { background: #EAF3DE; color: #3B6D11; }
+    .tip-coral  { background: #FAECE7; color: #712B13; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* Tag compare */
+    .tag-compare { display: flex; flex-direction: column; gap: 8px; margin: 0.8rem 0; }
+    .tc { border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+
+    /* CTA */
+    .cta-wrap { text-align: center; padding: 2rem 1rem 2.5rem; }
+    .cta-btn { display: inline-block; background: #EAB308; color: #1C1C1C; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem; padding: 13px 32px; border-radius: 12px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #CA8A04; color: #fff; }
+    .cta-sub { font-size: 0.82rem; color: #888780; margin-top: 0.8rem; }
+
+    code { font-family: 'Fira Code', monospace; background: #FEF9C3; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #854D0E; }
+
+    @media (max-width: 520px) { .hero h1 { font-size: 1.6rem; } .split-pane, .concept-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <div class="nav-row">
+    <a class="nav-canvas" href="cours-canvas.html">🎮 Cours Canvas &amp; Jeu vidéo →</a>
+  </div>
+
+  <div class="hero">
+    <div style="font-size:2.8rem;margin-bottom:0.5rem;">⚡</div>
+    <h1>JavaScript —<br>Rends tes pages vivantes !</h1>
+    <p>Apprends les bases de JS et comment le connecter à ton HTML pour créer de l'interactivité.</p>
+    <div class="badge-row">
+      <span class="badge b-yellow">Débutant</span>
+      <span class="badge b-blue">HTML + JS</span>
+      <span class="badge b-purple">Interactivité</span>
+    </div>
+  </div>
+
+  <!-- C'est quoi JS -->
+  <div class="card">
+    <div class="stitle"><div class="pill yellow">?</div>C'est quoi JavaScript ?</div>
+    <p class="desc">Si ton site était une personne : <strong>HTML</strong> serait le squelette, <strong>CSS</strong> serait les vêtements, et <strong>JavaScript</strong> serait les muscles qui permettent de bouger ! JS est le langage de programmation du web : il rend les pages <strong>interactives</strong> — boutons cliquables, animations, jeux, formulaires dynamiques…</p>
+
+    <div class="analogy">
+      <div class="analogy-icon">🎬</div>
+      <div class="analogy-text">
+        <strong>HTML = le décor et les acteurs immobiles.</strong> CSS = leurs costumes et leur look. JavaScript = le réalisateur qui dit "action !" et fait bouger tout le monde. Sans JS, ta page est une photo. Avec JS, c'est un film interactif !
+      </div>
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept-card cc-blue">
+        <div class="cc-title" style="color:#0C447C;">📄 HTML</div>
+        <div class="cc-desc" style="color:#185FA5;">Structure et contenu.<br>Titres, paragraphes, boutons…</div>
+      </div>
+      <div class="concept-card cc-purple">
+        <div class="cc-title" style="color:#3C3489;">🎨 CSS</div>
+        <div class="cc-desc" style="color:#4C44A8;">Apparence visuelle.<br>Couleurs, tailles, animations…</div>
+      </div>
+      <div class="concept-card cc-yellow" style="grid-column:span 2;">
+        <div class="cc-title" style="color:#854D0E;">⚡ JavaScript</div>
+        <div class="cc-desc" style="color:#92400E;">Comportement et interactivité. Réagir aux clics, modifier le contenu, faire des calculs, créer des jeux…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Intégrer JS dans HTML -->
+  <div class="card">
+    <div class="stitle"><div class="pill blue">🔗</div>Comment intégrer JavaScript dans HTML ?</div>
+    <p class="desc">Il existe <strong>3 façons</strong> d'ajouter du JavaScript à une page HTML. La bonne pratique est de toujours utiliser un fichier externe.</p>
+
+    <div class="rl">Méthode 1 — JS dans une balise &lt;script&gt; en bas du body (simple)</div>
+    <div class="js-block-html"><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;h1</span> <span class="atr">id</span>=<span class="val">"titre"</span><span class="tag">&gt;</span>Bonjour !<span class="tag">&lt;/h1&gt;</span>
+  <span class="tag">&lt;button</span> <span class="atr">onclick</span>=<span class="val">"changerTitre()"</span><span class="tag">&gt;</span>Cliquer<span class="tag">&lt;/button&gt;</span>
+
+  <span class="cm">&lt;!-- JS juste avant &lt;/body&gt; : le HTML est déjà chargé --&gt;</span>
+  <span class="tag">&lt;script&gt;</span>
+    <span class="kw">function</span> <span class="fn">changerTitre</span>() {
+      <span class="dom">document.getElementById</span>(<span class="str">'titre'</span>).textContent <span class="op">=</span> <span class="str">'Cliqué !'</span>;
+    }
+  <span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></div>
+
+    <div class="rl" style="margin-top:1rem;">Méthode 2 — Fichier JS externe ✅ (recommandée)</div>
+    <div class="js-block-html"><span class="cm">&lt;!-- Dans index.html, juste avant &lt;/body&gt; --&gt;</span>
+<span class="tag">&lt;script</span> <span class="atr">src</span>=<span class="val">"Assets/js/script.js"</span><span class="tag">&gt;&lt;/script&gt;</span></div>
+
+    <div class="js-block"><span class="cm">// Dans Assets/js/script.js</span>
+<span class="kw">function</span> <span class="fn">changerTitre</span>() {
+  <span class="dom">document.getElementById</span>(<span class="str">'titre'</span>).textContent <span class="op">=</span> <span class="str">'Cliqué !'</span>;
+}</div>
+
+    <div class="rl" style="margin-top:1rem;">Méthode 3 — JS dans le &lt;head&gt; avec defer (moderne)</div>
+    <div class="js-block-html"><span class="tag">&lt;head&gt;</span>
+  <span class="cm">&lt;!-- defer = attendre que le HTML soit chargé avant d'exécuter --&gt;</span>
+  <span class="tag">&lt;script</span> <span class="atr">src</span>=<span class="val">"Assets/js/script.js"</span> <span class="atr">defer</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;/head&gt;</span></div>
+
+    <div class="tip tip-blue"><span class="tip-i">💡</span><span>Place toujours ta balise <code>&lt;script&gt;</code> <strong>avant &lt;/body&gt;</strong> ou utilise l'attribut <code>defer</code>. Sinon le JS essaie de modifier des éléments HTML qui n'existent pas encore — ça plante !</span></div>
+  </div>
+
+  <!-- Les variables -->
+  <div class="card">
+    <div class="stitle"><div class="pill yellow">📦</div>Les variables — Stocker des valeurs</div>
+    <p class="desc">Une variable est une <strong>boîte avec un nom</strong> dans laquelle tu ranges une valeur. En JS moderne, on utilise <code>let</code> et <code>const</code>.</p>
+
+    <div class="js-block"><span class="cm">// const : valeur qui ne change PAS</span>
+<span class="kw">const</span> <span class="var">nomDuJeu</span> <span class="op">=</span> <span class="str">"Super Aventure"</span>;
+<span class="kw">const</span> <span class="var">vitesseMax</span> <span class="op">=</span> <span class="num">300</span>;
+
+<span class="cm">// let : valeur qui peut changer</span>
+<span class="kw">let</span> <span class="var">score</span> <span class="op">=</span> <span class="num">0</span>;
+<span class="kw">let</span> <span class="var">viesDuJoueur</span> <span class="op">=</span> <span class="num">3</span>;
+<span class="kw">let</span> <span class="var">estEnVie</span> <span class="op">=</span> <span class="boo">true</span>;
+<span class="kw">let</span> <span class="var">nomJoueur</span> <span class="op">=</span> <span class="str">"Alice"</span>;
+
+<span class="cm">// Modifier une variable let</span>
+<span class="var">score</span> <span class="op">=</span> <span class="var">score</span> <span class="op">+</span> <span class="num">10</span>;  <span class="cm">// score vaut maintenant 10</span>
+<span class="var">score</span> <span class="op">+=</span> <span class="num">5</span>;          <span class="cm">// raccourci : score vaut 15</span>
+<span class="var">viesDuJoueur</span><span class="op">--</span>;      <span class="cm">// enlève 1 : viesDuJoueur vaut 2</span></div>
+
+    <div class="concept-grid">
+      <div class="concept-card cc-yellow">
+        <div class="cc-title" style="color:#854D0E;">const</div>
+        <div class="cc-code" style="color:#854D0E;">const PI = 3.14;</div>
+        <div class="cc-desc" style="color:#92400E;">Valeur <strong>fixe</strong>. Ne peut pas être réassignée. Bonne pratique : utilise const par défaut.</div>
+      </div>
+      <div class="concept-card cc-blue">
+        <div class="cc-title" style="color:#0C447C;">let</div>
+        <div class="cc-code" style="color:#0C447C;">let score = 0;</div>
+        <div class="cc-desc" style="color:#185FA5;">Valeur <strong>modifiable</strong>. Utilise let seulement si la valeur doit changer.</div>
+      </div>
+    </div>
+
+    <div class="tip"><span class="tip-i">⚠️</span><span>N'utilise plus <code>var</code> — c'est l'ancien mot-clé, il cause des bugs bizarres. Utilise toujours <code>const</code> ou <code>let</code>.</span></div>
+  </div>
+
+  <!-- Les types de données -->
+  <div class="card">
+    <div class="stitle"><div class="pill green">🔢</div>Les types de données</div>
+    <p class="desc">En JavaScript, chaque valeur a un <strong>type</strong>. Les principaux types à connaître :</p>
+
+    <div class="concept-grid">
+      <div class="concept-card cc-blue">
+        <div class="cc-title" style="color:#0C447C;">String (texte)</div>
+        <div class="cc-code"><span style="color:#86EFAC;">"Bonjour"</span> ou <span style="color:#86EFAC;">'Alice'</span></div>
+        <div class="cc-desc" style="color:#185FA5;">Toujours entre guillemets simples ou doubles. Peut être concaténé avec <code>+</code>.</div>
+      </div>
+      <div class="concept-card cc-yellow">
+        <div class="cc-title" style="color:#854D0E;">Number (nombre)</div>
+        <div class="cc-code"><span style="color:#FB923C;">42</span> ou <span style="color:#FB923C;">3.14</span></div>
+        <div class="cc-desc" style="color:#92400E;">Entiers et décimaux. Opérations : + - * / %</div>
+      </div>
+      <div class="concept-card cc-green">
+        <div class="cc-title" style="color:#3B6D11;">Boolean (vrai/faux)</div>
+        <div class="cc-code"><span style="color:#FB923C;">true</span> ou <span style="color:#FB923C;">false</span></div>
+        <div class="cc-desc" style="color:#3B6D11;">Seulement deux valeurs possibles. Utilisé pour les conditions.</div>
+      </div>
+      <div class="concept-card cc-purple">
+        <div class="cc-title" style="color:#3C3489;">Array (liste)</div>
+        <div class="cc-code"><span style="color:#D4D4D4;">[1, 2, 3]</span></div>
+        <div class="cc-desc" style="color:#4C44A8;">Une liste ordonnée de valeurs. Accès par index (commence à 0).</div>
+      </div>
+      <div class="concept-card cc-teal" style="grid-column:span 2;">
+        <div class="cc-title" style="color:#085041;">Object (objet)</div>
+        <div class="cc-code"><span style="color:#D4D4D4;">{ nom: "Alice", score: 42, vies: 3 }</span></div>
+        <div class="cc-desc" style="color:#0F6E56;">Groupe de données nommées (clé: valeur). Parfait pour représenter un joueur, un ennemi, un obstacle…</div>
+      </div>
+    </div>
+
+    <div class="js-block"><span class="cm">// Exemples concrets en contexte jeu vidéo</span>
+<span class="kw">const</span> <span class="var">joueur</span> <span class="op">=</span> {
+  nom: <span class="str">"Alice"</span>,
+  score: <span class="num">0</span>,
+  vies: <span class="num">3</span>,
+  estInvincible: <span class="boo">false</span>
+};
+
+<span class="kw">const</span> <span class="var">niveaux</span> <span class="op">=</span> [<span class="str">"Forêt"</span>, <span class="str">"Désert"</span>, <span class="str">"Volcan"</span>, <span class="str">"Château"</span>];
+
+<span class="cm">// Accéder aux valeurs</span>
+console.<span class="fn">log</span>(<span class="var">joueur</span>.nom);      <span class="cm">// → "Alice"</span>
+console.<span class="fn">log</span>(<span class="var">niveaux</span>[<span class="num">0</span>]);    <span class="cm">// → "Forêt" (index 0 = premier)</span>
+console.<span class="fn">log</span>(<span class="var">niveaux</span>[<span class="num">2</span>]);    <span class="cm">// → "Volcan"</span></div>
+  </div>
+
+  <!-- Les fonctions -->
+  <div class="card">
+    <div class="stitle"><div class="pill purple">⚙️</div>Les fonctions — Réutiliser du code</div>
+    <p class="desc">Une fonction est un <strong>bloc de code qu'on peut appeler autant de fois qu'on veut</strong>. C'est le cœur de la programmation : plutôt que de répéter le même code, on l'enferme dans une fonction et on l'appelle par son nom.</p>
+
+    <div class="js-block"><span class="cm">// Déclarer une fonction</span>
+<span class="kw">function</span> <span class="fn">direBonjour</span>(<span class="var">prenom</span>) {
+  console.<span class="fn">log</span>(<span class="str">"Bonjour "</span> <span class="op">+</span> <span class="var">prenom</span> <span class="op">+</span> <span class="str">" !"</span>);
+}
+
+<span class="cm">// Appeler la fonction</span>
+<span class="fn">direBonjour</span>(<span class="str">"Alice"</span>);   <span class="cm">// → "Bonjour Alice !"</span>
+<span class="fn">direBonjour</span>(<span class="str">"Bob"</span>);     <span class="cm">// → "Bonjour Bob !"</span>
+
+<span class="cm">// Fonction avec valeur de retour</span>
+<span class="kw">function</span> <span class="fn">additionner</span>(<span class="var">a</span>, <span class="var">b</span>) {
+  <span class="kw">return</span> <span class="var">a</span> <span class="op">+</span> <span class="var">b</span>;
+}
+
+<span class="kw">const</span> <span class="var">resultat</span> <span class="op">=</span> <span class="fn">additionner</span>(<span class="num">10</span>, <span class="num">25</span>);
+console.<span class="fn">log</span>(<span class="var">resultat</span>);  <span class="cm">// → 35</span>
+
+<span class="cm">// Fonction fléchée (écriture moderne)</span>
+<span class="kw">const</span> <span class="fn">multiplier</span> <span class="op">=</span> (<span class="var">a</span>, <span class="var">b</span>) <span class="op">=&gt;</span> <span class="var">a</span> <span class="op">*</span> <span class="var">b</span>;
+console.<span class="fn">log</span>(<span class="fn">multiplier</span>(<span class="num">3</span>, <span class="num">4</span>));  <span class="cm">// → 12</span></div>
+  </div>
+
+  <!-- Les conditions -->
+  <div class="card">
+    <div class="stitle"><div class="pill amber">🔀</div>Les conditions — Prendre des décisions</div>
+    <p class="desc">Les conditions permettent d'exécuter du code <strong>seulement si une certaine situation est vraie</strong>. C'est le cerveau du programme !</p>
+
+    <div class="js-block"><span class="cm">// if / else if / else</span>
+<span class="kw">let</span> <span class="var">vies</span> <span class="op">=</span> <span class="num">2</span>;
+
+<span class="kw">if</span> (<span class="var">vies</span> <span class="op">===</span> <span class="num">0</span>) {
+  console.<span class="fn">log</span>(<span class="str">"Game Over !"</span>);
+} <span class="kw">else if</span> (<span class="var">vies</span> <span class="op">===</span> <span class="num">1</span>) {
+  console.<span class="fn">log</span>(<span class="str">"Attention, dernière vie !"</span>);
+} <span class="kw">else</span> {
+  console.<span class="fn">log</span>(<span class="str">"Tu as encore "</span> <span class="op">+</span> <span class="var">vies</span> <span class="op">+</span> <span class="str">" vies."</span>);
+}
+<span class="cm">// → "Tu as encore 2 vies."</span>
+
+<span class="cm">// Les opérateurs de comparaison</span>
+<span class="var">score</span> <span class="op">===</span> <span class="num">100</span>   <span class="cm">// strictement égal</span>
+<span class="var">vies</span> <span class="op">!==</span> <span class="num">0</span>      <span class="cm">// différent de</span>
+<span class="var">score</span> <span class="op">&gt;</span> <span class="num">50</span>      <span class="cm">// supérieur à</span>
+<span class="var">score</span> <span class="op">&lt;=</span> <span class="num">100</span>    <span class="cm">// inférieur ou égal</span>
+
+<span class="cm">// Combiner des conditions</span>
+<span class="kw">if</span> (<span class="var">vies</span> <span class="op">&gt;</span> <span class="num">0</span> <span class="op">&amp;&amp;</span> <span class="var">score</span> <span class="op">&gt;=</span> <span class="num">100</span>) {  <span class="cm">// && = ET</span>
+  console.<span class="fn">log</span>(<span class="str">"Niveau suivant !"</span>);
+}
+<span class="kw">if</span> (<span class="var">vies</span> <span class="op">===</span> <span class="num">0</span> <span class="op">||</span> <span class="var">tempsRestant</span> <span class="op">===</span> <span class="num">0</span>) { <span class="cm">// || = OU</span>
+  console.<span class="fn">log</span>(<span class="str">"Perdu !"</span>);
+}</span></div>
+
+    <div class="tip"><span class="tip-i">⚠️</span><span>Utilise toujours <code>===</code> (triple égal) pour comparer en JS, pas <code>==</code> (double). Le triple égal compare aussi le type de données et évite des bugs surprenants !</span></div>
+  </div>
+
+  <!-- Les boucles -->
+  <div class="card">
+    <div class="stitle"><div class="pill coral">🔁</div>Les boucles — Répéter des actions</div>
+    <p class="desc">Une boucle permet de <strong>répéter une action</strong> sans réécrire le même code des dizaines de fois. Indispensable en jeu vidéo pour gérer des ennemis, des obstacles, des niveaux…</p>
+
+    <div class="js-block"><span class="cm">// Boucle for : répéter un nombre précis de fois</span>
+<span class="kw">for</span> (<span class="kw">let</span> <span class="var">i</span> <span class="op">=</span> <span class="num">0</span>; <span class="var">i</span> <span class="op">&lt;</span> <span class="num">5</span>; <span class="var">i</span><span class="op">++</span>) {
+  console.<span class="fn">log</span>(<span class="str">"Ennemi numéro "</span> <span class="op">+</span> <span class="var">i</span>);
+}
+<span class="cm">// → Ennemi numéro 0, 1, 2, 3, 4</span>
+
+<span class="cm">// Boucle while : répéter tant qu'une condition est vraie</span>
+<span class="kw">let</span> <span class="var">vies</span> <span class="op">=</span> <span class="num">3</span>;
+<span class="kw">while</span> (<span class="var">vies</span> <span class="op">&gt;</span> <span class="num">0</span>) {
+  console.<span class="fn">log</span>(<span class="str">"Vie restante : "</span> <span class="op">+</span> <span class="var">vies</span>);
+  <span class="var">vies</span><span class="op">--</span>;
+}
+<span class="cm">// → 3, 2, 1 puis la boucle s'arrête</span>
+
+<span class="cm">// Boucle forEach : parcourir un tableau</span>
+<span class="kw">const</span> <span class="var">ennemis</span> <span class="op">=</span> [<span class="str">"Goblin"</span>, <span class="str">"Dragon"</span>, <span class="str">"Sorcier"</span>];
+<span class="var">ennemis</span>.<span class="fn">forEach</span>((<span class="var">ennemi</span>) <span class="op">=&gt;</span> {
+  console.<span class="fn">log</span>(<span class="str">"Prépare-toi : "</span> <span class="op">+</span> <span class="var">ennemi</span> <span class="op">+</span> <span class="str">" arrive !"</span>);
+});</span></div>
+  </div>
+
+  <!-- Le DOM -->
+  <div class="card">
+    <div class="stitle"><div class="pill teal">🌳</div>Le DOM — Modifier la page HTML avec JS</div>
+    <p class="desc">Le <strong>DOM</strong> (Document Object Model) est la façon dont JavaScript "voit" ta page HTML — comme un arbre d'éléments modifiables. Avec le DOM, tu peux <strong>lire, modifier, ajouter ou supprimer</strong> n'importe quel élément de ta page dynamiquement.</p>
+
+    <div class="js-block"><span class="cm">// Sélectionner des éléments HTML</span>
+<span class="kw">const</span> <span class="var">titre</span>   <span class="op">=</span> <span class="dom">document.getElementById</span>(<span class="str">'mon-titre'</span>);
+<span class="kw">const</span> <span class="var">bouton</span>  <span class="op">=</span> <span class="dom">document.querySelector</span>(<span class="str">'.btn-jouer'</span>);  <span class="cm">// par classe</span>
+<span class="kw">const</span> <span class="var">tous</span>    <span class="op">=</span> <span class="dom">document.querySelectorAll</span>(<span class="str">'p'</span>);       <span class="cm">// tous les &lt;p&gt;</span>
+
+<span class="cm">// Modifier le contenu texte</span>
+<span class="var">titre</span>.textContent <span class="op">=</span> <span class="str">"Score : 150"</span>;
+
+<span class="cm">// Modifier le HTML interne</span>
+<span class="var">titre</span>.innerHTML <span class="op">=</span> <span class="str">"Score : &lt;strong&gt;150&lt;/strong&gt;"</span>;
+
+<span class="cm">// Modifier le style CSS</span>
+<span class="var">titre</span>.style.color <span class="op">=</span> <span class="str">"red"</span>;
+<span class="var">titre</span>.style.fontSize <span class="op">=</span> <span class="str">"2rem"</span>;
+
+<span class="cm">// Ajouter / retirer une classe CSS</span>
+<span class="var">bouton</span>.classList.<span class="fn">add</span>(<span class="str">'actif'</span>);
+<span class="var">bouton</span>.classList.<span class="fn">remove</span>(<span class="str">'desactive'</span>);
+<span class="var">bouton</span>.classList.<span class="fn">toggle</span>(<span class="str">'cache'</span>);   <span class="cm">// ajoute si absent, retire si présent</span></div>
+  </div>
+
+  <!-- Les événements -->
+  <div class="card">
+    <div class="stitle"><div class="pill pink">👂</div>Les événements — Réagir aux actions</div>
+    <p class="desc">Les <strong>événements</strong> permettent de réagir à ce que fait l'utilisateur : clic, touche de clavier, mouvement de souris… C'est la base de toute interactivité et de tout jeu vidéo !</p>
+
+    <div class="js-block"><span class="cm">// Écouter un clic sur un bouton</span>
+<span class="kw">const</span> <span class="var">bouton</span> <span class="op">=</span> <span class="dom">document.getElementById</span>(<span class="str">'btn-jouer'</span>);
+
+<span class="var">bouton</span>.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+  console.<span class="fn">log</span>(<span class="str">"Le jeu démarre !"</span>);
+});
+
+<span class="cm">// Événements clavier (essentiel pour les jeux !)</span>
+<span class="dom">document</span>.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, <span class="kw">function</span>(<span class="var">event</span>) {
+  console.<span class="fn">log</span>(<span class="str">"Touche appuyée : "</span> <span class="op">+</span> <span class="var">event</span>.key);
+
+  <span class="kw">if</span> (<span class="var">event</span>.key <span class="op">===</span> <span class="str">'ArrowLeft'</span>)  { <span class="fn">deplacerGauche</span>(); }
+  <span class="kw">if</span> (<span class="var">event</span>.key <span class="op">===</span> <span class="str">'ArrowRight'</span>) { <span class="fn">deplacerDroite</span>(); }
+  <span class="kw">if</span> (<span class="var">event</span>.key <span class="op">===</span> <span class="str">' '</span>)           { <span class="fn">sauter</span>(); }
+});
+
+<span class="cm">// Événements souris</span>
+<span class="dom">document</span>.<span class="fn">addEventListener</span>(<span class="str">'mousemove'</span>, <span class="kw">function</span>(<span class="var">event</span>) {
+  <span class="cm">// event.clientX et event.clientY = position de la souris</span>
+  console.<span class="fn">log</span>(<span class="var">event</span>.clientX, <span class="var">event</span>.clientY);
+});</span></div>
+
+    <div class="concept-grid">
+      <div class="concept-card cc-yellow"><div class="cc-title" style="color:#854D0E;">'click'</div><div class="cc-desc" style="color:#92400E;">Clic de souris sur un élément</div></div>
+      <div class="concept-card cc-blue"><div class="cc-title" style="color:#0C447C;">'keydown'</div><div class="cc-desc" style="color:#185FA5;">Touche de clavier enfoncée</div></div>
+      <div class="concept-card cc-purple"><div class="cc-title" style="color:#3C3489;">'keyup'</div><div class="cc-desc" style="color:#4C44A8;">Touche de clavier relâchée</div></div>
+      <div class="concept-card cc-green"><div class="cc-title" style="color:#3B6D11;">'mousemove'</div><div class="cc-desc" style="color:#3B6D11;">Mouvement de la souris</div></div>
+    </div>
+  </div>
+
+  <!-- Exemple complet : bouton score -->
+  <div class="card">
+    <div class="stitle"><div class="pill green">🔨</div>Exemple complet — Un compteur de score</div>
+    <p class="desc">Voici un exemple complet qui montre comment HTML et JS travaillent ensemble pour créer un mini-compteur interactif :</p>
+
+    <div class="split-pane">
+      <div class="pane pane-code">
+        <div class="pane-header ph-html">📄 index.html</div>
+        <div class="pane-body"><span class="tag">&lt;div</span> <span class="atr">id</span>=<span class="val">"jeu"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;h2</span> <span class="atr">id</span>=<span class="val">"score-affiche"</span><span class="tag">&gt;</span>
+    Score : 0
+  <span class="tag">&lt;/h2&gt;</span>
+  <span class="tag">&lt;button</span> <span class="atr">id</span>=<span class="val">"btn-point"</span><span class="tag">&gt;</span>
+    +10 points
+  <span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;button</span> <span class="atr">id</span>=<span class="val">"btn-reset"</span><span class="tag">&gt;</span>
+    Reset
+  <span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="tag">&lt;script</span> <span class="atr">src</span>=<span class="val">"script.js"</span><span class="tag">&gt;&lt;/script&gt;</span></div>
+      </div>
+      <div class="pane pane-code">
+        <div class="pane-header ph-js">⚡ script.js</div>
+        <div class="pane-body"><span class="kw">let</span> <span class="var">score</span> <span class="op">=</span> <span class="num">0</span>;
+
+<span class="kw">const</span> <span class="var">affichage</span> <span class="op">=</span>
+  <span class="dom">document.getElementById</span>(
+    <span class="str">'score-affiche'</span>
+  );
+
+<span class="kw">const</span> <span class="var">btnPoint</span> <span class="op">=</span>
+  <span class="dom">document.getElementById</span>(
+    <span class="str">'btn-point'</span>
+  );
+
+<span class="var">btnPoint</span>.<span class="fn">addEventListener</span>(
+  <span class="str">'click'</span>,
+  <span class="kw">function</span>() {
+    <span class="var">score</span> <span class="op">+=</span> <span class="num">10</span>;
+    <span class="var">affichage</span>.textContent
+      <span class="op">=</span> <span class="str">"Score : "</span> <span class="op">+</span> <span class="var">score</span>;
+  }
+);</div>
+      </div>
+    </div>
+
+    <!-- Mini démo live -->
+    <div style="background:#F5F4F0;border-radius:10px;padding:1rem;margin-top:0.8rem;text-align:center;">
+      <div class="rl" style="margin-bottom:0.6rem;">🎮 Essaie ici !</div>
+      <div id="score-demo" style="font-size:1.4rem;font-weight:800;color:#2C2C2A;margin-bottom:0.8rem;">Score : 0</div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="ajouterScore()" style="background:#EAB308;color:#1C1C1C;font-family:'Nunito',sans-serif;font-weight:800;border:none;border-radius:8px;padding:8px 18px;cursor:pointer;font-size:0.9rem;">+10 points</button>
+        <button onclick="resetScore()" style="background:#F1EFE8;color:#2C2C2A;font-family:'Nunito',sans-serif;font-weight:700;border:0.5px solid #D3D1C7;border-radius:8px;padding:8px 18px;cursor:pointer;font-size:0.9rem;">Reset</button>
+      </div>
+    </div>
+    <script>
+      var _score = 0;
+      function ajouterScore() { _score += 10; document.getElementById('score-demo').textContent = 'Score : ' + _score; }
+      function resetScore() { _score = 0; document.getElementById('score-demo').textContent = 'Score : 0'; }
+    </script>
+  </div>
+
+  <!-- Console.log -->
+  <div class="card">
+    <div class="stitle"><div class="pill gray">🐛</div>Déboguer avec console.log</div>
+    <p class="desc"><code>console.log()</code> est ton meilleur ami pour comprendre ce qui se passe dans ton code. Il affiche des valeurs dans la <strong>console du navigateur</strong> (F12 → onglet Console).</p>
+
+    <div class="js-block"><span class="cm">// Afficher une valeur simple</span>
+console.<span class="fn">log</span>(<span class="str">"Le score est : "</span>, <span class="var">score</span>);
+
+<span class="cm">// Afficher un objet entier</span>
+console.<span class="fn">log</span>(<span class="str">"Joueur :"</span>, <span class="var">joueur</span>);
+
+<span class="cm">// Afficher avec template littéral (backtick)</span>
+console.<span class="fn">log</span>(<span class="str">`Vies : ${<span class="var">vies</span>} | Score : ${<span class="var">score</span>}`</span>);
+
+<span class="cm">// Afficher une erreur ou un avertissement</span>
+console.<span class="fn">error</span>(<span class="str">"Erreur : ennemi hors limites !"</span>);
+console.<span class="fn">warn</span>(<span class="str">"Attention : vies basses !"</span>);</span></div>
+
+    <div class="tip tip-purple"><span class="tip-i">🌟</span><span>Ouvre la console avec <strong>F12</strong> dans ton navigateur. C'est là que tu vois toutes les erreurs JS de ta page ET ce que tu affiches avec <code>console.log</code>. Indispensable pour déboguer !</span></div>
+  </div>
+
+  <!-- Résumé -->
+  <div class="card">
+    <div class="stitle"><div class="pill gray">✓</div>Résumé — Ce qu'il faut retenir</div>
+    <div class="tag-compare">
+      <div class="tc" style="background:#FEFCE8;color:#854D0E;">✅ JS s'intègre avec <code style="background:rgba(0,0,0,0.08)">&lt;script src="..."&gt;&lt;/script&gt;</code> avant <code style="background:rgba(0,0,0,0.08)">&lt;/body&gt;</code></div>
+      <div class="tc" style="background:#FEFCE8;color:#854D0E;">✅ <code style="background:rgba(0,0,0,0.08)">const</code> = valeur fixe &nbsp;|&nbsp; <code style="background:rgba(0,0,0,0.08)">let</code> = valeur qui change</div>
+      <div class="tc" style="background:#FEFCE8;color:#854D0E;">✅ <code style="background:rgba(0,0,0,0.08)">function nom() {}</code> crée une fonction réutilisable</div>
+      <div class="tc" style="background:#FEFCE8;color:#854D0E;">✅ <code style="background:rgba(0,0,0,0.08)">if / else</code> = décisions &nbsp;|&nbsp; <code style="background:rgba(0,0,0,0.08)">for / while</code> = répétitions</div>
+      <div class="tc" style="background:#FEFCE8;color:#854D0E;">✅ Le DOM : <code style="background:rgba(0,0,0,0.08)">getElementById</code> pour cibler un élément HTML</div>
+      <div class="tc" style="background:#FEFCE8;color:#854D0E;">✅ <code style="background:rgba(0,0,0,0.08)">addEventListener('click', ...)</code> pour réagir aux actions</div>
+      <div class="tc" style="background:#FEFCE8;color:#854D0E;">✅ <code style="background:rgba(0,0,0,0.08)">console.log()</code> pour déboguer → F12 pour voir la console</div>
+    </div>
+  </div>
+
+  <div class="cta-wrap">
+    <p style="font-size:0.95rem;color:#5F5E5A;margin-bottom:1.2rem;">Tu maîtrises les bases de JS ! 🎉<br>Passe au cours suivant pour faire un vrai jeu vidéo !</p>
+    <a class="cta-btn" href="cours-canvas.html">Canvas &amp; Jeu vidéo →</a>
+    <p class="cta-sub">Variables, boucles, collisions, game loop…</p>
+  </div>
+
+</body>
+</html>

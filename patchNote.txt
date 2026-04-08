@@ -11,6 +11,7 @@ v1.01.4 = ajout cours arborescente dossier + navigation
 v1.01.5 = ajout cours git + terminal 
 v1.01.6 = rectif cours terminal axé CMD
 v1.01.7 = ajout cours githubs + patchnote + readME
+v1.01.8 = ajout jeux vidéo JS + Canvas
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/

@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas &amp; Jeu vidéo — Notions d'algorithmique</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-orange { background: #FEF3C7; color: #92400E; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+    .b-green  { background: #EAF3DE; color: #3B6D11; }
+
+    .nav-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .nav-link { display: inline-flex; align-items: center; gap: 5px; font-size: 0.85rem; font-weight: 700; text-decoration: none; border-radius: 8px; padding: 6px 13px; border: 0.5px solid; transition: background 0.15s; }
+    .nav-js { color: #854D0E; background: #FEF9C3; border-color: #FDE047; }
+    .nav-js:hover { background: #FEF08A; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .teal   { background: #9FE1CB; color: #085041; }
+    .purple { background: #CECBF6; color: #3C3489; }
+    .coral  { background: #F5C4B3; color: #712B13; }
+    .amber  { background: #FAC775; color: #633806; }
+    .blue   { background: #B5D4F4; color: #0C447C; }
+    .green  { background: #C0DD97; color: #3B6D11; }
+    .orange { background: #FED7AA; color: #9A3412; }
+    .pink   { background: #F4C0D1; color: #72243E; }
+    .red    { background: #F7C1C1; color: #791F1F; }
+    .gray   { background: #D3D1C7; color: #444441; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    /* Code blocks */
+    .js-block {
+      background: #1A1A1A;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.83rem;
+      line-height: 1.95;
+      white-space: pre;
+      overflow-x: auto;
+      color: #D4D4D4;
+      margin: 0.7rem 0;
+      border-left: 3px solid #F97316;
+    }
+    .kw  { color: #C084FC; font-weight: 700; }
+    .fn  { color: #60A5FA; }
+    .str { color: #86EFAC; }
+    .num { color: #FB923C; }
+    .cm  { color: #6B7280; font-style: italic; }
+    .op  { color: #F472B6; }
+    .var { color: #FCD34D; }
+    .dom { color: #67E8F9; }
+    .boo { color: #FB923C; font-weight: 700; }
+    .hl  { color: #FCD34D; font-weight: 700; }
+    .tag { color: #85B7EB; }
+    .atr { color: #FAC775; }
+    .val { color: #86EFAC; }
+
+    /* Canvas demo container */
+    .demo-wrap {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #D3D1C7;
+      margin: 0.8rem 0;
+    }
+    .demo-header {
+      background: #1A1A1A;
+      padding: 8px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .demo-title { font-size: 0.8rem; color: #9CA3AF; font-family: 'Nunito', sans-serif; font-weight: 700; }
+    .demo-btns { display: flex; gap: 6px; }
+    .demo-btn { font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; border: none; cursor: pointer; font-family: 'Nunito', sans-serif; }
+    .db-start { background: #22C55E; color: #fff; }
+    .db-stop  { background: #EF4444; color: #fff; }
+    .db-reset { background: #6B7280; color: #fff; }
+    canvas { display: block; background: #0F0F0F; }
+
+    /* Algo visual blocks */
+    .algo-schema {
+      background: #F5F4F0;
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      margin: 0.8rem 0;
+      font-size: 0.88rem;
+    }
+    .schema-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+    .schema-box { border-radius: 8px; padding: 6px 14px; font-weight: 700; font-size: 0.84rem; text-align: center; }
+    .sb-input  { background: #B5D4F4; color: #0C447C; }
+    .sb-calc   { background: #FED7AA; color: #9A3412; }
+    .sb-cond   { background: #DDD6FE; color: #3C3489; }
+    .sb-output { background: #BBF7D0; color: #166534; }
+    .sb-loop   { background: #FEF08A; color: #854D0E; }
+    .schema-arrow { color: #888780; font-size: 1.1rem; }
+
+    /* Concept cards */
+    .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0.8rem 0; }
+    .concept-card { border-radius: 12px; padding: 1rem 1.1rem; border: 0.5px solid; }
+    .cc-orange { background: #FFF7ED; border-color: #FED7AA; }
+    .cc-green  { background: #F0FDF4; border-color: #BBF7D0; }
+    .cc-blue   { background: #EFF6FF; border-color: #BFDBFE; }
+    .cc-purple { background: #F5F3FF; border-color: #DDD6FE; }
+    .cc-red    { background: #FFF5F5; border-color: #FED7D7; }
+    .cc-teal   { background: #F0FDFA; border-color: #99F6E4; }
+    .cc-title { font-weight: 800; font-size: 0.95rem; margin-bottom: 0.3rem; }
+    .cc-desc  { font-size: 0.83rem; line-height: 1.5; }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 8px; margin: 0.8rem 0; }
+    .step { display: flex; gap: 12px; align-items: flex-start; background: #F5F4F0; border-radius: 10px; padding: 0.75rem 1rem; }
+    .step-num { width: 26px; height: 26px; border-radius: 50%; background: #FED7AA; color: #9A3412; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
+    .step-body { font-size: 0.9rem; color: #2C2C2A; line-height: 1.6; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #FFF7ED; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #9A3412; line-height: 1.5; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-green  { background: #EAF3DE; color: #3B6D11; }
+    .tip-coral  { background: #FAECE7; color: #712B13; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .tag-compare { display: flex; flex-direction: column; gap: 8px; margin: 0.8rem 0; }
+    .tc { border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+
+    .cta-wrap { text-align: center; padding: 2rem 1rem 2.5rem; }
+    .cta-btn { display: inline-block; background: #F97316; color: #fff; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem; padding: 13px 32px; border-radius: 12px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #EA580C; }
+    .cta-sub { font-size: 0.82rem; color: #888780; margin-top: 0.8rem; }
+
+    code { font-family: 'Fira Code', monospace; background: #FEF3C7; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #92400E; }
+
+    @media (max-width: 520px) { .hero h1 { font-size: 1.6rem; } .concept-grid { grid-template-columns: 1fr; } canvas { width: 100% !important; } }
+  </style>
+</head>
+<body>
+
+  <div class="nav-row">
+    <a class="nav-js" href="cours-javascript.html">← Cours JavaScript Bases</a>
+  </div>
+
+  <div class="hero">
+    <div style="font-size:2.8rem;margin-bottom:0.5rem;">🎮</div>
+    <h1>Canvas &amp; Jeu vidéo —<br>L'algo derrière les jeux</h1>
+    <p>Découvre comment les jeux vidéo fonctionnent avec Canvas, la game loop et les notions d'algorithmique clés.</p>
+    <div class="badge-row">
+      <span class="badge b-orange">Intermédiaire</span>
+      <span class="badge b-coral">Canvas 2D</span>
+      <span class="badge b-green">Démos interactives</span>
+    </div>
+  </div>
+
+  <!-- Canvas : c'est quoi -->
+  <div class="card">
+    <div class="stitle"><div class="pill orange">🖼️</div>C'est quoi le Canvas ?</div>
+    <p class="desc">L'élément HTML <code>&lt;canvas&gt;</code> est une zone de dessin dans laquelle JavaScript peut dessiner <strong>en temps réel</strong> — des formes, des images, du texte, des animations… C'est la base de la plupart des jeux 2D sur le web !</p>
+
+    <div class="js-block"><span class="cm">&lt;!-- Dans le HTML --&gt;</span>
+<span class="tag">&lt;canvas</span> <span class="atr">id</span>=<span class="val">"monCanvas"</span> <span class="atr">width</span>=<span class="val">"600"</span> <span class="atr">height</span>=<span class="val">"400"</span><span class="tag">&gt;&lt;/canvas&gt;</span>
+
+<span class="cm">// Dans script.js — Initialiser le canvas</span>
+<span class="kw">const</span> <span class="var">canvas</span>  <span class="op">=</span> <span class="dom">document.getElementById</span>(<span class="str">'monCanvas'</span>);
+<span class="kw">const</span> <span class="var">ctx</span>     <span class="op">=</span> <span class="var">canvas</span>.<span class="fn">getContext</span>(<span class="str">'2d'</span>);
+
+<span class="cm">// Dessiner un rectangle</span>
+<span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#EAB308'</span>;
+<span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="num">50</span>, <span class="num">50</span>, <span class="num">100</span>, <span class="num">80</span>);  <span class="cm">// x, y, largeur, hauteur</span>
+
+<span class="cm">// Dessiner un cercle</span>
+<span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#EF4444'</span>;
+<span class="var">ctx</span>.<span class="fn">beginPath</span>();
+<span class="var">ctx</span>.<span class="fn">arc</span>(<span class="num">200</span>, <span class="num">100</span>, <span class="num">30</span>, <span class="num">0</span>, Math.PI <span class="op">*</span> <span class="num">2</span>);  <span class="cm">// x, y, rayon, 0, 2π</span>
+<span class="var">ctx</span>.<span class="fn">fill</span>();
+
+<span class="cm">// Écrire du texte</span>
+<span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#fff'</span>;
+<span class="var">ctx</span>.font <span class="op">=</span> <span class="str">'24px Nunito'</span>;
+<span class="var">ctx</span>.<span class="fn">fillText</span>(<span class="str">'Score: 0'</span>, <span class="num">20</span>, <span class="num">30</span>);</span></div>
+
+    <!-- Live canvas demo : dessiner -->
+    <div class="demo-wrap">
+      <div class="demo-header">
+        <span class="demo-title">🎨 Canvas — Dessin de base</span>
+        <div class="demo-btns">
+          <button class="demo-btn db-start" onclick="drawBasic()">Dessiner</button>
+          <button class="demo-btn db-reset" onclick="clearCanvas('c1')">Effacer</button>
+        </div>
+      </div>
+      <canvas id="c1" width="640" height="160"></canvas>
+    </div>
+
+    <div class="tip"><span class="tip-i">💡</span><span>Le système de coordonnées du canvas : <strong>x=0, y=0</strong> est en haut à gauche. x augmente vers la droite, y augmente vers le bas. C'est l'inverse du repère mathématique !</span></div>
+  </div>
+
+  <!-- La Game Loop -->
+  <div class="card">
+    <div class="stitle"><div class="pill coral">🔄</div>La Game Loop — Le cœur du jeu</div>
+    <p class="desc">La <strong>game loop</strong> (boucle de jeu) est LA notion algorithmique fondamentale de tout jeu vidéo. C'est une boucle infinie qui s'exécute ~60 fois par seconde et qui fait toujours la même chose :</p>
+
+    <div class="algo-schema">
+      <div class="schema-row">
+        <div class="schema-box sb-input">1. Lire les entrées</div>
+        <span class="schema-arrow">→</span>
+        <div class="schema-box sb-calc">2. Mettre à jour l'état</div>
+        <span class="schema-arrow">→</span>
+        <div class="schema-box sb-output">3. Dessiner</div>
+        <span class="schema-arrow">→</span>
+        <div class="schema-box sb-loop">↻ Recommencer</div>
+      </div>
+      <div style="font-size:0.82rem;color:#5F5E5A;margin-top:0.5rem;">Clavier/souris → Déplacer les objets, vérifier collisions → Effacer + redessiner → 60 fois/seconde</div>
+    </div>
+
+    <div class="js-block"><span class="cm">// requestAnimationFrame : la fonction magique</span>
+<span class="cm">// Elle appelle ta fonction avant chaque affichage (~60fps)</span>
+
+<span class="kw">function</span> <span class="fn">gameLoop</span>() {
+  <span class="cm">// 1. EFFACER le canvas (sinon les anciens dessins restent !)</span>
+  <span class="var">ctx</span>.<span class="fn">clearRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">canvas</span>.width, <span class="var">canvas</span>.height);
+
+  <span class="cm">// 2. METTRE À JOUR : déplacer les objets</span>
+  <span class="fn">mettreAJour</span>();
+
+  <span class="cm">// 3. DESSINER : afficher tous les objets</span>
+  <span class="fn">dessiner</span>();
+
+  <span class="cm">// 4. RAPPELER la game loop à la prochaine frame</span>
+  requestAnimationFrame(<span class="fn">gameLoop</span>);
+}
+
+<span class="cm">// Démarrer la boucle</span>
+requestAnimationFrame(<span class="fn">gameLoop</span>);</span></div>
+
+    <div class="concept-grid">
+      <div class="concept-card cc-orange">
+        <div class="cc-title" style="color:#9A3412;">60 FPS</div>
+        <div class="cc-desc" style="color:#92400E;">La game loop tourne ~60 fois par seconde. Chaque tour = 1 frame. C'est pour ça que les mouvements paraissent fluides.</div>
+      </div>
+      <div class="concept-card cc-teal">
+        <div class="cc-title" style="color:#085041;">clearRect</div>
+        <div class="cc-desc" style="color:#0F6E56;">On DOIT effacer le canvas à chaque frame. Sinon l'objet laisse une traînée à chaque déplacement — comme une peinture humide qu'on aurait frottée.</div>
+      </div>
+    </div>
+
+    <!-- Live demo : game loop basique -->
+    <div class="demo-wrap" style="margin-top:0.8rem;">
+      <div class="demo-header">
+        <span class="demo-title">🔄 Game Loop — Balle en mouvement</span>
+        <div class="demo-btns">
+          <button class="demo-btn db-start" onclick="startBall()">Start</button>
+          <button class="demo-btn db-stop" onclick="stopBall()">Stop</button>
+        </div>
+      </div>
+      <canvas id="c2" width="640" height="140"></canvas>
+    </div>
+  </div>
+
+  <!-- Coordonnées et mouvement -->
+  <div class="card">
+    <div class="stitle"><div class="pill blue">📐</div>Coordonnées &amp; Mouvement — Les variables de position</div>
+    <p class="desc">Tout objet dans un jeu a une <strong>position</strong> (x, y) et une <strong>vitesse</strong> (vx, vy). À chaque frame, on ajoute la vitesse à la position. C'est aussi simple que ça !</p>
+
+    <div class="js-block"><span class="cm">// Un objet "joueur" avec sa position et vitesse</span>
+<span class="kw">const</span> <span class="var">joueur</span> <span class="op">=</span> {
+  x: <span class="num">100</span>,    <span class="cm">// position horizontale (px depuis la gauche)</span>
+  y: <span class="num">200</span>,    <span class="cm">// position verticale (px depuis le haut)</span>
+  vx: <span class="num">3</span>,    <span class="cm">// vitesse horizontale (px par frame)</span>
+  vy: <span class="num">0</span>,    <span class="cm">// vitesse verticale</span>
+  largeur: <span class="num">40</span>,
+  hauteur: <span class="num">40</span>
+};
+
+<span class="kw">function</span> <span class="fn">mettreAJour</span>() {
+  <span class="cm">// Mouvement : position += vitesse (à chaque frame)</span>
+  <span class="var">joueur</span>.x <span class="op">+=</span> <span class="var">joueur</span>.vx;
+  <span class="var">joueur</span>.y <span class="op">+=</span> <span class="var">joueur</span>.vy;
+
+  <span class="cm">// Rebondir sur les bords gauche/droite</span>
+  <span class="kw">if</span> (<span class="var">joueur</span>.x <span class="op">&lt;</span> <span class="num">0</span> <span class="op">||</span> <span class="var">joueur</span>.x <span class="op">+</span> <span class="var">joueur</span>.largeur <span class="op">&gt;</span> <span class="var">canvas</span>.width) {
+    <span class="var">joueur</span>.vx <span class="op">*=</span> <span class="op">-</span><span class="num">1</span>;  <span class="cm">// inverser la direction !</span>
+  }
+}</span></div>
+
+    <div style="background:#F5F4F0;border-radius:10px;padding:0.9rem 1rem;margin:0.8rem 0;">
+      <div class="rl">La physique du mouvement en résumé</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:0.5rem;font-size:0.88rem;">
+        <div style="display:flex;align-items:center;gap:8px;"><span style="font-family:'Fira Code',monospace;background:#FEF9C3;color:#854D0E;padding:2px 8px;border-radius:4px;">x += vx</span> <span style="color:#5F5E5A;">→ déplace horizontalement à chaque frame</span></div>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="font-family:'Fira Code',monospace;background:#FEF9C3;color:#854D0E;padding:2px 8px;border-radius:4px;">y += vy</span> <span style="color:#5F5E5A;">→ déplace verticalement à chaque frame</span></div>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="font-family:'Fira Code',monospace;background:#FEF9C3;color:#854D0E;padding:2px 8px;border-radius:4px;">vy += gravité</span> <span style="color:#5F5E5A;">→ accélère vers le bas (gravité !)</span></div>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="font-family:'Fira Code',monospace;background:#FEF9C3;color:#854D0E;padding:2px 8px;border-radius:4px;">vx *= -1</span> <span style="color:#5F5E5A;">→ inverse le sens (rebond sur un mur)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Détection de collision AABB -->
+  <div class="card">
+    <div class="stitle"><div class="pill red">💥</div>Détection de collision — L'algo AABB</div>
+    <p class="desc">La <strong>collision</strong> est la détection de quand deux objets se touchent. L'algorithme le plus utilisé en jeu 2D s'appelle <strong>AABB</strong> (Axis-Aligned Bounding Box = "boîte rectangulaire alignée"). C'est un test logique simple !</p>
+
+    <div class="algo-schema">
+      <div style="font-size:0.88rem;color:#5F5E5A;margin-bottom:0.8rem;">Deux rectangles A et B se touchent si ET SEULEMENT SI toutes ces conditions sont vraies :</div>
+      <div class="schema-row">
+        <div class="schema-box sb-cond" style="flex:1;">A.gauche &lt; B.droite</div>
+      </div>
+      <div class="schema-row">
+        <div class="schema-box sb-cond" style="flex:1;">A.droite &gt; B.gauche</div>
+      </div>
+      <div class="schema-row">
+        <div class="schema-box sb-cond" style="flex:1;">A.haut &lt; B.bas</div>
+      </div>
+      <div class="schema-row">
+        <div class="schema-box sb-cond" style="flex:1;">A.bas &gt; B.haut</div>
+      </div>
+    </div>
+
+    <div class="js-block"><span class="cm">// Fonction de détection de collision AABB</span>
+<span class="kw">function</span> <span class="fn">collision</span>(<span class="var">a</span>, <span class="var">b</span>) {
+  <span class="kw">return</span> (
+    <span class="var">a</span>.x <span class="op">&lt;</span> <span class="var">b</span>.x <span class="op">+</span> <span class="var">b</span>.largeur   <span class="cm">// gauche de A < droite de B</span>
+    <span class="op">&amp;&amp;</span> <span class="var">a</span>.x <span class="op">+</span> <span class="var">a</span>.largeur <span class="op">&gt;</span> <span class="var">b</span>.x  <span class="cm">// droite de A > gauche de B</span>
+    <span class="op">&amp;&amp;</span> <span class="var">a</span>.y <span class="op">&lt;</span> <span class="var">b</span>.y <span class="op">+</span> <span class="var">b</span>.hauteur  <span class="cm">// haut de A < bas de B</span>
+    <span class="op">&amp;&amp;</span> <span class="var">a</span>.y <span class="op">+</span> <span class="var">a</span>.hauteur <span class="op">&gt;</span> <span class="var">b</span>.y  <span class="cm">// bas de A > haut de B</span>
+  );
+}
+
+<span class="cm">// Utilisation dans la game loop</span>
+<span class="kw">const</span> <span class="var">joueur</span>  <span class="op">=</span> { x: <span class="num">100</span>, y: <span class="num">200</span>, largeur: <span class="num">40</span>, hauteur: <span class="num">40</span> };
+<span class="kw">const</span> <span class="var">ennemi</span>  <span class="op">=</span> { x: <span class="num">200</span>, y: <span class="num">190</span>, largeur: <span class="num">50</span>, hauteur: <span class="num">50</span> };
+<span class="kw">const</span> <span class="var">piece</span>   <span class="op">=</span> { x: <span class="num">300</span>, y: <span class="num">195</span>, largeur: <span class="num">20</span>, hauteur: <span class="num">20</span> };
+
+<span class="kw">if</span> (<span class="fn">collision</span>(<span class="var">joueur</span>, <span class="var">ennemi</span>)) {
+  <span class="var">vies</span><span class="op">--</span>;
+  console.<span class="fn">log</span>(<span class="str">"Touché ! Vies restantes : "</span> <span class="op">+</span> <span class="var">vies</span>);
+}
+
+<span class="kw">if</span> (<span class="fn">collision</span>(<span class="var">joueur</span>, <span class="var">piece</span>)) {
+  <span class="var">score</span> <span class="op">+=</span> <span class="num">10</span>;
+  <span class="cm">// "ramasser" la pièce : la déplacer hors écran</span>
+  <span class="var">piece</span>.x <span class="op">=</span> <span class="op">-</span><span class="num">100</span>;
+}</span></div>
+
+    <!-- Live demo collision -->
+    <div class="demo-wrap" style="margin-top:0.8rem;">
+      <div class="demo-header">
+        <span class="demo-title">💥 Collision AABB — Bouge la balle avec les touches ← →</span>
+        <div class="demo-btns">
+          <button class="demo-btn db-reset" onclick="resetCollision()">Reset</button>
+        </div>
+      </div>
+      <canvas id="c3" width="640" height="160" tabindex="0"></canvas>
+    </div>
+    <p style="font-size:0.82rem;color:#888780;margin-top:4px;text-align:center;">← → pour déplacer la balle. Elle devient rouge si collision !</p>
+  </div>
+
+  <!-- Gravité et saut -->
+  <div class="card">
+    <div class="stitle"><div class="pill purple">⬇️</div>Gravité &amp; Saut — Simuler la physique</div>
+    <p class="desc">Dans un jeu de plateforme, la gravité s'applique à chaque frame en ajoutant une valeur à la vitesse verticale. Le saut, c'est juste donner une grande vitesse vers le haut d'un coup !</p>
+
+    <div class="js-block"><span class="cm">// Constantes physiques</span>
+<span class="kw">const</span> <span class="var">GRAVITE</span>       <span class="op">=</span> <span class="num">0.5</span>;   <span class="cm">// px/frame² ajoutés à chaque frame</span>
+<span class="kw">const</span> <span class="var">FORCE_SAUT</span>    <span class="op">=</span> <span class="op">-</span><span class="num">12</span>;  <span class="cm">// négatif = vers le haut</span>
+<span class="kw">const</span> <span class="var">SOL</span>           <span class="op">=</span> <span class="num">350</span>;   <span class="cm">// hauteur du sol en pixels</span>
+
+<span class="kw">let</span> <span class="var">joueur</span> <span class="op">=</span> { x: <span class="num">100</span>, y: <span class="num">300</span>, vy: <span class="num">0</span>, auSol: <span class="boo">false</span> };
+
+<span class="kw">function</span> <span class="fn">mettreAJour</span>() {
+  <span class="cm">// Appliquer la gravité : accélère le joueur vers le bas</span>
+  <span class="var">joueur</span>.vy <span class="op">+=</span> <span class="var">GRAVITE</span>;
+
+  <span class="cm">// Appliquer le mouvement vertical</span>
+  <span class="var">joueur</span>.y <span class="op">+=</span> <span class="var">joueur</span>.vy;
+
+  <span class="cm">// Collision avec le sol : empêcher de passer à travers</span>
+  <span class="kw">if</span> (<span class="var">joueur</span>.y <span class="op">&gt;=</span> <span class="var">SOL</span>) {
+    <span class="var">joueur</span>.y  <span class="op">=</span> <span class="var">SOL</span>;
+    <span class="var">joueur</span>.vy <span class="op">=</span> <span class="num">0</span>;     <span class="cm">// stopper la chute</span>
+    <span class="var">joueur</span>.auSol <span class="op">=</span> <span class="boo">true</span>;
+  }
+}
+
+<span class="cm">// Saut : seulement si le joueur est sur le sol</span>
+<span class="dom">document</span>.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, <span class="kw">function</span>(<span class="var">e</span>) {
+  <span class="kw">if</span> (<span class="var">e</span>.key <span class="op">===</span> <span class="str">' '</span> <span class="op">&amp;&amp;</span> <span class="var">joueur</span>.auSol) {
+    <span class="var">joueur</span>.vy    <span class="op">=</span> <span class="var">FORCE_SAUT</span>;  <span class="cm">// impulsion vers le haut</span>
+    <span class="var">joueur</span>.auSol <span class="op">=</span> <span class="boo">false</span>;
+  }
+});</span></div>
+
+    <!-- Live demo : gravity + jump -->
+    <div class="demo-wrap">
+      <div class="demo-header">
+        <span class="demo-title">⬇️ Gravité &amp; Saut — Appuie sur Espace ou clique "Sauter"</span>
+      </div>
+      <canvas id="c4" width="640" height="180" tabindex="0"></canvas>
+    </div>
+    <div style="text-align:center;margin-top:6px;">
+      <button onclick="jumpPlayer()" style="background:#C084FC;color:#fff;font-family:'Nunito',sans-serif;font-weight:800;border:none;border-radius:8px;padding:7px 20px;cursor:pointer;font-size:0.9rem;">Sauter !</button>
+    </div>
+  </div>
+
+  <!-- Gestion des entrées clavier -->
+  <div class="card">
+    <div class="stitle"><div class="pill teal">⌨️</div>Gestion des entrées clavier — La bonne façon</div>
+    <p class="desc">Pour un jeu fluide, on ne doit <strong>pas déplacer directement</strong> le joueur dans l'événement keydown. On <strong>mémorise quelles touches sont enfoncées</strong> dans un objet, et on applique les déplacements dans la game loop.</p>
+
+    <div class="js-block"><span class="cm">// ❌ Mauvaise approche : déplacement direct dans keydown</span>
+<span class="cm">// → Mouvement saccadé à cause du délai de répétition OS</span>
+document.addEventListener(<span class="str">'keydown'</span>, (e) => {
+  if (e.key === <span class="str">'ArrowRight'</span>) joueur.x += 5; <span class="cm">// saccadé !</span>
+});
+
+<span class="cm">// ✅ Bonne approche : mémoriser les touches enfoncées</span>
+<span class="kw">const</span> <span class="var">touches</span> <span class="op">=</span> {};  <span class="cm">// objet qui stocke l'état de chaque touche</span>
+
+<span class="dom">document</span>.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, (<span class="var">e</span>) <span class="op">=&gt;</span> { <span class="var">touches</span>[<span class="var">e</span>.key] <span class="op">=</span> <span class="boo">true</span>; });
+<span class="dom">document</span>.<span class="fn">addEventListener</span>(<span class="str">'keyup'</span>,   (<span class="var">e</span>) <span class="op">=&gt;</span> { <span class="var">touches</span>[<span class="var">e</span>.key] <span class="op">=</span> <span class="boo">false</span>; });
+
+<span class="cm">// Dans la game loop : lire l'état des touches à chaque frame</span>
+<span class="kw">function</span> <span class="fn">gererEntrees</span>() {
+  <span class="kw">if</span> (<span class="var">touches</span>[<span class="str">'ArrowLeft'</span>])  <span class="var">joueur</span>.x <span class="op">-=</span> <span class="num">5</span>;   <span class="cm">// ← mouvement fluide !</span>
+  <span class="kw">if</span> (<span class="var">touches</span>[<span class="str">'ArrowRight'</span>]) <span class="var">joueur</span>.x <span class="op">+=</span> <span class="num">5</span>;
+  <span class="kw">if</span> (<span class="var">touches</span>[<span class="str">'ArrowUp'</span>])    <span class="var">joueur</span>.y <span class="op">-=</span> <span class="num">5</span>;
+  <span class="kw">if</span> (<span class="var">touches</span>[<span class="str">'ArrowDown'</span>])  <span class="var">joueur</span>.y <span class="op">+=</span> <span class="num">5</span>;
+}</span></div>
+  </div>
+
+  <!-- Tableau de scores et tri -->
+  <div class="card">
+    <div class="stitle"><div class="pill green">🏆</div>Tableau de scores — Tableaux &amp; tri</div>
+    <p class="desc">En jeu vidéo, on gère souvent des <strong>listes d'objets</strong> — ennemis, obstacles, projectiles… On utilise des <strong>tableaux JS</strong> et des algorithmes pour les filtrer, les trier et les parcourir.</p>
+
+    <div class="js-block"><span class="cm">// Gérer une liste d'ennemis</span>
+<span class="kw">let</span> <span class="var">ennemis</span> <span class="op">=</span> [
+  { x: <span class="num">100</span>, y: <span class="num">50</span>,  vie: <span class="num">3</span>, largeur: <span class="num">40</span>, hauteur: <span class="num">40</span> },
+  { x: <span class="num">250</span>, y: <span class="num">80</span>,  vie: <span class="num">1</span>, largeur: <span class="num">40</span>, hauteur: <span class="num">40</span> },
+  { x: <span class="num">400</span>, y: <span class="num">30</span>,  vie: <span class="num">2</span>, largeur: <span class="num">40</span>, hauteur: <span class="num">40</span> },
+];
+
+<span class="cm">// Dessiner TOUS les ennemis avec forEach</span>
+<span class="var">ennemis</span>.<span class="fn">forEach</span>((<span class="var">ennemi</span>) <span class="op">=&gt;</span> {
+  <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#EF4444'</span>;
+  <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="var">ennemi</span>.x, <span class="var">ennemi</span>.y, <span class="var">ennemi</span>.largeur, <span class="var">ennemi</span>.hauteur);
+});
+
+<span class="cm">// Supprimer les ennemis morts (vie <= 0)</span>
+<span class="cm">// filter() garde seulement ceux qui satisfont la condition</span>
+<span class="var">ennemis</span> <span class="op">=</span> <span class="var">ennemis</span>.<span class="fn">filter</span>((<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">e</span>.vie <span class="op">&gt;</span> <span class="num">0</span>);
+
+<span class="cm">// Trier le tableau de scores (du plus grand au plus petit)</span>
+<span class="kw">const</span> <span class="var">scores</span> <span class="op">=</span> [
+  { nom: <span class="str">"Alice"</span>, points: <span class="num">980</span> },
+  { nom: <span class="str">"Bob"</span>,   points: <span class="num">1250</span> },
+  { nom: <span class="str">"Carla"</span>, points: <span class="num">760</span> },
+];
+
+<span class="var">scores</span>.<span class="fn">sort</span>((<span class="var">a</span>, <span class="var">b</span>) <span class="op">=&gt;</span> <span class="var">b</span>.points <span class="op">-</span> <span class="var">a</span>.points);
+<span class="cm">// → [Bob 1250, Alice 980, Carla 760]</span>
+
+<span class="cm">// Ajouter un nouvel ennemi au tableau</span>
+<span class="var">ennemis</span>.<span class="fn">push</span>({ x: <span class="num">500</span>, y: <span class="num">60</span>, vie: <span class="num">2</span>, largeur: <span class="num">40</span>, hauteur: <span class="num">40</span> });</span></div>
+  </div>
+
+  <!-- Le deltaTime -->
+  <div class="card">
+    <div class="stitle"><div class="pill amber">⏱️</div>Delta Time — Mouvement indépendant du FPS</div>
+    <p class="desc">Si un jeu tourne à 30fps sur une vieille machine et 60fps sur une nouvelle, les objets bougeront à des vitesses différentes sans <strong>deltaTime</strong>. Le deltaTime (temps écoulé depuis la dernière frame) permet un mouvement identique <strong>sur tous les appareils</strong>.</p>
+
+    <div class="js-block"><span class="kw">let</span> <span class="var">dernierTemps</span> <span class="op">=</span> <span class="num">0</span>;
+
+<span class="kw">function</span> <span class="fn">gameLoop</span>(<span class="var">timestamp</span>) {
+  <span class="cm">// timestamp = temps écoulé depuis le début (en ms)</span>
+  <span class="kw">const</span> <span class="var">dt</span> <span class="op">=</span> (<span class="var">timestamp</span> <span class="op">-</span> <span class="var">dernierTemps</span>) <span class="op">/</span> <span class="num">1000</span>; <span class="cm">// en secondes</span>
+  <span class="var">dernierTemps</span> <span class="op">=</span> <span class="var">timestamp</span>;
+
+  <span class="cm">// Vitesse en pixels PAR SECONDE (pas par frame)</span>
+  <span class="kw">const</span> <span class="var">VITESSE</span> <span class="op">=</span> <span class="num">200</span>;  <span class="cm">// 200px/seconde, identique à 30fps ou 60fps</span>
+
+  <span class="cm">// Déplacement proportionnel au temps écoulé</span>
+  <span class="var">joueur</span>.x <span class="op">+=</span> <span class="var">VITESSE</span> <span class="op">*</span> <span class="var">dt</span>;  <span class="cm">// ~3.3px à 60fps, ~6.6px à 30fps</span>
+
+  <span class="var">ctx</span>.<span class="fn">clearRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">canvas</span>.width, <span class="var">canvas</span>.height);
+  <span class="fn">dessiner</span>();
+  requestAnimationFrame(<span class="fn">gameLoop</span>);
+}
+
+requestAnimationFrame(<span class="fn">gameLoop</span>);</span></div>
+
+    <div class="tip tip-blue"><span class="tip-i">💡</span><span>Pour les projets débutants, le deltaTime n'est pas obligatoire. Mais si tu veux que ton jeu soit <strong>équitable sur tous les appareils</strong>, c'est une bonne pratique à adopter dès le départ.</span></div>
+  </div>
+
+  <!-- Mini-jeu complet : architecture -->
+  <div class="card">
+    <div class="stitle"><div class="pill orange">🏗️</div>Architecture d'un mini-jeu complet</div>
+    <p class="desc">Voici comment organiser le code d'un vrai mini-jeu avec toutes les notions vues :</p>
+
+    <div class="js-block"><span class="cm">// === CONFIGURATION ===</span>
+<span class="kw">const</span> <span class="var">canvas</span> <span class="op">=</span> <span class="dom">document.getElementById</span>(<span class="str">'jeu'</span>);
+<span class="kw">const</span> <span class="var">ctx</span>    <span class="op">=</span> <span class="var">canvas</span>.<span class="fn">getContext</span>(<span class="str">'2d'</span>);
+
+<span class="cm">// === ÉTAT DU JEU ===</span>
+<span class="kw">let</span> <span class="var">score</span>   <span class="op">=</span> <span class="num">0</span>;
+<span class="kw">let</span> <span class="var">vies</span>    <span class="op">=</span> <span class="num">3</span>;
+<span class="kw">let</span> <span class="var">enJeu</span>   <span class="op">=</span> <span class="boo">true</span>;
+
+<span class="kw">const</span> <span class="var">joueur</span> <span class="op">=</span> { x: <span class="num">50</span>, y: <span class="num">200</span>, vx: <span class="num">0</span>, vy: <span class="num">0</span>, w: <span class="num">40</span>, h: <span class="num">40</span> };
+<span class="kw">let</span>   <span class="var">ennemis</span> <span class="op">=</span> [];
+<span class="kw">const</span> <span class="var">touches</span> <span class="op">=</span> {};
+
+<span class="cm">// === ENTRÉES ===</span>
+document.addEventListener(<span class="str">'keydown'</span>, (e) => touches[e.key] = <span class="boo">true</span>);
+document.addEventListener(<span class="str">'keyup'</span>,   (e) => touches[e.key] = <span class="boo">false</span>);
+
+<span class="cm">// === MISE À JOUR ===</span>
+<span class="kw">function</span> <span class="fn">update</span>() {
+  <span class="kw">if</span> (<span class="op">!</span><span class="var">enJeu</span>) <span class="kw">return</span>;
+
+  <span class="cm">// 1. Mouvements joueur</span>
+  <span class="kw">if</span> (<span class="var">touches</span>[<span class="str">'ArrowLeft'</span>])  <span class="var">joueur</span>.x <span class="op">-=</span> <span class="num">4</span>;
+  <span class="kw">if</span> (<span class="var">touches</span>[<span class="str">'ArrowRight'</span>]) <span class="var">joueur</span>.x <span class="op">+=</span> <span class="num">4</span>;
+
+  <span class="cm">// 2. Mouvements ennemis</span>
+  <span class="var">ennemis</span>.<span class="fn">forEach</span>((<span class="var">e</span>) <span class="op">=&gt;</span> { <span class="var">e</span>.x <span class="op">-=</span> <span class="var">e</span>.vitesse; });
+  <span class="var">ennemis</span> <span class="op">=</span> <span class="var">ennemis</span>.<span class="fn">filter</span>((<span class="var">e</span>) <span class="op">=&gt;</span> <span class="var">e</span>.x <span class="op">&gt;</span> <span class="op">-</span><span class="num">50</span>);  <span class="cm">// nettoyer hors écran</span>
+
+  <span class="cm">// 3. Collisions</span>
+  <span class="var">ennemis</span>.<span class="fn">forEach</span>((<span class="var">e</span>) <span class="op">=&gt;</span> {
+    <span class="kw">if</span> (<span class="fn">collision</span>(<span class="var">joueur</span>, <span class="var">e</span>)) { <span class="var">vies</span><span class="op">--</span>; <span class="kw">if</span> (<span class="var">vies</span> <span class="op">===</span> <span class="num">0</span>) <span class="var">enJeu</span> <span class="op">=</span> <span class="boo">false</span>; }
+  });
+}
+
+<span class="cm">// === DESSIN ===</span>
+<span class="kw">function</span> <span class="fn">draw</span>() {
+  <span class="var">ctx</span>.<span class="fn">clearRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">canvas</span>.width, <span class="var">canvas</span>.height);
+  <span class="cm">// dessiner joueur, ennemis, HUD (score, vies)…</span>
+  <span class="kw">if</span> (<span class="op">!</span><span class="var">enJeu</span>) { <span class="var">ctx</span>.<span class="fn">fillText</span>(<span class="str">'GAME OVER'</span>, <span class="num">200</span>, <span class="num">200</span>); }
+}
+
+<span class="cm">// === GAME LOOP ===</span>
+<span class="kw">function</span> <span class="fn">loop</span>() { <span class="fn">update</span>(); <span class="fn">draw</span>(); requestAnimationFrame(<span class="fn">loop</span>); }
+<span class="fn">loop</span>();</span></div>
+
+    <!-- Live mini-game demo -->
+    <div class="demo-wrap" style="margin-top:0.8rem;">
+      <div class="demo-header">
+        <span class="demo-title">🎮 Mini-jeu complet — ← → pour esquiver les blocs rouges !</span>
+        <div class="demo-btns">
+          <button class="demo-btn db-start" onclick="startMiniGame()">Démarrer</button>
+          <button class="demo-btn db-reset" onclick="resetMiniGame()">Reset</button>
+        </div>
+      </div>
+      <canvas id="c5" width="640" height="200" tabindex="0"></canvas>
+    </div>
+    <p style="font-size:0.82rem;color:#888780;margin-top:4px;text-align:center;">← → pour déplacer. Esquive les blocs rouges ! Clique sur le canvas d'abord pour le focus.</p>
+  </div>
+
+  <!-- Résumé notions algo -->
+  <div class="card">
+    <div class="stitle"><div class="pill gray">✓</div>Les notions d'algorithmique du jeu vidéo</div>
+    <p class="desc">Voici un récap de toutes les notions algorithmiques utilisées dans les jeux :</p>
+    <div class="tag-compare">
+      <div class="tc" style="background:#FFF7ED;color:#9A3412;">🔄 <strong>Game Loop</strong> — Boucle infinie : lire entrées → update → draw → repeat</div>
+      <div class="tc" style="background:#FFF7ED;color:#9A3412;">📐 <strong>Coordonnées x/y + vitesse vx/vy</strong> — Position += vitesse à chaque frame</div>
+      <div class="tc" style="background:#FFF7ED;color:#9A3412;">💥 <strong>Collision AABB</strong> — 4 comparaisons pour savoir si 2 rectangles se touchent</div>
+      <div class="tc" style="background:#FFF7ED;color:#9A3412;">⬇️ <strong>Gravité</strong> — vy += gravité à chaque frame, simuler la physique réelle</div>
+      <div class="tc" style="background:#FFF7ED;color:#9A3412;">⌨️ <strong>État des touches</strong> — Mémoriser keydown/keyup dans un objet pour un mouvement fluide</div>
+      <div class="tc" style="background:#FFF7ED;color:#9A3412;">📊 <strong>Tableaux forEach/filter</strong> — Gérer des listes d'ennemis, projectiles, pièces…</div>
+      <div class="tc" style="background:#FFF7ED;color:#9A3412;">⏱️ <strong>DeltaTime</strong> — Rendre le jeu indépendant du FPS de l'appareil</div>
+    </div>
+  </div>
+
+  <div class="cta-wrap">
+    <p style="font-size:0.95rem;color:#5F5E5A;margin-bottom:1.2rem;">Tu connais les bases du jeu vidéo en JS ! 🎮<br>Il ne reste plus qu'à coder ton propre jeu !</p>
+    <a class="cta-btn" href="cours-javascript.html">← Revoir les bases JS</a>
+    <p class="cta-sub">Variables, fonctions, DOM, événements</p>
+  </div>
+
+  <!-- ===== SCRIPTS DES DÉMOS ===== -->
+  <script>
+  // ---- Démo 1 : dessin de base ----
+  function drawBasic() {
+    var c = document.getElementById('c1');
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0,0,c.width,c.height);
+
+    // Rectangle jaune
+    ctx.fillStyle = '#EAB308';
+    ctx.fillRect(40, 30, 120, 80);
+
+    // Cercle rouge
+    ctx.fillStyle = '#EF4444';
+    ctx.beginPath();
+    ctx.arc(260, 75, 45, 0, Math.PI*2);
+    ctx.fill();
+
+    // Triangle vert
+    ctx.fillStyle = '#22C55E';
+    ctx.beginPath();
+    ctx.moveTo(380, 130); ctx.lineTo(440, 20); ctx.lineTo(500, 130);
+    ctx.closePath(); ctx.fill();
+
+    // Texte
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 16px Nunito, sans-serif';
+    ctx.fillText('rect(40,30,120,80)', 40, 125);
+    ctx.fillText('arc(260,75,45)', 220, 145);
+    ctx.fillText('triangle', 405, 148);
+
+    // Ligne
+    ctx.strokeStyle = '#C084FC'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(540,20); ctx.lineTo(620,140); ctx.stroke();
+    ctx.fillStyle = '#C084FC'; ctx.font = 'bold 13px Nunito,sans-serif';
+    ctx.fillText('ligne', 560, 90);
+  }
+
+  function clearCanvas(id) {
+    var c = document.getElementById(id);
+    c.getContext('2d').clearRect(0,0,c.width,c.height);
+  }
+
+  // ---- Démo 2 : balle rebondissante (game loop) ----
+  var ballRaf = null;
+  var ball = { x: 50, y: 70, vx: 3.5, vy: 2.2, r: 18 };
+
+  function drawBall() {
+    var c = document.getElementById('c2');
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0,0,c.width,c.height);
+
+    // Fond
+    ctx.fillStyle = '#111827';
+    ctx.fillRect(0,0,c.width,c.height);
+
+    // Tracer la trajectoire (effet)
+    ctx.fillStyle = 'rgba(250,204,21,0.12)';
+    for (var t=1; t<=8; t++) {
+      ctx.beginPath();
+      ctx.arc(ball.x - ball.vx*t*1.5, ball.y - ball.vy*t*1.5, ball.r*(1-t*0.09), 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    // Balle
+    ctx.fillStyle = '#FBBF24';
+    ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2); ctx.fill();
+
+    // Labels
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '12px Fira Code, monospace';
+    ctx.fillText('x='+Math.round(ball.x)+' y='+Math.round(ball.y), 8, 20);
+    ctx.fillText('vx='+ball.vx.toFixed(1)+' vy='+ball.vy.toFixed(1), 8, 36);
+
+    // Update
+    ball.x += ball.vx; ball.y += ball.vy;
+    if (ball.x - ball.r < 0 || ball.x + ball.r > c.width)  ball.vx *= -1;
+    if (ball.y - ball.r < 0 || ball.y + ball.r > c.height) ball.vy *= -1;
+
+    ballRaf = requestAnimationFrame(drawBall);
+  }
+
+  function startBall() { if (!ballRaf) drawBall(); }
+  function stopBall()  { if (ballRaf) { cancelAnimationFrame(ballRaf); ballRaf = null; } }
+
+  // ---- Démo 3 : collision AABB ----
+  var collPlayer = { x: 40, y: 60, w: 40, h: 40 };
+  var collBox    = { x: 280, y: 50, w: 80, h: 60 };
+  var collKeys   = {};
+
+  document.getElementById('c3').addEventListener('keydown', function(e) { collKeys[e.key] = true; e.preventDefault(); });
+  document.getElementById('c3').addEventListener('keyup',   function(e) { collKeys[e.key] = false; });
+
+  function checkAABB(a, b) {
+    return a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y;
+  }
+
+  function drawCollision() {
+    var c = document.getElementById('c3');
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.fillStyle = '#111827'; ctx.fillRect(0,0,c.width,c.height);
+
+    if (collKeys['ArrowLeft'])  collPlayer.x = Math.max(0, collPlayer.x - 4);
+    if (collKeys['ArrowRight']) collPlayer.x = Math.min(c.width-collPlayer.w, collPlayer.x + 4);
+    if (collKeys['ArrowUp'])    collPlayer.y = Math.max(0, collPlayer.y - 4);
+    if (collKeys['ArrowDown'])  collPlayer.y = Math.min(c.height-collPlayer.h, collPlayer.y + 4);
+
+    var hit = checkAABB(collPlayer, collBox);
+
+    // Obstacle
+    ctx.fillStyle = hit ? 'rgba(239,68,68,0.4)' : 'rgba(59,130,246,0.3)';
+    ctx.strokeStyle = hit ? '#EF4444' : '#3B82F6';
+    ctx.lineWidth = 2;
+    ctx.fillRect(collBox.x, collBox.y, collBox.w, collBox.h);
+    ctx.strokeRect(collBox.x, collBox.y, collBox.w, collBox.h);
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '11px Fira Code,monospace';
+    ctx.fillText('obstacle', collBox.x+8, collBox.y+35);
+
+    // Joueur
+    ctx.fillStyle = hit ? '#FBBF24' : '#22C55E';
+    ctx.fillRect(collPlayer.x, collPlayer.y, collPlayer.w, collPlayer.h);
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 14px Nunito,sans-serif';
+    ctx.fillText('P', collPlayer.x+13, collPlayer.y+26);
+
+    // Status
+    ctx.fillStyle = hit ? '#EF4444' : '#22C55E';
+    ctx.font = 'bold 13px Fira Code, monospace';
+    ctx.fillText(hit ? 'collision = true !' : 'collision = false', c.width-180, 20);
+
+    requestAnimationFrame(drawCollision);
+  }
+  drawCollision();
+
+  function resetCollision() {
+    collPlayer.x = 40; collPlayer.y = 60;
+  }
+
+  // ---- Démo 4 : gravité + saut ----
+  var gravPlayer = { x: 80, y: 100, vy: 0, w: 36, h: 36 };
+  var GRAVITY = 0.55;
+  var GROUND;
+  var platforms;
+
+  function initGrav() {
+    var c = document.getElementById('c4');
+    GROUND = c.height - 36;
+    platforms = [
+      { x: 180, y: c.height-80, w: 120, h: 12 },
+      { x: 380, y: c.height-120, w: 100, h: 12 },
+    ];
+  }
+  initGrav();
+
+  function jumpPlayer() {
+    if (gravPlayer.onGround) {
+      gravPlayer.vy = -13;
+      gravPlayer.onGround = false;
+    }
+  }
+
+  document.getElementById('c4').addEventListener('keydown', function(e) {
+    if (e.key === ' ' || e.key === 'ArrowUp') { jumpPlayer(); e.preventDefault(); }
+  });
+
+  function drawGrav() {
+    var c = document.getElementById('c4');
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.fillStyle = '#111827'; ctx.fillRect(0,0,c.width,c.height);
+
+    // Sol
+    ctx.fillStyle = '#374151';
+    ctx.fillRect(0, GROUND+gravPlayer.h, c.width, c.height);
+
+    // Plateformes
+    platforms.forEach(function(p) {
+      ctx.fillStyle = '#4B5563'; ctx.fillRect(p.x, p.y, p.w, p.h);
+    });
+
+    // Physique
+    gravPlayer.vy += GRAVITY;
+    gravPlayer.y  += gravPlayer.vy;
+    gravPlayer.onGround = false;
+
+    // Sol
+    if (gravPlayer.y + gravPlayer.h >= GROUND + gravPlayer.h) {
+      gravPlayer.y = GROUND; gravPlayer.vy = 0; gravPlayer.onGround = true;
+    }
+    // Plateformes
+    platforms.forEach(function(p) {
+      if (gravPlayer.x + gravPlayer.w > p.x && gravPlayer.x < p.x+p.w &&
+          gravPlayer.y + gravPlayer.h >= p.y && gravPlayer.y + gravPlayer.h <= p.y+16 &&
+          gravPlayer.vy >= 0) {
+        gravPlayer.y = p.y - gravPlayer.h; gravPlayer.vy = 0; gravPlayer.onGround = true;
+      }
+    });
+
+    // Joueur
+    ctx.fillStyle = '#C084FC';
+    ctx.fillRect(gravPlayer.x, gravPlayer.y, gravPlayer.w, gravPlayer.h);
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 13px Nunito,sans-serif';
+    ctx.fillText('P', gravPlayer.x+10, gravPlayer.y+23);
+
+    // HUD
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '12px Fira Code,monospace';
+    ctx.fillText('vy='+gravPlayer.vy.toFixed(1), 8, 20);
+    ctx.fillText(gravPlayer.onGround ? 'sol=true' : 'sol=false', 8, 36);
+    ctx.fillStyle = '#6B7280'; ctx.font = '11px Nunito, sans-serif';
+    ctx.fillText('Appuie sur espace ou clique "Sauter"', c.width/2-120, c.height-8);
+
+    requestAnimationFrame(drawGrav);
+  }
+  drawGrav();
+
+  // ---- Démo 5 : mini-jeu complet ----
+  var mgState = null;
+  var mgRaf   = null;
+  var mgKeys  = {};
+
+  document.getElementById('c5').addEventListener('keydown', function(e) { mgKeys[e.key] = true; e.preventDefault(); });
+  document.getElementById('c5').addEventListener('keyup',   function(e) { mgKeys[e.key] = false; });
+
+  function initMiniGame() {
+    var c = document.getElementById('c5');
+    mgState = {
+      player: { x: c.width/2-20, y: c.height-55, w: 40, h: 40, alive: true },
+      enemies: [],
+      score: 0,
+      timer: 0,
+      spawnRate: 80,
+      over: false,
+      started: false
+    };
+  }
+
+  function startMiniGame() {
+    if (mgRaf) cancelAnimationFrame(mgRaf);
+    initMiniGame();
+    mgState.started = true;
+    mgRaf = requestAnimationFrame(mgLoop);
+  }
+
+  function resetMiniGame() {
+    if (mgRaf) cancelAnimationFrame(mgRaf);
+    mgRaf = null;
+    var c = document.getElementById('c5');
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.fillStyle = '#111827'; ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '16px Nunito,sans-serif';
+    ctx.textAlign = 'center'; ctx.fillText('Clique sur "Démarrer" pour jouer !', c.width/2, c.height/2);
+    ctx.textAlign = 'left';
+  }
+
+  function mgLoop() {
+    var c = document.getElementById('c5');
+    var ctx = c.getContext('2d');
+    var s = mgState;
+
+    if (s.over) {
+      ctx.clearRect(0,0,c.width,c.height);
+      ctx.fillStyle = '#111827'; ctx.fillRect(0,0,c.width,c.height);
+      ctx.fillStyle = '#EF4444'; ctx.font = 'bold 32px Nunito,sans-serif';
+      ctx.textAlign = 'center'; ctx.fillText('GAME OVER', c.width/2, c.height/2-10);
+      ctx.fillStyle = '#9CA3AF'; ctx.font = '16px Nunito,sans-serif';
+      ctx.fillText('Score : '+s.score, c.width/2, c.height/2+24);
+      ctx.textAlign = 'left';
+      return;
+    }
+
+    // Update
+    if (mgKeys['ArrowLeft'])  s.player.x = Math.max(0, s.player.x-5);
+    if (mgKeys['ArrowRight']) s.player.x = Math.min(c.width-s.player.w, s.player.x+5);
+
+    // Spawn enemy
+    s.timer++;
+    s.score = Math.floor(s.timer/10);
+    if (s.timer % s.spawnRate === 0) {
+      var ew = 25 + Math.random()*25;
+      s.enemies.push({ x: Math.random()*(c.width-ew), y: -40, w: ew, h: ew, vy: 2+Math.random()*3 });
+      if (s.spawnRate > 30) s.spawnRate -= 1;
+    }
+
+    s.enemies.forEach(function(e) { e.y += e.vy; });
+    s.enemies = s.enemies.filter(function(e) { return e.y < c.height+50; });
+
+    // Collisions
+    s.enemies.forEach(function(e) {
+      if (checkAABB(s.player, e)) s.over = true;
+    });
+
+    // Draw
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.fillStyle = '#111827'; ctx.fillRect(0,0,c.width,c.height);
+
+    // Sol
+    ctx.fillStyle = '#1F2937';
+    ctx.fillRect(0, c.height-15, c.width, 15);
+
+    // Ennemis
+    s.enemies.forEach(function(e) {
+      ctx.fillStyle = '#EF4444';
+      ctx.fillRect(e.x, e.y, e.w, e.h);
+    });
+
+    // Joueur
+    ctx.fillStyle = '#22C55E';
+    ctx.fillRect(s.player.x, s.player.y, s.player.w, s.player.h);
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 14px Nunito,sans-serif';
+    ctx.fillText('P', s.player.x+13, s.player.y+26);
+
+    // HUD
+    ctx.fillStyle = '#FCD34D'; ctx.font = 'bold 14px Nunito,sans-serif';
+    ctx.fillText('Score : '+s.score, 10, 22);
+    ctx.fillStyle = '#9CA3AF'; ctx.font = '11px Nunito,sans-serif';
+    ctx.fillText('← → pour esquiver', c.width-130, 22);
+
+    mgRaf = requestAnimationFrame(mgLoop);
+  }
+
+  // Init canvas on load
+  window.addEventListener('DOMContentLoaded', function() {
+    drawBasic();
+    startBall();
+    resetMiniGame();
+  });
+
+  if (document.readyState !== 'loading') {
+    drawBasic(); startBall(); resetMiniGame();
+  }
+  </script>
+
+</body>
+</html>
