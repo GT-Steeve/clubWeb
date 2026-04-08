@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices — Patch-notes &amp; Versioning</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-pink   { background: #FDE8EF; color: #72243E; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #72243E; text-decoration: none; margin-bottom: 1.5rem; background: #FDE8EF; border: 0.5px solid #F4C0D1; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .back-link:hover { background: #F4C0D1; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-pink   { background: #F4C0D1; color: #72243E; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    /* File preview */
+    .file-block { background: #FAFAF8; border: 1px solid #D3D1C7; border-radius: 10px; overflow: hidden; margin: 0.8rem 0; }
+    .file-titlebar { background: #F1EFE8; padding: 7px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 0.5px solid #D3D1C7; }
+    .file-name { font-size: 0.8rem; font-weight: 700; color: #5F5E5A; font-family: 'Fira Code', monospace; }
+    .file-body { padding: 1rem 1.2rem; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.95; color: #2C2C2A; white-space: pre; overflow-x: auto; }
+    .fv  { color: #712B13; font-weight: 700; }
+    .fh  { color: #085041; font-weight: 700; }
+    .fc  { color: #3B6D11; }
+    .fb  { color: #A32D2D; }
+    .fd  { color: #633806; }
+
+    /* QCM */
+    .qcm-block { margin-bottom: 1.6rem; padding-bottom: 1.4rem; border-bottom: 0.5px solid #F1EFE8; }
+    .qcm-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .qcm-question { font-size: 0.96rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.7rem; }
+    .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+    .choice-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 8px; padding: 6px 14px; font-size: 0.84rem; font-family: 'Fira Code', monospace; cursor: pointer; transition: background 0.12s; }
+    .choice-btn:hover { background: #D3D1C7; }
+    .choice-btn.correct { background: #D0F4EA; color: #085041; border-color: #5DCAA5; }
+    .choice-btn.wrong   { background: #FCEBEB; color: #791F1F; border-color: #F09595; }
+    .choice-btn:disabled { cursor: default; }
+    .q-feedback { font-size: 0.88rem; min-height: 1.3em; font-weight: 700; margin-top: 6px; }
+    .q-feedback.ok { color: #0F6E56; }
+    .q-feedback.ko { color: #A32D2D; }
+
+    /* Progress */
+    .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1rem 0 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: #F4C0D1; border-radius: 10px; transition: width 0.4s; width: 0%; }
+    .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+    .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+    .chip-ok { background: #D0F4EA; color: #085041; }
+    .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+    /* Drag sort for versions */
+    .ver-sort { display: flex; flex-direction: column; gap: 7px; margin: 0.8rem 0; }
+    .ver-item { display: flex; align-items: center; gap: 10px; background: #F5F4F0; border: 0.5px solid #D3D1C7; border-radius: 9px; padding: 9px 14px; cursor: grab; user-select: none; font-family: 'Fira Code', monospace; font-size: 0.88rem; transition: background 0.12s; }
+    .ver-item:hover { background: #EAE8E0; }
+    .ver-item.dragging { opacity: 0.4; }
+    .ver-item.correct-pos { background: #E1F5EE; border-color: #5DCAA5; }
+    .ver-item.wrong-pos   { background: #FCEBEB; border-color: #F09595; }
+    .ver-handle { color: #B4B2A9; font-size: 1.1rem; cursor: grab; }
+    .ver-num { font-weight: 700; color: #712B13; }
+    .ver-desc { color: #5F5E5A; font-size: 0.82rem; }
+
+    /* Patch-note writer */
+    .pn-writer { display: flex; flex-direction: column; gap: 8px; margin: 0.8rem 0; }
+    .pn-line { display: flex; align-items: center; gap: 8px; }
+    .pn-symbol {
+      font-family: 'Fira Code', monospace; font-weight: 800; font-size: 1rem;
+      width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .sym-add  { background: #EAF3DE; color: #3B6D11; }
+    .sym-fix  { background: #FCEBEB; color: #791F1F; }
+    .sym-mod  { background: #FAEEDA; color: #633806; }
+    .pn-select {
+      font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.87rem;
+      border: 0.5px solid #D3D1C7; border-radius: 7px; padding: 6px 10px;
+      background: #fff; color: #2C2C2A; cursor: pointer; flex: 1;
+      appearance: none; -webkit-appearance: none;
+    }
+    .pn-select:focus { outline: none; border-color: #F4C0D1; }
+    .pn-select.correct { border-color: #5DCAA5; background: #E1F5EE; color: #085041; }
+    .pn-select.wrong   { border-color: #F09595; background: #FCEBEB; color: #791F1F; }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 0.8rem; flex-wrap: wrap; }
+    .action-btn { border: 0.5px solid #B4B2A9; background: #ffffff; color: #2C2C2A; border-radius: 8px; padding: 7px 16px; font-size: 0.88rem; font-family: 'Nunito', sans-serif; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+    .action-btn:hover { background: #F1EFE8; }
+    .action-btn.primary { background: #FDE8EF; color: #72243E; border-color: #F4C0D1; }
+    .action-btn.primary:hover { background: #F4C0D1; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #FDE8EF; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #72243E; line-height: 1.5; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #712B13; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    @media (max-width: 520px) { .hero h1 { font-size: 1.6rem; } }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="cours-patchnote.html">← Retour au cours Patch-notes</a>
+
+  <div class="hero">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">📋</div>
+    <h1>Exercices — Patch-notes<br>&amp; Versioning</h1>
+    <p>Mets en pratique la documentation de tes versions !</p>
+    <div class="badge-row">
+      <span class="badge b-pink">3 exercices</span>
+      <span class="badge b-purple">Interactif</span>
+    </div>
+  </div>
+
+  <!-- EX 1 : QCM versioning -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-pink">1</div>Exercice 1 — Comprendre les numéros de version</div>
+    <p class="desc">Pour chaque question, choisis la bonne réponse sur le versioning sémantique.</p>
+
+    <div class="qcm-block">
+      <div class="qcm-question">Tu ajoutes une toute petite modification à ton projet (correction d'une faute de frappe). Quel numéro de version s'incrémente ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'v1',false)">Le premier chiffre (majeur)</button>
+        <button class="choice-btn" onclick="qcm(this,'v1',false)">Le deuxième chiffre (mineur)</button>
+        <button class="choice-btn" onclick="qcm(this,'v1',true)">Le troisième chiffre (patch)</button>
+      </div>
+      <div class="q-feedback" id="fb-v1"></div>
+    </div>
+
+    <div class="qcm-block">
+      <div class="qcm-question">Tu ajoutes une <strong>nouvelle page entière</strong> à ton site. Quel numéro de version s'incrémente ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'v2',false)">Le premier chiffre (majeur)</button>
+        <button class="choice-btn" onclick="qcm(this,'v2',true)">Le deuxième chiffre (mineur)</button>
+        <button class="choice-btn" onclick="qcm(this,'v2',false)">Le troisième chiffre (patch)</button>
+      </div>
+      <div class="q-feedback" id="fb-v2"></div>
+    </div>
+
+    <div class="qcm-block">
+      <div class="qcm-question">Après <code>v0.00.9</code>, quelle est la version suivante si tu ajoutes une nouvelle fonctionnalité ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'v3',false)">v0.00.10</button>
+        <button class="choice-btn" onclick="qcm(this,'v3',true)">v0.01.0</button>
+        <button class="choice-btn" onclick="qcm(this,'v3',false)">v0.10.0</button>
+        <button class="choice-btn" onclick="qcm(this,'v3',false)">v1.00.0</button>
+      </div>
+      <div class="q-feedback" id="fb-v3"></div>
+    </div>
+
+    <div class="qcm-block">
+      <div class="qcm-question">Ton projet est terminé et tu es prêt à le présenter au public. Quel est le bon numéro de version majeure ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'v4',false)">v0.09.9</button>
+        <button class="choice-btn" onclick="qcm(this,'v4',true)">v1.00.0</button>
+        <button class="choice-btn" onclick="qcm(this,'v4',false)">v0.10.0</button>
+        <button class="choice-btn" onclick="qcm(this,'v4',false)">v2.00.0</button>
+      </div>
+      <div class="q-feedback" id="fb-v4"></div>
+    </div>
+
+    <div class="qcm-block" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
+      <div class="qcm-question">Dans un patch-note, quel symbole utilise-t-on pour indiquer la <strong>correction d'un bug</strong> ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'v5',false)">+</button>
+        <button class="choice-btn" onclick="qcm(this,'v5',true)">*</button>
+        <button class="choice-btn" onclick="qcm(this,'v5',false)">~</button>
+        <button class="choice-btn" onclick="qcm(this,'v5',false)">-</button>
+      </div>
+      <div class="q-feedback" id="fb-v5"></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="score-row" id="score-qcm"></div>
+  </div>
+
+  <!-- EX 2 : Ordonner les versions -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">2</div>Exercice 2 — Remets les versions dans l'ordre chronologique</div>
+    <p class="desc">Ces versions de patch-note sont dans le désordre ! Glisse-les pour les remettre de la plus ancienne (<strong>en haut</strong>) à la plus récente (<strong>en bas</strong>).</p>
+
+    <div class="ver-sort" id="ver-sort-container"></div>
+
+    <div class="btn-row">
+      <button class="action-btn primary" onclick="checkVerOrder()">Vérifier l'ordre</button>
+      <button class="action-btn" onclick="resetVerOrder()">Mélanger à nouveau</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-order"></div></div>
+    <div class="score-row" id="score-order"></div>
+
+    <div class="tip tip-purple"><span class="tip-i">💡</span><span>Pour ordonner les versions : compare d'abord le premier chiffre, puis le deuxième, puis le troisième. <code>v0.02.0</code> vient avant <code>v1.00.0</code> car <strong>0 &lt; 1</strong>.</span></div>
+  </div>
+
+  <!-- EX 3 : Choisir le bon symbole -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">3</div>Exercice 3 — Associe chaque changement au bon symbole</div>
+    <p class="desc">Voici des changements qui auraient pu être dans un patch-note. Pour chaque ligne, choisis si c'est un ajout <code>+</code>, une correction <code>*</code>, ou une modification <code>~</code>.</p>
+
+    <div id="symbol-container"></div>
+
+    <div class="btn-row">
+      <button class="action-btn primary" onclick="checkSymbols()">Vérifier</button>
+      <button class="action-btn" onclick="resetSymbols()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-sym"></div></div>
+    <div class="score-row" id="score-sym"></div>
+  </div>
+
+  <div class="footer-note">
+    🎉 Bravo ! Tu sais maintenant documenter tes versions.<br>
+    <a href="cours-readme.html" style="color:#72243E;font-weight:700;">Passe au cours README →</a>
+  </div>
+
+  <script>
+    var okMsgs = ['Excellent !', 'Parfait !', 'Bravo !', 'Très bien !', 'Correct !'];
+    function rnd(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+    /* ===== EX 1 : QCM ===== */
+    var qcmDone = {}, qcmScore = 0, qcmTotal = 5;
+    function qcm(btn, qid, correct) {
+      if (qcmDone[qid]) return;
+      qcmDone[qid] = true;
+      var fb = document.getElementById('fb-' + qid);
+      btn.classList.add(correct ? 'correct' : 'wrong');
+      btn.closest('.choices').querySelectorAll('.choice-btn').forEach(function(b) { b.disabled = true; });
+      if (correct) { fb.className = 'q-feedback ok'; fb.textContent = rnd(okMsgs) + ' ✓'; qcmScore++; }
+      else { fb.className = 'q-feedback ko'; fb.textContent = 'Pas tout à fait, relis le cours !'; }
+      var done = Object.keys(qcmDone).length;
+      document.getElementById('prog-qcm').style.width = (done / qcmTotal * 100) + '%';
+      if (done === qcmTotal) {
+        var row = document.getElementById('score-qcm');
+        row.innerHTML = '<span class="chip chip-ok">' + qcmScore + ' / ' + qcmTotal + ' correctes</span>';
+        if (qcmTotal - qcmScore > 0) row.innerHTML += '<span class="chip chip-ko">' + (qcmTotal-qcmScore) + ' erreur(s)</span>';
+      }
+    }
+
+    /* ===== EX 2 : Ordonner les versions (drag and drop simplifié via clic) ===== */
+    var versions = [
+      { ver: 'v0.01.1', desc: 'Correction du menu sur mobile', order: 3 },
+      { ver: 'v0.00.1', desc: 'Début du projet, structure de base', order: 1 },
+      { ver: 'v1.00.0', desc: 'Mise en ligne officielle !', order: 6 },
+      { ver: 'v0.02.0', desc: 'Ajout du formulaire de contact', order: 5 },
+      { ver: 'v0.01.0', desc: 'Nouvelle section : galerie de projets', order: 2 },
+      { ver: 'v0.00.2', desc: 'Ajout de la navigation et du header', order: 4 },
+    ];
+
+    var dragSrc = null;
+
+    function buildVerOrder() {
+      var container = document.getElementById('ver-sort-container');
+      // Shuffle
+      var shuffled = versions.slice().sort(function() { return Math.random() - 0.5; });
+      container.innerHTML = '';
+      shuffled.forEach(function(v) {
+        var item = document.createElement('div');
+        item.className = 'ver-item';
+        item.draggable = true;
+        item.dataset.order = v.order;
+        item.innerHTML = '<span class="ver-handle">⠿</span><span class="ver-num">' + v.ver + '</span><span class="ver-desc">— ' + v.desc + '</span>';
+        item.addEventListener('dragstart', function(e) { dragSrc = this; this.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+        item.addEventListener('dragend', function() { this.classList.remove('dragging'); });
+        item.addEventListener('dragover', function(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+        item.addEventListener('drop', function(e) {
+          e.preventDefault();
+          if (dragSrc !== this) {
+            var parent = this.parentNode;
+            var items = Array.from(parent.children);
+            var srcIdx = items.indexOf(dragSrc);
+            var dstIdx = items.indexOf(this);
+            if (srcIdx < dstIdx) parent.insertBefore(dragSrc, this.nextSibling);
+            else parent.insertBefore(dragSrc, this);
+          }
+        });
+        container.appendChild(item);
+      });
+      document.getElementById('prog-order').style.width = '0%';
+      document.getElementById('score-order').innerHTML = '';
+      document.querySelectorAll('.ver-item').forEach(function(el) { el.classList.remove('correct-pos','wrong-pos'); });
+    }
+
+    function checkVerOrder() {
+      var items = document.querySelectorAll('#ver-sort-container .ver-item');
+      var correct = 0;
+      items.forEach(function(item, i) {
+        item.classList.remove('correct-pos','wrong-pos');
+        var expectedOrder = i + 1;
+        if (parseInt(item.dataset.order) === expectedOrder) { item.classList.add('correct-pos'); correct++; }
+        else item.classList.add('wrong-pos');
+      });
+      document.getElementById('prog-order').style.width = (correct / versions.length * 100) + '%';
+      var row = document.getElementById('score-order');
+      if (correct === versions.length) {
+        row.innerHTML = '<span class="chip chip-ok">' + rnd(okMsgs) + ' Toutes les versions dans le bon ordre ! 🎉</span>';
+      } else {
+        row.innerHTML = '<span class="chip chip-ok">' + correct + ' / ' + versions.length + ' dans le bon ordre</span><span class="chip chip-ko">' + (versions.length-correct) + ' à corriger</span>';
+      }
+    }
+
+    function resetVerOrder() { buildVerOrder(); }
+
+    /* ===== EX 3 : Symboles ===== */
+    var symbolData = [
+      { text: 'Ajout de la page À propos avec une biographie', correct: '+' },
+      { text: 'Correction du bug : les images ne s\'affichent pas sur Firefox', correct: '*' },
+      { text: 'Mise à jour des couleurs du thème (bleu → violet)', correct: '~' },
+      { text: 'Ajout du formulaire de contact avec envoi d\'email', correct: '+' },
+      { text: 'Correction : le titre déborde sur petits écrans', correct: '*' },
+      { text: 'Modification du footer : ajout des liens réseaux sociaux', correct: '~' },
+      { text: 'Ajout de la section galerie de projets', correct: '+' },
+      { text: 'Correction : faute de frappe dans la page d\'accueil', correct: '*' },
+    ];
+    var symDone = {}, symScore = 0;
+
+    function buildSymbols() {
+      var container = document.getElementById('symbol-container');
+      container.innerHTML = '';
+      symDone = {}; symScore = 0;
+      document.getElementById('prog-sym').style.width = '0%';
+      document.getElementById('score-sym').innerHTML = '';
+
+      symbolData.forEach(function(d, idx) {
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:8px;';
+
+        var symBox = document.createElement('div');
+        symBox.style.cssText = 'font-family:"Fira Code",monospace;font-weight:800;font-size:1rem;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#F1EFE8;color:#888780;border:0.5px dashed #B4B2A9;';
+        symBox.textContent = '?';
+        symBox.id = 'sym-icon-' + idx;
+
+        var sel = document.createElement('select');
+        sel.className = 'pn-select';
+        sel.id = 'sym-sel-' + idx;
+        sel.dataset.correct = d.correct;
+        sel.dataset.idx = idx;
+        sel.innerHTML = '<option value="">— Choisis le symbole —</option>'
+          + '<option value="+">+ Ajout d\'une nouvelle chose</option>'
+          + '<option value="*">* Correction d\'un bug</option>'
+          + '<option value="~">~ Modification d\'une chose existante</option>'
+          + '<option value="-">- Suppression d\'une chose</option>';
+        sel.addEventListener('change', function() {
+          var icon = document.getElementById('sym-icon-' + this.dataset.idx);
+          var bg = { '+': '#EAF3DE', '*': '#FCEBEB', '~': '#FAEEDA', '-': '#F1EFE8' };
+          var cl = { '+': '#3B6D11', '*': '#791F1F', '~': '#633806', '-': '#888780' };
+          if (this.value) { icon.style.background = bg[this.value]; icon.style.color = cl[this.value]; icon.style.border = 'none'; icon.textContent = this.value; }
+          else { icon.style.background = '#F1EFE8'; icon.style.color = '#888780'; icon.textContent = '?'; }
+        });
+
+        var label = document.createElement('div');
+        label.style.cssText = 'font-size:0.87rem;color:#2C2C2A;flex:1;line-height:1.4;';
+        label.textContent = d.text;
+
+        row.appendChild(symBox);
+        row.appendChild(sel);
+        row.appendChild(label);
+        container.appendChild(row);
+      });
+    }
+
+    function checkSymbols() {
+      var total = symbolData.length;
+      var correct = 0;
+      symbolData.forEach(function(d, idx) {
+        var sel = document.getElementById('sym-sel-' + idx);
+        sel.disabled = true;
+        if (sel.value === d.correct) {
+          sel.className = 'pn-select correct'; correct++;
+        } else {
+          sel.className = 'pn-select wrong';
+        }
+      });
+      symDone = { done: true }; symScore = correct;
+      document.getElementById('prog-sym').style.width = (correct / total * 100) + '%';
+      var row = document.getElementById('score-sym');
+      row.innerHTML = '<span class="chip chip-ok">' + correct + ' / ' + total + ' correctes</span>';
+      if (total - correct > 0) row.innerHTML += '<span class="chip chip-ko">' + (total-correct) + ' erreur(s)</span>';
+    }
+
+    function resetSymbols() { buildSymbols(); }
+
+    buildVerOrder();
+    buildSymbols();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices — README.md</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-green  { background: #EAF3DE; color: #3B6D11; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #3B6D11; text-decoration: none; margin-bottom: 1.5rem; background: #EAF3DE; border: 0.5px solid #97C459; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .back-link:hover { background: #C0DD97; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-amber  { background: #FAC775; color: #633806; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    /* QCM */
+    .qcm-block { margin-bottom: 1.6rem; padding-bottom: 1.4rem; border-bottom: 0.5px solid #F1EFE8; }
+    .qcm-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .qcm-question { font-size: 0.96rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.7rem; }
+    .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+    .choice-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 8px; padding: 6px 14px; font-size: 0.84rem; font-family: 'Fira Code', monospace; cursor: pointer; transition: background 0.12s; }
+    .choice-btn:hover { background: #D3D1C7; }
+    .choice-btn.correct { background: #D0F4EA; color: #085041; border-color: #5DCAA5; }
+    .choice-btn.wrong   { background: #FCEBEB; color: #791F1F; border-color: #F09595; }
+    .choice-btn:disabled { cursor: default; }
+    .q-feedback { font-size: 0.88rem; min-height: 1.3em; font-weight: 700; margin-top: 6px; }
+    .q-feedback.ok { color: #0F6E56; }
+    .q-feedback.ko { color: #A32D2D; }
+
+    /* Markdown source preview */
+    .md-src-block { background: #FAFAF8; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 0.7rem 1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.9; margin: 0.6rem 0; color: #2C2C2A; white-space: pre; overflow-x: auto; }
+    .ms-h  { color: #0C447C; font-weight: 700; }
+    .ms-b  { color: #712B13; }
+    .ms-c  { color: #3B6D11; }
+    .ms-l  { color: #3C3489; }
+    .ms-li { color: #085041; }
+
+    /* Drag sort sections */
+    .sec-sort { display: flex; flex-direction: column; gap: 7px; margin: 0.8rem 0; }
+    .sec-item { display: flex; align-items: center; gap: 10px; background: #F5F4F0; border: 0.5px solid #D3D1C7; border-radius: 9px; padding: 10px 14px; cursor: grab; user-select: none; font-size: 0.88rem; transition: background 0.12s; }
+    .sec-item:hover { background: #EAE8E0; }
+    .sec-item.dragging { opacity: 0.35; }
+    .sec-item.correct-pos { background: #E1F5EE; border-color: #5DCAA5; }
+    .sec-item.wrong-pos   { background: #FCEBEB; border-color: #F09595; }
+    .sec-handle { color: #B4B2A9; font-size: 1.1rem; cursor: grab; flex-shrink: 0; }
+    .sec-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .sec-title { font-weight: 700; color: #2C2C2A; }
+    .sec-desc { font-size: 0.8rem; color: #888780; margin-top: 1px; }
+
+    /* Progress */
+    .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1rem 0 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: #C0DD97; border-radius: 10px; transition: width 0.4s; width: 0%; }
+    .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+    .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+    .chip-ok { background: #D0F4EA; color: #085041; }
+    .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 0.8rem; flex-wrap: wrap; }
+    .action-btn { border: 0.5px solid #B4B2A9; background: #ffffff; color: #2C2C2A; border-radius: 8px; padding: 7px 16px; font-size: 0.88rem; font-family: 'Nunito', sans-serif; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+    .action-btn:hover { background: #F1EFE8; }
+    .action-btn.primary { background: #EAF3DE; color: #3B6D11; border-color: #97C459; }
+    .action-btn.primary:hover { background: #C0DD97; }
+
+    /* Match pairs */
+    .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0.8rem 0; }
+    .match-col-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: #888780; margin-bottom: 8px; text-align: center; }
+    .match-item { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 8px; padding: 8px 12px; font-size: 0.86rem; text-align: center; cursor: pointer; transition: all 0.12s; }
+    .match-item:hover { background: #D3D1C7; }
+    .match-item.selected-a { background: #EEEDFE; border-color: #7F77DD; color: #26215C; font-weight: 700; }
+    .match-item.selected-b { background: #FAEEDA; border-color: #FAC775; color: #633806; font-weight: 700; }
+    .match-item.matched-ok { background: #D0F4EA; border-color: #5DCAA5; color: #085041; font-weight: 700; cursor: default; }
+    .match-item.matched-ko { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+    .match-item.md-code { font-family: 'Fira Code', monospace; font-size: 0.84rem; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #EAF3DE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #3B6D11; line-height: 1.5; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #EAF3DE; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #3B6D11; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    @media (max-width: 520px) { .hero h1 { font-size: 1.6rem; } .match-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="cours-readme.html">← Retour au cours README</a>
+
+  <div class="hero">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">📄</div>
+    <h1>Exercices — README.md</h1>
+    <p>Mets en pratique la syntaxe Markdown et la structure d'un bon README !</p>
+    <div class="badge-row">
+      <span class="badge b-green">3 exercices</span>
+      <span class="badge b-purple">Interactif</span>
+    </div>
+  </div>
+
+  <!-- EX 1 : QCM syntaxe Markdown -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">1</div>Exercice 1 — Reconnais la syntaxe Markdown</div>
+    <p class="desc">Pour chaque extrait de code Markdown, identifie ce qu'il produit comme résultat.</p>
+
+    <div class="qcm-block">
+      <div class="md-src-block"><span class="ms-h">## Technologies utilisées</span></div>
+      <div class="qcm-question">Que produit cette ligne dans le README affiché sur GitHub ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'m1',false)">Un paragraphe en gras</button>
+        <button class="choice-btn" onclick="qcm(this,'m1',true)">Un sous-titre de niveau 2</button>
+        <button class="choice-btn" onclick="qcm(this,'m1',false)">Un commentaire invisible</button>
+        <button class="choice-btn" onclick="qcm(this,'m1',false)">Une liste à puces</button>
+      </div>
+      <div class="q-feedback" id="fb-m1"></div>
+    </div>
+
+    <div class="qcm-block">
+      <div class="md-src-block"><span class="ms-li">- HTML5</span>
+<span class="ms-li">- CSS3</span>
+<span class="ms-li">- JavaScript</span></div>
+      <div class="qcm-question">Que produit cet extrait Markdown ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'m2',false)">Un tableau à 3 colonnes</button>
+        <button class="choice-btn" onclick="qcm(this,'m2',false)">Du texte en italique</button>
+        <button class="choice-btn" onclick="qcm(this,'m2',true)">Une liste à puces avec 3 éléments</button>
+        <button class="choice-btn" onclick="qcm(this,'m2',false)">Un titre avec 3 #</button>
+      </div>
+      <div class="q-feedback" id="fb-m2"></div>
+    </div>
+
+    <div class="qcm-block">
+      <div class="md-src-block"><span class="ms-l">[Voir le site](https://alice.github.io/portfolio)</span></div>
+      <div class="qcm-question">Que produit cet extrait Markdown ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'m3',false)">Une image</button>
+        <button class="choice-btn" onclick="qcm(this,'m3',true)">Un lien cliquable avec le texte "Voir le site"</button>
+        <button class="choice-btn" onclick="qcm(this,'m3',false)">Un titre en gras</button>
+        <button class="choice-btn" onclick="qcm(this,'m3',false)">Du code informatique</button>
+      </div>
+      <div class="q-feedback" id="fb-m3"></div>
+    </div>
+
+    <div class="qcm-block">
+      <div class="md-src-block"><span class="ms-b">**Mon super projet**</span></div>
+      <div class="qcm-question">Comment s'affiche <code>**Mon super projet**</code> une fois rendu ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'m4',false)">*Mon super projet*</button>
+        <button class="choice-btn" onclick="qcm(this,'m4',false)"><em>Mon super projet</em> (italique)</button>
+        <button class="choice-btn" onclick="qcm(this,'m4',true)"><strong>Mon super projet</strong> (gras)</button>
+        <button class="choice-btn" onclick="qcm(this,'m4',false)">Un titre principal</button>
+      </div>
+      <div class="q-feedback" id="fb-m4"></div>
+    </div>
+
+    <div class="qcm-block" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
+      <div class="qcm-question">Quel est le bon nom de fichier pour que GitHub affiche automatiquement la présentation du projet ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'m5',false)">readme.md</button>
+        <button class="choice-btn" onclick="qcm(this,'m5',false)">README.txt</button>
+        <button class="choice-btn" onclick="qcm(this,'m5',true)">README.md</button>
+        <button class="choice-btn" onclick="qcm(this,'m5',false)">Readme.MD</button>
+      </div>
+      <div class="q-feedback" id="fb-m5"></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="score-row" id="score-qcm"></div>
+  </div>
+
+  <!-- EX 2 : Associer syntaxe Markdown → résultat -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">2</div>Exercice 2 — Associe la syntaxe à son résultat</div>
+    <p class="desc">Clique sur un élément de syntaxe Markdown à gauche, puis sur le résultat correspondant à droite.</p>
+
+    <div class="match-grid" id="match-container"></div>
+
+    <div class="btn-row">
+      <button class="action-btn primary" onclick="checkMatch()">Vérifier</button>
+      <button class="action-btn" onclick="resetMatch()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-match"></div></div>
+    <div class="score-row" id="score-match"></div>
+  </div>
+
+  <!-- EX 3 : Remettre les sections dans l'ordre -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">3</div>Exercice 3 — Remets les sections du README dans le bon ordre</div>
+    <p class="desc">Un README bien structuré suit toujours le même ordre. Glisse ces sections pour les ordonner correctement, du début à la fin.</p>
+
+    <div class="sec-sort" id="sec-sort-container"></div>
+
+    <div class="btn-row">
+      <button class="action-btn primary" onclick="checkSecOrder()">Vérifier l'ordre</button>
+      <button class="action-btn" onclick="resetSecOrder()">Mélanger à nouveau</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-sec"></div></div>
+    <div class="score-row" id="score-sec"></div>
+
+    <div class="tip"><span class="tip-i">💡</span><span>L'ordre idéal : d'abord ce qui est le plus important pour comprendre immédiatement le projet (titre, description, lien), puis les détails techniques (technologies, fonctionnalités, structure), et enfin les infos secondaires (auteur, licence).</span></div>
+  </div>
+
+  <div class="footer-note">
+    🎉 Bravo ! Tu sais créer un README professionnel.<br>
+    <a href="cours-github-pages.html" style="color:#3B6D11;font-weight:700;">Passe au cours GitHub Pages → héberge ton site gratuitement !</a>
+  </div>
+
+  <script>
+    var okMsgs = ['Excellent !', 'Parfait !', 'Bravo !', 'Très bien !', 'Correct !'];
+    function rnd(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+    /* ===== EX 1 QCM ===== */
+    var qcmDone = {}, qcmScore = 0, qcmTotal = 5;
+    function qcm(btn, qid, correct) {
+      if (qcmDone[qid]) return;
+      qcmDone[qid] = true;
+      btn.classList.add(correct ? 'correct' : 'wrong');
+      btn.closest('.choices').querySelectorAll('.choice-btn').forEach(function(b) { b.disabled = true; });
+      var fb = document.getElementById('fb-' + qid);
+      if (correct) { fb.className = 'q-feedback ok'; fb.textContent = rnd(okMsgs) + ' ✓'; qcmScore++; }
+      else { fb.className = 'q-feedback ko'; fb.textContent = 'Pas tout à fait, relis le cours !'; }
+      var done = Object.keys(qcmDone).length;
+      document.getElementById('prog-qcm').style.width = (done/qcmTotal*100)+'%';
+      if (done === qcmTotal) {
+        var row = document.getElementById('score-qcm');
+        row.innerHTML = '<span class="chip chip-ok">'+qcmScore+' / '+qcmTotal+' correctes</span>';
+        if (qcmTotal-qcmScore > 0) row.innerHTML += '<span class="chip chip-ko">'+(qcmTotal-qcmScore)+' erreur(s)</span>';
+      }
+    }
+
+    /* ===== EX 2 : Associations Markdown ===== */
+    var matchData = [
+      { syntax: '# Titre',         result: 'Titre principal H1' },
+      { syntax: '## Sous-titre',   result: 'Sous-titre H2' },
+      { syntax: '**gras**',        result: 'Texte en gras' },
+      { syntax: '*italique*',      result: 'Texte en italique' },
+      { syntax: '- élément',       result: 'Puce de liste' },
+      { syntax: '[texte](url)',     result: 'Lien cliquable' },
+    ];
+    var matchSelected = null, matchSide = null, matchDone = {}, matchScore = 0;
+
+    function buildMatch() {
+      var container = document.getElementById('match-container');
+      var leftCol = '<div><div class="match-col-title">Syntaxe Markdown</div>';
+      var shuffledRight = matchData.slice().sort(function() { return Math.random()-0.5; });
+      var rightCol = '<div><div class="match-col-title">Résultat affiché</div>';
+      matchData.forEach(function(d, i) {
+        leftCol += '<div class="match-item md-code" id="ma-'+i+'" onclick="selectMatch(this,\'a\','+i+')" style="margin-bottom:6px;">'+d.syntax+'</div>';
+      });
+      shuffledRight.forEach(function(d, i) {
+        rightCol += '<div class="match-item" id="mb-'+i+'" onclick="selectMatch(this,\'b\','+i+')" data-result="'+d.result+'" style="margin-bottom:6px;">'+d.result+'</div>';
+      });
+      leftCol += '</div>'; rightCol += '</div>';
+      container.innerHTML = leftCol + rightCol;
+      matchSelected = null; matchSide = null; matchDone = {}; matchScore = 0;
+      document.getElementById('prog-match').style.width = '0%';
+      document.getElementById('score-match').innerHTML = '';
+    }
+
+    function selectMatch(el, side, idx) {
+      if (el.classList.contains('matched-ok')) return;
+      if (side === 'a') {
+        document.querySelectorAll('.match-item').forEach(function(e) { if (!e.classList.contains('matched-ok')) e.classList.remove('selected-a','selected-b'); });
+        el.classList.add('selected-a'); matchSelected = idx; matchSide = 'a';
+      } else if (matchSide === 'a' && matchSelected !== null) {
+        var expected = matchData[matchSelected].result;
+        var clicked = el.getAttribute('data-result');
+        var aEl = document.getElementById('ma-' + matchSelected);
+        if (expected === clicked) {
+          aEl.classList.remove('selected-a'); aEl.classList.add('matched-ok');
+          el.classList.add('matched-ok'); matchDone[matchSelected] = true; matchScore++;
+          updateMatchScore();
+        } else {
+          aEl.classList.add('matched-ko'); el.classList.add('matched-ko');
+          setTimeout(function() { aEl.classList.remove('selected-a','matched-ko'); el.classList.remove('selected-b','matched-ko'); }, 700);
+        }
+        matchSelected = null; matchSide = null;
+      }
+    }
+
+    function updateMatchScore() {
+      var done = Object.keys(matchDone).length;
+      document.getElementById('prog-match').style.width = (done/matchData.length*100)+'%';
+      if (done === matchData.length) {
+        document.getElementById('score-match').innerHTML = '<span class="chip chip-ok">'+rnd(okMsgs)+' Toutes les paires trouvées ! 🎉</span>';
+      }
+    }
+
+    function checkMatch() { updateMatchScore(); }
+    function resetMatch() { buildMatch(); }
+
+    /* ===== EX 3 : Sections du README ===== */
+    var sections = [
+      { icon: '🎨', title: '# Titre du projet', desc: 'Le nom du projet + courte description', order: 1 },
+      { icon: '🌐', title: 'Lien du site', desc: 'Le lien GitHub Pages en haut, très visible', order: 2 },
+      { icon: '📝', title: '## Description', desc: 'Explication détaillée du projet', order: 3 },
+      { icon: '🛠️', title: '## Technologies', desc: 'Liste des langages et outils utilisés', order: 4 },
+      { icon: '🚀', title: '## Fonctionnalités', desc: 'Ce que le projet peut faire', order: 5 },
+      { icon: '📁', title: '## Structure du projet', desc: "L'arborescence des dossiers", order: 6 },
+      { icon: '📋', title: '## Patch-notes', desc: 'Lien vers le fichier patch-note.txt', order: 7 },
+      { icon: '👤', title: '## Auteur', desc: 'Ton prénom et le contexte du projet', order: 8 },
+    ];
+    var dragSrc = null;
+
+    function buildSecOrder() {
+      var container = document.getElementById('sec-sort-container');
+      var shuffled = sections.slice().sort(function() { return Math.random()-0.5; });
+      container.innerHTML = '';
+      shuffled.forEach(function(s) {
+        var item = document.createElement('div');
+        item.className = 'sec-item';
+        item.draggable = true;
+        item.dataset.order = s.order;
+        item.innerHTML = '<span class="sec-handle">⠿</span><span class="sec-icon">'+s.icon+'</span><div><div class="sec-title">'+s.title+'</div><div class="sec-desc">'+s.desc+'</div></div>';
+        item.addEventListener('dragstart', function(e) { dragSrc = this; this.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+        item.addEventListener('dragend', function() { this.classList.remove('dragging'); });
+        item.addEventListener('dragover', function(e) { e.preventDefault(); });
+        item.addEventListener('drop', function(e) {
+          e.preventDefault();
+          if (dragSrc !== this) {
+            var p = this.parentNode;
+            var items = Array.from(p.children);
+            var si = items.indexOf(dragSrc), di = items.indexOf(this);
+            if (si < di) p.insertBefore(dragSrc, this.nextSibling);
+            else p.insertBefore(dragSrc, this);
+          }
+        });
+        container.appendChild(item);
+      });
+      document.getElementById('prog-sec').style.width = '0%';
+      document.getElementById('score-sec').innerHTML = '';
+    }
+
+    function checkSecOrder() {
+      var items = document.querySelectorAll('#sec-sort-container .sec-item');
+      var correct = 0;
+      items.forEach(function(item, i) {
+        item.classList.remove('correct-pos','wrong-pos');
+        if (parseInt(item.dataset.order) === i+1) { item.classList.add('correct-pos'); correct++; }
+        else item.classList.add('wrong-pos');
+      });
+      document.getElementById('prog-sec').style.width = (correct/sections.length*100)+'%';
+      var row = document.getElementById('score-sec');
+      if (correct === sections.length) row.innerHTML = '<span class="chip chip-ok">'+rnd(okMsgs)+' Ordre parfait ! 🎉</span>';
+      else row.innerHTML = '<span class="chip chip-ok">'+correct+' / '+sections.length+' en bonne position</span><span class="chip chip-ko">'+(sections.length-correct)+' à corriger</span>';
+    }
+
+    function resetSecOrder() { buildSecOrder(); }
+
+    buildMatch();
+    buildSecOrder();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le README.md — Présenter son projet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-green  { background: #EAF3DE; color: #3B6D11; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+
+    .nav-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .nav-link { display: inline-flex; align-items: center; gap: 5px; font-size: 0.85rem; font-weight: 700; text-decoration: none; border-radius: 8px; padding: 6px 13px; border: 0.5px solid; transition: background 0.15s; }
+    .nav-patch  { color: #72243E; background: #FDE8EF; border-color: #F4C0D1; }
+    .nav-patch:hover { background: #F4C0D1; }
+    .nav-pages  { color: #0C447C; background: #E6F1FB; border-color: #85B7EB; }
+    .nav-pages:hover { background: #B5D4F4; }
+    .nav-ex     { color: #3B6D11; background: #EAF3DE; border-color: #97C459; }
+    .nav-ex:hover { background: #C0DD97; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .teal   { background: #9FE1CB; color: #085041; }
+    .purple { background: #CECBF6; color: #3C3489; }
+    .coral  { background: #F5C4B3; color: #712B13; }
+    .amber  { background: #FAC775; color: #633806; }
+    .blue   { background: #B5D4F4; color: #0C447C; }
+    .green  { background: #C0DD97; color: #3B6D11; }
+    .pink   { background: #F4C0D1; color: #72243E; }
+    .red    { background: #F7C1C1; color: #791F1F; }
+    .gray   { background: #D3D1C7; color: #444441; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    /* Side-by-side : markdown source vs rendu */
+    .md-split { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0.8rem 0; }
+    .md-pane { border-radius: 10px; overflow: hidden; border: 0.5px solid; }
+    .md-pane-header { padding: 6px 12px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; }
+    .md-src { border-color: #B4B2A9; }
+    .md-src .md-pane-header { background: #F1EFE8; color: #888780; }
+    .md-src-body { background: #FAFAF8; padding: 0.8rem 1rem; font-family: 'Fira Code', monospace; font-size: 0.8rem; line-height: 1.9; color: #2C2C2A; white-space: pre; overflow-x: auto; }
+    .md-ren { border-color: #97C459; }
+    .md-ren .md-pane-header { background: #EAF3DE; color: #3B6D11; }
+    .md-ren-body { background: #ffffff; padding: 0.8rem 1rem; font-size: 0.85rem; line-height: 1.7; }
+    .rh1 { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.3rem; color: #2C2C2A; }
+    .rh2 { font-size: 1rem; font-weight: 700; margin: 0.6rem 0 0.2rem; color: #2C2C2A; border-bottom: 1px solid #F1EFE8; padding-bottom: 3px; }
+    .rh3 { font-size: 0.9rem; font-weight: 700; margin: 0.4rem 0 0.2rem; color: #5F5E5A; }
+    .rbold { font-weight: 800; }
+    .ritalic { font-style: italic; }
+    .rcode { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 3px; padding: 1px 5px; font-size: 0.82rem; }
+    .rlink { color: #185FA5; text-decoration: underline; }
+    .rbadge { display: inline-block; border-radius: 10px; padding: 2px 8px; font-size: 0.75rem; font-weight: 700; }
+
+    /* Markdown syntax colour classes */
+    .ms-h { color: #0C447C; font-weight: 700; }  /* heading # */
+    .ms-b { color: #712B13; }                     /* **bold** */
+    .ms-i { color: #633806; font-style: italic; } /* *italic* */
+    .ms-c { color: #3B6D11; }                     /* `code` */
+    .ms-l { color: #3C3489; }                     /* [link](url) */
+    .ms-li { color: #085041; }                    /* - list item */
+    .ms-cm { color: #888780; font-style: italic; }
+
+    /* Code block (raw markdown) */
+    .md-block { background: #FAFAF8; border: 0.5px solid #D3D1C7; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.9; white-space: pre; overflow-x: auto; color: #2C2C2A; margin: 0.7rem 0; }
+
+    /* Full README preview */
+    .readme-preview { border: 1px solid #97C459; border-radius: 12px; overflow: hidden; margin: 0.8rem 0; }
+    .readme-preview-header { background: #EAF3DE; padding: 8px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 0.5px solid #97C459; }
+    .readme-preview-title { font-size: 0.8rem; font-weight: 800; color: #3B6D11; font-family: 'Nunito', sans-serif; }
+    .readme-preview-body { background: #fff; padding: 1.2rem 1.4rem; font-size: 0.88rem; line-height: 1.75; }
+
+    .analogy { display: flex; gap: 14px; align-items: flex-start; background: #EEEDFE; border-radius: 12px; padding: 1rem 1.1rem; margin: 0.8rem 0; border: 0.5px solid #CECBF6; }
+    .analogy-icon { font-size: 2rem; flex-shrink: 0; }
+    .analogy-text { font-size: 0.9rem; color: #3C3489; line-height: 1.65; }
+    .analogy-text strong { font-weight: 800; }
+
+    .steps { display: flex; flex-direction: column; gap: 8px; margin: 0.8rem 0; }
+    .step { display: flex; gap: 12px; align-items: flex-start; background: #F5F4F0; border-radius: 10px; padding: 0.75rem 1rem; }
+    .step-num { width: 26px; height: 26px; border-radius: 50%; background: #C0DD97; color: #3B6D11; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
+    .step-body { font-size: 0.9rem; color: #2C2C2A; line-height: 1.6; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #EAF3DE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #3B6D11; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .tag-compare { display: flex; flex-direction: column; gap: 8px; margin: 0.8rem 0; }
+    .tc { border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+
+    .cta-wrap { text-align: center; padding: 2rem 1rem 2.5rem; }
+    .cta-btn { display: inline-block; background: #3B6D11; color: #ffffff; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem; padding: 13px 32px; border-radius: 12px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #4E8E18; }
+    .cta-sub { font-size: 0.82rem; color: #888780; margin-top: 0.8rem; }
+
+    code { font-family: 'Fira Code', monospace; background: #EAF3DE; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #3B6D11; }
+
+    @media (max-width: 520px) { .hero h1 { font-size: 1.6rem; } .md-split { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <div class="nav-row">
+    <a class="nav-patch" href="cours-patchnote.html">← Cours Patch-notes</a>
+    <a class="nav-pages" href="cours-github-pages.html">🌐 Cours GitHub Pages →</a>
+    <a class="nav-ex"    href="exercices-readme.html">✏️ Exercices →</a>
+  </div>
+
+  <div class="hero">
+    <div style="font-size:2.8rem;margin-bottom:0.5rem;">📄</div>
+    <h1>Le README.md —<br>La carte d'identité de ton projet</h1>
+    <p>Apprends à créer un README qui présente clairement ton projet à tout le monde.</p>
+    <div class="badge-row">
+      <span class="badge b-green">Bonne pratique</span>
+      <span class="badge b-amber">Markdown</span>
+      <span class="badge b-purple">GitHub</span>
+    </div>
+  </div>
+
+  <!-- Pourquoi un README -->
+  <div class="card">
+    <div class="stitle"><div class="pill green">?</div>C'est quoi un README.md ?</div>
+    <p class="desc">Le <strong>README.md</strong> est le premier fichier qu'on regarde quand on visite un projet sur GitHub. Il s'affiche automatiquement sur la page principale de ton dépôt. C'est la <strong>vitrine de ton projet</strong> : il doit expliquer ce que c'est, comment l'utiliser, et comment y contribuer.</p>
+
+    <div class="analogy">
+      <div class="analogy-icon">🏪</div>
+      <div class="analogy-text">
+        <strong>Le README, c'est comme la devanture d'un magasin.</strong> Quand tu passes devant une boutique, tu lis le nom, tu regardes la vitrine pour comprendre ce qu'ils vendent, les horaires… Sans ça, tu ne saurais pas si ça t'intéresse. Sur GitHub, le README joue ce rôle : sans lui, ton projet est une boîte mystérieuse que personne ne va ouvrir !
+      </div>
+    </div>
+
+    <div class="tip"><span class="tip-i">💡</span><span>Sur GitHub, le fichier <code>README.md</code> à la racine de ton projet est automatiquement affiché sur la page principale de ton dépôt. Il n'y a rien à configurer — GitHub le détecte tout seul !</span></div>
+  </div>
+
+  <!-- Le Markdown -->
+  <div class="card">
+    <div class="stitle"><div class="pill purple">Md</div>C'est quoi le Markdown ?</div>
+    <p class="desc">Le <strong>Markdown</strong> est un langage de mise en forme très simple. En ajoutant quelques symboles autour du texte, tu peux créer des titres, du gras, des listes, des liens… sans écrire de HTML ! GitHub convertit automatiquement le Markdown en beau HTML affiché.</p>
+
+    <div class="md-split">
+      <div class="md-pane md-src">
+        <div class="md-pane-header">✍️ Ce que tu écris</div>
+        <div class="md-src-body"><span class="ms-h"># Mon super projet</span>
+
+<span class="ms-b">**Description :**</span> Un portfolio
+créé avec HTML et CSS.
+
+<span class="ms-h">## Technologies</span>
+<span class="ms-li">- HTML5</span>
+<span class="ms-li">- CSS3</span>
+<span class="ms-li">- Git &amp; GitHub</span>
+
+<span class="ms-l">[Voir le site](https://lien.com)</span></div>
+      </div>
+      <div class="md-pane md-ren">
+        <div class="md-pane-header">👁️ Ce que ça affiche</div>
+        <div class="md-ren-body">
+          <div class="rh1">Mon super projet</div>
+          <p><span class="rbold">Description :</span> Un portfolio créé avec HTML et CSS.</p>
+          <div class="rh2">Technologies</div>
+          <ul style="margin-left:1.2rem;color:#5F5E5A;font-size:0.85rem;">
+            <li>HTML5</li><li>CSS3</li><li>Git &amp; GitHub</li>
+          </ul>
+          <p style="margin-top:0.5rem;"><a class="rlink">Voir le site</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- La syntaxe Markdown -->
+  <div class="card">
+    <div class="stitle"><div class="pill amber">🔑</div>La syntaxe Markdown essentielle</div>
+    <p class="desc">Voici les éléments de base à connaître pour écrire un bon README :</p>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin:0.8rem 0;">
+
+      <div style="background:#F5F4F0;border-radius:10px;padding:0.8rem 1rem;">
+        <div class="rl">Titres</div>
+        <div class="md-split" style="margin:0.4rem 0 0;">
+          <div class="md-src-body" style="background:#FAFAF8;border-radius:8px;padding:0.6rem 0.8rem;font-family:'Fira Code',monospace;font-size:0.8rem;line-height:1.8;"><span class="ms-h"># Titre principal (H1)</span>
+<span class="ms-h">## Sous-titre (H2)</span>
+<span class="ms-h">### Sous-sous-titre (H3)</span></div>
+          <div style="background:#fff;border-radius:8px;padding:0.6rem 0.8rem;font-size:0.85rem;border:0.5px solid #D3D1C7;">
+            <div class="rh1" style="font-size:1rem;">Titre principal</div>
+            <div class="rh2" style="font-size:0.9rem;">Sous-titre</div>
+            <div class="rh3">Sous-sous-titre</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F5F4F0;border-radius:10px;padding:0.8rem 1rem;">
+        <div class="rl">Mise en forme du texte</div>
+        <div class="md-split" style="margin:0.4rem 0 0;">
+          <div class="md-src-body" style="background:#FAFAF8;border-radius:8px;padding:0.6rem 0.8rem;font-family:'Fira Code',monospace;font-size:0.8rem;line-height:1.8;"><span class="ms-b">**texte en gras**</span>
+<span class="ms-i">*texte en italique*</span>
+<span class="ms-c">`du code inline`</span></div>
+          <div style="background:#fff;border-radius:8px;padding:0.6rem 0.8rem;font-size:0.85rem;border:0.5px solid #D3D1C7;line-height:1.9;">
+            <span class="rbold">texte en gras</span><br>
+            <span class="ritalic">texte en italique</span><br>
+            <span class="rcode">du code inline</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#F5F4F0;border-radius:10px;padding:0.8rem 1rem;">
+        <div class="rl">Listes et liens</div>
+        <div class="md-split" style="margin:0.4rem 0 0;">
+          <div class="md-src-body" style="background:#FAFAF8;border-radius:8px;padding:0.6rem 0.8rem;font-family:'Fira Code',monospace;font-size:0.8rem;line-height:1.8;"><span class="ms-li">- Élément 1</span>
+<span class="ms-li">- Élément 2</span>
+<span class="ms-li">- Élément 3</span>
+
+<span class="ms-l">[Texte du lien](https://url.com)</span></div>
+          <div style="background:#fff;border-radius:8px;padding:0.6rem 0.8rem;font-size:0.85rem;border:0.5px solid #D3D1C7;line-height:1.9;">
+            <ul style="margin-left:1.1rem;color:#5F5E5A;">
+              <li>Élément 1</li><li>Élément 2</li><li>Élément 3</li>
+            </ul>
+            <a class="rlink" style="display:block;margin-top:0.4rem;">Texte du lien</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tip tip-purple"><span class="tip-i">💡</span><span>Dans VS Code, installe l'extension <strong>"Markdown Preview Enhanced"</strong> : elle te montre le rendu de ton README en temps réel à côté du code ! Clique droit sur le fichier → "Open Preview".</span></div>
+  </div>
+
+  <!-- Structure idéale d'un README -->
+  <div class="card">
+    <div class="stitle"><div class="pill teal">📐</div>La structure idéale d'un README</div>
+    <p class="desc">Un bon README contient toujours ces sections dans cet ordre :</p>
+
+    <div class="md-block"><span class="ms-h"># 🎨 Nom du projet</span>
+
+<span class="ms-cm">&gt; Une courte phrase qui résume ton projet (1-2 lignes max)</span>
+
+<span class="ms-li">- 🌐 **Lien vers le site :** [Voir le projet](https://ton-pseudo.github.io/ton-projet)</span>
+<span class="ms-li">- 📋 **Version actuelle :** v0.01.0</span>
+
+<span class="ms-h">---</span>
+
+<span class="ms-h">## 📝 Description</span>
+
+Explique en <span class="ms-b">**2 à 5 phrases**</span> ce que fait ton projet,
+dans quel contexte il a été créé, et à qui il s'adresse.
+
+<span class="ms-h">## 🛠️ Technologies utilisées</span>
+
+<span class="ms-li">- HTML5 / CSS3</span>
+<span class="ms-li">- JavaScript</span>
+<span class="ms-li">- Git &amp; GitHub</span>
+
+<span class="ms-h">## 🚀 Fonctionnalités</span>
+
+<span class="ms-li">- Navigation avec menu responsive</span>
+<span class="ms-li">- Galerie de projets filtrables</span>
+<span class="ms-li">- Formulaire de contact</span>
+
+<span class="ms-h">## 📁 Structure du projet</span>
+
+<span class="ms-c">```</span>
+mon-site/
+├── index.html
+├── patch-note.txt
+├── README.md
+└── Assets/
+    ├── css/
+    ├── js/
+    └── img/
+<span class="ms-c">```</span>
+
+<span class="ms-h">## 📋 Patch-notes</span>
+
+Consulte le fichier <span class="ms-l">[patch-note.txt](./patch-note.txt)</span> pour l'historique complet.
+
+<span class="ms-h">## 👤 Auteur</span>
+
+Créé par <span class="ms-b">**Ton Prénom**</span> — Projet scolaire 2025</div>
+  </div>
+
+  <!-- Exemple rendu -->
+  <div class="card">
+    <div class="stitle"><div class="pill green">👁️</div>À quoi ça ressemble sur GitHub ?</div>
+    <p class="desc">Voici comment ce README s'afficherait sur la page GitHub de ton projet :</p>
+
+    <div class="readme-preview">
+      <div class="readme-preview-header">
+        <span style="font-size:13px;">📄</span>
+        <span class="readme-preview-title">README.md — Aperçu GitHub</span>
+      </div>
+      <div class="readme-preview-body">
+        <div style="font-size:1.3rem;font-weight:800;margin-bottom:0.4rem;display:flex;align-items:center;gap:8px;">🎨 Mon Portfolio</div>
+        <p style="color:#5F5E5A;font-size:0.87rem;margin-bottom:0.8rem;border-left:3px solid #D3D1C7;padding-left:10px;">Un portfolio créé avec HTML et CSS pour présenter mes projets web.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem;">
+          <span class="rbadge" style="background:#E6F1FB;color:#0C447C;">🌐 Voir le projet</span>
+          <span class="rbadge" style="background:#FDE8EF;color:#72243E;">📋 v0.01.0</span>
+        </div>
+        <hr style="border:none;border-top:1px solid #F1EFE8;margin-bottom:0.8rem;">
+        <div class="rh2">📝 Description</div>
+        <p style="font-size:0.85rem;color:#5F5E5A;margin-bottom:0.8rem;">Ce projet est un portfolio personnel réalisé dans le cadre d'un cours de développement web. Il présente mes créations et permet de me contacter directement.</p>
+        <div class="rh2">🛠️ Technologies utilisées</div>
+        <ul style="margin-left:1.1rem;font-size:0.85rem;color:#5F5E5A;margin-bottom:0.8rem;"><li>HTML5 / CSS3</li><li>Git &amp; GitHub</li></ul>
+        <div class="rh2">🚀 Fonctionnalités</div>
+        <ul style="margin-left:1.1rem;font-size:0.85rem;color:#5F5E5A;margin-bottom:0.8rem;"><li>Navigation responsive</li><li>Galerie de projets</li><li>Formulaire de contact</li></ul>
+        <div class="rh2">👤 Auteur</div>
+        <p style="font-size:0.85rem;color:#5F5E5A;">Créé par <strong>Alice Martin</strong> — Projet scolaire 2025</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Créer le fichier -->
+  <div class="card">
+    <div class="stitle"><div class="pill coral">📁</div>Créer son README.md étape par étape</div>
+
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">Dans VS Code, fais <strong>clic droit</strong> sur la racine de ton projet → <strong>"Nouveau fichier"</strong> → tape <code>README.md</code> (avec la majuscule et l'extension .md !)</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">Commence par le titre : <code># 🎨 Nom de ton projet</code></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">Ajoute une description courte, les technologies utilisées, et les fonctionnalités</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body">Ajoute le lien vers ton site GitHub Pages (on le verra dans le cours suivant !)</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body">Sauvegarde, puis fais <code>git add .</code> → <code>git commit -m "Ajout du README"</code> → <code>git push</code></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-body">Va sur GitHub.com → ton dépôt → tu vois le README affiché automatiquement ! 🎉</div></div>
+    </div>
+
+    <div class="tip tip-amber"><span class="tip-i">⚠️</span><span>Le fichier doit s'appeler exactement <strong>README.md</strong> (tout en majuscules, avec .md). GitHub ne reconnaît pas readme.md ou Readme.md sur certains systèmes. Et il doit être à la <strong>racine du projet</strong>, pas dans un sous-dossier !</span></div>
+  </div>
+
+  <!-- Lien vers GitHub Pages -->
+  <div class="card">
+    <div class="stitle"><div class="pill blue">🔗</div>Ajouter le lien GitHub Pages dans le README</div>
+    <p class="desc">Une fois ton site hébergé sur GitHub Pages (voir le cours suivant), tu dois ajouter le lien dans ton README pour que les visiteurs puissent cliquer directement dessus :</p>
+
+    <div class="md-block"><span class="ms-h"># 🎨 Mon Portfolio</span>
+
+<span class="ms-cm">&gt; Portfolio personnel créé avec HTML, CSS et JavaScript.</span>
+
+<span class="ms-li">- 🌐 **Lien du site :** <span class="ms-l">[https://alice.github.io/mon-portfolio](https://alice.github.io/mon-portfolio)</span></span>
+<span class="ms-li">- 📋 **Version :** v1.00.0</span>
+<span class="ms-li">- 👤 **Auteur :** Alice Martin</span></div>
+
+    <div class="tip tip-blue"><span class="tip-i">🌐</span><span>Le lien GitHub Pages suit toujours ce format : <code>https://TON-PSEUDO.github.io/NOM-DU-DEPOT</code>. Remplace <code>TON-PSEUDO</code> par ton nom d'utilisateur GitHub et <code>NOM-DU-DEPOT</code> par le nom de ton dépôt !</span></div>
+  </div>
+
+  <!-- Résumé -->
+  <div class="card">
+    <div class="stitle"><div class="pill gray">✓</div>Résumé : les règles du README</div>
+    <div class="tag-compare">
+      <div class="tc" style="background:#EAF3DE;color:#3B6D11;">✅ Fichier <strong>README.md</strong> à la racine — toujours avec la bonne casse</div>
+      <div class="tc" style="background:#EAF3DE;color:#3B6D11;">✅ Sections obligatoires : Titre, Description, Technologies, Fonctionnalités</div>
+      <div class="tc" style="background:#FAEEDA;color:#633806;">✅ <code style="background:rgba(0,0,0,0.08)">#</code> = titre &nbsp;|&nbsp; <code style="background:rgba(0,0,0,0.08)">**texte**</code> = gras &nbsp;|&nbsp; <code style="background:rgba(0,0,0,0.08)">- item</code> = liste</div>
+      <div class="tc" style="background:#EEEDFE;color:#3C3489;">✅ Ajoute toujours le <strong>lien GitHub Pages</strong> en haut du README</div>
+      <div class="tc" style="background:#E6F1FB;color:#0C447C;">✅ Mets à jour le README à chaque grande évolution du projet</div>
+    </div>
+  </div>
+
+  <div class="cta-wrap">
+    <p style="font-size:0.95rem;color:#5F5E5A;margin-bottom:1.2rem;">Tu sais écrire un README ? Parfait ! 🎉<br>Mets en pratique avec les exercices !</p>
+    <a class="cta-btn" href="exercices-readme.html">Passer aux exercices →</a>
+    <p class="cta-sub">Exercice 1 : identifier la syntaxe Markdown<br>Exercice 2 : remettre les sections dans le bon ordre</p>
+  </div>
+
+</body>
+</html>

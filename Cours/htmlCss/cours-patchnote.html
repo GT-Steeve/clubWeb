@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patch-notes &amp; Versioning — Documenter ses commits</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 2.5rem 1rem 2rem;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: #5F5E5A;
+      margin-top: 0.5rem;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 1.2rem;
+    }
+
+    .badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+    }
+
+    .b-pink {
+      background: #FDE8EF;
+      color: #72243E;
+    }
+
+    .b-amber {
+      background: #FAEEDA;
+      color: #633806;
+    }
+
+    .b-purple {
+      background: #EEEDFE;
+      color: #3C3489;
+    }
+
+    .nav-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 6px 13px;
+      border: 0.5px solid;
+      transition: background 0.15s;
+    }
+
+    .nav-readme {
+      color: #3B6D11;
+      background: #EAF3DE;
+      border-color: #97C459;
+    }
+
+    .nav-readme:hover {
+      background: #C0DD97;
+    }
+
+    .nav-pages {
+      color: #0C447C;
+      background: #E6F1FB;
+      border-color: #85B7EB;
+    }
+
+    .nav-pages:hover {
+      background: #B5D4F4;
+    }
+
+    .nav-ex {
+      color: #72243E;
+      background: #FDE8EF;
+      border-color: #F4C0D1;
+    }
+
+    .nav-ex:hover {
+      background: #F4C0D1;
+    }
+
+    .card {
+      border-radius: 16px;
+      border: 0.5px solid #D3D1C7;
+      background: #ffffff;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .stitle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 0.8rem;
+    }
+
+    .pill {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .teal {
+      background: #9FE1CB;
+      color: #085041;
+    }
+
+    .purple {
+      background: #CECBF6;
+      color: #3C3489;
+    }
+
+    .coral {
+      background: #F5C4B3;
+      color: #712B13;
+    }
+
+    .amber {
+      background: #FAC775;
+      color: #633806;
+    }
+
+    .blue {
+      background: #B5D4F4;
+      color: #0C447C;
+    }
+
+    .green {
+      background: #C0DD97;
+      color: #3B6D11;
+    }
+
+    .pink {
+      background: #F4C0D1;
+      color: #72243E;
+    }
+
+    .red {
+      background: #F7C1C1;
+      color: #791F1F;
+    }
+
+    .gray {
+      background: #D3D1C7;
+      color: #444441;
+    }
+
+    .desc {
+      font-size: 0.94rem;
+      color: #5F5E5A;
+      line-height: 1.7;
+      margin-bottom: 0.9rem;
+    }
+
+    .rl {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888780;
+      margin-bottom: 6px;
+    }
+
+    /* File block (simulating a text file) */
+    .file-block {
+      background: #FAFAF8;
+      border: 1px solid #D3D1C7;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 0.8rem 0;
+    }
+
+    .file-titlebar {
+      background: #F1EFE8;
+      padding: 7px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 0.5px solid #D3D1C7;
+    }
+
+    .file-icon {
+      font-size: 13px;
+    }
+
+    .file-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #5F5E5A;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .file-body {
+      padding: 1rem 1.2rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.83rem;
+      line-height: 1.95;
+      color: #2C2C2A;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .fv {
+      color: #712B13;
+      font-weight: 700;
+    }
+
+    /* version tag */
+    .fh {
+      color: #085041;
+      font-weight: 700;
+    }
+
+    /* section header */
+    .fc {
+      color: #3B6D11;
+    }
+
+    /* feature add */
+    .fb {
+      color: #A32D2D;
+    }
+
+    /* bug fix */
+    .fd {
+      color: #633806;
+    }
+
+    /* deprecation/note */
+    .fcm {
+      color: #888780;
+      font-style: italic;
+    }
+
+    /* comment */
+
+    /* Version diagram */
+    .ver-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 0.8rem 0;
+    }
+
+    .ver-card {
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      border: 0.5px solid;
+      text-align: center;
+    }
+
+    .vc-patch {
+      background: #FDE8EF;
+      border-color: #F4C0D1;
+    }
+
+    .vc-minor {
+      background: #FAEEDA;
+      border-color: #FAC775;
+    }
+
+    .vc-major {
+      background: #EAF3DE;
+      border-color: #C0DD97;
+    }
+
+    .vc-num {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .vc-label {
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .vc-desc {
+      font-size: 0.8rem;
+      margin-top: 0.4rem;
+      line-height: 1.5;
+    }
+
+    /* Version timeline */
+    .vtl {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 0.9rem 0;
+    }
+
+    .vtl-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .vtl-dot-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .vtl-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid;
+      margin-top: 5px;
+    }
+
+    .vtl-line {
+      width: 2px;
+      background: #D3D1C7;
+      flex: 1;
+      min-height: 18px;
+    }
+
+    .vtl-content {
+      padding-bottom: 16px;
+    }
+
+    .vtl-tag {
+      display: inline-block;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 2px 9px;
+      margin-bottom: 4px;
+    }
+
+    .vtl-msg {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #2C2C2A;
+    }
+
+    .vtl-detail {
+      font-size: 0.82rem;
+      color: #5F5E5A;
+      margin-top: 2px;
+    }
+
+    .dot-patch {
+      background: #F4C0D1;
+      border-color: #72243E;
+    }
+
+    .dot-minor {
+      background: #FAC775;
+      border-color: #633806;
+    }
+
+    .dot-major {
+      background: #C0DD97;
+      border-color: #3B6D11;
+    }
+
+    .tag-patch {
+      background: #FDE8EF;
+      color: #72243E;
+    }
+
+    .tag-minor {
+      background: #FAEEDA;
+      color: #633806;
+    }
+
+    .tag-major {
+      background: #EAF3DE;
+      color: #3B6D11;
+    }
+
+    /* Analogy */
+    .analogy {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: #EEEDFE;
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      margin: 0.8rem 0;
+      border: 0.5px solid #CECBF6;
+    }
+
+    .analogy-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .analogy-text {
+      font-size: 0.9rem;
+      color: #3C3489;
+      line-height: 1.65;
+    }
+
+    .analogy-text strong {
+      font-weight: 800;
+    }
+
+    /* Steps */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 0.8rem 0;
+    }
+
+    .step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: #F5F4F0;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+    }
+
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #F4C0D1;
+      color: #72243E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .step-body {
+      font-size: 0.9rem;
+      color: #2C2C2A;
+      line-height: 1.6;
+    }
+
+    /* Rules table */
+    .rule-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.8rem;
+      font-size: 0.88rem;
+    }
+
+    .rule-table th {
+      background: #FDE8EF;
+      text-align: left;
+      padding: 8px 12px;
+      font-weight: 800;
+      border-bottom: 1.5px solid #F4C0D1;
+      font-size: 0.8rem;
+      color: #72243E;
+    }
+
+    .rule-table td {
+      padding: 8px 12px;
+      border-bottom: 0.5px solid #F1EFE8;
+      vertical-align: top;
+    }
+
+    .rule-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .rule-table tr:hover td {
+      background: #FAFAF8;
+    }
+
+    .rt-tag {
+      font-family: 'Fira Code', monospace;
+      font-weight: 700;
+      color: #712B13;
+    }
+
+    .rt-desc {
+      color: #5F5E5A;
+    }
+
+    .tip {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: #FDE8EF;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      margin-top: 0.9rem;
+      font-size: 0.88rem;
+      color: #72243E;
+      line-height: 1.5;
+    }
+
+    .tip-amber {
+      background: #FAEEDA;
+      color: #633806;
+    }
+
+    .tip-purple {
+      background: #EEEDFE;
+      color: #3C3489;
+    }
+
+    .tip-green {
+      background: #EAF3DE;
+      color: #3B6D11;
+    }
+
+    .tip-blue {
+      background: #E6F1FB;
+      color: #0C447C;
+    }
+
+    .tip-i {
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Recap summary cards */
+    .tag-compare {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 0.8rem 0;
+    }
+
+    .tc {
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* CTA */
+    .cta-wrap {
+      text-align: center;
+      padding: 2rem 1rem 2.5rem;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: #72243E;
+      color: #ffffff;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 13px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .cta-btn:hover {
+      background: #9E3459;
+    }
+
+    .cta-sub {
+      font-size: 0.82rem;
+      color: #888780;
+      margin-top: 0.8rem;
+    }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      background: #F1EFE8;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 0.87em;
+      color: #712B13;
+    }
+
+    @media (max-width: 520px) {
+      .hero h1 {
+        font-size: 1.6rem;
+      }
+
+      .ver-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="nav-row">
+    <a class="nav-readme" href="cours-readme.html">📄 Cours README →</a>
+    <a class="nav-pages" href="cours-github-pages.html">🌐 Cours GitHub Pages →</a>
+    <a class="nav-ex" href="exercices-patchnote.html">✏️ Exercices →</a>
+  </div>
+
+  <div class="hero">
+    <div style="font-size:2.8rem;margin-bottom:0.5rem;">📋</div>
+    <h1>Patch-notes &amp;<br>Versioning</h1>
+    <p>Apprends à documenter chaque version de ton projet comme un vrai développeur.</p>
+    <div class="badge-row">
+      <span class="badge b-pink">Bonne pratique</span>
+      <span class="badge b-amber">patch-note.txt</span>
+      <span class="badge b-purple">Versioning sémantique</span>
+    </div>
+  </div>
+
+  <!-- Pourquoi -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill pink">?</div>Pourquoi tenir un patch-note ?
+    </div>
+    <p class="desc">Quand tu travailles sur un projet, tu vas faire des dizaines de modifications. Sans notes, dans 3
+      mois tu ne te souviendras plus de ce que tu avais changé entre la version 1 et la version 2 ! Le
+      <strong>patch-note</strong> est un fichier texte qui garde trace de <strong>toutes les versions</strong> et de
+      <strong>toutes les nouveautés</strong>.</p>
+
+    <div class="analogy">
+      <div class="analogy-icon">🎮</div>
+      <div class="analogy-text">
+        <strong>Tu connais les mises à jour de jeux vidéo ?</strong> Quand un jeu se met à jour, il y a toujours une
+        liste qui dit "v1.2.0 — nouveau personnage ajouté, bug du menu corrigé, équilibrage des armes". C'est exactement
+        ça un patch-note ! Et bien, <strong>ton projet mérite la même rigueur</strong> que les grands studios de jeux.
+      </div>
+    </div>
+
+    <div class="tip tip-green"><span class="tip-i">💡</span><span>Le patch-note sert aussi à <strong>communiquer avec
+          les utilisateurs</strong> (ou ton prof !) : ils voient clairement ce qui a changé entre chaque version sans
+        avoir à lire tout ton code.</span></div>
+  </div>
+
+  <!-- Le versioning sémantique -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill purple">V</div>Les numéros de version : comment ça marche ?
+    </div>
+    <p class="desc">Un numéro de version s'écrit avec <strong>trois chiffres</strong> séparés par des points :
+      <code>v0.00.1</code>. Chaque chiffre a une signification précise !</p>
+
+    <div class="ver-grid">
+      <div class="ver-card vc-major">
+        <span class="vc-num" style="color:#3B6D11;">v<strong>1</strong>.00.0</span>
+        <div class="vc-label" style="color:#3B6D11;">Majeure</div>
+        <div class="vc-desc" style="color:#3B6D11;">Changement <strong>énorme</strong>.<br>Nouvelle étape du
+          projet.<br>Peut casser la version précédente.</div>
+      </div>
+      <div class="ver-card vc-minor">
+        <span class="vc-num" style="color:#633806;">v0.<strong>01</strong>.0</span>
+        <div class="vc-label" style="color:#633806;">Mineure</div>
+        <div class="vc-desc" style="color:#633806;">Ajout d'une <strong>nouvelle fonctionnalité</strong>.<br>Le projet
+          reste compatible.<br>Tout continue de fonctionner.</div>
+      </div>
+      <div class="ver-card vc-patch">
+        <span class="vc-num" style="color:#72243E;">v0.00.<strong>1</strong></span>
+        <div class="vc-label" style="color:#72243E;">Patch</div>
+        <div class="vc-desc" style="color:#72243E;">Petite correction ou<br>modification mineure.<br>Début ou retouche.
+        </div>
+      </div>
+    </div>
+
+    <div class="tip tip-amber"><span class="tip-i">⚠️</span><span>Quand tu augmentes un chiffre, tous ceux à
+        <strong>droite repassent à zéro</strong>. Exemple : après <code>v0.00.9</code> vient <code>v0.01.0</code> (et
+        non <code>v0.00.10</code>). Après <code>v0.09.0</code> vient <code>v0.10.0</code>.</span></div>
+  </div>
+
+  <!-- Les grandes étapes : v0 vs v1 -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill amber">🚀</div>v0 vs v1 : le sens des grandes versions
+    </div>
+    <p class="desc">Le chiffre de version majeure (le tout premier) indique à quel stade de maturité se trouve ton
+      projet :</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0.8rem 0;">
+      <div style="background:#FAEEDA;border-radius:12px;padding:1rem;border:0.5px solid #FAC775;">
+        <div style="font-size:1.8rem;margin-bottom:0.4rem;">🔬</div>
+        <div style="font-weight:800;color:#633806;font-size:1.1rem;margin-bottom:0.4rem;">v0.xx.x</div>
+        <div style="font-size:0.87rem;color:#854F0B;line-height:1.6;">Prototype / En développement.<br>Le projet
+          <strong>n'est pas fini</strong>.<br>Alpha (v0.0x) = premiers tests.<br>Beta (v0.1x+) = testable par
+          d'autres.<br>Les choses peuvent changer radicalement.</div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:12px;padding:1rem;border:0.5px solid #C0DD97;">
+        <div style="font-size:1.8rem;margin-bottom:0.4rem;">🎉</div>
+        <div style="font-weight:800;color:#3B6D11;font-size:1.1rem;margin-bottom:0.4rem;">v1.00.0</div>
+        <div style="font-size:0.87rem;color:#3B6D11;line-height:1.6;">Version publique.<br>Le projet est
+          <strong>présentable</strong>.<br>Les fonctionnalités principales sont là.<br>Tu es prêt à le montrer au
+          monde.<br>Stabilité garantie.</div>
+      </div>
+    </div>
+
+    <div class="vtl" style="margin-top:1rem;">
+      <div class="vtl-item">
+        <div class="vtl-dot-col">
+          <div class="vtl-dot dot-patch"></div>
+          <div class="vtl-line"></div>
+        </div>
+        <div class="vtl-content"><span class="vtl-tag tag-patch">v0.00.1</span>
+          <div class="vtl-msg">🌱 Début du projet</div>
+          <div class="vtl-detail">Structure de base créée, fichiers initiaux</div>
+        </div>
+      </div>
+      <div class="vtl-item">
+        <div class="vtl-dot-col">
+          <div class="vtl-dot dot-patch"></div>
+          <div class="vtl-line"></div>
+        </div>
+        <div class="vtl-content"><span class="vtl-tag tag-patch">v0.00.2</span>
+          <div class="vtl-msg">🎨 Ajout de la navigation</div>
+          <div class="vtl-detail">Header et menu créés</div>
+        </div>
+      </div>
+      <div class="vtl-item">
+        <div class="vtl-dot-col">
+          <div class="vtl-dot dot-minor"></div>
+          <div class="vtl-line"></div>
+        </div>
+        <div class="vtl-content"><span class="vtl-tag tag-minor">v0.01.0</span>
+          <div class="vtl-msg">✨ Nouvelle section : galerie</div>
+          <div class="vtl-detail">Première fonctionnalité majeure ajoutée</div>
+        </div>
+      </div>
+      <div class="vtl-item">
+        <div class="vtl-dot-col">
+          <div class="vtl-dot dot-patch"></div>
+          <div class="vtl-line"></div>
+        </div>
+        <div class="vtl-content"><span class="vtl-tag tag-patch">v0.01.1</span>
+          <div class="vtl-msg">🐛 Correction affichage mobile</div>
+          <div class="vtl-detail">Bug sur petits écrans corrigé</div>
+        </div>
+      </div>
+      <div class="vtl-item">
+        <div class="vtl-dot-col">
+          <div class="vtl-dot dot-minor"></div>
+          <div class="vtl-line"></div>
+        </div>
+        <div class="vtl-content"><span class="vtl-tag tag-minor">v0.02.0</span>
+          <div class="vtl-msg">📬 Formulaire de contact</div>
+          <div class="vtl-detail">Deuxième grosse fonctionnalité</div>
+        </div>
+      </div>
+      <div class="vtl-item">
+        <div class="vtl-dot-col">
+          <div class="vtl-dot dot-major"></div>
+        </div>
+        <div class="vtl-content" style="padding-bottom:0;"><span class="vtl-tag tag-major">v1.00.0</span>
+          <div class="vtl-msg">🎉 Mise en ligne officielle</div>
+          <div class="vtl-detail">Projet complet et présentable au public !</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Le fichier patch-note.txt -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill coral">📋</div>Créer le fichier patch-note.txt
+    </div>
+    <p class="desc">Le fichier <code>patch-note.txt</code> se place à la <strong>racine de ton projet</strong> (au même
+      niveau que ton <code>index.html</code>). Il est écrit en texte simple, sans code. Voici le format à suivre :</p>
+
+    <div class="file-block">
+      <div class="file-titlebar">
+        <span class="file-icon">📋</span>
+        <span class="file-name">patch-note.txt</span>
+      </div>
+      <div class="file-body"><span class="fh">============================================================
+          MON-SITE — PATCH NOTES
+          Projet : Portfolio personnel
+          ============================================================
+
+        </span><span class="fv">[ v0.00.1 ] — 2025-01-14</span>
+        <span class="fh">DÉMARRAGE DU PROJET</span>
+        <span class="fc">+ Création de la structure de base du projet</span>
+        <span class="fc">+ Ajout de index.html avec le squelette HTML</span>
+        <span class="fc">+ Ajout de Assets/css/style.css (vide pour l'instant)</span>
+
+        <span class="fv">[ v0.00.2 ] — 2025-01-15</span>
+        <span class="fh">MISE EN PLACE DU HEADER</span>
+        <span class="fc">+ Création du header avec logo et titre</span>
+        <span class="fc">+ Ajout de la navigation principale (liens)</span>
+        <span class="fd">~ Couleurs provisoires, à affiner plus tard</span>
+
+        <span class="fv">[ v0.01.0 ] — 2025-01-18</span>
+        <span class="fh">NOUVELLE FONCTIONNALITÉ : SECTION GALERIE</span>
+        <span class="fc">+ Ajout de la section galerie de projets</span>
+        <span class="fc">+ Intégration de 3 cartes de projets avec images</span>
+        <span class="fb">* Correction : lien cassé vers Assets/img/logo.png</span>
+
+        <span class="fv">[ v0.01.1 ] — 2025-01-19</span>
+        <span class="fh">CORRECTIFS MOBILE</span>
+        <span class="fb">* Correction : galerie non responsive sur mobile</span>
+        <span class="fb">* Correction : texte trop petit sur écrans &lt; 480px</span>
+
+        <span class="fv">[ v0.02.0 ] — 2025-01-25</span>
+        <span class="fh">NOUVELLE FONCTIONNALITÉ : FORMULAIRE DE CONTACT</span>
+        <span class="fc">+ Ajout de la section contact avec formulaire</span>
+        <span class="fc">+ Ajout du footer avec liens réseaux sociaux</span>
+
+        <span class="fv">[ v1.00.0 ] — 2025-02-01</span>
+        <span class="fh">MISE EN LIGNE OFFICIELLE 🎉</span>
+        <span class="fc">+ Publication sur GitHub Pages</span>
+        <span class="fc">+ Ajout du lien vers le site dans README.md</span>
+        <span class="fd">~ Projet considéré stable et présentable</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Légende des symboles -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill green">🔑</div>Les symboles à utiliser
+    </div>
+    <p class="desc">Utilise toujours les mêmes symboles pour que ton patch-note soit facile à lire d'un coup d'œil :</p>
+
+    <table class="rule-table">
+      <thead>
+        <tr>
+          <th>Symbole</th>
+          <th>Signification</th>
+          <th>Exemple</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rt-tag" style="color:#3B6D11;">+</span></td>
+          <td class="rt-desc">Ajout d'une nouvelle chose (feature, fichier, section…)</td>
+          <td><code style="color:#3B6D11;">+ Ajout de la page contact</code></td>
+        </tr>
+        <tr>
+          <td><span class="rt-tag" style="color:#A32D2D;">*</span></td>
+          <td class="rt-desc">Correction d'un bug ou d'une erreur</td>
+          <td><code style="color:#A32D2D;">* Correction du menu cassé</code></td>
+        </tr>
+        <tr>
+          <td><span class="rt-tag" style="color:#633806;">~</span></td>
+          <td class="rt-desc">Modification, amélioration d'une chose existante</td>
+          <td><code style="color:#633806;">~ Mise à jour des couleurs</code></td>
+        </tr>
+        <tr>
+          <td><span class="rt-tag" style="color:#888780;">-</span></td>
+          <td class="rt-desc">Suppression d'une chose</td>
+          <td><code style="color:#888780;">- Suppression de l'ancienne galerie</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="tip tip-purple"><span class="tip-i">💡</span><span>Ces symboles ne sont pas une règle universelle
+        officielle — c'est ta convention personnelle. L'important c'est d'être <strong>cohérent</strong> : une fois que
+        tu as choisi tes symboles, utilise-les toujours pareil dans tout ton fichier.</span></div>
+  </div>
+
+  <!-- Créer dans le projet -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill blue">📁</div>Où placer le fichier et comment le créer ?
+    </div>
+    <p class="desc">Le <code>patch-note.txt</code> se place à la <strong>racine du projet</strong>, au même niveau que
+      <code>index.html</code> :</p>
+
+    <div style="background:#1D1D1B;border-radius:12px;padding:1.1rem 1.3rem;
+font-family:'Fira Code', monospace;font-size:0.85rem;line-height:2;
+color:#D3D1C7;margin:0.8rem 0;white-space:pre;">
+      <span style="color:#fff;font-weight:700;">mon-site/</span>
+      <span style="color:#5F5E5A;">├── </span><span style="color:#9FE1CB;font-weight:700;">📁 Assets/</span>
+      <span style="color:#5F5E5A;">├── </span><span style="color:#85B7EB;">index.html</span>
+      <span style="color:#5F5E5A;">├── </span><span style="color:#F4C0D1;font-weight:700;">patch-note.txt</span><span
+        style="color:#f5f4f1;font-style:italic;"> ← ici, à la racine !</span>
+      <span style="color:#5F5E5A;">└── </span><span style="color:#9FE1CB;font-weight:700;">README.md</span>
+    </div>
+
+    <div class="rl">Créer le fichier avec VS Code</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">Dans VS Code, fais un <strong>clic droit</strong> sur la racine de ton projet dans le
+          panneau de gauche</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">Choisis <strong>"Nouveau fichier"</strong> et tape <code>patch-note.txt</code></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">Écris ta première entrée : la version initiale <code>v0.00.1</code> avec la date du jour
+          et "Début du projet"</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">À chaque fois que tu fais un <strong>commit Git</strong>, tu mets à jour le patch-note
+          avant de pusher !</div>
+      </div>
+    </div>
+
+    <div class="tip tip-amber"><span class="tip-i">🌟</span><span>La bonne habitude : <strong>mets à jour le patch-note
+          en même temps que tu fais ton commit Git</strong>. Le message de commit et l'entrée de patch-note se
+        complètent : le commit dit "quoi" en bref, le patch-note détaille "quoi, comment et pourquoi".</span></div>
+  </div>
+
+  <!-- Lien commit / patch-note -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill teal">🔗</div>Lier commit Git et patch-note
+    </div>
+    <p class="desc">Pour chaque nouvelle version, tu fais <strong>deux choses en même temps</strong> : tu mets à jour le
+      patch-note ET tu fais un commit Git. Voici le flux idéal :</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">Tu travailles sur ton projet et tu ajoutes une fonctionnalité</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">Tu ouvres <code>patch-note.txt</code> et tu ajoutes la nouvelle entrée de version avec la
+          date et les détails</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">Dans CMD : <code>git add .</code> (inclut le patch-note mis à jour)</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">Dans CMD : <code>git commit -m "v0.01.0 — Ajout galerie de projets"</code></div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">Dans CMD : <code>git push</code> pour envoyer sur GitHub</div>
+      </div>
+    </div>
+
+    <div class="tip tip-green"><span class="tip-i">🚀</span><span>En nommant ton commit avec le numéro de version
+        (<code>v0.01.0</code>), tu peux <strong>retrouver n'importe quelle version</strong> dans l'historique Git rien
+        qu'avec <code>git log</code>. Le versioning et Git deviennent une vraie machine à remonter le temps !</span>
+    </div>
+  </div>
+
+  <!-- Résumé -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill gray">✓</div>Résumé : les règles du patch-note
+    </div>
+    <div class="tag-compare">
+      <div class="tc" style="background:#FDE8EF;color:#72243E;">✅ <strong>patch-note.txt</strong> à la racine du projet,
+        toujours</div>
+      <div class="tc" style="background:#FAEEDA;color:#633806;">✅ Format : <code
+          style="background:rgba(0,0,0,0.08);">[ vX.XX.X ] — AAAA-MM-JJ</code> puis les changements</div>
+      <div class="tc" style="background:#EAF3DE;color:#3B6D11;">✅ <code style="background:rgba(0,0,0,0.08);">+</code>
+        ajout &nbsp;|&nbsp; <code style="background:rgba(0,0,0,0.08);">*</code> correction &nbsp;|&nbsp; <code
+          style="background:rgba(0,0,0,0.08);">~</code> modification &nbsp;|&nbsp; <code
+          style="background:rgba(0,0,0,0.08);">-</code> suppression</div>
+      <div class="tc" style="background:#EEEDFE;color:#3C3489;">✅ <strong>v0</strong> = en développement &nbsp;|&nbsp;
+        <strong>v1</strong> = version publique prête</div>
+      <div class="tc" style="background:#E6F1FB;color:#0C447C;">✅ Mise à jour à chaque commit Git — c'est un duo
+        inséparable !</div>
+    </div>
+  </div>
+
+  <div class="cta-wrap">
+    <p style="font-size:0.95rem;color:#5F5E5A;margin-bottom:1.2rem;">Tu connais le versioning ? Super ! 🎉<br>Mets en
+      pratique avec les exercices !</p>
+    <a class="cta-btn" href="exercices-patchnote.html">Passer aux exercices →</a>
+    <p class="cta-sub">Exercice 1 : décoder des numéros de version<br>Exercice 2 : rédiger un vrai patch-note</p>
+  </div>
+
+</body>
+
+</html>

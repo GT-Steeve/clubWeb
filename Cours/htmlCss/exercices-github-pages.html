@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices — GitHub Pages</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #0C447C; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .back-link:hover { background: #B5D4F4; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-amber  { background: #FAC775; color: #633806; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    /* QCM */
+    .qcm-block { margin-bottom: 1.6rem; padding-bottom: 1.4rem; border-bottom: 0.5px solid #F1EFE8; }
+    .qcm-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .qcm-question { font-size: 0.96rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.7rem; }
+    .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+    .choice-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 8px; padding: 6px 14px; font-size: 0.84rem; font-family: 'Fira Code', monospace; cursor: pointer; transition: background 0.12s; }
+    .choice-btn:hover { background: #D3D1C7; }
+    .choice-btn.correct { background: #D0F4EA; color: #085041; border-color: #5DCAA5; }
+    .choice-btn.wrong   { background: #FCEBEB; color: #791F1F; border-color: #F09595; }
+    .choice-btn:disabled { cursor: default; }
+    .q-feedback { font-size: 0.88rem; min-height: 1.3em; font-weight: 700; margin-top: 6px; }
+    .q-feedback.ok { color: #0F6E56; }
+    .q-feedback.ko { color: #A32D2D; }
+
+    /* URL builder game */
+    .url-display {
+      background: #E6F1FB; border: 1px solid #85B7EB; border-radius: 10px;
+      padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace;
+      font-size: 0.88rem; margin: 0.8rem 0; min-height: 46px;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 2px; color: #2C2C2A;
+    }
+    .url-seg-placed { border-radius: 5px; padding: 3px 8px; font-weight: 700; cursor: pointer; }
+    .url-seg-placed:hover { opacity: 0.7; }
+    .us-base  { background: #0C447C; color: #fff; }
+    .us-user  { background: #3B6D11; color: #fff; }
+    .us-repo  { background: #633806; color: #fff; }
+    .us-fixed { color: #888780; }
+    .url-placeholder { color: #888780; font-style: italic; font-size: 0.82rem; }
+
+    .url-pieces { display: flex; flex-wrap: wrap; gap: 7px; margin: 0.7rem 0; }
+    .url-piece {
+      border-radius: 7px; padding: 5px 12px; font-family: 'Fira Code', monospace;
+      font-size: 0.84rem; cursor: pointer; font-weight: 700; border: 0.5px solid;
+      transition: background 0.12s;
+    }
+    .up-user { background: #EAF3DE; border-color: #97C459; color: #3B6D11; }
+    .up-user:hover { background: #C0DD97; }
+    .up-repo { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+    .up-repo:hover { background: #FAC775; }
+    .up-wrong { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+    .up-wrong:hover { background: #F09595; }
+    .url-piece.placed { opacity: 0.35; cursor: default; }
+
+    /* Steps ordering (drag & drop) */
+    .steps-sort { display: flex; flex-direction: column; gap: 7px; margin: 0.8rem 0; }
+    .step-item { display: flex; align-items: center; gap: 10px; background: #F5F4F0; border: 0.5px solid #D3D1C7; border-radius: 9px; padding: 10px 14px; cursor: grab; user-select: none; font-size: 0.88rem; transition: background 0.12s; }
+    .step-item:hover { background: #EAE8E0; }
+    .step-item.dragging { opacity: 0.35; }
+    .step-item.correct-pos { background: #E1F5EE; border-color: #5DCAA5; }
+    .step-item.wrong-pos   { background: #FCEBEB; border-color: #F09595; }
+    .step-handle { color: #B4B2A9; font-size: 1.1rem; flex-shrink: 0; }
+    .step-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .step-text { font-weight: 700; color: #2C2C2A; }
+
+    /* Progress */
+    .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1rem 0 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: #85B7EB; border-radius: 10px; transition: width 0.4s; width: 0%; }
+    .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+    .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+    .chip-ok { background: #D0F4EA; color: #085041; }
+    .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 0.8rem; flex-wrap: wrap; }
+    .action-btn { border: 0.5px solid #B4B2A9; background: #ffffff; color: #2C2C2A; border-radius: 8px; padding: 7px 16px; font-size: 0.88rem; font-family: 'Nunito', sans-serif; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+    .action-btn:hover { background: #F1EFE8; }
+    .action-btn.primary { background: #E6F1FB; color: #0C447C; border-color: #85B7EB; }
+    .action-btn.primary:hover { background: #B5D4F4; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E6F1FB; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #0C447C; line-height: 1.5; }
+    .tip-green { background: #EAF3DE; color: #3B6D11; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #E6F1FB; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    @media (max-width: 520px) { .hero h1 { font-size: 1.6rem; } }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="cours-github-pages.html">← Retour au cours GitHub Pages</a>
+
+  <div class="hero">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">🌐</div>
+    <h1>Exercices — GitHub Pages</h1>
+    <p>Mets en pratique l'hébergement de site sur GitHub !</p>
+    <div class="badge-row">
+      <span class="badge b-blue">3 exercices</span>
+      <span class="badge b-purple">Interactif</span>
+    </div>
+  </div>
+
+  <!-- EX 1 : QCM GitHub Pages -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-blue">1</div>Exercice 1 — Questions sur GitHub Pages</div>
+    <p class="desc">Réponds à ces questions pour vérifier que tu as bien compris GitHub Pages.</p>
+
+    <div class="qcm-block">
+      <div class="qcm-question">Combien coûte GitHub Pages pour un projet public ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'p1',false)">9,99€ / mois</button>
+        <button class="choice-btn" onclick="qcm(this,'p1',true)">C'est gratuit</button>
+        <button class="choice-btn" onclick="qcm(this,'p1',false)">1€ / mois</button>
+        <button class="choice-btn" onclick="qcm(this,'p1',false)">Gratuit seulement pour les étudiants</button>
+      </div>
+      <div class="q-feedback" id="fb-p1"></div>
+    </div>
+
+    <div class="qcm-block">
+      <div class="qcm-question">Quel fichier doit obligatoirement être à la racine du dépôt pour que GitHub Pages affiche ton site ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'p2',false)">README.md</button>
+        <button class="choice-btn" onclick="qcm(this,'p2',true)">index.html</button>
+        <button class="choice-btn" onclick="qcm(this,'p2',false)">style.css</button>
+        <button class="choice-btn" onclick="qcm(this,'p2',false)">main.js</button>
+      </div>
+      <div class="q-feedback" id="fb-p2"></div>
+    </div>
+
+    <div class="qcm-block">
+      <div class="qcm-question">L'utilisateur GitHub s'appelle <code>marc42</code> et son dépôt s'appelle <code>jeu-quiz</code>. Quelle est l'URL de son GitHub Pages ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'p3',false)">https://github.com/marc42/jeu-quiz</button>
+        <button class="choice-btn" onclick="qcm(this,'p3',false)">https://jeu-quiz.github.io/marc42</button>
+        <button class="choice-btn" onclick="qcm(this,'p3',true)">https://marc42.github.io/jeu-quiz</button>
+        <button class="choice-btn" onclick="qcm(this,'p3',false)">https://github.io/marc42/jeu-quiz</button>
+      </div>
+      <div class="q-feedback" id="fb-p3"></div>
+    </div>
+
+    <div class="qcm-block">
+      <div class="qcm-question">Après avoir activé GitHub Pages, tu modifies ton CSS et tu fais <code>git push</code>. Que se passe-t-il ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'p4',false)">Rien, il faut réactiver GitHub Pages</button>
+        <button class="choice-btn" onclick="qcm(this,'p4',false)">Il faut télécharger les fichiers manuellement</button>
+        <button class="choice-btn" onclick="qcm(this,'p4',true)">Le site se met à jour automatiquement en 1-2 minutes</button>
+        <button class="choice-btn" onclick="qcm(this,'p4',false)">Il faut supprimer et recréer le dépôt</button>
+      </div>
+      <div class="q-feedback" id="fb-p4"></div>
+    </div>
+
+    <div class="qcm-block" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
+      <div class="qcm-question">Dans quel onglet des Settings GitHub trouves-tu la configuration de GitHub Pages ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="qcm(this,'p5',false)">Actions</button>
+        <button class="choice-btn" onclick="qcm(this,'p5',false)">Branches</button>
+        <button class="choice-btn" onclick="qcm(this,'p5',true)">Pages</button>
+        <button class="choice-btn" onclick="qcm(this,'p5',false)">Environments</button>
+      </div>
+      <div class="q-feedback" id="fb-p5"></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="score-row" id="score-qcm"></div>
+  </div>
+
+  <!-- EX 2 : Construire l'URL GitHub Pages -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">2</div>Exercice 2 — Construis l'URL GitHub Pages</div>
+    <p class="desc">Pour chaque profil ci-dessous, clique sur les bons morceaux pour assembler l'URL GitHub Pages correcte. L'URL doit être : <code>https://PSEUDO.github.io/DEPOT</code></p>
+
+    <div id="url-exercises"></div>
+  </div>
+
+  <!-- EX 3 : Remettre les étapes dans l'ordre -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">3</div>Exercice 3 — Remets les étapes d'activation dans l'ordre</div>
+    <p class="desc">Voici les étapes pour activer GitHub Pages, dans le désordre. Glisse-les pour les remettre dans le bon ordre chronologique.</p>
+
+    <div class="steps-sort" id="steps-sort-container"></div>
+
+    <div class="btn-row">
+      <button class="action-btn primary" onclick="checkStepsOrder()">Vérifier l'ordre</button>
+      <button class="action-btn" onclick="resetStepsOrder()">Mélanger à nouveau</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-steps"></div></div>
+    <div class="score-row" id="score-steps"></div>
+
+    <div class="tip tip-green"><span class="tip-i">💡</span><span>Souviens-toi : avant d'activer GitHub Pages, ton projet doit <strong>déjà exister sur GitHub</strong> avec un <code>index.html</code>. On active Pages <strong>après</strong> le premier push !</span></div>
+  </div>
+
+  <!-- Grand récap final -->
+  <div class="card">
+    <div class="stitle"><div class="pill" style="background:#2C2C2A;color:#FAC775;">🏆</div>Récap final — Les 3 bonnes pratiques</div>
+    <p class="desc">Tu as terminé les 3 cours de bonnes pratiques ! Voici le résumé de ce que tu sais maintenant faire :</p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:0.5rem;">
+      <div style="display:flex;gap:12px;align-items:flex-start;background:#FDE8EF;border-radius:10px;padding:0.85rem 1rem;">
+        <span style="font-size:1.3rem;">📋</span>
+        <div><div style="font-weight:800;color:#72243E;margin-bottom:2px;">patch-note.txt</div><div style="font-size:0.85rem;color:#9E3459;">Documenter chaque version avec les symboles + * ~ - et les numéros v0.00.1 → v1.00.0</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;background:#EAF3DE;border-radius:10px;padding:0.85rem 1rem;">
+        <span style="font-size:1.3rem;">📄</span>
+        <div><div style="font-weight:800;color:#3B6D11;margin-bottom:2px;">README.md</div><div style="font-size:0.85rem;color:#4E8E18;">Présenter son projet en Markdown avec titre, description, technologies, lien du site</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;background:#E6F1FB;border-radius:10px;padding:0.85rem 1rem;">
+        <span style="font-size:1.3rem;">🌐</span>
+        <div><div style="font-weight:800;color:#0C447C;margin-bottom:2px;">GitHub Pages</div><div style="font-size:0.85rem;color:#185FA5;">Héberger son site gratuitement sur https://pseudo.github.io/depot</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    🎉 Félicitations ! Tu maîtrises maintenant toutes les bonnes pratiques d'un vrai développeur web.<br>
+    <div style="margin-top:8px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+      <a href="cours-patchnote.html" style="color:#72243E;font-weight:700;">📋 Revoir Patch-notes</a>
+      <a href="cours-readme.html" style="color:#3B6D11;font-weight:700;">📄 Revoir README</a>
+      <a href="cours-github-pages.html" style="color:#0C447C;font-weight:700;">🌐 Revoir GitHub Pages</a>
+    </div>
+  </div>
+
+  <script>
+    var okMsgs = ['Excellent !', 'Parfait !', 'Bravo !', 'Très bien !', 'Correct !'];
+    function rnd(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+    /* ===== EX 1 : QCM ===== */
+    var qcmDone = {}, qcmScore = 0, qcmTotal = 5;
+    function qcm(btn, qid, correct) {
+      if (qcmDone[qid]) return;
+      qcmDone[qid] = true;
+      btn.classList.add(correct ? 'correct' : 'wrong');
+      btn.closest('.choices').querySelectorAll('.choice-btn').forEach(function(b) { b.disabled = true; });
+      var fb = document.getElementById('fb-' + qid);
+      if (correct) { fb.className = 'q-feedback ok'; fb.textContent = rnd(okMsgs) + ' ✓'; qcmScore++; }
+      else { fb.className = 'q-feedback ko'; fb.textContent = 'Pas tout à fait, relis le cours !'; }
+      var done = Object.keys(qcmDone).length;
+      document.getElementById('prog-qcm').style.width = (done/qcmTotal*100)+'%';
+      if (done === qcmTotal) {
+        var row = document.getElementById('score-qcm');
+        row.innerHTML = '<span class="chip chip-ok">'+qcmScore+' / '+qcmTotal+' correctes</span>';
+        if (qcmTotal-qcmScore > 0) row.innerHTML += '<span class="chip chip-ko">'+(qcmTotal-qcmScore)+' erreur(s)</span>';
+      }
+    }
+
+    /* ===== EX 2 : URL Builder ===== */
+    var urlCases = [
+      {
+        desc: 'Pseudo GitHub : <strong>lucie-dev</strong> — Dépôt : <strong>portfolio</strong>',
+        correctUser: 'lucie-dev',
+        correctRepo: 'portfolio',
+        choices: [
+          { label: 'lucie-dev', type: 'user' },
+          { label: 'portfolio', type: 'repo' },
+          { label: 'lucie-portfolio', type: 'wrong' },
+          { label: 'mon-depot', type: 'wrong' },
+        ],
+        id: 'url1', built: [], done: false
+      },
+      {
+        desc: 'Pseudo GitHub : <strong>tom42</strong> — Dépôt : <strong>jeu-dechiffrement</strong>',
+        correctUser: 'tom42',
+        correctRepo: 'jeu-dechiffrement',
+        choices: [
+          { label: 'tom42', type: 'user' },
+          { label: 'jeu-dechiffrement', type: 'repo' },
+          { label: 'project-web', type: 'wrong' },
+          { label: 'thomas', type: 'wrong' },
+        ],
+        id: 'url2', built: [], done: false
+      },
+    ];
+
+    function buildUrlExercises() {
+      var container = document.getElementById('url-exercises');
+      container.innerHTML = '';
+      urlCases.forEach(function(ex) {
+        ex.built = []; ex.done = false;
+        var div = document.createElement('div');
+        div.style.marginBottom = '1.4rem';
+        div.style.paddingBottom = '1.4rem';
+        div.style.borderBottom = '0.5px solid #F1EFE8';
+
+        div.innerHTML = '<div class="rl">Profil</div>'
+          + '<p style="font-size:0.92rem;margin-bottom:0.6rem;">' + ex.desc + '</p>'
+          + '<div class="rl">URL à construire</div>'
+          + '<div class="url-display" id="url-disp-'+ex.id+'">'
+          + '<span class="url-placeholder">Clique sur les morceaux ci-dessous pour assembler l\'URL…</span>'
+          + '</div>'
+          + '<div class="url-pieces" id="url-pieces-'+ex.id+'"></div>'
+          + '<div class="q-feedback" id="url-fb-'+ex.id+'"></div>'
+          + '<div class="btn-row"><button class="action-btn" onclick="resetUrl(\''+ex.id+'\')">Recommencer</button></div>';
+        container.appendChild(div);
+
+        var piecesDiv = div.querySelector('#url-pieces-' + ex.id);
+        var shuffled = ex.choices.slice().sort(function() { return Math.random()-0.5; });
+        shuffled.forEach(function(piece) {
+          var btn = document.createElement('span');
+          btn.className = 'url-piece up-' + piece.type;
+          btn.textContent = piece.label;
+          btn.dataset.label = piece.label;
+          btn.dataset.ptype = piece.type;
+          btn.onclick = function() { clickUrlPiece(btn, ex); };
+          piecesDiv.appendChild(btn);
+        });
+      });
+      // Remove last border
+      var divs = container.querySelectorAll('div[style]');
+      if (divs.length) divs[divs.length-1].style.borderBottom = 'none';
+    }
+
+    function clickUrlPiece(btn, ex) {
+      if (btn.classList.contains('placed') || ex.done) return;
+      var ptype = btn.dataset.ptype;
+      var label = btn.dataset.label;
+      if (ptype === 'wrong') {
+        var fb = document.getElementById('url-fb-' + ex.id);
+        fb.className = 'q-feedback ko';
+        fb.textContent = '"' + label + '" ne fait pas partie de l\'URL. Essaie les bons morceaux !';
+        btn.style.animation = 'none';
+        setTimeout(function() { fb.textContent = ''; fb.className = 'q-feedback'; }, 1500);
+        return;
+      }
+      // Check if this type already placed
+      if (ex.built.find(function(b) { return b.type === ptype; })) return;
+      btn.classList.add('placed');
+      ex.built.push({ type: ptype, label: label });
+      renderUrl(ex);
+      if (ex.built.length === 2) checkUrl(ex);
+    }
+
+    function renderUrl(ex) {
+      var disp = document.getElementById('url-disp-' + ex.id);
+      var user = ex.built.find(function(b) { return b.type === 'user'; });
+      var repo = ex.built.find(function(b) { return b.type === 'repo'; });
+      disp.innerHTML = '<span class="us-fixed">https://</span>';
+      if (user) disp.innerHTML += '<span class="url-seg-placed us-user" title="Clique pour retirer" onclick="removeUrlSeg(\'user\',\''+ex.id+'\')">'+user.label+'</span>';
+      else disp.innerHTML += '<span class="url-placeholder">PSEUDO</span>';
+      disp.innerHTML += '<span class="us-fixed">.github.io/</span>';
+      if (repo) disp.innerHTML += '<span class="url-seg-placed us-repo" title="Clique pour retirer" onclick="removeUrlSeg(\'repo\',\''+ex.id+'\')">'+repo.label+'</span>';
+      else disp.innerHTML += '<span class="url-placeholder">DEPOT</span>';
+    }
+
+    function removeUrlSeg(type, exId) {
+      var ex = urlCases.find(function(e) { return e.id === exId; });
+      if (ex.done) return;
+      var removed = ex.built.find(function(b) { return b.type === type; });
+      ex.built = ex.built.filter(function(b) { return b.type !== type; });
+      // Re-enable the button
+      document.querySelectorAll('#url-pieces-'+exId+' .url-piece').forEach(function(btn) {
+        if (btn.dataset.label === removed.label) btn.classList.remove('placed');
+      });
+      renderUrl(ex);
+      document.getElementById('url-fb-'+exId).textContent = '';
+    }
+
+    function checkUrl(ex) {
+      var user = ex.built.find(function(b) { return b.type === 'user'; });
+      var repo = ex.built.find(function(b) { return b.type === 'repo'; });
+      var fb = document.getElementById('url-fb-' + ex.id);
+      if (user && repo && user.label === ex.correctUser && repo.label === ex.correctRepo) {
+        fb.className = 'q-feedback ok';
+        fb.textContent = rnd(okMsgs) + ' ✓ URL correcte : https://'+ex.correctUser+'.github.io/'+ex.correctRepo;
+        ex.done = true;
+      } else {
+        fb.className = 'q-feedback ko';
+        fb.textContent = 'Ce n\'est pas tout à fait ça. Vérifie les bons morceaux !';
+        setTimeout(function() { resetUrl(ex.id); }, 1800);
+      }
+    }
+
+    function resetUrl(exId) {
+      var ex = urlCases.find(function(e) { return e.id === exId; });
+      ex.built = []; ex.done = false;
+      document.querySelectorAll('#url-pieces-'+exId+' .url-piece').forEach(function(b) { b.classList.remove('placed'); });
+      var disp = document.getElementById('url-disp-' + exId);
+      disp.innerHTML = '<span class="url-placeholder">Clique sur les morceaux ci-dessous pour assembler l\'URL…</span>';
+      document.getElementById('url-fb-' + exId).textContent = '';
+      document.getElementById('url-fb-' + exId).className = 'q-feedback';
+    }
+
+    /* ===== EX 3 : Étapes GitHub Pages ===== */
+    var stepsData = [
+      { icon: '📦', text: 'Avoir un dépôt GitHub public avec index.html à la racine', order: 1 },
+      { icon: '🌿', text: 'Avoir fait au moins un git push pour envoyer le code sur GitHub', order: 2 },
+      { icon: '⚙️', text: 'Aller dans Settings → Pages sur GitHub.com', order: 3 },
+      { icon: '🎯', text: 'Choisir la branche "main" et le dossier "/" puis cliquer Save', order: 4 },
+      { icon: '⏱️', text: 'Attendre 1-2 minutes et actualiser la page', order: 5 },
+      { icon: '🔗', text: 'Copier le lien GitHub Pages et l\'ajouter dans le README.md', order: 6 },
+    ];
+    var dragSrc = null;
+
+    function buildStepsOrder() {
+      var container = document.getElementById('steps-sort-container');
+      var shuffled = stepsData.slice().sort(function() { return Math.random()-0.5; });
+      container.innerHTML = '';
+      shuffled.forEach(function(s) {
+        var item = document.createElement('div');
+        item.className = 'step-item';
+        item.draggable = true;
+        item.dataset.order = s.order;
+        item.innerHTML = '<span class="step-handle">⠿</span><span class="step-icon">'+s.icon+'</span><span class="step-text">'+s.text+'</span>';
+        item.addEventListener('dragstart', function(e) { dragSrc = this; this.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+        item.addEventListener('dragend', function() { this.classList.remove('dragging'); });
+        item.addEventListener('dragover', function(e) { e.preventDefault(); });
+        item.addEventListener('drop', function(e) {
+          e.preventDefault();
+          if (dragSrc !== this) {
+            var p = this.parentNode, items = Array.from(p.children);
+            var si = items.indexOf(dragSrc), di = items.indexOf(this);
+            if (si < di) p.insertBefore(dragSrc, this.nextSibling);
+            else p.insertBefore(dragSrc, this);
+          }
+        });
+        container.appendChild(item);
+      });
+      document.getElementById('prog-steps').style.width = '0%';
+      document.getElementById('score-steps').innerHTML = '';
+    }
+
+    function checkStepsOrder() {
+      var items = document.querySelectorAll('#steps-sort-container .step-item');
+      var correct = 0;
+      items.forEach(function(item, i) {
+        item.classList.remove('correct-pos','wrong-pos');
+        if (parseInt(item.dataset.order) === i+1) { item.classList.add('correct-pos'); correct++; }
+        else item.classList.add('wrong-pos');
+      });
+      document.getElementById('prog-steps').style.width = (correct/stepsData.length*100)+'%';
+      var row = document.getElementById('score-steps');
+      if (correct === stepsData.length) row.innerHTML = '<span class="chip chip-ok">'+rnd(okMsgs)+' Toutes les étapes dans le bon ordre ! 🎉</span>';
+      else row.innerHTML = '<span class="chip chip-ok">'+correct+' / '+stepsData.length+' dans le bon ordre</span><span class="chip chip-ko">'+(stepsData.length-correct)+' à corriger</span>';
+    }
+
+    function resetStepsOrder() { buildStepsOrder(); }
+
+    buildUrlExercises();
+    buildStepsOrder();
+  </script>
+
+</body>
+</html>
