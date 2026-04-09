@@ -70,6 +70,16 @@
       background: #EEEDFE;
       color: #3C3489;
     }
+    
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
 
     .nav-row {
       display: flex;
@@ -639,11 +649,7 @@
 
 <body>
 
-  <div class="nav-row">
-    <a class="nav-readme" href="cours-readme.html">📄 Cours README →</a>
-    <a class="nav-pages" href="cours-github-pages.html">🌐 Cours GitHub Pages →</a>
-    <a class="nav-ex" href="exercices-patchnote.html">✏️ Exercices →</a>
-  </div>
+  <a class="nav-prev" href="../sommaire.html">&larr; Retour au sommaire</a>
 
   <div class="hero">
     <div style="font-size:2.8rem;margin-bottom:0.5rem;">📋</div>

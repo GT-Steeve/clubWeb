@@ -12,11 +12,13 @@ v1.01.5 = ajout cours git + terminal
 v1.01.6 = rectif cours terminal axé CMD
 v1.01.7 = ajout cours githubs + patchnote + readME
 v1.01.8 = ajout jeux vidéo JS + Canvas
+v1.01.9 = refonte arborescente dossier
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
 
 ** Next step ** 
+checker les lien exercice + retour sommaire + retour page club web
 Revoir l'exercice 3 question 1 uniquement !
 bonne pratique, patchNote + readME.md + activer PAGE sur github
 Faire une éval, Transformer où modifier une fichier html, css

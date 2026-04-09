@@ -39,7 +39,17 @@
     .nav-git:hover { background: #F5C4B3; }
     .nav-ex  { color: #085041; background: #D0F4EA; border-color: #5DCAA5; }
     .nav-ex:hover  { background: #9FE1CB; }
-
+    
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+    
     .card {
       border-radius: 16px;
       border: 0.5px solid #D3D1C7;
@@ -210,10 +220,7 @@
 </head>
 <body>
 
-  <div class="nav-row">
-    <a class="nav-git" href="cours-git.html">🌿 Cours Git →</a>
-    <a class="nav-ex"  href="exercices-terminal.html">✏️ Exercices Terminal →</a>
-  </div>
+  <a class="nav-prev" href="../sommaire.html">&larr; Retour au sommaire</a>
 
   <div class="hero">
     <div style="font-size:2.8rem;margin-bottom:0.5rem;">⬛</div>

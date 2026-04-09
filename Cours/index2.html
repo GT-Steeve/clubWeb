@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Sommaire de Cours</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .matiere-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--accent-color);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 10px 0;
+            border-bottom: 1px thin #fafafa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        .cours-link {
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .cours-link:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .date {
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        .badge {
+            background: #e8f4fd;
+            color: #3498db;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>📚 Sommaire de mes Cours</h1>
+            <p>Année Académique 2025-2026</p>
+        </header>
+
+        <main>
+            <section class="matiere-card">
+                <h2>Nom de la Matière 1</h2>
+                <ul>
+                    <li>
+                        <a href="chemin/vers/ton/cours1.html" class="cours-link">Chapitre 1 : Introduction aux concepts</a>
+                        <span class="date">01/09/2025</span>
+                    </li>
+                    <li>
+                        <a href="#" class="cours-link">Chapitre 2 : Titre du second cours</a>
+                        <span class="badge">En cours</span>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="matiere-card">
+                <h2>Nom de la Matière 2</h2>
+                <ul>
+                    <li>
+                        <a href="#" class="cours-link">Titre du cours</a>
+                        <span class="date">05/09/2025</span>
+                    </li>
+                </ul>
+            </section>
+
+            </main>
+
+        <footer style="text-align: center; margin-top: 40px; font-size: 0.9em; color: #777;">
+            <p>Dernière mise à jour : Avril 2026</p>
+        </footer>
+    </div>
+
+</body>
+</html>

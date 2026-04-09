@@ -67,6 +67,16 @@
     .tag { color: #85B7EB; }
     .atr { color: #FAC775; }
     .val { color: #86EFAC; }
+    
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
 
     /* Canvas demo container */
     .demo-wrap {
@@ -146,9 +156,7 @@
 </head>
 <body>
 
-  <div class="nav-row">
-    <a class="nav-js" href="cours-javascript.html">← Cours JavaScript Bases</a>
-  </div>
+  <a class="nav-prev" href="../sommaire.html">&larr; Retour au sommaire</a>
 
   <div class="hero">
     <div style="font-size:2.8rem;margin-bottom:0.5rem;">🎮</div>

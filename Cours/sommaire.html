@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sommaire — Cours de développement web</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #F7F6F2;
+      --card-bg:   #FFFFFF;
+      --ink:       #1E1D1A;
+      --ink-soft:  #5F5E5A;
+      --border:    #E8E6DF;
+
+      --teal:   #0BBFAD;
+      --teal-l: #D6F5F2;
+      --purple: #7B5CF0;
+      --purple-l: #EDE9FD;
+      --amber:  #F59E0B;
+      --amber-l:#FEF3C7;
+      --blue:   #3B82F6;
+      --blue-l: #DBEAFE;
+      --green:  #22C55E;
+      --green-l:#DCFCE7;
+      --rose:   #F43F5E;
+      --rose-l: #FFE4E6;
+      --orange: #F97316;
+      --orange-l:#FFEDD5;
+      --sky:    #0EA5E9;
+      --sky-l:  #E0F2FE;
+      --indigo: #6366F1;
+      --indigo-l:#E0E7FF;
+      --lime:   #84CC16;
+      --lime-l: #ECFCCB;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1E1D1A 0%, #2D2C28 60%, #3a3830 100%);
+      color: #fff;
+      text-align: center;
+      padding: 3.5rem 1.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(11,191,173,.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 20%, rgba(123,92,240,.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-emoji { font-size: 3rem; margin-bottom: .6rem; display: block; animation: bounce 2s ease-in-out infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .hero h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -.02em;
+      margin-bottom: .5rem;
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,.7);
+      max-width: 480px;
+      margin: 0 auto 1.4rem;
+    }
+    .badge-row { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; }
+    .badge {
+      font-size: .75rem;
+      font-weight: 700;
+      padding: .28rem .75rem;
+      border-radius: 999px;
+      letter-spacing: .03em;
+    }
+    .b-teal   { background: var(--teal-l);   color: #0a8c80; }
+    .b-purple { background: var(--purple-l); color: #5b3fbf; }
+    .b-amber  { background: var(--amber-l);  color: #b45309; }
+
+    /* ── LEGEND BAR ── */
+    .legend {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 1rem 1.5rem;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+    }
+    .legend-item { display: flex; align-items: center; gap: .35rem; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
+
+    /* ── GRID ── */
+    .grid {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.1rem;
+    }
+
+    /* ── CARD ── */
+    .course-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 1.4rem 1.25rem 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: .55rem;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .course-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      border-radius: 16px 16px 0 0;
+    }
+    .course-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.09);
+    }
+    .course-card:hover { border-color: transparent; }
+
+    .card-icon {
+      font-size: 1.9rem;
+      line-height: 1;
+      margin-bottom: .1rem;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--ink);
+    }
+    .card-desc {
+      font-size: .82rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+      margin-top: .2rem;
+    }
+    .tag {
+      font-size: .68rem;
+      font-weight: 700;
+      padding: .22rem .6rem;
+      border-radius: 999px;
+    }
+    .card-arrow {
+      font-size: .8rem;
+      font-weight: 700;
+      margin-top: .3rem;
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .course-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+
+    /* Color themes */
+    .theme-teal   .course-card::before { background: var(--teal); }
+    .theme-teal   .course-card:hover   { box-shadow: 0 12px 32px rgba(11,191,173,.18); }
+    .theme-teal   .card-arrow { color: var(--teal); }
+    .theme-teal   .tag-main   { background: var(--teal-l); color: #0a8c80; }
+
+    .theme-purple .course-card::before { background: var(--purple); }
+    .theme-purple .course-card:hover   { box-shadow: 0 12px 32px rgba(123,92,240,.18); }
+    .theme-purple .card-arrow { color: var(--purple); }
+    .theme-purple .tag-main   { background: var(--purple-l); color: #5b3fbf; }
+
+    .theme-amber  .course-card::before { background: var(--amber); }
+    .theme-amber  .course-card:hover   { box-shadow: 0 12px 32px rgba(245,158,11,.18); }
+    .theme-amber  .card-arrow { color: var(--amber); }
+    .theme-amber  .tag-main   { background: var(--amber-l); color: #b45309; }
+
+    .theme-blue   .course-card::before { background: var(--blue); }
+    .theme-blue   .course-card:hover   { box-shadow: 0 12px 32px rgba(59,130,246,.18); }
+    .theme-blue   .card-arrow { color: var(--blue); }
+    .theme-blue   .tag-main   { background: var(--blue-l); color: #1d4ed8; }
+
+    .theme-green  .course-card::before { background: var(--green); }
+    .theme-green  .course-card:hover   { box-shadow: 0 12px 32px rgba(34,197,94,.18); }
+    .theme-green  .card-arrow { color: var(--green); }
+    .theme-green  .tag-main   { background: var(--green-l); color: #15803d; }
+
+    .theme-rose   .course-card::before { background: var(--rose); }
+    .theme-rose   .course-card:hover   { box-shadow: 0 12px 32px rgba(244,63,94,.18); }
+    .theme-rose   .card-arrow { color: var(--rose); }
+    .theme-rose   .tag-main   { background: var(--rose-l); color: #be123c; }
+
+    .theme-orange .course-card::before { background: var(--orange); }
+    .theme-orange .course-card:hover   { box-shadow: 0 12px 32px rgba(249,115,22,.18); }
+    .theme-orange .card-arrow { color: var(--orange); }
+    .theme-orange .tag-main   { background: var(--orange-l); color: #c2410c; }
+
+    .theme-sky    .course-card::before { background: var(--sky); }
+    .theme-sky    .course-card:hover   { box-shadow: 0 12px 32px rgba(14,165,233,.18); }
+    .theme-sky    .card-arrow { color: var(--sky); }
+    .theme-sky    .tag-main   { background: var(--sky-l); color: #0369a1; }
+
+    .theme-indigo .course-card::before { background: var(--indigo); }
+    .theme-indigo .course-card:hover   { box-shadow: 0 12px 32px rgba(99,102,241,.18); }
+    .theme-indigo .card-arrow { color: var(--indigo); }
+    .theme-indigo .tag-main   { background: var(--indigo-l); color: #4338ca; }
+
+    .theme-lime   .course-card::before { background: var(--lime); }
+    .theme-lime   .course-card:hover   { box-shadow: 0 12px 32px rgba(132,204,22,.18); }
+    .theme-lime   .card-arrow { color: #65a30d; }
+    .theme-lime   .tag-main   { background: var(--lime-l); color: #65a30d; }
+
+    .tag-level { background: #F3F2EE; color: var(--ink-soft); }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      grid-column: 1 / -1;
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      padding: .5rem 0 .1rem;
+      border-top: 1px solid var(--border);
+      margin-top: .5rem;
+    }
+    .section-label:first-child { border-top: none; margin-top: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 1.5rem 1rem 2.5rem;
+      font-size: .8rem;
+      color: var(--ink-soft);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="hero-emoji">📚</span>
+    <h1>Cours de développement web</h1>
+    <p>Tous les cours au même endroit — clique sur un sujet pour commencer !</p>
+    <div class="badge-row">
+      <span class="badge b-teal">10 cours</span>
+      <span class="badge b-purple">Du débutant au confirmé</span>
+      <span class="badge b-amber">Complet &amp; gratuit</span>
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- ── LES FONDATIONS ── -->
+    <div class="section-label">🧱 Les fondations</div>
+
+    <div class="theme-teal">
+      <a class="course-card" href="General/cours-html.html">
+        <div class="card-icon">🌐</div>
+        <div class="card-title">Apprends le HTML !</div>
+        <div class="card-desc">Le langage de base pour créer des pages web. Balises, structure, formulaires et bien plus.</div>
+        <div class="card-tags">
+          <span class="tag tag-main">HTML</span>
+          <span class="tag tag-level">Débutant</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+    <div class="theme-purple">
+      <a class="course-card" href="General/cours-css.html">
+        <div class="card-icon">🎨</div>
+        <div class="card-title">Apprends le CSS !</div>
+        <div class="card-desc">Mets en forme tes pages : couleurs, polices, mises en page flexbox et animations.</div>
+        <div class="card-tags">
+          <span class="tag tag-main">CSS</span>
+          <span class="tag tag-level">Débutant</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+    <div class="theme-amber">
+      <a class="course-card" href="General/cours-javascript.html">
+        <div class="card-icon">⚡</div>
+        <div class="card-title">JavaScript — Les bases &amp; intégration HTML</div>
+        <div class="card-desc">Rends tes pages vivantes ! Variables, fonctions, événements et manipulation du DOM.</div>
+        <div class="card-tags">
+          <span class="tag tag-main">JavaScript</span>
+          <span class="tag tag-level">Intermédiaire</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+    <!-- ── ORGANISATION & STRUCTURE ── -->
+    <div class="section-label">📁 Organisation &amp; structure</div>
+
+    <div class="theme-blue">
+      <a class="course-card" href="General/cours-architecture.html">
+        <div class="card-icon">🗂️</div>
+        <div class="card-title">Architecture de projet &amp; chemins de fichiers</div>
+        <div class="card-desc">Organise tes dossiers proprement et maîtrise les chemins relatifs et absolus.</div>
+        <div class="card-tags">
+          <span class="tag tag-main">Architecture</span>
+          <span class="tag tag-level">Débutant</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+    <div class="theme-sky">
+      <a class="course-card" href="General/cours-terminal.html">
+        <div class="card-icon">🖥️</div>
+        <div class="card-title">Le Terminal CMD — L'invite de commandes</div>
+        <div class="card-desc">Navigue dans tes fichiers, exécute des commandes et prends le contrôle de ton environnement.</div>
+        <div class="card-tags">
+          <span class="tag tag-main">Terminal</span>
+          <span class="tag tag-level">Débutant</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+    <!-- ── GIT & COLLABORATION ── -->
+    <div class="section-label">🔀 Git &amp; collaboration</div>
+
+    <div class="theme-orange">
+      <a class="course-card" href="General/cours-git.html">
+        <div class="card-icon">🌿</div>
+        <div class="card-title">Git &amp; GitHub — Sauvegarde ton code !</div>
+        <div class="card-desc">Versionne ton projet, crée des branches et collabore avec d'autres développeurs.</div>
+        <div class="card-tags">
+          <span class="tag tag-main">Git</span>
+          <span class="tag tag-level">Intermédiaire</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+    <div class="theme-green">
+      <a class="course-card" href="General/cours-github-pages.html">
+        <div class="card-icon">🚀</div>
+        <div class="card-title">GitHub Pages — Héberge ton site gratuitement !</div>
+        <div class="card-desc">Publie ton site sur internet en quelques clics grâce à GitHub Pages, sans payer d'hébergement.</div>
+        <div class="card-tags">
+          <span class="tag tag-main">GitHub Pages</span>
+          <span class="tag tag-level">Intermédiaire</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+    <div class="theme-rose">
+      <a class="course-card" href="General/cours-patchnote.html">
+        <div class="card-icon">📝</div>
+        <div class="card-title">Patch-notes &amp; Versioning — Documenter ses commits</div>
+        <div class="card-desc">Écris des messages de commit clairs, rédige des patch-notes et gère le versioning sémantique.</div>
+        <div class="card-tags">
+          <span class="tag tag-main">Versioning</span>
+          <span class="tag tag-level">Intermédiaire</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+    <div class="theme-indigo">
+      <a class="course-card" href="General/cours-readme.html">
+        <div class="card-icon">📄</div>
+        <div class="card-title">Le README.md — La carte d'identité de ton projet</div>
+        <div class="card-desc">Présente ton projet en Markdown : badges, captures d'écran, installation et contribution.</div>
+        <div class="card-tags">
+          <span class="tag tag-main">README</span>
+          <span class="tag tag-level">Débutant</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+    <!-- ── ALLER PLUS LOIN ── -->
+    <div class="section-label">🎮 Aller plus loin</div>
+
+    <div class="theme-lime">
+      <a class="course-card" href="General/cours-canvas.html">
+        <div class="card-icon">🕹️</div>
+        <div class="card-title">Canvas &amp; Jeu vidéo — L'algo derrière les jeux</div>
+        <div class="card-desc">Dessine sur le Canvas HTML5 et découvre les notions d'algorithmique pour créer des jeux simples.</div>
+        <div class="card-tags">
+          <span class="tag tag-main">Canvas</span>
+          <span class="tag tag-level">Avancé</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+  </div>
+
+  <footer>
+    Cours de développement web &mdash; Bonne lecture ! 🎉
+  </footer>
+
+</body>
+</html>
