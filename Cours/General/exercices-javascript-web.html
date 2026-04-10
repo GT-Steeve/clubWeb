@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices JavaScript</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-yellow  { background: #FEF3C7; color: #713F12; }
+    .b-purple  { background: #EEEDFE; color: #3C3489; }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #713F12;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #FEF3C7; border: 0.5px solid #FDE68A;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .back-link:hover { background: #FDE68A; }
+
+    .card {
+      border-radius: 16px;
+      border: 0.5px solid #D3D1C7;
+      background: #ffffff;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .stitle {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+    }
+    .pill {
+      width: 32px; height: 32px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; flex-shrink: 0;
+    }
+    .p-yellow  { background: #FDE68A; color: #713F12; }
+    .p-purple  { background: #CECBF6; color: #3C3489; }
+    .p-teal    { background: #9FE1CB; color: #085041; }
+    .p-amber   { background: #FAC775; color: #633806; }
+    .p-green   { background: #C0DD97; color: #3B6D11; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+
+    .code-block {
+      background: #1E1E2E;
+      border: 0.5px solid #313149;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      line-height: 1.9;
+      white-space: pre;
+      overflow-x: auto;
+      color: #CDD6F4;
+      margin-bottom: 0.8rem;
+    }
+    .kw   { color: #CBA6F7; }
+    .str  { color: #A6E3A1; }
+    .num  { color: #FAB387; }
+    .fn   { color: #89DCEB; }
+    .cm   { color: #6C7086; font-style: italic; }
+    .op   { color: #89B4FA; }
+    .err  { color: #F38BA8; font-weight: 700; }
+    .punc { color: #6C7086; }
+
+    .rl {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #888780; margin-bottom: 6px;
+    }
+
+    .tip {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #E1F5EE; border-radius: 10px;
+      padding: 0.75rem 1rem; margin-top: 0.9rem;
+      font-size: 0.88rem; color: #085041; line-height: 1.5;
+    }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .kbd {
+      display: inline-block;
+      background: #F1EFE8;
+      border: 0.5px solid #B4B2A9;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      color: #2C2C2A;
+    }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      background: #F1EFE8;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.87em;
+      color: #993C1D;
+    }
+
+    /* ---- EXERCICE 1 : matching ---- */
+    .match-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 0.8rem;
+    }
+    .match-col-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #888780; margin-bottom: 8px;
+    }
+    .match-item {
+      background: #F1EFE8;
+      border: 0.5px solid #B4B2A9;
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+      user-select: none;
+    }
+    .match-item:hover { background: #D3D1C7; }
+    .match-item.selected   { background: #CECBF6; border-color: #7F77DD; color: #26215C; }
+    .match-item.matched-ok { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+    .match-item.matched-ko { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+    .match-item.disabled   { cursor: default; opacity: 0.5; }
+
+    .match-feedback { font-size: 0.88rem; min-height: 1.4em; font-weight: 700; margin-top: 0.6rem; }
+    .feedback-ok { color: #0F6E56; }
+    .feedback-ko { color: #A32D2D; }
+
+    .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.4s; width: 0%; }
+    .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+    .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+    .chip-ok { background: #E1F5EE; color: #085041; }
+    .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+    /* ---- EXERCICE 2 : corriger du JS cassé ---- */
+    .broken-block {
+      background: #1E1E2E;
+      border: 0.5px solid #313149;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      line-height: 1.9;
+      color: #CDD6F4;
+      margin-bottom: 0.8rem;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .choices { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.7rem 0 0.4rem; }
+    .choice-btn {
+      border: 0.5px solid #B4B2A9;
+      background: #F1EFE8;
+      color: #2C2C2A;
+      border-radius: 8px;
+      padding: 5px 14px;
+      font-size: 0.85rem;
+      font-family: 'Fira Code', monospace;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .choice-btn:hover   { background: #D3D1C7; }
+    .choice-btn.correct { background: #E1F5EE; color: #085041; border-color: #5DCAA5; }
+    .choice-btn.wrong   { background: #FCEBEB; color: #791F1F; border-color: #F09595; }
+    .choice-btn:disabled { cursor: default; }
+    .q-feedback { font-size: 0.88rem; min-height: 1.3em; font-weight: 700; }
+    .q-feedback.ok { color: #0F6E56; }
+    .q-feedback.ko { color: #A32D2D; }
+
+    /* ---- EXERCICE 3 : éditeur JS en direct ---- */
+    .live-editor-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+    .live-textarea {
+      width: 100%;
+      min-height: 220px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      line-height: 1.8;
+      background: #1E1E2E;
+      border: 0.5px solid #313149;
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      color: #CDD6F4;
+      resize: vertical;
+      outline: none;
+    }
+    .live-textarea:focus { border-color: #7F77DD; }
+    .live-preview {
+      border-radius: 10px;
+      border: 0.5px solid #B4B2A9;
+      background: #ffffff;
+      padding: 1rem;
+      min-height: 220px;
+      overflow: auto;
+      font-size: 0.9rem;
+    }
+    .live-console {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      background: #1E1E2E;
+      color: #A6E3A1;
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      margin-top: 0.6rem;
+      min-height: 3rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .live-console .prompt { color: #6C7086; }
+    .live-console .cerr   { color: #F38BA8; }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 0.8rem; flex-wrap: wrap; }
+    .action-btn {
+      border: 0.5px solid #B4B2A9;
+      background: #ffffff;
+      color: #2C2C2A;
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 0.88rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .action-btn:hover { background: #F1EFE8; }
+    .action-btn.primary { background: #FEF3C7; color: #713F12; border-color: #FDE68A; }
+    .action-btn.primary:hover { background: #FDE68A; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+
+    @media (max-width: 560px) {
+      .match-grid, .live-editor-wrap { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="cours-javascript-web.html">&larr; Retour au cours JavaScript</a>
+
+  <div class="hero">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">⚡</div>
+    <h1>Exercices JavaScript</h1>
+    <p>Mets en pratique ce que tu as appris !</p>
+    <div class="badge-row">
+      <span class="badge b-yellow">3 exercices</span>
+      <span class="badge b-purple">Interactif</span>
+    </div>
+  </div>
+
+  <!-- ===================== EXERCICE 1 : ASSOCIER ===================== -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-yellow">1</div>Exercice 1 &mdash; Associe le mot-cl&eacute; &agrave; sa description</div>
+    <p class="desc">Clique d'abord sur un <strong>mot-cl&eacute; JavaScript</strong> &agrave; gauche, puis sur la <strong>description</strong> qui lui correspond &agrave; droite.</p>
+
+    <div class="match-grid">
+      <div>
+        <div class="match-col-title">Mot-cl&eacute;s JS</div>
+        <div class="match-item" id="prop-let"      onclick="selectProp(this,'let')">let</div>
+        <div class="match-item" id="prop-const"    onclick="selectProp(this,'const')">const</div>
+        <div class="match-item" id="prop-function" onclick="selectProp(this,'function')">function</div>
+        <div class="match-item" id="prop-if"       onclick="selectProp(this,'if')">if</div>
+        <div class="match-item" id="prop-for"      onclick="selectProp(this,'for')">for</div>
+        <div class="match-item" id="prop-return"   onclick="selectProp(this,'return')">return</div>
+      </div>
+      <div>
+        <div class="match-col-title">Descriptions</div>
+        <div class="match-item" id="desc-for"      onclick="selectDesc(this,'for')">R&eacute;p&eacute;ter du code en boucle</div>
+        <div class="match-item" id="desc-const"    onclick="selectDesc(this,'const')">Variable dont la valeur ne change pas</div>
+        <div class="match-item" id="desc-if"       onclick="selectDesc(this,'if')">Ex&eacute;cuter du code sous condition</div>
+        <div class="match-item" id="desc-return"   onclick="selectDesc(this,'return')">Renvoyer une valeur depuis une fonction</div>
+        <div class="match-item" id="desc-let"      onclick="selectDesc(this,'let')">Variable dont la valeur peut changer</div>
+        <div class="match-item" id="desc-function" onclick="selectDesc(this,'function')">D&eacute;finir un bloc de code r&eacute;utilisable</div>
+      </div>
+    </div>
+
+    <div class="match-feedback" id="match-feedback"></div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-match"></div></div>
+    <div class="score-row" id="score-match"></div>
+  </div>
+
+  <!-- ===================== EXERCICE 2 : CORRIGER LE JS ===================== -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">2</div>Exercice 2 &mdash; Trouve l'erreur dans chaque bloc JavaScript</div>
+    <p class="desc">Chaque bloc ci-dessous contient <strong>une erreur</strong>. Clique sur la correction qui convient !</p>
+
+    <!-- Q1 -->
+    <div style="margin-bottom:1.3rem;">
+      <div class="rl">Erreur 1 &mdash; la d&eacute;claration de variable est incorrecte :</div>
+      <div class="broken-block"><span class="err">variable</span> age <span class="op">=</span> <span class="num">14</span>;   <span class="cm">// ← ce mot n'existe pas en JS moderne</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="q2answer(this,'q2-1',false)">var</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-1',true)">let</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-1',false)">set</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-1',false)">int</button>
+      </div>
+      <div class="q-feedback" id="fb-q2-1"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div style="margin-bottom:1.3rem;">
+      <div class="rl">Erreur 2 &mdash; le test de comparaison est mal &eacute;crit :</div>
+      <div class="broken-block"><span class="kw">if</span> (score <span class="err">=</span> <span class="num">10</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Gagn&eacute; !"</span>);
+}
+<span class="cm">// ← = assigne, ne compare pas !</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="q2answer(this,'q2-2',false)">==</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-2',true)">===</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-2',false)">:=</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-2',false)">=&gt;</button>
+      </div>
+      <div class="q-feedback" id="fb-q2-2"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div style="margin-bottom:1.3rem;">
+      <div class="rl">Erreur 3 &mdash; il manque quelque chose dans la boucle for :</div>
+      <div class="broken-block"><span class="kw">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> <span class="num">5</span><span class="err">)</span> {
+  <span class="fn">console</span>.<span class="fn">log</span>(i);
+}
+<span class="cm">// ← boucle infinie !</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="q2answer(this,'q2-3',false)">Ajouter i-- apr&egrave;s i &lt; 5</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-3',false)">Remplacer &lt; par &lt;=</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-3',true)">Ajouter ; i++ apr&egrave;s i &lt; 5</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-3',false)">Enlever let devant i</button>
+      </div>
+      <div class="q-feedback" id="fb-q2-3"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div style="margin-bottom:1.3rem;">
+      <div class="rl">Erreur 4 &mdash; la fonction ne renvoie rien :</div>
+      <div class="broken-block"><span class="kw">function</span> <span class="fn">double</span>(n) {
+  n <span class="op">*</span> <span class="num">2</span>;   <span class="cm">// ← le r&eacute;sultat est calcul&eacute; mais perdu !</span>
+}
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">double</span>(<span class="num">5</span>)); <span class="cm">// affiche undefined</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="q2answer(this,'q2-4',false)">Remplacer function par const</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-4',false)">Ajouter console.log(n * 2)</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-4',true)">Ajouter return devant n * 2</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-4',false)">Changer n en num</button>
+      </div>
+      <div class="q-feedback" id="fb-q2-4"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div>
+      <div class="rl">Erreur 5 &mdash; l'acc&egrave;s au tableau est incorrect :</div>
+      <div class="broken-block"><span class="kw">const</span> couleurs <span class="op">=</span> [<span class="str">"rouge"</span>, <span class="str">"vert"</span>, <span class="str">"bleu"</span>];
+<span class="fn">console</span>.<span class="fn">log</span>(couleurs[<span class="err">3</span>]); <span class="cm">// ← affiche undefined !</span>
+<span class="cm">// On voulait afficher "bleu"</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="q2answer(this,'q2-5',false)">couleurs[4]</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-5',false)">couleurs.last</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-5',true)">couleurs[2]</button>
+        <button class="choice-btn" onclick="q2answer(this,'q2-5',false)">couleurs(3)</button>
+      </div>
+      <div class="q-feedback" id="fb-q2-5"></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="prog-q2"></div></div>
+    <div class="score-row" id="score-q2"></div>
+  </div>
+
+  <!-- ===================== EXERCICE 3 : ÉDITEUR EN DIRECT ===================== -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">3</div>Exercice 3 &mdash; L'&eacute;diteur JavaScript en direct !</div>
+    <p class="desc">Modifie le JavaScript &agrave; gauche et clique sur <strong>Ex&eacute;cuter</strong> pour voir le r&eacute;sultat dans la console &agrave; droite.</p>
+    <p class="desc" style="margin-bottom:0.4rem;"><strong>D&eacute;fi :</strong> &Eacute;cris une fonction <code>saluer(prénom)</code> qui affiche <em>"Bonjour, [pr&eacute;nom] !"</em>, puis appelle-la avec ton pr&eacute;nom. Ensuite, affiche dans la console tous les nombres pairs de 1 à 10 !</p>
+
+    <div class="live-editor-wrap">
+      <div>
+        <div class="rl">Ton JavaScript :</div>
+        <textarea class="live-textarea" id="live-js" spellcheck="false">// Défi 1 : crée et appelle une fonction
+function saluer(prénom) {
+  console.log("Bonjour, " + prénom + " !");
+}
+
+saluer("Lucas");
+saluer("Emma");
+
+// Défi 2 : affiche les nombres pairs de 1 à 10
+for (let i = 1; i <= 10; i++) {
+  if (i % 2 === 0) {
+    console.log(i + " est pair");
+  }
+}</textarea>
+      </div>
+      <div>
+        <div class="rl">Résultat — console :</div>
+        <div class="live-console" id="live-console"><span style="color:#6C7086;">← clique sur Exécuter</span></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="action-btn primary" onclick="runCode()">&#9654; Ex&eacute;cuter</button>
+      <button class="action-btn" onclick="resetCode()">R&eacute;initialiser</button>
+      <button class="action-btn" onclick="showSolution()">Voir une solution</button>
+    </div>
+
+    <div class="tip tip-purple" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span>Utilise <code>console.log()</code> pour afficher des valeurs. Tu peux &eacute;crire autant de lignes que tu veux — essaie d'ajouter de nouvelles fonctions ou boucles !</span>
+    </div>
+  </div>
+
+  <!-- ===================== EXERCICE BONUS : QCM ===================== -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">★</div>Bonus &mdash; Questions rapides</div>
+    <p class="desc">Quelques questions pour v&eacute;rifier que tu as bien tout compris !</p>
+
+    <!-- BQ1 -->
+    <div style="margin-bottom:1.3rem;">
+      <div class="rl">Question 1 &mdash; Que va afficher ce code ?</div>
+      <div class="code-block"><span class="kw">let</span> x <span class="op">=</span> <span class="num">5</span>;
+x <span class="op">=</span> x <span class="op">+</span> <span class="num">3</span>;
+<span class="fn">console</span>.<span class="fn">log</span>(x);</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="bqAnswer(this,'bq1',false)">5</button>
+        <button class="choice-btn" onclick="bqAnswer(this,'bq1',false)">3</button>
+        <button class="choice-btn" onclick="bqAnswer(this,'bq1',true)">8</button>
+        <button class="choice-btn" onclick="bqAnswer(this,'bq1',false)">53</button>
+      </div>
+      <div class="q-feedback" id="fb-bq1"></div>
+    </div>
+
+    <!-- BQ2 -->
+    <div style="margin-bottom:1.3rem;">
+      <div class="rl">Question 2 &mdash; Combien de fois ce code affiche-t-il quelque chose ?</div>
+      <div class="code-block"><span class="kw">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> <span class="num">4</span>; i<span class="op">++</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Hello"</span>);
+}</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="bqAnswer(this,'bq2',false)">3 fois</button>
+        <button class="choice-btn" onclick="bqAnswer(this,'bq2',true)">4 fois</button>
+        <button class="choice-btn" onclick="bqAnswer(this,'bq2',false)">5 fois</button>
+        <button class="choice-btn" onclick="bqAnswer(this,'bq2',false)">1 fois</button>
+      </div>
+      <div class="q-feedback" id="fb-bq2"></div>
+    </div>
+
+    <!-- BQ3 -->
+    <div style="margin-bottom:1.3rem;">
+      <div class="rl">Question 3 &mdash; Quelle m&eacute;thode s&eacute;lectionne un &eacute;l&eacute;ment HTML par son id ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="bqAnswer(this,'bq3',false)">document.getClass("id")</button>
+        <button class="choice-btn" onclick="bqAnswer(this,'bq3',false)">document.find("id")</button>
+        <button class="choice-btn" onclick="bqAnswer(this,'bq3',true)">document.getElementById("id")</button>
+        <button class="choice-btn" onclick="bqAnswer(this,'bq3',false)">document.select("id")</button>
+      </div>
+      <div class="q-feedback" id="fb-bq3"></div>
+    </div>
+
+    <!-- BQ4 -->
+    <div>
+      <div class="rl">Question 4 &mdash; Quel &eacute;v&eacute;nement &eacute;coute un clic de souris ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="bqAnswer(this,'bq4',false)">"press"</button>
+        <button class="choice-btn" onclick="bqAnswer(this,'bq4',false)">"touch"</button>
+        <button class="choice-btn" onclick="bqAnswer(this,'bq4',false)">"select"</button>
+        <button class="choice-btn" onclick="bqAnswer(this,'bq4',true)">"click"</button>
+      </div>
+      <div class="q-feedback" id="fb-bq4"></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="prog-bq"></div></div>
+    <div class="score-row" id="score-bq"></div>
+  </div>
+
+  <div class="footer-note">
+    Bravo d'avoir fait les exercices JavaScript ! ⚡<br>
+    <span style="font-size:0.82rem;">Tu peux maintenant rendre tes pages HTML interactives !</span><br><br>
+    <a href="cours-javascript.html" style="color:#713F12;font-weight:700;text-decoration:none;">&larr; Retour au cours JavaScript</a>
+    &nbsp;&nbsp;
+    <a href="cours-html.html" style="color:#185FA5;font-weight:700;text-decoration:none;">&larr; Retour au cours HTML</a>
+  </div>
+
+  <script>
+    /* ================================================================
+       EXERCICE 1 — matching
+    ================================================================ */
+    var selectedProp = null;
+    var selectedDesc = null;
+    var matchScore   = 0;
+    var matchTotal   = 6;
+
+    var ok_msgs = ['Parfait !', 'Bravo !', "C'est ça !", 'Excellent !'];
+    var ko_msgs = ['Pas tout à fait...', 'Essaie encore !', 'Presque !'];
+    function rnd(a) { return a[Math.floor(Math.random() * a.length)]; }
+
+    function selectProp(el, key) {
+      if (el.classList.contains('matched-ok') || el.classList.contains('disabled')) return;
+      document.querySelectorAll('[id^="prop-"]').forEach(function(e) { e.classList.remove('selected'); });
+      el.classList.add('selected');
+      selectedProp = key;
+      if (selectedDesc) tryMatch();
+    }
+
+    function selectDesc(el, key) {
+      if (el.classList.contains('matched-ok') || el.classList.contains('disabled')) return;
+      document.querySelectorAll('[id^="desc-"]').forEach(function(e) { e.classList.remove('selected'); });
+      el.classList.add('selected');
+      selectedDesc = key;
+      if (selectedProp) tryMatch();
+    }
+
+    function tryMatch() {
+      var propEl = document.getElementById('prop-' + selectedProp);
+      var descEl = document.getElementById('desc-' + selectedDesc);
+      var fb = document.getElementById('match-feedback');
+      if (selectedProp === selectedDesc) {
+        matchScore++;
+        propEl.classList.remove('selected'); descEl.classList.remove('selected');
+        propEl.classList.add('matched-ok');  descEl.classList.add('matched-ok');
+        fb.className = 'match-feedback feedback-ok';
+        fb.textContent = rnd(ok_msgs) + ' ✓';
+      } else {
+        propEl.classList.remove('selected'); descEl.classList.remove('selected');
+        propEl.classList.add('matched-ko');  descEl.classList.add('matched-ko');
+        fb.className = 'match-feedback feedback-ko';
+        fb.textContent = rnd(ko_msgs) + ' Essaie une autre combinaison.';
+        setTimeout(function() {
+          propEl.classList.remove('matched-ko');
+          descEl.classList.remove('matched-ko');
+          fb.textContent = '';
+        }, 1000);
+      }
+      selectedProp = null;
+      selectedDesc = null;
+      updateMatchScore();
+    }
+
+    function updateMatchScore() {
+      var pct = Math.round(matchScore / matchTotal * 100);
+      document.getElementById('prog-match').style.width = pct + '%';
+      var row = document.getElementById('score-match');
+      row.innerHTML = '';
+      if (matchScore > 0) {
+        var c = document.createElement('span');
+        c.className = 'chip chip-ok';
+        c.textContent = matchScore + ' / ' + matchTotal + ' association' + (matchScore > 1 ? 's' : '') + ' trouvée' + (matchScore > 1 ? 's' : '');
+        row.appendChild(c);
+      }
+    }
+
+    /* ================================================================
+       EXERCICE 2 — corriger du JS cassé
+    ================================================================ */
+    var q2state = { 'q2-1': null, 'q2-2': null, 'q2-3': null, 'q2-4': null, 'q2-5': null };
+
+    function q2answer(btn, qId, isCorrect) {
+      if (q2state[qId] !== null) return;
+      q2state[qId] = isCorrect;
+      btn.closest('.choices').querySelectorAll('.choice-btn').forEach(function(b) { b.disabled = true; });
+      btn.classList.add(isCorrect ? 'correct' : 'wrong');
+      var fb = document.getElementById('fb-' + qId);
+      fb.className = 'q-feedback ' + (isCorrect ? 'ok' : 'ko');
+      fb.textContent = isCorrect ? rnd(ok_msgs) + ' ✓' : rnd(ko_msgs);
+      updateQ2Score();
+    }
+
+    function updateQ2Score() {
+      var vals   = Object.values(q2state);
+      var done   = vals.filter(function(v) { return v !== null; }).length;
+      var good   = vals.filter(function(v) { return v === true; }).length;
+      document.getElementById('prog-q2').style.width = (done / 5 * 100) + '%';
+      var row = document.getElementById('score-q2');
+      row.innerHTML = '';
+      if (done > 0) {
+        var c = document.createElement('span');
+        c.className = 'chip chip-ok';
+        c.textContent = good + ' bonne' + (good > 1 ? 's' : '') + ' réponse' + (good > 1 ? 's' : '');
+        row.appendChild(c);
+        if (done - good > 0) {
+          var e = document.createElement('span');
+          e.className = 'chip chip-ko';
+          e.textContent = (done - good) + ' erreur' + (done - good > 1 ? 's' : '');
+          row.appendChild(e);
+        }
+      }
+    }
+
+    /* ================================================================
+       EXERCICE 3 — éditeur en direct
+    ================================================================ */
+    var defaultJS = 'function saluer(prénom) {\n  console.log("Bonjour, " + prénom + " !");\n}\n\nsaluer("Lucas");\nsaluer("Emma");\n\n// Défi 2 : affiche les nombres pairs de 1 à 10\nfor (let i = 1; i <= 10; i++) {\n  if (i % 2 === 0) {\n    console.log(i + " est pair");\n  }\n}';
+
+    var solutionJS = '// Fonction qui salue\nfunction saluer(prénom) {\n  console.log("Bonjour, " + prénom + " !");\n}\n\nsaluer("Alice");\nsaluer("Bob");\nsaluer("Toi");\n\n// Nombres pairs de 1 à 10\nconsole.log("--- Nombres pairs ---");\nfor (let i = 1; i <= 10; i++) {\n  if (i % 2 === 0) {\n    console.log(i + " est pair ✓");\n  }\n}\nconsole.log("Terminé !")';
+
+    function runCode() {
+      var code = document.getElementById('live-js').value;
+      var consoleEl = document.getElementById('live-console');
+      var lines = [];
+
+      // Intercepter console.log
+      var fakeConsole = {
+        log: function() {
+          var args = Array.prototype.slice.call(arguments);
+          lines.push('> ' + args.map(function(a) {
+            return (typeof a === 'object') ? JSON.stringify(a) : String(a);
+          }).join(' '));
+        }
+      };
+
+      try {
+        var fn = new Function('console', code);
+        fn(fakeConsole);
+        if (lines.length === 0) {
+          consoleEl.innerHTML = '<span style="color:#6C7086;">Aucun console.log() trouvé — pense à afficher quelque chose !</span>';
+        } else {
+          consoleEl.textContent = lines.join('\n');
+        }
+      } catch(e) {
+        consoleEl.innerHTML = '<span class="cerr">Erreur : ' + e.message + '</span>';
+      }
+    }
+
+    function resetCode() {
+      document.getElementById('live-js').value = defaultJS;
+      document.getElementById('live-console').innerHTML = '<span style="color:#6C7086;">← clique sur Exécuter</span>';
+    }
+
+    function showSolution() {
+      document.getElementById('live-js').value = solutionJS;
+      runCode();
+    }
+
+    /* ================================================================
+       BONUS — QCM
+    ================================================================ */
+    var bqState = { 'bq1': null, 'bq2': null, 'bq3': null, 'bq4': null };
+
+    function bqAnswer(btn, qId, isCorrect) {
+      if (bqState[qId] !== null) return;
+      bqState[qId] = isCorrect;
+      btn.closest('.choices').querySelectorAll('.choice-btn').forEach(function(b) { b.disabled = true; });
+      btn.classList.add(isCorrect ? 'correct' : 'wrong');
+      var fb = document.getElementById('fb-' + qId);
+      fb.className = 'q-feedback ' + (isCorrect ? 'ok' : 'ko');
+      fb.textContent = isCorrect ? rnd(ok_msgs) + ' ✓' : rnd(ko_msgs);
+      updateBqScore();
+    }
+
+    function updateBqScore() {
+      var vals = Object.values(bqState);
+      var done = vals.filter(function(v) { return v !== null; }).length;
+      var good = vals.filter(function(v) { return v === true; }).length;
+      document.getElementById('prog-bq').style.width = (done / 4 * 100) + '%';
+      var row = document.getElementById('score-bq');
+      row.innerHTML = '';
+      if (done > 0) {
+        var c = document.createElement('span');
+        c.className = 'chip chip-ok';
+        c.textContent = good + ' / 4 bonne' + (good > 1 ? 's' : '') + ' réponse' + (good > 1 ? 's' : '');
+        row.appendChild(c);
+        if (done === 4 && good === 4) {
+          var b = document.createElement('span');
+          b.className = 'chip chip-ok';
+          b.textContent = '🎉 Parfait score !';
+          row.appendChild(b);
+        }
+        if (done - good > 0) {
+          var e = document.createElement('span');
+          e.className = 'chip chip-ko';
+          e.textContent = (done - good) + ' erreur' + (done - good > 1 ? 's' : '');
+          row.appendChild(e);
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

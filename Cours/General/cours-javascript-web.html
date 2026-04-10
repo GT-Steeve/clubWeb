@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apprends le JavaScript !</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* HERO */
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-yellow { background: #FEF3C7; color: #713F12; }
+    .b-purple  { background: #EEEDFE; color: #3C3489; }
+    .b-amber   { background: #FEF0D4; color: #633806; }
+
+    /* CARD */
+    .card {
+      border-radius: 16px;
+      border: 0.5px solid #D3D1C7;
+      background: #ffffff;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .stitle {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+    }
+
+    .pill {
+      width: 32px; height: 32px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; flex-shrink: 0;
+    }
+    .yellow  { background: #FDE68A; color: #713F12; }
+    .amber   { background: #FAC775; color: #633806; }
+    .teal    { background: #9FE1CB; color: #085041; }
+    .purple  { background: #CECBF6; color: #3C3489; }
+    .blue    { background: #BFDBFE; color: #1E3A8A; }
+    .green   { background: #C0DD97; color: #3B6D11; }
+    .coral   { background: #F5C4B3; color: #712B13; }
+    .red     { background: #FECACA; color: #7F1D1D; }
+    .pink    { background: #FBCFE8; color: #831843; }
+    
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+
+    /* CODE */
+    .code-block {
+      background: #1E1E2E;
+      border: 0.5px solid #313149;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      line-height: 1.9;
+      white-space: pre;
+      overflow-x: auto;
+      color: #CDD6F4;
+      margin-bottom: 0.8rem;
+    }
+    .kw   { color: #CBA6F7; }   /* mot-clé : let, const, function, if… */
+    .str  { color: #A6E3A1; }   /* chaîne  */
+    .num  { color: #FAB387; }   /* nombre  */
+    .fn   { color: #89DCEB; }   /* nom de fonction */
+    .cm   { color: #6C7086; font-style: italic; }   /* commentaire */
+    .op   { color: #89B4FA; }   /* opérateur */
+    .var  { color: #CDD6F4; }   /* variable */
+    .bool { color: #F38BA8; }   /* true/false */
+    .obj  { color: #F9E2AF; }   /* objet/clé */
+
+    /* RESULT BOX */
+    .result-box {
+      background: #F5F4F0;
+      border: 0.5px solid #D3D1C7;
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+    .rl {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #888780; margin-bottom: 6px;
+    }
+    .console-out {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.83rem;
+      background: #1E1E2E;
+      color: #A6E3A1;
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      margin-top: 0.5rem;
+    }
+    .console-out .prompt { color: #6C7086; }
+
+    /* TIPS */
+    .tip {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #E1F5EE; border-radius: 10px;
+      padding: 0.75rem 1rem; margin-top: 0.9rem;
+      font-size: 0.88rem; color: #085041; line-height: 1.5;
+    }
+    .tip-warn  { background: #FEF3C7; color: #713F12; }
+    .tip-purple{ background: #EEEDFE; color: #3C3489; }
+    .tip-blue  { background: #EFF6FF; color: #1E3A8A; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* TAG COMPARE */
+    .tag-compare {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 1.2rem;
+    }
+    .tc {
+      flex: 1 1 calc(50% - 5px); min-width: 200px;
+      border-radius: 12px; padding: 0.8rem 1rem;
+      font-size: 0.88rem; line-height: 1.5; font-weight: 600;
+    }
+    .tc code { font-family: 'Fira Code', monospace; font-size: 0.85rem; font-weight: 700; }
+
+    /* SECTION DIVIDER */
+    .section-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 1.8rem 0 1rem;
+    }
+    .section-divider span {
+      font-size: 0.78rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #888780; white-space: nowrap;
+    }
+    .section-divider::before, .section-divider::after {
+      content: ''; flex: 1; height: 1px; background: #D3D1C7;
+    }
+
+    /* KEYBOARD */
+    .kbd {
+      display: inline-block;
+      background: #F1EFE8;
+      border: 0.5px solid #B4B2A9;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      color: #2C2C2A;
+    }
+
+    /* INLINE CODE */
+    code {
+      font-family: 'Fira Code', monospace;
+      background: #F1EFE8;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.87em;
+      color: #993C1D;
+    }
+
+    /* CTA */
+    .cta-wrap {
+      text-align: center;
+      background: #ffffff;
+      border: 0.5px solid #D3D1C7;
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: #F0C429;
+      color: #2C2C2A;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 0.75rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #e0b418; }
+    .cta-sub { font-size: 0.83rem; color: #888780; margin-top: 0.9rem; line-height: 1.6; }
+
+    /* INTERACTIVE DEMO */
+    .demo-wrap {
+      background: #F5F4F0;
+      border: 0.5px solid #D3D1C7;
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      margin-top: 0.8rem;
+    }
+    .demo-btn {
+      background: #F0C429;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 18px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #2C2C2A;
+      transition: background 0.12s;
+    }
+    .demo-btn:hover { background: #e0b418; }
+    .demo-output {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      background: #1E1E2E;
+      color: #A6E3A1;
+      border-radius: 8px;
+      padding: 0.65rem 1rem;
+      margin-top: 0.7rem;
+      min-height: 2.2rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .demo-input {
+      width: 100%;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      background: #F1EFE8;
+      border: 0.5px solid #B4B2A9;
+      border-radius: 8px;
+      padding: 7px 12px;
+      color: #2C2C2A;
+      outline: none;
+      margin-bottom: 0.6rem;
+    }
+    .demo-input:focus { border-color: #888780; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.5rem; }
+
+    @media (max-width: 500px) {
+      .code-block { font-size: 0.76rem; }
+      .hero h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <a class="nav-prev" href="../sommaire.html">&larr; Retour au sommaire</a>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">⚡</div>
+    <h1>Apprends le JavaScript web</h1>
+    <p>Le langage qui donne vie à tes pages web</p>
+    <div class="badge-row">
+      <span class="badge b-yellow">Débutant</span>
+      <span class="badge b-purple">Complet</span>
+      <span class="badge b-amber">Interactif</span>
+    </div>
+  </div>
+
+  <!-- C'EST QUOI LE JS -->
+  <div class="card">
+    <div class="stitle"><div class="pill yellow">?</div>C'est quoi le JavaScript ?</div>
+    <p class="desc">Le <strong>JavaScript</strong> (JS) est le langage de programmation du web. Alors que le HTML structure ta page et le CSS la colorie, le JavaScript la rend <strong>vivante et interactive</strong> : boutons qui réagissent, animations, formulaires qui vérifient les infos, menus qui s'ouvrent...<br><br>Le navigateur comprend le JavaScript <strong>directement</strong>, sans avoir besoin d'installer quoi que ce soit !</p>
+    <div class="tag-compare">
+      <div class="tc" style="background:#E6F1FB;color:#0C447C;"><code>HTML</code> La structure — les briques</div>
+      <div class="tc" style="background:#FEF0D4;color:#633806;"><code>CSS</code> Le style — les couleurs</div>
+      <div class="tc" style="background:#FEF3C7;color:#713F12;" style="flex-basis:100%;"><code>JavaScript</code> Le comportement — l'action !</div>
+    </div>
+  </div>
+
+  <!-- INTÉGRER JS -->
+  <div class="card">
+    <div class="stitle"><div class="pill amber">S</div>Comment intégrer du JavaScript ?</div>
+    <p class="desc">On ajoute le JavaScript dans une page HTML grâce à la balise <strong>&lt;script&gt;</strong>. On la place en général juste avant la fermeture de <code>&lt;/body&gt;</code>.</p>
+    <div class="code-block"><span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html&gt;</span>
+  <span class="kw">&lt;body&gt;</span>
+
+    <span class="kw">&lt;h1&gt;</span>Ma page<span class="kw">&lt;/h1&gt;</span>
+
+    <span class="cm">&lt;!-- Le JS se met juste avant /body --&gt;</span>
+    <span class="kw">&lt;script&gt;</span>
+      <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Bonjour depuis JavaScript !"</span>);
+    <span class="kw">&lt;/script&gt;</span>
+
+  <span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></div>
+    <div class="tip"><span class="tip-i">💡</span><span>Pour voir le résultat d'un <code>console.log()</code>, ouvre la console du navigateur avec <span class="kbd">F12</span> puis clique sur l'onglet <strong>Console</strong>.</span></div>
+  </div>
+
+  <div class="section-divider"><span>Les bases du langage</span></div>
+
+  <!-- VARIABLES -->
+  <div class="card">
+    <div class="stitle"><div class="pill teal">V</div>Les variables</div>
+    <p class="desc">Une <strong>variable</strong> est une boîte qui sert à stocker une valeur. En JavaScript moderne, on utilise <code>let</code> pour une valeur qui peut changer, et <code>const</code> pour une valeur fixe.</p>
+    <div class="code-block"><span class="kw">let</span> <span class="var">age</span> <span class="op">=</span> <span class="num">14</span>;           <span class="cm">// peut changer</span>
+<span class="kw">const</span> <span class="var">prénom</span> <span class="op">=</span> <span class="str">"Lucas"</span>;   <span class="cm">// ne change pas</span>
+<span class="kw">let</span> <span class="var">connecté</span> <span class="op">=</span> <span class="bool">true</span>;    <span class="cm">// vrai ou faux</span>
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="var">prénom</span>);       <span class="cm">// → Lucas</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="var">age</span> <span class="op">+</span> <span class="num">1</span>);     <span class="cm">// → 15</span></div>
+    <div class="tag-compare" style="margin-top:0.5rem;margin-bottom:0;">
+      <div class="tc" style="background:#E1F5EE;color:#085041;"><code>let</code> valeur modifiable<br><small style="font-weight:600;opacity:0.8;">peut être réassignée</small></div>
+      <div class="tc" style="background:#FEF3C7;color:#713F12;"><code>const</code> valeur fixe<br><small style="font-weight:600;opacity:0.8;">ne peut pas changer</small></div>
+    </div>
+    <div class="tip tip-warn" style="margin-top:0.9rem;"><span class="tip-i">⚠</span><span>Évite l'ancien <code>var</code> — il cause des bugs bizarres. Utilise toujours <code>let</code> ou <code>const</code> !</span></div>
+  </div>
+
+  <!-- TYPES DE DONNÉES -->
+  <div class="card">
+    <div class="stitle"><div class="pill blue">T</div>Les types de données</div>
+    <p class="desc">JavaScript peut stocker différents types de valeurs dans une variable :</p>
+    <div class="code-block"><span class="kw">let</span> <span class="var">texte</span>   <span class="op">=</span> <span class="str">"Bonjour !"</span>;     <span class="cm">// String (texte)</span>
+<span class="kw">let</span> <span class="var">nombre</span>  <span class="op">=</span> <span class="num">42</span>;             <span class="cm">// Number (entier)</span>
+<span class="kw">let</span> <span class="var">décimal</span> <span class="op">=</span> <span class="num">3.14</span>;          <span class="cm">// Number (décimal)</span>
+<span class="kw">let</span> <span class="var">vrai</span>    <span class="op">=</span> <span class="bool">true</span>;          <span class="cm">// Boolean</span>
+<span class="kw">let</span> <span class="var">faux</span>    <span class="op">=</span> <span class="bool">false</span>;         <span class="cm">// Boolean</span>
+<span class="kw">let</span> <span class="var">rien</span>    <span class="op">=</span> <span class="bool">null</span>;          <span class="cm">// Null (vide volontairement)</span></div>
+    <div class="tip tip-blue"><span class="tip-i">💡</span><span>Pour coller des variables à du texte, utilise les <strong>template literals</strong> avec des backticks <code>`</code> :<br><br><span style="font-family:'Fira Code',monospace;font-size:0.85em;">const msg = <span style="color:#3C3489;">`Bonjour ${prénom}, tu as ${age} ans !`</span>;</span></span></div>
+  </div>
+
+  <!-- OPÉRATEURS -->
+  <div class="card">
+    <div class="stitle"><div class="pill purple">O</div>Les opérateurs</div>
+    <p class="desc">Les opérateurs permettent de faire des calculs et des comparaisons.</p>
+    <div class="code-block"><span class="cm">// Opérateurs mathématiques</span>
+<span class="num">10</span> <span class="op">+</span> <span class="num">3</span>   <span class="cm">// → 13   (addition)</span>
+<span class="num">10</span> <span class="op">-</span> <span class="num">3</span>   <span class="cm">// → 7    (soustraction)</span>
+<span class="num">10</span> <span class="op">*</span> <span class="num">3</span>   <span class="cm">// → 30   (multiplication)</span>
+<span class="num">10</span> <span class="op">/</span> <span class="num">2</span>   <span class="cm">// → 5    (division)</span>
+<span class="num">10</span> <span class="op">%</span> <span class="num">3</span>   <span class="cm">// → 1    (reste de division)</span>
+
+<span class="cm">// Opérateurs de comparaison</span>
+<span class="num">5</span> <span class="op">===</span> <span class="num">5</span>  <span class="cm">// → true  (strictement égal)</span>
+<span class="num">5</span> <span class="op">!==</span> <span class="num">3</span>  <span class="cm">// → true  (différent)</span>
+<span class="num">10</span> <span class="op">&gt;</span> <span class="num">5</span>   <span class="cm">// → true  (supérieur)</span>
+<span class="num">3</span> <span class="op">&lt;=</span> <span class="num">3</span>   <span class="cm">// → true  (inférieur ou égal)</span></div>
+    <div class="tip tip-warn"><span class="tip-i">⚠</span><span>Utilise toujours <code>===</code> (triple égal) pour comparer — jamais <code>==</code> (double). Le triple égal évite des comparaisons surprenantes !</span></div>
+  </div>
+
+  <div class="section-divider"><span>Structures de contrôle</span></div>
+
+  <!-- CONDITIONS -->
+  <div class="card">
+    <div class="stitle"><div class="pill green">C</div>Les conditions : if / else</div>
+    <p class="desc">Une condition permet d'exécuter du code <strong>seulement si</strong> quelque chose est vrai. Sinon, on peut prévoir un autre chemin avec <code>else</code>.</p>
+    <div class="code-block"><span class="kw">let</span> <span class="var">age</span> <span class="op">=</span> <span class="num">16</span>;
+
+<span class="kw">if</span> (<span class="var">age</span> <span class="op">&gt;=</span> <span class="num">18</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Tu es majeur !"</span>);
+} <span class="kw">else if</span> (<span class="var">age</span> <span class="op">&gt;=</span> <span class="num">13</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Tu es ado !"</span>);   <span class="cm">// ← ce bloc s'exécute</span>
+} <span class="kw">else</span> {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Tu es enfant !"</span>);
+}</div>
+    <div class="rl" style="margin-top:0.6rem;">Résultat dans la console</div>
+    <div class="console-out"><span class="prompt">&gt; </span>Tu es ado !</div>
+
+    <!-- DEMO INTERACTIVE -->
+    <div class="demo-wrap" style="margin-top:0.9rem;">
+      <div class="rl">Essaie toi-même !</div>
+      <input class="demo-input" type="number" id="demo-age" placeholder="Entre un âge (ex: 20)" min="0" max="120">
+      <button class="demo-btn" onclick="demoAge()">Tester la condition</button>
+      <div class="demo-output" id="out-age"><span style="color:#6C7086;">← le résultat apparaît ici</span></div>
+    </div>
+  </div>
+
+  <!-- BOUCLES -->
+  <div class="card">
+    <div class="stitle"><div class="pill coral">B</div>Les boucles : for</div>
+    <p class="desc">Une boucle permet de <strong>répéter</strong> du code plusieurs fois sans tout réécrire. La boucle <code>for</code> est la plus courante.</p>
+    <div class="code-block"><span class="cm">// Compter de 1 à 5</span>
+<span class="kw">for</span> (<span class="kw">let</span> <span class="var">i</span> <span class="op">=</span> <span class="num">1</span>; <span class="var">i</span> <span class="op">&lt;=</span> <span class="num">5</span>; <span class="var">i</span><span class="op">++</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Tour n°"</span> <span class="op">+</span> <span class="var">i</span>);
+}
+
+<span class="cm">// → Tour n°1</span>
+<span class="cm">// → Tour n°2</span>
+<span class="cm">// → Tour n°3  ...</span></div>
+    <div class="tip"><span class="tip-i">💡</span><span>La boucle <code>for</code> se lit : <strong>démarre à i=1</strong>, continue <strong>tant que i ≤ 5</strong>, et <strong>augmente i de 1</strong> à chaque tour (<code>i++</code>).</span></div>
+
+    <div class="demo-wrap" style="margin-top:0.9rem;">
+      <div class="rl">Essaie toi-même !</div>
+      <input class="demo-input" type="number" id="demo-loop" placeholder="Combien de tours ? (1–20)" min="1" max="20">
+      <button class="demo-btn" onclick="demoLoop()">Lancer la boucle</button>
+      <div class="demo-output" id="out-loop"><span style="color:#6C7086;">← le résultat apparaît ici</span></div>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>Fonctions & tableaux</span></div>
+
+  <!-- FONCTIONS -->
+  <div class="card">
+    <div class="stitle"><div class="pill yellow">F</div>Les fonctions</div>
+    <p class="desc">Une <strong>fonction</strong> est un bloc de code qu'on peut réutiliser autant de fois qu'on veut. On la définit une fois, et on l'appelle quand on en a besoin.</p>
+    <div class="code-block"><span class="cm">// Définir une fonction</span>
+<span class="kw">function</span> <span class="fn">direBonjour</span>(<span class="var">prénom</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Salut, </span><span class="op">${</span><span class="var">prénom</span><span class="op">}</span><span class="str"> !`</span>);
+}
+
+<span class="cm">// Appeler la fonction</span>
+<span class="fn">direBonjour</span>(<span class="str">"Emma"</span>);   <span class="cm">// → Salut, Emma !</span>
+<span class="fn">direBonjour</span>(<span class="str">"Hugo"</span>);   <span class="cm">// → Salut, Hugo !</span></div>
+    <div class="code-block" style="margin-top:0.3rem;"><span class="cm">// Fonction qui retourne une valeur</span>
+<span class="kw">function</span> <span class="fn">addition</span>(<span class="var">a</span>, <span class="var">b</span>) {
+  <span class="kw">return</span> <span class="var">a</span> <span class="op">+</span> <span class="var">b</span>;
+}
+
+<span class="kw">let</span> <span class="var">résultat</span> <span class="op">=</span> <span class="fn">addition</span>(<span class="num">4</span>, <span class="num">7</span>);
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="var">résultat</span>);       <span class="cm">// → 11</span></div>
+
+    <div class="demo-wrap">
+      <div class="rl">Essaie toi-même !</div>
+      <input class="demo-input" type="text" id="demo-name" placeholder="Entre un prénom">
+      <button class="demo-btn" onclick="demoFn()">Dire bonjour</button>
+      <div class="demo-output" id="out-fn"><span style="color:#6C7086;">← le résultat apparaît ici</span></div>
+    </div>
+  </div>
+
+  <!-- TABLEAUX -->
+  <div class="card">
+    <div class="stitle"><div class="pill blue">T</div>Les tableaux (Arrays)</div>
+    <p class="desc">Un <strong>tableau</strong> permet de stocker plusieurs valeurs dans une seule variable. On les écrit entre crochets <code>[ ]</code>.</p>
+    <div class="code-block"><span class="kw">const</span> <span class="var">fruits</span> <span class="op">=</span> [<span class="str">"pomme"</span>, <span class="str">"banane"</span>, <span class="str">"kiwi"</span>];
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="var">fruits</span>[<span class="num">0</span>]);   <span class="cm">// → pomme  (index commence à 0 !)</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="var">fruits</span>[<span class="num">2</span>]);   <span class="cm">// → kiwi</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="var">fruits</span>.<span class="fn">length</span>); <span class="cm">// → 3  (nombre d'éléments)</span>
+
+<span class="cm">// Parcourir un tableau avec for...of</span>
+<span class="kw">for</span> (<span class="kw">let</span> <span class="var">fruit</span> <span class="kw">of</span> <span class="var">fruits</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"J'aime les "</span> <span class="op">+</span> <span class="var">fruit</span><span class="op">+</span><span class="str">"s"</span>);
+}</div>
+    <div class="tip tip-warn"><span class="tip-i">⚠</span><span>Les index commencent à <strong>0</strong>, pas à 1 ! Le premier élément est <code>fruits[0]</code>, le deuxième <code>fruits[1]</code>...</span></div>
+  </div>
+
+  <!-- OBJETS -->
+  <div class="card">
+    <div class="stitle"><div class="pill pink">O</div>Les objets</div>
+    <p class="desc">Un <strong>objet</strong> regroupe plusieurs informations liées ensemble. On les écrit avec des accolades <code>{ }</code> sous forme de <strong>clé : valeur</strong>.</p>
+    <div class="code-block"><span class="kw">const</span> <span class="var">élève</span> <span class="op">=</span> {
+  <span class="obj">prénom</span>: <span class="str">"Lucas"</span>,
+  <span class="obj">age</span>:    <span class="num">14</span>,
+  <span class="obj">classe</span>: <span class="str">"3ème"</span>,
+  <span class="obj">aimeLaCode</span>: <span class="bool">true</span>
+};
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="var">élève</span>.<span class="obj">prénom</span>);   <span class="cm">// → Lucas</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="var">élève</span>.<span class="obj">age</span>);      <span class="cm">// → 14</span>
+
+<span class="cm">// Modifier une valeur</span>
+<span class="var">élève</span>.<span class="obj">age</span> <span class="op">=</span> <span class="num">15</span>;
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="var">élève</span>.<span class="obj">age</span>);      <span class="cm">// → 15</span></div>
+    <div class="tip"><span class="tip-i">💡</span><span>Un objet c'est comme une fiche d'identité : chaque ligne est une <strong>propriété</strong> (clé) associée à une <strong>valeur</strong>. On y accède avec le <code>.</code> (point).</span></div>
+  </div>
+
+  <div class="section-divider"><span>Interagir avec la page web</span></div>
+
+  <!-- DOM -->
+  <div class="card">
+    <div class="stitle"><div class="pill amber">D</div>Modifier la page : le DOM</div>
+    <p class="desc">Le <strong>DOM</strong> (Document Object Model) est la représentation de ta page HTML en JavaScript. Grâce à lui, tu peux <strong>lire, modifier ou créer</strong> des éléments directement depuis ton code JS !</p>
+    <div class="code-block"><span class="cm">// Sélectionner un élément par son id</span>
+<span class="kw">const</span> <span class="var">titre</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">getElementById</span>(<span class="str">"mon-titre"</span>);
+
+<span class="cm">// Modifier le texte</span>
+<span class="var">titre</span>.<span class="obj">textContent</span> <span class="op">=</span> <span class="str">"Nouveau titre !"</span>;
+
+<span class="cm">// Modifier le style CSS</span>
+<span class="var">titre</span>.<span class="obj">style</span>.<span class="obj">color</span> <span class="op">=</span> <span class="str">"red"</span>;
+
+<span class="cm">// Sélectionner par classe (retourne plusieurs éléments)</span>
+<span class="kw">const</span> <span class="var">paragraphes</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">querySelectorAll</span>(<span class="str">".texte"</span>);</div>
+    <div class="tip tip-blue"><span class="tip-i">💡</span><span><code>getElementById("id")</code> sélectionne un seul élément. <code>querySelectorAll(".classe")</code> sélectionne tous ceux qui correspondent — comme un sélecteur CSS !</span></div>
+  </div>
+
+  <!-- EVENTS -->
+  <div class="card">
+    <div class="stitle"><div class="pill red">E</div>Les événements</div>
+    <p class="desc">Un <strong>événement</strong> est une action de l'utilisateur : un clic, une frappe clavier, le survol d'un élément... On peut écouter ces événements avec <code>addEventListener</code>.</p>
+    <div class="code-block"><span class="cm">// Dans le HTML :</span>
+<span class="kw">&lt;button</span> <span class="obj">id</span>=<span class="str">"mon-btn"</span><span class="kw">&gt;</span>Clique-moi !<span class="kw">&lt;/button&gt;</span>
+<span class="kw">&lt;p</span> <span class="obj">id</span>=<span class="str">"message"</span><span class="kw">&gt;&lt;/p&gt;</span>
+
+<span class="cm">// Dans le JavaScript :</span>
+<span class="kw">const</span> <span class="var">btn</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">getElementById</span>(<span class="str">"mon-btn"</span>);
+<span class="kw">const</span> <span class="var">msg</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">getElementById</span>(<span class="str">"message"</span>);
+
+<span class="var">btn</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, <span class="kw">function</span>() {
+  <span class="var">msg</span>.<span class="obj">textContent</span> <span class="op">=</span> <span class="str">"Tu as cliqué ! 🎉"</span>;
+});</div>
+
+    <!-- DEMO INTERACTIVE -->
+    <div class="demo-wrap" style="margin-top:0.9rem;">
+      <div class="rl">Démo en direct</div>
+      <div class="btn-row">
+        <button class="demo-btn" id="demo-event-btn" onclick="demoEvent()">Clique-moi !</button>
+        <button class="demo-btn" style="background:#F1EFE8;color:#2C2C2A;" onclick="resetEvent()">Réinitialiser</button>
+      </div>
+      <div class="demo-output" id="out-event"><span style="color:#6C7086;">← en attente d'un clic...</span></div>
+    </div>
+
+    <div class="tip" style="margin-top:0.9rem;"><span class="tip-i">💡</span><span>Les événements les plus courants : <code>"click"</code>, <code>"mouseover"</code>, <code>"keydown"</code>, <code>"input"</code>, <code>"submit"</code>.</span></div>
+  </div>
+
+  <!-- EXEMPLE COMPLET -->
+  <div class="card">
+    <div class="stitle"><div class="pill teal">E</div>Exemple complet : un compteur</div>
+    <p class="desc">Voilà un exemple qui regroupe tout ce qu'on a vu : variables, conditions, DOM et événements. Un vrai mini-projet !</p>
+    <div class="code-block"><span class="cm">// HTML</span>
+<span class="kw">&lt;p</span> <span class="obj">id</span>=<span class="str">"compteur"</span><span class="kw">&gt;</span>0<span class="kw">&lt;/p&gt;</span>
+<span class="kw">&lt;button</span> <span class="obj">id</span>=<span class="str">"btn-plus"</span><span class="kw">&gt;</span>+1<span class="kw">&lt;/button&gt;</span>
+<span class="kw">&lt;button</span> <span class="obj">id</span>=<span class="str">"btn-reset"</span><span class="kw">&gt;</span>Réinitialiser<span class="kw">&lt;/button&gt;</span>
+
+<span class="cm">// JavaScript</span>
+<span class="kw">let</span> <span class="var">compte</span> <span class="op">=</span> <span class="num">0</span>;
+<span class="kw">const</span> <span class="var">affichage</span> <span class="op">=</span> <span class="fn">document</span>.<span class="fn">getElementById</span>(<span class="str">"compteur"</span>);
+
+<span class="fn">document</span>.<span class="fn">getElementById</span>(<span class="str">"btn-plus"</span>).<span class="fn">addEventListener</span>(<span class="str">"click"</span>, <span class="kw">function</span>() {
+  <span class="var">compte</span><span class="op">++</span>;
+  <span class="var">affichage</span>.<span class="obj">textContent</span> <span class="op">=</span> <span class="var">compte</span>;
+  <span class="kw">if</span> (<span class="var">compte</span> <span class="op">&gt;=</span> <span class="num">10</span>) {
+    <span class="var">affichage</span>.<span class="obj">style</span>.<span class="obj">color</span> <span class="op">=</span> <span class="str">"green"</span>;
+  }
+});
+
+<span class="fn">document</span>.<span class="fn">getElementById</span>(<span class="str">"btn-reset"</span>).<span class="fn">addEventListener</span>(<span class="str">"click"</span>, <span class="kw">function</span>() {
+  <span class="var">compte</span> <span class="op">=</span> <span class="num">0</span>;
+  <span class="var">affichage</span>.<span class="obj">textContent</span> <span class="op">=</span> <span class="num">0</span>;
+  <span class="var">affichage</span>.<span class="obj">style</span>.<span class="obj">color</span> <span class="op">=</span> <span class="str">""</span>;
+});</div>
+
+    <div class="demo-wrap">
+      <div class="rl">Résultat en direct</div>
+      <div style="text-align:center;padding:0.5rem 0 0.8rem;">
+        <div id="compteur-val" style="font-size:2.5rem;font-weight:800;font-family:'Fira Code',monospace;transition:color 0.3s;">0</div>
+      </div>
+      <div class="btn-row" style="justify-content:center;">
+        <button class="demo-btn" onclick="compteurPlus()">+1</button>
+        <button class="demo-btn" onclick="compteurMoins()">-1</button>
+        <button class="demo-btn" style="background:#F1EFE8;color:#2C2C2A;" onclick="compteurReset()">Réinitialiser</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECAP -->
+  <div class="tag-compare">
+    <div class="tc" style="background:#FEF3C7;color:#713F12;"><code>let / const</code> Stocker des valeurs</div>
+    <div class="tc" style="background:#E1F5EE;color:#085041;"><code>if / else</code> Prendre des décisions</div>
+    <div class="tc" style="background:#EFF6FF;color:#1E3A8A;"><code>for</code> Répéter des actions</div>
+    <div class="tc" style="background:#EEEDFE;color:#3C3489;"><code>function</code> Réutiliser du code</div>
+    <div class="tc" style="background:#FEF0D4;color:#633806;"><code>getElementById</code> Toucher la page</div>
+    <div class="tc" style="background:#FECACA;color:#7F1D1D;"><code>addEventListener</code> Réagir aux clics</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <p style="font-size:0.95rem;color:#5F5E5A;margin-bottom:1.2rem;">Tu as lu tout le cours ? Excellent travail ! ⚡<br>Il est maintenant temps de mettre en pratique ce que tu as appris.</p>
+    <a class="cta-btn" href="exercices-javascript-web.html">Passer aux exercices →</a>
+    <p class="cta-sub">Exercice 1 : associer concept et syntaxe<br>Exercice 2 : corriger du JavaScript cassé<br>Exercice 3 : écrire une mini-fonction interactive</p>
+  </div>
+
+  <script>
+    /* ---- DÉMO CONDITION ---- */
+    function demoAge() {
+      var input = parseInt(document.getElementById('demo-age').value);
+      var out = document.getElementById('out-age');
+      if (isNaN(input) || input < 0) {
+        out.innerHTML = '<span style="color:#F38BA8;">⚠ Entre un âge valide !</span>';
+        return;
+      }
+      var msg;
+      if (input >= 18) {
+        msg = '✓ Tu es majeur(e) !';
+      } else if (input >= 13) {
+        msg = '→ Tu es ado !';
+      } else if (input >= 0) {
+        msg = '→ Tu es enfant !';
+      }
+      out.textContent = '> ' + msg;
+    }
+
+    /* ---- DÉMO BOUCLE ---- */
+    function demoLoop() {
+      var n = parseInt(document.getElementById('demo-loop').value);
+      var out = document.getElementById('out-loop');
+      if (isNaN(n) || n < 1) { out.innerHTML = '<span style="color:#F38BA8;">⚠ Entre un nombre entre 1 et 20 !</span>'; return; }
+      if (n > 20) n = 20;
+      var lines = [];
+      for (var i = 1; i <= n; i++) {
+        lines.push('> Tour n°' + i);
+      }
+      out.textContent = lines.join('\n');
+    }
+
+    /* ---- DÉMO FONCTION ---- */
+    function demoFn() {
+      var prénom = document.getElementById('demo-name').value.trim();
+      var out = document.getElementById('out-fn');
+      if (!prénom) { out.innerHTML = '<span style="color:#F38BA8;">⚠ Entre un prénom d\'abord !</span>'; return; }
+      out.textContent = '> Salut, ' + prénom + ' ! 👋';
+    }
+
+    /* ---- DÉMO ÉVÉNEMENT ---- */
+    var clickCount = 0;
+    function demoEvent() {
+      clickCount++;
+      var out = document.getElementById('out-event');
+      var msgs = ['Tu as cliqué ! 🎉', 'Encore ! 😄', 'Tu adores cliquer ! 🔥', "Allez, encore un coup !", "C'est addictif, hein ? 😂"];
+      out.textContent = '> ' + (msgs[Math.min(clickCount - 1, msgs.length - 1)]) + ' (clic n°' + clickCount + ')';
+    }
+    function resetEvent() {
+      clickCount = 0;
+      document.getElementById('out-event').innerHTML = '<span style="color:#6C7086;">← en attente d\'un clic...</span>';
+    }
+
+    /* ---- COMPTEUR ---- */
+    var compte = 0;
+    function compteurMaj() {
+      var el = document.getElementById('compteur-val');
+      el.textContent = compte;
+      if (compte > 0) el.style.color = '#A6E3A1';
+      else if (compte < 0) el.style.color = '#F38BA8';
+      else el.style.color = '#CDD6F4';
+    }
+    function compteurPlus()  { compte++; compteurMaj(); }
+    function compteurMoins() { compte--; compteurMaj(); }
+    function compteurReset() { compte = 0; compteurMaj(); }
+    compteurMaj();
+  </script>
+
+</body>
+</html>
