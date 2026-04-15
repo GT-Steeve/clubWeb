@@ -14,6 +14,7 @@ v1.01.7 = ajout cours githubs + patchnote + readME
 v1.01.8 = ajout jeux vidéo JS + Canvas
 v1.01.9 = refonte arborescente dossier
 v1.02.0 = Programme complet du club web - tous les sujet basique
+v1.02.1 = Rectif contenu acceuil et sommaire
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
