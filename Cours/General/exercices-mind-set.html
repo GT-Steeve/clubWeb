@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'état d'esprit du développeur</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f5f4f0;
+            color: #2C2C2A;
+            padding: 1.5rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 2.5rem 1rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: #5F5E5A;
+            margin-top: 0.5rem;
+        }
+
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 1.2rem;
+        }
+
+        .badge {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+
+        .b-coral {
+            background: #FAECE7;
+            color: #712B13;
+        }
+
+        .b-purple {
+            background: #EEEDFE;
+            color: #3C3489;
+        }
+
+        .b-amber {
+            background: #FAEEDA;
+            color: #633806;
+        }
+
+        .b-teal {
+            background: #E1F5EE;
+            color: #085041;
+        }
+
+        /* BACK LINK */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #185FA5;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            background: #E6F1FB;
+            border: 0.5px solid #85B7EB;
+            border-radius: 8px;
+            padding: 6px 14px;
+            transition: background 0.15s;
+        }
+
+        .back-link:hover {
+            background: #B5D4F4;
+        }
+
+        .nav-prev {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #185FA5;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            background: #E6F1FB;
+            border: 0.5px solid #85B7EB;
+            border-radius: 8px;
+            padding: 6px 14px;
+            transition: background 0.15s;
+        }
+
+        .nav-prev:hover {
+            background: #B5D4F4;
+        }
+
+        /* CARD */
+        .card {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .stitle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+        }
+
+        .pill {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .p-teal {
+            background: #9FE1CB;
+            color: #085041;
+        }
+
+        .p-purple {
+            background: #CECBF6;
+            color: #3C3489;
+        }
+
+        .p-coral {
+            background: #F5C4B3;
+            color: #712B13;
+        }
+
+        .p-amber {
+            background: #FAC775;
+            color: #633806;
+        }
+
+        .p-blue {
+            background: #B5D4F4;
+            color: #0C447C;
+        }
+
+        .p-green {
+            background: #C0DD97;
+            color: #3B6D11;
+        }
+
+        .p-pink {
+            background: #F4C0D1;
+            color: #72243E;
+        }
+
+        .p-gray {
+            background: #D3D1C7;
+            color: #444441;
+        }
+
+        .desc {
+            font-size: 0.94rem;
+            color: #5F5E5A;
+            line-height: 1.7;
+            margin-bottom: 0.9rem;
+        }
+
+        .desc:last-child {
+            margin-bottom: 0;
+        }
+
+        /* CODE */
+        .code-block {
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            padding: 0.9rem 1.1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.84rem;
+            line-height: 1.8;
+            white-space: pre;
+            overflow-x: auto;
+            color: #2C2C2A;
+        }
+
+        .sel {
+            color: #993C1D;
+        }
+
+        .prop {
+            color: #185FA5;
+        }
+
+        .val {
+            color: #0F6E56;
+        }
+
+        .cm {
+            color: #888780;
+            font-style: italic;
+        }
+
+        .punc {
+            color: #888780;
+        }
+
+        /* TIPS */
+        .tip {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            background: #E1F5EE;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-top: 0.9rem;
+            font-size: 0.88rem;
+            color: #085041;
+            line-height: 1.5;
+        }
+
+        .tip-coral {
+            background: #FAECE7;
+            color: #712B13;
+        }
+
+        .tip-purple {
+            background: #EEEDFE;
+            color: #3C3489;
+        }
+
+        .tip-amber {
+            background: #FAEEDA;
+            color: #633806;
+        }
+
+        .tip-blue {
+            background: #E6F1FB;
+            color: #0C447C;
+        }
+
+        .tip-i {
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* RESULT BOX */
+        .result-box {
+            border-radius: 10px;
+            border: 0.5px dashed #B4B2A9;
+            background: #F1EFE8;
+            padding: 0.9rem 1.1rem;
+            font-size: 0.94rem;
+            margin-top: 0.8rem;
+            line-height: 1.7;
+        }
+
+        .rl {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #888780;
+            margin-bottom: 6px;
+        }
+
+        /* CYCLE */
+        .cycle-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            margin-top: 0.8rem;
+        }
+
+        .cycle-step {
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: #2C2C2A;
+        }
+
+        .cycle-arrow {
+            color: #B4B2A9;
+            font-size: 1rem;
+        }
+
+        /* GRID RESSOURCES */
+        .res-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 0.8rem;
+        }
+
+        .res-card {
+            border-radius: 12px;
+            border: 0.5px solid #D3D1C7;
+            padding: 0.9rem;
+            text-align: center;
+            background: #FAFAF8;
+        }
+
+        .res-icon {
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+
+        .res-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #2C2C2A;
+            margin-bottom: 3px;
+        }
+
+        .res-desc {
+            font-size: 0.78rem;
+            color: #888780;
+            line-height: 1.5;
+        }
+
+        /* TWO-COL RECAP */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 0.8rem;
+        }
+
+        .tc {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .tc strong {
+            display: block;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        /* SECTION LABEL */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 2rem 0 1rem;
+        }
+
+        .section-label-text {
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888780;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 0.5px;
+            background: #D3D1C7;
+        }
+
+        /* PROGRESS */
+        .progress-wrap {
+            height: 7px;
+            background: #D3D1C7;
+            border-radius: 10px;
+            margin: 1.2rem 0 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #5DCAA5;
+            border-radius: 10px;
+            transition: width 0.4s;
+            width: 0%;
+        }
+
+        .score-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .chip-ok {
+            background: #E1F5EE;
+            color: #085041;
+        }
+
+        .chip-ko {
+            background: #FCEBEB;
+            color: #791F1F;
+        }
+
+        .chip-neutral {
+            background: #F1EFE8;
+            color: #888780;
+        }
+
+        /* QCM */
+        .qcm-card {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .q-num {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #888780;
+            margin-bottom: 6px;
+        }
+
+        .q-text {
+            font-size: 0.97rem;
+            font-weight: 700;
+            color: #2C2C2A;
+            margin-bottom: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .opt {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            padding: 9px 13px;
+            cursor: pointer;
+            transition: background 0.12s, border-color 0.12s;
+            font-size: 0.9rem;
+            color: #2C2C2A;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .opt:hover {
+            background: #D3D1C7;
+        }
+
+        .opt.selected {
+            background: #EEEDFE;
+            border-color: #AFA9EC;
+            color: #26215C;
+        }
+
+        .opt.correct {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+            color: #085041;
+            cursor: default;
+        }
+
+        .opt.wrong {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+            cursor: default;
+        }
+
+        .opt-dot {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            border-radius: 50%;
+            border: 2px solid #B4B2A9;
+            margin-top: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.12s;
+        }
+
+        .opt.selected .opt-dot {
+            border-color: #7F77DD;
+            background: #7F77DD;
+        }
+
+        .opt.correct .opt-dot {
+            border-color: #1D9E75;
+            background: #1D9E75;
+        }
+
+        .opt.wrong .opt-dot {
+            border-color: #E24B4A;
+            background: #E24B4A;
+        }
+
+        .opt-dot-inner {
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            display: none;
+        }
+
+        .opt.selected .opt-dot-inner,
+        .opt.correct .opt-dot-inner,
+        .opt.wrong .opt-dot-inner {
+            display: block;
+        }
+
+        .q-feedback {
+            font-size: 0.86rem;
+            font-weight: 700;
+            margin-top: 0.6rem;
+            min-height: 1.3em;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .q-feedback.show {
+            display: block;
+        }
+
+        .q-feedback.ok {
+            color: #0F6E56;
+        }
+
+        .q-feedback.ko {
+            color: #A32D2D;
+        }
+
+        /* QUIZ V/F */
+        .vf-card {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .vf-statement {
+            font-size: 0.97rem;
+            font-weight: 700;
+            color: #2C2C2A;
+            margin-bottom: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .vf-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .vf-btn {
+            flex: 1;
+            padding: 8px 0;
+            border-radius: 10px;
+            border: 0.5px solid #B4B2A9;
+            background: #F1EFE8;
+            color: #2C2C2A;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.12s, border-color 0.12s;
+        }
+
+        .vf-btn.vrai:hover {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+            color: #085041;
+        }
+
+        .vf-btn.faux:hover {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+        }
+
+        .vf-btn.correct-ans {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+            color: #085041;
+            cursor: default;
+        }
+
+        .vf-btn.wrong-ans {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+            cursor: default;
+        }
+
+        /* ACTION BUTTONS */
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            border: 0.5px solid #B4B2A9;
+            background: #F1EFE8;
+            color: #2C2C2A;
+            border-radius: 10px;
+            padding: 8px 20px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.12s;
+        }
+
+        .action-btn:hover {
+            background: #D3D1C7;
+        }
+
+        .action-btn.primary {
+            background: #2C2C2A;
+            color: #FAC775;
+            border-color: #2C2C2A;
+        }
+
+        .action-btn.primary:hover {
+            background: #444441;
+        }
+
+        /* SCORE PANEL */
+        .score-panel {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-top: 1rem;
+            display: none;
+            text-align: center;
+        }
+
+        .score-panel.show {
+            display: block;
+        }
+
+        .score-big {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #2C2C2A;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .score-big span {
+            color: #5DCAA5;
+        }
+
+        .score-sub {
+            font-size: 0.9rem;
+            color: #888780;
+        }
+
+        /* CTA */
+        .cta-wrap {
+            text-align: center;
+            background: #2C2C2A;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .cta-wrap p {
+            color: #D3D1C7;
+            font-size: 0.95rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: #FAC775;
+            color: #412402;
+            font-weight: 800;
+            font-size: 0.97rem;
+            padding: 10px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+
+        .cta-btn:hover {
+            background: #EF9F27;
+        }
+
+        /* FOOTER */
+        .footer-note {
+            text-align: center;
+            padding: 2rem 0 1rem;
+            font-size: 0.88rem;
+            color: #888780;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 500px) {
+            .res-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="nav-prev" href="cours-mind-set.html">&larr; Retour au cours</a>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>🧠 L'état d'esprit du développeur</h1>
+        <p>Comprendre la logique avant tout — la vraie compétence, c'est de savoir chercher.</p>
+        <div class="badge-row">
+            <span class="badge b-coral">Module 01</span>
+            <span class="badge b-purple">Fondations</span>
+            <span class="badge b-amber">Autonomie</span>
+            <span class="badge b-teal">Cours + QCM + Quiz</span>
+        </div>
+    </div>
+
+    <!-- ===== QCM ===== -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">QCM — Questions à choix multiples</span>
+    </div>
+
+    <div id="qcm-container"></div>
+
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkQCM()">Corriger le QCM</button>
+        <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+    </div>
+    <div class="progress-wrap">
+        <div class="progress-fill" id="prog-qcm"></div>
+    </div>
+    <div class="score-row" id="score-qcm"></div>
+    <div class="score-panel" id="qcm-score-panel">
+        <div class="score-big"><span id="qcm-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au QCM</div>
+    </div>
+
+    <!-- ===== QUIZ V/F ===== -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">Quiz — Vrai ou Faux</span>
+    </div>
+
+    <div id="vf-container"></div>
+
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkVF()">Corriger le Quiz</button>
+        <button class="action-btn" onclick="resetVF()">Recommencer</button>
+    </div>
+    <div class="progress-wrap">
+        <div class="progress-fill" id="prog-vf"></div>
+    </div>
+    <div class="score-row" id="score-vf"></div>
+    <div class="score-panel" id="vf-score-panel">
+        <div class="score-big"><span id="vf-score-val">0</span> / 7</div>
+        <div class="score-sub">bonnes réponses au Quiz V/F</div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-note">
+        Comprendre → Chercher → Coder → Tester → Recommencer 🚀<br>
+        <span style="font-size:0.82rem;">L'état d'esprit du développeur</span>
+    </div>
+
+    <!-- CTA -->
+    <a class="cta-btn" href="../sommaire.html">&larr; Retour au sommaire</a>
+
+    <script>
+        /* ===== DONNÉES QCM ===== */
+        var qcmData = [
+            {
+                q: "Quelle est la compétence fondamentale d'un bon développeur ?",
+                opts: [
+                    "Connaître par cœur toutes les syntaxes de tous les langages",
+                    "Comprendre le fonctionnement et savoir lire la documentation",
+                    "Coder le plus vite possible sans faire d'erreurs",
+                    "N'utiliser que ses connaissances personnelles"
+                ],
+                correct: 1,
+                expl: "✓ Un développeur efficace comprend la logique et sait où chercher — il ne mémorise pas tout."
+            },
+            {
+                q: "Pourquoi l'IA seule ne suffit-elle pas pour progresser en programmation ?",
+                opts: [
+                    "Parce qu'elle fait trop d'erreurs dans le code",
+                    "Parce qu'elle ne connaît pas tous les langages",
+                    "Parce qu'elle ne remplace pas la compréhension personnelle du développeur",
+                    "Parce qu'elle est trop lente à répondre"
+                ],
+                correct: 2,
+                expl: "✓ L'IA donne du code, mais sans compréhension tu seras bloqué dès que le projet évoluera."
+            },
+            {
+                q: "Quelle est la formule de l'expertise en programmation ?",
+                opts: [
+                    "Expertise = Nombre de langages × Vitesse de frappe",
+                    "Expertise = Temps passé à coder + Compréhension",
+                    "Expertise = Temps passé à coder × Niveau de compréhension",
+                    "Expertise = Quantité de code ÷ Nombre de bugs"
+                ],
+                correct: 2,
+                expl: "✓ C'est un produit : les deux facteurs sont indispensables et se renforcent mutuellement."
+            },
+            {
+                q: "Quelle est la première étape du cycle du développeur ?",
+                opts: ["Tester", "Coder", "Chercher la documentation", "Avoir une idée"],
+                correct: 3,
+                expl: "✓ Tout commence par une idée — c'est le moteur de tout projet."
+            },
+            {
+                q: "StackOverflow, c'est quoi ?",
+                opts: [
+                    "Un langage de programmation",
+                    "Un éditeur de code",
+                    "Un célèbre forum d'entraide pour développeurs",
+                    "Un framework JavaScript"
+                ],
+                correct: 2,
+                expl: "✓ StackOverflow est l'un des forums les plus utiles pour résoudre des problèmes techniques."
+            },
+            {
+                q: "Pourquoi l'objectif principal du cours est-il l'autonomie ?",
+                opts: [
+                    "Pour éviter de payer des professeurs",
+                    "Parce que les fondations de l'informatique reposent sur la même logique, permettant de créer seul",
+                    "Parce que travailler seul est plus rapide",
+                    "Pour ne pas utiliser d'IA"
+                ],
+                correct: 1,
+                expl: "✓ Une fois les fondations comprises, la logique se répète et tu peux construire n'importe quoi."
+            },
+            {
+                q: "Quelle attitude ressemble à celle d'un bon développeur face à la documentation ?",
+                opts: [
+                    "Un cuisinier qui suit une recette",
+                    "Un artiste qui crée sans instructions",
+                    "Un sportif qui mémorise des statistiques",
+                    "Un enfant qui attend qu'on lui explique tout"
+                ],
+                correct: 0,
+                expl: "✓ Comme un cuisinier avec sa recette : on lit, on comprend, on applique, on adapte."
+            },
+            {
+                q: "Que se passe-t-il à chaque itération du cycle Idée → Coder → Tester → Analyser ?",
+                opts: [
+                    "On oublie les anciennes notions",
+                    "On acquiert de l'expérience réutilisable pour les prochains projets",
+                    "On devient dépendant des tutoriels",
+                    "Le code devient de plus en plus difficile à comprendre"
+                ],
+                correct: 1,
+                expl: "✓ Chaque cycle te fait progresser. L'expérience accumulée accélère tes futurs projets."
+            }
+        ];
+
+        /* ===== DONNÉES QUIZ V/F ===== */
+        var vfData = [
+            {
+                s: "Un bon développeur connaît par cœur toutes les fonctions de chaque langage qu'il utilise.",
+                ans: false,
+                expl: "Faux. Un bon développeur sait où chercher l'information, pas tout mémoriser."
+            },
+            {
+                s: "L'IA peut remplacer la compréhension du développeur pour maintenir un projet sur le long terme.",
+                ans: false,
+                expl: "Faux. L'IA aide à trouver des informations, mais sans compréhension tu seras bloqué."
+            },
+            {
+                s: "StackOverflow est une ressource valide pour résoudre des bugs et des problèmes techniques.",
+                ans: true,
+                expl: "Vrai. C'est l'un des forums les plus utiles pour les développeurs du monde entier."
+            },
+            {
+                s: "L'expertise se construit uniquement par le temps passé à coder, sans avoir besoin de comprendre.",
+                ans: false,
+                expl: "Faux. Sans compréhension, le temps passé à coder ne crée pas de vraie expertise."
+            },
+            {
+                s: "Les fondations de la programmation reposent sur la même logique quel que soit le langage.",
+                ans: true,
+                expl: "Vrai. Variables, conditions, boucles, fonctions... ces concepts sont universels."
+            },
+            {
+                s: "Tester son code fait partie intégrante du cycle de développement.",
+                ans: true,
+                expl: "Vrai. Tester → Analyser → Corriger est une étape incontournable."
+            },
+            {
+                s: "Copier-coller du code généré par l'IA sans le lire suffit pour progresser en programmation.",
+                ans: false,
+                expl: "Faux. Il est indispensable de lire, comprendre et savoir maintenir le code qu'on utilise."
+            }
+        ];
+
+        var msgs_ok = ['Parfait !', 'Bravo !', "C'est ça !", 'Excellent !'];
+        var msgs_ko = ['Pas tout à fait...', 'Essaie encore !', 'Presque !'];
+        function rnd(a) { return a[Math.floor(Math.random() * a.length)]; }
+
+        /* ===== QCM ===== */
+        var qcmAnswers = {};
+
+        function renderQCM() {
+            var c = document.getElementById('qcm-container');
+            c.innerHTML = '';
+            qcmData.forEach(function (q, qi) {
+                var card = document.createElement('div');
+                card.className = 'qcm-card';
+                var optsHtml = q.opts.map(function (o, oi) {
+                    return '<div class="opt" id="qcm-opt-' + qi + '-' + oi + '" onclick="selectQCM(' + qi + ',' + oi + ')">' +
+                        '<div class="opt-dot"><div class="opt-dot-inner"></div></div>' +
+                        '<span>' + o + '</span></div>';
+                }).join('');
+                card.innerHTML =
+                    '<div class="q-num">Question ' + (qi + 1) + ' sur ' + qcmData.length + '</div>' +
+                    '<div class="q-text">' + q.q + '</div>' +
+                    '<div class="options">' + optsHtml + '</div>' +
+                    '<div class="q-feedback" id="qcm-fb-' + qi + '"></div>';
+                c.appendChild(card);
+            });
+        }
+
+        function selectQCM(qi, oi) {
+            if (document.getElementById('qcm-opt-' + qi + '-0').style.pointerEvents === 'none') return;
+            qcmAnswers[qi] = oi;
+            qcmData[qi].opts.forEach(function (_, i) {
+                var el = document.getElementById('qcm-opt-' + qi + '-' + i);
+                el.classList.toggle('selected', i === oi);
+            });
+        }
+
+        function checkQCM() {
+            var score = 0;
+            qcmData.forEach(function (q, qi) {
+                var chosen = qcmAnswers[qi];
+                var fb = document.getElementById('qcm-fb-' + qi);
+                q.opts.forEach(function (_, i) {
+                    var el = document.getElementById('qcm-opt-' + qi + '-' + i);
+                    el.style.pointerEvents = 'none';
+                    el.classList.remove('selected');
+                });
+                if (chosen !== undefined) {
+                    if (chosen === q.correct) {
+                        document.getElementById('qcm-opt-' + qi + '-' + chosen).classList.add('correct');
+                        score++;
+                        fb.className = 'q-feedback show ok';
+                        fb.textContent = q.expl;
+                    } else {
+                        document.getElementById('qcm-opt-' + qi + '-' + chosen).classList.add('wrong');
+                        document.getElementById('qcm-opt-' + qi + '-' + q.correct).classList.add('correct');
+                        fb.className = 'q-feedback show ko';
+                        fb.textContent = '✗ ' + q.expl.replace('✓ ', '');
+                    }
+                } else {
+                    document.getElementById('qcm-opt-' + qi + '-' + q.correct).classList.add('correct');
+                    fb.className = 'q-feedback show ko';
+                    fb.textContent = '— Sans réponse. ' + q.expl.replace('✓ ', '');
+                }
+            });
+            var pct = Math.round(score / qcmData.length * 100);
+            document.getElementById('prog-qcm').style.width = pct + '%';
+            var row = document.getElementById('score-qcm');
+            row.innerHTML = '<span class="chip chip-ok">' + score + ' / ' + qcmData.length + ' bonnes réponses</span>';
+            if (qcmData.length - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (qcmData.length - score) + ' erreur(s)</span>';
+            document.getElementById('qcm-score-val').textContent = score;
+            var panel = document.getElementById('qcm-score-panel');
+            panel.classList.add('show');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetQCM() {
+            qcmAnswers = {};
+            document.getElementById('qcm-score-panel').classList.remove('show');
+            document.getElementById('prog-qcm').style.width = '0%';
+            document.getElementById('score-qcm').innerHTML = '';
+            renderQCM();
+        }
+
+        /* ===== QUIZ V/F ===== */
+        var vfAnswers = {};
+
+        function renderVF() {
+            var c = document.getElementById('vf-container');
+            c.innerHTML = '';
+            vfData.forEach(function (q, qi) {
+                var card = document.createElement('div');
+                card.className = 'vf-card';
+                card.innerHTML =
+                    '<div class="q-num">Affirmation ' + (qi + 1) + ' sur ' + vfData.length + '</div>' +
+                    '<div class="vf-statement">' + q.s + '</div>' +
+                    '<div class="vf-btns">' +
+                    '<button class="vf-btn vrai" id="vf-v-' + qi + '" onclick="answerVF(' + qi + ',true)">✓ Vrai</button>' +
+                    '<button class="vf-btn faux" id="vf-f-' + qi + '" onclick="answerVF(' + qi + ',false)">✗ Faux</button>' +
+                    '</div>' +
+                    '<div class="q-feedback" id="vf-fb-' + qi + '"></div>';
+                c.appendChild(card);
+            });
+        }
+
+        function answerVF(qi, val) {
+            if (document.getElementById('vf-v-' + qi).disabled) return;
+            vfAnswers[qi] = val;
+            var vb = document.getElementById('vf-v-' + qi);
+            var fb2 = document.getElementById('vf-f-' + qi);
+            vb.className = 'vf-btn vrai' + (val ? ' selected-vf' : '');
+            fb2.className = 'vf-btn faux' + (!val ? ' selected-vf' : '');
+            vb.style.background = val ? '#EEEDFE' : '';
+            vb.style.borderColor = val ? '#AFA9EC' : '';
+            vb.style.color = val ? '#26215C' : '';
+            fb2.style.background = !val ? '#EEEDFE' : '';
+            fb2.style.borderColor = !val ? '#AFA9EC' : '';
+            fb2.style.color = !val ? '#26215C' : '';
+        }
+
+        function checkVF() {
+            var score = 0;
+            vfData.forEach(function (q, qi) {
+                var vb = document.getElementById('vf-v-' + qi);
+                var fb2 = document.getElementById('vf-f-' + qi);
+                var fb = document.getElementById('vf-fb-' + qi);
+                vb.disabled = true; fb2.disabled = true;
+                vb.style.background = ''; vb.style.borderColor = ''; vb.style.color = '';
+                fb2.style.background = ''; fb2.style.borderColor = ''; fb2.style.color = '';
+                vb.className = 'vf-btn vrai'; fb2.className = 'vf-btn faux';
+                var chosen = vfAnswers[qi];
+                if (chosen !== undefined) {
+                    var correct = (chosen === q.ans);
+                    if (correct) {
+                        score++;
+                        (chosen ? vb : fb2).classList.add('correct-ans');
+                        fb.className = 'q-feedback show ok';
+                        fb.textContent = rnd(msgs_ok) + ' ' + q.expl;
+                    } else {
+                        (chosen ? vb : fb2).classList.add('wrong-ans');
+                        (q.ans ? vb : fb2).classList.add('correct-ans');
+                        fb.className = 'q-feedback show ko';
+                        fb.textContent = rnd(msgs_ko) + ' ' + q.expl;
+                    }
+                } else {
+                    (q.ans ? vb : fb2).classList.add('correct-ans');
+                    fb.className = 'q-feedback show ko';
+                    fb.textContent = '— Sans réponse. ' + q.expl;
+                }
+            });
+            var pct = Math.round(score / vfData.length * 100);
+            document.getElementById('prog-vf').style.width = pct + '%';
+            var row = document.getElementById('score-vf');
+            row.innerHTML = '<span class="chip chip-ok">' + score + ' / ' + vfData.length + ' bonnes réponses</span>';
+            if (vfData.length - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (vfData.length - score) + ' erreur(s)</span>';
+            document.getElementById('vf-score-val').textContent = score;
+            var panel = document.getElementById('vf-score-panel');
+            panel.classList.add('show');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetVF() {
+            vfAnswers = {};
+            document.getElementById('vf-score-panel').classList.remove('show');
+            document.getElementById('prog-vf').style.width = '0%';
+            document.getElementById('score-vf').innerHTML = '';
+            renderVF();
+        }
+
+        /* ===== INIT ===== */
+        renderQCM();
+        renderVF();
+    </script>
+
+</body>
+
+</html>
