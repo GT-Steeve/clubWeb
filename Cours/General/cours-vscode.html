@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apprends VS Code !</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #F5F4EF;
+      color: #2C2C2A;
+      padding: 2rem 1rem 4rem;
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    .nav-prev {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #185FA5;
+      text-decoration: none;
+      margin-bottom: 1.5rem;
+      background: #E6F1FB;
+      border: 0.5px solid #85B7EB;
+      border-radius: 8px;
+      padding: 6px 14px;
+      transition: background 0.15s;
+    }
+
+    .nav-prev:hover {
+      background: #B5D4F4;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1E1E2E 0%, #2D2B55 50%, #3C3489 100%);
+      border-radius: 18px;
+      padding: 2.5rem 2rem 2rem;
+      margin-bottom: 1.8rem;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 180px;
+      height: 180px;
+      background: rgba(100, 120, 255, 0.15);
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+      position: relative;
+    }
+
+    .hero p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      position: relative;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    .b-teal {
+      background: #D0F0E8;
+      color: #085041;
+    }
+
+    .b-purple {
+      background: #E6E2FF;
+      color: #3C3489;
+    }
+
+    .b-amber {
+      background: #FDE9C2;
+      color: #7A4500;
+    }
+
+    .b-blue {
+      background: #D6EBFF;
+      color: #0C447C;
+    }
+
+    .b-pink {
+      background: #FFE0F0;
+      color: #8B1050;
+    }
+
+    /* CARD */
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #E8E7E0;
+      border-radius: 14px;
+      padding: 1.5rem 1.4rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .stitle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 0.9rem;
+      color: #1A1918;
+    }
+
+    .pill {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .teal {
+      background: #D0F0E8;
+      color: #085041;
+    }
+
+    .purple {
+      background: #E6E2FF;
+      color: #3C3489;
+    }
+
+    .blue {
+      background: #D6EBFF;
+      color: #0C447C;
+    }
+
+    .green {
+      background: #E2F3D4;
+      color: #27500A;
+    }
+
+    .amber {
+      background: #FDE9C2;
+      color: #7A4500;
+    }
+
+    .coral {
+      background: #FDDDD6;
+      color: #7C2012;
+    }
+
+    .red {
+      background: #FCEBEB;
+      color: #791F1F;
+    }
+
+    .pink {
+      background: #FFE0F0;
+      color: #8B1050;
+    }
+
+    .indigo {
+      background: #E0E7FF;
+      color: #3730A3;
+    }
+
+    .desc {
+      font-size: 0.9rem;
+      color: #4A4947;
+      margin-bottom: 0.9rem;
+      line-height: 1.65;
+    }
+
+    .desc:last-child {
+      margin-bottom: 0;
+    }
+
+    /* CODE BLOCK */
+    .code-block {
+      background: #1E1E2E;
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      color: #CDD6F4;
+      white-space: pre;
+      overflow-x: auto;
+      line-height: 1.7;
+      margin-bottom: 0.8rem;
+    }
+
+    .code-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .tag {
+      color: #89DCEB;
+    }
+
+    .attr {
+      color: #CBA6F7;
+    }
+
+    .val {
+      color: #A6E3A1;
+    }
+
+    .cm {
+      color: #6C7086;
+      font-style: italic;
+    }
+
+    .kw {
+      color: #F38BA8;
+    }
+
+    .str {
+      color: #A6E3A1;
+    }
+
+    .num {
+      color: #FAB387;
+    }
+
+    .fn {
+      color: #89B4FA;
+    }
+
+    /* RESULT / VISUAL BOX */
+    .result-box {
+      background: #F8F7F3;
+      border: 1px solid #E0DED6;
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      margin-top: 0.5rem;
+    }
+
+    .rl {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888780;
+      margin-bottom: 0.4rem;
+    }
+
+    /* TIP */
+    .tip {
+      background: #E6F1FB;
+      border-left: 3px solid #3B82F6;
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+      font-size: 0.84rem;
+      color: #1A3A5C;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-top: 0.8rem;
+    }
+
+    .tip-purple {
+      background: #EFECFF;
+      border-left-color: #7C3AED;
+      color: #2E1B6E;
+    }
+
+    .tip-warn {
+      background: #FFF7E6;
+      border-left-color: #F59E0B;
+      color: #7A4500;
+    }
+
+    .tip-green {
+      background: #EAFAF0;
+      border-left-color: #22C55E;
+      color: #14532D;
+    }
+
+    .tip-i {
+      font-style: normal;
+      flex-shrink: 0;
+    }
+
+    /* KEYBOARD */
+    .kbd {
+      display: inline-block;
+      background: #F1F0EB;
+      border: 1px solid #C8C6BE;
+      border-bottom: 2px solid #A8A6A0;
+      border-radius: 5px;
+      padding: 1px 7px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #2C2C2A;
+    }
+
+    /* STEPS */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-top: 0.6rem;
+    }
+
+    .step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #3C3489;
+      color: white;
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-body {
+      flex: 1;
+    }
+
+    .step-body strong {
+      display: block;
+      font-size: 0.92rem;
+      margin-bottom: 2px;
+    }
+
+    .step-body span {
+      font-size: 0.84rem;
+      color: #5A5957;
+    }
+
+    /* EXTENSION GRID */
+    .ext-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.8rem;
+    }
+
+    .ext-card {
+      background: #F8F7F3;
+      border: 1px solid #E0DED6;
+      border-radius: 10px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .ext-card .ext-icon {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+
+    .ext-card .ext-name {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #1A1918;
+    }
+
+    .ext-card .ext-desc {
+      font-size: 0.73rem;
+      color: #5A5957;
+      margin-top: 2px;
+    }
+
+    /* FILE TYPE TABLE */
+    .file-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.7rem;
+      font-size: 0.85rem;
+    }
+
+    .file-table th {
+      background: #F1F0EB;
+      color: #444441;
+      padding: 7px 10px;
+      text-align: left;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .file-table th:first-child {
+      border-radius: 8px 0 0 0;
+    }
+
+    .file-table th:last-child {
+      border-radius: 0 8px 0 0;
+    }
+
+    .file-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid #EEECE4;
+      vertical-align: top;
+    }
+
+    .file-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .file-table code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      background: #EFECFF;
+      color: #3C3489;
+      padding: 1px 6px;
+      border-radius: 5px;
+    }
+
+    /* TAG COMPARE */
+    .tag-compare {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 1.2rem;
+    }
+
+    .tc {
+      border-radius: 10px;
+      padding: 0.6rem 1rem;
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    .tc code {
+      font-family: 'Fira Code', monospace;
+      font-weight: 700;
+    }
+
+    /* SHORTCUT BOX */
+    .sc-box {
+      background: #F8F7F3;
+      border: 1px solid #E0DED6;
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+    }
+
+    .sc-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.86rem;
+      color: #3A3937;
+    }
+
+    .sc-keys {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .sep {
+      color: #999;
+      font-size: 0.8rem;
+    }
+
+    /* CTA */
+    .cta-wrap {
+      background: linear-gradient(135deg, #1E1E2E 0%, #3C3489 100%);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: white;
+      margin-top: 1.5rem;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: #FFFFFF;
+      color: #3C3489;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 0.7rem 2rem;
+      border-radius: 10px;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: opacity 0.15s;
+    }
+
+    .cta-btn:hover {
+      opacity: 0.9;
+    }
+
+    .cta-sub {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.8rem;
+      line-height: 1.5;
+    }
+
+    /* VSCODE DEMO */
+    .vscode-demo {
+      background: #1E1E2E;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 0.7rem;
+      border: 1px solid #313244;
+    }
+
+    .vsc-titlebar {
+      background: #181825;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .vsc-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+
+    .vsc-body {
+      display: flex;
+      min-height: 180px;
+    }
+
+    .vsc-sidebar {
+      background: #181825;
+      width: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0;
+      gap: 16px;
+    }
+
+    .vsc-icon {
+      font-size: 1.2rem;
+      opacity: 0.5;
+      cursor: pointer;
+    }
+
+    .vsc-icon.active {
+      opacity: 1;
+    }
+
+    .vsc-explorer {
+      background: #1E1E2E;
+      width: 130px;
+      padding: 8px 0;
+      border-right: 1px solid #313244;
+      font-size: 0.72rem;
+      color: #CDD6F4;
+    }
+
+    .vsc-exp-title {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6C7086;
+      padding: 0 10px 6px;
+    }
+
+    .vsc-file {
+      padding: 3px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .vsc-file:hover {
+      background: #313244;
+    }
+
+    .vsc-file.active {
+      background: #313244;
+    }
+
+    .vsc-editor {
+      flex: 1;
+      padding: 12px 14px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.72rem;
+      color: #CDD6F4;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 500px) {
+      .hero h1 {
+        font-size: 1.6rem;
+      }
+
+      .ext-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="../sommaire.html">← Retour au sommaire</a>
+
+  <div class="hero">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">💻</div>
+    <h1>VS Code & les IDEs</h1>
+    <p>Ton éditeur de code, ton meilleur ami !</p>
+    <div class="badge-row">
+      <span class="badge b-blue">Débutant</span>
+      <span class="badge b-purple">Complet</span>
+      <span class="badge b-amber">Essentiel</span>
+    </div>
+  </div>
+
+  <!-- C'EST QUOI UN IDE -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill teal">?</div>C'est quoi un IDE ?
+    </div>
+    <p class="desc">Un <strong>IDE</strong> (Integrated Development Environment, ou <em>Environnement de Développement
+        Intégré</em>) est un logiciel spécialement conçu pour écrire du code. C'est comme un traitement de texte (Word,
+      LibreOffice…), mais en beaucoup plus puissant pour les développeurs !</p>
+    <p class="desc">Un IDE t'aide à :</p>
+    <div class="tag-compare">
+      <div class="tc" style="background:#E6F1FB;color:#0C447C;"><strong>✏️ Écrire</strong> du code avec de la coloration
+        et de l'autocomplétion</div>
+      <div class="tc" style="background:#EAF3DE;color:#27500A;"><strong>🔍 Détecter</strong> les erreurs avant même de
+        lancer ton programme</div>
+      <div class="tc" style="background:#FAEEDA;color:#633806;"><strong>📁 Organiser</strong> tous tes fichiers dans un
+        seul endroit</div>
+      <div class="tc" style="background:#EFECFF;color:#3730A3;"><strong>🚀 Lancer</strong> et tester ton code
+        directement depuis l'éditeur</div>
+    </div>
+    <div class="tip">
+      <span class="tip-i">💡</span>
+      <span>Sans IDE, tu écrirais ton code dans le Bloc-notes — ça marche, mais tu n'aurais aucune aide. L'IDE, c'est le
+        filet de sécurité du développeur !</span>
+    </div>
+  </div>
+
+  <!-- POURQUOI VS CODE -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill blue">★</div>Pourquoi choisir VS Code ?
+    </div>
+    <p class="desc">Il existe beaucoup d'IDEs (IntelliJ, Sublime Text, Atom…), mais <strong>Visual Studio Code</strong>
+      (ou VS Code) est de loin le plus utilisé au monde. Voici pourquoi :</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Gratuit et open source</strong>
+          <span>Développé par Microsoft, VS Code est entièrement gratuit, pour toujours.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Compatible avec tous les langages</strong>
+          <span>HTML, CSS, JavaScript, Python, PHP, Java… il gère tout !</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Des milliers d'extensions</strong>
+          <span>Tu peux ajouter des fonctionnalités en un clic grâce à la marketplace d'extensions.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Léger et rapide</strong>
+          <span>Il démarre en quelques secondes et tourne bien même sur des machines modestes.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TÉLÉCHARGER & INSTALLER -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill purple">⬇</div>Télécharger & installer VS Code
+    </div>
+    <p class="desc">L'installation est simple et rapide. Suis ces étapes :</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Va sur le site officiel</strong>
+          <span>Ouvre ton navigateur et rends-toi sur <strong>code.visualstudio.com</strong></span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Clique sur le bouton de téléchargement</strong>
+          <span>Le site détecte automatiquement ton système (Windows, Mac ou Linux) et te propose la bonne
+            version.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Lance l'installateur</strong>
+          <span>Sur Windows : double-clique sur le fichier <code
+              style="font-family:'Fira Code',monospace;font-size:0.82rem;background:#EFECFF;color:#3C3489;padding:1px 6px;border-radius:5px;">.exe</code>
+            téléchargé. Sur Mac : fais glisser l'app dans ton dossier Applications.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Accepte les options par défaut</strong>
+          <span>Clique "Suivant" jusqu'à la fin. Coche <em>"Ajouter au PATH"</em> si c'est proposé — c'est utile
+            !</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <strong>Lance VS Code !</strong>
+          <span>Une fenêtre sombre avec un écran d'accueil s'ouvre. Tu y es 🎉</span>
+        </div>
+      </div>
+    </div>
+    <div class="tip tip-green" style="margin-top:0.9rem;">
+      <span class="tip-i">✅</span>
+      <span>VS Code se met à jour tout seul. Tu n'auras plus jamais à le réinstaller !</span>
+    </div>
+  </div>
+
+  <!-- INTERFACE DE VS CODE -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill indigo">🖥</div>L'interface de VS Code
+    </div>
+    <p class="desc">Voilà à quoi ressemble VS Code quand tu l'ouvres. Chaque zone a son rôle :</p>
+
+    <div class="vscode-demo">
+      <div class="vsc-titlebar">
+        <div class="vsc-dot" style="background:#FF5F57;"></div>
+        <div class="vsc-dot" style="background:#FEBC2E;"></div>
+        <div class="vsc-dot" style="background:#28C840;"></div>
+        <span style="font-family:'Fira Code',monospace;font-size:0.7rem;color:#6C7086;margin-left:8px;">Visual Studio
+          Code — mon-projet</span>
+      </div>
+      <div class="vsc-body">
+        <div class="vsc-sidebar">
+          <div class="vsc-icon active">📁</div>
+          <div class="vsc-icon">🔍</div>
+          <div class="vsc-icon">🔀</div>
+          <div class="vsc-icon">🧩</div>
+        </div>
+        <div class="vsc-explorer">
+          <div class="vsc-exp-title">Mon-projet</div>
+          <div class="vsc-file">📁 css</div>
+          <div class="vsc-file">📁 js</div>
+          <div class="vsc-file active">📄 index.html</div>
+          <div class="vsc-file">📄 style.css</div>
+          <div class="vsc-file">📄 script.js</div>
+        </div>
+        <div class="vsc-editor">
+          <span style="color:#89DCEB;">&lt;!DOCTYPE html&gt;</span>
+          <span style="color:#89DCEB;">&lt;html</span> <span style="color:#CBA6F7;">lang</span>=<span
+            style="color:#A6E3A1;">"fr"</span><span style="color:#89DCEB;">&gt;</span>
+          <span style="color:#89DCEB;">&lt;head&gt;</span>
+          <span style="color:#89DCEB;">&lt;title&gt;</span>Ma page<span style="color:#89DCEB;">&lt;/title&gt;</span>
+          <span style="color:#89DCEB;">&lt;/head&gt;</span>
+          <span style="color:#89DCEB;">&lt;body&gt;</span>
+          <span style="color:#6C7086;font-style:italic;">&lt;!-- Contenu ici --&gt;</span>
+          <span style="color:#89DCEB;">&lt;/body&gt;</span>
+          <span style="color:#89DCEB;">&lt;/html&gt;</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:1rem;display:flex;flex-direction:column;gap:6px;font-size:0.84rem;">
+      <div style="display:flex;gap:8px;align-items:center;"><span
+          style="background:#D6EBFF;color:#0C447C;border-radius:6px;padding:2px 8px;font-weight:700;font-size:0.75rem;">Barre
+          latérale</span><span>Icônes pour explorer les fichiers, chercher, gérer Git, et les extensions.</span></div>
+      <div style="display:flex;gap:8px;align-items:center;"><span
+          style="background:#E2F3D4;color:#27500A;border-radius:6px;padding:2px 8px;font-weight:700;font-size:0.75rem;">Explorateur</span><span>Voir
+          l'arborescence de ton projet — tous tes fichiers et dossiers.</span></div>
+      <div style="display:flex;gap:8px;align-items:center;"><span
+          style="background:#EFECFF;color:#3730A3;border-radius:6px;padding:2px 8px;font-weight:700;font-size:0.75rem;">Éditeur</span><span>La
+          zone principale où tu écris ton code, avec coloration syntaxique.</span></div>
+    </div>
+  </div>
+
+  <!-- CRÉER UN DOSSIER ET FICHIER -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill green">📁</div>Créer un dossier et un fichier
+    </div>
+    <p class="desc">Avant de coder, tu dois ouvrir un <strong>dossier de travail</strong> dans VS Code. C'est lui qui
+      contiendra tous tes fichiers de projet.</p>
+
+    <div class="rl" style="margin-bottom:0.5rem;">Ouvrir un dossier</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Fichier → Ouvrir le dossier…</strong>
+          <span>Dans la barre de menus en haut, clique sur <em>Fichier</em> puis <em>Ouvrir le dossier</em>.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Choisis ou crée un dossier</strong>
+          <span>Par exemple : crée un dossier <code
+              style="font-family:'Fira Code',monospace;font-size:0.82rem;background:#EAF3DE;color:#27500A;padding:1px 6px;border-radius:5px;">mon-projet</code>
+            sur ton bureau, puis sélectionne-le.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rl" style="margin-bottom:0.5rem;margin-top:1rem;">Créer un nouveau fichier</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Dans l'explorateur, clique sur l'icône 📄+</strong>
+          <span>Passe ta souris sur le nom du dossier dans la barre latérale gauche — une icône "Nouveau fichier"
+            apparaît.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Tape le nom du fichier avec son extension</strong>
+          <span>Par exemple : <code
+              style="font-family:'Fira Code',monospace;font-size:0.82rem;background:#EFECFF;color:#3C3489;padding:1px 6px;border-radius:5px;">index.html</code>
+            ou <code
+              style="font-family:'Fira Code',monospace;font-size:0.82rem;background:#EFECFF;color:#3C3489;padding:1px 6px;border-radius:5px;">style.css</code>.
+            L'extension détermine le type de fichier !</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Appuie sur Entrée</strong>
+          <span>Le fichier apparaît dans la liste et s'ouvre automatiquement dans l'éditeur.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip tip-purple" style="margin-top:0.9rem;">
+      <span class="tip-i">⌨️</span>
+      <span>Raccourci : <span class="kbd">Ctrl</span>+<span class="kbd">N</span> pour créer un nouveau fichier, puis
+        <span class="kbd">Ctrl</span>+<span class="kbd">S</span> pour l'enregistrer et lui donner un nom.</span>
+    </div>
+  </div>
+
+  <!-- LES EXTENSIONS DE FICHIERS -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill amber">📄</div>Les extensions de fichiers
+    </div>
+    <p class="desc">L'<strong>extension</strong> d'un fichier (la partie après le point dans le nom) indique son type et
+      son langage. VS Code l'utilise pour activer la coloration syntaxique correcte !</p>
+
+    <table class="file-table">
+      <thead>
+        <tr>
+          <th>Extension</th>
+          <th>Type de fichier</th>
+          <th>Usage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>.html</code></td>
+          <td>HTML</td>
+          <td>Structure des pages web</td>
+        </tr>
+        <tr>
+          <td><code>.css</code></td>
+          <td>CSS</td>
+          <td>Mise en forme et design des pages</td>
+        </tr>
+        <tr>
+          <td><code>.js</code></td>
+          <td>JavaScript</td>
+          <td>Interactivité et logique côté navigateur</td>
+        </tr>
+        <tr>
+          <td><code>.py</code></td>
+          <td>Python</td>
+          <td>Scripts, data science, back-end</td>
+        </tr>
+        <tr>
+          <td><code>.json</code></td>
+          <td>JSON</td>
+          <td>Données structurées, configuration</td>
+        </tr>
+        <tr>
+          <td><code>.md</code></td>
+          <td>Markdown</td>
+          <td>Documentation, README de projet</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="code-block" style="margin-top:0.9rem;"><span class="cm"><!-- Exemple : projet web classique --></span>
+      <span class="tag">mon-projet/</span>
+      ├── <span class="fn">index</span><span class="attr">.html</span> <span class="cm">← la page principale</span>
+      ├── <span class="fn">style</span><span class="attr">.css</span> <span class="cm">← les couleurs et styles</span>
+      ├── <span class="fn">script</span><span class="attr">.js</span> <span class="cm">← les interactions</span>
+      └── <span class="fn">README</span><span class="attr">.md</span> <span class="cm">← la documentation</span>
+    </div>
+
+    <div class="tip tip-warn">
+      <span class="tip-i">⚠️</span>
+      <span>N'oublie <strong>jamais</strong> l'extension quand tu nommes un fichier ! Sans elle, VS Code (et ton
+        navigateur) ne saura pas quel type de fichier c'est.</span>
+    </div>
+  </div>
+
+  <!-- FONCTIONS DE BASE -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill coral">⚡</div>Fonctions de base indispensables
+    </div>
+    <p class="desc">Voici les raccourcis et fonctions que tu utiliseras tous les jours :</p>
+
+    <div class="sc-box">
+      <div class="sc-row">
+        <div class="sc-keys"><span class="kbd">Ctrl</span><span class="sep">+</span><span class="kbd">S</span></div>
+        <span>Enregistrer le fichier</span>
+      </div>
+      <div class="sc-row">
+        <div class="sc-keys"><span class="kbd">Ctrl</span><span class="sep">+</span><span class="kbd">Z</span></div>
+        <span>Annuler la dernière action</span>
+      </div>
+      <div class="sc-row">
+        <div class="sc-keys"><span class="kbd">Ctrl</span><span class="sep">+</span><span class="kbd">F</span></div>
+        <span>Rechercher dans le fichier</span>
+      </div>
+      <div class="sc-row">
+        <div class="sc-keys"><span class="kbd">Ctrl</span><span class="sep">+</span><span class="kbd">H</span></div>
+        <span>Rechercher et remplacer</span>
+      </div>
+      <div class="sc-row">
+        <div class="sc-keys"><span class="kbd">Ctrl</span><span class="sep">+</span><span class="kbd">/</span></div>
+        <span>Commenter / décommenter une ligne</span>
+      </div>
+      <div class="sc-row">
+        <div class="sc-keys"><span class="kbd">Shift</span><span class="sep">+</span><span class="kbd">Alt</span><span
+            class="sep">+</span><span class="kbd">F</span></div>
+        <span>Formater tout le code automatiquement</span>
+      </div>
+      <div class="sc-row">
+        <div class="sc-keys"><span class="kbd">Ctrl</span><span class="sep">+</span><span class="kbd">P</span></div>
+        <span>Ouvrir rapidement un fichier par son nom</span>
+      </div>
+      <div class="sc-row">
+        <div class="sc-keys"><span class="kbd">Ctrl</span><span class="sep">+</span><span class="kbd">`</span></div>
+        <span>Ouvrir le terminal intégré</span>
+      </div>
+    </div>
+
+    <div class="tip" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span>Sur <strong>Mac</strong>, remplace <span class="kbd">Ctrl</span> par <span class="kbd">Cmd</span> (⌘) pour
+        tous ces raccourcis !</span>
+    </div>
+  </div>
+
+  <!-- AUTOCOMPLETION -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill pink">✨</div>L'autocomplétion — ton super pouvoir
+    </div>
+    <p class="desc">VS Code t'aide à écrire plus vite grâce à l'<strong>autocomplétion</strong> : quand tu commences à
+      taper, il te propose de finir le mot tout seul !</p>
+
+    <div class="rl">Exemple — tape <code style="font-family:'Fira Code',monospace;font-size:0.82rem;">h1</code> puis Tab
+      dans un fichier .html :</div>
+    <div class="code-block"><span class="cm">← Tu tapes : h1 + Tab</span>
+      <span class="cm">← VS Code génère automatiquement :</span>
+      <span class="tag">&lt;h1&gt;</span><span
+        style="background:#3C3489;color:white;padding:0 2px;border-radius:3px;">|</span><span
+        class="tag">&lt;/h1&gt;</span>
+    </div>
+
+    <div class="rl" style="margin-top:0.8rem;">Exemple — tape <code
+        style="font-family:'Fira Code',monospace;font-size:0.82rem;">!</code> puis Tab dans un .html vide :</div>
+    <div class="code-block"><span class="tag">&lt;!DOCTYPE html&gt;</span>
+      <span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="str">"en"</span><span
+        class="tag">&gt;</span>
+      <span class="tag">&lt;head&gt;</span>
+      <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span><span
+        class="tag">&gt;</span>
+      <span class="tag">&lt;title&gt;</span>Document<span class="tag">&lt;/title&gt;</span>
+      <span class="tag">&lt;/head&gt;</span>
+      <span class="tag">&lt;body&gt;</span>
+
+      <span class="tag">&lt;/body&gt;</span>
+      <span class="tag">&lt;/html&gt;</span>
+    </div>
+    <div class="tip tip-purple">
+      <span class="tip-i">🪄</span>
+      <span>Le <strong>!</strong> suivi de <span class="kbd">Tab</span> génère toute la structure HTML de base en une
+        seconde. C'est le raccourci Emmet le plus connu !</span>
+    </div>
+  </div>
+
+  <!-- EXTENSIONS -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill indigo">🧩</div>Extensions indispensables
+    </div>
+    <p class="desc">Les <strong>extensions</strong> se trouvent dans l'icône 🧩 de la barre latérale (ou <span
+        class="kbd">Ctrl</span>+<span class="kbd">Shift</span>+<span class="kbd">X</span>). Tape le nom dans la barre de
+      recherche et clique "Installer".</p>
+
+    <div class="ext-grid">
+      <div class="ext-card">
+        <div class="ext-icon">🌐</div>
+        <div class="ext-name">Live Server</div>
+        <div class="ext-desc">Recharge ta page automatiquement à chaque sauvegarde</div>
+      </div>
+      <div class="ext-card">
+        <div class="ext-icon">🎨</div>
+        <div class="ext-name">Prettier</div>
+        <div class="ext-desc">Formate ton code automatiquement et proprement</div>
+      </div>
+      <div class="ext-card">
+        <div class="ext-icon">🔍</div>
+        <div class="ext-name">IntelliSense CSS</div>
+        <div class="ext-desc">Autocomplétion pour tes classes CSS dans le HTML</div>
+      </div>
+      <div class="ext-card">
+        <div class="ext-icon">🐍</div>
+        <div class="ext-name">Python</div>
+        <div class="ext-desc">Support complet du Python : débogage, linting, etc.</div>
+      </div>
+      <div class="ext-card">
+        <div class="ext-icon">🌈</div>
+        <div class="ext-name">Color Highlight</div>
+        <div class="ext-desc">Affiche les couleurs CSS directement dans le code</div>
+      </div>
+      <div class="ext-card">
+        <div class="ext-icon">📌</div>
+        <div class="ext-name">GitLens</div>
+        <div class="ext-desc">Vois qui a modifié chaque ligne et quand</div>
+      </div>
+    </div>
+
+    <div class="tip tip-green" style="margin-top:1rem;">
+      <span class="tip-i">⭐</span>
+      <span>Commence par <strong>Live Server</strong> — c'est l'extension numéro 1 pour les débutants en HTML/CSS. Elle
+        change vraiment la vie !</span>
+    </div>
+  </div>
+
+  <!-- LIVE SERVER DETAIL -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill teal">🌐</div>Zoom sur Live Server
+    </div>
+    <p class="desc"><strong>Live Server</strong> est une extension qui lance un serveur local et recharge
+      automatiquement ta page dans le navigateur dès que tu sauvegardes ton fichier. Fini le <span class="kbd">F5</span>
+      répété !</p>
+
+    <div class="rl" style="margin-bottom:0.5rem;">Comment l'utiliser :</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Installe l'extension Live Server</strong>
+          <span>Cherche "Live Server" de <em>Ritwick Dey</em> dans les extensions et clique Installer.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Ouvre ton fichier .html</strong>
+          <span>Clique sur ton fichier <code
+              style="font-family:'Fira Code',monospace;font-size:0.82rem;background:#D0F0E8;color:#085041;padding:1px 6px;border-radius:5px;">index.html</code>
+            pour l'activer dans l'éditeur.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Clique sur "Go Live" en bas à droite</strong>
+          <span>Un bouton <em>Go Live</em> apparaît dans la barre de statut bleue en bas de VS Code.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Ta page s'ouvre dans le navigateur !</strong>
+          <span>Maintenant, chaque fois que tu appuies sur <span class="kbd">Ctrl</span>+<span class="kbd">S</span>, la
+            page se recharge instantanément.</span>
+        </div>
+      </div>
+    </div>
+    <div class="tip tip-warn">
+      <span class="tip-i">⚠️</span>
+      <span>Pour que Live Server fonctionne bien, assure-toi d'avoir <strong>ouvert un dossier</strong> dans VS Code et
+        pas juste un fichier seul !</span>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <p style="font-size:0.95rem;opacity:0.9;margin-bottom:0.3rem;">Tu as lu tout le cours ? Super ! 🎉</p>
+    <p style="font-size:0.82rem;opacity:0.7;">Maintenant, teste tes connaissances avec les exercices.</p>
+    <a class="cta-btn" href="exercices-vscode.html">Passer aux exercices →</a>
+    <p class="cta-sub">Exercice 1 : identifier les éléments de l'interface<br>Exercice 2 : choisir la bonne extension de
+      fichier</p>
+  </div>
+
+</body>
+
+</html>

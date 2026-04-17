@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices VS Code</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #F5F4EF;
+      color: #2C2C2A;
+      padding: 2rem 1rem 4rem;
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+
+    .cta-btn {
+      display: inline-block;
+      background: #FAC775;
+      color: #412402;
+      font-weight: 800;
+      font-size: 0.97rem;
+      padding: 10px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .cta-btn:hover {
+      background: #EF9F27;
+    }
+
+    /* NAV */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #185FA5;
+      text-decoration: none;
+      margin-bottom: 1.5rem;
+      background: #E6F1FB;
+      border: 0.5px solid #85B7EB;
+      border-radius: 8px;
+      padding: 6px 14px;
+      transition: background 0.15s;
+    }
+
+    .back-link:hover {
+      background: #B5D4F4;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1E1E2E 0%, #2D2B55 50%, #3C3489 100%);
+      border-radius: 18px;
+      padding: 2.5rem 2rem 2rem;
+      margin-bottom: 1.8rem;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 180px;
+      height: 180px;
+      background: rgba(100, 120, 255, 0.15);
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+      position: relative;
+    }
+
+    .hero p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      position: relative;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    .b-blue {
+      background: #D6EBFF;
+      color: #0C447C;
+    }
+
+    .b-purple {
+      background: #E6E2FF;
+      color: #3C3489;
+    }
+
+    /* CARD */
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #E8E7E0;
+      border-radius: 14px;
+      padding: 1.5rem 1.4rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .stitle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 0.9rem;
+      color: #1A1918;
+    }
+
+    .pill {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .p-blue {
+      background: #D6EBFF;
+      color: #0C447C;
+    }
+
+    .p-purple {
+      background: #E6E2FF;
+      color: #3C3489;
+    }
+
+    .p-green {
+      background: #E2F3D4;
+      color: #27500A;
+    }
+
+    .desc {
+      font-size: 0.9rem;
+      color: #4A4947;
+      margin-bottom: 0.9rem;
+      line-height: 1.65;
+    }
+
+    .desc:last-child {
+      margin-bottom: 0;
+    }
+
+    .rl {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888780;
+      margin-bottom: 0.4rem;
+    }
+
+    .kbd {
+      display: inline-block;
+      background: #F1F0EB;
+      border: 1px solid #C8C6BE;
+      border-bottom: 2px solid #A8A6A0;
+      border-radius: 5px;
+      padding: 1px 7px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #2C2C2A;
+    }
+
+    /* TIP */
+    .tip {
+      background: #E6F1FB;
+      border-left: 3px solid #3B82F6;
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+      font-size: 0.84rem;
+      color: #1A3A5C;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-top: 0.8rem;
+    }
+
+    .tip-purple {
+      background: #EFECFF;
+      border-left-color: #7C3AED;
+      color: #2E1B6E;
+    }
+
+    .tip-i {
+      font-style: normal;
+      flex-shrink: 0;
+    }
+
+    /* QUESTION */
+    .question {
+      margin-bottom: 1.4rem;
+    }
+
+    .question:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 0.7rem;
+    }
+
+    .choice-btn {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #C8C6BE;
+      background: #F8F7F3;
+      color: #2C2C2A;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .choice-btn:hover:not(:disabled) {
+      background: #EAE8E0;
+      border-color: #999790;
+    }
+
+    .choice-btn.correct {
+      background: #EAFAF0;
+      border-color: #22C55E;
+      color: #14532D;
+      font-weight: 700;
+    }
+
+    .choice-btn.wrong {
+      background: #FCEBEB;
+      border-color: #EF4444;
+      color: #7F1D1D;
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    .choice-btn:disabled {
+      cursor: not-allowed;
+    }
+
+    .feedback {
+      margin-top: 0.5rem;
+      font-size: 0.84rem;
+      font-weight: 600;
+      min-height: 1.2em;
+    }
+
+    .feedback.ok {
+      color: #15803D;
+    }
+
+    .feedback.err {
+      color: #B91C1C;
+    }
+
+    /* PROGRESS */
+    .progress-wrap {
+      background: #F1F0EB;
+      border-radius: 99px;
+      height: 8px;
+      margin-top: 1.2rem;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #3C3489, #6C63FF);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .score-row {
+      font-size: 0.82rem;
+      color: #5A5957;
+      margin-top: 0.4rem;
+      min-height: 1.2em;
+    }
+
+    /* DRAG MATCH EXERCISE */
+    .match-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 0.8rem;
+    }
+
+    .match-col-title {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888780;
+      margin-bottom: 0.4rem;
+    }
+
+    .match-item {
+      background: #F8F7F3;
+      border: 1.5px solid #E0DED6;
+      border-radius: 9px;
+      padding: 8px 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+
+    .match-item:hover {
+      background: #EAE8E0;
+      border-color: #C0BEB6;
+    }
+
+    .match-item.selected {
+      background: #EFECFF;
+      border-color: #3C3489;
+      color: #3C3489;
+    }
+
+    .match-item.matched-ok {
+      background: #EAFAF0;
+      border-color: #22C55E;
+      color: #14532D;
+      pointer-events: none;
+    }
+
+    .match-item.matched-err {
+      background: #FCEBEB;
+      border-color: #EF4444;
+      color: #7F1D1D;
+    }
+
+    .match-item.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .match-desc {
+      background: #F8F7F3;
+      border: 1.5px solid #E0DED6;
+      border-radius: 9px;
+      padding: 8px 12px;
+      font-size: 0.83rem;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      user-select: none;
+    }
+
+    .match-desc:hover {
+      background: #EAE8E0;
+      border-color: #C0BEB6;
+    }
+
+    .match-desc.selected {
+      background: #EFECFF;
+      border-color: #3C3489;
+    }
+
+    .match-desc.matched-ok {
+      background: #EAFAF0;
+      border-color: #22C55E;
+      color: #14532D;
+      pointer-events: none;
+    }
+
+    .match-desc.matched-err {
+      background: #FCEBEB;
+      border-color: #EF4444;
+      color: #7F1D1D;
+    }
+
+    /* BUTTONS */
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    .action-btn {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 9px;
+      border: 1.5px solid #C8C6BE;
+      background: #F8F7F3;
+      color: #2C2C2A;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .action-btn:hover {
+      background: #EAE8E0;
+    }
+
+    .action-btn.primary {
+      background: #3C3489;
+      color: white;
+      border-color: #3C3489;
+    }
+
+    .action-btn.primary:hover {
+      background: #2D2B55;
+    }
+
+    /* MATCH FEEDBACK */
+    .match-feedback {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-top: 0.8rem;
+      min-height: 1.5em;
+    }
+
+    .match-feedback.ok {
+      color: #15803D;
+    }
+
+    .match-feedback.err {
+      color: #B91C1C;
+    }
+
+    /* FOOTER */
+    .footer-note {
+      text-align: center;
+      color: #5A5957;
+      font-size: 0.88rem;
+      margin-top: 2rem;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 500px) {
+      .match-wrap {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="back-link" href="cours-vscode.html">← Retour au cours</a>
+
+  <div class="hero">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">✏️</div>
+    <h1>Exercices VS Code</h1>
+    <p>Mets en pratique ce que tu as appris !</p>
+    <div class="badge-row">
+      <span class="badge b-blue">2 exercices</span>
+      <span class="badge b-purple">Interactif</span>
+    </div>
+  </div>
+
+  <!-- EXERCICE 1 -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill p-blue">1</div>Exercice 1 — Vrai ou faux ?
+    </div>
+    <p class="desc">Lis chaque affirmation et clique sur la bonne réponse. Teste tes connaissances sur les IDEs et VS
+      Code !</p>
+
+    <!-- Q1 -->
+    <div class="question">
+      <div class="rl">Question 1</div>
+      <p class="desc" style="font-weight:700;color:#1A1918;">Un IDE est un logiciel spécialement conçu pour écrire du
+        code.</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'vf1',true)">✅ Vrai</button>
+        <button class="choice-btn" onclick="answer(this,'vf1',false)">❌ Faux</button>
+      </div>
+      <div class="feedback" id="fb-vf1"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question">
+      <div class="rl">Question 2</div>
+      <p class="desc" style="font-weight:700;color:#1A1918;">VS Code est un logiciel payant développé par Google.</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'vf2',false)">✅ Vrai</button>
+        <button class="choice-btn" onclick="answer(this,'vf2',true)">❌ Faux</button>
+      </div>
+      <div class="feedback" id="fb-vf2"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question">
+      <div class="rl">Question 3</div>
+      <p class="desc" style="font-weight:700;color:#1A1918;">L'extension <strong>Live Server</strong> recharge
+        automatiquement ta page à chaque sauvegarde.</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'vf3',true)">✅ Vrai</button>
+        <button class="choice-btn" onclick="answer(this,'vf3',false)">❌ Faux</button>
+      </div>
+      <div class="feedback" id="fb-vf3"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question">
+      <div class="rl">Question 4</div>
+      <p class="desc" style="font-weight:700;color:#1A1918;">Le raccourci <span class="kbd">Ctrl</span>+<span
+          class="kbd">S</span> permet de formater automatiquement tout le code.</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'vf4',false)">✅ Vrai</button>
+        <button class="choice-btn" onclick="answer(this,'vf4',true)">❌ Faux</button>
+      </div>
+      <div class="feedback" id="fb-vf4"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question">
+      <div class="rl">Question 5</div>
+      <p class="desc" style="font-weight:700;color:#1A1918;">Taper <strong>!</strong> puis <span class="kbd">Tab</span>
+        dans un fichier .html génère la structure HTML de base.</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'vf5',true)">✅ Vrai</button>
+        <button class="choice-btn" onclick="answer(this,'vf5',false)">❌ Faux</button>
+      </div>
+      <div class="feedback" id="fb-vf5"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question">
+      <div class="rl">Question 6</div>
+      <p class="desc" style="font-weight:700;color:#1A1918;">Un fichier sans extension fonctionne très bien dans VS
+        Code, elle n'est pas obligatoire.</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'vf6',false)">✅ Vrai</button>
+        <button class="choice-btn" onclick="answer(this,'vf6',true)">❌ Faux</button>
+      </div>
+      <div class="feedback" id="fb-vf6"></div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-fill" id="prog1"></div>
+    </div>
+    <div class="score-row" id="score1"></div>
+  </div>
+
+  <!-- EXERCICE 2 -->
+  <div class="card">
+    <div class="stitle">
+      <div class="pill p-purple">2</div>Exercice 2 — Associe l'extension au bon langage
+    </div>
+    <p class="desc">Clique d'abord sur une extension de fichier à gauche, puis sur sa description à droite pour les
+      associer. Trouve les 5 bonnes paires !</p>
+
+    <div class="match-wrap">
+      <div>
+        <div class="match-col-title">Extension</div>
+        <div class="match-item" id="ext-html" onclick="selectExt('html')">.html</div>
+        <div class="match-item" id="ext-css" onclick="selectExt('css')">.css</div>
+        <div class="match-item" id="ext-js" onclick="selectExt('js')">.js</div>
+        <div class="match-item" id="ext-py" onclick="selectExt('py')">.py</div>
+        <div class="match-item" id="ext-json" onclick="selectExt('json')">.json</div>
+      </div>
+      <div>
+        <div class="match-col-title">Rôle</div>
+        <div class="match-desc" id="desc-css" onclick="selectDesc('css')">Mise en forme et design de la page</div>
+        <div class="match-desc" id="desc-py" onclick="selectDesc('py')">Scripts Python, data science</div>
+        <div class="match-desc" id="desc-html" onclick="selectDesc('html')">Structure et contenu de la page web</div>
+        <div class="match-desc" id="desc-json" onclick="selectDesc('json')">Données structurées, configuration</div>
+        <div class="match-desc" id="desc-js" onclick="selectDesc('js')">Interactions et logique côté navigateur</div>
+      </div>
+    </div>
+
+    <div class="match-feedback" id="match-fb"></div>
+
+    <div class="btn-row">
+      <button class="action-btn primary" onclick="checkMatches()">Vérifier les associations</button>
+      <button class="action-btn" onclick="resetMatches()">Recommencer</button>
+    </div>
+
+    <div class="progress-wrap" style="margin-top:1rem;">
+      <div class="progress-fill" id="prog2"></div>
+    </div>
+    <div class="score-row" id="score2"></div>
+
+    <div class="tip tip-purple" style="margin-top:1rem;">
+      <span class="tip-i">💡</span>
+      <span>Souviens-toi : dans un projet web classique, on retrouve toujours les trois mousquetaires :
+        <strong>.html</strong>, <strong>.css</strong> et <strong>.js</strong> !</span>
+    </div>
+  </div>
+
+  <a class="cta-btn" href="../sommaire.html">&larr; Retour au sommaire</a>
+
+  <script>
+    // ---- EXERCISE 1 : Vrai / Faux ----
+    const correctAnswers = {
+      vf1: true,  // IDE = logiciel pour coder => Vrai
+      vf2: false, // VS Code gratuit Microsoft => Faux (la bonne réponse est Faux)
+      vf3: true,  // Live Server => Vrai
+      vf4: false, // Ctrl+S = sauvegarder, pas formater => Faux
+      vf5: true,  // ! + Tab => Vrai
+      vf6: false, // Extension pas obligatoire => Faux
+    };
+    const feedbacks = {
+      vf1: { ok: "Exactement ! Un IDE est conçu pour faciliter l'écriture de code.", err: "Non — un IDE est bien un logiciel spécialisé pour écrire du code." },
+      vf2: { ok: "Bien vu ! VS Code est gratuit et développé par Microsoft, pas Google.", err: "Attention ! VS Code est gratuit et développé par Microsoft." },
+      vf3: { ok: "Parfait ! Live Server recharge la page automatiquement à chaque Ctrl+S.", err: "Non, c'est bien ce que fait Live Server — rechargement automatique !" },
+      vf4: { ok: "Correct ! Ctrl+S sert à sauvegarder. Pour formater, c'est Shift+Alt+F.", err: "Non — Ctrl+S sauvegarde le fichier. Le formatage se fait avec Shift+Alt+F." },
+      vf5: { ok: "Parfait ! C'est le raccourci Emmet le plus utile en HTML.", err: "Si, c'est vrai ! Tape ! puis Tab dans un .html vide, tu verras !" },
+      vf6: { ok: "Exact ! L'extension est indispensable pour que VS Code comprenne le type de fichier.", err: "Non — l'extension est très importante. Sans elle, VS Code ne sait pas comment colorer ton code !" },
+    };
+
+    const q1State = {};
+    let q1Done = 0;
+    const q1Total = Object.keys(correctAnswers).length;
+
+    function answer(btn, id, isCorrect) {
+      if (q1State[id]) return;
+      q1State[id] = true;
+
+      const parent = btn.closest('.question');
+      const btns = parent.querySelectorAll('.choice-btn');
+      btns.forEach(b => b.disabled = true);
+
+      const fb = document.getElementById('fb-' + id);
+
+      if (isCorrect) {
+        btn.classList.add('correct');
+        fb.textContent = '✅ ' + feedbacks[id].ok;
+        fb.className = 'feedback ok';
+      } else {
+        btn.classList.add('wrong');
+        fb.textContent = '❌ ' + feedbacks[id].err;
+        fb.className = 'feedback err';
+        // Highlight correct answer
+        btns.forEach(b => {
+          if (!b.classList.contains('wrong')) b.classList.add('correct');
+        });
+      }
+
+      q1Done++;
+      const pct = Math.round((q1Done / q1Total) * 100);
+      document.getElementById('prog1').style.width = pct + '%';
+
+      if (q1Done === q1Total) {
+        const correct = Object.keys(q1State).length; // all answered
+        let trueCorrect = 0;
+        document.querySelectorAll('.choice-btn.correct').forEach(() => trueCorrect++);
+        document.getElementById('score1').textContent = '🎉 Exercice terminé ! Bravo d\'avoir répondu à toutes les questions.';
+      }
+    }
+
+    // ---- EXERCISE 2 : Match ----
+    const pairs = {
+      html: 'html',
+      css: 'css',
+      js: 'js',
+      py: 'py',
+      json: 'json',
+    };
+
+    let selectedExt = null;
+    let selectedDesc = null;
+    let matchedCount = 0;
+    const matchTotal = 5;
+    const matched = {};
+
+    function selectExt(key) {
+      if (matched[key]) return;
+      // Deselect previous
+      document.querySelectorAll('.match-item').forEach(el => el.classList.remove('selected'));
+      if (selectedExt === key) { selectedExt = null; return; }
+      selectedExt = key;
+      document.getElementById('ext-' + key).classList.add('selected');
+      tryMatch();
+    }
+
+    function selectDesc(key) {
+      if (matched[key]) return;
+      document.querySelectorAll('.match-desc').forEach(el => el.classList.remove('selected'));
+      if (selectedDesc === key) { selectedDesc = null; return; }
+      selectedDesc = key;
+      document.getElementById('desc-' + key).classList.add('selected');
+      tryMatch();
+    }
+
+    function tryMatch() {
+      if (!selectedExt || !selectedDesc) return;
+
+      const ext = selectedExt;
+      const desc = selectedDesc;
+      selectedExt = null;
+      selectedDesc = null;
+
+      const extEl = document.getElementById('ext-' + ext);
+      const descEl = document.getElementById('desc-' + desc);
+
+      if (pairs[ext] === desc) {
+        // Correct
+        extEl.classList.remove('selected');
+        descEl.classList.remove('selected');
+        extEl.classList.add('matched-ok');
+        descEl.classList.add('matched-ok');
+        matched[ext] = true;
+        matchedCount++;
+
+        const pct = Math.round((matchedCount / matchTotal) * 100);
+        document.getElementById('prog2').style.width = pct + '%';
+
+        if (matchedCount === matchTotal) {
+          document.getElementById('match-fb').textContent = '🎉 Parfait ! Tu as trouvé toutes les bonnes paires !';
+          document.getElementById('match-fb').className = 'match-feedback ok';
+          document.getElementById('score2').textContent = '5/5 — Excellent travail !';
+        } else {
+          document.getElementById('match-fb').textContent = '✅ Bonne association ! Continue…';
+          document.getElementById('match-fb').className = 'match-feedback ok';
+        }
+      } else {
+        // Wrong — shake animation
+        extEl.classList.remove('selected');
+        descEl.classList.remove('selected');
+        extEl.classList.add('matched-err');
+        descEl.classList.add('matched-err');
+        document.getElementById('match-fb').textContent = '❌ Ce n\'est pas la bonne paire, réessaie !';
+        document.getElementById('match-fb').className = 'match-feedback err';
+        setTimeout(() => {
+          extEl.classList.remove('matched-err');
+          descEl.classList.remove('matched-err');
+        }, 800);
+      }
+    }
+
+    function checkMatches() {
+      if (matchedCount === matchTotal) {
+        document.getElementById('match-fb').textContent = '🎉 Tout est correct — tu as tout trouvé !';
+        document.getElementById('match-fb').className = 'match-feedback ok';
+      } else {
+        document.getElementById('match-fb').textContent = `⏳ Continue ! Tu as trouvé ${matchedCount}/${matchTotal} paires. Clique sur une extension puis sur sa description.`;
+        document.getElementById('match-fb').className = 'match-feedback err';
+      }
+    }
+
+    function resetMatches() {
+      selectedExt = null;
+      selectedDesc = null;
+      matchedCount = 0;
+      Object.keys(matched).forEach(k => delete matched[k]);
+
+      document.querySelectorAll('.match-item, .match-desc').forEach(el => {
+        el.className = el.classList.contains('match-item') ? 'match-item' : 'match-desc';
+      });
+
+      // Restore onclick
+      ['html', 'css', 'js', 'py', 'json'].forEach(k => {
+        document.getElementById('ext-' + k).setAttribute('onclick', `selectExt('${k}')`);
+        document.getElementById('desc-' + k).setAttribute('onclick', `selectDesc('${k}')`);
+      });
+
+      document.getElementById('prog2').style.width = '0%';
+      document.getElementById('score2').textContent = '';
+      document.getElementById('match-fb').textContent = '';
+      document.getElementById('match-fb').className = 'match-feedback';
+    }
+  </script>
+
+</body>
+
+</html>

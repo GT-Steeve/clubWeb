@@ -17,6 +17,7 @@ v1.02.0 = Programme complet du club web - tous les sujet basique
 v1.02.1 = Rectif contenu acceuil et sommaire
 v1.02.2 = Réorganisation global sommaire
 v1.03.0 = ajout cours mind set
+v1.04.0 = ajout cours IDE & vscode
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
