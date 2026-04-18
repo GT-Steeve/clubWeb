@@ -1,12 +1,33 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Exercices HTML</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="../../Asset/css/exercices-html.css">
+  <style>
+    .cta-btn {
+      display: inline-block;
+      background: #FAC775;
+      color: #412402;
+      font-weight: 800;
+      font-size: 0.97rem;
+      padding: 10px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .cta-btn:hover {
+      background: #EF9F27;
+    }
+  </style>
 </head>
+
 <body>
 
   <a class="back-link" href="cours-html.html">← Retour au cours</a>
@@ -23,12 +44,15 @@
 
   <!-- EXERCICE 1 -->
   <div class="card">
-    <div class="stitle"><div class="pill p-blue">1</div>Exercice 1 — Ajoute les balises manquantes</div>
-    <p class="desc">Ce code HTML est incomplet. Pour chaque ligne, choisis la balise qui manque. Clique sur la bonne réponse !</p>
+    <div class="stitle">
+      <div class="pill p-blue">1</div>Exercice 1 — Ajoute les balises manquantes
+    </div>
+    <p class="desc">Ce code HTML est incomplet. Pour chaque ligne, choisis la balise qui manque. Clique sur la bonne
+      réponse !</p>
 
     <div class="question">
       <div class="rl">Ligne 1 — il manque la balise fermante du titre :</div>
-      <div class="code-block"><span class="tag">&lt;h1&gt;</span>Bonjour le monde !<span class="err">  ???</span></div>
+      <div class="code-block"><span class="tag">&lt;h1&gt;</span>Bonjour le monde !<span class="err"> ???</span></div>
       <div class="choices">
         <button class="choice-btn" onclick="answer(this,'q1',false)">&lt;/p&gt;</button>
         <button class="choice-btn" onclick="answer(this,'q1',true)">&lt;/h1&gt;</button>
@@ -40,7 +64,9 @@
 
     <div class="question">
       <div class="rl">Ligne 2 — il manque la balise ouvrante du lien :</div>
-      <div class="code-block"><span class="err">???</span> <span class="attr">href</span>=<span class="val">"https://google.com"</span><span class="tag">&gt;</span>Clique ici<span class="tag">&lt;/a&gt;</span></div>
+      <div class="code-block"><span class="err">???</span> <span class="attr">href</span>=<span
+          class="val">"https://google.com"</span><span class="tag">&gt;</span>Clique ici<span
+          class="tag">&lt;/a&gt;</span></div>
       <div class="choices">
         <button class="choice-btn" onclick="answer(this,'q2',false)">&lt;p</button>
         <button class="choice-btn" onclick="answer(this,'q2',false)">&lt;img</button>
@@ -53,9 +79,10 @@
     <div class="question">
       <div class="rl">Ligne 3 — il manque la balise fermante de la liste :</div>
       <div class="code-block"><span class="tag">&lt;ul&gt;</span>
-  <span class="tag">&lt;li&gt;</span>Pomme<span class="tag">&lt;/li&gt;</span>
-  <span class="tag">&lt;li&gt;</span>Banane<span class="tag">&lt;/li&gt;</span>
-<span class="err">???</span></div>
+        <span class="tag">&lt;li&gt;</span>Pomme<span class="tag">&lt;/li&gt;</span>
+        <span class="tag">&lt;li&gt;</span>Banane<span class="tag">&lt;/li&gt;</span>
+        <span class="err">???</span>
+      </div>
       <div class="choices">
         <button class="choice-btn" onclick="answer(this,'q3',false)">&lt;/li&gt;</button>
         <button class="choice-btn" onclick="answer(this,'q3',false)">&lt;/ol&gt;</button>
@@ -67,7 +94,7 @@
 
     <div class="question">
       <div class="rl">Ligne 4 — il manque la balise fermante du paragraphe :</div>
-      <div class="code-block"><span class="tag">&lt;p&gt;</span>J'apprends le HTML !<span class="err">  ???</span></div>
+      <div class="code-block"><span class="tag">&lt;p&gt;</span>J'apprends le HTML !<span class="err"> ???</span></div>
       <div class="choices">
         <button class="choice-btn" onclick="answer(this,'q4',false)">&lt;/h1&gt;</button>
         <button class="choice-btn" onclick="answer(this,'q4',true)">&lt;/p&gt;</button>
@@ -79,7 +106,9 @@
 
     <div class="question">
       <div class="rl">Ligne 5 — il manque la balise ouvrante de l'image :</div>
-      <div class="code-block"><span class="err">???</span> <span class="attr">src</span>=<span class="val">"chien.jpg"</span> <span class="attr">alt</span>=<span class="val">"Un chien"</span><span class="tag">&gt;</span></div>
+      <div class="code-block"><span class="err">???</span> <span class="attr">src</span>=<span
+          class="val">"chien.jpg"</span> <span class="attr">alt</span>=<span class="val">"Un chien"</span><span
+          class="tag">&gt;</span></div>
       <div class="choices">
         <button class="choice-btn" onclick="answer(this,'q5',false)">&lt;a</button>
         <button class="choice-btn" onclick="answer(this,'q5',false)">&lt;p</button>
@@ -92,8 +121,9 @@
     <div class="question">
       <div class="rl">Ligne 6 — il manque la balise fermante du footer :</div>
       <div class="code-block"><span class="tag">&lt;footer&gt;</span>
-  <span class="tag">&lt;p&gt;</span>© 2024<span class="tag">&lt;/p&gt;</span>
-<span class="err">???</span></div>
+        <span class="tag">&lt;p&gt;</span>© 2024<span class="tag">&lt;/p&gt;</span>
+        <span class="err">???</span>
+      </div>
       <div class="choices">
         <button class="choice-btn" onclick="answer(this,'q6',false)">&lt;/body&gt;</button>
         <button class="choice-btn" onclick="answer(this,'q6',false)">&lt;/nav&gt;</button>
@@ -103,15 +133,23 @@
       <div class="feedback" id="fb-q6"></div>
     </div>
 
-    <div class="progress-wrap"><div class="progress-fill" id="prog1"></div></div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="prog1"></div>
+    </div>
     <div class="score-row" id="score1"></div>
   </div>
 
   <!-- EXERCICE 2 -->
   <div class="card">
-    <div class="stitle"><div class="pill p-purple">2</div>Exercice 2 — Indente ce code</div>
-    <p class="desc">Le code ci-dessous est mal indenté : tout est collé à gauche. Utilise <span class="kbd">Tab</span> pour décaler les lignes à droite et <span class="kbd">Shift</span>+<span class="kbd">Tab</span> pour revenir à gauche. Dans un vrai éditeur, tu peux aussi appuyer sur <span class="kbd">Shift</span>+<span class="kbd">Alt</span>+<span class="kbd">F</span> pour tout formater d'un coup !</p>
-    <p class="desc" style="margin-bottom:0.4rem;"><strong>Objectif :</strong> faire ressembler ton code à la version bien indentée juste en dessous.</p>
+    <div class="stitle">
+      <div class="pill p-purple">2</div>Exercice 2 — Indente ce code
+    </div>
+    <p class="desc">Le code ci-dessous est mal indenté : tout est collé à gauche. Utilise <span class="kbd">Tab</span>
+      pour décaler les lignes à droite et <span class="kbd">Shift</span>+<span class="kbd">Tab</span> pour revenir à
+      gauche. Dans un vrai éditeur, tu peux aussi appuyer sur <span class="kbd">Shift</span>+<span
+        class="kbd">Alt</span>+<span class="kbd">F</span> pour tout formater d'un coup !</p>
+    <p class="desc" style="margin-bottom:0.4rem;"><strong>Objectif :</strong> faire ressembler ton code à la version
+      bien indentée juste en dessous.</p>
 
     <div class="rl">Ton code à indenter — clique dedans et utilise Tab :</div>
     <textarea class="indent-code" id="indent-input" spellcheck="false">&lt;body&gt;
@@ -139,34 +177,40 @@
     <div style="margin-top:1.2rem;">
       <div class="rl">Version bien indentée (objectif à atteindre) :</div>
       <div class="code-block"><span class="tag">&lt;body&gt;</span>
-  <span class="tag">&lt;header&gt;</span>
-    <span class="tag">&lt;h1&gt;</span>Mon site<span class="tag">&lt;/h1&gt;</span>
-    <span class="tag">&lt;nav&gt;</span>
-      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"accueil.html"</span><span class="tag">&gt;</span>Accueil<span class="tag">&lt;/a&gt;</span>
-    <span class="tag">&lt;/nav&gt;</span>
-  <span class="tag">&lt;/header&gt;</span>
-  <span class="tag">&lt;main&gt;</span>
-    <span class="tag">&lt;p&gt;</span>Bienvenue !<span class="tag">&lt;/p&gt;</span>
-  <span class="tag">&lt;/main&gt;</span>
-  <span class="tag">&lt;footer&gt;</span>
-    <span class="tag">&lt;p&gt;</span>&copy; 2024<span class="tag">&lt;/p&gt;</span>
-  <span class="tag">&lt;/footer&gt;</span>
-<span class="tag">&lt;/body&gt;</span></div>
+        <span class="tag">&lt;header&gt;</span>
+        <span class="tag">&lt;h1&gt;</span>Mon site<span class="tag">&lt;/h1&gt;</span>
+        <span class="tag">&lt;nav&gt;</span>
+        <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"accueil.html"</span><span
+          class="tag">&gt;</span>Accueil<span class="tag">&lt;/a&gt;</span>
+        <span class="tag">&lt;/nav&gt;</span>
+        <span class="tag">&lt;/header&gt;</span>
+        <span class="tag">&lt;main&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Bienvenue !<span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;/main&gt;</span>
+        <span class="tag">&lt;footer&gt;</span>
+        <span class="tag">&lt;p&gt;</span>&copy; 2024<span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;/footer&gt;</span>
+        <span class="tag">&lt;/body&gt;</span>
+      </div>
     </div>
 
     <div class="tip tip-purple" style="margin-top:0.9rem;">
       <span class="tip-i">💡</span>
-      <span>Regarder l'indentation, c'est la façon la plus rapide de savoir quelle balise est <strong>à l'intérieur</strong> de quelle autre. Plus une ligne est décalée à droite, plus elle est profondément imbriquée !</span>
+      <span>Regarder l'indentation, c'est la façon la plus rapide de savoir quelle balise est <strong>à
+          l'intérieur</strong> de quelle autre. Plus une ligne est décalée à droite, plus elle est profondément
+        imbriquée !</span>
     </div>
   </div>
 
   <div class="footer-note">
-    Bravo d'avoir fait les exercices ! 🎉<br>
-    <span style="font-size:0.82rem;">Tu peux maintenant créer ta première vraie page HTML !</span><br><br>
-    <a href="cours-html.html" style="color:#3C3489;font-weight:700;text-decoration:none;">← Retour au cours</a>
+    Tu peux maintenant créer ta première vraie page HTML ! 🎉<br><br>
+    <span style="font-size:0.82rem;">Comprendre → Chercher → Coder → Tester → Recommencer 🚀</span><br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    <a class="cta-btn" href="../sommaire.html#step2">&larr; Retour au sommaire</a>
   </div>
 
-<script src="../../Asset/js/exercices-html.js"></script>
+  <script src="../../Asset/js/exercices-html.js"></script>
 
 </body>
+
 </html>

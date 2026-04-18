@@ -19,14 +19,14 @@ v1.02.2 = Réorganisation global sommaire
 v1.03.0 = ajout cours mind set
 v1.04.0 = ajout cours IDE & vscode
 v1.04.1 = rectif contenu cours ajout extension texte .txt 
+v1.04.2 = rectif footer ajout etat du devellopeur 
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
 
 ** Next step ** 
-Revoir les cours Jeux Web
+Revoir les cours Jeux Web URGENT !!
 prévoir exercice pour javascript jeux et canvas
-checker les lien exercice + retour sommaire + retour page club web
 Revoir l'exercice 3 question 1 uniquement !
 Faire une éval, Transformer où modifier une fichier html, css
 Sur une même structure html, prévoir plusieur css et les switch
