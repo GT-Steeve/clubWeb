@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le HTML — Balises, attributs & ressources</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🏗️%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f5f4f0;
+            color: #2C2C2A;
+            padding: 1.5rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .nav-prev {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.88rem; font-weight: 700; color: #185FA5;
+            text-decoration: none; margin-bottom: 1.5rem;
+            background: #E6F1FB; border: 0.5px solid #85B7EB;
+            border-radius: 8px; padding: 6px 14px; transition: background 0.15s;
+        }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        /* HERO */
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-coral   { background: #FAECE7; color: #712B13; }
+        .b-purple  { background: #EEEDFE; color: #3C3489; }
+        .b-amber   { background: #FAEEDA; color: #633806; }
+        .b-teal    { background: #E1F5EE; color: #085041; }
+        .b-blue    { background: #E6F1FB; color: #0C447C; }
+
+        /* CARD */
+        .card {
+            border-radius: 16px; border: 0.5px solid #D3D1C7;
+            background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+        }
+        .stitle {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+        }
+        .pill {
+            width: 32px; height: 32px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 700; flex-shrink: 0;
+        }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+        .p-pink   { background: #F4C0D1; color: #72243E; }
+        .p-gray   { background: #D3D1C7; color: #444441; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child { margin-bottom: 0; }
+
+        /* TIP */
+        .tip {
+            display: flex; gap: 10px; align-items: flex-start;
+            background: #E1F5EE; border-radius: 10px;
+            padding: 0.75rem 1rem; margin-top: 0.9rem;
+            font-size: 0.88rem; color: #085041; line-height: 1.5;
+        }
+        .tip-coral  { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber  { background: #FAEEDA; color: #633806; }
+        .tip-blue   { background: #E6F1FB; color: #0C447C; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        /* RESULT BOX */
+        .result-box {
+            border-radius: 10px; border: 0.5px dashed #B4B2A9;
+            background: #F1EFE8; padding: 0.9rem 1.1rem;
+            font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.7;
+        }
+        .rl {
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.05em; color: #888780; margin-bottom: 6px;
+        }
+
+        /* CODE BLOCK */
+        .code-block {
+            background: #F1EFE8; border: 0.5px solid #B4B2A9;
+            border-radius: 10px; padding: 0.9rem 1.1rem;
+            font-family: 'Fira Code', monospace; font-size: 0.84rem;
+            line-height: 1.8; white-space: pre; overflow-x: auto;
+            color: #2C2C2A; margin-top: 0.8rem;
+        }
+        .tag   { color: #993C1D; }
+        .attr  { color: #185FA5; }
+        .val   { color: #0F6E56; }
+        .cm    { color: #888780; font-style: italic; }
+        .txt   { color: #2C2C2A; }
+        .punc  { color: #888780; }
+
+        /* SECTION LABEL */
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text {
+            font-size: 0.78rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.1em; color: #888780; white-space: nowrap;
+        }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        /* BALISE TABLE */
+        .tag-table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.88rem; }
+        .tag-table th {
+            text-align: left; padding: 7px 10px;
+            background: #F1EFE8; border-bottom: 1px solid #D3D1C7;
+            font-weight: 800; font-size: 0.8rem; text-transform: uppercase;
+            letter-spacing: 0.05em; color: #888780;
+        }
+        .tag-table td { padding: 8px 10px; border-bottom: 0.5px solid #EEEcE5; vertical-align: top; }
+        .tag-table tr:last-child td { border-bottom: none; }
+        .tag-table tr:hover td { background: #FAFAF8; }
+        .tag-name {
+            font-family: 'Fira Code', monospace; font-size: 0.82rem;
+            font-weight: 700; color: #993C1D;
+            background: #FAECE7; border-radius: 5px;
+            padding: 2px 7px; white-space: nowrap;
+        }
+        .tag-desc { color: #5F5E5A; line-height: 1.5; }
+        .tag-note { font-size: 0.78rem; color: #888780; margin-top: 2px; }
+
+        /* ATTR TABLE */
+        .attr-row {
+            display: flex; gap: 8px; align-items: flex-start;
+            padding: 8px 0; border-bottom: 0.5px solid #EEEcE5; flex-wrap: wrap;
+        }
+        .attr-row:last-child { border-bottom: none; }
+        .attr-pill {
+            font-family: 'Fira Code', monospace; font-size: 0.8rem;
+            font-weight: 700; color: #185FA5;
+            background: #E6F1FB; border-radius: 5px;
+            padding: 2px 8px; white-space: nowrap; flex-shrink: 0;
+        }
+        .attr-desc { font-size: 0.88rem; color: #5F5E5A; line-height: 1.5; }
+
+        /* RES CARDS */
+        .res-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 0.8rem; }
+        .res-card {
+            border-radius: 12px; border: 0.5px solid #D3D1C7;
+            padding: 0.9rem; text-align: center; background: #FAFAF8;
+            text-decoration: none; transition: border-color 0.15s, background 0.15s;
+            display: block;
+        }
+        .res-card:hover { border-color: #85B7EB; background: #E6F1FB; }
+        .res-icon { font-size: 1.4rem; margin-bottom: 6px; }
+        .res-title { font-size: 0.88rem; font-weight: 800; color: #2C2C2A; margin-bottom: 3px; }
+        .res-desc { font-size: 0.78rem; color: #888780; line-height: 1.5; }
+        .res-url { font-size: 0.75rem; color: #185FA5; margin-top: 4px; font-family: 'Fira Code', monospace; }
+
+        /* TWO COL */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+        .tc {
+            border-radius: 10px; padding: 0.75rem 1rem;
+            font-size: 0.88rem; font-weight: 600; line-height: 1.5;
+        }
+        .tc strong { display: block; font-family: 'Fira Code', monospace; font-size: 0.82rem; font-weight: 700; margin-bottom: 3px; }
+
+        /* STRUCTURE TREE */
+        .tree {
+            font-family: 'Fira Code', monospace; font-size: 0.84rem;
+            line-height: 2; background: #F1EFE8; border: 0.5px solid #B4B2A9;
+            border-radius: 10px; padding: 0.9rem 1.1rem; margin-top: 0.8rem;
+            overflow-x: auto;
+        }
+        .tree-tag { color: #993C1D; font-weight: 700; }
+        .tree-attr { color: #185FA5; }
+        .tree-val  { color: #0F6E56; }
+        .tree-cm   { color: #888780; font-style: italic; }
+        .indent1 { padding-left: 1.2rem; }
+        .indent2 { padding-left: 2.4rem; }
+        .indent3 { padding-left: 3.6rem; }
+
+        /* CTA */
+        .cta-wrap {
+            text-align: center; background: #2C2C2A;
+            border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem;
+        }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn {
+            display: inline-block; background: #FAC775; color: #412402;
+            font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+            border-radius: 10px; text-decoration: none; transition: background 0.15s;
+        }
+        .cta-btn:hover { background: #EF9F27; }
+
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) {
+            .res-grid { grid-template-columns: 1fr 1fr; }
+            .two-col  { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="../sommaire.html#step2Advence">← Retour au sommaire</a>
+
+<!-- HERO -->
+<div class="hero">
+    <h1>🏗️ HTML Avancé</h1>
+    <p>La structure de toute page web — balises, attributs, et où aller plus loin.</p>
+    <div class="badge-row">
+        <span class="badge b-coral">Module 02</span>
+        <span class="badge b-purple">Fondations</span>
+        <span class="badge b-amber">Balises avancées</span>
+        <span class="badge b-teal">Attributs</span>
+        <span class="badge b-blue">Ressources</span>
+    </div>
+</div>
+
+<!-- 1. QU'EST-CE QUE LE HTML -->
+<div class="card">
+    <div class="stitle"><div class="pill p-teal">1</div>Qu'est-ce que le HTML ?</div>
+    <p class="desc">HTML signifie <strong>HyperText Markup Language</strong>. Ce n'est pas un langage de programmation — c'est un <strong>langage de balisage</strong>. Il ne calcule rien. Il ne réagit à rien. Il <em>décrit</em> le contenu d'une page : ce qui est un titre, ce qui est un paragraphe, ce qui est une image, ce qui est un lien.</p>
+    <p class="desc">Le navigateur lit ton HTML et construit ce qu'on appelle le <strong>DOM</strong> (Document Object Model) — une représentation en arbre de tous les éléments. C'est sur ce DOM que le CSS et le JavaScript viennent travailler.</p>
+    <div class="result-box">
+        <div class="rl">La relation entre les trois langages du web</div>
+        🏗️ <strong>HTML</strong> — La structure : les murs, les pièces, les portes<br>
+        🎨 <strong>CSS</strong> — Le style : la peinture, les meubles, la décoration<br>
+        ⚙️ <strong>JavaScript</strong> — Le comportement : l'électricité, la plomberie, les interrupteurs
+    </div>
+    <div class="tip">
+        <span class="tip-i">💡</span>
+        <span>Un HTML bien structuré, sans CSS ni JavaScript, reste une page <em>lisible et utilisable</em>. C'est la fondation — si elle est solide, tout le reste s'appuie dessus correctement.</span>
+    </div>
+</div>
+
+<!-- 2. ANATOMIE D'UNE BALISE -->
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">2</div>Anatomie d'une balise HTML</div>
+    <p class="desc">Tout en HTML repose sur les <strong>balises</strong>. Une balise est un mot-clé entouré de chevrons <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt; &gt;</code>. La plupart vont par paire : une balise <em>ouvrante</em> et une balise <em>fermante</em>.</p>
+
+    <div class="code-block"><span class="cm">&lt;!-- Structure complète d'un élément HTML --&gt;</span>
+<span class="tag">&lt;balise</span> <span class="attr">attribut</span>=<span class="val">"valeur"</span><span class="tag">&gt;</span><span class="txt">contenu visible</span><span class="tag">&lt;/balise&gt;</span>
+
+<span class="cm">&lt;!-- Exemples concrets --&gt;</span>
+<span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="val">"intro"</span><span class="tag">&gt;</span><span class="txt">Bonjour le monde</span><span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"https://exemple.com"</span> <span class="attr">target</span>=<span class="val">"_blank"</span><span class="tag">&gt;</span><span class="txt">Cliquez ici</span><span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"photo.jpg"</span> <span class="attr">alt</span>=<span class="val">"Description"</span><span class="tag">&gt;</span>  <span class="cm">&lt;!-- balise auto-fermante --&gt;</span></div>
+
+    <p class="desc" style="margin-top:0.9rem;">Certaines balises n'ont pas de contenu et se ferment d'elles-mêmes : <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;img&gt;</code>, <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;br&gt;</code>, <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;hr&gt;</code>, <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;input&gt;</code>, <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;meta&gt;</code>, <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;link&gt;</code>. On les appelle <strong>balises vides</strong> ou <em>void elements</em>.</p>
+
+    <div class="tip tip-amber">
+        <span class="tip-i">⚠️</span>
+        <span>Oublier de fermer une balise est l'une des erreurs les plus fréquentes. Le navigateur essaie de corriger seul — mais pas toujours comme tu l'espères. Prends l'habitude d'ouvrir ET fermer chaque balise immédiatement.</span>
+    </div>
+</div>
+
+<!-- 3. STRUCTURE D'UNE PAGE HTML -->
+<div class="card">
+    <div class="stitle"><div class="pill p-purple">3</div>Structure complète d'une page HTML</div>
+    <p class="desc">Toute page HTML correcte commence par la même ossature. Chaque ligne a un rôle précis.</p>
+
+    <div class="code-block"><span class="cm">&lt;!-- Déclaration de type de document --&gt;</span>
+<span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="val">"fr"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;head&gt;</span>                      <span class="cm">&lt;!-- Infos pour le navigateur --&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span> <span class="attr">content</span>=<span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span><span class="txt">Titre de la page</span><span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="val">"stylesheet"</span> <span class="attr">href</span>=<span class="val">"style.css"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;/head&gt;</span>
+
+  <span class="tag">&lt;body&gt;</span>                      <span class="cm">&lt;!-- Tout ce qui est visible --&gt;</span>
+    <span class="tag">&lt;header&gt;</span>...<span class="tag">&lt;/header&gt;</span>
+    <span class="tag">&lt;main&gt;</span>...<span class="tag">&lt;/main&gt;</span>
+    <span class="tag">&lt;footer&gt;</span>...<span class="tag">&lt;/footer&gt;</span>
+  <span class="tag">&lt;/body&gt;</span>
+
+<span class="tag">&lt;/html&gt;</span></div>
+
+    <div class="two-col" style="margin-top:1rem;">
+        <div class="tc" style="background:#EEEDFE;color:#3C3489;">
+            <strong>&lt;head&gt;</strong>
+            Invisible dans la page. Contient les métadonnées, le titre de l'onglet, les liens vers CSS et polices.
+        </div>
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong>&lt;body&gt;</strong>
+            Tout ce que l'utilisateur voit et interagit. Structure, textes, images, formulaires — tout est ici.
+        </div>
+    </div>
+</div>
+
+<!-- 4. BALISES SÉMANTIQUES -->
+<div class="section-label"><span class="section-label-text">🏷️ Balises sémantiques</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-green">4</div>La sémantique — donner du sens au HTML</div>
+    <p class="desc">Avant HTML5, les développeurs construisaient leurs pages avec des <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;div&gt;</code> partout. HTML5 a introduit des <strong>balises sémantiques</strong> : des balises qui <em>décrivent</em> leur rôle, pas seulement leur apparence.</p>
+    <p class="desc">Un moteur de recherche, un lecteur d'écran pour malvoyants, ou un autre développeur comprendra immédiatement la structure de ta page si tu utilises les bonnes balises.</p>
+
+    <table class="tag-table">
+        <tr><th>Balise</th><th>Rôle</th></tr>
+        <tr>
+            <td><span class="tag-name">&lt;header&gt;</span></td>
+            <td><div class="tag-desc">En-tête de page ou de section. Logo, titre principal, navigation.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;nav&gt;</span></td>
+            <td><div class="tag-desc">Bloc de navigation principale. Liens vers les autres pages.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;main&gt;</span></td>
+            <td><div class="tag-desc">Contenu principal unique de la page. Un seul <code style="font-family:'Fira Code',monospace;font-size:0.85em;">&lt;main&gt;</code> par page.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;article&gt;</span></td>
+            <td><div class="tag-desc">Contenu autonome et réutilisable : article de blog, carte produit, post.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;section&gt;</span></td>
+            <td><div class="tag-desc">Groupe thématique de contenu. Doit avoir un titre (<code style="font-family:'Fira Code',monospace;font-size:0.85em;">&lt;h2&gt;</code> à <code style="font-family:'Fira Code',monospace;font-size:0.85em;">&lt;h6&gt;</code>).</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;aside&gt;</span></td>
+            <td><div class="tag-desc">Contenu secondaire : barre latérale, encadré, publicité, liens connexes.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;footer&gt;</span></td>
+            <td><div class="tag-desc">Pied de page ou de section. Mentions légales, liens utiles, contact.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;figure&gt;</span></td>
+            <td><div class="tag-desc">Contenu illustratif autonome (image, schéma, code). Associé à <code style="font-family:'Fira Code',monospace;font-size:0.85em;">&lt;figcaption&gt;</code> pour la légende.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;time&gt;</span></td>
+            <td><div class="tag-desc">Date ou heure lisible par les machines. Attribut <code style="font-family:'Fira Code',monospace;font-size:0.85em;">datetime</code> pour le format standard.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;address&gt;</span></td>
+            <td><div class="tag-desc">Informations de contact (email, adresse postale, téléphone).</div></td>
+        </tr>
+    </table>
+
+    <div class="code-block"><span class="cm">&lt;!-- Exemple de structure sémantique complète --&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;header&gt;</span>
+    <span class="tag">&lt;nav&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"/"</span><span class="tag">&gt;</span>Accueil<span class="tag">&lt;/a&gt;&lt;/nav&gt;</span>
+  <span class="tag">&lt;/header&gt;</span>
+
+  <span class="tag">&lt;main&gt;</span>
+    <span class="tag">&lt;article&gt;</span>
+      <span class="tag">&lt;h1&gt;</span>Mon article<span class="tag">&lt;/h1&gt;</span>
+      <span class="tag">&lt;time</span> <span class="attr">datetime</span>=<span class="val">"2025-04-18"</span><span class="tag">&gt;</span>18 avril 2025<span class="tag">&lt;/time&gt;</span>
+      <span class="tag">&lt;p&gt;</span>Contenu...<span class="tag">&lt;/p&gt;</span>
+      <span class="tag">&lt;figure&gt;</span>
+        <span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"schema.png"</span> <span class="attr">alt</span>=<span class="val">"Schéma explicatif"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;figcaption&gt;</span>Figure 1 — Schéma<span class="tag">&lt;/figcaption&gt;</span>
+      <span class="tag">&lt;/figure&gt;</span>
+    <span class="tag">&lt;/article&gt;</span>
+    <span class="tag">&lt;aside&gt;</span>Articles connexes...<span class="tag">&lt;/aside&gt;</span>
+  <span class="tag">&lt;/main&gt;</span>
+
+  <span class="tag">&lt;footer&gt;</span>
+    <span class="tag">&lt;address&gt;</span>contact@monsite.fr<span class="tag">&lt;/address&gt;</span>
+  <span class="tag">&lt;/footer&gt;</span>
+<span class="tag">&lt;/body&gt;</span></div>
+
+    <div class="tip tip-purple">
+        <span class="tip-i">🎯</span>
+        <span>La règle d'or : utilise <code style="font-family:'Fira Code',monospace;">&lt;div&gt;</code> uniquement pour les <em>conteneurs de style</em> qui n'ont pas de signification sémantique. Pour tout le reste, il existe une balise qui dit ce que tu veux dire.</span>
+    </div>
+</div>
+
+<!-- 5. BALISES DE TEXTE -->
+<div class="section-label"><span class="section-label-text">✍️ Balises de texte & mise en forme</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-coral">5</div>Titres, texte et mise en valeur</div>
+    <p class="desc">HTML dispose d'une hiérarchie de titres de <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;h1&gt;</code> à <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;h6&gt;</code>, et plusieurs balises pour enrichir le sens du texte.</p>
+
+    <table class="tag-table">
+        <tr><th>Balise</th><th>Sens et usage</th></tr>
+        <tr>
+            <td><span class="tag-name">&lt;h1&gt; … &lt;h6&gt;</span></td>
+            <td><div class="tag-desc">Titres hiérarchiques. <strong>Un seul <code style="font-family:'Fira Code',monospace;font-size:0.85em;">&lt;h1&gt;</code> par page</strong> — c'est le titre principal.</div><div class="tag-note">Ne pas sauter de niveau (h1→h3 sans h2)</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;p&gt;</span></td>
+            <td><div class="tag-desc">Paragraphe. Crée automatiquement un espace avant et après.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;strong&gt;</span></td>
+            <td><div class="tag-desc">Importance forte. Affiché en gras, mais signifie aussi "important" pour les lecteurs d'écran.</div><div class="tag-note">Différent de &lt;b&gt; qui est purement visuel</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;em&gt;</span></td>
+            <td><div class="tag-desc">Emphase/insistance. Affiché en italique, signifie "accent particulier" sémantiquement.</div><div class="tag-note">Différent de &lt;i&gt; qui est purement visuel</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;mark&gt;</span></td>
+            <td><div class="tag-desc">Texte surligné/mis en évidence (fond jaune par défaut). Pertinent dans un contexte de recherche.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;del&gt;</span> / <span class="tag-name">&lt;ins&gt;</span></td>
+            <td><div class="tag-desc">Texte supprimé (barré) et inséré (souligné). Indique des modifications de contenu.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;abbr&gt;</span></td>
+            <td><div class="tag-desc">Abréviation. L'attribut <code style="font-family:'Fira Code',monospace;font-size:0.85em;">title</code> affiche l'explication au survol de la souris.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;blockquote&gt;</span></td>
+            <td><div class="tag-desc">Citation longue mise en retrait. L'attribut <code style="font-family:'Fira Code',monospace;font-size:0.85em;">cite</code> référence la source.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;cite&gt;</span></td>
+            <td><div class="tag-desc">Titre d'une œuvre citée : livre, film, chanson, article.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;code&gt;</span></td>
+            <td><div class="tag-desc">Code informatique en ligne. Police monospace. Pour les blocs de code, utilise <code style="font-family:'Fira Code',monospace;font-size:0.85em;">&lt;pre&gt;&lt;code&gt;</code>.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;kbd&gt;</span></td>
+            <td><div class="tag-desc">Touche de clavier. Exemple : appuyez sur <kbd style="font-family:'Fira Code',monospace;background:#F1EFE8;border:0.5px solid #B4B2A9;border-radius:4px;padding:1px 5px;font-size:0.85em;">Ctrl+S</kbd></div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;sup&gt;</span> / <span class="tag-name">&lt;sub&gt;</span></td>
+            <td><div class="tag-desc">Exposant (10²) et indice (H₂O). Utile pour les formules scientifiques.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;small&gt;</span></td>
+            <td><div class="tag-desc">Texte secondaire, mentions légales, copyright. Taille réduite sémantiquement.</div></td>
+        </tr>
+    </table>
+
+    <div class="code-block"><span class="tag">&lt;p&gt;</span>
+  La formule de l'eau est H<span class="tag">&lt;sub&gt;</span>2<span class="tag">&lt;/sub&gt;</span>O.
+  <span class="tag">&lt;abbr</span> <span class="attr">title</span>=<span class="val">"HyperText Markup Language"</span><span class="tag">&gt;</span>HTML<span class="tag">&lt;/abbr&gt;</span>
+  est né en <span class="tag">&lt;mark&gt;</span>1991<span class="tag">&lt;/mark&gt;</span>.
+  Prix : <span class="tag">&lt;del&gt;</span>29€<span class="tag">&lt;/del&gt;</span> <span class="tag">&lt;ins&gt;</span>19€<span class="tag">&lt;/ins&gt;</span>
+<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;blockquote</span> <span class="attr">cite</span>=<span class="val">"https://source.com"</span><span class="tag">&gt;</span>
+  "La simplicité est la sophistication suprême."
+<span class="tag">&lt;/blockquote&gt;</span></div>
+</div>
+
+<!-- 6. LISTES -->
+<div class="card">
+    <div class="stitle"><div class="pill p-amber">6</div>Listes : ul, ol, dl</div>
+    <p class="desc">HTML propose trois types de listes, chacune avec un usage précis :</p>
+
+    <table class="tag-table">
+        <tr><th>Type</th><th>Balise</th><th>Usage</th></tr>
+        <tr>
+            <td><strong>Non ordonnée</strong></td>
+            <td><span class="tag-name">&lt;ul&gt;</span> + <span class="tag-name">&lt;li&gt;</span></td>
+            <td><div class="tag-desc">Liste à puces. L'ordre n'a pas d'importance.</div></td>
+        </tr>
+        <tr>
+            <td><strong>Ordonnée</strong></td>
+            <td><span class="tag-name">&lt;ol&gt;</span> + <span class="tag-name">&lt;li&gt;</span></td>
+            <td><div class="tag-desc">Liste numérotée. Étapes, classements, instructions séquentielles.</div></td>
+        </tr>
+        <tr>
+            <td><strong>Définition</strong></td>
+            <td><span class="tag-name">&lt;dl&gt;</span> + <span class="tag-name">&lt;dt&gt;</span> + <span class="tag-name">&lt;dd&gt;</span></td>
+            <td><div class="tag-desc">Paires terme/définition. Glossaires, FAQ, métadonnées.</div></td>
+        </tr>
+    </table>
+
+    <div class="code-block"><span class="cm">&lt;!-- &lt;ol&gt; avec attributs start et type --&gt;</span>
+<span class="tag">&lt;ol</span> <span class="attr">start</span>=<span class="val">"3"</span> <span class="attr">type</span>=<span class="val">"A"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Troisième point (affiché C)<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Quatrième point (affiché D)<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ol&gt;</span>
+
+<span class="cm">&lt;!-- Liste de définitions --&gt;</span>
+<span class="tag">&lt;dl&gt;</span>
+  <span class="tag">&lt;dt&gt;</span>HTML<span class="tag">&lt;/dt&gt;</span>
+  <span class="tag">&lt;dd&gt;</span>Langage de balisage pour structurer le web<span class="tag">&lt;/dd&gt;</span>
+  <span class="tag">&lt;dt&gt;</span>CSS<span class="tag">&lt;/dt&gt;</span>
+  <span class="tag">&lt;dd&gt;</span>Langage de style pour mettre en forme le web<span class="tag">&lt;/dd&gt;</span>
+<span class="tag">&lt;/dl&gt;</span></div>
+
+    <div class="tip tip-blue">
+        <span class="tip-i">📌</span>
+        <span>L'attribut <code style="font-family:'Fira Code',monospace;">type</code> de <code style="font-family:'Fira Code',monospace;">&lt;ol&gt;</code> accepte : <code style="font-family:'Fira Code',monospace;">1</code> (défaut), <code style="font-family:'Fira Code',monospace;">A</code>, <code style="font-family:'Fira Code',monospace;">a</code>, <code style="font-family:'Fira Code',monospace;">I</code> (chiffres romains majuscules), <code style="font-family:'Fira Code',monospace;">i</code>. L'attribut <code style="font-family:'Fira Code',monospace;">start</code> définit le numéro de départ.</span>
+    </div>
+</div>
+
+<!-- 7. LIENS ET MÉDIAS -->
+<div class="section-label"><span class="section-label-text">🔗 Liens, médias & intégrations</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-pink">7</div>Les liens — &lt;a&gt; et ses attributs</div>
+    <p class="desc">La balise <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;a&gt;</code> (anchor) est l'une des plus puissantes du HTML. Elle ne sert pas qu'à relier des pages.</p>
+
+    <div class="attr-row"><span class="attr-pill">href</span><div class="attr-desc">URL de destination. Peut être absolue (<code style="font-family:'Fira Code',monospace;font-size:0.85em;">https://...</code>), relative (<code style="font-family:'Fira Code',monospace;font-size:0.85em;">./page.html</code>), ou une ancre (<code style="font-family:'Fira Code',monospace;font-size:0.85em;">#section</code>).</div></div>
+    <div class="attr-row"><span class="attr-pill">target</span><div class="attr-desc"><code style="font-family:'Fira Code',monospace;font-size:0.85em;">_blank</code> ouvre dans un nouvel onglet. <code style="font-family:'Fira Code',monospace;font-size:0.85em;">_self</code> (défaut), <code style="font-family:'Fira Code',monospace;font-size:0.85em;">_parent</code>, <code style="font-family:'Fira Code',monospace;font-size:0.85em;">_top</code>.</div></div>
+    <div class="attr-row"><span class="attr-pill">rel</span><div class="attr-desc"><code style="font-family:'Fira Code',monospace;font-size:0.85em;">noopener noreferrer</code> pour les liens externes (sécurité). <code style="font-family:'Fira Code',monospace;font-size:0.85em;">nofollow</code> pour les moteurs de recherche.</div></div>
+    <div class="attr-row"><span class="attr-pill">download</span><div class="attr-desc">Force le téléchargement du fichier lié au lieu de l'ouvrir.</div></div>
+    <div class="attr-row"><span class="attr-pill">href="mailto:"</span><div class="attr-desc">Ouvre le client mail avec l'adresse pré-remplie.</div></div>
+    <div class="attr-row"><span class="attr-pill">href="tel:"</span><div class="attr-desc">Déclenche un appel sur mobile.</div></div>
+
+    <div class="code-block"><span class="cm">&lt;!-- Lien externe sécurisé --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"https://w3schools.com"</span> <span class="attr">target</span>=<span class="val">"_blank"</span> <span class="attr">rel</span>=<span class="val">"noopener noreferrer"</span><span class="tag">&gt;</span>
+  W3Schools
+<span class="tag">&lt;/a&gt;</span>
+
+<span class="cm">&lt;!-- Ancre interne — lien vers une section de la même page --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#contact"</span><span class="tag">&gt;</span>Aller à la section contact<span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;section</span> <span class="attr">id</span>=<span class="val">"contact"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/section&gt;</span>
+
+<span class="cm">&lt;!-- Téléchargement de fichier --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"rapport.pdf"</span> <span class="attr">download</span>=<span class="val">"mon-rapport"</span><span class="tag">&gt;</span>Télécharger le PDF<span class="tag">&lt;/a&gt;</span>
+
+<span class="cm">&lt;!-- Lien email et téléphone --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"mailto:contact@site.fr"</span><span class="tag">&gt;</span>Envoyer un email<span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"tel:+33612345678"</span><span class="tag">&gt;</span>Appeler<span class="tag">&lt;/a&gt;</span></div>
+</div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">8</div>Images, audio, vidéo</div>
+    <p class="desc">HTML5 intègre nativement l'audio et la vidéo sans plugin. La balise <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;picture&gt;</code> permet de servir des images différentes selon l'écran.</p>
+
+    <div class="code-block"><span class="cm">&lt;!-- Image simple avec attributs essentiels --&gt;</span>
+<span class="tag">&lt;img</span>
+  <span class="attr">src</span>=<span class="val">"photo.jpg"</span>
+  <span class="attr">alt</span>=<span class="val">"Description pour les malvoyants et Google"</span>
+  <span class="attr">width</span>=<span class="val">"800"</span>
+  <span class="attr">height</span>=<span class="val">"600"</span>
+  <span class="attr">loading</span>=<span class="val">"lazy"</span>
+<span class="tag">&gt;</span>
+
+<span class="cm">&lt;!-- Image responsive avec &lt;picture&gt; --&gt;</span>
+<span class="tag">&lt;picture&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">media</span>=<span class="val">"(max-width: 600px)"</span> <span class="attr">srcset</span>=<span class="val">"small.jpg"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">media</span>=<span class="val">"(max-width: 1200px)"</span> <span class="attr">srcset</span>=<span class="val">"medium.jpg"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"large.jpg"</span> <span class="attr">alt</span>=<span class="val">"Photo adaptative"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/picture&gt;</span>
+
+<span class="cm">&lt;!-- Vidéo HTML5 native --&gt;</span>
+<span class="tag">&lt;video</span> <span class="attr">controls</span> <span class="attr">autoplay</span> <span class="attr">muted</span> <span class="attr">loop</span> <span class="attr">poster</span>=<span class="val">"apercu.jpg"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="val">"video.mp4"</span> <span class="attr">type</span>=<span class="val">"video/mp4"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="val">"video.webm"</span> <span class="attr">type</span>=<span class="val">"video/webm"</span><span class="tag">&gt;</span>
+  <span class="txt">Ton navigateur ne supporte pas la vidéo HTML5.</span>
+<span class="tag">&lt;/video&gt;</span>
+
+<span class="cm">&lt;!-- Audio HTML5 native --&gt;</span>
+<span class="tag">&lt;audio</span> <span class="attr">controls</span> <span class="attr">preload</span>=<span class="val">"metadata"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="val">"son.mp3"</span> <span class="attr">type</span>=<span class="val">"audio/mpeg"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/audio&gt;</span></div>
+
+    <div class="tip tip-amber">
+        <span class="tip-i">⚠️</span>
+        <span>L'attribut <code style="font-family:'Fira Code',monospace;">alt</code> sur <code style="font-family:'Fira Code',monospace;">&lt;img&gt;</code> est <strong>obligatoire</strong>. Vide (<code style="font-family:'Fira Code',monospace;">alt=""</code>) pour les images décoratives, descriptif pour les images de contenu. C'est essentiel pour l'accessibilité et le référencement.</span>
+    </div>
+</div>
+
+<!-- 8. FORMULAIRES -->
+<div class="section-label"><span class="section-label-text">📋 Formulaires avancés</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-teal">9</div>Les formulaires — &lt;form&gt; et ses éléments</div>
+    <p class="desc">Les formulaires sont l'un des sujets les plus riches du HTML. HTML5 a introduit de nombreux types d'<code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;input&gt;</code> qui apportent des comportements natifs sans JavaScript.</p>
+
+    <div class="code-block"><span class="cm">&lt;!-- Structure d'un formulaire complet --&gt;</span>
+<span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="val">"/envoyer"</span> <span class="attr">method</span>=<span class="val">"POST"</span> <span class="attr">novalidate</span><span class="tag">&gt;</span>
+
+  <span class="cm">&lt;!-- Label TOUJOURS associé à son input via "for" / "id" --&gt;</span>
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"nom"</span><span class="tag">&gt;</span>Nom complet<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">id</span>=<span class="val">"nom"</span> <span class="attr">name</span>=<span class="val">"nom"</span>
+         <span class="attr">placeholder</span>=<span class="val">"Jean Dupont"</span> <span class="attr">required</span> <span class="attr">autocomplete</span>=<span class="val">"name"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"email"</span><span class="tag">&gt;</span>Email<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"email"</span> <span class="attr">id</span>=<span class="val">"email"</span> <span class="attr">name</span>=<span class="val">"email"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"age"</span><span class="tag">&gt;</span>Âge<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"number"</span> <span class="attr">id</span>=<span class="val">"age"</span> <span class="attr">name</span>=<span class="val">"age"</span>
+         <span class="attr">min</span>=<span class="val">"0"</span> <span class="attr">max</span>=<span class="val">"120"</span> <span class="attr">step</span>=<span class="val">"1"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"couleur"</span><span class="tag">&gt;</span>Couleur préférée<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"color"</span> <span class="attr">id</span>=<span class="val">"couleur"</span> <span class="attr">name</span>=<span class="val">"couleur"</span> <span class="attr">value</span>=<span class="val">"#5DCAA5"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"niveau"</span><span class="tag">&gt;</span>Niveau (0-100)<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"range"</span> <span class="attr">id</span>=<span class="val">"niveau"</span> <span class="attr">min</span>=<span class="val">"0"</span> <span class="attr">max</span>=<span class="val">"100"</span> <span class="attr">value</span>=<span class="val">"50"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"submit"</span> <span class="attr">value</span>=<span class="val">"Envoyer"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/form&gt;</span></div>
+
+    <p class="desc" style="margin-top:0.9rem;">Tous les types d'<code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;input&gt;</code> HTML5 :</p>
+    <div class="two-col">
+        <div class="tc" style="background:#FAECE7;color:#712B13;font-family:'Fira Code',monospace;font-size:0.82rem;line-height:2;">
+            text · password · email · url<br>
+            number · range · tel · search<br>
+            date · time · datetime-local<br>
+            month · week · color
+        </div>
+        <div class="tc" style="background:#EEEDFE;color:#3C3489;font-family:'Fira Code',monospace;font-size:0.82rem;line-height:2;">
+            checkbox · radio · file<br>
+            submit · reset · button<br>
+            hidden · image
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-purple">10</div>Éléments de formulaire avancés</div>
+
+    <div class="code-block"><span class="cm">&lt;!-- Liste de suggestions avec &lt;datalist&gt; --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">list</span>=<span class="val">"villes"</span> <span class="attr">placeholder</span>=<span class="val">"Choisir une ville"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;datalist</span> <span class="attr">id</span>=<span class="val">"villes"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="val">"Paris"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="val">"Lyon"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="val">"Marseille"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/datalist&gt;</span>
+
+<span class="cm">&lt;!-- Groupement de champs avec &lt;fieldset&gt; --&gt;</span>
+<span class="tag">&lt;fieldset&gt;</span>
+  <span class="tag">&lt;legend&gt;</span>Informations personnelles<span class="tag">&lt;/legend&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">name</span>=<span class="val">"prenom"</span> <span class="attr">placeholder</span>=<span class="val">"Prénom"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">name</span>=<span class="val">"nom"</span> <span class="attr">placeholder</span>=<span class="val">"Nom"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/fieldset&gt;</span>
+
+<span class="cm">&lt;!-- Barre de progression avec &lt;progress&gt; et &lt;meter&gt; --&gt;</span>
+<span class="tag">&lt;progress</span> <span class="attr">value</span>=<span class="val">"70"</span> <span class="attr">max</span>=<span class="val">"100"</span><span class="tag">&gt;</span>70%<span class="tag">&lt;/progress&gt;</span>
+<span class="tag">&lt;meter</span> <span class="attr">value</span>=<span class="val">"6"</span> <span class="attr">min</span>=<span class="val">"0"</span> <span class="attr">max</span>=<span class="val">"10"</span> <span class="attr">low</span>=<span class="val">"3"</span> <span class="attr">high</span>=<span class="val">"7"</span> <span class="attr">optimum</span>=<span class="val">"9"</span><span class="tag">&gt;</span>6/10<span class="tag">&lt;/meter&gt;</span></div>
+
+    <div class="tip tip-purple">
+        <span class="tip-i">🎯</span>
+        <span><code style="font-family:'Fira Code',monospace;">&lt;progress&gt;</code> représente une tâche en cours (chargement). <code style="font-family:'Fira Code',monospace;">&lt;meter&gt;</code> représente une mesure dans une plage connue (score, niveau de batterie). Les deux s'affichent nativement sans CSS.</span>
+    </div>
+</div>
+
+<!-- 9. BALISES INTERACTIVES -->
+<div class="section-label"><span class="section-label-text">🖱️ Balises interactives HTML5</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-coral">11</div>Details, summary, dialog — interactivité sans JS</div>
+    <p class="desc">HTML5 offre des éléments interactifs natifs — sans une seule ligne de JavaScript. Ils sont sous-utilisés mais très puissants.</p>
+
+    <table class="tag-table">
+        <tr><th>Balise</th><th>Ce qu'elle fait</th></tr>
+        <tr>
+            <td><span class="tag-name">&lt;details&gt;</span></td>
+            <td><div class="tag-desc">Accordion natif. Contenu masqué/révélé au clic. L'attribut <code style="font-family:'Fira Code',monospace;font-size:0.85em;">open</code> l'affiche par défaut.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;summary&gt;</span></td>
+            <td><div class="tag-desc">Titre cliquable d'un <code style="font-family:'Fira Code',monospace;font-size:0.85em;">&lt;details&gt;</code>. Remplace le triangle par défaut.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;dialog&gt;</span></td>
+            <td><div class="tag-desc">Fenêtre modale native. L'attribut <code style="font-family:'Fira Code',monospace;font-size:0.85em;">open</code> l'affiche. JS : <code style="font-family:'Fira Code',monospace;font-size:0.85em;">.showModal()</code> / <code style="font-family:'Fira Code',monospace;font-size:0.85em;">.close()</code>.</div></td>
+        </tr>
+        <tr>
+            <td><span class="tag-name">&lt;menu&gt;</span></td>
+            <td><div class="tag-desc">Groupe de boutons ou d'actions. Sémantiquement différent de <code style="font-family:'Fira Code',monospace;font-size:0.85em;">&lt;ul&gt;</code>.</div></td>
+        </tr>
+    </table>
+
+    <div class="code-block"><span class="cm">&lt;!-- Accordion 100% HTML —aucun JS --&gt;</span>
+<span class="tag">&lt;details&gt;</span>
+  <span class="tag">&lt;summary&gt;</span>❓ Qu'est-ce que le HTML ?<span class="tag">&lt;/summary&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Le HTML est un langage de balisage pour le web.<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/details&gt;</span>
+
+<span class="tag">&lt;details</span> <span class="attr">open</span><span class="tag">&gt;</span>   <span class="cm">&lt;!-- ouvert par défaut --&gt;</span>
+  <span class="tag">&lt;summary&gt;</span>💡 Astuce importante<span class="tag">&lt;/summary&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Cette section est visible dès le chargement.<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/details&gt;</span>
+
+<span class="cm">&lt;!-- Modale native HTML5 --&gt;</span>
+<span class="tag">&lt;dialog</span> <span class="attr">id</span>=<span class="val">"maModale"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;h2&gt;</span>Titre de la modale<span class="tag">&lt;/h2&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Contenu...<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">onclick</span>=<span class="val">"document.getElementById('maModale').close()"</span><span class="tag">&gt;</span>Fermer<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/dialog&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">onclick</span>=<span class="val">"document.getElementById('maModale').showModal()"</span><span class="tag">&gt;</span>Ouvrir<span class="tag">&lt;/button&gt;</span></div>
+</div>
+
+<!-- 10. TABLEAUX -->
+<div class="card">
+    <div class="stitle"><div class="pill p-green">12</div>Les tableaux — &lt;table&gt; et sa structure complète</div>
+    <p class="desc">Les tableaux HTML servent à afficher des <strong>données tabulaires</strong> — et uniquement ça. Jamais pour la mise en page (c'est le rôle du CSS).</p>
+
+    <div class="code-block"><span class="tag">&lt;table&gt;</span>
+  <span class="tag">&lt;caption&gt;</span>Résultats du trimestre<span class="tag">&lt;/caption&gt;</span>  <span class="cm">&lt;!-- titre du tableau --&gt;</span>
+
+  <span class="tag">&lt;thead&gt;</span>   <span class="cm">&lt;!-- en-têtes de colonnes --&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;th</span> <span class="attr">scope</span>=<span class="val">"col"</span><span class="tag">&gt;</span>Matière<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;th</span> <span class="attr">scope</span>=<span class="val">"col"</span><span class="tag">&gt;</span>Note<span class="tag">&lt;/th&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/thead&gt;</span>
+
+  <span class="tag">&lt;tbody&gt;</span>   <span class="cm">&lt;!-- données --&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;td&gt;</span>HTML<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>18/20<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;td</span> <span class="attr">colspan</span>=<span class="val">"2"</span><span class="tag">&gt;</span>Mention très bien<span class="tag">&lt;/td&gt;</span>  <span class="cm">&lt;!-- fusionne 2 colonnes --&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/tbody&gt;</span>
+
+  <span class="tag">&lt;tfoot&gt;</span>   <span class="cm">&lt;!-- pied de tableau --&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;td&gt;</span>Moyenne<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>17/20<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/tfoot&gt;</span>
+<span class="tag">&lt;/table&gt;</span></div>
+
+    <div class="tip tip-blue">
+        <span class="tip-i">📌</span>
+        <span><code style="font-family:'Fira Code',monospace;">colspan="2"</code> fusionne 2 colonnes horizontalement. <code style="font-family:'Fira Code',monospace;">rowspan="2"</code> fusionne 2 lignes verticalement. L'attribut <code style="font-family:'Fira Code',monospace;">scope</code> sur <code style="font-family:'Fira Code',monospace;">&lt;th&gt;</code> améliore l'accessibilité.</span>
+    </div>
+</div>
+
+<!-- 11. ATTRIBUTS GLOBAUX -->
+<div class="section-label"><span class="section-label-text">🔧 Attributs globaux essentiels</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-gray">13</div>Attributs disponibles sur toutes les balises</div>
+    <p class="desc">Ces attributs s'appliquent à <em>n'importe quelle</em> balise HTML. Ils sont fondamentaux pour le CSS, le JavaScript et l'accessibilité.</p>
+
+    <div class="attr-row"><span class="attr-pill">id</span><div class="attr-desc"><strong>Identifiant unique</strong> dans la page. Utilisé par le CSS (<code style="font-family:'Fira Code',monospace;font-size:0.85em;">#mon-id</code>), JavaScript (<code style="font-family:'Fira Code',monospace;font-size:0.85em;">getElementById</code>), et les ancres de lien (<code style="font-family:'Fira Code',monospace;font-size:0.85em;">#mon-id</code>). Un seul par page.</div></div>
+    <div class="attr-row"><span class="attr-pill">class</span><div class="attr-desc"><strong>Classe(s) CSS</strong>. Plusieurs classes séparées par des espaces : <code style="font-family:'Fira Code',monospace;font-size:0.85em;">class="card active highlight"</code>. Réutilisable sur plusieurs éléments.</div></div>
+    <div class="attr-row"><span class="attr-pill">style</span><div class="attr-desc">CSS inline directement sur l'élément. À éviter en général — préférer les classes CSS pour maintenir la séparation contenu/style.</div></div>
+    <div class="attr-row"><span class="attr-pill">data-*</span><div class="attr-desc"><strong>Attributs de données personnalisés</strong>. Stockent des infos pour JavaScript : <code style="font-family:'Fira Code',monospace;font-size:0.85em;">data-user-id="42"</code>, accessible via <code style="font-family:'Fira Code',monospace;font-size:0.85em;">element.dataset.userId</code>.</div></div>
+    <div class="attr-row"><span class="attr-pill">hidden</span><div class="attr-desc">Masque l'élément (équivalent CSS <code style="font-family:'Fira Code',monospace;font-size:0.85em;">display:none</code>). Attribut booléen — sa simple présence suffit.</div></div>
+    <div class="attr-row"><span class="attr-pill">title</span><div class="attr-desc">Infobulle au survol. Texte affiché dans une tooltip par le navigateur.</div></div>
+    <div class="attr-row"><span class="attr-pill">tabindex</span><div class="attr-desc">Contrôle la navigation au clavier (touche Tab). <code style="font-family:'Fira Code',monospace;font-size:0.85em;">0</code> = dans l'ordre naturel, <code style="font-family:'Fira Code',monospace;font-size:0.85em;">-1</code> = accessible par JS mais pas par Tab, <code style="font-family:'Fira Code',monospace;font-size:0.85em;">1+</code> = ordre personnalisé.</div></div>
+    <div class="attr-row"><span class="attr-pill">contenteditable</span><div class="attr-desc"><code style="font-family:'Fira Code',monospace;font-size:0.85em;">"true"</code> rend n'importe quel élément éditable directement dans la page, comme un champ texte.</div></div>
+    <div class="attr-row"><span class="attr-pill">draggable</span><div class="attr-desc"><code style="font-family:'Fira Code',monospace;font-size:0.85em;">"true"</code> rend l'élément déplaçable par glisser-déposer. Utilisé avec les événements JS <code style="font-family:'Fira Code',monospace;font-size:0.85em;">dragstart</code>, <code style="font-family:'Fira Code',monospace;font-size:0.85em;">drop</code>.</div></div>
+    <div class="attr-row"><span class="attr-pill">lang</span><div class="attr-desc">Langue du contenu. Sur <code style="font-family:'Fira Code',monospace;font-size:0.85em;">&lt;html lang="fr"&gt;</code> pour la page entière, ou sur un élément pour un passage en langue différente.</div></div>
+    <div class="attr-row"><span class="attr-pill">spellcheck</span><div class="attr-desc"><code style="font-family:'Fira Code',monospace;font-size:0.85em;">"true"</code> ou <code style="font-family:'Fira Code',monospace;font-size:0.85em;">"false"</code> — active ou désactive le correcteur orthographique natif sur les champs editables.</div></div>
+
+    <div class="code-block"><span class="cm">&lt;!-- Exemples d'attributs data-* --&gt;</span>
+<span class="tag">&lt;div</span>
+  <span class="attr">id</span>=<span class="val">"carte-1"</span>
+  <span class="attr">class</span>=<span class="val">"carte active"</span>
+  <span class="attr">data-product-id</span>=<span class="val">"42"</span>
+  <span class="attr">data-price</span>=<span class="val">"29.99"</span>
+  <span class="attr">data-category</span>=<span class="val">"electronique"</span>
+<span class="tag">&gt;</span>
+  Produit
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="cm">// Accès en JavaScript :</span>
+<span class="cm">// element.dataset.productId  → "42"</span>
+<span class="cm">// element.dataset.price      → "29.99"</span></div>
+</div>
+
+<!-- 12. META TAGS SEO -->
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">14</div>Les balises &lt;meta&gt; — SEO & réseaux sociaux</div>
+    <p class="desc">Les balises <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;meta&gt;</code> dans le <code style="font-family:'Fira Code',monospace;background:#F1EFE8;padding:1px 5px;border-radius:4px;font-size:0.85em;">&lt;head&gt;</code> transmettent des informations aux moteurs de recherche, aux réseaux sociaux et aux navigateurs.</p>
+
+    <div class="code-block"><span class="tag">&lt;head&gt;</span>
+  <span class="cm">&lt;!-- Essentiels --&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span> <span class="attr">content</span>=<span class="val">"width=device-width, initial-scale=1"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"description"</span> <span class="attr">content</span>=<span class="val">"Description de 150-160 caractères pour Google"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"author"</span> <span class="attr">content</span>=<span class="val">"Ton nom"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"robots"</span> <span class="attr">content</span>=<span class="val">"index, follow"</span><span class="tag">&gt;</span>
+
+  <span class="cm">&lt;!-- Open Graph (Facebook, LinkedIn, Discord...) --&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">property</span>=<span class="val">"og:title"</span> <span class="attr">content</span>=<span class="val">"Titre affiché sur les réseaux"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">property</span>=<span class="val">"og:description"</span> <span class="attr">content</span>=<span class="val">"Description courte"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">property</span>=<span class="val">"og:image"</span> <span class="attr">content</span>=<span class="val">"https://monsite.fr/image.jpg"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">property</span>=<span class="val">"og:url"</span> <span class="attr">content</span>=<span class="val">"https://monsite.fr"</span><span class="tag">&gt;</span>
+
+  <span class="cm">&lt;!-- Twitter Card --&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"twitter:card"</span> <span class="attr">content</span>=<span class="val">"summary_large_image"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"twitter:title"</span> <span class="attr">content</span>=<span class="val">"Titre pour Twitter"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span></div>
+
+    <div class="tip tip-coral">
+        <span class="tip-i">🔑</span>
+        <span>La balise <code style="font-family:'Fira Code',monospace;">description</code> n'impacte pas directement le classement Google — mais elle influe sur le <strong>taux de clic</strong> dans les résultats de recherche. Soigne-la.</span>
+    </div>
+</div>
+
+<!-- 13. RESSOURCES -->
+<div class="section-label"><span class="section-label-text">📚 Ressources pour aller plus loin</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-teal">15</div>Où découvrir et tester d'autres balises</div>
+    <p class="desc">Il existe plus de 100 balises HTML. Tu n'as pas besoin de toutes les connaître — tu as besoin de savoir où les trouver et comment les tester. Voici les meilleures ressources, toutes <strong>gratuites</strong>.</p>
+
+    <div class="res-grid">
+        <a class="res-card" href="https://www.w3schools.com/html/" target="_blank" rel="noopener noreferrer">
+            <div class="res-icon">🏫</div>
+            <div class="res-title">W3Schools</div>
+            <div class="res-desc">Référence complète + éditeur "Try It" intégré pour tester en direct</div>
+            <div class="res-url">w3schools.com/html</div>
+        </a>
+        <a class="res-card" href="https://developer.mozilla.org/fr/docs/Web/HTML" target="_blank" rel="noopener noreferrer">
+            <div class="res-icon">🦊</div>
+            <div class="res-title">MDN Web Docs</div>
+            <div class="res-desc">La documentation officielle la plus complète et fiable. En français.</div>
+            <div class="res-url">developer.mozilla.org</div>
+        </a>
+        <a class="res-card" href="https://html.spec.whatwg.org/" target="_blank" rel="noopener noreferrer">
+            <div class="res-icon">📖</div>
+            <div class="res-title">WHATWG Spec</div>
+            <div class="res-desc">La spécification officielle du HTML vivant. Pour les curieux avancés.</div>
+            <div class="res-url">html.spec.whatwg.org</div>
+        </a>
+        <a class="res-card" href="https://codepen.io" target="_blank" rel="noopener noreferrer">
+            <div class="res-icon">🖊️</div>
+            <div class="res-title">CodePen</div>
+            <div class="res-desc">Éditeur en ligne pour tester HTML/CSS/JS et partager des extraits de code.</div>
+            <div class="res-url">codepen.io</div>
+        </a>
+        <a class="res-card" href="https://validator.w3.org/" target="_blank" rel="noopener noreferrer">
+            <div class="res-icon">✅</div>
+            <div class="res-title">W3C Validator</div>
+            <div class="res-desc">Valide ton HTML. Détecte les balises mal fermées et les erreurs de syntaxe.</div>
+            <div class="res-url">validator.w3.org</div>
+        </a>
+        <a class="res-card" href="https://caniuse.com/" target="_blank" rel="noopener noreferrer">
+            <div class="res-icon">🌐</div>
+            <div class="res-title">Can I Use</div>
+            <div class="res-desc">Vérifie la compatibilité de n'importe quelle balise ou fonctionnalité HTML avec les navigateurs.</div>
+            <div class="res-url">caniuse.com</div>
+        </a>
+    </div>
+
+    <div class="result-box" style="margin-top:1rem;">
+        <div class="rl">Comment utiliser W3Schools efficacement</div>
+        1. Cherche la balise qui t'intéresse (ex: <em>"html details tag"</em>)<br>
+        2. Lis la description et les attributs disponibles<br>
+        3. Clique sur <strong>"Try It Yourself"</strong> pour voir et modifier l'exemple en direct<br>
+        4. Expérimente en changeant les valeurs des attributs<br>
+        5. Copie ce que tu as compris dans ton propre projet
+    </div>
+
+    <div class="tip tip-amber">
+        <span class="tip-i">⚠️</span>
+        <span>W3Schools est excellent pour <em>découvrir</em> et <em>tester</em>. Pour les informations les plus précises et à jour, confirme toujours sur <strong>MDN</strong>. Les deux se complètent.</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-amber">16</div>Balises supplémentaires à explorer par toi-même</div>
+    <p class="desc">Ces balises méritent d'être découvertes sur W3Schools ou MDN. Cherche-les, lis leur description, teste les attributs :</p>
+
+    <div class="two-col">
+        <div class="tc" style="background:#FAECE7;color:#712B13;">
+            <strong>🎨 Intégrations</strong>
+            &lt;iframe&gt; · &lt;embed&gt; · &lt;object&gt;<br>
+            &lt;canvas&gt; · &lt;svg&gt; · &lt;map&gt; · &lt;area&gt;
+        </div>
+        <div class="tc" style="background:#EEEDFE;color:#3C3489;">
+            <strong>📝 Texte avancé</strong>
+            &lt;ruby&gt; · &lt;rt&gt; · &lt;rp&gt;<br>
+            &lt;wbr&gt; · &lt;bdi&gt; · &lt;bdo&gt; · &lt;dfn&gt;
+        </div>
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong>🔧 Scripting</strong>
+            &lt;template&gt; · &lt;slot&gt;<br>
+            &lt;noscript&gt; · &lt;script&gt; · &lt;link&gt;
+        </div>
+        <div class="tc" style="background:#FAEEDA;color:#633806;">
+            <strong>📋 Formulaires +</strong>
+            &lt;output&gt; · &lt;select&gt;<br>
+            &lt;optgroup&gt; · &lt;textarea&gt;
+        </div>
+    </div>
+
+    <div class="tip">
+        <span class="tip-i">🌱</span>
+        <span>Ne cherche pas à tout apprendre d'un coup. Chaque fois que tu construis quelque chose et que tu te demandes <em>"est-ce qu'il existe une balise pour ça ?"</em> — c'est le bon moment pour aller chercher. C'est comme ça que la connaissance s'ancre.</span>
+    </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+    <p>Cours lu ✓ &nbsp; Balises comprises ✓ &nbsp; Attributs assimilés ✓ &nbsp; Prêt à te tester ?</p>
+    <a class="cta-btn" href="exercices-html-avance.html">Passer aux exercices →</a>
+</div>
+
+<div class="footer-note">
+    Comprendre → Chercher → Coder → Tester → Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span>
+</div>
+
+</body>
+</html>

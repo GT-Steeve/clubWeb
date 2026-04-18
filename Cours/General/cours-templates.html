@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Templates HTML/CSS/JS — Réutiliser & Personnaliser</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧩%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f5f4f0; color: #2C2C2A;
+            padding: 1.5rem; max-width: 720px; margin: 0 auto;
+        }
+        .nav-prev {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.88rem; font-weight: 700; color: #185FA5;
+            text-decoration: none; margin-bottom: 1.5rem;
+            background: #E6F1FB; border: 0.5px solid #85B7EB;
+            border-radius: 8px; padding: 6px 14px; transition: background 0.15s;
+        }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        /* HERO */
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+
+        /* CARD */
+        .card {
+            border-radius: 16px; border: 0.5px solid #D3D1C7;
+            background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+        }
+        .stitle {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+        }
+        .pill {
+            width: 32px; height: 32px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 700; flex-shrink: 0;
+        }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+        .p-pink   { background: #F4C0D1; color: #72243E; }
+        .p-gray   { background: #D3D1C7; color: #444441; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child { margin-bottom: 0; }
+
+        /* TIP */
+        .tip {
+            display: flex; gap: 10px; align-items: flex-start;
+            background: #E1F5EE; border-radius: 10px;
+            padding: 0.75rem 1rem; margin-top: 0.9rem;
+            font-size: 0.88rem; color: #085041; line-height: 1.5;
+        }
+        .tip-coral  { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber  { background: #FAEEDA; color: #633806; }
+        .tip-blue   { background: #E6F1FB; color: #0C447C; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        /* RESULT BOX */
+        .result-box {
+            border-radius: 10px; border: 0.5px dashed #B4B2A9;
+            background: #F1EFE8; padding: 0.9rem 1.1rem;
+            font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.7;
+        }
+        .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+        /* CODE */
+        .code-block {
+            background: #F1EFE8; border: 0.5px solid #B4B2A9;
+            border-radius: 10px; padding: 0.9rem 1.1rem;
+            font-family: 'Fira Code', monospace; font-size: 0.84rem;
+            line-height: 1.8; white-space: pre; overflow-x: auto;
+            color: #2C2C2A; margin-top: 0.8rem;
+        }
+        .tag  { color: #993C1D; }
+        .attr { color: #185FA5; }
+        .val  { color: #0F6E56; }
+        .cm   { color: #888780; font-style: italic; }
+        .sel  { color: #993C1D; }
+        .prop { color: #185FA5; }
+
+        /* SECTION LABEL */
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; white-space: nowrap; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        /* RES CARDS */
+        .res-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 0.8rem; }
+        .res-card {
+            border-radius: 12px; border: 0.5px solid #D3D1C7;
+            padding: 0.9rem; text-align: center; background: #FAFAF8;
+            text-decoration: none; transition: border-color 0.15s, background 0.15s; display: block;
+        }
+        .res-card:hover { border-color: #85B7EB; background: #E6F1FB; }
+        .res-icon { font-size: 1.4rem; margin-bottom: 6px; }
+        .res-title { font-size: 0.88rem; font-weight: 800; color: #2C2C2A; margin-bottom: 3px; }
+        .res-desc { font-size: 0.78rem; color: #888780; line-height: 1.5; }
+        .res-url { font-size: 0.75rem; color: #185FA5; margin-top: 4px; font-family: 'Fira Code', monospace; }
+
+        /* TWO COL */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+        .tc { border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.88rem; font-weight: 600; line-height: 1.5; }
+        .tc strong { display: block; font-family: 'Fira Code', monospace; font-size: 0.82rem; font-weight: 700; margin-bottom: 3px; }
+
+        /* CYCLE */
+        .cycle-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 0.8rem; }
+        .cycle-step { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 20px; padding: 5px 14px; font-size: 0.86rem; font-weight: 700; color: #2C2C2A; }
+        .cycle-arrow { color: #B4B2A9; font-size: 1rem; }
+
+        /* STEP LIST */
+        .step-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.8rem; }
+        .step-item { display: flex; gap: 12px; align-items: flex-start; }
+        .step-num {
+            width: 28px; height: 28px; min-width: 28px; border-radius: 9px;
+            background: #2C2C2A; color: #FAC775;
+            font-size: 13px; font-weight: 800;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+        }
+        .step-body { font-size: 0.92rem; font-weight: 600; line-height: 1.6; color: #2C2C2A; }
+        .step-body span { color: #5F5E5A; font-weight: 400; }
+
+        /* INLINE CODE */
+        .ic {
+            font-family: 'Fira Code', monospace; font-size: 0.83em;
+            background: #F1EFE8; border-radius: 4px; padding: 1px 5px; color: #993C1D;
+        }
+
+        /* BEFORE / AFTER DIFF */
+        .diff-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+        .diff-block { border-radius: 10px; overflow: hidden; font-family: 'Fira Code', monospace; font-size: 0.81rem; line-height: 1.9; }
+        .diff-header { padding: 5px 12px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+        .diff-header.before { background: #FCEBEB; color: #791F1F; }
+        .diff-header.after  { background: #E1F5EE; color: #085041; }
+        .diff-body { background: #F1EFE8; border: 0.5px solid #B4B2A9; padding: 0.8rem 1rem; white-space: pre; overflow-x: auto; border-top: none; }
+
+        /* CTA */
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn {
+            display: inline-block; background: #FAC775; color: #412402;
+            font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+            border-radius: 10px; text-decoration: none; transition: background 0.15s;
+        }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) {
+            .res-grid  { grid-template-columns: 1fr 1fr; }
+            .two-col   { grid-template-columns: 1fr; }
+            .diff-wrap { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="../sommaire.html#step2Advence">← Retour au sommaire</a>
+
+<!-- HERO -->
+<div class="hero">
+    <h1>🧩 Les Templates HTML/CSS/JS</h1>
+    <p>Trouver, comprendre et personnaliser du code prêt à l'emploi.</p>
+    <div class="badge-row">
+        <span class="badge b-coral">Module 03</span>
+        <span class="badge b-purple">Réutilisation</span>
+        <span class="badge b-amber">Personnalisation</span>
+        <span class="badge b-teal">CodePen & ressources</span>
+        <span class="badge b-blue">Bonnes pratiques</span>
+    </div>
+</div>
+
+<!-- 1. QU'EST-CE QU'UN TEMPLATE -->
+<div class="card">
+    <div class="stitle"><div class="pill p-teal">1</div>Qu'est-ce qu'un template ?</div>
+    <p class="desc">Un <strong>template</strong> (ou gabarit) est un bloc de code HTML, CSS et/ou JavaScript déjà écrit, fonctionnel, et conçu pour être <strong>réutilisé et personnalisé</strong>. Il peut s'agir d'un simple composant (bouton animé, carte, menu) ou d'une page entière (landing page, dashboard, portfolio).</p>
+    <p class="desc">Les templates existent parce que la majorité des interfaces web partagent les mêmes besoins : une navigation, un hero, des cartes, un formulaire, un pied de page. Plutôt que de recoder ces éléments à chaque projet, la communauté les partage en ligne — gratuitement, et souvent librement réutilisables.</p>
+    <div class="two-col">
+        <div class="tc" style="background:#FAECE7;color:#712B13;">
+            <strong>❌ Sans template</strong>
+            Repartir de zéro à chaque fois. Réinventer des composants standards. Perdre du temps sur la structure.
+        </div>
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong>✅ Avec template</strong>
+            Partir d'une base solide. Se concentrer sur le contenu et la personnalisation. Apprendre des autres.
+        </div>
+    </div>
+    <div class="tip">
+        <span class="tip-i">💡</span>
+        <span>Utiliser un template n'est pas tricher — c'est travailler intelligemment. <strong>Tout développeur professionnel</strong> s'appuie sur du code existant, des bibliothèques, des snippets. La compétence, c'est savoir le lire, le comprendre et l'adapter.</span>
+    </div>
+</div>
+
+<!-- 2. OÙ TROUVER DES TEMPLATES -->
+<div class="section-label"><span class="section-label-text">🌐 Où trouver des templates</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">2</div>Quelques sources de templates html css gratuits</div>
+    <p class="desc">Ces plateformes regroupent des milliers de templates et composants, tous testables directement dans le navigateur. Tu peux en trouver d'autre par toi-même !</p>
+
+    <div class="res-grid">
+        <a class="res-card" href="https://html5up.net" target="_blank" rel="noopener noreferrer">
+            <div class="res-icon">🏗️</div>
+            <div class="res-title">HTML5 UP</div>
+            <div class="res-desc">Templates de pages complètes (portfolio, landing, blog). Entièrement responsive, gratuits.</div>
+            <div class="res-url">html5up.net</div>
+        </a>
+        <a class="res-card" href="https://codepen.io" target="_blank" rel="noopener noreferrer">
+            <div class="res-icon">🖊️</div>
+            <div class="res-title">CodePen</div>
+            <div class="res-desc">La plus grande communauté de snippets HTML/CSS/JS. Éditeur en direct, fork en 1 clic.</div>
+            <div class="res-url">codepen.io</div>
+        </a>
+        <a class="res-card" href="https://cssfx.netlify.app" target="_blank" rel="noopener noreferrer">
+            <div class="res-icon">✨</div>
+            <div class="res-title">CSS FX</div>
+            <div class="res-desc">Effets CSS prêts à copier : animations, transitions, effets de texte.</div>
+            <div class="res-url">cssfx.netlify.app</div>
+        </a>
+        <a class="res-card" href="https://uiverse.io" target="_blank" rel="noopener noreferrer">
+            <div class="res-icon">🪐</div>
+            <div class="res-title">UIverse</div>
+            <div class="res-desc">Composants UI open source : boutons, cartes, loaders, inputs. Code copié d'un clic.</div>
+            <div class="res-url">uiverse.io</div>
+        </a>
+        <a class="res-card" href="https://free-css.com" target="_blank" rel="noopener noreferrer">
+            <div class="res-icon">🎨</div>
+            <div class="res-title">Free CSS</div>
+            <div class="res-desc">Plus de 3000 templates CSS complets à télécharger. Catégorisés par type de site.</div>
+            <div class="res-url">free-css.com</div>
+        </a>
+        <a class="res-card" href="https://animate.style" target="_blank" rel="noopener noreferrer">
+            <div class="res-icon">🎬</div>
+            <div class="res-title">Animate.css</div>
+            <div class="res-desc">Bibliothèque d'animations CSS prêtes à l'emploi. Ajouter une classe = animer un élément.</div>
+            <div class="res-url">animate.style</div>
+        </a>
+    </div>
+
+    <div class="result-box" style="margin-top:1rem;">
+        <div class="rl">Autres ressources notables</div>
+        🎯 <strong>Tailwind UI</strong> (tailwindui.com) — composants Tailwind CSS premium et gratuits<br>
+        🎯 <strong>Flowbite</strong> (flowbite.com) — composants Tailwind CSS open source<br>
+        🎯 <strong>Bootsnipp</strong> (bootsnipp.com) — snippets Bootstrap<br>
+        🎯 <strong>GitHub</strong> — recherche <em>"html template"</em>, <em>"css snippets"</em> — des milliers de dépôts
+    </div>
+</div>
+
+<!-- 3. CODEPEN EN DÉTAIL -->
+<div class="card">
+    <div class="stitle"><div class="pill p-purple">3</div>CodePen — la plateforme incontournable</div>
+    <p class="desc">CodePen est l'outil de référence pour tester et partager du code front-end. Comprendre son interface te permettra de tirer le meilleur de cette ressource.</p>
+
+    <div class="result-box">
+        <div class="rl">Interface d'un Pen (éditeur CodePen)</div>
+        <strong>🔝 En haut</strong> — 3 panneaux : HTML | CSS | JS<br>
+        <strong>🔽 En bas</strong> — Le résultat en direct, mis à jour à chaque modification<br>
+        <strong>⚙️ Bouton Settings</strong> — Ajouter des librairies externes (Bootstrap, GSAP, etc.)<br>
+        <strong>🍴 Bouton Fork</strong> — Copier le Pen dans ton compte pour le modifier librement<br>
+        <strong>📦 Bouton Export</strong> — Télécharger le code en .zip pour l'utiliser en local
+    </div>
+
+    <div class="step-list" style="margin-top:0.9rem;">
+        <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-body">Cherche ce que tu veux : <em>"navbar CSS"</em>, <em>"card hover effect"</em>, <em>"dark mode toggle"</em>…<span> Dans la barre de recherche de CodePen.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-body">Lis le code avant de copier.<span> Comprends ce que fait chaque section. C'est là que tu apprends.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-body">Fork ou exporte.<span> Fork si tu veux modifier dans CodePen. Export .zip si tu l'intègres dans ton projet local.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-body">Teste les modifications.<span> Change les couleurs, le texte, les tailles — et observe l'effet en direct.</span></div>
+        </div>
+    </div>
+
+    <div class="tip tip-purple">
+        <span class="tip-i">🎯</span>
+        <span>Sur CodePen, les <strong>Pens les plus likés</strong> sont généralement les mieux codés. Filtre par <em>"Most Loved"</em> pour trouver les meilleurs exemples.</span>
+    </div>
+</div>
+
+<!-- 4. ANATOMIE D'UN TEMPLATE -->
+<div class="section-label"><span class="section-label-text">🔍 Lire et comprendre un template</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-coral">4</div>Anatomie d'un template — ce qu'il faut repérer</div>
+    <p class="desc">Avant de copier un template, prends 2 minutes pour le <strong>décortiquer</strong>. Voici ce qu'il faut identifier :</p>
+
+    <div class="step-list">
+        <div class="step-item">
+            <div class="step-num">📄</div>
+            <div class="step-body">La <strong>structure HTML</strong><span> — quelles balises sont utilisées, comment les éléments sont imbriqués, quelles classes sont appliquées.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">🎨</div>
+            <div class="step-body">Les <strong>variables CSS</strong><span> — souvent définies en haut du CSS avec <code class="ic">:root { --couleur: #xxx; }</code>. Ce sont les leviers de personnalisation.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">⚙️</div>
+            <div class="step-body">Les <strong>dépendances</strong><span> — librairies JS ou CSS externes (jQuery, GSAP, Bootstrap…). Vérifie dans les Settings de CodePen.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">🔗</div>
+            <div class="step-body">Les <strong>classes qui font le travail</strong><span> — certaines classes CSS portent l'effet visuel principal. Identifie-les pour pouvoir les appliquer ailleurs.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">📜</div>
+            <div class="step-body">Le <strong>rôle du JavaScript</strong><span> — est-ce qu'il gère un état (ouvert/fermé) ? une animation ? un calcul ? Ou est-ce du CSS pur ?</span></div>
+        </div>
+    </div>
+
+    <div class="tip tip-amber">
+        <span class="tip-i">⚠️</span>
+        <span>Si tu ne comprends pas ce que fait une ligne, <strong>ne la copie pas aveuglément</strong>. Cherche sur MDN, demande à l'IA d'expliquer — mais assure-toi de comprendre avant d'intégrer. C'est la protection contre l'effet spaghetti.</span>
+    </div>
+</div>
+
+<!-- 5. VARIABLES CSS -->
+<div class="card">
+    <div class="stitle"><div class="pill p-green">5</div>Les variables CSS — le cœur de la personnalisation</div>
+    <p class="desc">La plupart des bons templates utilisent des <strong>variables CSS</strong> (aussi appelées <em>custom properties</em>). Elles permettent de centraliser les valeurs répétées : couleurs, espacements, polices. Changer une variable change l'ensemble du template en une ligne.</p>
+
+    <div class="code-block"><span class="cm">/* Variables définies dans :root — accessibles partout */</span>
+<span class="sel">:root</span> {
+  <span class="prop">--couleur-principale</span>: <span class="val">#5DCAA5</span>;
+  <span class="prop">--couleur-texte</span>: <span class="val">#2C2C2A</span>;
+  <span class="prop">--couleur-fond</span>: <span class="val">#f5f4f0</span>;
+  <span class="prop">--rayon-bord</span>: <span class="val">12px</span>;
+  <span class="prop">--police</span>: <span class="val">'Nunito', sans-serif</span>;
+  <span class="prop">--ombre</span>: <span class="val">0 4px 20px rgba(0,0,0,0.1)</span>;
+}
+
+<span class="cm">/* Utilisation dans le CSS */</span>
+<span class="sel">.bouton</span> {
+  <span class="prop">background</span>: <span class="val">var(--couleur-principale)</span>;
+  <span class="prop">border-radius</span>: <span class="val">var(--rayon-bord)</span>;
+  <span class="prop">font-family</span>: <span class="val">var(--police)</span>;
+  <span class="prop">box-shadow</span>: <span class="val">var(--ombre)</span>;
+}
+
+<span class="cm">/* Pour personnaliser : changer UNIQUEMENT le :root */</span>
+<span class="sel">:root</span> {
+  <span class="prop">--couleur-principale</span>: <span class="val">#FF6B6B</span>;  <span class="cm">/* tout le template change ! */</span>
+}</div>
+
+    <div class="tip">
+        <span class="tip-i">💡</span>
+        <span>Quand tu forkes un template sur CodePen, la <strong>première chose à faire</strong> est de repérer le bloc <span class="ic">:root</span> dans le CSS. C'est ton panneau de contrôle. Modifie ces variables en premier — tu verras l'impact immédiatement.</span>
+    </div>
+</div>
+
+<!-- 6. MÉTHODE POUR PERSONNALISER -->
+<div class="section-label"><span class="section-label-text">🛠️ Méthode de personnalisation</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-amber">6</div>La méthode en 5 étapes pour personnaliser un template</div>
+    <p class="desc">Voici le processus à suivre à chaque fois que tu récupères un template, que ce soit depuis CodePen, GitHub ou n'importe quelle autre source.</p>
+
+    <div class="step-list">
+        <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-body"><strong>Comprendre avant de modifier</strong><span> — Lis tout le code. Identifie la structure HTML, les classes importantes, le rôle du JS. Prends le temps — tu éviteras des bugs inutiles.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-body"><strong>Changer les variables CSS en premier</strong><span> — Couleurs, polices, espacements. Ce sont les modifications les plus sûres car elles ne cassent pas la structure.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-body"><strong>Remplacer le contenu</strong><span> — Textes, images, liens. Garde la même structure HTML mais mets ton propre contenu.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-body"><strong>Modifier la structure avec précaution</strong><span> — Ajouter ou supprimer des éléments HTML. Teste après chaque changement — ne modifie pas tout en une fois.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">5</div>
+            <div class="step-body"><strong>Supprimer ce dont tu n'as pas besoin</strong><span> — Un bon template contient souvent plus que nécessaire. Supprime les parties inutilisées pour alléger ton code.</span></div>
+        </div>
+    </div>
+
+    <div class="cycle-wrap" style="margin-top:1rem;">
+        <div class="cycle-step">Comprendre</div>
+        <span class="cycle-arrow">→</span>
+        <div class="cycle-step">Variables CSS</div>
+        <span class="cycle-arrow">→</span>
+        <div class="cycle-step">Contenu</div>
+        <span class="cycle-arrow">→</span>
+        <div class="cycle-step">Structure</div>
+        <span class="cycle-arrow">→</span>
+        <div class="cycle-step">Nettoyer</div>
+    </div>
+</div>
+
+<!-- 7. EXEMPLE CONCRET -->
+<div class="card">
+    <div class="stitle"><div class="pill p-pink">7</div>Exemple concret — personnaliser une card</div>
+    <p class="desc">Voici un exemple de card trouvée sur CodePen, et comment la personnaliser étape par étape.</p>
+
+    <div class="diff-wrap">
+        <div class="diff-block">
+            <div class="diff-header before">❌ Template original</div>
+            <div class="diff-body"><span class="cm">/* CSS original */</span>
+<span class="sel">:root</span> {
+  --color: <span class="val">#6C63FF</span>;
+  --bg: <span class="val">#1a1a2e</span>;
+  --radius: <span class="val">8px</span>;
+}
+<span class="sel">.card</span> {
+  <span class="prop">background</span>: var(--bg);
+  <span class="prop">border-radius</span>: var(--radius);
+}
+
+<span class="cm">&lt;!-- HTML original --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="val">"card"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;h2&gt;</span>Card Title<span class="tag">&lt;/h2&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Lorem ipsum...<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#"</span><span class="tag">&gt;</span>Read more<span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div>
+        </div>
+        <div class="diff-block">
+            <div class="diff-header after">✅ Après personnalisation</div>
+            <div class="diff-body"><span class="cm">/* CSS personnalisé */</span>
+<span class="sel">:root</span> {
+  --color: <span class="val">#5DCAA5</span>;  <span class="cm">← couleur</span>
+  --bg: <span class="val">#ffffff</span>;     <span class="cm">← fond blanc</span>
+  --radius: <span class="val">16px</span>;    <span class="cm">← coins +ronds</span>
+}
+<span class="sel">.card</span> {
+  <span class="prop">background</span>: var(--bg);
+  <span class="prop">border-radius</span>: var(--radius);
+}
+
+<span class="cm">&lt;!-- HTML personnalisé --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="val">"card"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;h2&gt;</span>Mon Projet<span class="tag">&lt;/h2&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Ma description...<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"projet.html"</span><span class="tag">&gt;</span>Voir<span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div>
+        </div>
+    </div>
+
+    <div class="result-box" style="margin-top:0.9rem;">
+        <div class="rl">Ce qui a changé</div>
+        ✅ 3 variables CSS modifiées → couleur, fond, bordures arrondies<br>
+        ✅ Le texte anglais remplacé par du contenu réel<br>
+        ✅ Le lien <span class="ic">#</span> remplacé par une vraie URL<br>
+        ❌ La structure HTML n'a pas été touchée — elle fonctionnait déjà
+    </div>
+</div>
+
+<!-- 8. INTÉGRER DANS UN PROJET LOCAL -->
+<div class="section-label"><span class="section-label-text">📁 Intégrer un template dans son projet</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-teal">8</div>De CodePen à un fichier local</div>
+    <p class="desc">CodePen fusionne le HTML, CSS et JS dans un environnement en ligne. Pour l'utiliser dans ton propre projet, voici comment le restructurer correctement.</p>
+
+    <div class="code-block"><span class="cm">/* Structure de fichiers recommandée */</span>
+mon-projet/
+├── index.html
+├── style.css
+└── script.js
+
+<span class="cm">/* Dans index.html — lier les fichiers */</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="cm">&lt;!-- CSS en haut, dans le head --&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="val">"stylesheet"</span> <span class="attr">href</span>=<span class="val">"style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="cm">&lt;!-- ton HTML ici --&gt;</span>
+
+  <span class="cm">&lt;!-- JS en bas, avant /body --&gt;</span>
+  <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="val">"script.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span></div>
+
+    <div class="step-list" style="margin-top:0.9rem;">
+        <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-body"><strong>Copie le HTML</strong> de CodePen<span> → colle dans le <span class="ic">&lt;body&gt;</span> de ton <span class="ic">index.html</span></span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-body"><strong>Copie le CSS</strong> de CodePen<span> → colle dans ton fichier <span class="ic">style.css</span></span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-body"><strong>Copie le JS</strong> de CodePen<span> → colle dans ton fichier <span class="ic">script.js</span></span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-body"><strong>Vérifie les dépendances</strong><span> — Dans les Settings de CodePen, regarde si des librairies externes sont ajoutées (ex: GSAP). Il faudra les inclure dans ton HTML aussi.</span></div>
+        </div>
+    </div>
+
+    <div class="tip tip-blue">
+        <span class="tip-i">📌</span>
+        <span>Le CSS doit être dans le <span class="ic">&lt;head&gt;</span> (chargé avant l'affichage). Le JavaScript doit être à la fin du <span class="ic">&lt;body&gt;</span> (chargé après le HTML). Inverser cet ordre crée des bugs.</span>
+    </div>
+</div>
+
+<!-- 9. DÉPENDANCES EXTERNES -->
+<div class="card">
+    <div class="stitle"><div class="pill p-purple">9</div>Gérer les dépendances externes</div>
+    <p class="desc">Certains templates utilisent des librairies externes. Il faut les inclure dans ton projet, généralement via un lien <strong>CDN</strong> (Content Delivery Network) — un serveur qui héberge la librairie pour toi, sans installation.</p>
+
+    <div class="code-block"><span class="cm">&lt;!-- Exemples de librairies via CDN --&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="cm">&lt;!-- Animate.css — animations CSS prêtes à l'emploi --&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="val">"stylesheet"</span>
+    <span class="attr">href</span>=<span class="val">"https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"</span><span class="tag">&gt;</span>
+
+  <span class="cm">&lt;!-- Font Awesome — icônes vectorielles --&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="val">"stylesheet"</span>
+    <span class="attr">href</span>=<span class="val">"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+
+<span class="tag">&lt;body&gt;</span>
+  <span class="cm">&lt;!-- GSAP — animations JavaScript avancées --&gt;</span>
+  <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="val">"https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span></div>
+
+    <div class="result-box" style="margin-top:0.8rem;">
+        <div class="rl">Librairies fréquemment utilisées dans les templates</div>
+        🎬 <strong>GSAP</strong> — animations JS très fluides et performantes<br>
+        ✨ <strong>Animate.css</strong> — classes CSS d'animation à appliquer directement<br>
+        🎨 <strong>Font Awesome</strong> — bibliothèque d'icônes (plus de 2000 icônes gratuites)<br>
+        📐 <strong>Bootstrap</strong> — système de grille et composants UI responsive<br>
+        🌊 <strong>AOS</strong> — animations au scroll (Animate On Scroll)<br>
+        💫 <strong>Swiper.js</strong> — sliders et carousels tactiles
+    </div>
+</div>
+
+<!-- 10. ADAPTER UN TEMPLATE SANS LE CASSER -->
+<div class="section-label"><span class="section-label-text">⚠️ Adapter sans casser</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-coral">10</div>Les erreurs classiques à éviter</div>
+    <p class="desc">Personnaliser un template, c'est apprendre à opérer sans anesthésie. Voici les erreurs les plus courantes — et comment les éviter.</p>
+
+    <div class="two-col">
+        <div class="tc" style="background:#FCEBEB;color:#791F1F;">
+            <strong>❌ Supprimer des classes sans comprendre</strong>
+            Une classe peut porter à la fois le style ET le comportement JS. La supprimer casse les deux.
+        </div>
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong>✅ Commenter plutôt que supprimer</strong>
+            Mets en commentaire ce que tu veux tester en supprimant. Tu pourras annuler facilement.
+        </div>
+        <div class="tc" style="background:#FCEBEB;color:#791F1F;">
+            <strong>❌ Tout modifier en même temps</strong>
+            Changer 10 choses à la fois rend impossible de savoir ce qui a causé le bug.
+        </div>
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong>✅ Un changement → un test</strong>
+            Modifie une chose, recharge la page, vérifie que ça fonctionne. Puis passe au suivant.
+        </div>
+        <div class="tc" style="background:#FCEBEB;color:#791F1F;">
+            <strong>❌ Ignorer les dépendances</strong>
+            Un template qui ne marche pas en local alors qu'il marchait sur CodePen : c'est souvent une librairie oubliée.
+        </div>
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong>✅ Vérifier les Settings CodePen</strong>
+            Onglet Settings → CSS/JS → voir les librairies ajoutées, et les inclure dans ton projet.
+        </div>
+    </div>
+
+    <div class="tip tip-amber">
+        <span class="tip-i">⚠️</span>
+        <span>Utilise les <strong>outils de développement du navigateur</strong> (F12 ou Clic droit → Inspecter). L'onglet Console montre les erreurs JavaScript en rouge. L'onglet Elements montre le HTML rendu. Ce sont tes meilleurs alliés pour déboguer.</span>
+    </div>
+</div>
+
+<!-- 11. ALLER PLUS LOIN — COMPRENDRE LES ANIMATIONS CSS -->
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">11</div>Comprendre les animations CSS dans les templates</div>
+    <p class="desc">La plupart des effets visuels impressionnants sur CodePen reposent sur deux mécanismes CSS : les <strong>transitions</strong> et les <strong>animations keyframes</strong>. Savoir les lire te permet d'adapter n'importe quel effet.</p>
+
+    <div class="code-block"><span class="cm">/* Transition — effet lors d'un changement d'état (hover, focus) */</span>
+<span class="sel">.bouton</span> {
+  <span class="prop">background</span>: <span class="val">#5DCAA5</span>;
+  <span class="prop">transition</span>: <span class="val">background 0.3s ease, transform 0.2s ease</span>;
+  <span class="cm">/*           propriété  durée  courbe */</span>
+}
+<span class="sel">.bouton:hover</span> {
+  <span class="prop">background</span>: <span class="val">#1D9E75</span>;
+  <span class="prop">transform</span>: <span class="val">scale(1.05)</span>;  <span class="cm">/* grossit légèrement */</span>
+}
+
+<span class="cm">/* Animation keyframes — effet en boucle ou au chargement */</span>
+<span class="sel">@keyframes</span> apparaitre {
+  <span class="val">from</span> { <span class="prop">opacity</span>: <span class="val">0</span>; <span class="prop">transform</span>: <span class="val">translateY(20px)</span>; }
+  <span class="val">to</span>   { <span class="prop">opacity</span>: <span class="val">1</span>; <span class="prop">transform</span>: <span class="val">translateY(0)</span>; }
+}
+
+<span class="sel">.carte</span> {
+  <span class="prop">animation</span>: <span class="val">apparaitre 0.5s ease forwards</span>;
+  <span class="cm">/*          nom-anim  durée  courbe  remplissage */</span>
+}
+
+<span class="cm">/* Pour personnaliser : change la durée, les valeurs from/to */</span></div>
+
+    <div class="tip">
+        <span class="tip-i">💡</span>
+        <span>Pour tout effet CSS que tu ne comprends pas, tape la propriété sur <strong>MDN</strong> ou demande à l'IA de l'expliquer ligne par ligne. Les animations CSS ne sont pas mystérieuses une fois qu'on a compris <span class="ic">from</span> / <span class="ic">to</span> et <span class="ic">transition</span>.</span>
+    </div>
+</div>
+
+<!-- 12. LICENCES -->
+<div class="card">
+    <div class="stitle"><div class="pill p-gray">12</div>Licences — ce qu'on a le droit de faire</div>
+    <p class="desc">La majorité des templates sur CodePen, HTML5 UP et UIverse sont sous <strong>licence libre</strong>. Mais il est important de vérifier avant d'utiliser, surtout pour un projet commercial.</p>
+
+    <div class="result-box">
+        <div class="rl">Les licences les plus courantes</div>
+        🟢 <strong>MIT</strong> — Utilisation libre, commerciale ou non. Conserver la mention d'auteur.<br>
+        🟢 <strong>Creative Commons Zero (CC0)</strong> — Domaine public. Aucune restriction.<br>
+        🟡 <strong>Creative Commons BY</strong> — Libre, mais créditer l'auteur.<br>
+        🟡 <strong>Creative Commons BY-NC</strong> — Libre, crédit requis, pas d'usage commercial.<br>
+        🔴 <strong>Tous droits réservés</strong> — Demander l'autorisation de l'auteur.
+    </div>
+
+    <div class="tip tip-blue">
+        <span class="tip-i">📌</span>
+        <span>Sur CodePen, chaque Pen indique sa licence dans les détails. Sur HTML5 UP, tous les templates sont <strong>CCA 3.0</strong> (libre avec crédit). Pour un usage perso ou d'apprentissage, ces questions se posent moins — mais prends l'habitude de vérifier.</span>
+    </div>
+</div>
+
+<!-- 13. MINI-PROJET -->
+<div class="section-label"><span class="section-label-text">🚀 Mini-projet personnel</span></div>
+
+<div class="card" style="background:#2C2C2A;border-color:#2C2C2A;">
+    <div class="stitle" style="color:#f5f4f0;"><div class="pill p-amber">🚀</div>Ton défi : personnaliser un template complet</div>
+    <p class="desc" style="color:#B4B2A9;">Applique tout ce que tu viens d'apprendre en construisant quelque chose de réel à partir d'un template existant.</p>
+
+    <div class="step-list">
+        <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-body" style="color:#D3D1C7;"><strong style="color:#FAC775;">Va sur CodePen.io</strong><span style="color:#888780;"> et cherche un composant qui t'intéresse : card, navbar, hero section, bouton animé…</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-body" style="color:#D3D1C7;"><strong style="color:#FAC775;">Lis tout le code</strong><span style="color:#888780;"> — HTML, CSS, JS. Identifie les variables CSS, les classes principales, les dépendances.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-body" style="color:#D3D1C7;"><strong style="color:#FAC775;">Fork le Pen</strong><span style="color:#888780;"> et commence par changer les couleurs et les textes dans le :root.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-body" style="color:#D3D1C7;"><strong style="color:#FAC775;">Exporte en .zip</strong><span style="color:#888780;"> et intègre dans un projet local avec tes 3 fichiers : index.html, style.css, script.js.</span></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">5</div>
+            <div class="step-body" style="color:#D3D1C7;"><strong style="color:#FAC775;">Essaie de modifier la structure</strong><span style="color:#888780;"> — ajoute un élément, change l'ordre, retire ce dont tu n'as pas besoin.</span></div>
+        </div>
+    </div>
+
+    <div class="tip tip-purple" style="margin-top:1rem;">
+        <span class="tip-i">🎯</span>
+        <span style="color:#3C3489;">Idée de défi concret : trouve une <strong>card produit</strong> sur CodePen et transforme-la en <strong>carte de présentation personnelle</strong>. Ton nom, ta photo, ta description, tes liens. C'est simple, utile, et tu verras chaque concept du cours en action.</span>
+    </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+    <p>Cours lu ✓ &nbsp; Templates compris ✓ &nbsp; Méthode assimilée ✓ &nbsp; Prêt à te tester ?</p>
+    <a class="cta-btn" href="exercices-templates.html">Passer aux exercices →</a>
+</div>
+
+<div class="footer-note">
+    Trouver → Lire → Personnaliser → Créer 🧩<br>
+    <span style="font-size:0.82rem;">Cours — Les Templates HTML/CSS/JS</span>
+</div>
+
+</body>
+</html>

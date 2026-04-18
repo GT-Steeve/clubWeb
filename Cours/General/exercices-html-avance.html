@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Le HTML</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E✏️%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f5f4f0; color: #2C2C2A;
+            padding: 1.5rem; max-width: 720px; margin: 0 auto;
+        }
+        .nav-prev {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.88rem; font-weight: 700; color: #185FA5;
+            text-decoration: none; margin-bottom: 1.5rem;
+            background: #E6F1FB; border: 0.5px solid #85B7EB;
+            border-radius: 8px; padding: 6px 14px; transition: background 0.15s;
+        }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+
+        .card {
+            border-radius: 16px; border: 0.5px solid #D3D1C7;
+            background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+        }
+        .stitle {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+        }
+        .pill {
+            width: 32px; height: 32px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 700; flex-shrink: 0;
+        }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+        .p-pink   { background: #F4C0D1; color: #72243E; }
+        .p-gray   { background: #D3D1C7; color: #444441; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child { margin-bottom: 0; }
+
+        .tip {
+            display: flex; gap: 10px; align-items: flex-start;
+            background: #E1F5EE; border-radius: 10px;
+            padding: 0.75rem 1rem; margin-top: 0.9rem;
+            font-size: 0.88rem; color: #085041; line-height: 1.5;
+        }
+        .tip-coral  { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber  { background: #FAEEDA; color: #633806; }
+        .tip-blue   { background: #E6F1FB; color: #0C447C; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .result-box {
+            border-radius: 10px; border: 0.5px dashed #B4B2A9;
+            background: #F1EFE8; padding: 0.9rem 1.1rem;
+            font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.7;
+        }
+        .rl {
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.05em; color: #888780; margin-bottom: 6px;
+        }
+
+        /* CODE BLOCK */
+        .code-block {
+            background: #F1EFE8; border: 0.5px solid #B4B2A9;
+            border-radius: 10px; padding: 0.9rem 1.1rem;
+            font-family: 'Fira Code', monospace; font-size: 0.84rem;
+            line-height: 1.8; white-space: pre; overflow-x: auto;
+            color: #2C2C2A; margin-top: 0.8rem;
+        }
+        .tag  { color: #993C1D; }
+        .attr { color: #185FA5; }
+        .val  { color: #0F6E56; }
+        .cm   { color: #888780; font-style: italic; }
+
+        /* SECTION LABEL */
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text {
+            font-size: 0.78rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.1em; color: #888780; white-space: nowrap;
+        }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        /* PROGRESS */
+        .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.4s; width: 0%; }
+        .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .chip-ok { background: #E1F5EE; color: #085041; }
+        .chip-ko { background: #FCEBEB; color: #791F1F; }
+        .chip-neutral { background: #F1EFE8; color: #888780; }
+
+        /* QCM */
+        .qcm-card {
+            border-radius: 16px; border: 0.5px solid #D3D1C7;
+            background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem;
+        }
+        .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 7px; }
+        .opt {
+            display: flex; align-items: flex-start; gap: 10px;
+            background: #F1EFE8; border: 0.5px solid #B4B2A9;
+            border-radius: 10px; padding: 9px 13px; cursor: pointer;
+            transition: background 0.12s, border-color 0.12s;
+            font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none;
+        }
+        .opt:hover { background: #D3D1C7; }
+        .opt.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .opt.correct  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .opt.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .opt-dot {
+            width: 18px; height: 18px; min-width: 18px;
+            border-radius: 50%; border: 2px solid #B4B2A9; margin-top: 1px;
+            display: flex; align-items: center; justify-content: center; transition: all 0.12s;
+        }
+        .opt.selected .opt-dot { border-color: #7F77DD; background: #7F77DD; }
+        .opt.correct  .opt-dot { border-color: #1D9E75; background: #1D9E75; }
+        .opt.wrong    .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+        .opt-dot-inner { width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
+        .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+        .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; min-height: 1.3em; display: none; line-height: 1.5; }
+        .q-feedback.show { display: block; }
+        .q-feedback.ok { color: #0F6E56; }
+        .q-feedback.ko { color: #A32D2D; }
+
+        /* V/F */
+        .vf-card {
+            border-radius: 16px; border: 0.5px solid #D3D1C7;
+            background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem;
+        }
+        .vf-statement { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .vf-btns { display: flex; gap: 10px; }
+        .vf-btn {
+            flex: 1; padding: 8px 0; border-radius: 10px;
+            border: 0.5px solid #B4B2A9; background: #F1EFE8;
+            color: #2C2C2A; font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem; font-weight: 700; cursor: pointer;
+            transition: background 0.12s, border-color 0.12s;
+        }
+        .vf-btn.vrai:hover { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .vf-btn.faux:hover { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-btn.correct-ans { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+
+        /* DRAG & DROP */
+        .drag-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.8rem; }
+        .drag-item {
+            background: #F1EFE8; border: 0.5px solid #B4B2A9;
+            border-radius: 10px; padding: 10px 14px;
+            font-size: 0.9rem; font-weight: 700; cursor: grab;
+            display: flex; align-items: center; gap: 10px; user-select: none;
+            transition: background 0.12s, box-shadow 0.12s;
+        }
+        .drag-item:active { cursor: grabbing; box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+        .drag-item.dragging { opacity: 0.4; }
+        .drag-item.drag-over { background: #EEEDFE; border-color: #AFA9EC; }
+        .drag-handle { color: #B4B2A9; font-size: 1.1rem; flex-shrink: 0; }
+        .drag-item.correct-order { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .drag-item.wrong-order   { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+
+        /* ASSOCIER EXERCICE */
+        .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .match-col-label {
+            font-size: 11px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.08em; color: #888780; margin-bottom: 6px;
+            text-align: center;
+        }
+        .match-item {
+            background: #F1EFE8; border: 0.5px solid #B4B2A9;
+            border-radius: 10px; padding: 9px 13px; font-size: 0.88rem;
+            font-weight: 700; cursor: pointer; transition: all 0.12s;
+            user-select: none; text-align: center;
+            font-family: 'Fira Code', monospace;
+        }
+        .match-item.selected-left  { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .match-item.selected-right { background: #E6F1FB; border-color: #85B7EB; color: #0C447C; }
+        .match-item.matched-ok     { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; font-family: 'Nunito', sans-serif; font-size: 0.82rem; }
+        .match-item.matched-ko     { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .match-item.correct-show   { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .match-desc { font-family: 'Nunito', sans-serif; font-size: 0.82rem; font-weight: 600; }
+
+        /* COMPLÉTER LE CODE */
+        .fill-block {
+            background: #F1EFE8; border: 0.5px solid #B4B2A9;
+            border-radius: 10px; padding: 0.9rem 1.1rem;
+            font-family: 'Fira Code', monospace; font-size: 0.84rem;
+            line-height: 2.2; margin-top: 0.8rem; overflow-x: auto;
+        }
+        .fill-input {
+            font-family: 'Fira Code', monospace; font-size: 0.82rem;
+            background: #fff; border: 1.5px solid #AFA9EC;
+            border-radius: 5px; padding: 1px 6px; color: #26215C;
+            font-weight: 700; width: auto; min-width: 80px;
+            outline: none; transition: border-color 0.12s;
+        }
+        .fill-input:focus { border-color: #7F77DD; }
+        .fill-input.ok { border-color: #1D9E75; background: #E1F5EE; color: #085041; }
+        .fill-input.ko { border-color: #E24B4A; background: #FCEBEB; color: #791F1F; }
+
+        /* ACTION BUTTONS */
+        .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .action-btn {
+            border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A;
+            border-radius: 10px; padding: 8px 20px;
+            font-family: 'Nunito', sans-serif; font-size: 0.9rem;
+            font-weight: 700; cursor: pointer; transition: background 0.12s;
+        }
+        .action-btn:hover { background: #D3D1C7; }
+        .action-btn.primary { background: #2C2C2A; color: #FAC775; border-color: #2C2C2A; }
+        .action-btn.primary:hover { background: #444441; }
+
+        /* SCORE PANEL */
+        .score-panel {
+            border-radius: 16px; border: 0.5px solid #D3D1C7;
+            background: #fff; padding: 1.4rem 1.5rem;
+            margin-top: 1rem; display: none; text-align: center;
+        }
+        .score-panel.show { display: block; }
+        .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .score-big span { color: #5DCAA5; }
+        .score-sub { font-size: 0.9rem; color: #888780; }
+
+        /* CTA */
+        .cta-wrap {
+            text-align: center; background: #2C2C2A;
+            border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem;
+        }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn {
+            display: inline-block; background: #FAC775; color: #412402;
+            font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+            border-radius: 10px; text-decoration: none; transition: background 0.15s;
+        }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) { .match-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="cours-html-avance.html">← Retour au cours</a>
+
+<!-- HERO -->
+<div class="hero">
+    <h1>✏️ Exercices HTML Avancé</h1>
+    <p>Teste ta compréhension des balises, attributs et structure HTML.</p>
+    <div class="badge-row">
+        <span class="badge b-coral">Module 02</span>
+        <span class="badge b-purple">QCM · V/F</span>
+        <span class="badge b-amber">Associer · Remettre en ordre</span>
+        <span class="badge b-teal">Compléter le code</span>
+    </div>
+</div>
+
+<!-- ===== QCM ===== -->
+<div class="section-label"><span class="section-label-text">🧠 QCM — Questions à choix unique</span></div>
+
+<div id="qcm-container"></div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+<div class="score-row" id="score-qcm"></div>
+<div class="btn-row">
+    <button class="action-btn primary" onclick="checkQCM()">Valider le QCM</button>
+    <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+</div>
+<div class="score-panel" id="qcm-score-panel">
+    <div class="score-big"><span id="qcm-score-val">0</span> / 10</div>
+    <div class="score-sub">bonnes réponses au QCM</div>
+</div>
+
+<!-- ===== ASSOCIER BALISE / RÔLE ===== -->
+<div class="section-label"><span class="section-label-text">🔗 Associe la balise à son rôle</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">🔗</div>Associer — Balise et rôle</div>
+    <p class="desc">Clique sur une balise à gauche, puis sur sa description à droite pour les associer.</p>
+    <div class="match-grid">
+        <div>
+            <div class="match-col-label">Balise</div>
+            <div id="match-left"></div>
+        </div>
+        <div>
+            <div class="match-col-label">Rôle</div>
+            <div id="match-right"></div>
+        </div>
+    </div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkMatch()">Vérifier</button>
+        <button class="action-btn" onclick="resetMatch()">Recommencer</button>
+    </div>
+    <div class="result-box" id="match-result" style="display:none;margin-top:0.8rem;"></div>
+</div>
+
+<!-- ===== REMETTRE DANS L'ORDRE ===== -->
+<div class="section-label"><span class="section-label-text">🔀 Remets la structure dans l'ordre</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-amber">🔀</div>Ordre des balises d'une page HTML</div>
+    <p class="desc">Ces blocs représentent les grandes sections d'une page HTML correcte. Remets-les dans le bon ordre par glisser-déposer.</p>
+    <div class="drag-list" id="dragList"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkOrder()">Vérifier l'ordre</button>
+        <button class="action-btn" onclick="resetOrder()">Réinitialiser</button>
+    </div>
+    <div class="q-feedback" id="order-feedback" style="margin-top:10px; border-radius:8px; padding:8px 12px; font-weight:600;"></div>
+</div>
+
+<!-- ===== COMPLÉTER LE CODE ===== -->
+<div class="section-label"><span class="section-label-text">⌨️ Complète le code HTML</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-coral">⌨️</div>Complète les attributs manquants</div>
+    <p class="desc">Remplis les cases <span style="font-family:'Fira Code',monospace;background:#EEEDFE;border:1.5px solid #AFA9EC;border-radius:4px;padding:1px 6px;font-size:0.82rem;color:#26215C;">___</span> avec le bon attribut ou la bonne valeur.</p>
+
+    <div id="fill-container"></div>
+
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkFill()">Vérifier les réponses</button>
+        <button class="action-btn" onclick="resetFill()">Recommencer</button>
+    </div>
+    <div class="result-box" id="fill-result" style="display:none;margin-top:0.8rem;"></div>
+</div>
+
+<!-- ===== V/F ===== -->
+<div class="section-label"><span class="section-label-text">✅ Vrai / Faux</span></div>
+
+<div id="vf-container"></div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-vf"></div></div>
+<div class="score-row" id="score-vf"></div>
+<div class="btn-row">
+    <button class="action-btn primary" onclick="checkVF()">Valider le V/F</button>
+    <button class="action-btn" onclick="resetVF()">Recommencer</button>
+</div>
+<div class="score-panel" id="vf-score-panel">
+    <div class="score-big"><span id="vf-score-val">0</span> / 8</div>
+    <div class="score-sub">bonnes réponses au Vrai / Faux</div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+    <p>Exercices terminés ✓ &nbsp; Refais-les 2 à 3 fois pour ancrer les concepts.</p>
+    <a class="cta-btn" href="../sommaire.html#step2Advence">↩ Retour au sommaire</a>
+</div>
+
+<div class="footer-note">
+    Comprendre → Chercher → Coder → Tester → Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span>
+</div>
+
+<script>
+/* ===================== QCM ===================== */
+var qcmData = [
+    {
+        q: "Que signifie l'acronyme HTML ?",
+        opts: ["HyperText Markup Language","HighText Machine Language","HyperTool Markup Links","HyperText Main Language"],
+        correct: 0,
+        expl: "✓ HyperText Markup Language — langage de balisage pour structurer les pages web."
+    },
+    {
+        q: "Quelle balise est utilisée UNIQUEMENT pour la navigation principale d'un site ?",
+        opts: ["&lt;menu&gt;","&lt;ul&gt;","&lt;nav&gt;","&lt;header&gt;"],
+        correct: 2,
+        expl: "✓ &lt;nav&gt; est la balise sémantique dédiée à la navigation principale."
+    },
+    {
+        q: "Quel attribut de &lt;img&gt; est OBLIGATOIRE pour l'accessibilité ?",
+        opts: ["src","width","alt","loading"],
+        correct: 2,
+        expl: "✓ alt est obligatoire. Il décrit l'image pour les malvoyants et les moteurs de recherche."
+    },
+    {
+        q: "Quelle balise crée un accordion (contenu masqué/révélé) sans JavaScript ?",
+        opts: ["&lt;accordion&gt;","&lt;details&gt;","&lt;collapse&gt;","&lt;toggle&gt;"],
+        correct: 1,
+        expl: "✓ &lt;details&gt; avec &lt;summary&gt; crée un accordion 100% HTML, sans JS."
+    },
+    {
+        q: "Dans un formulaire, à quoi sert l'attribut 'for' sur un &lt;label&gt; ?",
+        opts: ["Définir le style du label","Associer le label à son &lt;input&gt; via son id","Définir l'ordre de tabulation","Indiquer la méthode d'envoi"],
+        correct: 1,
+        expl: "✓ 'for' doit correspondre à l'id de l'input. Cela améliore l'accessibilité et permet de cliquer sur le label pour activer le champ."
+    },
+    {
+        q: "Quelle est la différence entre &lt;strong&gt; et &lt;b&gt; ?",
+        opts: ["Aucune — ils font la même chose","&lt;strong&gt; a une signification sémantique (important), &lt;b&gt; est purement visuel","&lt;b&gt; est plus récent que &lt;strong&gt;","&lt;strong&gt; s'utilise uniquement dans les titres"],
+        correct: 1,
+        expl: "✓ &lt;strong&gt; = importance sémantique (les lecteurs d'écran le signalent). &lt;b&gt; = gras visuel sans signification."
+    },
+    {
+        q: "Quel type d'input affiche un sélecteur de couleur natif ?",
+        opts: ['type="text"','type="hex"','type="color"','type="picker"'],
+        correct: 2,
+        expl: '✓ type="color" affiche le sélecteur de couleur natif du navigateur.'
+    },
+    {
+        q: "À quoi servent les attributs data-* sur une balise HTML ?",
+        opts: ["À appliquer du CSS directement","À stocker des données personnalisées accessibles via JavaScript","À définir les métadonnées de la page","À créer des animations CSS"],
+        correct: 1,
+        expl: "✓ data-* stocke des infos dans le HTML, accessibles en JS via element.dataset.nomAttribut."
+    },
+    {
+        q: "Quelle balise utiliser pour un article de blog ou une carte produit autonome ?",
+        opts: ["&lt;section&gt;","&lt;div&gt;","&lt;aside&gt;","&lt;article&gt;"],
+        correct: 3,
+        expl: "✓ &lt;article&gt; représente un contenu autonome et réutilisable hors contexte."
+    },
+    {
+        q: "Quelle est la différence entre &lt;progress&gt; et &lt;meter&gt; ?",
+        opts: ["Aucune — ils sont identiques","&lt;progress&gt; = tâche en cours. &lt;meter&gt; = valeur dans une plage connue","&lt;meter&gt; est obsolète en HTML5","&lt;progress&gt; ne fonctionne qu'avec JavaScript"],
+        correct: 1,
+        expl: "✓ progress = chargement/avancement. meter = mesure scalaire (score, niveau, batterie)."
+    }
+];
+var qcmAnswers = {};
+
+function renderQCM() {
+    var c = document.getElementById('qcm-container'); c.innerHTML = '';
+    qcmData.forEach(function(q, qi) {
+        var card = document.createElement('div'); card.className = 'qcm-card';
+        var optsHtml = q.opts.map(function(o, oi) {
+            return '<div class="opt" id="qcm-opt-'+qi+'-'+oi+'" onclick="selectQCM('+qi+','+oi+')">'
+                + '<div class="opt-dot"><div class="opt-dot-inner"></div></div><span>'+o+'</span></div>';
+        }).join('');
+        card.innerHTML = '<div class="q-num">Question '+(qi+1)+' sur '+qcmData.length+'</div>'
+            + '<div class="q-text">'+q.q+'</div><div class="options">'+optsHtml+'</div>'
+            + '<div class="q-feedback" id="qcm-fb-'+qi+'"></div>';
+        c.appendChild(card);
+    });
+}
+function selectQCM(qi, oi) {
+    if (document.getElementById('qcm-opt-'+qi+'-0').style.pointerEvents === 'none') return;
+    qcmAnswers[qi] = oi;
+    qcmData[qi].opts.forEach(function(_, i) {
+        document.getElementById('qcm-opt-'+qi+'-'+i).classList.toggle('selected', i === oi);
+    });
+}
+function checkQCM() {
+    var score = 0;
+    qcmData.forEach(function(q, qi) {
+        var chosen = qcmAnswers[qi], fb = document.getElementById('qcm-fb-'+qi);
+        q.opts.forEach(function(_, i) {
+            var el = document.getElementById('qcm-opt-'+qi+'-'+i);
+            el.style.pointerEvents = 'none'; el.classList.remove('selected');
+        });
+        if (chosen !== undefined) {
+            if (chosen === q.correct) {
+                document.getElementById('qcm-opt-'+qi+'-'+chosen).classList.add('correct');
+                score++; fb.className = 'q-feedback show ok'; fb.innerHTML = q.expl;
+            } else {
+                document.getElementById('qcm-opt-'+qi+'-'+chosen).classList.add('wrong');
+                document.getElementById('qcm-opt-'+qi+'-'+q.correct).classList.add('correct');
+                fb.className = 'q-feedback show ko'; fb.innerHTML = '✗ ' + q.expl.replace('✓ ', '');
+            }
+        } else {
+            document.getElementById('qcm-opt-'+qi+'-'+q.correct).classList.add('correct');
+            fb.className = 'q-feedback show ko'; fb.innerHTML = '— Sans réponse. ' + q.expl.replace('✓ ', '');
+        }
+    });
+    document.getElementById('prog-qcm').style.width = Math.round(score/qcmData.length*100)+'%';
+    var row = document.getElementById('score-qcm');
+    row.innerHTML = '<span class="chip chip-ok">'+score+' / '+qcmData.length+' bonnes réponses</span>';
+    if (qcmData.length-score>0) row.innerHTML += '<span class="chip chip-ko">'+(qcmData.length-score)+' erreur(s)</span>';
+    document.getElementById('qcm-score-val').textContent = score;
+    document.getElementById('qcm-score-panel').classList.add('show');
+    document.getElementById('qcm-score-panel').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetQCM() {
+    qcmAnswers = {}; document.getElementById('qcm-score-panel').classList.remove('show');
+    document.getElementById('prog-qcm').style.width='0%'; document.getElementById('score-qcm').innerHTML=''; renderQCM();
+}
+
+/* ===================== ASSOCIER ===================== */
+var matchPairs = [
+    { tag: '&lt;header&gt;',   desc: 'En-tête de page (logo, titre, nav)' },
+    { tag: '&lt;aside&gt;',    desc: 'Contenu secondaire / barre latérale' },
+    { tag: '&lt;figure&gt;',   desc: 'Contenu illustratif avec légende' },
+    { tag: '&lt;time&gt;',     desc: 'Date ou heure lisible par machine' },
+    { tag: '&lt;mark&gt;',     desc: 'Texte surligné / mis en évidence' },
+    { tag: '&lt;abbr&gt;',     desc: 'Abréviation avec explication au survol' },
+    { tag: '&lt;details&gt;',  desc: 'Accordion natif sans JavaScript' },
+    { tag: '&lt;datalist&gt;', desc: 'Liste de suggestions pour un &lt;input&gt;' }
+];
+var matchLeft = null, matchAnswers = {}, matchDone = {};
+
+function shuffleArr(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+}
+
+function renderMatch() {
+    matchLeft = null; matchAnswers = {}; matchDone = {};
+    var leftEl = document.getElementById('match-left'); leftEl.innerHTML = '';
+    var rightEl = document.getElementById('match-right'); rightEl.innerHTML = '';
+    var shuffledRight = shuffleArr(matchPairs.map(function(p,i){ return i; }));
+
+    matchPairs.forEach(function(p, i) {
+        var el = document.createElement('div');
+        el.className = 'match-item'; el.dataset.idx = i; el.dataset.side = 'left';
+        el.innerHTML = p.tag; el.style.marginBottom = '8px';
+        el.onclick = function() { clickMatchLeft(i, el); };
+        leftEl.appendChild(el);
+    });
+
+    shuffledRight.forEach(function(origIdx) {
+        var p = matchPairs[origIdx];
+        var el = document.createElement('div');
+        el.className = 'match-item match-desc'; el.dataset.idx = origIdx; el.dataset.side = 'right';
+        el.textContent = p.desc; el.style.marginBottom = '8px';
+        el.onclick = function() { clickMatchRight(origIdx, el); };
+        rightEl.appendChild(el);
+    });
+    document.getElementById('match-result').style.display = 'none';
+}
+
+function clickMatchLeft(idx, el) {
+    if (matchDone[idx]) return;
+    matchLeft = idx;
+    document.querySelectorAll('#match-left .match-item').forEach(function(e) {
+        if (!matchDone[parseInt(e.dataset.idx)]) e.classList.remove('selected-left');
+    });
+    el.classList.add('selected-left');
+}
+
+function clickMatchRight(idx, el) {
+    if (matchLeft === null || matchDone[idx] || matchDone[matchLeft]) return;
+    matchAnswers[matchLeft] = idx;
+    matchDone[matchLeft] = true; matchDone[idx] = true;
+
+    var leftEls = document.querySelectorAll('#match-left .match-item');
+    leftEls.forEach(function(e) { if (parseInt(e.dataset.idx) === matchLeft) e.classList.add('matched-ok'); });
+    el.classList.add('matched-ok');
+    matchLeft = null;
+}
+
+function checkMatch() {
+    var score = 0;
+    document.querySelectorAll('#match-left .match-item').forEach(function(el) {
+        var i = parseInt(el.dataset.idx), ans = matchAnswers[i];
+        el.classList.remove('matched-ok');
+        if (ans === i) { el.classList.add('matched-ok'); score++; }
+        else { el.classList.add('matched-ko'); }
+    });
+    document.querySelectorAll('#match-right .match-item').forEach(function(el) {
+        var i = parseInt(el.dataset.idx);
+        el.classList.remove('matched-ok', 'matched-ko');
+        var isMatched = Object.values(matchAnswers).indexOf(i) > -1;
+        var matchedBy = Object.keys(matchAnswers).find(function(k){ return matchAnswers[k]===i; });
+        if (matchedBy !== undefined && parseInt(matchedBy) === i) el.classList.add('matched-ok');
+        else if (isMatched) el.classList.add('matched-ko');
+        else el.classList.add('correct-show');
+    });
+    var res = document.getElementById('match-result');
+    res.style.display = 'block';
+    res.innerHTML = '<div class="rl">'+(score === matchPairs.length ? '✅ Parfait !' : 'Résultat')+'</div>'
+        + score + ' / ' + matchPairs.length + ' associations correctes.';
+}
+
+function resetMatch() { renderMatch(); }
+renderMatch();
+
+/* ===================== DRAG ORDER ===================== */
+var orderCorrect = [
+    '&lt;!DOCTYPE html&gt;',
+    '&lt;html lang="fr"&gt;',
+    '&lt;head&gt; … &lt;/head&gt;',
+    '&lt;body&gt;',
+    '  &lt;header&gt; … &lt;/header&gt;',
+    '  &lt;main&gt; … &lt;/main&gt;',
+    '  &lt;footer&gt; … &lt;/footer&gt;',
+    '&lt;/body&gt;',
+    '&lt;/html&gt;'
+];
+var orderShuffled = orderCorrect.slice();
+// shuffle once
+(function(){
+    for(var i=orderShuffled.length-1;i>0;i--){
+        var j=Math.floor(Math.random()*(i+1));
+        var t=orderShuffled[i]; orderShuffled[i]=orderShuffled[j]; orderShuffled[j]=t;
+    }
+})();
+var dragSrc = null;
+
+function renderDragList() {
+    var list = document.getElementById('dragList'); list.innerHTML='';
+    orderShuffled.forEach(function(step, i) {
+        var item = document.createElement('div');
+        item.className='drag-item'; item.draggable=true; item.dataset.index=i;
+        item.innerHTML='<span class="drag-handle">⠿</span><span style="font-family:\'Fira Code\',monospace;font-size:0.83rem;">'+step+'</span>';
+        item.addEventListener('dragstart', function(e){ dragSrc=i; item.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
+        item.addEventListener('dragend', function(){ item.classList.remove('dragging'); });
+        item.addEventListener('dragover', function(e){ e.preventDefault(); list.querySelectorAll('.drag-item').forEach(function(el){ el.classList.remove('drag-over'); }); item.classList.add('drag-over'); });
+        item.addEventListener('dragleave', function(){ item.classList.remove('drag-over'); });
+        item.addEventListener('drop', function(e){
+            e.preventDefault(); item.classList.remove('drag-over');
+            if(dragSrc!==null&&dragSrc!==i){
+                var tmp=orderShuffled[dragSrc]; orderShuffled[dragSrc]=orderShuffled[i]; orderShuffled[i]=tmp;
+                dragSrc=null; renderDragList();
+            }
+        });
+        // mobile tap swap
+        var tapSrc=null;
+        item.addEventListener('touchstart',function(e){
+            var idx=parseInt(item.dataset.index);
+            if(tapSrc===null){ tapSrc=idx; item.style.outline='2px solid #7F77DD'; }
+            else{ var tmp=orderShuffled[tapSrc]; orderShuffled[tapSrc]=orderShuffled[idx]; orderShuffled[idx]=tmp; tapSrc=null; renderDragList(); }
+        });
+        list.appendChild(item);
+    });
+}
+function checkOrder() {
+    var items = document.getElementById('dragList').querySelectorAll('.drag-item');
+    var correct=true;
+    items.forEach(function(item,i){
+        var txt=item.querySelector('span:last-child').innerHTML;
+        if(txt===orderCorrect[i]) item.classList.add('correct-order');
+        else { item.classList.add('wrong-order'); correct=false; }
+    });
+    var fb=document.getElementById('order-feedback');
+    fb.className='q-feedback show '+(correct?'ok':'ko');
+    fb.style.background=correct?'#E1F5EE':'#FCEBEB';
+    fb.style.color=correct?'#085041':'#791F1F';
+    fb.textContent=correct?'✅ Parfait ! Tu connais l\'ordre exact d\'une page HTML.':'✗ Pas tout à fait. L\'ordre : !DOCTYPE → html → head → body → (header, main, footer) → /body → /html';
+}
+function resetOrder() {
+    (function(){for(var i=orderShuffled.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=orderShuffled[i];orderShuffled[i]=orderShuffled[j];orderShuffled[j]=t;}})();
+    document.getElementById('order-feedback').className='q-feedback';
+    document.getElementById('order-feedback').style.background='';
+    renderDragList();
+}
+renderDragList();
+
+/* ===================== COMPLÉTER LE CODE ===================== */
+var fillExercices = [
+    {
+        label: "Exercice 1 — Balise image accessible",
+        lines: [
+            { type: 'code', html: '<span class="tag">&lt;img</span>' },
+            { type: 'fill', before: '  ', attr: 'src', eq: '=', after: '', placeholder: 'src', answer: 'src' },
+            { type: 'fill', before: '  ', attr: 'alt', eq: '=', after: '"Description de l\'image"', placeholder: 'alt', answer: 'alt', note: true },
+            { type: 'fill', before: '  ', attr: 'loading', eq: '=', after: '"lazy"', placeholder: 'loading', answer: 'loading' },
+            { type: 'code', html: '<span class="tag">&gt;</span>' }
+        ],
+        hint: 'Les 3 attributs essentiels sur &lt;img&gt; : la source, la description alternative, et le chargement différé.'
+    },
+    {
+        label: "Exercice 2 — Lien externe sécurisé",
+        lines: [
+            { type: 'fill', before: '<span class="tag">&lt;a</span> ', attr: 'href', eq: '=', after: '"https://w3schools.com"', placeholder: 'href', answer: 'href' },
+            { type: 'fill', before: '   ', attr: 'target', eq: '=', after: '"_blank"', placeholder: 'target', answer: 'target' },
+            { type: 'fill', before: '   ', attr: 'rel', eq: '=', after: '"noopener noreferrer"<span class="tag">&gt;</span>W3Schools<span class="tag">&lt;/a&gt;</span>', placeholder: 'rel', answer: 'rel' }
+        ],
+        hint: 'Pour un lien qui ouvre dans un nouvel onglet : href, target="_blank", et rel="noopener noreferrer" pour la sécurité.'
+    },
+    {
+        label: "Exercice 3 — Input de formulaire",
+        lines: [
+            { type: 'fill', before: '<span class="tag">&lt;label</span> ', attr: 'for', eq: '=', after: '"email"<span class="tag">&gt;</span>Email<span class="tag">&lt;/label&gt;</span>', placeholder: 'for', answer: 'for' },
+            { type: 'fill', before: '<span class="tag">&lt;input</span> ', attr: 'type', eq: '=', after: '"email"', placeholder: 'type', answer: 'type' },
+            { type: 'fill', before: '       ', attr: 'id', eq: '=', after: '"email"', placeholder: 'id', answer: 'id' },
+            { type: 'code', html: '       <span class="attr">name</span>=<span class="val">"email"</span> <span class="attr">required</span><span class="tag">&gt;</span>' }
+        ],
+        hint: 'Le label doit avoir un "for" correspondant à l\'id de l\'input. Le type="email" active la validation native.'
+    }
+];
+
+function renderFill() {
+    var c = document.getElementById('fill-container'); c.innerHTML = '';
+    fillExercices.forEach(function(ex, ei) {
+        var card = document.createElement('div'); card.className = 'card'; card.style.marginBottom = '1rem';
+        var html = '<p class="desc" style="font-weight:700;color:#2C2C2A;margin-bottom:0.5rem;">'+ex.label+'</p>';
+        html += '<div class="fill-block">';
+        ex.lines.forEach(function(line, li) {
+            if (line.type === 'code') {
+                html += line.html + '\n';
+            } else {
+                html += (line.before || '') + '<input class="fill-input" id="fill-'+ei+'-'+li+'" placeholder="'+line.placeholder+'" autocomplete="off" autocorrect="off" spellcheck="false">'
+                    + '=<span class="val">' + (line.after ? '"...' : '') + '</span> ' + (line.after || '') + '\n';
+            }
+        });
+        html += '</div>';
+        if (ex.hint) html += '<div class="tip tip-blue" style="margin-top:0.6rem;"><span class="tip-i">💡</span><span>'+ex.hint+'</span></div>';
+        card.innerHTML = html;
+        c.appendChild(card);
+    });
+    document.getElementById('fill-result').style.display = 'none';
+}
+
+function checkFill() {
+    var score = 0, total = 0;
+    fillExercices.forEach(function(ex, ei) {
+        ex.lines.forEach(function(line, li) {
+            if (line.type === 'fill') {
+                total++;
+                var inp = document.getElementById('fill-'+ei+'-'+li);
+                if (!inp) return;
+                var val = inp.value.trim().toLowerCase();
+                if (val === line.answer.toLowerCase()) {
+                    inp.classList.add('ok'); inp.classList.remove('ko'); score++;
+                } else {
+                    inp.classList.add('ko'); inp.classList.remove('ok');
+                    if (val === '') inp.value = line.answer; // show correct answer
+                }
+            }
+        });
+    });
+    var res = document.getElementById('fill-result');
+    res.style.display = 'block';
+    res.innerHTML = '<div class="rl">'+(score===total?'✅ Parfait !':'Résultat')+'</div>'+score+' / '+total+' attributs corrects.'+(score<total?' Les cases en rouge montrent la bonne réponse.':'');
+}
+function resetFill() { renderFill(); }
+renderFill();
+
+/* ===================== V/F ===================== */
+var vfData = [
+    { s: "On peut utiliser plusieurs balises &lt;h1&gt; sur une même page sans problème de référencement.", ans: false, expl: "Faux. Un seul &lt;h1&gt; par page — c'est le titre principal. Google et les lecteurs d'écran s'appuient dessus." },
+    { s: "La balise &lt;div&gt; a une signification sémantique précise en HTML5.", ans: false, expl: "Faux. &lt;div&gt; est un conteneur générique sans sens sémantique. Il sert uniquement pour le style avec CSS." },
+    { s: "L'attribut 'loading=\"lazy\"' sur &lt;img&gt; améliore les performances de la page.", ans: true, expl: "Vrai. Il diffère le chargement des images hors de l'écran, ce qui accélère le chargement initial de la page." },
+    { s: "La balise &lt;table&gt; peut être utilisée pour mettre en page une grille de contenu.", ans: false, expl: "Faux. &lt;table&gt; est réservé aux données tabulaires. La mise en page se fait avec CSS (flexbox, grid)." },
+    { s: "L'attribut 'data-*' permet de stocker des informations personnalisées dans le HTML accessibles en JavaScript.", ans: true, expl: "Vrai. data-user-id='42' est accessible via element.dataset.userId en JavaScript." },
+    { s: "La balise &lt;em&gt; et la balise &lt;i&gt; ont exactement la même signification.", ans: false, expl: "Faux. &lt;em&gt; a une valeur sémantique (emphase, insistance). &lt;i&gt; est purement visuel (italique)." },
+    { s: "L'attribut 'rel=\"noopener noreferrer\"' doit être utilisé avec les liens qui s'ouvrent dans un nouvel onglet.", ans: true, expl: "Vrai. Sans cet attribut, la page ouverte peut accéder à la page parente via window.opener — une faille de sécurité." },
+    { s: "Il est possible de créer une modale (fenêtre popup) sans JavaScript en utilisant la balise &lt;dialog&gt;.", ans: false, expl: "Presque vrai — mais &lt;dialog&gt; nécessite quelques lignes JS (.showModal()) pour l'ouvrir. Il peut rester ouvert par défaut avec l'attribut open, mais l'ouverture programmatique demande JS." }
+];
+var vfAnswers = {};
+var msgs_ok = ['Parfait !', 'Bravo !', "C'est ça !", 'Excellent !'];
+var msgs_ko = ['Pas tout à fait...', 'Essaie encore !', 'Presque !'];
+function rnd(a) { return a[Math.floor(Math.random()*a.length)]; }
+
+function renderVF() {
+    var c = document.getElementById('vf-container'); c.innerHTML = '';
+    vfData.forEach(function(q, qi) {
+        var card = document.createElement('div'); card.className = 'vf-card';
+        card.innerHTML = '<div class="q-num">Affirmation '+(qi+1)+' sur '+vfData.length+'</div>'
+            + '<div class="vf-statement">'+q.s+'</div>'
+            + '<div class="vf-btns">'
+            + '<button class="vf-btn vrai" id="vf-v-'+qi+'" onclick="answerVF('+qi+',true)">✓ Vrai</button>'
+            + '<button class="vf-btn faux" id="vf-f-'+qi+'" onclick="answerVF('+qi+',false)">✗ Faux</button>'
+            + '</div>'
+            + '<div class="q-feedback" id="vf-fb-'+qi+'"></div>';
+        c.appendChild(card);
+    });
+}
+function answerVF(qi, val) {
+    if (document.getElementById('vf-v-'+qi).disabled) return;
+    vfAnswers[qi] = val;
+    var vb=document.getElementById('vf-v-'+qi), fb2=document.getElementById('vf-f-'+qi);
+    vb.className='vf-btn vrai'; fb2.className='vf-btn faux';
+    vb.style.background=val?'#EEEDFE':''; vb.style.borderColor=val?'#AFA9EC':''; vb.style.color=val?'#26215C':'';
+    fb2.style.background=!val?'#EEEDFE':''; fb2.style.borderColor=!val?'#AFA9EC':''; fb2.style.color=!val?'#26215C':'';
+}
+function checkVF() {
+    var score=0;
+    vfData.forEach(function(q, qi) {
+        var vb=document.getElementById('vf-v-'+qi), fb2=document.getElementById('vf-f-'+qi), fb=document.getElementById('vf-fb-'+qi);
+        vb.disabled=true; fb2.disabled=true;
+        vb.style.background=''; vb.style.borderColor=''; vb.style.color='';
+        fb2.style.background=''; fb2.style.borderColor=''; fb2.style.color='';
+        vb.className='vf-btn vrai'; fb2.className='vf-btn faux';
+        var chosen=vfAnswers[qi];
+        if (chosen!==undefined) {
+            if (chosen===q.ans) {
+                score++; (chosen?vb:fb2).classList.add('correct-ans');
+                fb.className='q-feedback show ok'; fb.innerHTML=rnd(msgs_ok)+' '+q.expl;
+            } else {
+                (chosen?vb:fb2).classList.add('wrong-ans');
+                (q.ans?vb:fb2).classList.add('correct-ans');
+                fb.className='q-feedback show ko'; fb.innerHTML=rnd(msgs_ko)+' '+q.expl;
+            }
+        } else {
+            (q.ans?vb:fb2).classList.add('correct-ans');
+            fb.className='q-feedback show ko'; fb.innerHTML='— Sans réponse. '+q.expl;
+        }
+    });
+    document.getElementById('prog-vf').style.width=Math.round(score/vfData.length*100)+'%';
+    var row=document.getElementById('score-vf');
+    row.innerHTML='<span class="chip chip-ok">'+score+' / '+vfData.length+' bonnes réponses</span>';
+    if (vfData.length-score>0) row.innerHTML+='<span class="chip chip-ko">'+(vfData.length-score)+' erreur(s)</span>';
+    document.getElementById('vf-score-val').textContent=score;
+    document.getElementById('vf-score-panel').classList.add('show');
+    document.getElementById('vf-score-panel').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetVF() {
+    vfAnswers={}; document.getElementById('vf-score-panel').classList.remove('show');
+    document.getElementById('prog-vf').style.width='0%'; document.getElementById('score-vf').innerHTML=''; renderVF();
+}
+
+renderQCM();
+renderVF();
+</script>
+</body>
+</html>
