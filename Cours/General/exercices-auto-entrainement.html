@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Auto-entraînement & Effet spaghetti</title>
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🔁%3C/text%3E%3C/svg%3E">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f5f4f0;
+            color: #2C2C2A;
+            padding: 1.5rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .nav-prev {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #185FA5;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            background: #E6F1FB;
+            border: 0.5px solid #85B7EB;
+            border-radius: 8px;
+            padding: 6px 14px;
+            transition: background 0.15s;
+        }
+
+        .nav-prev:hover {
+            background: #B5D4F4;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 2.5rem 1rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: #5F5E5A;
+            margin-top: 0.5rem;
+        }
+
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 1.2rem;
+        }
+
+        .badge {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+
+        .b-coral {
+            background: #FAECE7;
+            color: #712B13;
+        }
+
+        .b-purple {
+            background: #EEEDFE;
+            color: #3C3489;
+        }
+
+        .b-amber {
+            background: #FAEEDA;
+            color: #633806;
+        }
+
+        .b-teal {
+            background: #E1F5EE;
+            color: #085041;
+        }
+
+        .b-red {
+            background: #FCEBEB;
+            color: #791F1F;
+        }
+
+        .card {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .stitle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+        }
+
+        .pill {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .p-teal {
+            background: #9FE1CB;
+            color: #085041;
+        }
+
+        .p-purple {
+            background: #CECBF6;
+            color: #3C3489;
+        }
+
+        .p-coral {
+            background: #F5C4B3;
+            color: #712B13;
+        }
+
+        .p-amber {
+            background: #FAC775;
+            color: #633806;
+        }
+
+        .p-blue {
+            background: #B5D4F4;
+            color: #0C447C;
+        }
+
+        .p-green {
+            background: #C0DD97;
+            color: #3B6D11;
+        }
+
+        .p-red {
+            background: #F5B3B3;
+            color: #791F1F;
+        }
+
+        .desc {
+            font-size: 0.94rem;
+            color: #5F5E5A;
+            line-height: 1.7;
+            margin-bottom: 0.9rem;
+        }
+
+        .desc:last-child {
+            margin-bottom: 0;
+        }
+
+        .tip {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            background: #E1F5EE;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-top: 0.9rem;
+            font-size: 0.88rem;
+            color: #085041;
+            line-height: 1.5;
+        }
+
+        .tip-coral {
+            background: #FAECE7;
+            color: #712B13;
+        }
+
+        .tip-purple {
+            background: #EEEDFE;
+            color: #3C3489;
+        }
+
+        .tip-amber {
+            background: #FAEEDA;
+            color: #633806;
+        }
+
+        .tip-red {
+            background: #FCEBEB;
+            color: #791F1F;
+        }
+
+        .tip-i {
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .result-box {
+            border-radius: 10px;
+            border: 0.5px dashed #B4B2A9;
+            background: #F1EFE8;
+            padding: 0.9rem 1.1rem;
+            font-size: 0.94rem;
+            margin-top: 0.8rem;
+            line-height: 1.7;
+        }
+
+        .rl {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #888780;
+            margin-bottom: 6px;
+        }
+
+        /* SECTION LABEL */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 2rem 0 1rem;
+        }
+
+        .section-label-text {
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888780;
+            white-space: nowrap;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 0.5px;
+            background: #D3D1C7;
+        }
+
+        /* PROGRESS */
+        .progress-wrap {
+            height: 7px;
+            background: #D3D1C7;
+            border-radius: 10px;
+            margin: 1.2rem 0 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #5DCAA5;
+            border-radius: 10px;
+            transition: width 0.4s;
+            width: 0%;
+        }
+
+        .score-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .chip-ok {
+            background: #E1F5EE;
+            color: #085041;
+        }
+
+        .chip-ko {
+            background: #FCEBEB;
+            color: #791F1F;
+        }
+
+        /* ROUND TRACKER */
+        .round-tracker {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .round-badge {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            border: 0.5px solid #D3D1C7;
+            background: #F1EFE8;
+            color: #888780;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .round-badge.active {
+            background: #2C2C2A;
+            color: #f5f4f0;
+            border-color: #2C2C2A;
+        }
+
+        .round-badge.done {
+            background: #E1F5EE;
+            color: #085041;
+            border-color: #5DCAA5;
+        }
+
+        /* FLASHCARD */
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 1.2rem;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(.4, 0, .2, 1);
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .fc-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .fc-front {
+            background: #ffffff;
+        }
+
+        .fc-back {
+            background: #2C2C2A;
+            color: #f5f4f0;
+            transform: rotateY(180deg);
+        }
+
+        .fc-label {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888780;
+            margin-bottom: 0.8rem;
+        }
+
+        .fc-question {
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.5;
+            color: #2C2C2A;
+        }
+
+        .fc-answer {
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.6;
+            color: #f5f4f0;
+        }
+
+        .fc-hint {
+            font-size: 0.8rem;
+            color: #B4B2A9;
+            margin-top: 0.6rem;
+        }
+
+        .fc-back .fc-hint {
+            color: #5DCAA5;
+        }
+
+        .fc-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.8rem;
+            gap: 10px;
+        }
+
+        .fc-counter {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #888780;
+        }
+
+        .fc-btn {
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            padding: 8px 20px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #2C2C2A;
+            cursor: pointer;
+            transition: background 0.12s;
+        }
+
+        .fc-btn:hover {
+            background: #D3D1C7;
+        }
+
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .fc-btn.primary {
+            background: #2C2C2A;
+            color: #f5f4f0;
+            border-color: #2C2C2A;
+        }
+
+        .fc-btn.primary:hover {
+            background: #444441;
+        }
+
+        /* DRAG & DROP */
+        .drag-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 0.8rem;
+        }
+
+        .drag-item {
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            user-select: none;
+            transition: background 0.12s, box-shadow 0.12s;
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .drag-item.dragging {
+            opacity: 0.4;
+        }
+
+        .drag-item.drag-over {
+            background: #EEEDFE;
+            border-color: #AFA9EC;
+        }
+
+        .drag-handle {
+            color: #B4B2A9;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .drag-item.correct-order {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+            color: #085041;
+        }
+
+        .drag-item.wrong-order {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+        }
+
+        /* QCM */
+        .qcm-card {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .q-num {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #888780;
+            margin-bottom: 6px;
+        }
+
+        .q-text {
+            font-size: 0.97rem;
+            font-weight: 700;
+            color: #2C2C2A;
+            margin-bottom: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .opt {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            padding: 9px 13px;
+            cursor: pointer;
+            transition: background 0.12s, border-color 0.12s;
+            font-size: 0.9rem;
+            color: #2C2C2A;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .opt:hover {
+            background: #D3D1C7;
+        }
+
+        .opt.selected {
+            background: #EEEDFE;
+            border-color: #AFA9EC;
+            color: #26215C;
+        }
+
+        .opt.correct {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+            color: #085041;
+            cursor: default;
+        }
+
+        .opt.wrong {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+            cursor: default;
+        }
+
+        .opt-dot {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            border-radius: 50%;
+            border: 2px solid #B4B2A9;
+            margin-top: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.12s;
+        }
+
+        .opt.selected .opt-dot {
+            border-color: #7F77DD;
+            background: #7F77DD;
+        }
+
+        .opt.correct .opt-dot {
+            border-color: #1D9E75;
+            background: #1D9E75;
+        }
+
+        .opt.wrong .opt-dot {
+            border-color: #E24B4A;
+            background: #E24B4A;
+        }
+
+        .opt-dot-inner {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #fff;
+        }
+
+        .q-feedback {
+            display: none;
+            border-radius: 8px;
+            padding: 7px 12px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .q-feedback.show {
+            display: block;
+        }
+
+        .q-feedback.ok {
+            background: #E1F5EE;
+            color: #085041;
+        }
+
+        .q-feedback.ko {
+            background: #FCEBEB;
+            color: #791F1F;
+        }
+
+        /* SCÉNARIOS */
+        .scenario-box {
+            border-radius: 12px;
+            border: 2px dashed #F5C4B3;
+            background: #FAECE7;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .scenario-label {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #993C1D;
+            margin-bottom: 6px;
+        }
+
+        .scenario-text {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #712B13;
+            line-height: 1.6;
+        }
+
+        .scenario-choices {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 1rem;
+        }
+
+        .scenario-choice {
+            background: #ffffff;
+            border: 0.5px solid #D3D1C7;
+            border-radius: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: border-color 0.12s, background 0.12s;
+        }
+
+        .scenario-choice:hover {
+            border-color: #AFA9EC;
+            background: #EEEDFE;
+        }
+
+        .scenario-choice.correct-sc {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+            color: #085041;
+            cursor: default;
+        }
+
+        .scenario-choice.wrong-sc {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+            cursor: default;
+        }
+
+        .scenario-fb {
+            display: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .scenario-fb.show {
+            display: block;
+        }
+
+        .scenario-fb.ok {
+            background: #E1F5EE;
+            color: #085041;
+        }
+
+        .scenario-fb.ko {
+            background: #FCEBEB;
+            color: #791F1F;
+        }
+
+        /* V/F */
+        .vf-card {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .vf-statement {
+            font-size: 0.97rem;
+            font-weight: 700;
+            color: #2C2C2A;
+            margin-bottom: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .vf-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .vf-btn {
+            flex: 1;
+            padding: 9px;
+            border-radius: 10px;
+            border: 0.5px solid #B4B2A9;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: #F1EFE8;
+            color: #2C2C2A;
+            transition: background 0.12s;
+        }
+
+        .vf-btn:hover:not(:disabled) {
+            background: #D3D1C7;
+        }
+
+        .vf-btn.correct-ans {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+            color: #085041;
+        }
+
+        .vf-btn.wrong-ans {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+        }
+
+        .vf-btn:disabled {
+            cursor: default;
+        }
+
+        /* CHECKLIST PROJET */
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 0.8rem;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: background 0.12s;
+        }
+
+        .check-item:hover {
+            background: #D3D1C7;
+        }
+
+        .check-item.checked {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+        }
+
+        .check-box {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            border-radius: 6px;
+            border: 2px solid #B4B2A9;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.12s;
+            margin-top: 1px;
+        }
+
+        .check-item.checked .check-box {
+            background: #5DCAA5;
+            border-color: #1D9E75;
+            color: #fff;
+        }
+
+        .check-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #2C2C2A;
+        }
+
+        .check-item.checked .check-label {
+            color: #085041;
+        }
+
+        /* ACTION BUTTONS */
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 9px 22px;
+            border-radius: 10px;
+            border: 0.5px solid #B4B2A9;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: #F1EFE8;
+            color: #2C2C2A;
+            transition: background 0.12s;
+        }
+
+        .action-btn:hover {
+            background: #D3D1C7;
+        }
+
+        .action-btn.primary {
+            background: #2C2C2A;
+            color: #f5f4f0;
+            border-color: #2C2C2A;
+        }
+
+        .action-btn.primary:hover {
+            background: #444441;
+        }
+
+        /* SCORE PANEL */
+        .score-panel {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-top: 1rem;
+            display: none;
+            text-align: center;
+        }
+
+        .score-panel.show {
+            display: block;
+        }
+
+        .score-big {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #2C2C2A;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .score-big span {
+            color: #5DCAA5;
+        }
+
+        .score-sub {
+            font-size: 0.9rem;
+            color: #888780;
+        }
+
+        /* CTA */
+        .cta-wrap {
+            text-align: center;
+            background: #2C2C2A;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .cta-wrap h2 {
+            color: #f5f4f0;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .cta-wrap p {
+            color: #D3D1C7;
+            font-size: 0.95rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: #FAC775;
+            color: #412402;
+            font-weight: 800;
+            font-size: 0.97rem;
+            padding: 10px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+
+        .cta-btn:hover {
+            background: #EF9F27;
+        }
+
+        .footer-note {
+            text-align: center;
+            padding: 2rem 0 1rem;
+            font-size: 0.88rem;
+            color: #888780;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a class="nav-prev" href="cours-auto-entrainement.html">← Retour au cours</a>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>✏️ Exercices d'auto-entraînement</h1>
+        <p>Teste ta compréhension.</p>
+        <div class="badge-row">
+            <span class="badge b-coral">Module 01</span>
+            <span class="badge b-purple">3 rounds</span>
+            <span class="badge b-amber">Flashcards</span>
+            <span class="badge b-teal">QCM · Scénarios · V/F</span>
+        </div>
+    </div>
+
+    <!-- ROUND TRACKER -->
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-purple">🏅</div>Suivi de progression — Fais 3 rounds
+        </div>
+        <p class="desc">Chaque round que tu complètes ancre la compréhension plus profondément. Coche le round actif,
+            puis recommence depuis le début des exercices.</p>
+        <div class="round-tracker">
+            <div class="round-badge active" id="round1" onclick="setRound(1)">Round 1</div>
+            <div class="round-badge" id="round2" onclick="setRound(2)">Round 2</div>
+            <div class="round-badge" id="round3" onclick="setRound(3)">Round 3</div>
+            <span style="font-size:0.85rem;color:#888780;font-weight:600;">← Change de round après avoir tout
+                validé</span>
+        </div>
+        <div class="result-box" id="roundTip">
+            <div class="rl">Conseil pour ce round</div>
+            <span id="roundTipText">Premier passage : réponds sans regarder le cours. C'est normal de se tromper — c'est
+                le but.</span>
+        </div>
+    </div>
+
+    <!-- ===== FLASHCARDS ===== -->
+    <div class="section-label">
+        <span class="section-label-text">🃏 Flashcards — Concepts clés</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-blue">🃏</div>Flashcards — Retourne la carte pour voir la réponse
+        </div>
+        <p class="desc">Lis la question, formule ta réponse dans ta tête, <em>puis</em> retourne la carte. Sois honnête
+            avec toi-même : est-ce que ta réponse mentale correspondait ?</p>
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                <div class="fc-face fc-front">
+                    <div class="fc-label">❓ Question — Clique pour retourner</div>
+                    <div class="fc-question" id="fc-question"></div>
+                    <div class="fc-hint">Formule ta réponse dans ta tête d'abord 🧠</div>
+                </div>
+                <div class="fc-face fc-back">
+                    <div class="fc-label">✅ Réponse</div>
+                    <div class="fc-answer" id="fc-answer"></div>
+                    <div class="fc-hint">Est-ce que tu avais pensé à ça ?</div>
+                </div>
+            </div>
+        </div>
+        <div class="fc-nav">
+            <button class="fc-btn" id="fc-prev" onclick="prevCard()">← Précédente</button>
+            <span class="fc-counter" id="fc-counter">1 / 8</span>
+            <button class="fc-btn primary" id="fc-next" onclick="nextCard()">Suivante →</button>
+        </div>
+    </div>
+
+    <!-- ===== REMETS DANS L'ORDRE ===== -->
+    <div class="section-label">
+        <span class="section-label-text">🔀 Remets dans l'ordre</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-amber">🔀</div>Le cycle du développeur — dans le bon ordre
+        </div>
+        <p class="desc">Les étapes du cycle ont été mélangées. <strong>Glisse-dépose</strong> pour les remettre dans le
+            bon ordre. Sur mobile : tape deux étapes pour les échanger.</p>
+        <div class="drag-list" id="dragList"></div>
+        <div class="action-row">
+            <button class="action-btn primary" onclick="checkOrder()">Vérifier l'ordre</button>
+            <button class="action-btn" onclick="resetOrder()">Réinitialiser</button>
+        </div>
+        <div class="q-feedback" id="order-feedback" style="margin-top:10px;"></div>
+    </div>
+
+    <!-- ===== QCM ===== -->
+    <div class="section-label">
+        <span class="section-label-text">🧠 QCM</span>
+    </div>
+
+    <div id="qcm-container"></div>
+    <div class="progress-wrap">
+        <div class="progress-fill" id="prog-qcm"></div>
+    </div>
+    <div class="score-row" id="score-qcm"></div>
+    <div class="action-row">
+        <button class="action-btn primary" onclick="checkQCM()">Valider le QCM</button>
+        <button class="action-btn" onclick="resetQCM()">Refaire</button>
+    </div>
+    <div class="score-panel" id="qcm-score-panel">
+        <div class="score-big"><span id="qcm-score-val">0</span> / 5</div>
+        <div class="score-sub">bonnes réponses au QCM</div>
+    </div>
+
+    <!-- ===== SCÉNARIOS ===== -->
+    <div class="section-label">
+        <span class="section-label-text">🍝 Scénarios — Bonne ou mauvaise décision ?</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-coral">🍝</div>Scénarios — Identifie le bon comportement
+        </div>
+        <p class="desc">Pour chaque situation, choisis ce qu'un développeur avec le bon état d'esprit ferait pour éviter
+            l'effet spaghetti.</p>
+    </div>
+    <div id="scenario-container"></div>
+
+    <!-- ===== V/F ===== -->
+    <div class="section-label">
+        <span class="section-label-text">✅ Vrai / Faux</span>
+    </div>
+
+    <div id="vf-container"></div>
+    <div class="progress-wrap">
+        <div class="progress-fill" id="prog-vf"></div>
+    </div>
+    <div class="score-row" id="score-vf"></div>
+    <div class="action-row">
+        <button class="action-btn primary" onclick="checkVF()">Valider le V/F</button>
+        <button class="action-btn" onclick="resetVF()">Refaire</button>
+    </div>
+    <div class="score-panel" id="vf-score-panel">
+        <div class="score-big"><span id="vf-score-val">0</span> / 6</div>
+        <div class="score-sub">bonnes réponses au Vrai / Faux</div>
+    </div>
+
+    <!-- ===== CHECKLIST PROJET ===== -->
+    <div class="section-label">
+        <span class="section-label-text">🚀 Avant de lancer ton mini-projet</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-teal">✅</div>Checklist — Suis-je vraiment prêt ?
+        </div>
+        <p class="desc">Coche chaque point. Si tu ne peux pas tous les cocher, <a href="cours-auto-entrainement.html"
+                style="color:#185FA5;font-weight:700;">reviens au cours</a> et refais un round.</p>
+        <div class="checklist" id="projectChecklist">
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-label">Je sais expliquer avec mes propres mots ce qu'est l'effet spaghetti</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-label">Je comprends pourquoi copier-coller du code IA sans le lire est dangereux</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-label">Je connais les étapes du cycle du développeur (sans regarder le cours)</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-label">J'ai une idée de projet simple et précise — pas vague</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-label">J'ai fait au moins 2 rounds complets de ces exercices</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div>
+                <div class="check-label">Je suis prêt à chercher, tester, analyser — et recommencer si ça bloque</div>
+            </div>
+        </div>
+        <div class="result-box" id="checklist-result" style="display:none;margin-top:0.8rem;">
+            <div class="rl">✅ Prêt à coder !</div>
+            Tu as coché tous les points. Tu as le bon état d'esprit. Lance ton projet et reviens après pour voir ce que
+            tu as appris.
+        </div>
+    </div>
+
+    <!-- CTA FINAL -->
+    <div class="cta-wrap">
+        <h2>⚠️ A retenir pour savoir coder ⚠️</h2>
+        <p>Cours lu ✓ &nbsp; Exercices faits ✓ &nbsp; Créer un projet ✓</p>
+        <p>La route est longue mais rapide avec de bonne pratique.<br> L'expertise = Temps × Compréhension.</p>
+        <a class="cta-btn" href="../sommaire.html#step1">↩ Retour au sommaire</a>
+    </div>
+
+    <div class="footer-note">
+        Comprendre → Pratiquer → Créer → Recommencer 🚀</span><br>
+        <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    </div>
+
+    <script>
+        /* ===== FLASHCARDS ===== */
+        var flashcards = [
+            { q: "Quelle est la vraie compétence d'un développeur selon le cours ?", a: "Comprendre le fonctionnement et savoir lire la documentation — pas mémoriser du code par cœur." },
+            { q: "Qu'est-ce que l'effet spaghetti ?", a: "Quand résoudre un bug en crée d'autres ailleurs. Le code devient emmêlé, illisible et le projet se bloque." },
+            { q: "Quelle est la formule de l'expertise ?", a: "Expertise = Temps passé à coder × Niveau de compréhension. Les deux sont indispensables." },
+            { q: "Quel est le bon usage de l'IA pour un développeur ?", a: "L'utiliser pour obtenir des informations et comprendre — pas pour copier-coller du code sans le lire." },
+            { q: "Cite les 3 ressources d'un développeur face à un problème.", a: "1. La documentation officielle  2. Google / Forums (StackOverflow...)  3. L'IA" },
+            { q: "Pourquoi refaire les exercices 2 à 3 fois ?", a: "Pour ancrer la compréhension profonde. Faire une fois teste la mémoire immédiate. Répéter crée une vraie maîtrise." },
+            { q: "Quelle est la différence entre mémoriser et comprendre ?", a: "Mémoriser = réciter sans pouvoir adapter. Comprendre = saisir le fonctionnement et s'adapter à tout contexte." },
+            { q: "Pourquoi créer son propre mini-projet après les exercices ?", a: "Les exercices testent la mémoire. Un projet personnel prouve qu'on peut appliquer la connaissance seul, dans un contexte nouveau." }
+        ];
+        var currentCard = 0, cardFlipped = false;
+
+        function renderCard() {
+            var c = flashcards[currentCard];
+            document.getElementById('fc-question').textContent = c.q;
+            document.getElementById('fc-answer').textContent = c.a;
+            document.getElementById('fc-counter').textContent = (currentCard + 1) + ' / ' + flashcards.length;
+            document.getElementById('fc-prev').disabled = currentCard === 0;
+            document.getElementById('fc-next').textContent = currentCard === flashcards.length - 1 ? 'Recommencer' : 'Suivante →';
+            cardFlipped = false;
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+        function flipCard() { cardFlipped = !cardFlipped; document.getElementById('flashcard').classList.toggle('flipped', cardFlipped); }
+        function nextCard() { currentCard = currentCard < flashcards.length - 1 ? currentCard + 1 : 0; renderCard(); }
+        function prevCard() { if (currentCard > 0) { currentCard--; renderCard(); } }
+        renderCard();
+
+        /* ===== DRAG & DROP ===== */
+        var cycleCorrect = ['💡 Idée', '🔍 Chercher', '⌨️ Coder', '🧪 Tester', '🔎 Analyser', '🔄 Recommencer / Perfectionner'];
+        var cycleShuffled = ['⌨️ Coder', '🔍 Chercher', '🔄 Recommencer / Perfectionner', '💡 Idée', '🔎 Analyser', '🧪 Tester'];
+        var dragSrc = null;
+
+        function renderDragList() {
+            var list = document.getElementById('dragList');
+            list.innerHTML = '';
+            cycleShuffled.forEach(function (step, i) {
+                var item = document.createElement('div');
+                item.className = 'drag-item';
+                item.draggable = true;
+                item.dataset.index = i;
+                item.innerHTML = '<span class="drag-handle">⠿</span><span>' + step + '</span>';
+                item.addEventListener('dragstart', function (e) { dragSrc = i; item.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+                item.addEventListener('dragend', function () { item.classList.remove('dragging'); });
+                item.addEventListener('dragover', function (e) { e.preventDefault(); list.querySelectorAll('.drag-item').forEach(function (el) { el.classList.remove('drag-over'); }); item.classList.add('drag-over'); });
+                item.addEventListener('dragleave', function () { item.classList.remove('drag-over'); });
+                item.addEventListener('drop', function (e) {
+                    e.preventDefault(); item.classList.remove('drag-over');
+                    if (dragSrc !== null && dragSrc !== i) {
+                        var tmp = cycleShuffled[dragSrc]; cycleShuffled[dragSrc] = cycleShuffled[i]; cycleShuffled[i] = tmp;
+                        dragSrc = null; renderDragList();
+                    }
+                });
+                list.appendChild(item);
+            });
+            // Mobile tap-swap
+            var tapSrc = null;
+            list.querySelectorAll('.drag-item').forEach(function (item) {
+                item.addEventListener('touchstart', function (e) {
+                    var idx = parseInt(item.dataset.index);
+                    if (tapSrc === null) { tapSrc = idx; item.style.outline = '2px solid #7F77DD'; }
+                    else {
+                        var tmp = cycleShuffled[tapSrc]; cycleShuffled[tapSrc] = cycleShuffled[idx]; cycleShuffled[idx] = tmp;
+                        tapSrc = null; renderDragList();
+                    }
+                });
+            });
+        }
+        function checkOrder() {
+            var items = document.getElementById('dragList').querySelectorAll('.drag-item');
+            var correct = true;
+            items.forEach(function (item, i) {
+                var txt = item.querySelector('span:last-child').textContent;
+                item.classList.add(txt === cycleCorrect[i] ? 'correct-order' : 'wrong-order');
+                if (txt !== cycleCorrect[i]) correct = false;
+            });
+            var fb = document.getElementById('order-feedback');
+            fb.className = 'q-feedback show ' + (correct ? 'ok' : 'ko');
+            fb.textContent = correct ? '✅ Parfait ! Tu as le cycle du développeur en tête.' : '✗ Pas tout à fait. Le bon ordre : Idée → Chercher → Coder → Tester → Analyser → Recommencer. Réinitialise et réessaie !';
+        }
+        function resetOrder() {
+            cycleShuffled = ['⌨️ Coder', '🔍 Chercher', '🔄 Recommencer / Perfectionner', '💡 Idée', '🔎 Analyser', '🧪 Tester'];
+            document.getElementById('order-feedback').className = 'q-feedback';
+            renderDragList();
+        }
+        renderDragList();
+
+        /* ===== QCM ===== */
+        var qcmData = [
+            { q: "Qu'est-ce qui caractérise principalement l'effet spaghetti dans un projet ?", opts: ["Le code est trop long et difficile à lire", "Corriger un bug en crée d'autres, le projet devient impossible à faire avancer", "On utilise trop de variables différentes", "L'IA génère du code dans plusieurs langages"], correct: 1, expl: "L'effet spaghetti, c'est quand les corrections créent de nouveaux problèmes en cascade — le projet se bloque." },
+            { q: "Pourquoi un développeur doit-il comprendre le code généré par l'IA ?", opts: ["Pour pouvoir le réécrire en entier sans l'IA", "Pour impressionner ses collègues lors des revues de code", "Pour maintenir et faire évoluer le projet sans être bloqué", "Parce que l'IA fait souvent des fautes de syntaxe"], correct: 2, expl: "Sans compréhension, tu ne peux pas maintenir le projet. Dès qu'il évoluera, tu seras bloqué." },
+            { q: "Quelle étape vient après 'Tester' dans le cycle du développeur ?", opts: ["Coder à nouveau", "Analyser", "Chercher", "Déployer"], correct: 1, expl: "Le cycle : Idée → Chercher → Coder → Tester → Analyser → Recommencer." },
+            { q: "Pourquoi refaire les exercices 2 à 3 fois est-il recommandé ?", opts: ["Pour mémoriser les réponses par cœur", "Pour avoir un meilleur score", "Pour ancrer la compréhension profonde et pas seulement la mémoire immédiate", "Parce que les questions changent à chaque tentative"], correct: 2, expl: "La répétition espacée ancre la compréhension. C'est différent de mémoriser une réponse." },
+            { q: "Un développeur débutant rencontre un bug. Quelle est la meilleure approche ?", opts: ["Copier-coller immédiatement la solution de l'IA sans la lire", "Chercher à comprendre le bug, puis utiliser les ressources pour comprendre la solution", "Supprimer le code bugué et recommencer depuis zéro", "Demander à l'IA de réécrire tout le projet"], correct: 1, expl: "Comprendre le bug avant de chercher la solution — sinon tu auras le même bug (ou pire) la prochaine fois." }
+        ];
+        var qcmAnswers = {};
+
+        function renderQCM() {
+            var c = document.getElementById('qcm-container'); c.innerHTML = '';
+            qcmData.forEach(function (q, qi) {
+                var card = document.createElement('div'); card.className = 'qcm-card';
+                var optsHtml = q.opts.map(function (o, oi) {
+                    return '<div class="opt" id="qcm-opt-' + qi + '-' + oi + '" onclick="selectQCM(' + qi + ',' + oi + ')"><div class="opt-dot"><div class="opt-dot-inner"></div></div><span>' + o + '</span></div>';
+                }).join('');
+                card.innerHTML = '<div class="q-num">Question ' + (qi + 1) + ' sur ' + qcmData.length + '</div><div class="q-text">' + q.q + '</div><div class="options">' + optsHtml + '</div><div class="q-feedback" id="qcm-fb-' + qi + '"></div>';
+                c.appendChild(card);
+            });
+        }
+        function selectQCM(qi, oi) {
+            if (document.getElementById('qcm-opt-' + qi + '-0').style.pointerEvents === 'none') return;
+            qcmAnswers[qi] = oi;
+            qcmData[qi].opts.forEach(function (_, i) { document.getElementById('qcm-opt-' + qi + '-' + i).classList.toggle('selected', i === oi); });
+        }
+        function checkQCM() {
+            var score = 0;
+            qcmData.forEach(function (q, qi) {
+                var chosen = qcmAnswers[qi], fb = document.getElementById('qcm-fb-' + qi);
+                q.opts.forEach(function (_, i) { var el = document.getElementById('qcm-opt-' + qi + '-' + i); el.style.pointerEvents = 'none'; el.classList.remove('selected'); });
+                if (chosen !== undefined) {
+                    if (chosen === q.correct) { document.getElementById('qcm-opt-' + qi + '-' + chosen).classList.add('correct'); score++; fb.className = 'q-feedback show ok'; fb.textContent = '✓ ' + q.expl; }
+                    else { document.getElementById('qcm-opt-' + qi + '-' + chosen).classList.add('wrong'); document.getElementById('qcm-opt-' + qi + '-' + q.correct).classList.add('correct'); fb.className = 'q-feedback show ko'; fb.textContent = '✗ ' + q.expl; }
+                } else { document.getElementById('qcm-opt-' + qi + '-' + q.correct).classList.add('correct'); fb.className = 'q-feedback show ko'; fb.textContent = '— Sans réponse. ' + q.expl; }
+            });
+            var pct = Math.round(score / qcmData.length * 100);
+            document.getElementById('prog-qcm').style.width = pct + '%';
+            var row = document.getElementById('score-qcm');
+            row.innerHTML = '<span class="chip chip-ok">' + score + ' / ' + qcmData.length + ' bonnes réponses</span>';
+            if (qcmData.length - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (qcmData.length - score) + ' erreur(s)</span>';
+            document.getElementById('qcm-score-val').textContent = score;
+            document.getElementById('qcm-score-panel').classList.add('show');
+            document.getElementById('qcm-score-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        function resetQCM() {
+            qcmAnswers = {}; document.getElementById('qcm-score-panel').classList.remove('show');
+            document.getElementById('prog-qcm').style.width = '0%'; document.getElementById('score-qcm').innerHTML = ''; renderQCM();
+        }
+
+        /* ===== SCÉNARIOS ===== */
+        var scenariosData = [
+            { label: "Scénario 1", situation: "Tu demandes à l'IA de créer une fonctionnalité. Elle te génère 50 lignes de code. Que fais-tu ?", choices: [{ text: "🚀 Je copie-colle directement dans mon projet pour gagner du temps", correct: false }, { text: "📖 Je lis les 50 lignes, je cherche à comprendre chaque partie avant de les intégrer", correct: true }, { text: "✂️ Je prends les 10 premières lignes et j'ignore le reste", correct: false }], fb_ok: "Exact ! Lire et comprendre avant d'intégrer, c'est la protection contre l'effet spaghetti.", fb_ko: "Sans lire le code, tu ne sauras pas le maintenir. Le prochain bug sera impossible à corriger." },
+            { label: "Scénario 2", situation: "Ton bug est corrigé après avoir ajouté du code IA. Mais maintenant, une autre fonction ne marche plus. C'est le signe de quoi ?", choices: [{ text: "🔁 Du cycle normal du développeur — tester puis analyser", correct: false }, { text: "🍝 De l'effet spaghetti — ma correction a créé un nouveau problème", correct: true }, { text: "🤷 De la malchance — ça arrive parfois", correct: false }], fb_ok: "Oui ! Résoudre A pour créer B, c'est exactement la définition de l'effet spaghetti.", fb_ko: "Ce n'est pas du hasard. Quand corriger crée de nouveaux bugs, c'est le signe que le code n'est pas compris." },
+            { label: "Scénario 3", situation: "Tu veux créer un mini-projet mais tu ne sais pas par où commencer. Quelle est la meilleure approche ?", choices: [{ text: "🤖 Je demande à l'IA de créer le projet entier pour moi", correct: false }, { text: "📝 Je définis d'abord ce que je veux faire, puis je code étape par étape en comprenant chaque partie", correct: true }, { text: "⏳ J'attends d'avoir plus de connaissances avant de commencer", correct: false }], fb_ok: "Parfait ! Définir clairement l'objectif et avancer par étapes comprises, c'est le cycle du développeur.", fb_ko: "Commencer sans comprendre ou attendre indéfiniment sont deux extrêmes à éviter. Petits pas compris." }
+        ];
+        var scenarioAnswers = {};
+
+        function renderScenarios() {
+            var c = document.getElementById('scenario-container'); c.innerHTML = '';
+            scenariosData.forEach(function (sc, si) {
+                var div = document.createElement('div'); div.className = 'card';
+                var choicesHtml = sc.choices.map(function (ch, ci) { return '<div class="scenario-choice" id="sc-' + si + '-' + ci + '" onclick="answerScenario(' + si + ',' + ci + ')">' + ch.text + '</div>'; }).join('');
+                div.innerHTML = '<div class="stitle"><div class="pill p-coral">' + (si + 1) + '</div>' + sc.label + '</div><div class="scenario-box"><div class="scenario-label">📋 Situation</div><div class="scenario-text">' + sc.situation + '</div></div><div class="scenario-choices">' + choicesHtml + '</div><div class="scenario-fb" id="sc-fb-' + si + '"></div>';
+                c.appendChild(div);
+            });
+        }
+        function answerScenario(si, ci) {
+            if (scenarioAnswers[si] !== undefined) return;
+            scenarioAnswers[si] = ci;
+            var sc = scenariosData[si];
+            sc.choices.forEach(function (ch, i) { var el = document.getElementById('sc-' + si + '-' + i); el.style.pointerEvents = 'none'; if (i === ci) el.classList.add(ch.correct ? 'correct-sc' : 'wrong-sc'); else if (ch.correct) el.classList.add('correct-sc'); });
+            var fb = document.getElementById('sc-fb-' + si), isCorrect = sc.choices[ci].correct;
+            fb.className = 'scenario-fb show ' + (isCorrect ? 'ok' : 'ko');
+            fb.textContent = isCorrect ? '✓ ' + sc.fb_ok : '✗ ' + sc.fb_ko;
+        }
+        renderScenarios();
+
+        /* ===== V/F ===== */
+        var vfData = [
+            { s: "Utiliser l'IA pour générer du code est dangereux si on ne comprend pas ce code.", ans: true, expl: "Vrai. Sans compréhension, le premier bug sera impossible à corriger — c'est l'effet spaghetti." },
+            { s: "Faire les exercices une seule fois suffit pour maîtriser un concept.", ans: false, expl: "Faux. La répétition (2–3 fois) ancre la compréhension profonde, pas juste la mémoire immédiate." },
+            { s: "Créer son propre projet est plus formateur que faire des exercices imposés.", ans: true, expl: "Vrai. Un projet personnel mobilise la compréhension dans un contexte nouveau — le vrai test de la maîtrise." },
+            { s: "L'effet spaghetti se produit uniquement chez les développeurs débutants.", ans: false, expl: "Faux. Il touche quiconque intègre du code sans le comprendre, quel que soit le niveau." },
+            { s: "La passion et la curiosité accélèrent significativement la progression en programmation.", ans: true, expl: "Vrai. La motivation crée une boucle d'apprentissage active qui dépasse n'importe quel cours structuré." },
+            { s: "Le cycle du développeur se termine une fois le code déployé.", ans: false, expl: "Faux. Le cycle est infini : après 'Recommencer / Perfectionner', on repart sur une nouvelle idée ou amélioration." }
+        ];
+        var vfAnswers = {};
+
+        function renderVF() {
+            var c = document.getElementById('vf-container'); c.innerHTML = '';
+            vfData.forEach(function (q, qi) {
+                var card = document.createElement('div'); card.className = 'vf-card';
+                card.innerHTML = '<div class="q-num">Affirmation ' + (qi + 1) + ' sur ' + vfData.length + '</div><div class="vf-statement">' + q.s + '</div><div class="vf-btns"><button class="vf-btn vrai" id="vf-v-' + qi + '" onclick="answerVF(' + qi + ',true)">✓ Vrai</button><button class="vf-btn faux" id="vf-f-' + qi + '" onclick="answerVF(' + qi + ',false)">✗ Faux</button></div><div class="q-feedback" id="vf-fb-' + qi + '"></div>';
+                c.appendChild(card);
+            });
+        }
+        function answerVF(qi, val) {
+            if (document.getElementById('vf-v-' + qi).disabled) return;
+            vfAnswers[qi] = val;
+            var vb = document.getElementById('vf-v-' + qi), fb2 = document.getElementById('vf-f-' + qi);
+            vb.className = 'vf-btn vrai'; fb2.className = 'vf-btn faux';
+            vb.style.background = val ? '#EEEDFE' : ''; vb.style.borderColor = val ? '#AFA9EC' : ''; vb.style.color = val ? '#26215C' : '';
+            fb2.style.background = !val ? '#EEEDFE' : ''; fb2.style.borderColor = !val ? '#AFA9EC' : ''; fb2.style.color = !val ? '#26215C' : '';
+        }
+        function checkVF() {
+            var score = 0;
+            vfData.forEach(function (q, qi) {
+                var vb = document.getElementById('vf-v-' + qi), fb2 = document.getElementById('vf-f-' + qi), fb = document.getElementById('vf-fb-' + qi);
+                vb.disabled = true; fb2.disabled = true;
+                vb.style.background = ''; vb.style.borderColor = ''; vb.style.color = '';
+                fb2.style.background = ''; fb2.style.borderColor = ''; fb2.style.color = '';
+                vb.className = 'vf-btn vrai'; fb2.className = 'vf-btn faux';
+                var chosen = vfAnswers[qi];
+                if (chosen !== undefined) {
+                    if (chosen === q.ans) { score++; (chosen ? vb : fb2).classList.add('correct-ans'); fb.className = 'q-feedback show ok'; fb.textContent = '✓ ' + q.expl; }
+                    else { (chosen ? vb : fb2).classList.add('wrong-ans'); (q.ans ? vb : fb2).classList.add('correct-ans'); fb.className = 'q-feedback show ko'; fb.textContent = '✗ ' + q.expl; }
+                } else { (q.ans ? vb : fb2).classList.add('correct-ans'); fb.className = 'q-feedback show ko'; fb.textContent = '— Sans réponse. ' + q.expl; }
+            });
+            var pct = Math.round(score / vfData.length * 100);
+            document.getElementById('prog-vf').style.width = pct + '%';
+            var row = document.getElementById('score-vf');
+            row.innerHTML = '<span class="chip chip-ok">' + score + ' / ' + vfData.length + ' bonnes réponses</span>';
+            if (vfData.length - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (vfData.length - score) + ' erreur(s)</span>';
+            document.getElementById('vf-score-val').textContent = score;
+            document.getElementById('vf-score-panel').classList.add('show');
+            document.getElementById('vf-score-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        function resetVF() {
+            vfAnswers = {}; document.getElementById('vf-score-panel').classList.remove('show');
+            document.getElementById('prog-vf').style.width = '0%'; document.getElementById('score-vf').innerHTML = ''; renderVF();
+        }
+
+        /* ===== ROUND TRACKER ===== */
+        var roundTips = [
+            "Premier passage : réponds sans regarder le cours. C'est normal de se tromper — c'est le but.",
+            "Deuxième passage : tu vas mieux ! Remarque ce qui était flou au premier round.",
+            "Troisième passage : si tu arrives ici, tu as le bon état d'esprit. Tu es prêt à créer ton projet."
+        ];
+        function setRound(r) {
+            document.querySelectorAll('.round-badge').forEach(function (el, i) { el.classList.remove('active', 'done'); });
+            for (var i = 1; i < r; i++) { var el = document.getElementById('round' + i); el.classList.add('done'); el.textContent = 'Round ' + i + ' ✓'; }
+            document.getElementById('round' + r).classList.add('active');
+            document.getElementById('roundTipText').textContent = roundTips[r - 1];
+            resetQCM(); resetVF(); resetOrder(); scenarioAnswers = {}; renderScenarios();
+            renderCard();
+        }
+
+        /* ===== CHECKLIST ===== */
+        function toggleCheck(item) {
+            item.classList.toggle('checked');
+            item.querySelector('.check-box').textContent = item.classList.contains('checked') ? '✓' : '';
+            var all = document.querySelectorAll('#projectChecklist .check-item'), allDone = true;
+            all.forEach(function (el) { if (!el.classList.contains('checked')) allDone = false; });
+            document.getElementById('checklist-result').style.display = allDone ? 'block' : 'none';
+        }
+
+        renderQCM();
+        renderVF();
+    </script>
+</body>
+
+</html>

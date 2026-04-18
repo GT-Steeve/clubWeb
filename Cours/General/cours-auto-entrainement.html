@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours — Auto-entraînement & Effet spaghetti</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍝%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f5f4f0;
+            color: #2C2C2A;
+            padding: 1.5rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .nav-prev {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #185FA5;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            background: #E6F1FB;
+            border: 0.5px solid #85B7EB;
+            border-radius: 8px;
+            padding: 6px 14px;
+            transition: background 0.15s;
+        }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        .hero {
+            text-align: center;
+            padding: 2.5rem 1rem 2rem;
+        }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 1.2rem;
+        }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-coral { background: #FAECE7; color: #712B13; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber { background: #FAEEDA; color: #633806; }
+        .b-teal { background: #E1F5EE; color: #085041; }
+        .b-red { background: #FCEBEB; color: #791F1F; }
+
+        .card {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .stitle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+        }
+
+        .pill {
+            width: 32px; height: 32px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 700; flex-shrink: 0;
+        }
+        .p-teal  { background: #9FE1CB; color: #085041; }
+        .p-purple{ background: #CECBF6; color: #3C3489; }
+        .p-coral { background: #F5C4B3; color: #712B13; }
+        .p-amber { background: #FAC775; color: #633806; }
+        .p-blue  { background: #B5D4F4; color: #0C447C; }
+        .p-green { background: #C0DD97; color: #3B6D11; }
+        .p-red   { background: #F5B3B3; color: #791F1F; }
+
+        .desc {
+            font-size: 0.94rem;
+            color: #5F5E5A;
+            line-height: 1.7;
+            margin-bottom: 0.9rem;
+        }
+        .desc:last-child { margin-bottom: 0; }
+
+        .tip {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            background: #E1F5EE;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-top: 0.9rem;
+            font-size: 0.88rem;
+            color: #085041;
+            line-height: 1.5;
+        }
+        .tip-coral  { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber  { background: #FAEEDA; color: #633806; }
+        .tip-red    { background: #FCEBEB; color: #791F1F; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .result-box {
+            border-radius: 10px;
+            border: 0.5px dashed #B4B2A9;
+            background: #F1EFE8;
+            padding: 0.9rem 1.1rem;
+            font-size: 0.94rem;
+            margin-top: 0.8rem;
+            line-height: 1.7;
+        }
+        .rl {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #888780; margin-bottom: 6px;
+        }
+
+        /* CHECKLIST (lecture seule ici) */
+        .checklist { display: flex; flex-direction: column; gap: 8px; margin-top: 0.8rem; }
+        .check-item {
+            display: flex; align-items: flex-start; gap: 10px;
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.9rem; font-weight: 600;
+            line-height: 1.5; color: #2C2C2A;
+        }
+        .check-item.checked { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .check-box {
+            width: 20px; height: 20px; min-width: 20px;
+            border-radius: 6px; border: 2px solid #B4B2A9;
+            background: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; margin-top: 1px;
+        }
+        .check-item.checked .check-box { background: #5DCAA5; border-color: #1D9E75; color: #fff; }
+
+        /* SPAGHETTI */
+        .spaghetti-wrap {
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 0.8rem 0;
+        }
+        .spa-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+        .spa-node {
+            background: #fff; border: 0.5px solid #D3D1C7;
+            border-radius: 8px; padding: 6px 12px;
+            font-size: 0.82rem; font-weight: 700;
+        }
+        .spa-node.red    { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .spa-node.orange { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+        .spa-arrow { color: #F09595; font-weight: 800; font-size: 1.1rem; }
+
+        /* CYCLE */
+        .cycle-wrap {
+            display: flex; flex-wrap: wrap;
+            align-items: center; gap: 6px;
+            margin-top: 0.8rem;
+        }
+        .cycle-step {
+            background: #F1EFE8; border: 0.5px solid #B4B2A9;
+            border-radius: 20px; padding: 5px 14px;
+            font-size: 0.86rem; font-weight: 700; color: #2C2C2A;
+        }
+        .cycle-arrow { color: #B4B2A9; font-size: 1rem; }
+
+        /* MINI-PROJECT */
+        .project-card {
+            border-radius: 16px;
+            border: 2px solid #2C2C2A;
+            background: #2C2C2A;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 1.2rem;
+            color: #f5f4f0;
+        }
+        .project-card .stitle { color: #f5f4f0; }
+        .project-card .desc   { color: #B4B2A9; }
+
+        .project-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 0.8rem; }
+        .project-step {
+            display: flex; gap: 12px; align-items: flex-start;
+            background: #3D3D3A; border-radius: 10px;
+            padding: 10px 14px; font-size: 0.9rem; line-height: 1.5;
+        }
+        .project-step-num {
+            width: 24px; height: 24px; min-width: 24px;
+            border-radius: 8px; background: #FAC775; color: #412402;
+            font-size: 12px; font-weight: 800;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .project-step-text { color: #D3D1C7; font-weight: 600; }
+        .project-step-text strong { color: #FAC775; }
+
+        .project-ideas {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 8px; margin-top: 0.8rem;
+        }
+        .idea-pill {
+            background: #3D3D3A; border-radius: 10px;
+            padding: 10px 12px; font-size: 0.86rem;
+            font-weight: 700; color: #D3D1C7; text-align: center;
+        }
+        .idea-pill span { display: block; font-size: 1.1rem; margin-bottom: 3px; }
+
+        /* CTA */
+        .cta-wrap {
+            text-align: center;
+            background: #2C2C2A;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            margin-top: 2rem;
+        }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn {
+            display: inline-block;
+            background: #FAC775; color: #412402;
+            font-weight: 800; font-size: 0.97rem;
+            padding: 10px 28px; border-radius: 10px;
+            text-decoration: none; transition: background 0.15s;
+        }
+        .cta-btn:hover { background: #EF9F27; }
+
+        .footer-note {
+            text-align: center; padding: 2rem 0 1rem;
+            font-size: 0.88rem; color: #888780; line-height: 1.8;
+        }
+
+        @media (max-width: 500px) {
+            .project-ideas { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <a class="nav-prev" href="../sommaire.html">← Retour au sommaire</a>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>🔁 Auto-entraînement</h1>
+        <p>Comprends la méthode — puis passe aux exercices pour te tester.</p>
+        <div class="badge-row">
+            <span class="badge b-coral">Module 01</span>
+            <span class="badge b-purple">Méthodologie</span>
+            <span class="badge b-red">⚠️ Effet spaghetti</span>
+            <span class="badge b-teal">Mini-projet</span>
+        </div>
+    </div>
+
+    <!-- 1. POURQUOI S'AUTO-ENTRAÎNER -->
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-teal">1</div>Pourquoi s'auto-entraîner ?
+        </div>
+        <p class="desc">Tu viens de lire le cours et de faire les exercices une première fois. C'est un bon début — mais <strong>lire n'est pas comprendre</strong>, et faire une fois n'est pas maîtriser.</p>
+        <p class="desc">La compréhension profonde ne vient pas du premier passage. Elle se construit par la répétition active : chaque fois que tu refais les exercices, ton cerveau consolide les connexions entre les concepts.</p>
+
+        <div class="checklist" style="pointer-events:none;">
+            <div class="check-item checked">
+                <div class="check-box">✓</div>
+                <div>📚 <strong>Lire le cours</strong> — absorber les concepts clés</div>
+            </div>
+            <div class="check-item checked">
+                <div class="check-box">✓</div>
+                <div>✏️ <strong>Faire les exercices (1ère fois)</strong> — tester sa mémoire immédiate</div>
+            </div>
+            <div class="check-item">
+                <div class="check-box"></div>
+                <div>🔁 <strong>Refaire les exercices 2–3 fois</strong> — ancrer la compréhension profonde</div>
+            </div>
+            <div class="check-item">
+                <div class="check-box"></div>
+                <div>🚀 <strong>Créer son propre mini-projet</strong> — prouver qu'on a vraiment compris</div>
+            </div>
+        </div>
+
+        <div class="tip tip-amber">
+            <span class="tip-i">⚠️</span>
+            <span>Si tu passes directement de "lire" à "coder avec l'IA" sans ces étapes, tu prends un risque majeur : l'<strong>effet spaghetti</strong>. On en parle dans la section suivante.</span>
+        </div>
+    </div>
+
+    <!-- 2. EFFET SPAGHETTI -->
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-red">2</div>L'effet spaghetti — le piège de l'IA mal utilisée
+        </div>
+        <p class="desc">L'IA peut générer du code. Rapidement. Beaucoup. Trop. Si tu <strong>ne comprends pas ce que tu colles</strong>, ton projet devient un plat de spaghetti : emmêlé, illisible, impossible à corriger.</p>
+
+        <div class="spaghetti-wrap">
+            <div class="rl">Comment l'effet spaghetti s'installe</div>
+            <div class="spa-row">
+                <div class="spa-node">Bug A</div>
+                <div class="spa-arrow">→</div>
+                <div class="spa-node">Demander à l'IA</div>
+                <div class="spa-arrow">→</div>
+                <div class="spa-node orange">Coller le code sans lire</div>
+            </div>
+            <div class="spa-row"><div class="spa-arrow" style="margin-left:40px;">↓</div></div>
+            <div class="spa-row">
+                <div class="spa-node red">Bug B + Bug C apparaissent</div>
+                <div class="spa-arrow">→</div>
+                <div class="spa-node">Demander à l'IA</div>
+                <div class="spa-arrow">→</div>
+                <div class="spa-node orange">Coller encore</div>
+            </div>
+            <div class="spa-row"><div class="spa-arrow" style="margin-left:40px;">↓</div></div>
+            <div class="spa-row">
+                <div class="spa-node red">Projet bloqué 🚫</div>
+                <div class="spa-arrow">→</div>
+                <div class="spa-node red">Impossible d'avancer</div>
+            </div>
+        </div>
+
+        <p class="desc">Résoudre un bug <em>ici</em> en crée deux <em>ailleurs</em>. Le code ne tient plus. Tu ne sais plus ce qui fait quoi. Et l'IA ne peut plus t'aider parce que même elle est perdue dans ton code emmêlé.</p>
+        <p class="desc">C'est le <strong>blocage total du projet</strong> — non pas à cause d'un manque d'outils, mais à cause d'un manque de compréhension de base.</p>
+
+        <div class="tip tip-red">
+            <span class="tip-i">🔑</span>
+            <span>La solution : <strong>comprendre avant de coller</strong>. Pas mémoriser — comprendre. Savoir ce que fait chaque ligne, pourquoi elle est là, et ce qui se passerait si on la retirait.</span>
+        </div>
+    </div>
+
+    <!-- 3. POURQUOI LES EXERCICES PLUSIEURS FOIS -->
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-purple">3</div>Pourquoi refaire les exercices 2 à 3 fois ?
+        </div>
+        <p class="desc">La première fois que tu fais un exercice, tu testes ta <strong>mémoire à court terme</strong>. Tu te souviens d'avoir lu quelque chose, mais tu n'as pas encore vraiment intégré le concept.</p>
+        <p class="desc">La deuxième et troisième fois, quelque chose de différent se passe : tu ne cherches plus la réponse dans ta mémoire récente — tu la <strong>reconstruis à partir de ta compréhension</strong>. C'est là que l'apprentissage devient durable.</p>
+
+        <div class="result-box">
+            <div class="rl">Ce que tu remarqueras entre les rounds</div>
+            <strong>Round 1 :</strong> tu hésites, tu te trompes sur certains points — c'est normal et c'est utile.<br>
+            <strong>Round 2 :</strong> tu es plus sûr, tu identifies ce qui était flou avant.<br>
+            <strong>Round 3 :</strong> tu réponds avec confiance — tu as vraiment compris.
+        </div>
+
+        <div class="tip tip-purple">
+            <span class="tip-i">🧠</span>
+            <span>Se tromper n'est pas un échec. C'est de l'information : ça indique exactement ce que ton cerveau n'a pas encore ancré. <strong>Chaque erreur est une opportunité d'apprendre.</strong></span>
+        </div>
+    </div>
+
+    <!-- 4. CRÉER SON PROPRE PROJET -->
+    <div class="project-card">
+        <div class="stitle">
+            <div class="pill p-amber">4</div>Crée ton propre mini-projet
+        </div>
+        <p class="desc">Les exercices testent ta mémoire. Ton propre projet teste ta <strong>vraie compréhension</strong>. C'est la différence entre savoir réciter et savoir faire — entre lire une recette et cuisiner.</p>
+
+        <div class="project-steps">
+            <div class="project-step">
+                <div class="project-step-num">1</div>
+                <div class="project-step-text"><strong>Choisis une idée simple</strong> — une page HTML, un quiz, une checklist, un timer. Quelque chose que TU veux créer, en lien avec un thème utile.</div>
+            </div>
+            <div class="project-step">
+                <div class="project-step-num">2</div>
+                <div class="project-step-text"><strong>Réfléchis avant de coder</strong> — Qu'est-ce que tu veux afficher ? Quelles actions l'utilisateur peut faire ? Dessine-le sur papier si besoin.</div>
+            </div>
+            <div class="project-step">
+                <div class="project-step-num">3</div>
+                <div class="project-step-text"><strong>Utilise l'IA pour t'informer</strong>, pas pour penser à ta place. Demande des explications, pas juste du code. Lis ce qu'elle te donne avant de le coller.</div>
+            </div>
+            <div class="project-step">
+                <div class="project-step-num">4</div>
+                <div class="project-step-text"><strong>Teste et analyse</strong> — Si ça ne marche pas, cherche pourquoi avant de demander de l'aide. Le bug est ton meilleur professeur.</div>
+            </div>
+            <div class="project-step">
+                <div class="project-step-num">5</div>
+                <div class="project-step-text"><strong>Recommence avec une idée plus grande</strong> — Chaque projet terminé te donne de l'expérience réutilisable. C'est le cycle du développeur en action.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IDÉES DE PROJETS -->
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-green">💡</div>Idées de mini-projets sur ce thème
+        </div>
+        <p class="desc">Besoin d'inspiration ? Voici des projets simples directement liés au cours "État d'esprit du développeur" :</p>
+        <div class="project-ideas">
+            <div class="idea-pill"><span>🧠</span>Page "Mon manifeste de dev"<br><small style="font-weight:400;color:#888780;">Tes 5 règles en tant que développeur</small></div>
+            <div class="idea-pill"><span>🔄</span>Visualisation du cycle<br><small style="font-weight:400;color:#888780;">Anime le cycle du développeur en HTML/CSS</small></div>
+            <div class="idea-pill"><span>📊</span>Tracker d'état d'esprit<br><small style="font-weight:400;color:#888780;">Checklist interactive de ta session de code</small></div>
+            <div class="idea-pill"><span>🃏</span>Tes propres flashcards<br><small style="font-weight:400;color:#888780;">Crée une mini-app de flashcards en JS</small></div>
+            <div class="idea-pill"><span>⏱️</span>Timer Pomodoro<br><small style="font-weight:400;color:#888780;">25min de code, 5min de pause</small></div>
+            <div class="idea-pill"><span>📝</span>Journal de progression<br><small style="font-weight:400;color:#888780;">Note ce que tu apprends chaque jour</small></div>
+        </div>
+        <div class="tip tip-purple" style="margin-top:1rem;">
+            <span class="tip-i">🎯</span>
+            <span>Pas d'idée parfaite — juste une idée qui te motive. <strong>La motivation fait progresser 10x plus vite</strong> encore mieux avec un projet utilé par ton entourage.</span>
+        </div>
+    </div>
+
+    <!-- CTA VERS EXERCICES -->
+    <div class="cta-wrap">
+        <p>Cours lu ✓ &nbsp; Méthode comprise ✓ &nbsp; Prêt à te tester ?</p>
+        <a class="cta-btn" href="exercices-auto-entrainement.html">Passer aux exercices →</a>
+    </div>
+
+    <div class="footer-note">
+        Comprendre → Pratiquer → Créer → Recommencer 🚀<br>
+        <span style="font-size:0.82rem;">Cours — Auto-entraînement & Effet spaghetti</span>
+    </div>
+
+</body>
+</html>
