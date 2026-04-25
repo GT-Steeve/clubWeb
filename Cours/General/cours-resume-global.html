@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résumé — Tout ce qu'on a vu ensemble</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f5f4f0;
+            color: #2C2C2A;
+            padding: 1.5rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        /* NAV */
+        .nav-prev {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #185FA5;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            background: #E6F1FB;
+            border: 0.5px solid #85B7EB;
+            border-radius: 8px;
+            padding: 6px 14px;
+            transition: background 0.15s;
+        }
+
+        .nav-prev:hover {
+            background: #B5D4F4;
+        }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 2.5rem 1rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: #5F5E5A;
+            margin-top: 0.5rem;
+        }
+
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 1.2rem;
+        }
+
+        .badge {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+
+        .b-coral {
+            background: #FAECE7;
+            color: #712B13;
+        }
+
+        .b-purple {
+            background: #EEEDFE;
+            color: #3C3489;
+        }
+
+        .b-amber {
+            background: #FAEEDA;
+            color: #633806;
+        }
+
+        .b-teal {
+            background: #E1F5EE;
+            color: #085041;
+        }
+
+        .b-blue {
+            background: #E6F1FB;
+            color: #0C447C;
+        }
+
+        .b-green {
+            background: #E8F5D8;
+            color: #3B6D11;
+        }
+
+        /* CARD */
+        .card {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .stitle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+        }
+
+        .pill {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .p-teal {
+            background: #9FE1CB;
+            color: #085041;
+        }
+
+        .p-purple {
+            background: #CECBF6;
+            color: #3C3489;
+        }
+
+        .p-coral {
+            background: #F5C4B3;
+            color: #712B13;
+        }
+
+        .p-amber {
+            background: #FAC775;
+            color: #633806;
+        }
+
+        .p-blue {
+            background: #B5D4F4;
+            color: #0C447C;
+        }
+
+        .p-green {
+            background: #C0DD97;
+            color: #3B6D11;
+        }
+
+        .p-pink {
+            background: #F4C0D1;
+            color: #72243E;
+        }
+
+        .p-gray {
+            background: #D3D1C7;
+            color: #444441;
+        }
+
+        .p-red {
+            background: #F5B3B3;
+            color: #791F1F;
+        }
+
+        .desc {
+            font-size: 0.94rem;
+            color: #5F5E5A;
+            line-height: 1.7;
+            margin-bottom: 0.9rem;
+        }
+
+        .desc:last-child {
+            margin-bottom: 0;
+        }
+
+        /* TIP */
+        .tip {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            background: #E1F5EE;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-top: 0.9rem;
+            font-size: 0.88rem;
+            color: #085041;
+            line-height: 1.5;
+        }
+
+        .tip-coral {
+            background: #FAECE7;
+            color: #712B13;
+        }
+
+        .tip-purple {
+            background: #EEEDFE;
+            color: #3C3489;
+        }
+
+        .tip-amber {
+            background: #FAEEDA;
+            color: #633806;
+        }
+
+        .tip-blue {
+            background: #E6F1FB;
+            color: #0C447C;
+        }
+
+        .tip-red {
+            background: #FCEBEB;
+            color: #791F1F;
+        }
+
+        .tip-i {
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* RESULT BOX */
+        .result-box {
+            border-radius: 10px;
+            border: 0.5px dashed #B4B2A9;
+            background: #F1EFE8;
+            padding: 0.9rem 1.1rem;
+            font-size: 0.94rem;
+            margin-top: 0.8rem;
+            line-height: 1.8;
+        }
+
+        .rl {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #888780;
+            margin-bottom: 6px;
+        }
+
+        /* CODE */
+        .code-block {
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            padding: 0.9rem 1.1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.84rem;
+            line-height: 1.9;
+            white-space: pre;
+            overflow-x: auto;
+            color: #2C2C2A;
+            margin-top: 0.8rem;
+        }
+
+        .tag {
+            color: #993C1D;
+        }
+
+        .attr {
+            color: #185FA5;
+        }
+
+        .val {
+            color: #0F6E56;
+        }
+
+        .cm {
+            color: #888780;
+            font-style: italic;
+        }
+
+        .sel {
+            color: #993C1D;
+        }
+
+        .prop {
+            color: #185FA5;
+        }
+
+        /* SECTION LABEL */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 2.2rem 0 1.1rem;
+        }
+
+        .section-label-text {
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888780;
+            white-space: nowrap;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 0.5px;
+            background: #D3D1C7;
+        }
+
+        /* MODULE CARD (dark header) */
+        .module-card {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 0.5px solid #D3D1C7;
+            margin-bottom: 1.2rem;
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1rem 1.4rem;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+
+        .module-body {
+            background: #ffffff;
+            padding: 1.2rem 1.4rem;
+        }
+
+        .mh-1 {
+            background: #2C2C2A;
+            color: #9FE1CB;
+        }
+
+        .mh-2 {
+            background: #185FA5;
+            color: #B5D4F4;
+        }
+
+        .mh-3 {
+            background: #712B13;
+            color: #F5C4B3;
+        }
+
+        .mh-4 {
+            background: #3C3489;
+            color: #CECBF6;
+        }
+
+        .mh-5 {
+            background: #085041;
+            color: #9FE1CB;
+        }
+
+        .module-num {
+            width: 30px;
+            height: 30px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 800;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* KEY POINTS */
+        .key-points {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            margin-top: 0.6rem;
+        }
+
+        .kp {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #2C2C2A;
+        }
+
+        .kp-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 7px;
+        }
+
+        .kp-teal {
+            background: #5DCAA5;
+        }
+
+        .kp-blue {
+            background: #4A9DE0;
+        }
+
+        .kp-coral {
+            background: #E5724A;
+        }
+
+        .kp-purple {
+            background: #7F77DD;
+        }
+
+        .kp-green {
+            background: #7BBD45;
+        }
+
+        /* CHECKLIST */
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 0.8rem;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #2C2C2A;
+        }
+
+        .check-box {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            border-radius: 6px;
+            background: #5DCAA5;
+            border: 2px solid #1D9E75;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #fff;
+            margin-top: 1px;
+        }
+
+        /* SPAGHETTI */
+        .spa-wrap {
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 0.8rem 0;
+        }
+
+        .spa-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .spa-node {
+            background: #fff;
+            border: 0.5px solid #D3D1C7;
+            border-radius: 8px;
+            padding: 5px 11px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .spa-node.red {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+        }
+
+        .spa-node.orange {
+            background: #FAEEDA;
+            border-color: #FAC775;
+            color: #633806;
+        }
+
+        .spa-arrow {
+            color: #F09595;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        /* INLINE CODE */
+        .ic {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.83em;
+            background: #F1EFE8;
+            border-radius: 4px;
+            padding: 1px 5px;
+            color: #993C1D;
+        }
+
+        /* TWO COL */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 0.8rem;
+        }
+
+        .tc {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        /* CYCLE */
+        .cycle-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            margin-top: 0.8rem;
+        }
+
+        .cycle-step {
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 0.86rem;
+            font-weight: 700;
+        }
+
+        .cycle-arrow {
+            color: #B4B2A9;
+        }
+
+        /* STEP LIST */
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 0.8rem;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border-radius: 9px;
+            background: #2C2C2A;
+            color: #FAC775;
+            font-size: 13px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .step-body {
+            font-size: 0.92rem;
+            font-weight: 600;
+            line-height: 1.6;
+            color: #2C2C2A;
+        }
+
+        .step-body span {
+            color: #5F5E5A;
+            font-weight: 400;
+        }
+
+        /* RES GRID */
+        .res-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 0.8rem;
+        }
+
+        .res-card {
+            border-radius: 12px;
+            border: 0.5px solid #D3D1C7;
+            padding: 0.9rem;
+            text-align: center;
+            background: #FAFAF8;
+            text-decoration: none;
+            transition: border-color 0.15s, background 0.15s;
+            display: block;
+        }
+
+        .res-card:hover {
+            border-color: #85B7EB;
+            background: #E6F1FB;
+        }
+
+        .res-icon {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .res-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #2C2C2A;
+            margin-bottom: 2px;
+        }
+
+        .res-url {
+            font-size: 0.72rem;
+            color: #185FA5;
+            margin-top: 3px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* GRANDE RECAP TABLE */
+        .recap-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.8rem;
+            font-size: 0.88rem;
+        }
+
+        .recap-table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: #F1EFE8;
+            border-bottom: 1px solid #D3D1C7;
+            font-weight: 800;
+            font-size: 0.79rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #888780;
+        }
+
+        .recap-table td {
+            padding: 9px 12px;
+            border-bottom: 0.5px solid #EEEcE5;
+            vertical-align: top;
+            line-height: 1.5;
+        }
+
+        .recap-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .recap-table tr:hover td {
+            background: #FAFAF8;
+        }
+
+        .tag-pill {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #993C1D;
+            background: #FAECE7;
+            border-radius: 5px;
+            padding: 1px 6px;
+        }
+
+        /* CTA */
+        .cta-wrap {
+            text-align: center;
+            background: #2C2C2A;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .cta-wrap p {
+            color: #D3D1C7;
+            font-size: 0.95rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: #FAC775;
+            color: #412402;
+            font-weight: 800;
+            font-size: 0.97rem;
+            padding: 10px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+
+        .cta-btn:hover {
+            background: #EF9F27;
+        }
+
+        .cta-btn.secondary {
+            background: #3D3D3A;
+            color: #D3D1C7;
+            margin-left: 10px;
+        }
+
+        .cta-btn.secondary:hover {
+            background: #555552;
+        }
+
+        .footer-note {
+            text-align: center;
+            padding: 2rem 0 1rem;
+            font-size: 0.88rem;
+            color: #888780;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 500px) {
+            .res-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <a class="nav-prev" href="../sommaire.html">← Retour au sommaire</a>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>📋 Résumé global</h1>
+        <p>Tout ce qu'on a vu ensemble — en un seul endroit.</p>
+        <div class="badge-row">
+            <span class="badge b-teal">Module 01 — État d'esprit</span>
+            <span class="badge b-blue">Module 02 — HTML</span>
+            <span class="badge b-amber">Module 03 — Templates</span>
+            <span class="badge b-coral">Effet spaghetti</span>
+            <span class="badge b-purple">Auto-entraînement</span>
+        </div>
+    </div>
+
+    <!-- INTRO -->
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-gray">📖</div>Comment utiliser ce résumé
+        </div>
+        <p class="desc">Ce document est une <strong>synthèse des 3 modules</strong> que tu as traversés. Il ne remplace
+            pas les cours complets — il te permet de <strong>réviser rapidement</strong>, de retrouver une notion clé,
+            et de mesurer ce que tu as retenu avant de passer à la pratique.</p>
+        <p class="desc">Lis chaque module dans l'ordre, identifie les points qui te semblent encore flous, et retourne
+            au cours correspondant si besoin. Puis fais les exercices de révision.</p>
+        <div class="cycle-wrap">
+            <div class="cycle-step">Lire le résumé</div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step">Identifier les zones floues</div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step">Revoir le cours ciblé</div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step">Exercices de révision</div>
+        </div>
+    </div>
+
+    <!-- ===== MODULE 01 ===== -->
+    <div class="section-label"><span class="section-label-text">🧠 Module 01 — L'état d'esprit du développeur</span>
+    </div>
+
+    <div class="module-card">
+        <div class="module-header mh-1">
+            <div class="module-num">01</div>
+            L'état d'esprit du développeur
+        </div>
+        <div class="module-body">
+            <p class="desc">Ce module pose la fondation de tout le reste. La compétence technique ne suffit pas — la
+                façon dont tu penses face à un problème détermine ta progression.</p>
+
+            <div class="result-box">
+                <div class="rl">La formule fondamentale</div>
+                <strong style="font-size:1.05rem;">Expertise = Temps passé à coder × Niveau de
+                    compréhension</strong><br>
+                Les deux facteurs sont indispensables. Passer du temps sans comprendre ne mène nulle part. Comprendre
+                sans pratiquer non plus.
+            </div>
+
+            <div class="key-points" style="margin-top:1rem;">
+                <div class="kp">
+                    <div class="kp-dot kp-teal"></div>
+                    <div>La <strong>vraie compétence</strong> d'un développeur n'est pas de mémoriser du code, c'est de
+                        comprendre le fonctionnement et de savoir <strong>lire la documentation</strong>.</div>
+                </div>
+                <div class="kp">
+                    <div class="kp-dot kp-teal"></div>
+                    <div>Face à un blocage, trois ressources dans cet ordre : <strong>documentation officielle →
+                            Google/StackOverflow → IA</strong>.</div>
+                </div>
+                <div class="kp">
+                    <div class="kp-dot kp-teal"></div>
+                    <div>Le <strong>cycle du développeur</strong> est une boucle infinie : Idée → Chercher → Coder →
+                        Tester → Analyser → Recommencer.</div>
+                </div>
+                <div class="kp">
+                    <div class="kp-dot kp-teal"></div>
+                    <div>La <strong>passion et la curiosité</strong> ne se forcent pas mais s'entretiennent : ils
+                        accélèrent l'apprentissage plus que n'importe quel cours.</div>
+                </div>
+            </div>
+
+            <div class="cycle-wrap" style="margin-top:1rem;">
+                <div class="cycle-step">💡 Idée</div>
+                <span class="cycle-arrow">→</span>
+                <div class="cycle-step">🔍 Chercher</div>
+                <span class="cycle-arrow">→</span>
+                <div class="cycle-step">⌨️ Coder</div>
+                <span class="cycle-arrow">→</span>
+                <div class="cycle-step">🧪 Tester</div>
+                <span class="cycle-arrow">→</span>
+                <div class="cycle-step">🔎 Analyser</div>
+                <span class="cycle-arrow">→</span>
+                <div class="cycle-step">🔄 Recommencer</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EFFET SPAGHETTI -->
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-red">🍝</div>L'effet spaghetti — rappel essentiel
+        </div>
+        <p class="desc">L'effet spaghetti est le piège central de tout le cours. Il se produit quand tu utilises de l'IA
+            <strong>sans comprendre le code</strong> qu'elle génère.</p>
+
+        <div class="spa-wrap">
+            <div class="rl">Le mécanisme</div>
+            <div class="spa-row">
+                <div class="spa-node">Bug A</div>
+                <div class="spa-arrow">→</div>
+                <div class="spa-node">IA → coller sans lire</div>
+                <div class="spa-arrow">→</div>
+                <div class="spa-node orange">Bug B + C apparaissent</div>
+            </div>
+            <div class="spa-row">
+                <div class="spa-arrow" style="margin-left:30px;">↓</div>
+            </div>
+            <div class="spa-row">
+                <div class="spa-node red">Projet bloqué 🚫</div>
+                <div class="spa-arrow">→</div>
+                <div class="spa-node red">Impossible d'avancer</div>
+            </div>
+        </div>
+
+        <div class="tip tip-red">
+            <span class="tip-i">🔑</span>
+            <span>La règle absolue : <strong>comprendre avant de coller</strong>. Pas mémoriser — comprendre. Savoir ce
+                que fait chaque ligne, pourquoi elle est là. C'est la seule protection durable contre le blocage de
+                projet.</span>
+        </div>
+    </div>
+
+    <!-- AUTO-ENTRAÎNEMENT -->
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-purple">🔁</div>La méthode d'auto-entraînement
+        </div>
+        <p class="desc">Après chaque module, la méthode pour ancrer vraiment la compréhension — pas juste la mémoire à
+            court terme.</p>
+
+        <div class="checklist">
+            <div class="check-item">
+                <div class="check-box">✓</div>
+                <div>📚 <strong>Lire le cours</strong> — absorber les concepts</div>
+            </div>
+            <div class="check-item">
+                <div class="check-box">✓</div>
+                <div>✏️ <strong>Faire les exercices une première fois</strong> — tester la mémoire immédiate</div>
+            </div>
+            <div class="check-item">
+                <div class="check-box">✓</div>
+                <div>🔁 <strong>Refaire 2 à 3 fois</strong> — ancrer la compréhension profonde</div>
+            </div>
+            <div class="check-item">
+                <div class="check-box">✓</div>
+                <div>🚀 <strong>Créer son propre mini-projet</strong> — prouver qu'on a vraiment compris</div>
+            </div>
+        </div>
+
+        <div class="tip tip-purple">
+            <span class="tip-i">🎯</span>
+            <span>Un projet personnel mobilise la compréhension dans un <em>contexte nouveau</em>. C'est la différence
+                entre savoir réciter et savoir faire. <strong>C'est le vrai test de la maîtrise.</strong></span>
+        </div>
+    </div>
+
+    <!-- ===== MODULE 02 ===== -->
+    <div class="section-label"><span class="section-label-text">🏗️ Module 02 — Le HTML</span></div>
+
+    <div class="module-card">
+        <div class="module-header mh-2">
+            <div class="module-num">02</div>
+            Le HTML — Structure, balises & attributs
+        </div>
+        <div class="module-body">
+            <p class="desc">HTML (HyperText Markup Language) est le <strong>langage de structure</strong> du web. Il ne
+                calcule rien, ne stylise rien — il décrit le contenu. Le CSS et le JavaScript travaillent ensuite sur
+                cette base.</p>
+
+            <div class="two-col">
+                <div class="tc" style="background:#FAECE7;color:#712B13;font-size:0.85rem;">
+                    <strong style="font-family:'Nunito',sans-serif;font-size:0.88rem;">🏗️ HTML</strong>
+                    La structure — les murs, les pièces, les portes de ta page.
+                </div>
+                <div class="tc" style="background:#EEEDFE;color:#3C3489;font-size:0.85rem;">
+                    <strong style="font-family:'Nunito',sans-serif;font-size:0.88rem;">🎨 CSS</strong>
+                    Le style — la peinture, les meubles, la décoration.
+                </div>
+                <div class="tc" style="background:#FAEEDA;color:#633806;font-size:0.85rem;">
+                    <strong style="font-family:'Nunito',sans-serif;font-size:0.88rem;">⚙️ JavaScript</strong>
+                    Le comportement — l'électricité, les interrupteurs, la logique.
+                </div>
+                <div class="tc" style="background:#E1F5EE;color:#085041;font-size:0.85rem;">
+                    <strong style="font-family:'Nunito',sans-serif;font-size:0.88rem;">🌳 DOM</strong>
+                    L'arbre construit par le navigateur à partir du HTML.
+                </div>
+            </div>
+
+            <div class="result-box" style="margin-top:1rem;">
+                <div class="rl">Structure d'une balise</div>
+                <span class="tag" style="font-family:'Fira Code',monospace;">&lt;balise</span> <span class="attr"
+                    style="font-family:'Fira Code',monospace;">attribut</span>=<span class="val"
+                    style="font-family:'Fira Code',monospace;">"valeur"</span><span class="tag"
+                    style="font-family:'Fira Code',monospace;">&gt;</span>contenu<span class="tag"
+                    style="font-family:'Fira Code',monospace;">&lt;/balise&gt;</span><br><br>
+                Balises <strong>vides</strong> (auto-fermantes) : <span class="ic">&lt;img&gt;</span> <span
+                    class="ic">&lt;input&gt;</span> <span class="ic">&lt;br&gt;</span> <span
+                    class="ic">&lt;meta&gt;</span> <span class="ic">&lt;link&gt;</span> <span
+                    class="ic">&lt;hr&gt;</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-green">📋</div>Les balises essentielles à retenir
+        </div>
+
+        <table class="recap-table">
+            <tr>
+                <th>Catégorie</th>
+                <th>Balises clés</th>
+                <th>Rôle</th>
+            </tr>
+            <tr>
+                <td><strong>Structure page</strong></td>
+                <td><span class="tag-pill">&lt;!DOCTYPE&gt;</span> <span class="tag-pill">&lt;html&gt;</span> <span
+                        class="tag-pill">&lt;head&gt;</span> <span class="tag-pill">&lt;body&gt;</span></td>
+                <td style="color:#5F5E5A;">Squelette obligatoire de toute page HTML</td>
+            </tr>
+            <tr>
+                <td><strong>Sémantique</strong></td>
+                <td><span class="tag-pill">&lt;header&gt;</span> <span class="tag-pill">&lt;nav&gt;</span> <span
+                        class="tag-pill">&lt;main&gt;</span> <span class="tag-pill">&lt;article&gt;</span> <span
+                        class="tag-pill">&lt;section&gt;</span> <span class="tag-pill">&lt;aside&gt;</span> <span
+                        class="tag-pill">&lt;footer&gt;</span></td>
+                <td style="color:#5F5E5A;">Donnent du sens à la structure — remplacent les <span
+                        class="ic">&lt;div&gt;</span> génériques</td>
+            </tr>
+            <tr>
+                <td><strong>Texte</strong></td>
+                <td><span class="tag-pill">&lt;h1-h6&gt;</span> <span class="tag-pill">&lt;p&gt;</span> <span
+                        class="tag-pill">&lt;strong&gt;</span> <span class="tag-pill">&lt;em&gt;</span> <span
+                        class="tag-pill">&lt;mark&gt;</span> <span class="tag-pill">&lt;abbr&gt;</span> <span
+                        class="tag-pill">&lt;code&gt;</span></td>
+                <td style="color:#5F5E5A;">Structure et mise en valeur du texte avec sens sémantique</td>
+            </tr>
+            <tr>
+                <td><strong>Médias</strong></td>
+                <td><span class="tag-pill">&lt;img&gt;</span> <span class="tag-pill">&lt;picture&gt;</span> <span
+                        class="tag-pill">&lt;video&gt;</span> <span class="tag-pill">&lt;audio&gt;</span> <span
+                        class="tag-pill">&lt;figure&gt;</span></td>
+                <td style="color:#5F5E5A;">Intégration native de contenus visuels et sonores</td>
+            </tr>
+            <tr>
+                <td><strong>Liens</strong></td>
+                <td><span class="tag-pill">&lt;a&gt;</span> avec <span class="ic">href</span> <span
+                        class="ic">target</span> <span class="ic">rel</span> <span class="ic">download</span></td>
+                <td style="color:#5F5E5A;">Navigation, téléchargement, mailto, tel</td>
+            </tr>
+            <tr>
+                <td><strong>Formulaires</strong></td>
+                <td><span class="tag-pill">&lt;form&gt;</span> <span class="tag-pill">&lt;input&gt;</span> <span
+                        class="tag-pill">&lt;label&gt;</span> <span class="tag-pill">&lt;select&gt;</span> <span
+                        class="tag-pill">&lt;datalist&gt;</span> <span class="tag-pill">&lt;fieldset&gt;</span></td>
+                <td style="color:#5F5E5A;">Saisie utilisateur — 15+ types d'input HTML5 natifs</td>
+            </tr>
+            <tr>
+                <td><strong>Interactif</strong></td>
+                <td><span class="tag-pill">&lt;details&gt;</span> <span class="tag-pill">&lt;summary&gt;</span> <span
+                        class="tag-pill">&lt;dialog&gt;</span></td>
+                <td style="color:#5F5E5A;">Accordion et modale <strong>sans JavaScript</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Attributs globaux</strong></td>
+                <td><span class="ic">id</span> <span class="ic">class</span> <span class="ic">data-*</span> <span
+                        class="ic">hidden</span> <span class="ic">tabindex</span> <span
+                        class="ic">contenteditable</span></td>
+                <td style="color:#5F5E5A;">Disponibles sur toutes les balises — pont HTML/CSS/JS</td>
+            </tr>
+        </table>
+
+        <div class="tip tip-amber">
+            <span class="tip-i">⚠️</span>
+            <span>La règle d'or du HTML : utilise <span class="ic">&lt;div&gt;</span> uniquement pour les conteneurs de
+                style sans signification. Pour tout le reste — il existe une balise sémantique.</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-blue">🔗</div>Ressources HTML à garder sous la main
+        </div>
+        <div class="res-grid">
+            <a class="res-card" href="https://www.w3schools.com/html/" target="_blank" rel="noopener noreferrer">
+                <div class="res-icon">🏫</div>
+                <div class="res-title">W3Schools</div>
+                <div class="res-url">w3schools.com/html</div>
+            </a>
+            <a class="res-card" href="https://developer.mozilla.org/fr/docs/Web/HTML" target="_blank"
+                rel="noopener noreferrer">
+                <div class="res-icon">🦊</div>
+                <div class="res-title">MDN Web Docs</div>
+                <div class="res-url">developer.mozilla.org</div>
+            </a>
+            <a class="res-card" href="https://validator.w3.org/" target="_blank" rel="noopener noreferrer">
+                <div class="res-icon">✅</div>
+                <div class="res-title">W3C Validator</div>
+                <div class="res-url">validator.w3.org</div>
+            </a>
+            <a class="res-card" href="https://caniuse.com/" target="_blank" rel="noopener noreferrer">
+                <div class="res-icon">🌐</div>
+                <div class="res-title">Can I Use</div>
+                <div class="res-url">caniuse.com</div>
+            </a>
+            <a class="res-card" href="https://codepen.io" target="_blank" rel="noopener noreferrer">
+                <div class="res-icon">🖊️</div>
+                <div class="res-title">CodePen</div>
+                <div class="res-url">codepen.io</div>
+            </a>
+            <a class="res-card" href="https://html.spec.whatwg.org/" target="_blank" rel="noopener noreferrer">
+                <div class="res-icon">📖</div>
+                <div class="res-title">WHATWG Spec</div>
+                <div class="res-url">html.spec.whatwg.org</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== MODULE 03 ===== -->
+    <div class="section-label"><span class="section-label-text">🧩 Module 03 — Les Templates HTML/CSS/JS</span></div>
+
+    <div class="module-card">
+        <div class="module-header mh-3">
+            <div class="module-num">03</div>
+            Les Templates — Trouver, lire, personnaliser
+        </div>
+        <div class="module-body">
+            <p class="desc">Un template est un bloc de code HTML/CSS/JS <strong>déjà fonctionnel</strong>, conçu pour
+                être réutilisé et adapté. Tout développeur professionnel s'appuie sur du code existant — la compétence,
+                c'est savoir le <strong>lire, comprendre et adapter</strong>.</p>
+
+            <div class="key-points">
+                <div class="kp">
+                    <div class="kp-dot kp-coral"></div>
+                    <div>Lire tout le code <strong>avant</strong> de copier. Identifier la structure HTML, les classes
+                        CSS importantes, les dépendances JS.</div>
+                </div>
+                <div class="kp">
+                    <div class="kp-dot kp-coral"></div>
+                    <div>Les <strong>variables CSS dans <span class="ic">:root</span></strong> sont les premiers leviers
+                        de personnalisation — couleurs, polices, espacements.</div>
+                </div>
+                <div class="kp">
+                    <div class="kp-dot kp-coral"></div>
+                    <div>Vérifier les <strong>Settings CodePen</strong> pour les librairies externes avant d'intégrer en
+                        local.</div>
+                </div>
+                <div class="kp">
+                    <div class="kp-dot kp-coral"></div>
+                    <div>Un changement → un test. <strong>Ne pas tout modifier en même temps</strong> — impossible à
+                        déboguer.</div>
+                </div>
+                <div class="kp">
+                    <div class="kp-dot kp-coral"></div>
+                    <div>Toujours <strong>vérifier la licence</strong> avant d'utiliser dans un projet commercial.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-coral">🛠️</div>La méthode complète en 5 étapes
+        </div>
+        <div class="step-list">
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-body"><strong>Comprendre avant de modifier</strong><span> — Lire tout le HTML, CSS, JS.
+                        Identifier la structure et les classes importantes.</span></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-body"><strong>Variables CSS en premier</strong><span> — Le bloc <span
+                            class="ic">:root</span> dans le CSS. Couleurs, polices, espacements. Modification la plus
+                        sûre.</span></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-body"><strong>Remplacer le contenu</strong><span> — Textes, images, liens. Garder la
+                        structure HTML, changer uniquement le contenu.</span></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">4</div>
+                <div class="step-body"><strong>Modifier la structure avec précaution</strong><span> — Ajouter ou retirer
+                        des éléments un par un. Tester après chaque changement.</span></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">5</div>
+                <div class="step-body"><strong>Nettoyer</strong><span> — Supprimer ce dont tu n'as pas besoin. Un code
+                        léger est un code maintenable.</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-green">🌐</div>Les meilleures sources de templates
+        </div>
+        <div class="res-grid">
+            <a class="res-card" href="https://codepen.io" target="_blank" rel="noopener noreferrer">
+                <div class="res-icon">🖊️</div>
+                <div class="res-title">CodePen</div>
+                <div class="res-url">codepen.io</div>
+            </a>
+            <a class="res-card" href="https://uiverse.io" target="_blank" rel="noopener noreferrer">
+                <div class="res-icon">🪐</div>
+                <div class="res-title">UIverse</div>
+                <div class="res-url">uiverse.io</div>
+            </a>
+            <a class="res-card" href="https://html5up.net" target="_blank" rel="noopener noreferrer">
+                <div class="res-icon">🏗️</div>
+                <div class="res-title">HTML5 UP</div>
+                <div class="res-url">html5up.net</div>
+            </a>
+            <a class="res-card" href="https://cssfx.netlify.app" target="_blank" rel="noopener noreferrer">
+                <div class="res-icon">✨</div>
+                <div class="res-title">CSS FX</div>
+                <div class="res-url">cssfx.netlify.app</div>
+            </a>
+            <a class="res-card" href="https://animate.style" target="_blank" rel="noopener noreferrer">
+                <div class="res-icon">🎬</div>
+                <div class="res-title">Animate.css</div>
+                <div class="res-url">animate.style</div>
+            </a>
+            <a class="res-card" href="https://free-css.com" target="_blank" rel="noopener noreferrer">
+                <div class="res-icon">🎨</div>
+                <div class="res-title">Free CSS</div>
+                <div class="res-url">free-css.com</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== CONNEXIONS ENTRE MODULES ===== -->
+    <div class="section-label"><span class="section-label-text">🔗 Les connexions entre les modules</span></div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-teal">🔗</div>Tout est lié — voilà comment
+        </div>
+        <p class="desc">Ces trois modules ne sont pas indépendants. Ils forment un <strong>système cohérent</strong> de
+            compétences qui se renforcent mutuellement.</p>
+
+        <div class="step-list">
+            <div class="step-item">
+                <div class="step-num">🧠</div>
+                <div class="step-body"><strong>L'état d'esprit (M01) conditionne tout.</strong><span> Sans la bonne
+                        façon de penser — curiosité, patience, méthode — les modules 02 et 03 ne s'ancrent pas
+                        correctement.</span></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">🏗️</div>
+                <div class="step-body"><strong>Le HTML (M02) te donne les bases pour lire les templates.</strong><span>
+                        Impossible de comprendre et adapter un template si tu ne reconnais pas les balises et attributs
+                        qu'il utilise.</span></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">🧩</div>
+                <div class="step-body"><strong>Les templates (M03) appliquent l'état d'esprit au HTML
+                        réel.</strong><span> Lire le code d'un template avant de l'utiliser, c'est exactement l'état
+                        d'esprit du M01 mis en pratique sur du vrai HTML/CSS.</span></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">🍝</div>
+                <div class="step-body"><strong>L'effet spaghetti relie les 3 modules.</strong><span> Il se produit quand
+                        on ignore l'état d'esprit (M01), qu'on ne comprend pas le HTML (M02), et qu'on copie des
+                        templates sans les lire (M03).</span></div>
+            </div>
+        </div>
+
+        <div class="result-box" style="margin-top:0.9rem;">
+            <div class="rl">La ligne directrice de tout le parcours</div>
+            <strong>Comprendre avant d'agir.</strong> Que ce soit face à un bug, un nouveau concept HTML, ou un template
+            trouvé sur CodePen — la même règle s'applique toujours : lire, comprendre, puis adapter. Jamais l'inverse.
+        </div>
+    </div>
+
+    <!-- ===== CE QUE TU AS PRODUIT ===== -->
+    <div class="section-label"><span class="section-label-text">📂 Les fichiers créés pendant ce parcours</span></div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-amber">📂</div>Ton parcours de cours complet
+        </div>
+        <p class="desc">Voici l'ensemble des fichiers produits au fil de la conversation, organisés par module.</p>
+
+        <div class="result-box">
+            <div class="rl">Module 01 — État d'esprit</div>
+            📄 <strong>cours-mind-set.html</strong> — Le cours original sur l'état d'esprit<br>
+            ✏️ <strong>exercices-mind-set.html</strong> — Les exercices interactifs du module<br>
+            📘 <strong>cours-auto-entrainement.html</strong> — Méthode d'auto-entraînement & effet spaghetti<br>
+            🧪 <strong>exercices-auto-entrainement.html</strong> — Flashcards, QCM, Vrai/Faux, scénarios
+        </div>
+        <div class="result-box">
+            <div class="rl">Module 02 — HTML</div>
+            📄 <strong>cours-html.html</strong> — Cours approfondi HTML (16 sections, balises avancées, attributs,
+            ressources)<br>
+            ✏️ <strong>exercices-html.html</strong> — QCM, associer, remettre en ordre, compléter le code, Vrai/Faux
+        </div>
+        <div class="result-box">
+            <div class="rl">Module 03 — Templates</div>
+            📄 <strong>cours-templates.html</strong> — Trouver, lire et personnaliser des templates HTML/CSS/JS<br>
+            ✏️ <strong>exercices-templates.html</strong> — QCM, scénarios, associer, drag & drop, compléter le code
+        </div>
+        <div class="result-box">
+            <div class="rl">Ce fichier</div>
+            📋 <strong>resume-global.html</strong> — Ce résumé de l'ensemble du parcours<br>
+            🧪 <strong>exercices-resume.html</strong> — Quiz de révision globale croisant les 3 modules
+        </div>
+
+        <div class="tip">
+            <span class="tip-i">💡</span>
+            <span>Mets tous ces fichiers dans le <strong>même dossier</strong> sur ton ordinateur. Les liens entre cours
+                et exercices fonctionneront automatiquement.</span>
+        </div>
+    </div>
+
+    <!-- ===== PROCHAINES ÉTAPES ===== -->
+    <div class="section-label"><span class="section-label-text">🚀 Et maintenant — que faire ?</span></div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-purple">🚀</div>Tes prochaines étapes concrètes
+        </div>
+        <div class="step-list">
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-body"><strong>Fais les exercices de révision globale</strong><span> — le fichier
+                        exercices-resume.html croise tous les modules. C'est ton vrai test de consolidation.</span>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-body"><strong>Lance un mini-projet personnel</strong><span> — trouve un template sur
+                        CodePen, lis-le, personalise-le avec ton propre contenu. Applique la méthode des 5
+                        étapes.</span></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-body"><strong>Identifie ta prochaine zone floue</strong><span> — CSS (mise en page,
+                        flexbox, grid) ? JavaScript (interactions, événements) ? Construis le prochain module sur ce
+                        besoin réel.</span></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">4</div>
+                <div class="step-body"><strong>Refais les exercices de chaque module 2 à 3 fois</strong><span> — pas en
+                        une seule session. Espace sur plusieurs jours. La mémoire long terme se construit dans
+                        l'intervalle.</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-wrap">
+        <p>Résumé lu ✓ &nbsp; Connexions comprises ✓ &nbsp; Prêt à te tester sur tout ?</p>
+        <a class="cta-btn" href="exercices-resume-global.html">Passer aux exercices →</a>
+    </div>
+
+    <div class="footer-note">
+        État d'esprit → HTML → Templates → Créer → Recommencer 🚀<br>
+        <span style="font-size:0.82rem;">Résumé global — Parcours de développement web</span>
+    </div>
+
+</body>
+
+</html>
