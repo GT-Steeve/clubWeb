@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Web 1, 2 & 3</title>
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f5f4f0;
+            color: #2C2C2A;
+            padding: 1.5rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .nav-prev {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #185FA5;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            background: #E6F1FB;
+            border: 0.5px solid #85B7EB;
+            border-radius: 8px;
+            padding: 6px 14px;
+            transition: background 0.15s;
+        }
+
+        .nav-prev:hover {
+            background: #B5D4F4;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 2.5rem 1rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: #5F5E5A;
+            margin-top: 0.5rem;
+        }
+
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 1.2rem;
+        }
+
+        .badge {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+
+        .b-blue {
+            background: #E6F1FB;
+            color: #0C447C;
+        }
+
+        .b-purple {
+            background: #EEEDFE;
+            color: #3C3489;
+        }
+
+        .b-amber {
+            background: #FAEEDA;
+            color: #633806;
+        }
+
+        .b-teal {
+            background: #E1F5EE;
+            color: #085041;
+        }
+
+        .b-coral {
+            background: #FAECE7;
+            color: #712B13;
+        }
+
+        .card {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .stitle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+        }
+
+        .pill {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .p-teal {
+            background: #9FE1CB;
+            color: #085041;
+        }
+
+        .p-purple {
+            background: #CECBF6;
+            color: #3C3489;
+        }
+
+        .p-coral {
+            background: #F5C4B3;
+            color: #712B13;
+        }
+
+        .p-amber {
+            background: #FAC775;
+            color: #633806;
+        }
+
+        .p-blue {
+            background: #B5D4F4;
+            color: #0C447C;
+        }
+
+        .p-green {
+            background: #C0DD97;
+            color: #3B6D11;
+        }
+
+        .p-gray {
+            background: #D3D1C7;
+            color: #444441;
+        }
+
+        .desc {
+            font-size: 0.94rem;
+            color: #5F5E5A;
+            line-height: 1.7;
+            margin-bottom: 0.9rem;
+        }
+
+        .desc:last-child {
+            margin-bottom: 0;
+        }
+
+        .tip {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            background: #E1F5EE;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-top: 0.9rem;
+            font-size: 0.88rem;
+            color: #085041;
+            line-height: 1.5;
+        }
+
+        .tip-purple {
+            background: #EEEDFE;
+            color: #3C3489;
+        }
+
+        .tip-amber {
+            background: #FAEEDA;
+            color: #633806;
+        }
+
+        .tip-blue {
+            background: #E6F1FB;
+            color: #0C447C;
+        }
+
+        .tip-i {
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .result-box {
+            border-radius: 10px;
+            border: 0.5px dashed #B4B2A9;
+            background: #F1EFE8;
+            padding: 0.9rem 1.1rem;
+            font-size: 0.94rem;
+            margin-top: 0.8rem;
+            line-height: 1.8;
+        }
+
+        .rl {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #888780;
+            margin-bottom: 6px;
+        }
+
+        /* SECTION LABEL */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 2rem 0 1rem;
+        }
+
+        .section-label-text {
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888780;
+            white-space: nowrap;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 0.5px;
+            background: #D3D1C7;
+        }
+
+        /* PROGRESS */
+        .progress-wrap {
+            height: 7px;
+            background: #D3D1C7;
+            border-radius: 10px;
+            margin: 1.2rem 0 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #5DCAA5;
+            border-radius: 10px;
+            transition: width 0.4s;
+            width: 0%;
+        }
+
+        .score-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .chip-ok {
+            background: #E1F5EE;
+            color: #085041;
+        }
+
+        .chip-ko {
+            background: #FCEBEB;
+            color: #791F1F;
+        }
+
+        /* FLASHCARDS */
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 1.2rem;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 190px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(.4, 0, .2, 1);
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .fc-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .fc-front {
+            background: #ffffff;
+        }
+
+        .fc-back {
+            background: #2C2C2A;
+            color: #f5f4f0;
+            transform: rotateY(180deg);
+        }
+
+        .fc-label {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888780;
+            margin-bottom: 0.8rem;
+        }
+
+        .fc-question {
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.5;
+            color: #2C2C2A;
+        }
+
+        .fc-answer {
+            font-size: 0.93rem;
+            font-weight: 600;
+            line-height: 1.6;
+            color: #f5f4f0;
+        }
+
+        .fc-hint {
+            font-size: 0.78rem;
+            color: #B4B2A9;
+            margin-top: 0.5rem;
+        }
+
+        .fc-back .fc-hint {
+            color: #5DCAA5;
+        }
+
+        .fc-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.8rem;
+            gap: 10px;
+        }
+
+        .fc-counter {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #888780;
+        }
+
+        .fc-btn {
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            padding: 7px 18px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #2C2C2A;
+            cursor: pointer;
+            transition: background 0.12s;
+        }
+
+        .fc-btn:hover {
+            background: #D3D1C7;
+        }
+
+        .fc-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .fc-btn.primary {
+            background: #2C2C2A;
+            color: #f5f4f0;
+            border-color: #2C2C2A;
+        }
+
+        .fc-btn.primary:hover {
+            background: #444441;
+        }
+
+        /* QCM */
+        .qcm-card {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .q-num {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #888780;
+            margin-bottom: 6px;
+        }
+
+        .q-text {
+            font-size: 0.97rem;
+            font-weight: 700;
+            color: #2C2C2A;
+            margin-bottom: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .opt {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            padding: 9px 13px;
+            cursor: pointer;
+            transition: background 0.12s, border-color 0.12s;
+            font-size: 0.9rem;
+            color: #2C2C2A;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .opt:hover {
+            background: #D3D1C7;
+        }
+
+        .opt.selected {
+            background: #EEEDFE;
+            border-color: #AFA9EC;
+            color: #26215C;
+        }
+
+        .opt.correct {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+            color: #085041;
+            cursor: default;
+        }
+
+        .opt.wrong {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+            cursor: default;
+        }
+
+        .opt-dot {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            border-radius: 50%;
+            border: 2px solid #B4B2A9;
+            margin-top: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.12s;
+        }
+
+        .opt.selected .opt-dot {
+            border-color: #7F77DD;
+            background: #7F77DD;
+        }
+
+        .opt.correct .opt-dot {
+            border-color: #1D9E75;
+            background: #1D9E75;
+        }
+
+        .opt.wrong .opt-dot {
+            border-color: #E24B4A;
+            background: #E24B4A;
+        }
+
+        .opt-dot-inner {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #fff;
+            display: none;
+        }
+
+        .opt.selected .opt-dot-inner,
+        .opt.correct .opt-dot-inner,
+        .opt.wrong .opt-dot-inner {
+            display: block;
+        }
+
+        .q-feedback {
+            font-size: 0.86rem;
+            font-weight: 700;
+            margin-top: 0.6rem;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .q-feedback.show {
+            display: block;
+        }
+
+        .q-feedback.ok {
+            color: #0F6E56;
+        }
+
+        .q-feedback.ko {
+            color: #A32D2D;
+        }
+
+        /* ASSIGNER — classe la plateforme */
+        .assign-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 0.8rem;
+        }
+
+        .assign-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .assign-label {
+            font-size: 0.92rem;
+            font-weight: 700;
+            flex: 1;
+            padding: 8px 12px;
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+        }
+
+        .assign-select {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            background: #fff;
+            padding: 8px 10px;
+            color: #2C2C2A;
+            cursor: pointer;
+            min-width: 120px;
+            outline: none;
+        }
+
+        .assign-select.ok {
+            border-color: #5DCAA5;
+            background: #E1F5EE;
+            color: #085041;
+        }
+
+        .assign-select.ko {
+            border-color: #F09595;
+            background: #FCEBEB;
+            color: #791F1F;
+        }
+
+        /* V/F */
+        .vf-card {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #ffffff;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .vf-statement {
+            font-size: 0.97rem;
+            font-weight: 700;
+            color: #2C2C2A;
+            margin-bottom: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .vf-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .vf-btn {
+            flex: 1;
+            padding: 8px 0;
+            border-radius: 10px;
+            border: 0.5px solid #B4B2A9;
+            background: #F1EFE8;
+            color: #2C2C2A;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.12s;
+        }
+
+        .vf-btn.vrai:hover {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+            color: #085041;
+        }
+
+        .vf-btn.faux:hover {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+        }
+
+        .vf-btn.correct-ans {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+            color: #085041;
+            cursor: default;
+        }
+
+        .vf-btn.wrong-ans {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+            cursor: default;
+        }
+
+        /* SCÉNARIOS */
+        .scenario-box {
+            border-radius: 12px;
+            border: 2px dashed #F5C4B3;
+            background: #FAECE7;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .scenario-label {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #993C1D;
+            margin-bottom: 6px;
+        }
+
+        .scenario-text {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #712B13;
+            line-height: 1.6;
+        }
+
+        .scenario-choices {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 1rem;
+        }
+
+        .scenario-choice {
+            background: #ffffff;
+            border: 0.5px solid #D3D1C7;
+            border-radius: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.12s;
+        }
+
+        .scenario-choice:hover {
+            border-color: #AFA9EC;
+            background: #EEEDFE;
+        }
+
+        .scenario-choice.correct-sc {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+            color: #085041;
+            cursor: default;
+        }
+
+        .scenario-choice.wrong-sc {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+            cursor: default;
+        }
+
+        .scenario-fb {
+            display: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .scenario-fb.show {
+            display: block;
+        }
+
+        .scenario-fb.ok {
+            background: #E1F5EE;
+            color: #085041;
+        }
+
+        .scenario-fb.ko {
+            background: #FCEBEB;
+            color: #791F1F;
+        }
+
+        /* DRAG */
+        .drag-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 0.8rem;
+        }
+
+        .drag-item {
+            background: #F1EFE8;
+            border: 0.5px solid #B4B2A9;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            user-select: none;
+            transition: background 0.12s, box-shadow 0.12s;
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .1);
+        }
+
+        .drag-item.dragging {
+            opacity: 0.4;
+        }
+
+        .drag-item.drag-over {
+            background: #EEEDFE;
+            border-color: #AFA9EC;
+        }
+
+        .drag-handle {
+            color: #B4B2A9;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .drag-item.correct-order {
+            background: #E1F5EE;
+            border-color: #5DCAA5;
+            color: #085041;
+        }
+
+        .drag-item.wrong-order {
+            background: #FCEBEB;
+            border-color: #F09595;
+            color: #791F1F;
+        }
+
+        /* ACTION BUTTONS */
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            border: 0.5px solid #B4B2A9;
+            background: #F1EFE8;
+            color: #2C2C2A;
+            border-radius: 10px;
+            padding: 8px 20px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.12s;
+        }
+
+        .action-btn:hover {
+            background: #D3D1C7;
+        }
+
+        .action-btn.primary {
+            background: #2C2C2A;
+            color: #FAC775;
+            border-color: #2C2C2A;
+        }
+
+        .action-btn.primary:hover {
+            background: #444441;
+        }
+
+        /* SCORE PANEL */
+        .score-panel {
+            border-radius: 16px;
+            border: 0.5px solid #D3D1C7;
+            background: #fff;
+            padding: 1.4rem 1.5rem;
+            margin-top: 1rem;
+            display: none;
+            text-align: center;
+        }
+
+        .score-panel.show {
+            display: block;
+        }
+
+        .score-big {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #2C2C2A;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .score-big span {
+            color: #5DCAA5;
+        }
+
+        .score-sub {
+            font-size: 0.9rem;
+            color: #888780;
+        }
+
+        /* CTA */
+        .cta-wrap {
+            text-align: center;
+            background: #2C2C2A;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .cta-wrap p {
+            color: #D3D1C7;
+            font-size: 0.95rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: #FAC775;
+            color: #412402;
+            font-weight: 800;
+            font-size: 0.97rem;
+            padding: 10px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+
+        .cta-btn:hover {
+            background: #EF9F27;
+        }
+
+        .footer-note {
+            text-align: center;
+            padding: 2rem 0 1rem;
+            font-size: 0.88rem;
+            color: #888780;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 500px) {
+            .assign-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <a class="nav-prev" href="cours-web123.html">← Retour au cours</a>
+
+    <div class="hero">
+        <h1>✏️ Exercices — L'évolution du web</h1>
+        <p>Teste ta compréhension sur le web 1 à 3.</p>
+        <div class="badge-row">
+            <span class="badge b-blue">Web 1</span>
+            <span class="badge b-teal">Web 2</span>
+            <span class="badge b-purple">Web 3</span>
+            <span class="badge b-amber">Flashcards · QCM · V/F · Classer</span>
+        </div>
+    </div>
+
+    <!-- FLASHCARDS -->
+    <div class="section-label"><span class="section-label-text">🃏 Flashcards — Concepts clés</span></div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-blue">🃏</div>Flashcards — Retourne la carte pour voir la réponse
+        </div>
+        <p class="desc">Formule ta réponse dans ta tête avant de retourner la carte.</p>
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                <div class="fc-face fc-front">
+                    <div class="fc-label">❓ Question — Clique pour retourner</div>
+                    <div class="fc-question" id="fc-question"></div>
+                    <div class="fc-hint">Réfléchis d'abord 🧠</div>
+                </div>
+                <div class="fc-face fc-back">
+                    <div class="fc-label">✅ Réponse</div>
+                    <div class="fc-answer" id="fc-answer"></div>
+                    <div class="fc-hint">Est-ce que tu avais pensé à ça ?</div>
+                </div>
+            </div>
+        </div>
+        <div class="fc-nav">
+            <button class="fc-btn" id="fc-prev" onclick="prevCard()">← Précédente</button>
+            <span class="fc-counter" id="fc-counter">1 / 9</span>
+            <button class="fc-btn primary" id="fc-next" onclick="nextCard()">Suivante →</button>
+        </div>
+    </div>
+
+    <!-- CLASSER LES EXEMPLES -->
+    <div class="section-label"><span class="section-label-text">🗂️ Classe chaque exemple dans le bon web</span></div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-teal">🗂️</div>Associe chaque exemple à sa version du web
+        </div>
+        <p class="desc">Pour chaque service ou concept, sélectionne s'il appartient au Web 1, 2 ou 3.</p>
+        <div class="assign-grid" id="assign-container"></div>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="checkAssign()">Vérifier</button>
+            <button class="action-btn" onclick="resetAssign()">Recommencer</button>
+        </div>
+        <div class="result-box" id="assign-result" style="display:none;margin-top:0.8rem;"></div>
+    </div>
+
+    <!-- QCM -->
+    <div class="section-label"><span class="section-label-text">🧠 QCM</span></div>
+
+    <div id="qcm-container"></div>
+    <div class="progress-wrap">
+        <div class="progress-fill" id="prog-qcm"></div>
+    </div>
+    <div class="score-row" id="score-qcm"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkQCM()">Valider le QCM</button>
+        <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+    </div>
+    <div class="score-panel" id="qcm-score-panel">
+        <div class="score-big"><span id="qcm-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au QCM</div>
+    </div>
+
+    <!-- SCÉNARIOS -->
+    <div class="section-label"><span class="section-label-text">🎭 Scénarios — Dans quel web sommes-nous ?</span></div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-coral">🎭</div>Scénarios — Identifie la version du web
+        </div>
+        <p class="desc">Pour chaque situation décrite, identifie à quel web elle correspond et pourquoi.</p>
+    </div>
+    <div id="scenario-container"></div>
+
+    <!-- REMETTRE EN ORDRE CHRONOLOGIQUE -->
+    <div class="section-label"><span class="section-label-text">🔀 Remets dans l'ordre chronologique</span></div>
+
+    <div class="card">
+        <div class="stitle">
+            <div class="pill p-amber">🔀</div>Remets ces événements dans l'ordre
+        </div>
+        <p class="desc">Ces grandes étapes du web ont été mélangées. Remets-les dans l'ordre chronologique par
+            glisser-déposer.</p>
+        <div class="drag-list" id="dragList"></div>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="checkOrder()">Vérifier l'ordre</button>
+            <button class="action-btn" onclick="resetOrder()">Réinitialiser</button>
+        </div>
+        <div class="q-feedback" id="order-feedback"
+            style="margin-top:10px;border-radius:8px;padding:8px 12px;font-weight:600;"></div>
+    </div>
+
+    <!-- V/F -->
+    <div class="section-label"><span class="section-label-text">✅ Vrai / Faux</span></div>
+
+    <div id="vf-container"></div>
+    <div class="progress-wrap">
+        <div class="progress-fill" id="prog-vf"></div>
+    </div>
+    <div class="score-row" id="score-vf"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkVF()">Valider le V/F</button>
+        <button class="action-btn" onclick="resetVF()">Recommencer</button>
+    </div>
+    <div class="score-panel" id="vf-score-panel">
+        <div class="score-big"><span id="vf-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au Vrai / Faux</div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-wrap">
+        <p>Exercices terminés ✓ &nbsp; Refais-les 2 à 3 fois pour bien ancrer les concepts.</p>
+        <a class="cta-btn" href="../sommaire.html">↩ Revenir au sommaire</a>
+    </div>
+
+    <div class="footer-note">
+        <span style="font-size:0.82rem;">Comprendre → Chercher → Coder → Tester → Recommencer 🚀</span><br>
+        L'état d'esprit du développeur<br>
+    </div>
+
+    <script>
+        /* ===== FLASHCARDS ===== */
+        var flashcards = [
+            { q: "Qu'est-ce qui caractérise le Web 1 ?", a: "Un web de lecture seule. Les pages sont statiques, l'utilisateur consomme l'information mais ne peut pas interagir ni créer de contenu." },
+            { q: "À quelle période correspond le Web 2 ?", a: "Environ 2004 jusqu'à aujourd'hui. C'est l'ère des réseaux sociaux, des plateformes participatives et du contenu généré par les utilisateurs." },
+            { q: "Quelle est la grande promesse du Web 3 ?", a: "La décentralisation et la propriété des données. Les utilisateurs peuvent posséder leurs actifs numériques sans passer par un intermédiaire." },
+            { q: "Qu'est-ce qu'une blockchain ?", a: "Un registre numérique partagé sur des milliers d'ordinateurs, sans autorité centrale. Tout le monde peut vérifier — personne ne contrôle seul." },
+            { q: "Quelle est la formule ultra-simple pour retenir les 3 web ?", a: "Web 1 = Lire 📖 / Web 2 = Écrire & partager ✍️ / Web 3 = Posséder & contrôler 💰" },
+            { q: "Quel est le revers du Web 2 ?", a: "La centralisation. Quelques géants (Google, Meta, Amazon) détiennent les données de milliards d'utilisateurs et en tirent profit." },
+            { q: "Qu'est-ce qu'un smart contract ?", a: "Un programme autonome sur la blockchain qui s'exécute automatiquement quand ses conditions sont remplies — sans intermédiaire humain." },
+            { q: "Qu'est-ce qu'un NFT ?", a: "Non-Fungible Token. Un certificat de propriété numérique unique sur la blockchain. Peut représenter une image, une musique, ou tout actif numérique." },
+            { q: "Le Web 3 a-t-il remplacé le Web 2 ?", a: "Non. Ces phases coexistent. On est encore en plein Web 2 — et le Web 3 se développe en parallèle, pas en remplacement immédiat." }
+        ];
+        var currentCard = 0, cardFlipped = false;
+        function renderCard() {
+            var c = flashcards[currentCard];
+            document.getElementById('fc-question').textContent = c.q;
+            document.getElementById('fc-answer').textContent = c.a;
+            document.getElementById('fc-counter').textContent = (currentCard + 1) + ' / ' + flashcards.length;
+            document.getElementById('fc-prev').disabled = currentCard === 0;
+            document.getElementById('fc-next').textContent = currentCard === flashcards.length - 1 ? 'Recommencer' : 'Suivante →';
+            cardFlipped = false; document.getElementById('flashcard').classList.remove('flipped');
+        }
+        function flipCard() { cardFlipped = !cardFlipped; document.getElementById('flashcard').classList.toggle('flipped', cardFlipped); }
+        function nextCard() { currentCard = currentCard < flashcards.length - 1 ? currentCard + 1 : 0; renderCard(); }
+        function prevCard() { if (currentCard > 0) { currentCard--; renderCard(); } }
+        renderCard();
+
+        /* ===== ASSIGNER ===== */
+        var assignData = [
+            { label: '📖 Page personnelle HTML des années 90', answer: '1' },
+            { label: '📘 Facebook — publier des posts et réagir', answer: '2' },
+            { label: '₿ Bitcoin — monnaie décentralisée', answer: '3' },
+            { label: '📺 YouTube — uploader et commenter', answer: '2' },
+            { label: '🗂️ Annuaire en ligne sans interactivité', answer: '1' },
+            { label: '🖼️ NFT — certificat de propriété numérique', answer: '3' },
+            { label: '📷 Instagram — stories et partage de photos', answer: '2' },
+            { label: '📜 Smart contract Ethereum', answer: '3' },
+            { label: '🌐 Site vitrine statique d\'entreprise', answer: '1' }
+        ];
+
+        function renderAssign() {
+            var c = document.getElementById('assign-container'); c.innerHTML = '';
+            assignData.forEach(function (item, i) {
+                var row = document.createElement('div'); row.className = 'assign-row';
+                row.innerHTML = '<div class="assign-label">' + item.label + '</div>'
+                    + '<select class="assign-select" id="assign-' + i + '">'
+                    + '<option value="">Choisir...</option>'
+                    + '<option value="1">🌐 Web 1</option>'
+                    + '<option value="2">🌐 Web 2</option>'
+                    + '<option value="3">🌐 Web 3</option>'
+                    + '</select>';
+                c.appendChild(row);
+            });
+            document.getElementById('assign-result').style.display = 'none';
+        }
+        function checkAssign() {
+            var score = 0;
+            assignData.forEach(function (item, i) {
+                var sel = document.getElementById('assign-' + i);
+                sel.classList.remove('ok', 'ko');
+                if (sel.value === item.answer) { sel.classList.add('ok'); score++; }
+                else { sel.classList.add('ko'); if (sel.value === '') sel.value = item.answer; }
+                sel.disabled = true;
+            });
+            var res = document.getElementById('assign-result');
+            res.style.display = 'block';
+            res.innerHTML = '<div class="rl">' + (score === assignData.length ? '✅ Parfait !' : 'Résultat') + '</div>' + score + ' / ' + assignData.length + ' bonnes réponses.' + (score < assignData.length ? ' Les erreurs affichent la bonne réponse.' : '');
+        }
+        function resetAssign() { renderAssign(); }
+        renderAssign();
+
+        /* ===== QCM ===== */
+        var qcmData = [
+            { q: "Le Web 1 est aussi appelé :", opts: ["Le web social", "Le web statique", "Le web décentralisé", "Le web participatif"], correct: 1, expl: "✓ Web statique — pages fixes, lecture seule, sans interaction possible." },
+            { q: "Quelle est la caractéristique principale du Web 2 par rapport au Web 1 ?", opts: ["Les pages sont plus rapides", "Les utilisateurs peuvent créer et partager du contenu", "Le web est décentralisé", "Il n'y a plus de serveurs centraux"], correct: 1, expl: "✓ La participation. Les utilisateurs créent, commentent, partagent — ils ne sont plus passifs." },
+            { q: "Sur quelle technologie repose principalement le Web 3 ?", opts: ["Le HTML5", "Le cloud computing", "La blockchain", "Le WiFi 6"], correct: 2, expl: "✓ La blockchain — un registre distribué qui permet la décentralisation et la propriété numérique." },
+            { q: "Que signifie 'centralisé' dans le contexte du Web 2 ?", opts: ["Tout le monde peut accéder aux données", "Les données sont stockées et contrôlées par quelques grandes plateformes", "Le web est géré par un seul gouvernement", "Les connexions sont plus rapides"], correct: 1, expl: "✓ Tes données (posts, photos, messages) sont sur les serveurs de Meta, Google, etc. — pas chez toi." },
+            { q: "Dans quel web sommes-nous principalement aujourd'hui (2024) ?", opts: ["Web 1", "Web 3 uniquement", "Web 2, avec émergence du Web 3", "Web 1 et Web 2 simultanément"], correct: 2, expl: "✓ On est encore largement en Web 2 — mais le Web 3 émerge. Les phases coexistent, elles ne se remplacent pas du jour au lendemain." },
+            { q: "Qu'est-ce qu'Ethereum ?", opts: ["Une cryptomonnaie comme Bitcoin", "Une plateforme blockchain programmable permettant les smart contracts et dApps", "Un réseau social décentralisé", "Un navigateur web décentralisé"], correct: 1, expl: "✓ Ethereum est une blockchain programmable. Contrairement à Bitcoin (monnaie), Ethereum permet de créer des applications et des smart contracts." },
+            { q: "Quel est le vrai problème du Web 2 selon le cours ?", opts: ["Les sites sont trop lents", "L'interface est compliquée", "Les grandes plateformes centralisent et exploitent les données des utilisateurs", "Il n'y a pas assez de contenu disponible"], correct: 2, expl: "✓ La centralisation. Tes données génèrent de la valeur pour les plateformes — pas pour toi. 'Si c'est gratuit, c'est toi le produit.'" },
+            { q: "Lequel de ces éléments appartient au Web 3 ?", opts: ["Wikipedia", "Instagram", "Les NFT et les smart contracts", "Les forums de discussion"], correct: 2, expl: "✓ NFT et smart contracts sont des technologies Web 3 — basées sur la blockchain et permettant la propriété et l'automatisation décentralisées." }
+        ];
+        var qcmAnswers = {};
+
+        function renderQCM() {
+            var c = document.getElementById('qcm-container'); c.innerHTML = '';
+            qcmData.forEach(function (q, qi) {
+                var card = document.createElement('div'); card.className = 'qcm-card';
+                var optsHtml = q.opts.map(function (o, oi) {
+                    return '<div class="opt" id="qcm-opt-' + qi + '-' + oi + '" onclick="selectQCM(' + qi + ',' + oi + ')">'
+                        + '<div class="opt-dot"><div class="opt-dot-inner"></div></div><span>' + o + '</span></div>';
+                }).join('');
+                card.innerHTML = '<div class="q-num">Question ' + (qi + 1) + ' sur ' + qcmData.length + '</div>'
+                    + '<div class="q-text">' + q.q + '</div><div class="options">' + optsHtml + '</div>'
+                    + '<div class="q-feedback" id="qcm-fb-' + qi + '"></div>';
+                c.appendChild(card);
+            });
+        }
+        function selectQCM(qi, oi) {
+            if (document.getElementById('qcm-opt-' + qi + '-0').style.pointerEvents === 'none') return;
+            qcmAnswers[qi] = oi;
+            qcmData[qi].opts.forEach(function (_, i) { document.getElementById('qcm-opt-' + qi + '-' + i).classList.toggle('selected', i === oi); });
+        }
+        function checkQCM() {
+            var score = 0;
+            qcmData.forEach(function (q, qi) {
+                var chosen = qcmAnswers[qi], fb = document.getElementById('qcm-fb-' + qi);
+                q.opts.forEach(function (_, i) { var el = document.getElementById('qcm-opt-' + qi + '-' + i); el.style.pointerEvents = 'none'; el.classList.remove('selected'); });
+                if (chosen !== undefined) {
+                    if (chosen === q.correct) { document.getElementById('qcm-opt-' + qi + '-' + chosen).classList.add('correct'); score++; fb.className = 'q-feedback show ok'; fb.innerHTML = q.expl; }
+                    else { document.getElementById('qcm-opt-' + qi + '-' + chosen).classList.add('wrong'); document.getElementById('qcm-opt-' + qi + '-' + q.correct).classList.add('correct'); fb.className = 'q-feedback show ko'; fb.innerHTML = '✗ ' + q.expl.replace('✓ ', ''); }
+                } else { document.getElementById('qcm-opt-' + qi + '-' + q.correct).classList.add('correct'); fb.className = 'q-feedback show ko'; fb.innerHTML = '— Sans réponse. ' + q.expl.replace('✓ ', ''); }
+            });
+            document.getElementById('prog-qcm').style.width = Math.round(score / qcmData.length * 100) + '%';
+            var row = document.getElementById('score-qcm');
+            row.innerHTML = '<span class="chip chip-ok">' + score + ' / ' + qcmData.length + ' bonnes réponses</span>';
+            if (qcmData.length - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (qcmData.length - score) + ' erreur(s)</span>';
+            document.getElementById('qcm-score-val').textContent = score;
+            document.getElementById('qcm-score-panel').classList.add('show');
+            document.getElementById('qcm-score-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        function resetQCM() {
+            qcmAnswers = {}; document.getElementById('qcm-score-panel').classList.remove('show');
+            document.getElementById('prog-qcm').style.width = '0%'; document.getElementById('score-qcm').innerHTML = ''; renderQCM();
+        }
+
+        /* ===== SCÉNARIOS ===== */
+        var scenariosData = [
+            {
+                label: "Scénario 1",
+                situation: "En 1998, Marie ouvre son navigateur et visite le site de l'encyclopédie Britannica en ligne. Elle peut lire des articles mais ne peut ni commenter, ni créer de compte, ni modifier quoi que ce soit. Quel web est-ce ?",
+                choices: [
+                    { text: "🌐 Web 1 — lecture seule, site statique sans interaction", correct: true },
+                    { text: "🌐 Web 2 — une encyclopédie en ligne, c'est participatif", correct: false },
+                    { text: "🌐 Web 3 — les données sont décentralisées", correct: false }
+                ],
+                fb_ok: "Oui ! Web 1 : lecture seule, pas de compte, pas d'interaction. L'utilisateur est passif face au contenu.",
+                fb_ko: "Non. En 1998, le web est statique. Sans compte, sans commentaire, sans participation → Web 1."
+            },
+            {
+                label: "Scénario 2",
+                situation: "Lucas poste une vidéo de sa cover de guitare sur YouTube. En 24h, il reçoit 200 commentaires, 50 personnes s'abonnent à sa chaîne et YouTube lui suggère de monétiser son contenu. Quel web est-ce ?",
+                choices: [
+                    { text: "🌐 Web 1 — Lucas publie du contenu statique", correct: false },
+                    { text: "🌐 Web 2 — plateforme centralisée, création et partage de contenu", correct: true },
+                    { text: "🌐 Web 3 — Lucas possède sa chaîne sur la blockchain", correct: false }
+                ],
+                fb_ok: "Exact ! Web 2 : Lucas crée, le public interagit, mais c'est YouTube (Google) qui possède la plateforme et monétise les données.",
+                fb_ko: "C'est le Web 2. YouTube est une plateforme centralisée où les utilisateurs créent du contenu — mais la plateforme en contrôle les règles."
+            },
+            {
+                label: "Scénario 3",
+                situation: "Sophie achète un NFT d'une œuvre d'art numérique. La transaction est enregistrée sur Ethereum. Elle peut vendre ce NFT directement à un autre acheteur sans passer par une galerie ou une banque. Quel web est-ce ?",
+                choices: [
+                    { text: "🌐 Web 1 — acheter une image en ligne, ça existait avant", correct: false },
+                    { text: "🌐 Web 2 — c'est une plateforme en ligne comme les autres", correct: false },
+                    { text: "🌐 Web 3 — propriété numérique sur blockchain, sans intermédiaire", correct: true }
+                ],
+                fb_ok: "Parfait ! Web 3 : propriété numérique vérifiable sur blockchain, transaction directe entre acheteur et vendeur sans intermédiaire.",
+                fb_ko: "C'est le Web 3. La blockchain garantit la propriété (pas une galerie), et la vente se fait directement (pas une plateforme centralisée)."
+            }
+        ];
+        var scenarioAnswers = {};
+
+        function renderScenarios() {
+            var c = document.getElementById('scenario-container'); c.innerHTML = '';
+            scenariosData.forEach(function (sc, si) {
+                var div = document.createElement('div'); div.className = 'card';
+                var choicesHtml = sc.choices.map(function (ch, ci) {
+                    return '<div class="scenario-choice" id="sc-' + si + '-' + ci + '" onclick="answerScenario(' + si + ',' + ci + ')">' + ch.text + '</div>';
+                }).join('');
+                div.innerHTML = '<div class="stitle"><div class="pill p-coral">' + (si + 1) + '</div>' + sc.label + '</div>'
+                    + '<div class="scenario-box"><div class="scenario-label">📋 Situation</div><div class="scenario-text">' + sc.situation + '</div></div>'
+                    + '<div class="scenario-choices">' + choicesHtml + '</div>'
+                    + '<div class="scenario-fb" id="sc-fb-' + si + '"></div>';
+                c.appendChild(div);
+            });
+        }
+        function answerScenario(si, ci) {
+            if (scenarioAnswers[si] !== undefined) return;
+            scenarioAnswers[si] = ci;
+            var sc = scenariosData[si];
+            sc.choices.forEach(function (ch, i) {
+                var el = document.getElementById('sc-' + si + '-' + i);
+                el.style.pointerEvents = 'none';
+                if (i === ci) el.classList.add(ch.correct ? 'correct-sc' : 'wrong-sc');
+                else if (ch.correct) el.classList.add('correct-sc');
+            });
+            var fb = document.getElementById('sc-fb-' + si), isCorrect = sc.choices[ci].correct;
+            fb.className = 'scenario-fb show ' + (isCorrect ? 'ok' : 'ko');
+            fb.textContent = isCorrect ? '✓ ' + sc.fb_ok : '✗ ' + sc.fb_ko;
+        }
+        renderScenarios();
+
+        /* ===== DRAG ORDER ===== */
+        var orderCorrect = [
+            '🌐 ~1990 — Naissance du World Wide Web (Tim Berners-Lee)',
+            '📖 ~1990-2000 — Web 1 : pages statiques, lecture seule',
+            '📘 ~2004 — Lancement de Facebook, début du Web 2',
+            '📺 ~2005 — Création de YouTube, explosion du contenu utilisateur',
+            '₿ 2009 — Lancement de Bitcoin, première blockchain grand public',
+            '⟠ 2015 — Lancement d\'Ethereum et des smart contracts',
+            '🖼️ 2021 — Explosion des NFT, le Web 3 entre dans le débat public',
+            '🌐 2020+ — Web 3 en développement actif, coexistant avec le Web 2'
+        ];
+        var orderShuffled = orderCorrect.slice();
+        (function () { for (var i = orderShuffled.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = orderShuffled[i]; orderShuffled[i] = orderShuffled[j]; orderShuffled[j] = t; } })();
+        var dragSrc = null;
+
+        function renderDragList() {
+            var list = document.getElementById('dragList'); list.innerHTML = '';
+            orderShuffled.forEach(function (step, i) {
+                var item = document.createElement('div');
+                item.className = 'drag-item'; item.draggable = true; item.dataset.index = i;
+                item.innerHTML = '<span class="drag-handle">⠿</span><span>' + step + '</span>';
+                item.addEventListener('dragstart', function (e) { dragSrc = i; item.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+                item.addEventListener('dragend', function () { item.classList.remove('dragging'); });
+                item.addEventListener('dragover', function (e) { e.preventDefault(); list.querySelectorAll('.drag-item').forEach(function (el) { el.classList.remove('drag-over'); }); item.classList.add('drag-over'); });
+                item.addEventListener('dragleave', function () { item.classList.remove('drag-over'); });
+                item.addEventListener('drop', function (e) {
+                    e.preventDefault(); item.classList.remove('drag-over');
+                    if (dragSrc !== null && dragSrc !== i) { var tmp = orderShuffled[dragSrc]; orderShuffled[dragSrc] = orderShuffled[i]; orderShuffled[i] = tmp; dragSrc = null; renderDragList(); }
+                });
+                var tapSrc = null;
+                item.addEventListener('touchstart', function () {
+                    var idx = parseInt(item.dataset.index);
+                    if (tapSrc === null) { tapSrc = idx; item.style.outline = '2px solid #7F77DD'; }
+                    else { var tmp = orderShuffled[tapSrc]; orderShuffled[tapSrc] = orderShuffled[idx]; orderShuffled[idx] = tmp; tapSrc = null; renderDragList(); }
+                });
+                list.appendChild(item);
+            });
+        }
+        function checkOrder() {
+            var items = document.getElementById('dragList').querySelectorAll('.drag-item');
+            var correct = true;
+            items.forEach(function (item, i) {
+                var txt = item.querySelector('span:last-child').textContent;
+                if (txt === orderCorrect[i]) item.classList.add('correct-order');
+                else { item.classList.add('wrong-order'); correct = false; }
+            });
+            var fb = document.getElementById('order-feedback');
+            fb.className = 'q-feedback show ' + (correct ? 'ok' : 'ko');
+            fb.style.background = correct ? '#E1F5EE' : '#FCEBEB';
+            fb.style.color = correct ? '#085041' : '#791F1F';
+            fb.textContent = correct ? '✅ Parfait ! Tu connais la chronologie du web.' : '✗ Pas tout à fait. L\'ordre : WWW → Web 1 → Facebook/Web 2 → YouTube → Bitcoin → Ethereum → NFT → Web 3 en cours.';
+        }
+        function resetOrder() {
+            (function () { for (var i = orderShuffled.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = orderShuffled[i]; orderShuffled[i] = orderShuffled[j]; orderShuffled[j] = t; } })();
+            document.getElementById('order-feedback').className = 'q-feedback';
+            document.getElementById('order-feedback').style.background = '';
+            renderDragList();
+        }
+        renderDragList();
+
+        /* ===== V/F ===== */
+        var vfData = [
+            { s: "Le Web 1 permettait aux utilisateurs de commenter et de partager du contenu.", ans: false, expl: "Faux. Le Web 1 est en lecture seule — l'utilisateur consulte mais ne peut pas interagir ni créer de contenu." },
+            { s: "Facebook et YouTube sont des exemples typiques du Web 2.", ans: true, expl: "Vrai. Ces plateformes centralisées permettent la création, le partage et l'interaction — c'est l'essence du Web 2." },
+            { s: "Dans le Web 2, les utilisateurs possèdent pleinement leurs données.", ans: false, expl: "Faux. Dans le Web 2, les données sont sur les serveurs des plateformes (Meta, Google). Les utilisateurs n'en sont pas réellement propriétaires." },
+            { s: "Bitcoin est la première grande application de la blockchain grand public.", ans: true, expl: "Vrai. Lancé en 2009 par Satoshi Nakamoto, Bitcoin a introduit la blockchain au grand public — première monnaie décentralisée." },
+            { s: "Le Web 3 a complètement remplacé le Web 2 en 2023.", ans: false, expl: "Faux. Le Web 3 est encore en développement et coexiste avec le Web 2. On utilise encore largement des plateformes Web 2 aujourd'hui." },
+            { s: "Un smart contract s'exécute automatiquement sans avoir besoin d'un intermédiaire humain.", ans: true, expl: "Vrai. C'est précisément sa force : le code définit les règles, et quand les conditions sont remplies, il s'exécute seul sur la blockchain." },
+            { s: "Le Web 3 est une technologie entièrement fiable et sans risques.", ans: false, expl: "Faux. Le Web 3 est porteur d'innovations réelles mais aussi de spéculations, d'arnaques et de promesses non tenues. Il faut l'aborder avec esprit critique." },
+            { s: "L'Ethereum est différent du Bitcoin — il permet de créer des applications décentralisées.", ans: true, expl: "Vrai. Bitcoin est principalement une monnaie. Ethereum est une blockchain programmable qui permet les smart contracts et les dApps." }
+        ];
+        var vfAnswers = {};
+        var msgs_ok = ['Parfait !', 'Bravo !', "C'est ça !", 'Excellent !'];
+        var msgs_ko = ['Pas tout à fait...', 'Essaie encore !', 'Attention !'];
+        function rnd(a) { return a[Math.floor(Math.random() * a.length)]; }
+
+        function renderVF() {
+            var c = document.getElementById('vf-container'); c.innerHTML = '';
+            vfData.forEach(function (q, qi) {
+                var card = document.createElement('div'); card.className = 'vf-card';
+                card.innerHTML = '<div class="q-num">Affirmation ' + (qi + 1) + ' sur ' + vfData.length + '</div>'
+                    + '<div class="vf-statement">' + q.s + '</div>'
+                    + '<div class="vf-btns">'
+                    + '<button class="vf-btn vrai" id="vf-v-' + qi + '" onclick="answerVF(' + qi + ',true)">✓ Vrai</button>'
+                    + '<button class="vf-btn faux" id="vf-f-' + qi + '" onclick="answerVF(' + qi + ',false)">✗ Faux</button>'
+                    + '</div><div class="q-feedback" id="vf-fb-' + qi + '"></div>';
+                c.appendChild(card);
+            });
+        }
+        function answerVF(qi, val) {
+            if (document.getElementById('vf-v-' + qi).disabled) return;
+            vfAnswers[qi] = val;
+            var vb = document.getElementById('vf-v-' + qi), fb2 = document.getElementById('vf-f-' + qi);
+            vb.className = 'vf-btn vrai'; fb2.className = 'vf-btn faux';
+            vb.style.background = val ? '#EEEDFE' : ''; vb.style.borderColor = val ? '#AFA9EC' : ''; vb.style.color = val ? '#26215C' : '';
+            fb2.style.background = !val ? '#EEEDFE' : ''; fb2.style.borderColor = !val ? '#AFA9EC' : ''; fb2.style.color = !val ? '#26215C' : '';
+        }
+        function checkVF() {
+            var score = 0;
+            vfData.forEach(function (q, qi) {
+                var vb = document.getElementById('vf-v-' + qi), fb2 = document.getElementById('vf-f-' + qi), fb = document.getElementById('vf-fb-' + qi);
+                vb.disabled = true; fb2.disabled = true;
+                vb.style.background = ''; vb.style.borderColor = ''; vb.style.color = '';
+                fb2.style.background = ''; fb2.style.borderColor = ''; fb2.style.color = '';
+                vb.className = 'vf-btn vrai'; fb2.className = 'vf-btn faux';
+                var chosen = vfAnswers[qi];
+                if (chosen !== undefined) {
+                    if (chosen === q.ans) { score++; (chosen ? vb : fb2).classList.add('correct-ans'); fb.className = 'q-feedback show ok'; fb.innerHTML = rnd(msgs_ok) + ' ' + q.expl; }
+                    else { (chosen ? vb : fb2).classList.add('wrong-ans'); (q.ans ? vb : fb2).classList.add('correct-ans'); fb.className = 'q-feedback show ko'; fb.innerHTML = rnd(msgs_ko) + ' ' + q.expl; }
+                } else { (q.ans ? vb : fb2).classList.add('correct-ans'); fb.className = 'q-feedback show ko'; fb.innerHTML = '— Sans réponse. ' + q.expl; }
+            });
+            document.getElementById('prog-vf').style.width = Math.round(score / vfData.length * 100) + '%';
+            var row = document.getElementById('score-vf');
+            row.innerHTML = '<span class="chip chip-ok">' + score + ' / ' + vfData.length + ' bonnes réponses</span>';
+            if (vfData.length - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (vfData.length - score) + ' erreur(s)</span>';
+            document.getElementById('vf-score-val').textContent = score;
+            document.getElementById('vf-score-panel').classList.add('show');
+            document.getElementById('vf-score-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        function resetVF() {
+            vfAnswers = {}; document.getElementById('vf-score-panel').classList.remove('show');
+            document.getElementById('prog-vf').style.width = '0%'; document.getElementById('score-vf').innerHTML = ''; renderVF();
+        }
+
+        renderQCM(); renderVF();
+    </script>
+</body>
+
+</html>

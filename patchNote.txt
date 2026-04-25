@@ -25,11 +25,13 @@ v1.06.0 = ajout html avancé + template html css
 v1.07.0 = accès au cours simplifié + icone onglet
 v1.07.1 = icone onglet sur tous les cours général
 v1.08.0 = ajout révision html css template + structure web 1 / web 2
+v1.09.0 = ajout cours web 1, 2 et 3
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
 
 ** Next step ** 
+bug affichage exercices-resume-global.html fin de page
 Revoir les cours Jeux Web URGENT !!
 prévoir exercice pour javascript jeux et canvas
 Revoir l'exercice 3 question 1 uniquement !
