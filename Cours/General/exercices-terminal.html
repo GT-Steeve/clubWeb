@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Exercices &mdash; Le Terminal CMD</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: 'Nunito', sans-serif;
@@ -17,23 +26,67 @@
       margin: 0 auto;
     }
 
-    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
-    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
-    .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; }
-    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
-    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
-    .b-teal   { background: #D0F4EA; color: #085041; }
-    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .hero {
+      text-align: center;
+      padding: 2.5rem 1rem 2rem;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      color: #5F5E5A;
+      margin-top: 0.5rem;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 1.2rem;
+    }
+
+    .badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+    }
+
+    .b-teal {
+      background: #D0F4EA;
+      color: #085041;
+    }
+
+    .b-purple {
+      background: #EEEDFE;
+      color: #3C3489;
+    }
 
     .back-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 0.88rem; font-weight: 700; color: #085041;
-      text-decoration: none; margin-bottom: 1.5rem;
-      background: #D0F4EA; border: 0.5px solid #5DCAA5;
-      border-radius: 8px; padding: 6px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #085041;
+      text-decoration: none;
+      margin-bottom: 1.5rem;
+      background: #D0F4EA;
+      border: 0.5px solid #5DCAA5;
+      border-radius: 8px;
+      padding: 6px 14px;
       transition: background 0.15s;
     }
-    .back-link:hover { background: #9FE1CB; }
+
+    .back-link:hover {
+      background: #9FE1CB;
+    }
 
     .cta-btn {
       display: inline-block;
@@ -52,143 +105,474 @@
     }
 
     .card {
-      border-radius: 16px; border: 0.5px solid #D3D1C7;
-      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+      border-radius: 16px;
+      border: 0.5px solid #D3D1C7;
+      background: #ffffff;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.2rem;
     }
 
     .stitle {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 0.8rem;
     }
-    .pill {
-      width: 32px; height: 32px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; font-weight: 700; flex-shrink: 0;
-    }
-    .p-teal   { background: #9FE1CB; color: #085041; }
-    .p-purple { background: #CECBF6; color: #3C3489; }
-    .p-amber  { background: #FAC775; color: #633806; }
-    .p-blue   { background: #B5D4F4; color: #0C447C; }
 
-    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
-    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+    .pill {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .p-teal {
+      background: #9FE1CB;
+      color: #085041;
+    }
+
+    .p-purple {
+      background: #CECBF6;
+      color: #3C3489;
+    }
+
+    .p-amber {
+      background: #FAC775;
+      color: #633806;
+    }
+
+    .p-blue {
+      background: #B5D4F4;
+      color: #0C447C;
+    }
+
+    .desc {
+      font-size: 0.94rem;
+      color: #5F5E5A;
+      line-height: 1.7;
+      margin-bottom: 0.9rem;
+    }
+
+    .rl {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888780;
+      margin-bottom: 6px;
+    }
 
     .tip {
-      display: flex; gap: 10px; align-items: flex-start;
-      background: #D0F4EA; border-radius: 10px;
-      padding: 0.75rem 1rem; margin-top: 0.9rem;
-      font-size: 0.88rem; color: #085041; line-height: 1.5;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: #D0F4EA;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      margin-top: 0.9rem;
+      font-size: 0.88rem;
+      color: #085041;
+      line-height: 1.5;
     }
-    .tip-purple { background: #EEEDFE; color: #3C3489; }
-    .tip-amber  { background: #FAEEDA; color: #633806; }
-    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    .tip-purple {
+      background: #EEEDFE;
+      color: #3C3489;
+    }
+
+    .tip-amber {
+      background: #FAEEDA;
+      color: #633806;
+    }
+
+    .tip-i {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
 
     /* CMD window sim */
     .cmd-window {
-      border-radius: 10px; overflow: hidden;
-      border: 1px solid #3A3A3A; margin: 0.8rem 0;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #3A3A3A;
+      margin: 0.8rem 0;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
     }
+
     .cmd-titlebar {
-      background: #1C1C1C; padding: 7px 14px;
-      display: flex; align-items: center; justify-content: space-between;
+      background: #1C1C1C;
+      padding: 7px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    .cmd-titlebar-left { display: flex; align-items: center; gap: 8px; }
-    .cmd-title-text { font-size: 0.78rem; color: #AAAAAA; font-family: 'Nunito', sans-serif; }
-    .cmd-titlebar-btns { display: flex; gap: 6px; }
-    .tw-btn { width: 11px; height: 11px; border-radius: 50%; }
-    .tw-min { background: #FAC775; } .tw-max { background: #9FE1CB; } .tw-cls { background: #F09595; }
+
+    .cmd-titlebar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cmd-title-text {
+      font-size: 0.78rem;
+      color: #AAAAAA;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .cmd-titlebar-btns {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tw-btn {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+
+    .tw-min {
+      background: #FAC775;
+    }
+
+    .tw-max {
+      background: #9FE1CB;
+    }
+
+    .tw-cls {
+      background: #F09595;
+    }
+
     .cmd-body {
-      background: #0C0C0C; padding: 0.9rem 1.2rem;
-      font-family: 'Fira Code', monospace; font-size: 0.83rem;
-      line-height: 1.95; color: #C8C8C8; white-space: pre; overflow-x: auto;
+      background: #0C0C0C;
+      padding: 0.9rem 1.2rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.83rem;
+      line-height: 1.95;
+      color: #C8C8C8;
+      white-space: pre;
+      overflow-x: auto;
     }
-    .p  { color: #FAC775; }
-    .pa { color: #C8C8C8; }
-    .kw { color: #ffffff; font-weight: 700; }
-    .ar { color: #85B7EB; }
-    .ou { color: #C8C8C8; }
-    .di { color: #555; }
-    .cm { color: #4E9A4E; font-style: italic; }
-    .ok { color: #9FE1CB; }
-    .er { color: #F09595; }
-    .hi { color: #FAC775; font-weight: 700; }
+
+    .p {
+      color: #FAC775;
+    }
+
+    .pa {
+      color: #C8C8C8;
+    }
+
+    .kw {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .ar {
+      color: #85B7EB;
+    }
+
+    .ou {
+      color: #C8C8C8;
+    }
+
+    .di {
+      color: #555;
+    }
+
+    .cm {
+      color: #4E9A4E;
+      font-style: italic;
+    }
+
+    .ok {
+      color: #9FE1CB;
+    }
+
+    .er {
+      color: #F09595;
+    }
+
+    .hi {
+      color: #FAC775;
+      font-weight: 700;
+    }
 
     /* QCM */
-    .qcm-block { margin-bottom: 1.6rem; padding-bottom: 1.4rem; border-bottom: 0.5px solid #F1EFE8; }
-    .qcm-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .qcm-question { font-size: 0.96rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.7rem; }
-    .choices { display: flex; flex-wrap: wrap; gap: 8px; }
-    .choice-btn {
-      border: 0.5px solid #3A3A3A; background: #141414; color: #FAC775;
-      border-radius: 8px; padding: 6px 14px; font-size: 0.84rem;
-      font-family: 'Fira Code', monospace; cursor: pointer; transition: background 0.12s;
+    .qcm-block {
+      margin-bottom: 1.6rem;
+      padding-bottom: 1.4rem;
+      border-bottom: 0.5px solid #F1EFE8;
     }
-    .choice-btn:hover   { background: #2C2C2A; }
-    .choice-btn.correct { background: #0C2A20; color: #9FE1CB; border-color: #5DCAA5; }
-    .choice-btn.wrong   { background: #2A0C0C; color: #F09595; border-color: #F09595; }
-    .choice-btn:disabled { cursor: default; }
-    .q-feedback { font-size: 0.88rem; min-height: 1.3em; font-weight: 700; margin-top: 6px; }
-    .q-feedback.ok { color: #0F6E56; }
-    .q-feedback.ko { color: #A32D2D; }
+
+    .qcm-block:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .qcm-question {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: #2C2C2A;
+      margin-bottom: 0.7rem;
+    }
+
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .choice-btn {
+      border: 0.5px solid #3A3A3A;
+      background: #141414;
+      color: #FAC775;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.84rem;
+      font-family: 'Fira Code', monospace;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .choice-btn:hover {
+      background: #2C2C2A;
+    }
+
+    .choice-btn.correct {
+      background: #0C2A20;
+      color: #9FE1CB;
+      border-color: #5DCAA5;
+    }
+
+    .choice-btn.wrong {
+      background: #2A0C0C;
+      color: #F09595;
+      border-color: #F09595;
+    }
+
+    .choice-btn:disabled {
+      cursor: default;
+    }
+
+    .q-feedback {
+      font-size: 0.88rem;
+      min-height: 1.3em;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .q-feedback.ok {
+      color: #0F6E56;
+    }
+
+    .q-feedback.ko {
+      color: #A32D2D;
+    }
 
     /* Progress */
-    .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1rem 0 0; overflow: hidden; }
-    .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.4s; width: 0%; }
-    .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
-    .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
-    .chip-ok { background: #D0F4EA; color: #085041; }
-    .chip-ko { background: #FCEBEB; color: #791F1F; }
+    .progress-wrap {
+      height: 7px;
+      background: #D3D1C7;
+      border-radius: 10px;
+      margin: 1rem 0 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #5DCAA5;
+      border-radius: 10px;
+      transition: width 0.4s;
+      width: 0%;
+    }
+
+    .score-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .chip-ok {
+      background: #D0F4EA;
+      color: #085041;
+    }
+
+    .chip-ko {
+      background: #FCEBEB;
+      color: #791F1F;
+    }
 
     /* Sequence builder */
     .seq-builder {
-      display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
-      background: #0C0C0C; border: 1px solid #3A3A3A; border-radius: 10px;
-      padding: 0.8rem 1rem; min-height: 52px; margin: 0.7rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      background: #0C0C0C;
+      border: 1px solid #3A3A3A;
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      min-height: 52px;
+      margin: 0.7rem 0;
     }
+
     .seq-piece {
-      background: #1F1F1F; color: #FAC775;
-      border: 0.5px solid #555; border-radius: 6px;
-      padding: 5px 12px; font-family: 'Fira Code', monospace;
-      font-size: 0.84rem; cursor: pointer; font-weight: 700;
+      background: #1F1F1F;
+      color: #FAC775;
+      border: 0.5px solid #555;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.84rem;
+      cursor: pointer;
+      font-weight: 700;
       transition: background 0.12s;
     }
-    .seq-piece:hover { background: #2C2C2A; border-color: #FAC775; }
-    .seq-piece.placed { background: #0C2A20; border-color: #5DCAA5; color: #9FE1CB; cursor: default; }
-    .seq-arrow { color: #555; font-family: 'Fira Code', monospace; font-size: 0.9rem; padding: 0 2px; }
+
+    .seq-piece:hover {
+      background: #2C2C2A;
+      border-color: #FAC775;
+    }
+
+    .seq-piece.placed {
+      background: #0C2A20;
+      border-color: #5DCAA5;
+      color: #9FE1CB;
+      cursor: default;
+    }
+
+    .seq-arrow {
+      color: #555;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      padding: 0 2px;
+    }
 
     /* Fill-in blanks */
-    .fill-block { margin-bottom: 1.4rem; padding-bottom: 1.4rem; border-bottom: 0.5px solid #F1EFE8; }
-    .fill-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .blank-choices { display: flex; flex-wrap: wrap; gap: 7px; margin: 0.7rem 0; }
-    .blank-btn {
-      border: 0.5px solid #3A3A3A; background: #141414; color: #FAC775;
-      border-radius: 7px; padding: 5px 13px; font-size: 0.84rem;
-      font-family: 'Fira Code', monospace; cursor: pointer; transition: background 0.12s;
+    .fill-block {
+      margin-bottom: 1.4rem;
+      padding-bottom: 1.4rem;
+      border-bottom: 0.5px solid #F1EFE8;
     }
-    .blank-btn:hover { background: #2C2C2A; }
-    .blank-btn.correct { background: #0C2A20; color: #9FE1CB; border-color: #5DCAA5; }
-    .blank-btn.wrong   { background: #2A0C0C; color: #F09595; border-color: #F09595; }
-    .blank-btn:disabled { cursor: default; }
 
-    .btn-row { display: flex; gap: 8px; margin-top: 0.8rem; flex-wrap: wrap; }
-    .action-btn {
-      border: 0.5px solid #B4B2A9; background: #ffffff; color: #2C2C2A;
-      border-radius: 8px; padding: 7px 16px; font-size: 0.88rem;
-      font-family: 'Nunito', sans-serif; font-weight: 700; cursor: pointer;
+    .fill-block:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .blank-choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 0.7rem 0;
+    }
+
+    .blank-btn {
+      border: 0.5px solid #3A3A3A;
+      background: #141414;
+      color: #FAC775;
+      border-radius: 7px;
+      padding: 5px 13px;
+      font-size: 0.84rem;
+      font-family: 'Fira Code', monospace;
+      cursor: pointer;
       transition: background 0.12s;
     }
-    .action-btn:hover { background: #F1EFE8; }
-    .action-btn.primary { background: #D0F4EA; color: #085041; border-color: #5DCAA5; }
-    .action-btn.primary:hover { background: #9FE1CB; }
 
-    code { font-family: 'Fira Code', monospace; background: #141414; color: #FAC775; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; }
+    .blank-btn:hover {
+      background: #2C2C2A;
+    }
 
-    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .blank-btn.correct {
+      background: #0C2A20;
+      color: #9FE1CB;
+      border-color: #5DCAA5;
+    }
 
-    @media (max-width: 520px) { .hero h1 { font-size: 1.6rem; } }
+    .blank-btn.wrong {
+      background: #2A0C0C;
+      color: #F09595;
+      border-color: #F09595;
+    }
+
+    .blank-btn:disabled {
+      cursor: default;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      border: 0.5px solid #B4B2A9;
+      background: #ffffff;
+      color: #2C2C2A;
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 0.88rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .action-btn:hover {
+      background: #F1EFE8;
+    }
+
+    .action-btn.primary {
+      background: #D0F4EA;
+      color: #085041;
+      border-color: #5DCAA5;
+    }
+
+    .action-btn.primary:hover {
+      background: #9FE1CB;
+    }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      background: #141414;
+      color: #FAC775;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 0.87em;
+    }
+
+    .footer-note {
+      text-align: center;
+      padding: 2rem 1rem 2.5rem;
+      color: #888780;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 520px) {
+      .hero h1 {
+        font-size: 1.6rem;
+      }
+    }
   </style>
 </head>
+
 <body>
 
   <a class="back-link" href="cours-terminal.html">← Retour au cours Terminal CMD</a>
@@ -205,16 +589,28 @@
 
   <!-- EXERCICE 1 : QCM commandes CMD -->
   <div class="card">
-    <div class="stitle"><div class="pill p-teal">1</div>Exercice 1 &mdash; Quelle commande CMD utiliser ?</div>
+    <div class="stitle">
+      <div class="pill p-teal">1</div>Exercice 1 &mdash; Quelle commande CMD utiliser ?
+    </div>
     <p class="desc">Pour chaque situation, choisis la bonne commande à taper dans l'Invite de commandes.</p>
 
     <!-- Q1 -->
     <div class="qcm-block">
       <div class="cmd-window">
-        <div class="cmd-titlebar"><div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de commandes</span></div><div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div></div>
-        <div class="cmd-body"><span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span style="opacity:0.4;">█</span></div>
+        <div class="cmd-titlebar">
+          <div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de
+              commandes</span></div>
+          <div class="cmd-titlebar-btns">
+            <div class="tw-btn tw-min"></div>
+            <div class="tw-btn tw-max"></div>
+            <div class="tw-btn tw-cls"></div>
+          </div>
+        </div>
+        <div class="cmd-body"><span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span
+            style="opacity:0.4;">█</span></div>
       </div>
-      <div class="qcm-question">Tu veux <strong>voir tous les fichiers et dossiers</strong> qui se trouvent à cet endroit. Quelle commande tapes-tu ?</div>
+      <div class="qcm-question">Tu veux <strong>voir tous les fichiers et dossiers</strong> qui se trouvent à cet
+        endroit. Quelle commande tapes-tu ?</div>
       <div class="choices">
         <button class="choice-btn" onclick="qcm(this,'q1',false)">ls</button>
         <button class="choice-btn" onclick="qcm(this,'q1',false)">cd</button>
@@ -227,10 +623,20 @@
     <!-- Q2 -->
     <div class="qcm-block">
       <div class="cmd-window">
-        <div class="cmd-titlebar"><div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de commandes</span></div><div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div></div>
-        <div class="cmd-body"><span class="p">C:\Users\alice\Documents\Projets\mon-site</span><span class="pa">&gt;</span> <span style="opacity:0.4;">█</span></div>
+        <div class="cmd-titlebar">
+          <div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de
+              commandes</span></div>
+          <div class="cmd-titlebar-btns">
+            <div class="tw-btn tw-min"></div>
+            <div class="tw-btn tw-max"></div>
+            <div class="tw-btn tw-cls"></div>
+          </div>
+        </div>
+        <div class="cmd-body"><span class="p">C:\Users\alice\Documents\Projets\mon-site</span><span
+            class="pa">&gt;</span> <span style="opacity:0.4;">█</span></div>
       </div>
-      <div class="qcm-question">Tu es dans <strong>mon-site</strong> et tu veux <strong>remonter dans le dossier Projets</strong>. Quelle commande tapes-tu ?</div>
+      <div class="qcm-question">Tu es dans <strong>mon-site</strong> et tu veux <strong>remonter dans le dossier
+          Projets</strong>. Quelle commande tapes-tu ?</div>
       <div class="choices">
         <button class="choice-btn" onclick="qcm(this,'q2',false)">cd Projets</button>
         <button class="choice-btn" onclick="qcm(this,'q2',true)">cd ..</button>
@@ -242,7 +648,8 @@
 
     <!-- Q3 -->
     <div class="qcm-block">
-      <div class="qcm-question">Tu veux <strong>créer un nouveau dossier</strong> appelé <code>mon-projet</code> dans le dossier actuel. Quelle commande tapes-tu ?</div>
+      <div class="qcm-question">Tu veux <strong>créer un nouveau dossier</strong> appelé <code>mon-projet</code> dans le
+        dossier actuel. Quelle commande tapes-tu ?</div>
       <div class="choices">
         <button class="choice-btn" onclick="qcm(this,'q3',false)">cd mon-projet</button>
         <button class="choice-btn" onclick="qcm(this,'q3',false)">dir mon-projet</button>
@@ -255,16 +662,27 @@
     <!-- Q4 -->
     <div class="qcm-block">
       <div class="cmd-window">
-        <div class="cmd-titlebar"><div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de commandes</span></div><div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div></div>
-        <div class="cmd-body"><span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span class="kw">dir</span>
-<span class="di"> Répertoire de C:\Users\alice
+        <div class="cmd-titlebar">
+          <div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de
+              commandes</span></div>
+          <div class="cmd-titlebar-btns">
+            <div class="tw-btn tw-min"></div>
+            <div class="tw-btn tw-max"></div>
+            <div class="tw-btn tw-cls"></div>
+          </div>
+        </div>
+        <div class="cmd-body"><span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span
+            class="kw">dir</span>
+          <span class="di"> Répertoire de C:\Users\alice
 
-</span><span class="ou">15/01/2025  08:00    &lt;DIR&gt;          Documents
-15/01/2025  08:00    &lt;DIR&gt;          Bureau
-15/01/2025  08:00    &lt;DIR&gt;          Téléchargements
-               0 fichier(s)              0 octets</span></div>
+          </span><span class="ou">15/01/2025 08:00 &lt;DIR&gt; Documents
+            15/01/2025 08:00 &lt;DIR&gt; Bureau
+            15/01/2025 08:00 &lt;DIR&gt; Téléchargements
+            0 fichier(s) 0 octets</span>
+        </div>
       </div>
-      <div class="qcm-question">Tu vois ce résultat. Tu veux <strong>entrer dans le dossier Documents</strong>. Quelle commande tapes-tu ?</div>
+      <div class="qcm-question">Tu vois ce résultat. Tu veux <strong>entrer dans le dossier Documents</strong>. Quelle
+        commande tapes-tu ?</div>
       <div class="choices">
         <button class="choice-btn" onclick="qcm(this,'q4',false)">dir Documents</button>
         <button class="choice-btn" onclick="qcm(this,'q4',true)">cd Documents</button>
@@ -276,7 +694,8 @@
 
     <!-- Q5 -->
     <div class="qcm-block">
-      <div class="qcm-question">L'écran CMD est plein de texte et tu veux l'<strong>effacer pour avoir un écran vide et propre</strong>. Quelle commande tapes-tu ?</div>
+      <div class="qcm-question">L'écran CMD est plein de texte et tu veux l'<strong>effacer pour avoir un écran vide et
+          propre</strong>. Quelle commande tapes-tu ?</div>
       <div class="choices">
         <button class="choice-btn" onclick="qcm(this,'q5',false)">clear</button>
         <button class="choice-btn" onclick="qcm(this,'q5',true)">cls</button>
@@ -289,11 +708,22 @@
     <!-- Q6 -->
     <div class="qcm-block" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
       <div class="cmd-window">
-        <div class="cmd-titlebar"><div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de commandes</span></div><div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div></div>
-        <div class="cmd-body"><span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span style="opacity:0.4;">█</span>
-<span class="cm">                          ← tu as une clé USB branchée sur D:</span></div>
+        <div class="cmd-titlebar">
+          <div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de
+              commandes</span></div>
+          <div class="cmd-titlebar-btns">
+            <div class="tw-btn tw-min"></div>
+            <div class="tw-btn tw-max"></div>
+            <div class="tw-btn tw-cls"></div>
+          </div>
+        </div>
+        <div class="cmd-body"><span class="p">C:\Users\alice</span><span class="pa">&gt;</span> <span
+            style="opacity:0.4;">█</span>
+          <span class="cm"> ← tu as une clé USB branchée sur D:</span>
+        </div>
       </div>
-      <div class="qcm-question">Tu es sur <strong>C:</strong> et tu veux <strong>aller sur ta clé USB D:</strong>. Quelle commande tapes-tu ?</div>
+      <div class="qcm-question">Tu es sur <strong>C:</strong> et tu veux <strong>aller sur ta clé USB D:</strong>.
+        Quelle commande tapes-tu ?</div>
       <div class="choices">
         <button class="choice-btn" onclick="qcm(this,'q6',false)">cd D:\</button>
         <button class="choice-btn" onclick="qcm(this,'q6',false)">goto D:</button>
@@ -303,32 +733,52 @@
       <div class="q-feedback" id="fb-q6"></div>
     </div>
 
-    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="prog-qcm"></div>
+    </div>
     <div class="score-row" id="score-qcm"></div>
   </div>
 
   <!-- EXERCICE 2 : Lire une session CMD -->
   <div class="card">
-    <div class="stitle"><div class="pill p-purple">2</div>Exercice 2 &mdash; Lis la session CMD et réponds</div>
-    <p class="desc">Observe attentivement la session CMD ci-dessous, puis réponds aux questions en cliquant sur la bonne réponse.</p>
+    <div class="stitle">
+      <div class="pill p-purple">2</div>Exercice 2 &mdash; Lis la session CMD et réponds
+    </div>
+    <p class="desc">Observe attentivement la session CMD ci-dessous, puis réponds aux questions en cliquant sur la bonne
+      réponse.</p>
 
     <div class="cmd-window" style="margin-bottom:1rem;">
-      <div class="cmd-titlebar"><div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de commandes</span></div><div class="cmd-titlebar-btns"><div class="tw-btn tw-min"></div><div class="tw-btn tw-max"></div><div class="tw-btn tw-cls"></div></div></div>
-      <div class="cmd-body"><span class="p">C:\Users\bob</span><span class="pa">&gt;</span> <span class="kw">dir</span> <span class="ar">/B</span>
-<span class="ou">Documents
-Bureau
-Projets
-notes.txt</span>
+      <div class="cmd-titlebar">
+        <div class="cmd-titlebar-left"><span style="font-size:13px;">⬛</span><span class="cmd-title-text">Invite de
+            commandes</span></div>
+        <div class="cmd-titlebar-btns">
+          <div class="tw-btn tw-min"></div>
+          <div class="tw-btn tw-max"></div>
+          <div class="tw-btn tw-cls"></div>
+        </div>
+      </div>
+      <div class="cmd-body"><span class="p">C:\Users\bob</span><span class="pa">&gt;</span> <span class="kw">dir</span>
+        <span class="ar">/B</span>
+        <span class="ou">Documents
+          Bureau
+          Projets
+          notes.txt</span>
 
-<span class="p">C:\Users\bob</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">Projets</span>
-<span class="p">C:\Users\bob\Projets</span><span class="pa">&gt;</span> <span class="kw">dir</span> <span class="ar">/B</span>
-<span class="ou">site-perso
-jeu-python</span>
+        <span class="p">C:\Users\bob</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span
+          class="ar">Projets</span>
+        <span class="p">C:\Users\bob\Projets</span><span class="pa">&gt;</span> <span class="kw">dir</span> <span
+          class="ar">/B</span>
+        <span class="ou">site-perso
+          jeu-python</span>
 
-<span class="p">C:\Users\bob\Projets</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">site-perso</span>
-<span class="p">C:\Users\bob\Projets\site-perso</span><span class="pa">&gt;</span> <span class="kw">mkdir</span> <span class="ar">css</span>
-<span class="p">C:\Users\bob\Projets\site-perso</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">..</span>
-<span class="p">C:\Users\bob\Projets</span><span class="pa">&gt;</span></div>
+        <span class="p">C:\Users\bob\Projets</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span
+          class="ar">site-perso</span>
+        <span class="p">C:\Users\bob\Projets\site-perso</span><span class="pa">&gt;</span> <span class="kw">mkdir</span>
+        <span class="ar">css</span>
+        <span class="p">C:\Users\bob\Projets\site-perso</span><span class="pa">&gt;</span> <span class="kw">cd</span>
+        <span class="ar">..</span>
+        <span class="p">C:\Users\bob\Projets</span><span class="pa">&gt;</span>
+      </div>
     </div>
 
     <!-- Qs sur la session -->
@@ -373,14 +823,19 @@ jeu-python</span>
       <div class="q-feedback" id="fb-s4"></div>
     </div>
 
-    <div class="progress-wrap"><div class="progress-fill" id="prog-session"></div></div>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="prog-session"></div>
+    </div>
     <div class="score-row" id="score-session"></div>
   </div>
 
   <!-- EXERCICE 3 : Séquences de commandes -->
   <div class="card">
-    <div class="stitle"><div class="pill p-amber">3</div>Exercice 3 &mdash; Remets les commandes CMD dans l'ordre</div>
-    <p class="desc">Pour chaque mission, clique sur les commandes dans le <strong>bon ordre</strong> pour accomplir la tâche demandée.</p>
+    <div class="stitle">
+      <div class="pill p-amber">3</div>Exercice 3 &mdash; Remets les commandes CMD dans l'ordre
+    </div>
+    <p class="desc">Pour chaque mission, clique sur les commandes dans le <strong>bon ordre</strong> pour accomplir la
+      tâche demandée.</p>
 
     <div id="seq-container"></div>
   </div>
@@ -394,7 +849,7 @@ jeu-python</span>
 
   <script>
     var okMsgs = ['Excellent !', 'Parfait !', 'Bravo !', 'Très bien !', 'Correct !'];
-    function rnd(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+    function rnd(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
     /* ===== QCM shared ===== */
     var qcmDone = {}, qcmScore = 0, qcmTotal = 6;
@@ -408,7 +863,7 @@ jeu-python</span>
 
       var fb = document.getElementById('fb-' + qid);
       btn.classList.add(correct ? 'correct' : 'wrong');
-      btn.closest('.choices').querySelectorAll('.choice-btn').forEach(function(b) { b.disabled = true; });
+      btn.closest('.choices').querySelectorAll('.choice-btn').forEach(function (b) { b.disabled = true; });
       if (correct) {
         fb.className = 'q-feedback ok'; fb.textContent = rnd(okMsgs) + ' ✓';
         if (isSession) sessionScore++; else qcmScore++;
@@ -430,7 +885,7 @@ jeu-python</span>
     function showScore(id, score, total) {
       var row = document.getElementById(id);
       row.innerHTML = '<span class="chip chip-ok">' + score + ' bonne' + (score > 1 ? 's' : '') + ' réponse' + (score > 1 ? 's' : '') + ' sur ' + total + '</span>';
-      if (total - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (total-score) + ' erreur' + (total-score>1?'s':'') + '</span>';
+      if (total - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (total - score) + ' erreur' + (total - score > 1 ? 's' : '') + '</span>';
     }
 
     /* ===== EXERCICE 3 : Séquences ===== */
@@ -454,13 +909,13 @@ jeu-python</span>
     function buildSequences() {
       var container = document.getElementById('seq-container');
       container.innerHTML = '';
-      seqData.forEach(function(ex, idx) {
+      seqData.forEach(function (ex, idx) {
         var div = document.createElement('div');
         div.style.marginBottom = '1.6rem';
         div.style.paddingBottom = '1.4rem';
-        if (idx < seqData.length-1) div.style.borderBottom = '0.5px solid #F1EFE8';
+        if (idx < seqData.length - 1) div.style.borderBottom = '0.5px solid #F1EFE8';
 
-        div.innerHTML = '<div class="rl">Mission ' + (idx+1) + ' sur ' + seqData.length + '</div>'
+        div.innerHTML = '<div class="rl">Mission ' + (idx + 1) + ' sur ' + seqData.length + '</div>'
           + '<p style="font-size:0.92rem;color:#2C2C2A;margin-bottom:0.3rem;">' + ex.mission + '</p>'
           + '<p style="font-size:0.84rem;color:#888780;margin-bottom:0.7rem;">' + ex.context + '</p>'
           + '<div class="seq-builder" id="builder-' + ex.id + '">'
@@ -472,13 +927,13 @@ jeu-python</span>
         container.appendChild(div);
 
         var piecesDiv = div.querySelector('#pieces-' + ex.id);
-        var shuffled = ex.choices.slice().sort(function() { return Math.random()-0.5; });
-        shuffled.forEach(function(piece) {
+        var shuffled = ex.choices.slice().sort(function () { return Math.random() - 0.5; });
+        shuffled.forEach(function (piece) {
           var btn = document.createElement('span');
           btn.className = 'seq-piece';
           btn.textContent = piece;
           btn.dataset.value = piece;
-          btn.onclick = function() { addSeqPiece(this, ex); };
+          btn.onclick = function () { addSeqPiece(this, ex); };
           piecesDiv.appendChild(btn);
         });
         ex._built = [];
@@ -500,7 +955,7 @@ jeu-python</span>
         return;
       }
       builder.innerHTML = '';
-      ex._built.forEach(function(seg, i) {
+      ex._built.forEach(function (seg, i) {
         if (i > 0) {
           var arr = document.createElement('span');
           arr.className = 'seq-arrow';
@@ -511,15 +966,15 @@ jeu-python</span>
         s.className = 'seq-piece placed';
         s.textContent = seg;
         s.dataset.idx = i;
-        s.onclick = function() { removeSeqPiece(parseInt(this.dataset.idx), ex); };
+        s.onclick = function () { removeSeqPiece(parseInt(this.dataset.idx), ex); };
         builder.appendChild(s);
       });
     }
 
     function removeSeqPiece(idx, ex) {
       var removed = ex._built.splice(idx);
-      removed.forEach(function(val) {
-        document.querySelectorAll('#pieces-' + ex.id + ' .seq-piece').forEach(function(b) {
+      removed.forEach(function (val) {
+        document.querySelectorAll('#pieces-' + ex.id + ' .seq-piece').forEach(function (b) {
           if (b.dataset.value === val && b.classList.contains('placed')) b.classList.remove('placed');
         });
       });
@@ -532,15 +987,15 @@ jeu-python</span>
       var fb = document.getElementById('fb-' + ex.id);
       var built = ex._built, sol = ex.solution;
       if (built.length < sol.length) { fb.textContent = ''; fb.className = 'q-feedback'; return; }
-      var correct = built.length === sol.length && built.every(function(v,i) { return v === sol[i]; });
+      var correct = built.length === sol.length && built.every(function (v, i) { return v === sol[i]; });
       fb.className = 'q-feedback ' + (correct ? 'ok' : 'ko');
       fb.textContent = correct ? rnd(okMsgs) + ' ✓ Séquence correcte !' : 'Pas tout à fait… vérifie l\'ordre et recommence !';
     }
 
     function resetSeq(exId) {
-      var ex = seqData.find(function(e) { return e.id === exId; });
+      var ex = seqData.find(function (e) { return e.id === exId; });
       ex._built = [];
-      document.querySelectorAll('#pieces-' + exId + ' .seq-piece').forEach(function(b) { b.classList.remove('placed'); });
+      document.querySelectorAll('#pieces-' + exId + ' .seq-piece').forEach(function (b) { b.classList.remove('placed'); });
       renderBuilder(ex);
       document.getElementById('fb-' + exId).textContent = '';
       document.getElementById('fb-' + exId).className = 'q-feedback';
@@ -550,4 +1005,5 @@ jeu-python</span>
   </script>
 
 </body>
+
 </html>
