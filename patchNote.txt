@@ -22,6 +22,7 @@ v1.04.1 = rectif contenu cours ajout extension texte .txt
 v1.04.2 = rectif footer ajout etat du devellopeur 
 v1.05.0 = ajout cours auto-entrainement
 v1.06.0 = ajout html avancé + template html css
+v1.07.0 = accès au cours simplifié + icone onglet
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
