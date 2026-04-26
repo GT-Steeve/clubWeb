@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP — Le langage du web côté serveur</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐘%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-blue { background: #E6F1FB; color: #0C447C; }
+        .b-teal { background: #E1F5EE; color: #085041; }
+        .b-amber { background: #FAEEDA; color: #633806; }
+        .b-coral { background: #FAECE7; color: #712B13; }
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral { background: #F5C4B3; color: #712B13; }
+        .p-amber { background: #FAC775; color: #633806; }
+        .p-blue { background: #B5D4F4; color: #0C447C; }
+        .p-green { background: #C0DD97; color: #3B6D11; }
+        .p-gray { background: #D3D1C7; color: #444441; }
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child { margin-bottom: 0; }
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber { background: #FAEEDA; color: #633806; }
+        .tip-blue { background: #E6F1FB; color: #0C447C; }
+        .tip-coral { background: #FAECE7; color: #712B13; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+        .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.8; }
+        .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+        .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.9; white-space: pre; overflow-x: auto; color: #2C2C2A; margin-top: 0.8rem; }
+        .kw { color: #993C1D; font-weight: 700; }
+        .str { color: #0F6E56; }
+        .cm { color: #888780; font-style: italic; }
+        .var { color: #185FA5; }
+        .fn { color: #534AB7; }
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; white-space: nowrap; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+        .tc { border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.88rem; font-weight: 600; line-height: 1.5; }
+        .step-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.8rem; }
+        .step-item { display: flex; gap: 12px; align-items: flex-start; }
+        .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 9px; background: #2C2C2A; color: #FAC775; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+        .step-body { font-size: 0.92rem; font-weight: 600; line-height: 1.6; color: #2C2C2A; }
+        .step-body span { color: #5F5E5A; font-weight: 400; }
+        .fw-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+        .fw-card { border-radius: 12px; padding: 1rem; text-align: center; border: 0.5px solid #D3D1C7; background: #FAFAF8; }
+        .fw-icon { font-size: 1.4rem; margin-bottom: 5px; }
+        .fw-name { font-size: 0.9rem; font-weight: 800; color: #2C2C2A; margin-bottom: 4px; }
+        .fw-desc { font-size: 0.78rem; color: #5F5E5A; line-height: 1.5; }
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+        .ic { font-family: 'Fira Code', monospace; font-size: 0.83em; background: #F1EFE8; border-radius: 4px; padding: 1px 5px; color: #993C1D; }
+        @media (max-width: 500px) { .two-col { grid-template-columns: 1fr; } .fw-grid { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="../sommaire.html#step2Advence">← Retour au sommaire</a>
+
+<div class="hero">
+    <h1>🐘 PHP & Frameworks</h1>
+    <p>Le langage qui fait tourner 80% des sites web — et ses frameworks.</p>
+    <div class="badge-row">
+        <span class="badge b-purple">Serveur</span>
+        <span class="badge b-blue">PHP</span>
+        <span class="badge b-teal">Symfony · Laravel</span>
+        <span class="badge b-amber">WordPress · Drupal</span>
+    </div>
+</div>
+
+<!-- 1. QU'EST-CE QUE PHP -->
+<div class="card">
+    <div class="stitle"><div class="pill p-teal">1</div>Qu'est-ce que PHP ?</div>
+    <p class="desc">PHP (Hypertext Preprocessor) est un <strong>langage de programmation côté serveur</strong>. Contrairement au HTML ou au JavaScript front-end, PHP s'exécute sur le serveur avant d'envoyer la page au navigateur.</p>
+    <p class="desc">Créé en 1994 par Rasmus Lerdorf, PHP est aujourd'hui présent sur <strong>plus de 77% des sites web</strong> — dont WordPress, Facebook à ses débuts, Wikipedia. C'est le langage du web dynamique par excellence.</p>
+
+    <div class="two-col">
+        <div class="tc" style="background:#E6F1FB;color:#0C447C;">
+            <strong style="display:block;margin-bottom:4px;">🌐 HTML/CSS/JS (front)</strong>
+            S'exécute dans le navigateur de l'utilisateur. Le code est visible dans "Afficher la source".
+        </div>
+        <div class="tc" style="background:#EEEDFE;color:#3C3489;">
+            <strong style="display:block;margin-bottom:4px;">🐘 PHP (back)</strong>
+            S'exécute sur le serveur. L'utilisateur ne voit jamais le code PHP — seulement le HTML qu'il génère.
+        </div>
+    </div>
+
+    <div class="result-box" style="margin-top:1rem;">
+        <div class="rl">Ce que PHP peut faire</div>
+        🗄️ Lire et écrire dans une base de données<br>
+        👤 Gérer les comptes utilisateurs et les sessions<br>
+        📧 Envoyer des emails depuis un formulaire<br>
+        🔒 Sécuriser les données (hash de mots de passe…)<br>
+        📄 Générer du HTML dynamique selon l'utilisateur
+    </div>
+</div>
+
+<!-- 2. SYNTAXE DE BASE -->
+<div class="section-label"><span class="section-label-text">📝 Syntaxe PHP de base</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">2</div>La syntaxe PHP — les fondamentaux</div>
+    <p class="desc">Le code PHP s'écrit dans des fichiers <span class="ic">.php</span> et s'intègre dans du HTML grâce aux balises <span class="ic">&lt;?php</span> et <span class="ic">?&gt;</span>.</p>
+
+    <div class="code-block"><span class="cm">&lt;!-- Fichier: index.php --&gt;</span>
+<span class="kw">&lt;?php</span>
+  <span class="cm">// Variables — toujours préfixées par $</span>
+  <span class="var">$prenom</span> = <span class="str">"Alice"</span>;
+  <span class="var">$age</span>    = 28;
+  <span class="var">$actif</span>  = <span class="kw">true</span>;
+
+  <span class="cm">// Afficher du contenu</span>
+  <span class="fn">echo</span> <span class="str">"Bonjour "</span> . <span class="var">$prenom</span>;    <span class="cm">// concaténation avec .</span>
+  <span class="fn">echo</span> <span class="str">"&lt;br&gt;"</span>;
+
+  <span class="cm">// Condition</span>
+  <span class="kw">if</span> (<span class="var">$age</span> >= 18) {
+    <span class="fn">echo</span> <span class="str">"Majeur"</span>;
+  } <span class="kw">else</span> {
+    <span class="fn">echo</span> <span class="str">"Mineur"</span>;
+  }
+<span class="kw">?&gt;</span>
+
+<span class="cm">&lt;!-- Mélanger PHP et HTML --&gt;</span>
+&lt;h1&gt;Bienvenue, <span class="kw">&lt;?php</span> <span class="fn">echo</span> <span class="var">$prenom</span>; <span class="kw">?&gt;</span> !&lt;/h1&gt;</div>
+</div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-purple">3</div>Tableaux, boucles et fonctions</div>
+    <div class="code-block"><span class="cm">// Tableau (array)</span>
+<span class="var">$fruits</span> = [<span class="str">"pomme"</span>, <span class="str">"banane"</span>, <span class="str">"kiwi"</span>];
+
+<span class="cm">// Boucle foreach</span>
+<span class="kw">foreach</span> (<span class="var">$fruits</span> <span class="kw">as</span> <span class="var">$fruit</span>) {
+    <span class="fn">echo</span> <span class="var">$fruit</span> . <span class="str">"&lt;br&gt;"</span>;
+}
+
+<span class="cm">// Tableau associatif (clé → valeur)</span>
+<span class="var">$user</span> = [
+    <span class="str">"nom"</span>   => <span class="str">"Dupont"</span>,
+    <span class="str">"email"</span> => <span class="str">"alice@mail.com"</span>,
+    <span class="str">"age"</span>   => 28
+];
+<span class="fn">echo</span> <span class="var">$user</span>[<span class="str">"nom"</span>];   <span class="cm">// "Dupont"</span>
+
+<span class="cm">// Fonction</span>
+<span class="kw">function</span> <span class="fn">saluer</span>(<span class="var">$nom</span>) {
+    <span class="kw">return</span> <span class="str">"Bonjour, "</span> . <span class="var">$nom</span> . <span class="str">" !"</span>;
+}
+<span class="fn">echo</span> <span class="fn">saluer</span>(<span class="str">"Bob"</span>);   <span class="cm">// "Bonjour, Bob !"</span></div>
+</div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-coral">4</div>PHP et les formulaires — le cas concret</div>
+    <p class="desc">L'usage le plus courant de PHP : récupérer les données d'un formulaire HTML et les traiter côté serveur.</p>
+    <div class="code-block"><span class="cm">&lt;!-- formulaire.html --&gt;</span>
+&lt;form <span class="kw">action</span>=<span class="str">"traitement.php"</span> <span class="kw">method</span>=<span class="str">"POST"</span>&gt;
+  &lt;input type=<span class="str">"text"</span> name=<span class="str">"prenom"</span> placeholder=<span class="str">"Ton prénom"</span>&gt;
+  &lt;input type=<span class="str">"email"</span> name=<span class="str">"email"</span>&gt;
+  &lt;button type=<span class="str">"submit"</span>&gt;Envoyer&lt;/button&gt;
+&lt;/form&gt;
+
+<span class="cm">// traitement.php</span>
+<span class="kw">&lt;?php</span>
+  <span class="cm">// Récupérer les données POST</span>
+  <span class="var">$prenom</span> = <span class="fn">htmlspecialchars</span>(<span class="var">$_POST</span>[<span class="str">"prenom"</span>]);
+  <span class="var">$email</span>  = <span class="fn">htmlspecialchars</span>(<span class="var">$_POST</span>[<span class="str">"email"</span>]);
+
+  <span class="cm">// Toujours valider et sécuriser les données !</span>
+  <span class="kw">if</span> (!<span class="fn">empty</span>(<span class="var">$prenom</span>) && <span class="fn">filter_var</span>(<span class="var">$email</span>, <span class="kw">FILTER_VALIDATE_EMAIL</span>)) {
+      <span class="fn">echo</span> <span class="str">"Bienvenue, "</span> . <span class="var">$prenom</span> . <span class="str">" !"</span>;
+  } <span class="kw">else</span> {
+      <span class="fn">echo</span> <span class="str">"Données invalides."</span>;
+  }
+<span class="kw">?&gt;</span></div>
+    <div class="tip tip-coral">
+        <span class="tip-i">⚠️</span>
+        <span><span class="ic">htmlspecialchars()</span> est essentiel — il protège contre les attaques XSS en transformant les caractères dangereux. Ne jamais afficher directement une donnée utilisateur sans la nettoyer.</span>
+    </div>
+</div>
+
+<!-- 3. FRAMEWORKS PHP -->
+<div class="section-label"><span class="section-label-text">🏗️ Les frameworks PHP</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-green">5</div>Pourquoi utiliser un framework ?</div>
+    <p class="desc">Un <strong>framework</strong> est une boîte à outils structurée qui impose une façon d'organiser le code et fournit des fonctionnalités prêtes à l'emploi. Il évite de réinventer la roue à chaque projet.</p>
+    <div class="two-col">
+        <div class="tc" style="background:#FCEBEB;color:#791F1F;">
+            <strong style="display:block;margin-bottom:4px;">❌ PHP sans framework</strong>
+            Code répétitif, sécurité à gérer manuellement, structure anarchique, difficile à maintenir en équipe.
+        </div>
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong style="display:block;margin-bottom:4px;">✅ PHP avec framework</strong>
+            Structure MVC claire, sécurité intégrée, ORM pour la BDD, communauté et documentation riches.
+        </div>
+    </div>
+    <div class="tip tip-blue">
+        <span class="tip-i">📌</span>
+        <span>La plupart des frameworks PHP utilisent le pattern <strong>MVC (Model-View-Controller)</strong> : le Modèle gère les données, la Vue affiche l'interface, le Contrôleur fait le lien entre les deux.</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-purple">6</div>Symfony — le framework professionnel</div>
+    <p class="desc">Créé en 2005 par SensioLabs (français 🇫🇷), <strong>Symfony</strong> est le framework PHP de référence dans le monde professionnel. Modulaire, robuste et utilisé pour des projets d'envergure.</p>
+    <div class="result-box">
+        <div class="rl">Points clés de Symfony</div>
+        🧩 <strong>Composants réutilisables</strong> — plus de 50 composants indépendants (Routing, Security, Cache…)<br>
+        🔁 <strong>Doctrine ORM</strong> — manipule la base de données via des objets PHP (plus de SQL brut)<br>
+        🛡️ <strong>Sécurité intégrée</strong> — gestion des rôles, firewall, CSRF…<br>
+        🧪 <strong>Tests</strong> — PHPUnit intégré pour tester son code<br>
+        📦 <strong>Bundles</strong> — des extensions pour ajouter des fonctionnalités
+    </div>
+    <div class="code-block"><span class="cm">// Exemple : un contrôleur Symfony simple</span>
+<span class="kw">use</span> Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+<span class="kw">use</span> Symfony\Component\Routing\Annotation\Route;
+
+<span class="kw">class</span> <span class="fn">ArticleController</span> <span class="kw">extends</span> AbstractController
+{
+    <span class="cm">// La route /articles appelle cette méthode</span>
+    #[Route(<span class="str">'/articles'</span>, name: <span class="str">'article_list'</span>)]
+    <span class="kw">public function</span> <span class="fn">index</span>(): Response
+    {
+        <span class="var">$articles</span> = <span class="var">$this</span>->getDoctrine()
+                         ->getRepository(Article::<span class="kw">class</span>)
+                         ->findAll();
+
+        <span class="kw">return</span> <span class="var">$this</span>-><span class="fn">render</span>(<span class="str">'article/index.html.twig'</span>, [
+            <span class="str">'articles'</span> => <span class="var">$articles</span>,
+        ]);
+    }
+}</div>
+    <div class="tip tip-amber">
+        <span class="tip-i">🎯</span>
+        <span>Symfony est idéal pour les <strong>grandes applications d'entreprise</strong>. Sa courbe d'apprentissage est plus raide — mais il offre une architecture solide et maintenable sur le long terme.</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-coral">7</div>Laravel — le framework élégant</div>
+    <p class="desc">Créé en 2011 par Taylor Otwell, <strong>Laravel</strong> est le framework PHP le plus populaire aujourd'hui. Il est connu pour sa syntaxe expressive et sa courbe d'apprentissage plus douce que Symfony.</p>
+    <div class="result-box">
+        <div class="rl">Points clés de Laravel</div>
+        ✨ <strong>Eloquent ORM</strong> — manipulation de la BDD intuitive et expressive<br>
+        🔀 <strong>Blade</strong> — moteur de templates simple et puissant<br>
+        🚀 <strong>Artisan</strong> — outil en ligne de commande pour générer du code<br>
+        📬 <strong>Queues & Jobs</strong> — tâches asynchrones intégrées<br>
+        🔐 <strong>Authentification prête</strong> — système de login en quelques commandes
+    </div>
+    <div class="code-block"><span class="cm">// Eloquent ORM — la même requête qu'en SQL, mais en PHP</span>
+<span class="cm">// SQL : SELECT * FROM users WHERE active = 1 ORDER BY name</span>
+<span class="var">$users</span> = User::<span class="fn">where</span>(<span class="str">'active'</span>, 1)
+               -><span class="fn">orderBy</span>(<span class="str">'name'</span>)
+               -><span class="fn">get</span>();
+
+<span class="cm">// Route Laravel simple</span>
+Route::<span class="fn">get</span>(<span class="str">'/articles'</span>, <span class="kw">function</span>() {
+    <span class="var">$articles</span> = Article::<span class="fn">all</span>();
+    <span class="kw">return</span> <span class="fn">view</span>(<span class="str">'articles.index'</span>, [<span class="str">'articles'</span> => <span class="var">$articles</span>]);
+});
+
+<span class="cm">// Commandes Artisan (terminal)</span>
+<span class="cm">// php artisan make:model Article -m  → crée le modèle + migration BDD</span>
+<span class="cm">// php artisan serve                  → lance le serveur local</span></div>
+</div>
+
+<!-- 4. CMS PHP -->
+<div class="section-label"><span class="section-label-text">📦 Les CMS PHP — WordPress & Drupal</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-amber">8</div>WordPress — le CMS dominant</div>
+    <p class="desc">WordPress n'est pas un framework mais un <strong>CMS (Content Management System)</strong> — un système de gestion de contenu. Créé en 2003, il propulse aujourd'hui <strong>43% de tous les sites web</strong>. C'est un outil, pas un langage — on l'installe, on le configure, on l'étend avec des thèmes et plugins.</p>
+    <div class="two-col">
+        <div class="tc" style="background:#FAEEDA;color:#633806;">
+            <strong style="display:block;margin-bottom:4px;">✅ WordPress est parfait pour</strong>
+            Blogs, sites vitrines, e-commerce (WooCommerce), portfolios. Prise en main rapide, milliers de thèmes et plugins disponibles.
+        </div>
+        <div class="tc" style="background:#FCEBEB;color:#791F1F;">
+            <strong style="display:block;margin-bottom:4px;">❌ WordPress est limité pour</strong>
+            Applications web complexes, fonctionnalités très spécifiques, haute performance, architecture sur-mesure.
+        </div>
+    </div>
+    <div class="result-box" style="margin-top:0.9rem;">
+        <div class="rl">L'écosystème WordPress</div>
+        🎨 <strong>Thèmes</strong> — l'apparence du site (Astra, Divi, Elementor…)<br>
+        🔌 <strong>Plugins</strong> — ajout de fonctionnalités (formulaires, SEO, e-commerce…)<br>
+        📝 <strong>Gutenberg</strong> — éditeur de contenu par blocs intégré<br>
+        🛒 <strong>WooCommerce</strong> — transforme WordPress en boutique en ligne
+    </div>
+</div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-teal">9</div>Drupal — le CMS des grandes organisations</div>
+    <p class="desc"><strong>Drupal</strong> est un CMS open source plus technique que WordPress, conçu pour des projets complexes à grande échelle. Il est utilisé par des gouvernements, universités et grandes entreprises.</p>
+    <div class="two-col">
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong style="display:block;margin-bottom:4px;">🏛️ Drupal excelle pour</strong>
+            Sites gouvernementaux, portails d'entreprise, gestion de contenu multilingue complexe, sécurité critique.
+        </div>
+        <div class="tc" style="background:#FCEBEB;color:#791F1F;">
+            <strong style="display:block;margin-bottom:4px;">📉 Drupal est moins adapté pour</strong>
+            Projets simples et rapides, équipes sans développeurs PHP expérimentés, petits budgets.
+        </div>
+    </div>
+</div>
+
+<!-- 5. COMPARATIF -->
+<div class="section-label"><span class="section-label-text">⚖️ Quand utiliser quoi ?</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-gray">10</div>Le bon outil pour le bon projet</div>
+
+    <div class="fw-grid">
+        <div class="fw-card">
+            <div class="fw-icon">🐘</div>
+            <div class="fw-name">PHP pur</div>
+            <div class="fw-desc">Petits scripts, apprentissage, projets très simples</div>
+        </div>
+        <div class="fw-card">
+            <div class="fw-icon">🎼</div>
+            <div class="fw-name">Symfony</div>
+            <div class="fw-desc">Applications d'entreprise complexes, APIs robustes</div>
+        </div>
+        <div class="fw-card">
+            <div class="fw-icon">🚀</div>
+            <div class="fw-name">Laravel</div>
+            <div class="fw-desc">Applications web modernes, startups, développement rapide</div>
+        </div>
+        <div class="fw-card">
+            <div class="fw-icon">📝</div>
+            <div class="fw-name">WordPress</div>
+            <div class="fw-desc">Blogs, vitrines, e-commerce sans code personnalisé</div>
+        </div>
+        <div class="fw-card">
+            <div class="fw-icon">🏛️</div>
+            <div class="fw-name">Drupal</div>
+            <div class="fw-desc">Portails institutionnels, grandes organisations</div>
+        </div>
+        <div class="fw-card">
+            <div class="fw-icon">🐍</div>
+            <div class="fw-name">Python/Django</div>
+            <div class="fw-desc">Data science, IA, projets nécessitant Python</div>
+        </div>
+    </div>
+
+    <div class="tip">
+        <span class="tip-i">💡</span>
+        <span>En 2024, <strong>Laravel domine</strong> le marché des frameworks PHP. Si tu apprends PHP pour trouver un emploi rapidement, Laravel est le meilleur investissement. Si tu vises les grandes entreprises françaises, Symfony est très présent.</span>
+    </div>
+</div>
+
+<div class="cta-wrap">
+    <p>Cours lu ✓ &nbsp; PHP, Symfony, Laravel, WordPress, Drupal ✓ &nbsp; Prêt à tester tes connaissances ?</p>
+    <a class="cta-btn" href="exercices-php.html">Passer aux exercices →</a>
+</div>
+
+<div class="footer-note">
+    PHP → Framework → CMS → Projet 🐘<br>
+    <span style="font-size:0.82rem;">Cours — PHP & ses frameworks</span>
+</div>
+</body>
+</html>

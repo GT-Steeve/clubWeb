@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bases de données — SQL, MySQL, PostgreSQL & NoSQL</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🗄️%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal { background: #E1F5EE; color: #085041; }
+        .b-blue { background: #E6F1FB; color: #0C447C; }
+        .b-amber { background: #FAEEDA; color: #633806; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-coral { background: #FAECE7; color: #712B13; }
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral { background: #F5C4B3; color: #712B13; }
+        .p-amber { background: #FAC775; color: #633806; }
+        .p-blue { background: #B5D4F4; color: #0C447C; }
+        .p-green { background: #C0DD97; color: #3B6D11; }
+        .p-gray { background: #D3D1C7; color: #444441; }
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child { margin-bottom: 0; }
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber { background: #FAEEDA; color: #633806; }
+        .tip-blue { background: #E6F1FB; color: #0C447C; }
+        .tip-coral { background: #FAECE7; color: #712B13; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+        .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.8; }
+        .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+        .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.9; white-space: pre; overflow-x: auto; color: #2C2C2A; margin-top: 0.8rem; }
+        .kw { color: #185FA5; font-weight: 700; }
+        .str { color: #0F6E56; }
+        .cm { color: #888780; font-style: italic; }
+        .num { color: #E8760A; }
+        .fn { color: #534AB7; }
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; white-space: nowrap; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+        .tc { border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.88rem; font-weight: 600; line-height: 1.6; }
+        .table-demo { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.85rem; border-radius: 10px; overflow: hidden; }
+        .table-demo th { background: #2C2C2A; color: #FAC775; padding: 8px 12px; text-align: left; font-weight: 700; font-size: 0.8rem; }
+        .table-demo td { padding: 8px 12px; border-bottom: 0.5px solid #D3D1C7; }
+        .table-demo tr:last-child td { border-bottom: none; }
+        .table-demo tr:nth-child(even) td { background: #F5F4F0; }
+        .schema-wrap { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 12px; padding: 1rem; margin-top: 0.8rem; }
+        .schema-table { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+        .schema-title { background: #2C2C2A; color: #FAC775; font-size: 0.82rem; font-weight: 800; padding: 5px 12px; }
+        .schema-field { font-size: 0.8rem; padding: 4px 12px; border-bottom: 0.5px solid #EEEcE5; font-family: 'Fira Code', monospace; color: #5F5E5A; }
+        .schema-field:last-child { border-bottom: none; }
+        .schema-field .pk { color: #FAC775; font-weight: 700; }
+        .schema-field .fk { color: #5DCAA5; font-weight: 700; }
+        .schema-field .type { color: #888780; }
+        .ic { font-family: 'Fira Code', monospace; font-size: 0.83em; background: #F1EFE8; border-radius: 4px; padding: 1px 5px; color: #993C1D; }
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .cta-btn.sec { background: #3D3D3A; color: #D3D1C7; margin-left: 8px; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+        @media (max-width: 500px) { .two-col { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="../sommaire.html#step2Advence">← Retour au sommaire</a>
+
+<div class="hero">
+    <h1>🗄️ Les Bases de données</h1>
+    <p>L'endroit où vit toute l'information — SQL, tables, relations & NoSQL.</p>
+    <div class="badge-row">
+        <span class="badge b-blue">SQL</span>
+        <span class="badge b-teal">MySQL · PostgreSQL</span>
+        <span class="badge b-amber">Relations</span>
+        <span class="badge b-purple">NoSQL</span>
+        <span class="badge b-coral">ORM</span>
+    </div>
+</div>
+
+<!-- 1. QU'EST-CE QU'UNE BDD -->
+<div class="card">
+    <div class="stitle"><div class="pill p-teal">1</div>Qu'est-ce qu'une base de données ?</div>
+    <p class="desc">Une <strong>base de données</strong> est un système organisé pour stocker, rechercher et modifier des informations de façon efficace. Chaque application web en a besoin : les utilisateurs, les articles, les commandes, les messages — tout est stocké en base de données.</p>
+    <p class="desc">Sans base de données, une application ne peut rien "se souvenir" entre deux visites. Elle est à l'application ce que le disque dur est à ton ordinateur.</p>
+
+    <div class="result-box">
+        <div class="rl">Exemples concrets de données stockées</div>
+        👤 <strong>Utilisateurs</strong> — nom, email, mot de passe hashé, rôle<br>
+        📝 <strong>Articles / Posts</strong> — titre, contenu, date, auteur<br>
+        🛒 <strong>Commandes</strong> — produits, quantités, prix, statut<br>
+        💬 <strong>Messages</strong> — contenu, expéditeur, destinataire, date<br>
+        📊 <strong>Logs & statistiques</strong> — visites, clics, temps passé
+    </div>
+</div>
+
+<!-- 2. SQL DE BASE -->
+<div class="section-label"><span class="section-label-text">📋 Tables et SQL</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">2</div>Les tables — la structure des données</div>
+    <p class="desc">Dans une base de données <strong>relationnelle</strong>, les données sont organisées en <strong>tables</strong> — comme des feuilles Excel. Chaque table a des <strong>colonnes</strong> (les champs) et des <strong>lignes</strong> (les enregistrements).</p>
+
+    <table class="table-demo">
+        <tr><th>id</th><th>nom</th><th>email</th><th>age</th><th>actif</th></tr>
+        <tr><td>1</td><td>Alice Dupont</td><td>alice@mail.com</td><td>28</td><td>✓</td></tr>
+        <tr><td>2</td><td>Bob Martin</td><td>bob@mail.com</td><td>35</td><td>✓</td></tr>
+        <tr><td>3</td><td>Clara Petit</td><td>clara@mail.com</td><td>22</td><td>✗</td></tr>
+    </table>
+
+    <div class="result-box" style="margin-top:0.9rem;">
+        <div class="rl">Vocabulaire fondamental</div>
+        🔑 <strong>Clé primaire (PRIMARY KEY)</strong> — identifiant unique de chaque ligne (souvent <span class="ic">id</span>)<br>
+        🔗 <strong>Clé étrangère (FOREIGN KEY)</strong> — lien vers la clé primaire d'une autre table<br>
+        📋 <strong>Schéma</strong> — la structure de la base (quelles tables, quelles colonnes)<br>
+        📝 <strong>Requête</strong> — une instruction pour lire ou modifier les données
+    </div>
+</div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-purple">3</div>Le SQL — parler à la base de données</div>
+    <p class="desc"><strong>SQL</strong> (Structured Query Language) est le langage universel des bases de données relationnelles. Ses 4 opérations fondamentales forment le <strong>CRUD</strong> :</p>
+
+    <div class="code-block"><span class="cm">-- CREATE : créer une table</span>
+<span class="kw">CREATE TABLE</span> utilisateurs (
+    id      <span class="fn">INT</span> <span class="kw">PRIMARY KEY</span> <span class="kw">AUTO_INCREMENT</span>,
+    nom     <span class="fn">VARCHAR</span>(<span class="num">100</span>) <span class="kw">NOT NULL</span>,
+    email   <span class="fn">VARCHAR</span>(<span class="num">150</span>) <span class="kw">UNIQUE NOT NULL</span>,
+    age     <span class="fn">INT</span>,
+    actif   <span class="fn">BOOLEAN</span> <span class="kw">DEFAULT</span> <span class="kw">TRUE</span>
+);
+
+<span class="cm">-- READ : lire des données</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> utilisateurs;
+<span class="kw">SELECT</span> nom, email <span class="kw">FROM</span> utilisateurs <span class="kw">WHERE</span> actif = <span class="kw">TRUE</span>;
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> utilisateurs <span class="kw">WHERE</span> age > <span class="num">25</span> <span class="kw">ORDER BY</span> nom;
+
+<span class="cm">-- CREATE (INSERT) : insérer une ligne</span>
+<span class="kw">INSERT INTO</span> utilisateurs (nom, email, age)
+<span class="kw">VALUES</span> (<span class="str">'Alice'</span>, <span class="str">'alice@mail.com'</span>, <span class="num">28</span>);
+
+<span class="cm">-- UPDATE : modifier des données</span>
+<span class="kw">UPDATE</span> utilisateurs
+<span class="kw">SET</span> age = <span class="num">29</span>
+<span class="kw">WHERE</span> id = <span class="num">1</span>;
+
+<span class="cm">-- DELETE : supprimer</span>
+<span class="kw">DELETE FROM</span> utilisateurs <span class="kw">WHERE</span> id = <span class="num">3</span>;</div>
+
+    <div class="tip tip-coral">
+        <span class="tip-i">⚠️</span>
+        <span>Toujours utiliser <span class="ic">WHERE</span> avec <span class="ic">UPDATE</span> et <span class="ic">DELETE</span>. Sans <span class="ic">WHERE</span>, tu modifies ou supprimes <strong>toutes les lignes</strong> — l'erreur la plus redoutée des développeurs.</span>
+    </div>
+</div>
+
+<!-- 3. RELATIONS -->
+<div class="section-label"><span class="section-label-text">🔗 Les relations entre tables</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-coral">4</div>Les relations — relier les tables entre elles</div>
+    <p class="desc">La puissance des bases relationnelles vient des <strong>relations entre tables</strong>. On évite la duplication — on stocke une information une seule fois et on y fait référence ailleurs.</p>
+
+    <div class="schema-wrap">
+        <div class="rl">Exemple : blog avec auteurs et articles</div>
+        <div class="schema-table">
+            <div class="schema-title">📋 Table : utilisateurs</div>
+            <div class="schema-field"><span class="pk">🔑 id</span> <span class="type">INT PRIMARY KEY</span></div>
+            <div class="schema-field">nom <span class="type">VARCHAR(100)</span></div>
+            <div class="schema-field">email <span class="type">VARCHAR(150)</span></div>
+        </div>
+        <div class="schema-table">
+            <div class="schema-title">📋 Table : articles</div>
+            <div class="schema-field"><span class="pk">🔑 id</span> <span class="type">INT PRIMARY KEY</span></div>
+            <div class="schema-field">titre <span class="type">VARCHAR(200)</span></div>
+            <div class="schema-field">contenu <span class="type">TEXT</span></div>
+            <div class="schema-field"><span class="fk">🔗 utilisateur_id</span> <span class="type">INT FOREIGN KEY → utilisateurs.id</span></div>
+        </div>
+    </div>
+
+    <div class="code-block"><span class="cm">-- JOIN : joindre deux tables</span>
+<span class="cm">-- Récupérer les articles avec le nom de leur auteur</span>
+<span class="kw">SELECT</span>
+    articles.titre,
+    utilisateurs.nom <span class="kw">AS</span> auteur
+<span class="kw">FROM</span> articles
+<span class="kw">JOIN</span> utilisateurs <span class="kw">ON</span> articles.utilisateur_id = utilisateurs.id;
+
+<span class="cm">-- Résultat :</span>
+<span class="cm">-- | titre              | auteur       |</span>
+<span class="cm">-- | Mon premier post   | Alice Dupont |</span>
+<span class="cm">-- | Introduction au SQL| Bob Martin   |</span></div>
+
+    <div class="result-box" style="margin-top:0.8rem;">
+        <div class="rl">Les 3 types de relations</div>
+        <strong>1:1</strong> — Un utilisateur a un seul profil (profil ↔ utilisateur)<br>
+        <strong>1:N</strong> — Un auteur a plusieurs articles (auteur ↔ articles) — le plus courant<br>
+        <strong>N:M</strong> — Un article peut avoir plusieurs tags, un tag peut être sur plusieurs articles → table de jonction nécessaire
+    </div>
+</div>
+
+<!-- 4. SYSTÈMES BDD -->
+<div class="section-label"><span class="section-label-text">🛢️ Les systèmes de bases de données</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-green">5</div>MySQL vs PostgreSQL — lesquels utiliser ?</div>
+    <p class="desc">SQL est le langage — mais il faut aussi choisir le <strong>système de gestion de base de données (SGBD)</strong> qui l'implémente.</p>
+
+    <div class="two-col">
+        <div class="tc" style="background:#E6F1FB;color:#0C447C;">
+            <strong style="display:block;margin-bottom:6px;">🐬 MySQL</strong>
+            Le plus répandu. Simple à installer, rapide, utilisé par WordPress, Facebook (anciennement). Idéal pour débuter.<br><br>
+            <strong>Utilisé par :</strong> WordPress, Joomla, Drupal
+        </div>
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong style="display:block;margin-bottom:6px;">🐘 PostgreSQL</strong>
+            Plus avancé et plus strict. Supporte des types de données complexes (JSON, arrays…). Recommandé pour les projets sérieux.<br><br>
+            <strong>Utilisé par :</strong> Django (recommandé), Instagram, Heroku
+        </div>
+    </div>
+
+    <div class="tip tip-amber">
+        <span class="tip-i">🎯</span>
+        <span>Pour apprendre : commence avec <strong>MySQL ou SQLite</strong> (SQLite ne nécessite même pas d'installation — Django l'utilise par défaut). Pour la production avec Django : <strong>PostgreSQL</strong> est la référence.</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-amber">6</div>NoSQL — quand SQL ne suffit pas</div>
+    <p class="desc">Les bases <strong>NoSQL</strong> (Not Only SQL) sont conçues pour des cas d'usage où la structure tabulaire est inadaptée : données non structurées, très grande quantité, temps réel.</p>
+
+    <div class="two-col">
+        <div class="tc" style="background:#FAEEDA;color:#633806;">
+            <strong style="display:block;margin-bottom:4px;">🍃 MongoDB (documents)</strong>
+            Stocke des documents JSON. Flexibilité maximale — pas de schéma fixe. Utilisé pour des données variables.
+        </div>
+        <div class="tc" style="background:#EEEDFE;color:#3C3489;">
+            <strong style="display:block;margin-bottom:4px;">⚡ Redis (clé-valeur)</strong>
+            Ultra-rapide, stocke en mémoire. Utilisé pour le cache, les sessions, le temps réel.
+        </div>
+    </div>
+
+    <div class="result-box" style="margin-top:0.9rem;">
+        <div class="rl">SQL vs NoSQL — quand choisir ?</div>
+        ✅ <strong>SQL</strong> — données structurées avec relations (blog, e-commerce, CRM, ERP)<br>
+        ✅ <strong>MongoDB</strong> — données variables, JSON imbriqué (catalogues, logs, contenus)<br>
+        ✅ <strong>Redis</strong> — cache, sessions, données temps réel (notifications, leaderboards)
+    </div>
+</div>
+
+<!-- 5. ORM -->
+<div class="section-label"><span class="section-label-text">🔄 L'ORM — plus de SQL brut</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-gray">7</div>L'ORM — manipuler la BDD avec des objets</div>
+    <p class="desc">Un <strong>ORM (Object-Relational Mapper)</strong> permet d'interagir avec la base de données en utilisant des objets du langage de programmation, sans écrire de SQL brut. Django et Laravel ont chacun leur ORM.</p>
+
+    <div class="code-block"><span class="cm">-- SQL brut (sans ORM)</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> articles <span class="kw">WHERE</span> actif = <span class="num">1</span> <span class="kw">ORDER BY</span> date <span class="kw">DESC</span> <span class="kw">LIMIT</span> <span class="num">10</span>;
+
+<span class="cm"># Django ORM (équivalent Python)</span>
+Article.objects.<span class="fn">filter</span>(actif=<span class="kw">True</span>).<span class="fn">order_by</span>(<span class="str">'-date'</span>)[:<span class="num">10</span>]
+
+<span class="cm">// Laravel Eloquent (équivalent PHP)</span>
+Article::<span class="fn">where</span>(<span class="str">'actif'</span>, <span class="num">1</span>)-><span class="fn">orderBy</span>(<span class="str">'date'</span>, <span class="str">'desc'</span>)-><span class="fn">take</span>(<span class="num">10</span>)-><span class="fn">get</span>();</div>
+
+    <div class="tip tip-purple">
+        <span class="tip-i">💡</span>
+        <span>L'ORM offre aussi les <strong>migrations</strong> : des fichiers qui décrivent l'évolution du schéma de ta base de données. Chaque modification de structure se fait via une migration — et peut être annulée.</span>
+    </div>
+</div>
+
+<div class="cta-wrap">
+    <p>Cours lu ✓ &nbsp; SQL, tables, relations, NoSQL et ORM compris ✓</p>
+    <a class="cta-btn" href="exercices-bdd.html">Passer aux exercices →</a>
+</div>
+
+<div class="footer-note">
+    Données → Tables → SQL → Relations → ORM 🗄️<br>
+    <span style="font-size:0.82rem;">Cours — Bases de données</span>
+</div>
+</body>
+</html>

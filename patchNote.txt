@@ -27,6 +27,7 @@ v1.07.1 = icone onglet sur tous les cours général
 v1.08.0 = ajout révision html css template + structure web 1 / web 2
 v1.09.0 = ajout cours web 1, 2 et 3
 v1.09.1 = note next roadmap cours web 2
+v1.10.0 = ajout théorie web dynamique
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
