@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django — Le framework web Python complet</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal{background:#E1F5EE;color:#085041;} .b-blue{background:#E6F1FB;color:#0C447C;} .b-amber{background:#FAEEDA;color:#633806;} .b-purple{background:#EEEDFE;color:#3C3489;} .b-coral{background:#FAECE7;color:#712B13;} .b-green{background:#E8F5D8;color:#3B6D11;}
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal{background:#9FE1CB;color:#085041;} .p-purple{background:#CECBF6;color:#3C3489;} .p-coral{background:#F5C4B3;color:#712B13;} .p-amber{background:#FAC775;color:#633806;} .p-blue{background:#B5D4F4;color:#0C447C;} .p-green{background:#C0DD97;color:#3B6D11;} .p-gray{background:#D3D1C7;color:#444441;}
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child{margin-bottom:0;}
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip-purple{background:#EEEDFE;color:#3C3489;} .tip-amber{background:#FAEEDA;color:#633806;} .tip-blue{background:#E6F1FB;color:#0C447C;} .tip-coral{background:#FAECE7;color:#712B13;}
+        .tip-i{font-size:16px;flex-shrink:0;margin-top:1px;}
+        .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.8; }
+        .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+        .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.9; white-space: pre; overflow-x: auto; color: #2C2C2A; margin-top: 0.8rem; }
+        .kw{color:#993C1D;font-weight:700;} .str{color:#0F6E56;} .cm{color:#888780;font-style:italic;} .var{color:#185FA5;} .fn{color:#534AB7;} .num{color:#E8760A;} .dec{color:#7F77DD;}
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; white-space: nowrap; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+        .tc { border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.88rem; font-weight: 600; line-height: 1.6; }
+        .step-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.8rem; }
+        .step-item { display: flex; gap: 12px; align-items: flex-start; }
+        .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 9px; background: #2C2C2A; color: #FAC775; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+        .step-body { font-size: 0.92rem; font-weight: 600; line-height: 1.6; color: #2C2C2A; }
+        .step-body span{color:#5F5E5A;font-weight:400;}
+        .ic{font-family:'Fira Code',monospace;font-size:0.83em;background:#F1EFE8;border-radius:4px;padding:1px 5px;color:#993C1D;}
+        /* MTV DIAGRAM */
+        .mtv-wrap { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 0.8rem; }
+        .mtv-block { border-radius: 12px; padding: 1rem; text-align: center; }
+        .mtv-m{background:#FAECE7;} .mtv-t{background:#FAEEDA;} .mtv-v{background:#E1F5EE;}
+        .mtv-letter { font-size: 1.8rem; font-weight: 800; margin-bottom: 4px; }
+        .mtv-m .mtv-letter{color:#993C1D;} .mtv-t .mtv-letter{color:#633806;} .mtv-v .mtv-letter{color:#085041;}
+        .mtv-name { font-size: 0.85rem; font-weight: 800; margin-bottom: 4px; }
+        .mtv-m .mtv-name{color:#712B13;} .mtv-t .mtv-name{color:#412402;} .mtv-v .mtv-name{color:#054032;}
+        .mtv-desc { font-size: 0.78rem; color: #5F5E5A; line-height: 1.5; }
+        /* FLOW */
+        .flow-wrap { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 0.8rem; }
+        .flow-step { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 8px; padding: 5px 12px; font-size: 0.82rem; font-weight: 700; }
+        .flow-arrow { color: #B4B2A9; font-size: 1rem; }
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover{background:#EF9F27;}
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+        @media (max-width:500px){.two-col{grid-template-columns:1fr;}.mtv-wrap{grid-template-columns:1fr;}}
+    </style>
+</head>
+<body>
+<a class="nav-prev" href="../sommaire.html#step2Dynamique">← Retour au cours Python</a>
+
+<div class="hero">
+    <h1>🐍 Django</h1>
+    <p>Le framework Python "batteries included" — du Model au Template en passant par la View.</p>
+    <div class="badge-row">
+        <span class="badge b-teal">MTV</span>
+        <span class="badge b-blue">ORM</span>
+        <span class="badge b-amber">Admin auto</span>
+        <span class="badge b-purple">URLs & Views</span>
+        <span class="badge b-coral">Templates</span>
+        <span class="badge b-green">Sécurité</span>
+    </div>
+</div>
+
+<!-- 1. DJANGO C'EST QUOI -->
+<div class="card">
+    <div class="stitle"><div class="pill p-teal">1</div>Django — "batteries included"</div>
+    <p class="desc">Django est un framework web Python <strong>haute productivité</strong>. Sa philosophie : <em>"Ne te répète pas"</em> (DRY — Don't Repeat Yourself) et <em>"batteries included"</em> — tout ce dont tu as besoin est déjà là.</p>
+    <p class="desc">Créé en 2005 dans la rédaction d'un journal en ligne (Lawrence Journal-World), Django a été conçu pour aller vite. Instagram, Pinterest et Disqus ont démarré avec Django — il passe à l'échelle mondiale.</p>
+    <div class="result-box">
+        <div class="rl">Ce que Django fournit sans rien installer de plus</div>
+        🔐 <strong>Authentification</strong> — login, logout, reset de mot de passe, gestion des rôles<br>
+        🛠️ <strong>Interface admin auto-générée</strong> — CRUD sur toutes tes données en 2 lignes de code<br>
+        🗄️ <strong>ORM puissant</strong> — requêtes BDD sans SQL brut<br>
+        🔄 <strong>Migrations</strong> — gestion des changements de schéma BDD automatisée<br>
+        🛡️ <strong>Sécurité par défaut</strong> — CSRF, XSS, injection SQL, clickjacking<br>
+        📋 <strong>Système de formulaires</strong> — validation et rendu HTML intégrés<br>
+        🌍 <strong>Internationalisation</strong> — traduction multilingue intégrée
+    </div>
+</div>
+
+<!-- 2. MTV -->
+<div class="section-label"><span class="section-label-text">🏗️ L'architecture MTV</span></div>
+<div class="card">
+    <div class="stitle"><div class="pill p-purple">2</div>MTV — Model, Template, View</div>
+    <p class="desc">Django utilise le pattern <strong>MTV</strong> — l'équivalent du MVC classique. Chaque partie a un rôle précis et bien séparé.</p>
+    <div class="mtv-wrap">
+        <div class="mtv-block mtv-m">
+            <div class="mtv-letter">M</div>
+            <div class="mtv-name">Model</div>
+            <div class="mtv-desc">Structure des données. Définit les tables BDD via des classes Python.</div>
+        </div>
+        <div class="mtv-block mtv-t">
+            <div class="mtv-letter">T</div>
+            <div class="mtv-name">Template</div>
+            <div class="mtv-desc">L'interface utilisateur. HTML avec variables Python injectées.</div>
+        </div>
+        <div class="mtv-block mtv-v">
+            <div class="mtv-letter">V</div>
+            <div class="mtv-name">View</div>
+            <div class="mtv-desc">La logique. Reçoit la requête, interroge le Model, retourne un Template.</div>
+        </div>
+    </div>
+    <div class="flow-wrap" style="margin-top:1rem;">
+        <div class="flow-step">🌐 Requête URL</div><span class="flow-arrow">→</span>
+        <div class="flow-step">⚙️ urls.py</div><span class="flow-arrow">→</span>
+        <div class="flow-step">🔧 View</div><span class="flow-arrow">→</span>
+        <div class="flow-step">📦 Model (BDD)</div><span class="flow-arrow">→</span>
+        <div class="flow-step">🖼️ Template</div><span class="flow-arrow">→</span>
+        <div class="flow-step">🌐 Réponse HTML</div>
+    </div>
+    <div class="tip tip-blue">
+        <span class="tip-i">📌</span>
+        <span>Dans le MVC classique : Model=Model, View=Template, Controller=View. Django a juste renommé. Le "View" Django fait le travail du "Controller" MVC.</span>
+    </div>
+</div>
+
+<!-- 3. STRUCTURE DU PROJET -->
+<div class="section-label"><span class="section-label-text">📁 Structure d'un projet Django</span></div>
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">3</div>Créer et structurer un projet Django</div>
+    <div class="code-block"><span class="cm"># Préparation de l'environnement de programmation</span>
+python --version        <span class="cm"># Vérifie que python est installé</span>
+mkdir monprojet-django  <span class="cm"># Créer le dossier du projet</span>
+cd monprojet-django  
+python -m venv env      <span class="cm"># Réserve l'espace de code pour éviter des bug</span>
+# Windows               <span class="cm"># Si vous êtes sous window</span>
+.\env\Scripts\activate
+# macOS/Linux           <span class="cm"># Si vous êtes sur mac où Linux</span>
+source env/bin/activate
+
+<span class="cm"># Installation et création du projet</span>
+pip install django
+django-admin --version              <span class="cm"># vérifie si Django est installé</span>
+django-admin startproject monsite
+<span class="fn">cd</span> monsite
+python manage.py startapp blog      <span class="cm"># créer une app "blog"</span>
+python manage.py runserver          <span class="cm"># lancer le serveur local</span>
+
+<span class="cm"># Structure générée</span>
+monsite/
+├── manage.py            <span class="cm"># outil de gestion (migrations, serveur…)</span>
+├── monsite/
+│   ├── settings.py      <span class="cm"># configuration du projet</span>
+│   ├── urls.py          <span class="cm"># routes principales</span>
+│   └── wsgi.py          <span class="cm"># déploiement</span>
+└── blog/                <span class="cm"># notre application</span>
+    ├── models.py        <span class="cm"># les données (M)</span>
+    ├── views.py         <span class="cm"># la logique (V)</span>
+    ├── urls.py          <span class="cm"># les routes de l'app</span>
+    ├── admin.py         <span class="cm"># enregistrement dans l'admin</span>
+    └── templates/       <span class="cm"># les HTML (T)</span></div>
+    <div class="tip tip-amber">
+        <span class="tip-i">🎯</span>
+        <span>Un projet Django contient plusieurs <strong>applications</strong> (apps). Chaque app est un module indépendant — blog, boutique, users… Cette séparation favorise la réutilisation et la maintenabilité.</span>
+    </div>
+</div>
+
+<!-- 4. MODELS -->
+<div class="section-label"><span class="section-label-text">📦 Les Models — définir les données</span></div>
+<div class="card">
+    <div class="stitle"><div class="pill p-coral">4</div>models.py — Les données de l'application</div>
+    <p class="desc">Un <strong>Model</strong> est une classe Python qui représente une table en base de données. Chaque attribut est un champ de la table. Django crée automatiquement le SQL correspondant.</p>
+    <div class="code-block"><span class="cm"># blog/models.py</span>
+<span class="kw">from</span> django.db <span class="kw">import</span> models
+<span class="kw">from</span> django.contrib.auth.models <span class="kw">import</span> User
+
+<span class="kw">class</span> <span class="fn">Categorie</span>(models.Model):
+    <span class="var">nom</span>  = models.<span class="fn">CharField</span>(max_length=<span class="num">100</span>)
+    <span class="var">slug</span> = models.<span class="fn">SlugField</span>(unique=<span class="kw">True</span>)
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="var">self</span>.<span class="var">nom</span>
+
+<span class="kw">class</span> <span class="fn">Article</span>(models.Model):
+    <span class="var">titre</span>     = models.<span class="fn">CharField</span>(max_length=<span class="num">200</span>)
+    <span class="var">contenu</span>   = models.<span class="fn">TextField</span>()
+    <span class="var">publie_le</span> = models.<span class="fn">DateTimeField</span>(auto_now_add=<span class="kw">True</span>)
+    <span class="var">modifie_le</span>= models.<span class="fn">DateTimeField</span>(auto_now=<span class="kw">True</span>)
+    <span class="var">actif</span>     = models.<span class="fn">BooleanField</span>(default=<span class="kw">True</span>)
+    <span class="var">auteur</span>    = models.<span class="fn">ForeignKey</span>(User, on_delete=models.CASCADE)
+    <span class="var">categorie</span> = models.<span class="fn">ForeignKey</span>(Categorie, on_delete=models.SET_NULL, null=<span class="kw">True</span>)
+
+    <span class="kw">class</span> <span class="fn">Meta</span>:
+        ordering = [<span class="str">'-publie_le'</span>]   <span class="cm"># tri par défaut : plus récent en premier</span>
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="var">self</span>.<span class="var">titre</span>
+
+<span class="cm"># Appliquer les changements à la BDD</span>
+<span class="cm"># python manage.py makemigrations</span>
+<span class="cm"># python manage.py migrate</span></div>
+    <div class="result-box" style="margin-top:0.8rem;">
+        <div class="rl">Types de champs Django courants</div>
+        <strong>CharField</strong> — texte court (max_length requis)<br>
+        <strong>TextField</strong> — texte long (article, description)<br>
+        <strong>IntegerField / FloatField</strong> — nombres<br>
+        <strong>BooleanField</strong> — vrai/faux<br>
+        <strong>DateTimeField</strong> — date et heure<br>
+        <strong>ForeignKey</strong> — relation 1:N vers une autre table<br>
+        <strong>ManyToManyField</strong> — relation N:M<br>
+        <strong>ImageField / FileField</strong> — upload de fichiers
+    </div>
+</div>
+
+<!-- 5. MIGRATIONS -->
+<div class="card">
+    <div class="stitle"><div class="pill p-teal">5</div>Les migrations — synchroniser la BDD</div>
+    <p class="desc">Les <strong>migrations</strong> sont des fichiers Python générés automatiquement qui décrivent l'évolution de ta base de données. Chaque modification de Model se traduit en migration.</p>
+    <div class="code-block"><span class="cm"># 1. Générer les migrations (après modification des models)</span>
+python manage.py makemigrations
+
+<span class="cm"># 2. Appliquer les migrations à la BDD</span>
+python manage.py migrate
+
+<span class="cm"># 3. Voir les migrations en attente</span>
+python manage.py showmigrations
+
+<span class="cm"># 4. Revenir en arrière (annuler une migration)</span>
+python manage.py migrate blog 0001   <span class="cm"># revenir à la migration 0001</span></div>
+    <div class="tip">
+        <span class="tip-i">💡</span>
+        <span>La règle d'or : <strong>toujours versionner les migrations</strong> avec Git. Elles représentent l'historique complet de l'évolution de ta base de données.</span>
+    </div>
+</div>
+
+<!-- 6. VIEWS -->
+<div class="section-label"><span class="section-label-text">⚙️ Les Views — la logique métier</span></div>
+<div class="card">
+    <div class="stitle"><div class="pill p-amber">6</div>views.py — Fonctions et Class-Based Views</div>
+    <p class="desc">Une <strong>View</strong> est une fonction (ou classe) Python qui reçoit une requête HTTP et retourne une réponse HTTP. C'est elle qui fait le lien entre le Model et le Template.</p>
+    <div class="code-block"><span class="cm"># blog/views.py</span>
+<span class="kw">from</span> django.shortcuts <span class="kw">import</span> render, get_object_or_404
+<span class="kw">from</span> .models <span class="kw">import</span> Article
+
+<span class="cm"># View basée sur une fonction (Function-Based View)</span>
+<span class="kw">def</span> <span class="fn">liste_articles</span>(<span class="var">request</span>):
+    <span class="var">articles</span> = Article.objects.<span class="fn">filter</span>(actif=<span class="kw">True</span>)
+    <span class="kw">return</span> <span class="fn">render</span>(<span class="var">request</span>, <span class="str">'blog/liste.html'</span>, {
+        <span class="str">'articles'</span>: <span class="var">articles</span>
+    })
+
+<span class="kw">def</span> <span class="fn">detail_article</span>(<span class="var">request</span>, <span class="var">pk</span>):
+    <span class="cm"># get_object_or_404 → retourne 404 si l'article n'existe pas</span>
+    <span class="var">article</span> = <span class="fn">get_object_or_404</span>(Article, pk=<span class="var">pk</span>, actif=<span class="kw">True</span>)
+    <span class="kw">return</span> <span class="fn">render</span>(<span class="var">request</span>, <span class="str">'blog/detail.html'</span>, {<span class="str">'article'</span>: <span class="var">article</span>})
+
+<span class="cm"># View basée sur une classe (Class-Based View) — plus concise</span>
+<span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView, DetailView
+
+<span class="kw">class</span> <span class="fn">ArticleListView</span>(ListView):
+    model         = Article
+    template_name = <span class="str">'blog/liste.html'</span>
+    context_object_name = <span class="str">'articles'</span>
+
+    <span class="kw">def</span> <span class="fn">get_queryset</span>(<span class="var">self</span>):
+        <span class="kw">return</span> Article.objects.<span class="fn">filter</span>(actif=<span class="kw">True</span>)</div>
+</div>
+
+<!-- 7. URLs -->
+<div class="card">
+    <div class="stitle"><div class="pill p-purple">7</div>urls.py — Définir les routes</div>
+    <p class="desc">Le fichier <strong>urls.py</strong> mappe les URLs aux Views. Chaque URL correspond à une View qui traite la requête.</p>
+    <div class="code-block"><span class="cm"># monsite/urls.py (principal)</span>
+<span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> django.urls <span class="kw">import</span> path, include
+
+urlpatterns = [
+    path(<span class="str">'admin/'</span>, admin.site.urls),
+    path(<span class="str">'blog/'</span>, <span class="fn">include</span>(<span class="str">'blog.urls'</span>)),  <span class="cm"># inclure les URLs de l'app blog</span>
+]
+
+<span class="cm"># blog/urls.py (de l'application)</span>
+<span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> . <span class="kw">import</span> views
+
+urlpatterns = [
+    <span class="cm"># /blog/             → liste des articles</span>
+    path(<span class="str">''</span>, views.<span class="var">liste_articles</span>, name=<span class="str">'liste'</span>),
+
+    <span class="cm"># /blog/42/          → détail de l'article id=42</span>
+    path(<span class="str">'&lt;int:pk&gt;/'</span>, views.<span class="var">detail_article</span>, name=<span class="str">'detail'</span>),
+
+    <span class="cm"># /blog/mon-titre/   → détail par slug</span>
+    path(<span class="str">'&lt;slug:slug&gt;/'</span>, views.<span class="var">detail_par_slug</span>, name=<span class="str">'detail-slug'</span>),
+]</div>
+</div>
+
+<!-- 8. TEMPLATES -->
+<div class="section-label"><span class="section-label-text">🖼️ Les Templates — l'interface utilisateur</span></div>
+<div class="card">
+    <div class="stitle"><div class="pill p-green">8</div>Le système de templates Django</div>
+    <p class="desc">Les <strong>templates</strong> sont des fichiers HTML avec des balises spéciales Django pour injecter des données et ajouter de la logique (boucles, conditions, héritage).</p>
+    <div class="code-block"><span class="cm">{# templates/base.html — le gabarit parent #}</span>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;<span class="dec">{% block titre %}Mon Site{% endblock %}</span>&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;nav&gt;Menu commun à toutes les pages&lt;/nav&gt;
+
+  <span class="dec">{% block contenu %}</span>
+  <span class="cm">{# chaque page remplace ce bloc #}</span>
+  <span class="dec">{% endblock %}</span>
+&lt;/body&gt;
+&lt;/html&gt;
+
+<span class="cm">{# templates/blog/liste.html — hérite de base.html #}</span>
+<span class="dec">{% extends "base.html" %}</span>
+
+<span class="dec">{% block titre %}Articles du blog{% endblock %}</span>
+
+<span class="dec">{% block contenu %}</span>
+  <span class="dec">{% for article in articles %}</span>
+    &lt;article&gt;
+      &lt;h2&gt;<span class="dec">{{ article.titre }}</span>&lt;/h2&gt;
+      &lt;p&gt;<span class="dec">{{ article.contenu|truncatewords:50 }}</span>&lt;/p&gt;
+      &lt;a href=<span class="str">"{% url 'detail' article.pk %}"</span>&gt;Lire la suite&lt;/a&gt;
+    &lt;/article&gt;
+  <span class="dec">{% empty %}</span>
+    &lt;p&gt;Aucun article disponible.&lt;/p&gt;
+  <span class="dec">{% endfor %}</span>
+<span class="dec">{% endblock %}</span></div>
+    <div class="result-box" style="margin-top:0.8rem;">
+        <div class="rl">Syntaxe templates Django essentielle</div>
+        <strong>{{ variable }}</strong> — affiche la valeur d'une variable<br>
+        <strong>{% tag %}</strong> — balise de logique (for, if, block, extends…)<br>
+        <strong>{{ variable|filtre }}</strong> — transforme une variable (|truncatewords:50, |date:"d/m/Y"…)<br>
+        <strong>{% url 'nom-route' %}</strong> — génère une URL depuis son nom<br>
+        <strong>{% extends %}</strong> — hérite d'un template parent<br>
+        <strong>{% block %}</strong> — zone remplaçable dans un template enfant
+    </div>
+</div>
+
+<!-- 9. ORM AVANCÉ -->
+<div class="section-label"><span class="section-label-text">🗄️ L'ORM Django en détail</span></div>
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">9</div>QuerySets — interroger la base de données</div>
+    <p class="desc">L'ORM Django produit des <strong>QuerySets</strong> — des listes de résultats paresseuses (lazy) qui ne font la requête SQL qu'au moment où on en a besoin.</p>
+    <div class="code-block"><span class="cm"># Récupérer des données</span>
+Article.objects.<span class="fn">all</span>()                          <span class="cm"># tous les articles</span>
+Article.objects.<span class="fn">filter</span>(actif=<span class="kw">True</span>)             <span class="cm"># filtrés</span>
+Article.objects.<span class="fn">get</span>(pk=<span class="num">1</span>)                      <span class="cm"># un seul (erreur si pas trouvé)</span>
+Article.objects.<span class="fn">exclude</span>(actif=<span class="kw">False</span>)            <span class="cm"># exclure des résultats</span>
+Article.objects.<span class="fn">order_by</span>(<span class="str">'-publie_le'</span>)         <span class="cm"># tri décroissant</span>
+Article.objects.<span class="fn">filter</span>(actif=<span class="kw">True</span>)[:<span class="num">10</span>]        <span class="cm"># les 10 premiers</span>
+
+<span class="cm"># Lookups avancés (filtrages précis)</span>
+Article.objects.<span class="fn">filter</span>(titre__contains=<span class="str">"Django"</span>)  <span class="cm"># titre contient "Django"</span>
+Article.objects.<span class="fn">filter</span>(publie_le__year=<span class="num">2024</span>)       <span class="cm"># publiés en 2024</span>
+Article.objects.<span class="fn">filter</span>(auteur__username=<span class="str">"alice"</span>)   <span class="cm"># par auteur (JOIN auto)</span>
+
+<span class="cm"># Créer, modifier, supprimer</span>
+<span class="var">a</span> = Article.objects.<span class="fn">create</span>(titre=<span class="str">"Mon article"</span>, contenu=<span class="str">"..."</span>)
+<span class="var">a</span>.<span class="var">titre</span> = <span class="str">"Nouveau titre"</span>;  <span class="var">a</span>.<span class="fn">save</span>()
+<span class="var">a</span>.<span class="fn">delete</span>()</div>
+</div>
+
+<!-- 10. ADMIN -->
+<div class="card">
+    <div class="stitle"><div class="pill p-coral">10</div>L'interface Admin — automatique et puissante</div>
+    <p class="desc">L'un des atouts majeurs de Django : une interface d'administration complète <strong>générée automatiquement</strong> à partir des Models. En 2 lignes de code, tu as un backoffice professionnel.</p>
+    <div class="code-block"><span class="cm"># blog/admin.py</span>
+<span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> .models <span class="kw">import</span> Article, Categorie
+
+<span class="cm"># Enregistrement simple</span>
+admin.site.<span class="fn">register</span>(Categorie)
+
+<span class="cm"># Enregistrement personnalisé</span>
+<span class="dec">@admin.register(Article)</span>
+<span class="kw">class</span> <span class="fn">ArticleAdmin</span>(admin.ModelAdmin):
+    list_display   = [<span class="str">'titre'</span>, <span class="str">'auteur'</span>, <span class="str">'publie_le'</span>, <span class="str">'actif'</span>]
+    list_filter    = [<span class="str">'actif'</span>, <span class="str">'categorie'</span>]
+    search_fields  = [<span class="str">'titre'</span>, <span class="str">'contenu'</span>]
+    prepopulated_fields = {<span class="str">'slug'</span>: (<span class="str">'titre'</span>,)}
+
+<span class="cm"># Créer un superutilisateur (en terminal)</span>
+<span class="cm"># python manage.py createsuperuser</span>
+<span class="cm"># Accès : http://127.0.0.1:8000/admin/</span></div>
+    <div class="tip tip-purple">
+        <span class="tip-i">🎯</span>
+        <span>L'admin Django permet de gérer toutes tes données sans coder d'interface. C'est souvent suffisant pour les backoffices internes — et tu peux le personnaliser entièrement quand tu en as besoin.</span>
+    </div>
+</div>
+
+<!-- 11. SÉCURITÉ -->
+<div class="section-label"><span class="section-label-text">🛡️ Sécurité Django — protégée par défaut</span></div>
+<div class="card">
+    <div class="stitle"><div class="pill p-gray">11</div>Django protège contre les attaques courantes</div>
+    <p class="desc">Django intègre par défaut les protections contre les principales vulnérabilités web — sans que tu aies à écrire une seule ligne de code de sécurité.</p>
+    <div class="two-col">
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong style="display:block;margin-bottom:5px;">✅ CSRF</strong>
+            Token anti-CSRF automatique sur tous les formulaires via <span style="font-family:'Fira Code',monospace;font-size:0.82em;">{% csrf_token %}</span>
+        </div>
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong style="display:block;margin-bottom:5px;">✅ XSS</strong>
+            L'auto-échappement des templates neutralise les balises HTML malveillantes.
+        </div>
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong style="display:block;margin-bottom:5px;">✅ Injection SQL</strong>
+            L'ORM utilise des requêtes paramétrées — jamais de SQL brut avec des données utilisateur.
+        </div>
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong style="display:block;margin-bottom:5px;">✅ Mots de passe</strong>
+            Hashage automatique (PBKDF2) — les mots de passe ne sont jamais stockés en clair.
+        </div>
+    </div>
+</div>
+
+<!-- 12. COMMANDES CLÉS -->
+<div class="section-label"><span class="section-label-text">⌨️ Les commandes Django essentielles</span></div>
+<div class="card">
+    <div class="stitle"><div class="pill p-amber">12</div>manage.py — ton meilleur outil</div>
+    <div class="code-block"><span class="cm"># Démarrage</span>
+django-admin startproject monprojet     <span class="cm"># créer un projet</span>
+python manage.py startapp blog          <span class="cm"># créer une application</span>
+python manage.py runserver              <span class="cm"># démarrer le serveur (port 8000)</span>
+
+<span class="cm"># Base de données</span>
+python manage.py makemigrations         <span class="cm"># générer les migrations</span>
+python manage.py migrate                <span class="cm"># appliquer les migrations</span>
+
+<span class="cm"># Utilisateurs</span>
+python manage.py createsuperuser        <span class="cm"># créer un admin</span>
+
+<span class="cm"># Shell interactif — tester l'ORM en direct</span>
+python manage.py shell
+
+<span class="cm"># Tests</span>
+python manage.py test                   <span class="cm"># lancer tous les tests</span>
+
+<span class="cm"># Données de test</span>
+python manage.py loaddata fixtures.json <span class="cm"># charger des données initiales</span></div>
+</div>
+
+<div class="cta-wrap">
+    <p>Cours Django lu ✓ &nbsp; MTV, ORM, Templates, Admin ✓ &nbsp; Prêt à tester ?</p>
+    <a class="cta-btn" href="exercices-django.html">Passer aux exercices →</a>
+</div>
+<div class="footer-note">Model → Template → View → Deploy 🎸<br><span style="font-size:0.82rem;">Cours — Django</span></div>
+</body>
+</html>
