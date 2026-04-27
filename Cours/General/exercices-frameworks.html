@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exercices — Langages natifs & Frameworks</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E✏️%3C/text%3E%3C/svg%3E">
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -161,7 +162,7 @@
 <!-- DRAG — ORDRE LOGIQUE -->
 <div class="section-label"><span class="section-label-text">🔀 Remets dans l'ordre logique d'apprentissage</span></div>
 <div class="card">
-    <div class="stitle"><div class="pill p-amber">🔀</div>L'ordre pour apprendre JavaScript + React</div>
+    <div class="stitle"><div class="pill p-amber">🔀</div>L'ordre pour apprendre Python + Django</div>
     <p class="desc">Ces étapes d'apprentissage ont été mélangées. Remets-les dans l'ordre logique.</p>
     <div class="drag-list" id="dragList"></div>
     <div class="btn-row">
@@ -275,36 +276,88 @@ function checkAssign(){
 function resetAssign(){renderAssign();}
 renderAssign();
 
-/* ===== ASSOCIER ===== */
-var matchPairs=[
-    {tag:'⚛️ React',      desc:'🟨 JavaScript'},
-    {tag:'💚 Vue.js',     desc:'🟨 JavaScript'},
-    {tag:'🎼 Symfony',    desc:'🐘 PHP'},
-    {tag:'🚀 Laravel',    desc:'🐘 PHP'},
-    {tag:'📝 WordPress',  desc:'🐘 PHP'},
-    {tag:'🎸 Django',     desc:'🐍 Python'},
-    {tag:'⚗️ Flask',      desc:'🐍 Python'},
-    {tag:'🏛️ Drupal',     desc:'🐘 PHP'}
-];
-var matchSel=null,matchAns={},matchDone={};
+/* ===== ASSOCIER (corrigé) =====
+   Chaque paire a un correctRightIdx unique pointant vers la ligne droite attendue.
+   Les langages natifs apparaissent plusieurs fois côté droit — on les différencie
+   par un index de position, pas par leur texte. */
+var matchLeft  = ['⚛️ React','💚 Vue.js','🎼 Symfony','🚀 Laravel','📝 WordPress','🎸 Django','⚗️ Flask','🏛️ Drupal'];
+// Côté droit : 3 entrées de langages, une par langage
+var matchRight = ['🟨 JavaScript','🐘 PHP','🐍 Python'];
+// Pour chaque item gauche, l'index du bon item droit
+var matchCorrect = [0,0,1,1,1,2,2,1]; // React→JS, Vue→JS, Symfony→PHP, Laravel→PHP, WP→PHP, Django→Py, Flask→Py, Drupal→PHP
+
+var mSel=null, mAns={}, mDone={}, mRDone={};
 function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+
 function renderMatch(){
-    matchSel=null;matchAns={};matchDone={};
-    var L=document.getElementById('match-left');L.innerHTML='';
-    var R=document.getElementById('match-right');R.innerHTML='';
-    var sh=shuffle(matchPairs.map(function(_,i){return i;}));
-    matchPairs.forEach(function(p,i){var el=document.createElement('div');el.className='match-item';el.dataset.idx=i;el.textContent=p.tag;el.style.marginBottom='8px';el.onclick=function(){clickL(i,el);};L.appendChild(el);});
-    sh.forEach(function(oi){var p=matchPairs[oi];var el=document.createElement('div');el.className='match-item';el.dataset.idx=oi;el.textContent=p.desc;el.style.marginBottom='8px';el.onclick=function(){clickR(oi,el);};R.appendChild(el);});
+    mSel=null; mAns={}; mDone={}; mRDone={};
+    var L=document.getElementById('match-left'); L.innerHTML='';
+    var R=document.getElementById('match-right'); R.innerHTML='';
+
+    // Gauche : tous les frameworks dans l'ordre (mélangé)
+    var leftOrder = shuffle(matchLeft.map(function(_,i){return i;}));
+    leftOrder.forEach(function(li){
+        var el=document.createElement('div');
+        el.className='match-item'; el.dataset.li=li;
+        el.textContent=matchLeft[li]; el.style.marginBottom='8px';
+        el.onclick=function(){
+            if(mDone[li])return;
+            mSel=li;
+            document.querySelectorAll('#match-left .match-item').forEach(function(e){
+                if(!mDone[parseInt(e.dataset.li)]) e.classList.remove('selected-l');
+            });
+            el.classList.add('selected-l');
+        };
+        L.appendChild(el);
+    });
+
+    // Droite : les 3 langages natifs dans l'ordre mélangé
+    var rightOrder = shuffle([0,1,2]);
+    rightOrder.forEach(function(ri){
+        var el=document.createElement('div');
+        el.className='match-item'; el.dataset.ri=ri;
+        el.textContent=matchRight[ri]; el.style.marginBottom='8px';
+        el.onclick=function(){
+            if(mSel===null || mDone[mSel]) return;
+            // Un langage peut recevoir plusieurs frameworks — ne pas bloquer le droit
+            var li=mSel;
+            mAns[li]=ri; mDone[li]=true;
+            document.querySelectorAll('#match-left .match-item').forEach(function(e){
+                if(parseInt(e.dataset.li)===li){e.classList.remove('selected-l');e.classList.add('matched-ok');}
+            });
+            // Marquer le bouton droit seulement si tous ses frameworks sont posés
+            var allForThis = matchCorrect.filter(function(c){return c===ri;}).length;
+            var posedForThis = Object.keys(mAns).filter(function(k){return mAns[k]===ri;}).length;
+            if(posedForThis===allForThis) el.classList.add('matched-ok');
+            mSel=null;
+        };
+        R.appendChild(el);
+    });
     document.getElementById('match-result').style.display='none';
 }
-function clickL(i,el){if(matchDone[i])return;matchSel=i;document.querySelectorAll('#match-left .match-item').forEach(function(e){if(!matchDone[parseInt(e.dataset.idx)])e.classList.remove('selected-l');});el.classList.add('selected-l');}
-function clickR(i,el){if(matchSel===null||matchDone[i]||matchDone[matchSel])return;matchAns[matchSel]=i;matchDone[matchSel]=true;matchDone[i]=true;document.querySelectorAll('#match-left .match-item').forEach(function(e){if(parseInt(e.dataset.idx)===matchSel){e.classList.remove('selected-l');e.classList.add('matched-ok');}});el.classList.add('matched-ok');matchSel=null;}
+
 function checkMatch(){
     var score=0;
-    document.querySelectorAll('#match-left .match-item').forEach(function(el){var i=parseInt(el.dataset.idx);el.classList.remove('matched-ok');if(matchAns[i]===i){el.classList.add('matched-ok');score++;}else{el.classList.add('matched-ko');}});
-    document.querySelectorAll('#match-right .match-item').forEach(function(el){var i=parseInt(el.dataset.idx);el.classList.remove('matched-ok','matched-ko');var by=Object.keys(matchAns).find(function(k){return matchAns[k]===i;});if(by!==undefined&&parseInt(by)===i)el.classList.add('matched-ok');else if(by!==undefined)el.classList.add('matched-ko');else el.classList.add('correct-show');});
-    var res=document.getElementById('match-result');res.style.display='block';
-    res.innerHTML='<div class="rl">'+(score===matchPairs.length?'✅ Parfait !':'Résultat')+'</div>'+score+'/'+matchPairs.length+' associations correctes.';
+    document.querySelectorAll('#match-left .match-item').forEach(function(el){
+        var li=parseInt(el.dataset.li);
+        el.classList.remove('matched-ok','matched-ko');
+        if(mAns[li]===matchCorrect[li]){el.classList.add('matched-ok');score++;}
+        else{el.classList.add('matched-ko');}
+    });
+    document.querySelectorAll('#match-right .match-item').forEach(function(el){
+        var ri=parseInt(el.dataset.ri);
+        el.classList.remove('matched-ok','matched-ko');
+        // Vérifier si tous les frameworks associés à ce langage sont corrects
+        var expected=matchLeft.filter(function(_,li){return matchCorrect[li]===ri;});
+        var correct=expected.every(function(_,k){
+            var li=matchLeft.indexOf(expected[k]);
+            return mAns[li]===ri;
+        });
+        if(correct) el.classList.add('matched-ok');
+        else el.classList.add('correct-show');
+    });
+    var res=document.getElementById('match-result'); res.style.display='block';
+    res.innerHTML='<div class="rl">'+(score===matchLeft.length?'✅ Parfait !':'Résultat')+'</div>'+score+'/'+matchLeft.length+' frameworks correctement associés à leur langage.';
 }
 function resetMatch(){renderMatch();}
 renderMatch();
@@ -349,13 +402,13 @@ renderScenarios();
 
 /* ===== DRAG ORDER ===== */
 var orderCorrect=[
-    '1️⃣ Apprendre les bases de JavaScript natif (variables, fonctions, DOM, événements)',
-    '2️⃣ Comprendre les concepts asynchrones (Promises, async/await, fetch API)',
-    '3️⃣ Maîtriser les modules ES6 (import/export, classes, arrow functions)',
-    '4️⃣ Découvrir les problèmes que React résout (état, composants, DOM virtuel)',
-    '5️⃣ Apprendre les bases de React (JSX, composants, props, hooks useState)',
-    '6️⃣ Construire un premier projet React personnel',
-    '7️⃣ Approfondir (React Router, useEffect, Context, gestion d\'état avancée)'
+    '1️⃣ Apprendre les bases de Python natif (variables, fonctions, listes, dictionnaires)',
+    '2️⃣ Comprendre la POO Python (classes, héritage, méthodes spéciales)',
+    '3️⃣ Maîtriser les fichiers, exceptions et modules de la librairie standard',
+    '4️⃣ Découvrir les problèmes que Django résout (routing, BDD, auth, sécurité)',
+    '5️⃣ Apprendre les bases de Django (Models, Views, URLs, Templates, ORM)',
+    '6️⃣ Construire un premier projet Django personnel (blog, portfolio…)',
+    '7️⃣ Approfondir (DRF, tests, déploiement, Celery, optimisations)'
 ];
 var orderShuffled=orderCorrect.slice();
 (function(){for(var i=orderShuffled.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=orderShuffled[i];orderShuffled[i]=orderShuffled[j];orderShuffled[j]=t;}})();
@@ -380,7 +433,7 @@ function checkOrder(){
     items.forEach(function(item,i){var txt=item.querySelector('span:last-child').textContent;if(txt===orderCorrect[i])item.classList.add('correct-order');else{item.classList.add('wrong-order');correct=false;}});
     var fb=document.getElementById('order-fb');fb.className='q-feedback show '+(correct?'ok':'ko');
     fb.style.background=correct?'#E1F5EE':'#FCEBEB';fb.style.color=correct?'#085041':'#791F1F';
-    fb.textContent=correct?'✅ Parfait ! C\'est bien l\'ordre logique : JS natif → async → ES6 → comprendre React → apprendre React → projet → approfondir.':'✗ Pas tout à fait. L\'ordre logique est : bases JS → async → ES6 → pourquoi React → bases React → projet → avancé.';
+    fb.textContent=correct?'✅ Parfait ! C\'est bien l\'ordre logique : Python natif → POO → modules → pourquoi Django → bases Django → projet → approfondir.':'✗ Pas tout à fait. L\'ordre logique : bases Python → POO → modules → pourquoi Django → bases Django → projet → avancé.';
 }
 function resetOrder(){(function(){for(var i=orderShuffled.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=orderShuffled[i];orderShuffled[i]=orderShuffled[j];orderShuffled[j]=t;}})();var fb=document.getElementById('order-fb');fb.className='q-feedback';fb.style.background='';renderDragList();}
 renderDragList();
