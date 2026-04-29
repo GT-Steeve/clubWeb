@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Django Auth</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🔐%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        /* PROGRESS */
+        .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.4s; width: 0%; }
+        .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .chip-ok      { background: #E1F5EE; color: #085041; }
+        .chip-ko      { background: #FCEBEB; color: #791F1F; }
+        .chip-neutral { background: #F1EFE8; color: #888780; }
+
+        /* BUTTONS */
+        .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .action-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 10px; padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .action-btn:hover { background: #D3D1C7; }
+        .action-btn.primary { background: #2C2C2A; color: #FAC775; border-color: #2C2C2A; }
+        .action-btn.primary:hover { background: #444441; }
+        .action-btn.reveal { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+        .action-btn.reveal:hover { background: #CECBF6; }
+
+        /* SCORE PANEL */
+        .score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-top: 1rem; display: none; text-align: center; }
+        .score-panel.show { display: block; }
+        .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .score-big span { color: #5DCAA5; }
+        .score-sub { font-size: 0.9rem; color: #888780; }
+
+        /* FLASHCARDS */
+        .fc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 0.8rem; }
+        .fc { height: 130px; perspective: 700px; cursor: pointer; }
+        .fc-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.45s cubic-bezier(.4,0,.2,1); border-radius: 12px; }
+        .fc.flipped .fc-inner { transform: rotateY(180deg); }
+        .fc-front, .fc-back { position: absolute; inset: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 12px; text-align: center; backface-visibility: hidden; border: 0.5px solid #D3D1C7; }
+        .fc-front { background: #F1EFE8; font-family: 'Fira Code', monospace; font-size: 0.8rem; font-weight: 500; color: #2C2C2A; }
+        .fc-back  { background: #ffffff; font-size: 0.84rem; transform: rotateY(180deg); color: #085041; font-weight: 700; }
+        .fc-hint  { font-size: 0.68rem; color: #B4B2A9; position: absolute; bottom: 7px; right: 9px; }
+
+        /* QCM */
+        .qcm-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .q-text code { font-family: 'Fira Code', monospace; font-size: 0.84rem; }
+        .options { display: flex; flex-direction: column; gap: 7px; }
+        .opt { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; transition: background 0.12s, border-color 0.12s; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none; }
+        .opt:hover { background: #D3D1C7; }
+        .opt.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .opt.correct  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .opt.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .opt-dot { width: 18px; height: 18px; min-width: 18px; border-radius: 50%; border: 2px solid #B4B2A9; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+        .opt.selected .opt-dot { border-color: #7F77DD; background: #7F77DD; }
+        .opt.correct  .opt-dot { border-color: #1D9E75; background: #1D9E75; }
+        .opt.wrong    .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+        .opt-dot-inner { width: 6px; height: 6px; background: white; border-radius: 50%; display: none; }
+        .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+        .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .q-feedback.show { display: block; }
+        .q-feedback.ok { color: #0F6E56; }
+        .q-feedback.ko { color: #A32D2D; }
+
+        /* VF */
+        .vf-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .vf-statement { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .vf-btns { display: flex; gap: 10px; }
+        .vf-btn { flex: 1; padding: 8px 0; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s, border-color 0.12s; }
+        .vf-btn.vrai:hover { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .vf-btn.faux:hover { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-btn.correct-ans { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+
+        /* SCÉNARIOS */
+        .scenario-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .scenario-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 8px; }
+        .scenario-situation { font-size: 0.95rem; font-weight: 700; color: #2C2C2A; line-height: 1.5; margin-bottom: 1rem; }
+        .scenario-choice { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; margin-bottom: 7px; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; transition: background 0.12s, border-color 0.12s; user-select: none; }
+        .scenario-choice:hover { background: #D3D1C7; }
+        .scenario-choice.correct { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; font-weight: 700; }
+        .scenario-choice.wrong   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .scenario-choice.disabled { pointer-events: none; }
+        .scenario-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .scenario-feedback.show { display: block; }
+        .scenario-feedback.ok { color: #0F6E56; }
+        .scenario-feedback.ko { color: #A32D2D; }
+
+        /* MATCHING */
+        .match-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .match-col-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .match-col { display: flex; flex-direction: column; gap: 7px; }
+        .match-item { padding: 9px 13px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.12s, border-color 0.12s; }
+        .match-item:hover:not(.matched):not(.disabled) { background: #D3D1C7; }
+        .match-item.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .match-item.matched  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; pointer-events: none; font-weight: 700; }
+        .match-item.wrong-flash { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .match-code { font-family: 'Fira Code', monospace; font-size: 0.82rem; }
+        .match-result { font-size: 0.88rem; font-weight: 700; color: #085041; margin-top: 0.8rem; display: none; }
+        .match-result.show { display: block; }
+
+        /* ORDONNER */
+        .order-list { display: flex; flex-direction: column; gap: 7px; margin-top: 0.8rem; user-select: none; }
+        .order-item { display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #ffffff; font-size: 0.9rem; font-weight: 600; cursor: grab; transition: box-shadow 0.15s, background 0.12s; }
+        .order-item:active { cursor: grabbing; box-shadow: 0 4px 14px rgba(0,0,0,.1); }
+        .order-item.dragging  { opacity: 0.35; }
+        .order-item.drag-over { border-color: #5DCAA5; background: #E1F5EE; }
+        .order-item.tap-sel   { background: #EEEDFE; border-color: #AFA9EC; }
+        .order-item.correct   { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .order-item.wrong     { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .order-handle { color: #B4B2A9; font-size: 1rem; }
+        .order-num { font-size: 0.72rem; font-weight: 800; color: #888780; background: #F1EFE8; border-radius: 6px; padding: 2px 7px; min-width: 22px; text-align: center; }
+        .order-code { font-family: 'Fira Code', monospace; font-size: 0.82rem; }
+        .order-feedback { font-size: 0.88rem; font-weight: 700; margin-top: 0.8rem; display: none; line-height: 1.5; }
+        .order-feedback.show { display: block; }
+        .order-feedback.ok { color: #0F6E56; }
+        .order-feedback.ko { color: #A32D2D; }
+
+        /* COMPLÉTER */
+        .complete-wrap { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 2; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem; }
+        .blank { display: inline-block; min-width: 80px; border: none; border-bottom: 2px solid #AFA9EC; background: transparent; font-family: 'Fira Code', monospace; font-size: 0.84rem; color: #3C3489; font-weight: 700; padding: 0 4px; outline: none; vertical-align: baseline; transition: border-color 0.15s; }
+        .blank:focus { border-bottom-color: #7F77DD; }
+        .blank.ok { border-bottom-color: #1D9E75; color: #085041; }
+        .blank.ko { border-bottom-color: #E24B4A; color: #791F1F; }
+        .blank.revealed { border-bottom-color: #FAC775; color: #633806; background: rgba(250,199,117,0.15); }
+        .complete-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .complete-feedback.show { display: block; }
+        .complete-feedback.ok { color: #0F6E56; }
+        .complete-feedback.ko { color: #A32D2D; }
+        .answers-reveal { background: #FAEEDA; border: 0.5px solid #FAC775; border-radius: 10px; padding: 0.9rem 1.1rem; margin-top: 0.8rem; display: none; font-size: 0.88rem; line-height: 1.8; color: #633806; }
+        .answers-reveal.show { display: block; }
+        .answers-reveal strong { display: block; margin-bottom: 6px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .answer-line { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
+        .answer-key { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: #888780; min-width: 90px; }
+        .answer-val { font-family: 'Fira Code', monospace; font-size: 0.84rem; font-weight: 700; color: #633806; }
+
+        /* SYNTAX COLORS in complete blocks */
+        .kw  { color: #3C3489; font-weight: 700; }
+        .fn  { color: #185FA5; }
+        .val { color: #0F6E56; }
+        .cm  { color: #888780; font-style: italic; }
+        .sel { color: #993C1D; }
+
+        /* CTA */
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) { body { padding: 1rem; } .hero h1 { font-size: 1.7rem; } .match-wrap { grid-template-columns: 1fr; } .fc-grid { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+
+<body>
+    <a class="nav-prev" href="cours-django-auth.html">← Retour au cours</a>
+
+    <div class="hero">
+        <h1>🔐 Exercices — Auth Django</h1>
+        <p>Flashcards, QCM, vrai/faux, scénarios, matching, drag & drop et code à compléter.</p>
+        <div class="badge-row">
+            <span class="badge b-teal">🃏 Flashcards</span>
+            <span class="badge b-purple">✅ QCM</span>
+            <span class="badge b-amber">⚖️ Vrai/Faux</span>
+            <span class="badge b-coral">🎬 Scénarios</span>
+            <span class="badge b-blue">🔗 Associer</span>
+            <span class="badge b-green">⌨️ Compléter</span>
+        </div>
+    </div>
+
+    <!-- ══ 01 — FLASHCARDS ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">01 — Flashcards — cliquer pour retourner</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">🃏</div>Concepts clés de l'authentification</div>
+        <div class="fc-grid">
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>@login_required</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Décorateur qui bloque l'accès d'une vue aux visiteurs non connectés</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>request.user</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">L'utilisateur connecté, disponible dans toutes les vues Django</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>user.is_authenticated</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Retourne <strong>True</strong> si connecté, <strong>False</strong> si visiteur — utilisable dans les templates</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>UserCreationForm</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Formulaire Django prêt à l'emploi pour créer un compte utilisateur</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>{% csrf_token %}</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Tag obligatoire dans chaque formulaire POST — protection contre les attaques CSRF</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>LOGIN_REDIRECT_URL</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Réglage dans <code>settings.py</code> — URL de redirection après une connexion réussie</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>save(commit=False)</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Crée l'objet Python sans le sauvegarder en BDD — permet d'ajouter des champs avant</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>login(request, user)</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Connecte l'utilisateur programmatiquement — utilisé après la création de compte</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>include('django.contrib.auth.urls')</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Branche toutes les vues auth Django en une ligne dans urls.py</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>registration/login.html</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Chemin exact attendu par Django pour le template de connexion</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 02 — QCM ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">02 — QCM</span>
+    </div>
+    <div id="qcm-container"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkQCM()">Corriger le QCM</button>
+        <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="score-row" id="score-qcm"></div>
+    <div class="score-panel" id="qcm-score-panel">
+        <div class="score-big"><span id="qcm-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au QCM</div>
+    </div>
+
+    <!-- ══ 03 — VRAI/FAUX ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">03 — Vrai ou Faux</span>
+    </div>
+    <div id="vf-container"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkVF()">Corriger</button>
+        <button class="action-btn" onclick="resetVF()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-vf"></div></div>
+    <div class="score-row" id="score-vf"></div>
+    <div class="score-panel" id="vf-score-panel">
+        <div class="score-big"><span id="vf-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses Vrai/Faux</div>
+    </div>
+
+    <!-- ══ 04 — SCÉNARIOS ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">04 — Scénarios</span>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 1</div>
+        <div class="scenario-situation">🧑‍💻 Un utilisateur visite <code>/blog/creer/</code> sans être connecté. Que va-t-il se passer si la vue est décorée avec <code>@login_required</code> ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Il voit une erreur 500 — le serveur plante</div>
+        <div class="scenario-choice" onclick="pickScenario(this, true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Il est redirigé vers la page de connexion automatiquement</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Il voit le formulaire mais ne peut pas le soumettre</div>
+        <div class="scenario-feedback">✓ <code>@login_required</code> redirige automatiquement vers <code>LOGIN_URL</code> (par défaut <code>/accounts/login/</code>). L'URL de retour est passée en paramètre pour revenir après connexion.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 2</div>
+        <div class="scenario-situation">🧑‍💻 Dans la vue d'inscription, vous avez <code>form.save()</code> au lieu de <code>save(commit=False)</code>. Le champ <code>auteur</code> n'est pas dans le form. Que se passe-t-il ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Django met automatiquement l'utilisateur connecté comme auteur</div>
+        <div class="scenario-choice" onclick="pickScenario(this, true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Erreur : le champ <code>auteur</code> est obligatoire et manque — la sauvegarde échoue</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>L'article est créé sans auteur — le champ reste vide</div>
+        <div class="scenario-feedback">✓ <code>save(commit=False)</code> permet d'ajouter l'auteur avant la vraie sauvegarde. Sans ça, Django tente de sauvegarder un article sans auteur — ce qui viole la contrainte de clé étrangère.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 3</div>
+        <div class="scenario-situation">🧑‍💻 Dans votre template, vous masquez le bouton "Créer un article" avec <code>{% if user.is_authenticated %}</code>. Mais vous n'avez pas mis <code>@login_required</code> sur la vue. Est-ce suffisant ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Oui — si le bouton est caché, personne ne peut accéder à la vue</div>
+        <div class="scenario-choice" onclick="pickScenario(this, true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Non — n'importe qui peut taper l'URL directement dans le navigateur</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Ça dépend du navigateur utilisé</div>
+        <div class="scenario-feedback">✓ Masquer dans le template est du côté affichage seulement. La protection réelle est <code>@login_required</code> sur la vue côté serveur. Les deux sont nécessaires.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 4</div>
+        <div class="scenario-situation">🧑‍💻 Après connexion, Django redirige vers <code>/accounts/profile/</code> et affiche une 404. Comment corriger ça ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Créer une vue <code>profile</code> qui affiche une page vide</div>
+        <div class="scenario-choice" onclick="pickScenario(this, true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Ajouter <code>LOGIN_REDIRECT_URL = '/'</code> dans <code>settings.py</code></div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Modifier le template login.html pour changer la destination</div>
+        <div class="scenario-feedback">✓ <code>LOGIN_REDIRECT_URL</code> dans <code>settings.py</code> contrôle la destination après connexion. Par défaut Django cherche <code>/accounts/profile/</code> qui n'existe pas dans nos projets.</div>
+    </div>
+
+    <!-- ══ 05 — ASSOCIER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">05 — Associer — clic gauche puis clic droit</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">🔗</div>Élément → Rôle</div>
+        <div class="match-wrap">
+            <div>
+                <div class="match-col-label">Élément</div>
+                <div class="match-col">
+                    <div class="match-item match-code" id="ml0" onclick="selectMatch('left',0)">@login_required</div>
+                    <div class="match-item match-code" id="ml1" onclick="selectMatch('left',1)">request.user</div>
+                    <div class="match-item match-code" id="ml2" onclick="selectMatch('left',2)">UserCreationForm</div>
+                    <div class="match-item match-code" id="ml3" onclick="selectMatch('left',3)">{% csrf_token %}</div>
+                    <div class="match-item match-code" id="ml4" onclick="selectMatch('left',4)">LOGIN_REDIRECT_URL</div>
+                    <div class="match-item match-code" id="ml5" onclick="selectMatch('left',5)">save(commit=False)</div>
+                    <div class="match-item match-code" id="ml6" onclick="selectMatch('left',6)">is_authenticated</div>
+                </div>
+            </div>
+            <div>
+                <div class="match-col-label">Rôle</div>
+                <div class="match-col">
+                    <div class="match-item" id="mr0" onclick="selectMatch('right',0)">Bloque les vues aux visiteurs</div>
+                    <div class="match-item" id="mr1" onclick="selectMatch('right',1)">Utilisateur connecté dans la vue</div>
+                    <div class="match-item" id="mr2" onclick="selectMatch('right',2)">Formulaire de création de compte</div>
+                    <div class="match-item" id="mr3" onclick="selectMatch('right',3)">Protection anti-attaque CSRF</div>
+                    <div class="match-item" id="mr4" onclick="selectMatch('right',4)">Destination après connexion</div>
+                    <div class="match-item" id="mr5" onclick="selectMatch('right',5)">Crée l'objet sans sauvegarder</div>
+                    <div class="match-item" id="mr6" onclick="selectMatch('right',6)">Teste si l'user est connecté</div>
+                </div>
+            </div>
+        </div>
+        <div class="match-result" id="matchResult">🎉 Parfait ! Toutes les associations sont correctes.</div>
+    </div>
+
+    <!-- ══ 06 — ORDONNER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">06 — Remettre dans l'ordre</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">↕️</div>Flow complet : de l'inscription à la création d'article</div>
+        <p class="desc">Glissez-déposez ces étapes dans le bon ordre chronologique.</p>
+        <div class="order-list" id="orderList">
+            <div class="order-item" draggable="true" data-correct="4" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Décorer creer_article avec @login_required</span></div>
+            <div class="order-item" draggable="true" data-correct="1" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Brancher include('django.contrib.auth.urls') dans urls.py</span></div>
+            <div class="order-item" draggable="true" data-correct="6" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Utilisateur clique "Créer un article" → accès accordé</span></div>
+            <div class="order-item" draggable="true" data-correct="3" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Créer la vue inscription avec UserCreationForm</span></div>
+            <div class="order-item" draggable="true" data-correct="5" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Utilisateur s'inscrit → connecté automatiquement</span></div>
+            <div class="order-item" draggable="true" data-correct="2" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Ajouter LOGIN_REDIRECT_URL dans settings.py</span></div>
+        </div>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateOrder()">Valider l'ordre</button>
+            <button class="action-btn" onclick="shuffleOrder()">🔀 Mélanger</button>
+        </div>
+        <div class="order-feedback" id="orderFeedback"></div>
+    </div>
+
+    <!-- ══ 07 — COMPLÉTER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">07 — Compléter le code</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">①</div>Complétez — vue d'inscription</div>
+<pre class="complete-wrap"><span class="kw">from</span> django.contrib.auth.forms <span class="kw">import</span> <input class="blank" id="b1a" placeholder="???" autocomplete="off">
+<span class="kw">from</span> django.contrib.auth <span class="kw">import</span> <input class="blank" id="b1b" placeholder="???" autocomplete="off">
+<span class="kw">from</span> django.shortcuts <span class="kw">import</span> render, redirect
+
+<span class="kw">def</span> <span class="fn">inscription</span>(request):
+    <span class="kw">if</span> request.method == <span class="val">'POST'</span>:
+        form = <span class="fn">UserCreationForm</span>(request.<input class="blank" id="b1c" placeholder="???" autocomplete="off">)
+        <span class="kw">if</span> form.<span class="fn">is_valid</span>():
+            user = form.<span class="fn">save</span>()
+            <input class="blank" id="b1d" placeholder="???" autocomplete="off">(request, user)
+            <span class="kw">return</span> <span class="fn">redirect</span>(<span class="val">'blog:liste'</span>)
+    <span class="kw">else</span>:
+        form = <span class="fn">UserCreationForm</span>()
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'registration/inscription.html'</span>, {<span class="val">'form'</span>: <input class="blank" id="b1e" placeholder="???" style="min-width:50px" autocomplete="off">})</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c1')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c1')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c1')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c1-feedback"></div>
+        <div class="answers-reveal" id="c1-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">import ???</span><span class="answer-val">UserCreationForm</span></div>
+            <div class="answer-line"><span class="answer-key">import ???</span><span class="answer-val">login</span></div>
+            <div class="answer-line"><span class="answer-key">request.???</span><span class="answer-val">POST</span></div>
+            <div class="answer-line"><span class="answer-key">???(request, user)</span><span class="answer-val">login</span></div>
+            <div class="answer-line"><span class="answer-key">'form': ???</span><span class="answer-val">form</span></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">②</div>Complétez — vue protégée avec auteur</div>
+<pre class="complete-wrap"><span class="kw">from</span> django.contrib.auth.decorators <span class="kw">import</span> <input class="blank" id="b2a" placeholder="???" autocomplete="off">
+
+<span class="kw">@</span><input class="blank" id="b2b" placeholder="???" autocomplete="off">
+<span class="kw">def</span> <span class="fn">creer_article</span>(request):
+    <span class="kw">if</span> request.method == <span class="val">'POST'</span>:
+        form = <span class="fn">ArticleForm</span>(request.POST)
+        <span class="kw">if</span> form.<span class="fn">is_valid</span>():
+            article = form.<span class="fn">save</span>(commit=<input class="blank" id="b2c" placeholder="???" style="min-width:55px" autocomplete="off">)
+            article.auteur = request.<input class="blank" id="b2d" placeholder="???" style="min-width:50px" autocomplete="off">
+            article.<span class="fn">save</span>()
+            <span class="kw">return</span> <span class="fn">redirect</span>(<span class="val">'blog:liste'</span>)</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c2')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c2')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c2')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c2-feedback"></div>
+        <div class="answers-reveal" id="c2-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">import ???</span><span class="answer-val">login_required</span></div>
+            <div class="answer-line"><span class="answer-key">@???</span><span class="answer-val">login_required</span></div>
+            <div class="answer-line"><span class="answer-key">commit=???</span><span class="answer-val">False</span></div>
+            <div class="answer-line"><span class="answer-key">request.???</span><span class="answer-val">user</span></div>
+        </div>
+    </div>
+
+    <div class="cta-wrap">
+        <p>Bravo ! Passez au cours sur le CRUD et les formulaires.</p>
+        <a class="cta-btn" href="../sommaire.html">Retour au sommaire →</a>
+    </div>
+
+    <div class="footer-note">
+        inscription → connexion → @login_required → request.user 🔐<br>
+        <span style="font-size:0.82rem;">Exercices — Django Auth</span>
+    </div>
+
+    <script>
+    var qcmData = [
+        { q: "Quel décorateur permet de bloquer l'accès d'une vue aux visiteurs non connectés ?", opts: ["@auth_required", "@login_required", "@user_required", "@authenticated"], correct: 1, expl: "✓ @login_required redirige automatiquement vers LOGIN_URL si l'utilisateur n'est pas connecté." },
+        { q: "Dans quel fichier Django cherche-t-il le template de connexion par défaut ?", opts: ["templates/login.html", "templates/auth/login.html", "templates/registration/login.html", "templates/accounts/login.html"], correct: 2, expl: "✓ Django cherche templates/registration/login.html — le dossier registration/ est une convention." },
+        { q: "Quel réglage settings.py contrôle la redirection après connexion ?", opts: ["AUTH_REDIRECT_URL", "LOGIN_REDIRECT_URL", "AFTER_LOGIN_URL", "SUCCESS_URL"], correct: 1, expl: "✓ LOGIN_REDIRECT_URL dans settings.py. Par défaut Django redirige vers /accounts/profile/." },
+        { q: "Pourquoi utiliser save(commit=False) lors de la création d'un article ?", opts: ["Pour accélérer la sauvegarde", "Pour éviter les doublons en BDD", "Pour ajouter des champs comme auteur avant la vraie sauvegarde", "Pour valider le formulaire sans sauvegarder"], correct: 2, expl: "✓ save(commit=False) crée l'objet Python sans toucher la BDD, permettant d'ajouter auteur = request.user avant." },
+        { q: "Quelle fonction Django connecte un utilisateur après la création de son compte ?", opts: ["connect(request, user)", "authenticate(request, user)", "login(request, user)", "set_user(request, user)"], correct: 2, expl: "✓ login(request, user) crée la session et connecte l'utilisateur — à importer depuis django.contrib.auth." },
+        { q: "Que retourne request.user si personne n'est connecté ?", opts: ["None", "False", "Un objet AnonymousUser", "Une erreur 403"], correct: 2, expl: "✓ Django ne retourne jamais None pour request.user. C'est un objet AnonymousUser avec is_authenticated = False." },
+        { q: "Pourquoi {% csrf_token %} est-il obligatoire dans les formulaires POST ?", opts: ["Pour styliser le formulaire", "Pour protéger contre les attaques CSRF (requêtes forgées)", "Pour valider les champs côté client", "Pour accélérer l'envoi du formulaire"], correct: 1, expl: "✓ CSRF (Cross-Site Request Forgery) est une attaque où un site malveillant envoie des requêtes à votre place. Le token empêche ça." },
+        { q: "Où Django cherche-t-il automatiquement les vues de connexion, déconnexion et reset mot de passe ?", opts: ["Il faut toutes les créer manuellement", "Dans django.contrib.auth.views après include('django.contrib.auth.urls')", "Dans le fichier admin.py", "Dans settings.py avec AUTH_VIEWS"], correct: 1, expl: "✓ include('django.contrib.auth.urls') dans urls.py branche toutes ces vues d'un seul coup — aucune à créer." }
+    ];
+
+    var vfData = [
+        { stmt: "Django inclut une vue d'inscription prête à l'emploi dans <code>django.contrib.auth.urls</code>.", correct: false, expl: "Faux. Django fournit connexion, déconnexion, reset mot de passe — mais pas l'inscription. On doit écrire cette vue nous-mêmes." },
+        { stmt: "Masquer un bouton dans le template avec <code>{% if user.is_authenticated %}</code> suffit à sécuriser une vue.", correct: false, expl: "Faux. N'importe qui peut taper l'URL directement. Il faut @login_required sur la vue côté serveur." },
+        { stmt: "<code>request.user</code> est disponible dans toutes les vues Django sans rien importer.", correct: true, expl: "Vrai. Django injecte l'utilisateur dans chaque requête via le middleware d'authentification." },
+        { stmt: "Il faut impérativement appeler <code>login(request, user)</code> après <code>form.save()</code> dans la vue d'inscription.", correct: false, expl: "Non, c'est facultatif. On peut choisir de rediriger vers la page de connexion plutôt que de connecter l'utilisateur automatiquement." },
+        { stmt: "<code>user.is_authenticated</code> est une propriété utilisable directement dans un template Django.", correct: true, expl: "Vrai. Dans les templates, {{ user.is_authenticated }} ou {% if user.is_authenticated %} fonctionnent directement." },
+        { stmt: "Le dossier <code>registration/</code> dans templates est une convention Django à respecter.", correct: true, expl: "Vrai. Django cherche templates/registration/login.html. Ce chemin est codé en dur dans la vue LoginView." },
+        { stmt: "Si un visiteur essaie d'accéder à une vue avec <code>@login_required</code>, il obtient une erreur 403.", correct: false, expl: "Faux. Il est redirigé vers LOGIN_URL (la page de connexion) avec l'URL de retour en paramètre — pas une erreur." },
+        { stmt: "On peut relier User et Article avec une ForeignKey pour savoir qui a écrit quoi.", correct: true, expl: "Vrai. ForeignKey(User, on_delete=CASCADE) dans le model Article crée le lien. user.articles.all() retourne alors ses articles." }
+    ];
+
+    /* === QCM === */
+    function renderQCM() {
+        var c = document.getElementById('qcm-container'); c.innerHTML = '';
+        qcmData.forEach(function(q, i) {
+            var opts = q.opts.map(function(o, j) { return '<div class="opt" onclick="pickQCM(this,' + i + ',' + j + ')"><div class="opt-dot"><div class="opt-dot-inner"></div></div>' + o + '</div>'; }).join('');
+            c.innerHTML += '<div class="qcm-card" id="qcm-' + i + '"><div class="q-num">Question ' + (i+1) + ' / ' + qcmData.length + '</div><div class="q-text">' + q.q + '</div><div class="options">' + opts + '</div><div class="q-feedback" id="qfb-' + i + '"></div></div>';
+        });
+    }
+    function pickQCM(el, qi, oi) { var card = document.getElementById('qcm-' + qi); if (card.dataset.locked) return; card.querySelectorAll('.opt').forEach(function(o) { o.classList.remove('selected'); }); el.classList.add('selected'); card.dataset.picked = oi; }
+    function checkQCM() {
+        var correct = 0, chips = '';
+        qcmData.forEach(function(q, i) {
+            var card = document.getElementById('qcm-' + i); card.dataset.locked = 1;
+            var picked = parseInt(card.dataset.picked);
+            var fb = document.getElementById('qfb-' + i);
+            card.querySelectorAll('.opt').forEach(function(o, j) { o.classList.remove('selected'); if (j === q.correct) o.classList.add('correct'); else if (j === picked && picked !== q.correct) o.classList.add('wrong'); });
+            if (picked === q.correct) { correct++; chips += '<span class="chip chip-ok">Q' + (i+1) + ' ✓</span>'; fb.textContent = q.expl; fb.className = 'q-feedback show ok'; }
+            else { chips += '<span class="chip chip-ko">Q' + (i+1) + ' ✗</span>'; fb.textContent = '✗ ' + q.expl; fb.className = 'q-feedback show ko'; }
+        });
+        document.getElementById('prog-qcm').style.width = Math.round(correct / qcmData.length * 100) + '%';
+        document.getElementById('score-qcm').innerHTML = chips;
+        document.getElementById('qcm-score-val').textContent = correct;
+        document.getElementById('qcm-score-panel').classList.add('show');
+    }
+    function resetQCM() { renderQCM(); document.getElementById('prog-qcm').style.width = '0%'; document.getElementById('score-qcm').innerHTML = ''; document.getElementById('qcm-score-panel').classList.remove('show'); }
+
+    /* === VF === */
+    function renderVF() {
+        var c = document.getElementById('vf-container'); c.innerHTML = '';
+        vfData.forEach(function(v, i) { c.innerHTML += '<div class="vf-card" id="vf-' + i + '"><div class="vf-statement">' + v.stmt + '</div><div class="vf-btns"><button class="vf-btn vrai" onclick="pickVF(this,' + i + ',true)">✅ Vrai</button><button class="vf-btn faux" onclick="pickVF(this,' + i + ',false)">❌ Faux</button></div><div class="q-feedback" id="vfb-' + i + '"></div></div>'; });
+    }
+    function pickVF(btn, i, val) { var card = document.getElementById('vf-' + i); if (card.dataset.locked) return; card.querySelectorAll('.vf-btn').forEach(function(b) { b.classList.remove('selected'); }); btn.classList.add('selected'); card.dataset.picked = val; }
+    function checkVF() {
+        var correct = 0, chips = '';
+        vfData.forEach(function(v, i) {
+            var card = document.getElementById('vf-' + i); card.dataset.locked = 1;
+            var picked = card.dataset.picked === 'true';
+            var fb = document.getElementById('vfb-' + i);
+            card.querySelectorAll('.vf-btn').forEach(function(btn) { var isVrai = btn.classList.contains('vrai'); if ((isVrai && v.correct) || (!isVrai && !v.correct)) btn.classList.add('correct-ans'); else if (card.dataset.picked !== undefined && ((isVrai && !v.correct && picked) || (!isVrai && v.correct && !picked))) btn.classList.add('wrong-ans'); });
+            if (card.dataset.picked !== undefined && picked === v.correct) { correct++; chips += '<span class="chip chip-ok">Q' + (i+1) + ' ✓</span>'; fb.textContent = '✓ ' + v.expl; fb.className = 'q-feedback show ok'; }
+            else { chips += '<span class="chip chip-ko">Q' + (i+1) + ' ✗</span>'; fb.textContent = '✗ ' + v.expl; fb.className = 'q-feedback show ko'; }
+        });
+        document.getElementById('prog-vf').style.width = Math.round(correct / vfData.length * 100) + '%';
+        document.getElementById('score-vf').innerHTML = chips;
+        document.getElementById('vf-score-val').textContent = correct;
+        document.getElementById('vf-score-panel').classList.add('show');
+    }
+    function resetVF() { renderVF(); document.getElementById('prog-vf').style.width = '0%'; document.getElementById('score-vf').innerHTML = ''; document.getElementById('vf-score-panel').classList.remove('show'); }
+
+    /* === SCÉNARIOS === */
+    function pickScenario(el, isCorrect) {
+        var card = el.closest('.scenario-card'); if (card.querySelector('.correct')) return;
+        var choices = card.querySelectorAll('.scenario-choice'); choices.forEach(function(c) { c.classList.add('disabled'); });
+        var fb = card.querySelector('.scenario-feedback');
+        if (isCorrect) { el.classList.add('correct'); fb.classList.add('show', 'ok'); }
+        else { el.classList.add('wrong'); fb.classList.add('show', 'ko'); choices.forEach(function(c) { if (c.onclick.toString().includes('true')) c.classList.add('correct'); }); }
+    }
+
+    /* === MATCHING === */
+    var matchCorrect = [0,1,2,3,4,5,6];
+    var selLeft = null, selRight = null, matchedCount = 0;
+    function selectMatch(side, idx) {
+        if (side === 'left') { var el = document.getElementById('ml' + idx); if (el.classList.contains('matched')) return; if (selLeft !== null) document.getElementById('ml' + selLeft).classList.remove('selected'); selLeft = idx; el.classList.add('selected'); }
+        else { var er = document.getElementById('mr' + idx); if (er.classList.contains('matched')) return; if (selRight !== null) document.getElementById('mr' + selRight).classList.remove('selected'); selRight = idx; er.classList.add('selected'); }
+        if (selLeft !== null && selRight !== null) {
+            var lEl = document.getElementById('ml' + selLeft), rEl = document.getElementById('mr' + selRight);
+            if (matchCorrect[selLeft] === selRight) { lEl.classList.remove('selected'); lEl.classList.add('matched'); rEl.classList.remove('selected'); rEl.classList.add('matched'); matchedCount++; if (matchedCount === 7) document.getElementById('matchResult').classList.add('show'); }
+            else { lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash'); setTimeout(function() { lEl.classList.remove('selected','wrong-flash'); rEl.classList.remove('selected','wrong-flash'); }, 600); }
+            selLeft = null; selRight = null;
+        }
+    }
+
+    /* === ORDER === */
+    var dragSrc = null;
+    function initDrag() {
+        document.querySelectorAll('.order-item').forEach(function(item) {
+            item.addEventListener('dragstart', function() { dragSrc = this; this.classList.add('dragging'); });
+            item.addEventListener('dragend', function() { this.classList.remove('dragging'); document.querySelectorAll('.order-item').forEach(function(i) { i.classList.remove('drag-over'); }); });
+            item.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('drag-over'); });
+            item.addEventListener('dragleave', function() { this.classList.remove('drag-over'); });
+            item.addEventListener('drop', function(e) { e.preventDefault(); this.classList.remove('drag-over'); if (dragSrc !== this) { var list = document.getElementById('orderList'), arr = Array.from(list.children), si = arr.indexOf(dragSrc), ti = arr.indexOf(this); if (si < ti) list.insertBefore(dragSrc, this.nextSibling); else list.insertBefore(dragSrc, this); } });
+        });
+    }
+    initDrag();
+    var tapFirst = null;
+    function tapOrder(el) { if (tapFirst === null) { tapFirst = el; el.classList.add('tap-sel'); } else { if (tapFirst !== el) { var list = document.getElementById('orderList'), arr = Array.from(list.children), i1 = arr.indexOf(tapFirst), i2 = arr.indexOf(el); if (i1 < i2) list.insertBefore(tapFirst, el.nextSibling); else list.insertBefore(tapFirst, el); } tapFirst.classList.remove('tap-sel'); tapFirst = null; } }
+    function validateOrder() {
+        var list = document.getElementById('orderList'), items = Array.from(list.children), allOk = true;
+        items.forEach(function(item, idx) { item.querySelector('.order-num').textContent = idx + 1; item.classList.remove('correct','wrong'); if (parseInt(item.dataset.correct) === idx + 1) item.classList.add('correct'); else { item.classList.add('wrong'); allOk = false; } });
+        var fb = document.getElementById('orderFeedback');
+        if (allOk) { fb.textContent = '🎉 Parfait ! Toutes les étapes sont dans le bon ordre.'; fb.className = 'order-feedback show ok'; }
+        else { fb.textContent = '❌ Quelques étapes sont mal placées (en rouge). Réessayez !'; fb.className = 'order-feedback show ko'; }
+    }
+    function shuffleOrder() {
+        var list = document.getElementById('orderList'), items = Array.from(list.children);
+        for (var i = items.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i+1)); list.insertBefore(items[j], items[i]); var tmp = items[i]; items[i] = items[j]; items[j] = tmp; }
+        items.forEach(function(it) { it.className = 'order-item'; it.setAttribute('draggable','true'); it.querySelector('.order-num').textContent = '?'; });
+        document.getElementById('orderFeedback').className = 'order-feedback';
+        initDrag();
+    }
+
+    /* === COMPLÉTER === */
+    var completeData = {
+        c1: { ids: ['b1a','b1b','b1c','b1d','b1e'], answers: ['UserCreationForm','login','POST','login','form'] },
+        c2: { ids: ['b2a','b2b','b2c','b2d'], answers: ['login_required','login_required','False','user'] }
+    };
+    function validateComplete(cid) {
+        var data = completeData[cid], ok = 0;
+        data.ids.forEach(function(id, i) { var el = document.getElementById(id), val = el.value.trim(); el.classList.remove('ok','ko','revealed'); if (val.toLowerCase() === data.answers[i].toLowerCase()) { el.classList.add('ok'); ok++; } else { el.classList.add('ko'); } });
+        var fb = document.getElementById(cid + '-feedback'), total = data.ids.length;
+        if (ok === total) { fb.textContent = '🎉 Parfait ! Tous les champs sont corrects.'; fb.className = 'complete-feedback show ok'; }
+        else { fb.textContent = '❌ ' + ok + '/' + total + ' corrects — champs en rouge incorrects.'; fb.className = 'complete-feedback show ko'; }
+    }
+    function revealAnswers(cid) {
+        var data = completeData[cid];
+        data.ids.forEach(function(id, i) { var el = document.getElementById(id); el.value = data.answers[i]; el.classList.remove('ok','ko'); el.classList.add('revealed'); });
+        document.getElementById(cid + '-answers').classList.toggle('show');
+        var fb = document.getElementById(cid + '-feedback'); fb.textContent = '👁 Réponses affichées — étudiez-les, puis Réinitialiser pour réessayer.'; fb.className = 'complete-feedback show'; fb.style.color = '#633806';
+    }
+    function resetComplete(cid) {
+        var data = completeData[cid];
+        data.ids.forEach(function(id) { var el = document.getElementById(id); el.value = ''; el.classList.remove('ok','ko','revealed'); });
+        var fb = document.getElementById(cid + '-feedback'); fb.className = 'complete-feedback'; fb.style.color = '';
+        document.getElementById(cid + '-answers').classList.remove('show');
+    }
+
+    renderQCM(); renderVF();
+    </script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django — Comptes & Authentification</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🔐%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+        .p-gray   { background: #D3D1C7; color: #444441; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child { margin-bottom: 0; }
+        .desc strong { color: #2C2C2A; }
+
+        .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 1.8; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem; }
+        .code-label { font-family: 'Fira Code', monospace; font-size: 0.72rem; color: #888780; background: #D3D1C7; display: inline-block; padding: 2px 9px; border-radius: 5px 5px 0 0; margin-top: 0.8rem; margin-bottom: -1px; }
+
+        .sel  { color: #993C1D; }
+        .val  { color: #0F6E56; }
+        .cm   { color: #888780; font-style: italic; }
+        .kw   { color: #3C3489; font-weight: 700; }
+        .fn   { color: #185FA5; }
+
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip strong { color: inherit; }
+        .tip-coral  { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber  { background: #FAEEDA; color: #633806; }
+        .tip-blue   { background: #E6F1FB; color: #0C447C; }
+        .tip-green  { background: #EBF5D9; color: #3B6D11; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.7; }
+        .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+        .cycle-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 0.8rem; }
+        .cycle-step { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 20px; padding: 5px 14px; font-size: 0.86rem; font-weight: 700; color: #2C2C2A; }
+        .cycle-step.teal   { background: #E1F5EE; border-color: #9FE1CB; color: #085041; }
+        .cycle-step.purple { background: #EEEDFE; border-color: #CECBF6; color: #3C3489; }
+        .cycle-step.blue   { background: #E6F1FB; border-color: #B5D4F4; color: #0C447C; }
+        .cycle-step.coral  { background: #FAECE7; border-color: #F5C4B3; color: #712B13; }
+        .cycle-step.amber  { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+        .cycle-step.green  { background: #EBF5D9; border-color: #C0DD97; color: #3B6D11; }
+        .cycle-arrow { color: #B4B2A9; font-size: 1rem; }
+
+        .tbl-wrap { overflow-x: auto; margin-top: 0.8rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        th { background: #F1EFE8; padding: 8px 12px; text-align: left; font-weight: 800; border-bottom: 1px solid #D3D1C7; }
+        td { padding: 8px 12px; border-bottom: 0.5px solid #D3D1C7; color: #5F5E5A; vertical-align: top; }
+        tr:last-child td { border-bottom: none; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        .file-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1.2rem; overflow: hidden; }
+        .file-header { display: flex; align-items: center; gap: 10px; padding: 12px 18px; font-weight: 800; font-size: 0.95rem; }
+        .file-header .filename { font-family: 'Fira Code', monospace; font-size: 0.9rem; font-weight: 500; }
+        .file-header .file-desc { font-size: 0.8rem; margin-left: auto; opacity: 0.8; font-weight: 600; }
+        .fh-teal   { background: #9FE1CB; color: #085041; }
+        .fh-purple { background: #CECBF6; color: #3C3489; }
+        .fh-blue   { background: #B5D4F4; color: #0C447C; }
+        .fh-amber  { background: #FAC775; color: #633806; }
+        .fh-green  { background: #C0DD97; color: #3B6D11; }
+        .fh-coral  { background: #F5C4B3; color: #712B13; }
+        .file-body { padding: 1.2rem 1.4rem; }
+        .file-body .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .file-body h3 { font-size: 0.95rem; font-weight: 800; margin: 1.1rem 0 0.4rem; color: #2C2C2A; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+        .tc { border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.88rem; font-weight: 600; line-height: 1.5; }
+        .tc strong { display: block; margin-bottom: 3px; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        .steps { counter-reset: step; }
+        .step { display: flex; gap: 14px; margin-bottom: 14px; }
+        .step-n { counter-increment: step; width: 28px; height: 28px; border-radius: 50%; background: #9FE1CB; color: #085041; font-weight: 800; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .step-n::before { content: counter(step); }
+        .step-body { flex: 1; padding-top: 3px; font-size: 0.92rem; color: #5F5E5A; line-height: 1.6; }
+        .step-body strong { color: #2C2C2A; display: block; margin-bottom: 1px; }
+
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) { body { padding: 1rem; } .hero h1 { font-size: 1.7rem; } .two-col { grid-template-columns: 1fr; } .file-header .file-desc { display: none; } }
+    </style>
+</head>
+
+<body>
+    <a class="nav-prev" href="../sommaire.html#step2Dynamique">← Retour au sommaire</a>
+
+    <div class="hero">
+        <h1>🔐 Comptes &amp; Authentification</h1>
+        <p>Créer un compte, se connecter, séparer les visiteurs des créateurs de contenu.</p>
+        <div class="badge-row">
+            <span class="badge b-teal">Django Auth</span>
+            <span class="badge b-purple">Inscription</span>
+            <span class="badge b-blue">Connexion</span>
+            <span class="badge b-coral">@login_required</span>
+            <span class="badge b-amber">~35 min</span>
+        </div>
+    </div>
+
+    <!-- ══ CONCEPT ══ -->
+    <div class="section-label"><span class="section-label-text">Le concept — deux types d'utilisateurs</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">👥</div>Visiteur vs Créateur</div>
+        <p class="desc">Presque tous les sites web distinguent deux types de personnes. Imaginez un blog : tout le monde peut <strong>lire</strong> les articles, mais seul l'auteur peut en <strong>écrire ou en supprimer</strong>.</p>
+        <div class="two-col">
+            <div class="tc" style="background:#E6F1FB;color:#0C447C;">
+                <strong>👁️ Visiteur (non connecté)</strong>
+                Lit les articles<br>Voit les pages publiques<br>Ne peut rien créer
+            </div>
+            <div class="tc" style="background:#E1F5EE;color:#085041;">
+                <strong>✍️ Créateur (connecté)</strong>
+                Écrit des articles<br>Modifie son contenu<br>Accède au tableau de bord
+            </div>
+        </div>
+        <p class="desc" style="margin-top:0.9rem;">Django gère tout ça nativement, sans installer quoi que ce soit. Le système d'auth est déjà là — il suffit de l'activer et de s'en servir.</p>
+        <div class="tip">
+            <span class="tip-i">🎯</span>
+            <span><strong>Bonne nouvelle !</strong> Django inclut un système complet d'utilisateurs, de mots de passe chiffrés, de sessions et de permissions. On ne le réinvente pas — on l'utilise.</span>
+        </div>
+    </div>
+
+    <!-- ══ 01 — URLS AUTH ══ -->
+    <div class="section-label"><span class="section-label-text">01 — Brancher les URLs d'authentification</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-blue">
+            <span>🗺️</span>
+            <span class="filename">monsite/urls.py</span>
+            <span class="file-desc">Une seule ligne suffit</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Django fournit des vues prêtes à l'emploi pour la connexion, la déconnexion et la gestion du mot de passe. On les branche en une ligne dans le routeur principal.</p>
+<span class="code-label">monsite/urls.py</span>
+<pre class="code-block"><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> django.urls <span class="kw">import</span> path, include
+
+urlpatterns = [
+    <span class="fn">path</span>(<span class="val">'admin/'</span>, admin.site.urls),
+    <span class="fn">path</span>(<span class="val">'blog/'</span>, <span class="fn">include</span>(<span class="val">'blog.urls'</span>)),
+
+    <span class="cm"># ↓ Toutes les vues auth Django en une ligne</span>
+    <span class="fn">path</span>(<span class="val">'accounts/'</span>, <span class="fn">include</span>(<span class="val">'django.contrib.auth.urls'</span>)),
+
+    <span class="cm"># ↓ Notre vue d'inscription (à créer)</span>
+    <span class="fn">path</span>(<span class="val">'accounts/inscription/'</span>, views_auth.inscription, name=<span class="val">'inscription'</span>),
+]</pre>
+            <div class="result-box">
+                <div class="rl">URLs disponibles automatiquement après include</div>
+                <code>/accounts/login/</code> → page de connexion<br>
+                <code>/accounts/logout/</code> → déconnexion<br>
+                <code>/accounts/password_change/</code> → changer son mot de passe<br>
+                <code>/accounts/inscription/</code> → notre page d'inscription (à créer)
+            </div>
+            <div class="tip tip-amber">
+                <span class="tip-i">⚠️</span>
+                <span><strong>L'inscription n'est pas incluse par défaut</strong> — Django gère connexion et déconnexion, mais pas la création de compte. On doit écrire cette vue nous-mêmes.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 02 — TEMPLATES LOGIN ══ -->
+    <div class="section-label"><span class="section-label-text">02 — Le template de connexion</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-purple">
+            <span>🎨</span>
+            <span class="filename">templates/registration/login.html</span>
+            <span class="file-desc">Page de connexion attendue par Django</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Django cherche le template de connexion dans un chemin précis : <code>templates/registration/login.html</code>. Ce dossier <code>registration/</code> est une convention Django — respectez-le.</p>
+<span class="code-label">templates/registration/login.html</span>
+<pre class="code-block"><span class="kw">{% extends "base.html" %}</span>
+<span class="kw">{% block content %}</span>
+
+<span class="sel">&lt;h2&gt;</span>Connexion<span class="sel">&lt;/h2&gt;</span>
+
+<span class="sel">&lt;form</span> <span class="fn">method</span>=<span class="val">"post"</span><span class="sel">&gt;</span>
+    <span class="kw">{% csrf_token %}</span>      <span class="cm">&lt;!-- protection sécurité obligatoire --&gt;</span>
+    {{ form.as_p }}          <span class="cm">&lt;!-- Django génère les champs automatiquement --&gt;</span>
+    <span class="sel">&lt;button</span> <span class="fn">type</span>=<span class="val">"submit"</span><span class="sel">&gt;</span>Se connecter<span class="sel">&lt;/button&gt;</span>
+<span class="sel">&lt;/form&gt;</span>
+
+<span class="sel">&lt;p&gt;</span>Pas encore de compte ?
+    <span class="sel">&lt;a</span> <span class="fn">href</span>=<span class="val">"{% url 'inscription' %}"</span><span class="sel">&gt;</span>S'inscrire<span class="sel">&lt;/a&gt;</span>
+<span class="sel">&lt;/p&gt;</span>
+
+<span class="kw">{% endblock %}</span></pre>
+            <div class="tip">
+                <span class="tip-i">🔒</span>
+                <span><strong><code>{% csrf_token %}</code> est obligatoire</strong> sur chaque formulaire POST. C'est une protection contre les attaques CSRF. Django refusera le formulaire si ce tag est absent.</span>
+            </div>
+
+            <h3>Où rediriger après connexion ?</h3>
+            <p class="desc">Par défaut Django redirige vers <code>/accounts/profile/</code>. On change ça dans <code>settings.py</code> :</p>
+<span class="code-label">monsite/settings.py</span>
+<pre class="code-block"><span class="cm"># Après connexion → accueil du blog</span>
+LOGIN_REDIRECT_URL = <span class="val">'/'</span>
+
+<span class="cm"># Après déconnexion → page de connexion</span>
+LOGOUT_REDIRECT_URL = <span class="val">'/accounts/login/'</span>
+
+<span class="cm"># Si accès interdit → rediriger vers connexion</span>
+LOGIN_URL = <span class="val">'/accounts/login/'</span></pre>
+        </div>
+    </div>
+
+    <!-- ══ 03 — INSCRIPTION ══ -->
+    <div class="section-label"><span class="section-label-text">03 — Créer la vue d'inscription</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-teal">
+            <span>📝</span>
+            <span class="filename">blog/views.py</span>
+            <span class="file-desc">Vue d'inscription avec UserCreationForm</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Django fournit un formulaire prêt à l'emploi : <code>UserCreationForm</code>. Il gère la vérification des mots de passe, les validations, tout. On l'utilise dans notre vue.</p>
+<span class="code-label">blog/views.py</span>
+<pre class="code-block"><span class="kw">from</span> django.contrib.auth.forms <span class="kw">import</span> UserCreationForm
+<span class="kw">from</span> django.contrib.auth <span class="kw">import</span> login
+<span class="kw">from</span> django.shortcuts <span class="kw">import</span> render, redirect
+
+<span class="kw">def</span> <span class="fn">inscription</span>(request):
+    <span class="kw">if</span> request.method == <span class="val">'POST'</span>:
+        form = <span class="fn">UserCreationForm</span>(request.POST)
+        <span class="kw">if</span> form.<span class="fn">is_valid</span>():
+            user = form.<span class="fn">save</span>()          <span class="cm"># crée l'utilisateur en BDD</span>
+            <span class="fn">login</span>(request, user)         <span class="cm"># le connecte immédiatement</span>
+            <span class="kw">return</span> <span class="fn">redirect</span>(<span class="val">'blog:liste'</span>) <span class="cm"># redirige vers le blog</span>
+    <span class="kw">else</span>:
+        form = <span class="fn">UserCreationForm</span>()
+
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'registration/inscription.html'</span>, {<span class="val">'form'</span>: form})</pre>
+
+            <div class="result-box">
+                <div class="rl">Ce que fait cette vue</div>
+                1. Si requête GET → affiche le formulaire vide<br>
+                2. Si requête POST → valide les données<br>
+                3. Si valide → crée l'utilisateur + le connecte + redirige<br>
+                4. Si invalide → réaffiche le formulaire avec les erreurs
+            </div>
+
+            <h3>Le template d'inscription</h3>
+<span class="code-label">templates/registration/inscription.html</span>
+<pre class="code-block"><span class="kw">{% extends "base.html" %}</span>
+<span class="kw">{% block content %}</span>
+
+<span class="sel">&lt;h2&gt;</span>Créer un compte<span class="sel">&lt;/h2&gt;</span>
+
+<span class="sel">&lt;form</span> <span class="fn">method</span>=<span class="val">"post"</span><span class="sel">&gt;</span>
+    <span class="kw">{% csrf_token %}</span>
+    {{ form.as_p }}
+    <span class="sel">&lt;button</span> <span class="fn">type</span>=<span class="val">"submit"</span><span class="sel">&gt;</span>Créer mon compte<span class="sel">&lt;/button&gt;</span>
+<span class="sel">&lt;/form&gt;</span>
+
+<span class="sel">&lt;p&gt;</span>Déjà un compte ?
+    <span class="sel">&lt;a</span> <span class="fn">href</span>=<span class="val">"{% url 'login' %}"</span><span class="sel">&gt;</span>Se connecter<span class="sel">&lt;/a&gt;</span>
+<span class="sel">&lt;/p&gt;</span>
+
+<span class="kw">{% endblock %}</span></pre>
+        </div>
+    </div>
+
+    <!-- ══ 04 — PROTÉGER LES VUES ══ -->
+    <div class="section-label"><span class="section-label-text">04 — Protéger les vues avec @login_required</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-coral">
+            <span>🛡️</span>
+            <span class="filename">blog/views.py</span>
+            <span class="file-desc">Filtrer visiteur et créateur</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Le décorateur <code>@login_required</code> est la clé. Placez-le au-dessus d'une vue — si l'utilisateur n'est pas connecté, Django le redirige automatiquement vers la page de connexion.</p>
+<span class="code-label">blog/views.py</span>
+<pre class="code-block"><span class="kw">from</span> django.contrib.auth.decorators <span class="kw">import</span> login_required
+
+<span class="cm"># ✅ ACCESSIBLE À TOUS — visiteurs inclus</span>
+<span class="kw">def</span> <span class="fn">liste_articles</span>(request):
+    articles = Article.objects.<span class="fn">filter</span>(publie=True)
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/article_list.html'</span>, {<span class="val">'articles'</span>: articles})
+
+<span class="cm"># 🔐 RÉSERVÉ AUX CONNECTÉS — @login_required bloque les visiteurs</span>
+<span class="kw">@login_required</span>
+<span class="kw">def</span> <span class="fn">creer_article</span>(request):
+    <span class="cm"># seuls les utilisateurs connectés arrivent ici</span>
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/creer_article.html'</span>)
+
+<span class="kw">@login_required</span>
+<span class="kw">def</span> <span class="fn">tableau_de_bord</span>(request):
+    <span class="cm"># articles créés par l'utilisateur connecté uniquement</span>
+    mes_articles = Article.objects.<span class="fn">filter</span>(auteur=request.user)
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/dashboard.html'</span>, {<span class="val">'articles'</span>: mes_articles})</pre>
+
+            <div class="tip">
+                <span class="tip-i">🪄</span>
+                <span><strong><code>request.user</code></strong> — Dans toutes les vues, Django met automatiquement l'utilisateur connecté dans <code>request.user</code>. Si personne n'est connecté, c'est un objet <code>AnonymousUser</code>.</span>
+            </div>
+
+            <h3>Savoir si l'utilisateur est connecté dans un template</h3>
+<span class="code-label">templates/base.html</span>
+<pre class="code-block"><span class="kw">{% if user.is_authenticated %}</span>
+    <span class="cm">&lt;!-- Affiché uniquement si connecté --&gt;</span>
+    <span class="sel">&lt;p&gt;</span>Bonjour {{ user.username }} !<span class="sel">&lt;/p&gt;</span>
+    <span class="sel">&lt;a</span> <span class="fn">href</span>=<span class="val">"{% url 'tableau_de_bord' %}"</span><span class="sel">&gt;</span>Mon tableau de bord<span class="sel">&lt;/a&gt;</span>
+    <span class="sel">&lt;a</span> <span class="fn">href</span>=<span class="val">"{% url 'logout' %}"</span><span class="sel">&gt;</span>Se déconnecter<span class="sel">&lt;/a&gt;</span>
+<span class="kw">{% else %}</span>
+    <span class="cm">&lt;!-- Affiché si visiteur non connecté --&gt;</span>
+    <span class="sel">&lt;a</span> <span class="fn">href</span>=<span class="val">"{% url 'login' %}"</span><span class="sel">&gt;</span>Se connecter<span class="sel">&lt;/a&gt;</span>
+    <span class="sel">&lt;a</span> <span class="fn">href</span>=<span class="val">"{% url 'inscription' %}"</span><span class="sel">&gt;</span>S'inscrire<span class="sel">&lt;/a&gt;</span>
+<span class="kw">{% endif %}</span></pre>
+
+            <div class="tip tip-coral">
+                <span class="tip-i">🍝</span>
+                <span><strong>Effet spaghetti classique</strong> — Cacher un bouton "Créer un article" dans le template ne suffit pas à protéger la vue ! Un visiteur peut taper directement l'URL. Il faut toujours <code>@login_required</code> sur la vue, en plus du masquage visuel dans le template.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 05 — LIER ARTICLE À AUTEUR ══ -->
+    <div class="section-label"><span class="section-label-text">05 — Relier un article à son auteur</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-amber">
+            <span>🔗</span>
+            <span class="filename">blog/models.py</span>
+            <span class="file-desc">ForeignKey vers l'utilisateur Django</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Pour savoir "qui a écrit quoi", on relie le model <code>Article</code> au model <code>User</code> de Django avec une <code>ForeignKey</code>.</p>
+<span class="code-label">blog/models.py</span>
+<pre class="code-block"><span class="kw">from</span> django.db <span class="kw">import</span> models
+<span class="kw">from</span> django.contrib.auth.models <span class="kw">import</span> User
+
+<span class="kw">class</span> <span class="fn">Article</span>(models.Model):
+    titre    = models.<span class="fn">CharField</span>(max_length=200)
+    contenu  = models.<span class="fn">TextField</span>()
+    publie   = models.<span class="fn">BooleanField</span>(default=False)
+
+    <span class="cm"># Lien vers l'utilisateur Django — clé étrangère</span>
+    auteur   = models.<span class="fn">ForeignKey</span>(
+        User,
+        on_delete=models.CASCADE,   <span class="cm"># supprime les articles si l'user est supprimé</span>
+        related_name=<span class="val">'articles'</span>     <span class="cm"># user.articles.all() donnera ses articles</span>
+    )
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(self):
+        <span class="kw">return</span> <span class="fn">f</span><span class="val">"{self.titre} — par {self.auteur.username}"</span></pre>
+
+            <h3>Sauvegarder l'auteur automatiquement à la création</h3>
+<span class="code-label">blog/views.py</span>
+<pre class="code-block"><span class="kw">@login_required</span>
+<span class="kw">def</span> <span class="fn">creer_article</span>(request):
+    <span class="kw">if</span> request.method == <span class="val">'POST'</span>:
+        form = <span class="fn">ArticleForm</span>(request.POST)
+        <span class="kw">if</span> form.<span class="fn">is_valid</span>():
+            article = form.<span class="fn">save</span>(commit=False) <span class="cm"># ne sauvegarde pas encore</span>
+            article.auteur = request.user       <span class="cm"># on ajoute l'auteur</span>
+            article.<span class="fn">save</span>()                    <span class="cm"># maintenant on sauvegarde</span>
+            <span class="kw">return</span> <span class="fn">redirect</span>(<span class="val">'blog:liste'</span>)
+    <span class="kw">else</span>:
+        form = <span class="fn">ArticleForm</span>()
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/creer_article.html'</span>, {<span class="val">'form'</span>: form})</pre>
+
+            <div class="tip tip-purple">
+                <span class="tip-i">💡</span>
+                <span><strong><code>save(commit=False)</code></strong> — Ce paramètre crée l'objet Python sans l'écrire en base de données. On peut ainsi modifier des champs (ici <code>auteur</code>) avant la vraie sauvegarde.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 06 — RÉSUMÉ FLOW ══ -->
+    <div class="section-label"><span class="section-label-text">06 — Le flow complet</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-green">→</div>Du visiteur au créateur de contenu</div>
+        <div class="cycle-wrap">
+            <div class="cycle-step blue">Visiteur arrive</div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step">Clique "S'inscrire"</div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step teal">Compte créé + connecté</div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step green">Accès aux vues @login_required</div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step amber">Crée du contenu lié à son compte</div>
+        </div>
+
+        <div class="tip tip-green" style="margin-top:1rem;">
+            <span class="tip-i">✅</span>
+            <span><strong>Checklist auth complète</strong> — include auth.urls dans monsite/urls.py · créer la vue inscription · créer les templates login.html et inscription.html · définir LOGIN_REDIRECT_URL · ajouter @login_required sur les vues réservées · relier Article à User avec ForeignKey · utiliser save(commit=False) pour ajouter l'auteur</span>
+        </div>
+    </div>
+
+    <div class="cta-wrap">
+        <p>Concepts assimilés ? Passez aux exercices interactifs.</p>
+        <a class="cta-btn" href="exercices-django-auth.html">Faire les exercices →</a>
+    </div>
+
+    <div class="footer-note">
+        inscription → connexion → @login_required → request.user 🔐<br>
+        <span style="font-size:0.82rem;">Django — Comptes &amp; Authentification</span>
+    </div>
+</body>
+</html>

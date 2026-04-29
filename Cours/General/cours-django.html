@@ -64,7 +64,7 @@
     </style>
 </head>
 <body>
-<a class="nav-prev" href="../sommaire.html#step2Dynamique">← Retour au cours Python</a>
+<a class="nav-prev" href="../sommaire.html#step2Dynamique">← Retour au sommaire</a>
 
 <div class="hero">
     <h1>🐍 Django</h1>
@@ -141,10 +141,8 @@ python --version        <span class="cm"># Vérifie que python est installé</sp
 mkdir monprojet-django  <span class="cm"># Créer le dossier du projet</span>
 cd monprojet-django  
 python -m venv env      <span class="cm"># Réserve l'espace de code pour éviter des bug</span>
-# Windows               <span class="cm"># Si vous êtes sous window</span>
-.\env\Scripts\activate
-# macOS/Linux           <span class="cm"># Si vous êtes sur mac où Linux</span>
-source env/bin/activate
+.\env\Scripts\activate      <span class="cm"># Si vous êtes sous window</span>
+source env/bin/activate     <span class="cm"># Si vous êtes sur mac où Linux</span>
 
 <span class="cm"># Installation et création du projet</span>
 pip install django
