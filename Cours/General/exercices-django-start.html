@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exercices — Débuter avec Django</title>
-  <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link rel="icon"
+href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -159,6 +159,8 @@
         .vf-btn { flex: 1; padding: 8px 0; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s, border-color 0.12s; }
         .vf-btn.vrai:hover { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
         .vf-btn.faux:hover { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-btn.vrai.selected { background: #E1F5EE; border-color: #5DCAA5; color: #085041; border-width: 2px; }
+        .vf-btn.faux.selected { background: #FCEBEB; border-color: #F09595; color: #791F1F; border-width: 2px; }
         .vf-btn.correct-ans { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
         .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
 
@@ -598,9 +600,21 @@
         </div>
         <div class="btn-row">
             <button class="action-btn primary" onclick="validateOrder()">Valider l'ordre</button>
+            <button class="action-btn reveal" onclick="revealOrder()">👁 Voir les réponses</button>
             <button class="action-btn" onclick="shuffleOrder()">🔀 Mélanger</button>
         </div>
         <div class="order-feedback" id="orderFeedback"></div>
+        <div class="answers-reveal" id="order-answers">
+            <strong>Ordre correct</strong>
+            <div class="answer-line"><span class="answer-key">Étape 1</span><span class="answer-val">Créer le venv et installer Django</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 2</span><span class="answer-val">django-admin startproject + startapp</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 3</span><span class="answer-val">Déclarer l'app dans INSTALLED_APPS</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 4</span><span class="answer-val">Écrire les vues dans views.py</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 5</span><span class="answer-val">makemigrations puis migrate</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 6</span><span class="answer-val">Créer blog/urls.py et relier dans monsite/urls.py</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 7</span><span class="answer-val">Créer les templates HTML</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 8</span><span class="answer-val">Écrire models.py</span></div>
+        </div>
     </div>
 
 
@@ -1078,6 +1092,26 @@ urlpatterns = [
         }
     }
 
+    function revealOrder() {
+        // Trier les items par leur data-correct et les réafficher dans l'ordre
+        var list = document.getElementById('orderList');
+        var items = Array.from(list.children);
+        items.sort(function(a, b) {
+            return parseInt(a.dataset.correct) - parseInt(b.dataset.correct);
+        });
+        items.forEach(function(item, idx) {
+            list.appendChild(item);
+            item.querySelector('.order-num').textContent = idx + 1;
+            item.classList.remove('correct', 'wrong', 'dragging', 'drag-over');
+            item.classList.add('correct');
+        });
+        var fb = document.getElementById('orderFeedback');
+        fb.textContent = '👁 Voici le bon ordre — étudiez-le, puis cliquez Mélanger pour réessayer.';
+        fb.className = 'order-feedback show';
+        fb.style.color = '#633806';
+        document.getElementById('order-answers').classList.add('show');
+    }
+
     function shuffleOrder() {
         var list = document.getElementById('orderList');
         var items = Array.from(list.children);
@@ -1092,6 +1126,8 @@ urlpatterns = [
             it.querySelector('.order-num').textContent = '?';
         });
         document.getElementById('orderFeedback').className = 'order-feedback';
+        document.getElementById('orderFeedback').style.color = '';
+        document.getElementById('order-answers').classList.remove('show');
         initDrag();
     }
 

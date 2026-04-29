@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exercices — Django Auth</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🔐%3C/text%3E%3C/svg%3E">
+    <link rel="icon"
+href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -108,6 +109,8 @@
         .vf-btn { flex: 1; padding: 8px 0; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s, border-color 0.12s; }
         .vf-btn.vrai:hover { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
         .vf-btn.faux:hover { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-btn.vrai.selected { background: #E1F5EE; border-color: #5DCAA5; color: #085041; border-width: 2px; }
+        .vf-btn.faux.selected { background: #FCEBEB; border-color: #F09595; color: #791F1F; border-width: 2px; }
         .vf-btn.correct-ans { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
         .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
 
@@ -405,9 +408,19 @@
         </div>
         <div class="btn-row">
             <button class="action-btn primary" onclick="validateOrder()">Valider l'ordre</button>
+            <button class="action-btn reveal" onclick="revealOrder()">👁 Voir les réponses</button>
             <button class="action-btn" onclick="shuffleOrder()">🔀 Mélanger</button>
         </div>
         <div class="order-feedback" id="orderFeedback"></div>
+        <div class="answers-reveal" id="order-answers">
+            <strong>Ordre correct</strong>
+            <div class="answer-line"><span class="answer-key">Étape 1</span><span class="answer-val">Brancher include('django.contrib.auth.urls') dans urls.py</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 2</span><span class="answer-val">Ajouter LOGIN_REDIRECT_URL dans settings.py</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 3</span><span class="answer-val">Créer la vue inscription avec UserCreationForm</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 4</span><span class="answer-val">Décorer creer_article avec @login_required</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 5</span><span class="answer-val">Utilisateur s'inscrit → connecté automatiquement</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 6</span><span class="answer-val">Utilisateur clique "Créer un article" → accès accordé</span></div>
+        </div>
     </div>
 
     <!-- ══ 07 — COMPLÉTER ══ -->
@@ -477,7 +490,7 @@
 
     <div class="cta-wrap">
         <p>Bravo ! Passez au cours sur le CRUD et les formulaires.</p>
-        <a class="cta-btn" href="../sommaire.html">Retour au sommaire →</a>
+        <a class="cta-btn" href="../sommaire.html">← Retour au sommaire</a>
     </div>
 
     <div class="footer-note">
@@ -601,11 +614,29 @@
         if (allOk) { fb.textContent = '🎉 Parfait ! Toutes les étapes sont dans le bon ordre.'; fb.className = 'order-feedback show ok'; }
         else { fb.textContent = '❌ Quelques étapes sont mal placées (en rouge). Réessayez !'; fb.className = 'order-feedback show ko'; }
     }
+    function revealOrder() {
+        var list = document.getElementById('orderList');
+        var items = Array.from(list.children);
+        items.sort(function(a, b) { return parseInt(a.dataset.correct) - parseInt(b.dataset.correct); });
+        items.forEach(function(item, idx) {
+            list.appendChild(item);
+            item.querySelector('.order-num').textContent = idx + 1;
+            item.classList.remove('correct', 'wrong', 'dragging', 'drag-over');
+            item.classList.add('correct');
+        });
+        var fb = document.getElementById('orderFeedback');
+        fb.textContent = '👁 Voici le bon ordre — étudiez-le, puis cliquez Mélanger pour réessayer.';
+        fb.className = 'order-feedback show';
+        fb.style.color = '#633806';
+        document.getElementById('order-answers').classList.add('show');
+    }
     function shuffleOrder() {
         var list = document.getElementById('orderList'), items = Array.from(list.children);
         for (var i = items.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i+1)); list.insertBefore(items[j], items[i]); var tmp = items[i]; items[i] = items[j]; items[j] = tmp; }
         items.forEach(function(it) { it.className = 'order-item'; it.setAttribute('draggable','true'); it.querySelector('.order-num').textContent = '?'; });
         document.getElementById('orderFeedback').className = 'order-feedback';
+        document.getElementById('orderFeedback').style.color = '';
+        document.getElementById('order-answers').classList.remove('show');
         initDrag();
     }
 
