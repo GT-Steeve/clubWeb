@@ -69,7 +69,12 @@
         .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:0.8rem;}
         .match-col-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#888780;margin-bottom:6px;text-align:center;}
         .match-item{background:#F1EFE8;border:0.5px solid #B4B2A9;border-radius:10px;padding:9px 12px;font-size:0.85rem;font-weight:700;cursor:pointer;transition:all 0.12s;user-select:none;text-align:center;margin-bottom:8px;}
-        .match-item.selected-l{background:#EEEDFE;border-color:#AFA9EC;color:#26215C;} .match-item.matched-ok{background:#E1F5EE;border-color:#5DCAA5;color:#085041;cursor:default;font-size:0.8rem;} .match-item.matched-ko{background:#FCEBEB;border-color:#F09595;color:#791F1F;cursor:default;} .match-item.correct-show{background:#E1F5EE;border-color:#5DCAA5;opacity:0.6;cursor:default;}
+        .match-item:hover:not(.matched-ok):not(.matched-ko):not(.correct-show){background:#D3D1C7;}
+        /* Sélection gauche visible */
+        .match-item.selected-l{background:#EEEDFE;border-color:#AFA9EC;color:#26215C;border-width:2px;}
+        /* Sélection droite (en attente d'association) */
+        .match-item.selected-r{background:#FAEEDA;border-color:#FAC775;color:#633806;border-width:2px;}
+        .match-item.matched-ok{background:#E1F5EE;border-color:#5DCAA5;color:#085041;cursor:default;} .match-item.matched-ko{background:#FCEBEB;border-color:#F09595;color:#791F1F;cursor:default;} .match-item.correct-show{background:#E1F5EE;border-color:#5DCAA5;opacity:0.6;cursor:default;}
         /* CODE FILL */
         .fill-card{border-radius:16px;border:0.5px solid #D3D1C7;background:#fff;padding:1.4rem 1.5rem;margin-bottom:1rem;}
         .fill-block{background:#F1EFE8;border:0.5px solid #B4B2A9;border-radius:10px;padding:0.9rem 1.1rem;font-family:'Fira Code',monospace;font-size:0.83rem;line-height:2.3;margin-top:0.8rem;overflow-x:auto;}
@@ -86,6 +91,17 @@
         .btn-row{display:flex;gap:10px;margin-top:1.2rem;flex-wrap:wrap;}
         .action-btn{border:0.5px solid #B4B2A9;background:#F1EFE8;color:#2C2C2A;border-radius:10px;padding:8px 20px;font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:background 0.12s;}
         .action-btn:hover{background:#D3D1C7;} .action-btn.primary{background:#2C2C2A;color:#FAC775;border-color:#2C2C2A;} .action-btn.primary:hover{background:#444441;}
+        .action-btn.reveal{background:#EEEDFE;color:#3C3489;border-color:#CECBF6;} .action-btn.reveal:hover{background:#CECBF6;}
+        /* DRAG — numéro caché par défaut */
+        .drag-num{display:none;font-size:0.72rem;font-weight:800;color:#888780;background:#F1EFE8;border-radius:6px;padding:2px 7px;min-width:22px;text-align:center;flex-shrink:0;}
+        .drag-num.visible{display:block;}
+        /* ANSWERS REVEAL */
+        .answers-reveal{background:#FAEEDA;border:0.5px solid #FAC775;border-radius:10px;padding:0.9rem 1.1rem;margin-top:0.8rem;display:none;font-size:0.88rem;line-height:1.8;color:#633806;}
+        .answers-reveal.show{display:block;}
+        .answers-reveal strong{display:block;margin-bottom:6px;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.06em;}
+        .answer-line{display:flex;align-items:baseline;gap:8px;margin-bottom:3px;}
+        .answer-key{font-family:'Fira Code',monospace;font-size:0.8rem;color:#888780;min-width:55px;}
+        .answer-val{font-family:'Fira Code',monospace;font-size:0.84rem;font-weight:700;color:#633806;}
         .score-panel{border-radius:16px;border:0.5px solid #D3D1C7;background:#fff;padding:1.4rem 1.5rem;margin-top:1rem;display:none;text-align:center;}
         .score-panel.show{display:block;} .score-big{font-size:3rem;font-weight:800;color:#2C2C2A;line-height:1;margin-bottom:4px;} .score-big span{color:#5DCAA5;} .score-sub{font-size:0.9rem;color:#888780;}
         .cta-wrap{text-align:center;background:#2C2C2A;border-radius:16px;padding:2rem 1.5rem;margin-top:2rem;}
@@ -198,9 +214,26 @@ urlpatterns = [
 
 <div class="btn-row">
     <button class="action-btn primary" onclick="checkAllFill()">Vérifier tout le code</button>
+    <button class="action-btn reveal" onclick="revealFill()">👁 Voir les réponses</button>
     <button class="action-btn" onclick="resetFill()">Recommencer</button>
 </div>
 <div class="result-box" id="fill-global" style="display:none;margin-top:0.8rem;"></div>
+<div class="answers-reveal" id="fill-answers">
+    <strong>Réponses</strong>
+    <div style="margin-bottom:6px;font-size:0.85rem;font-weight:700;">Exercice 1 — Model</div>
+    <div class="answer-line"><span class="answer-key">f0</span><span class="answer-val">models</span></div>
+    <div class="answer-line"><span class="answer-key">f1</span><span class="answer-val">models.Model</span></div>
+    <div class="answer-line"><span class="answer-key">f2</span><span class="answer-val">default=True</span></div>
+    <div class="answer-line"><span class="answer-key">f3</span><span class="answer-val">titre</span></div>
+    <div style="margin:8px 0 6px;font-size:0.85rem;font-weight:700;">Exercice 2 — View &amp; URL</div>
+    <div class="answer-line"><span class="answer-key">f4</span><span class="answer-val">render</span></div>
+    <div class="answer-line"><span class="answer-key">f5</span><span class="answer-val">actif</span></div>
+    <div class="answer-line"><span class="answer-key">f6</span><span class="answer-val">name='liste'</span></div>
+    <div style="margin:8px 0 6px;font-size:0.85rem;font-weight:700;">Exercice 3 — Template</div>
+    <div class="answer-line"><span class="answer-key">f7</span><span class="answer-val">{% extends 'base.html' %}</span></div>
+    <div class="answer-line"><span class="answer-key">f8</span><span class="answer-val">{% block contenu %}</span></div>
+    <div class="answer-line"><span class="answer-key">f9</span><span class="answer-val">{% for article in articles %}</span></div>
+</div>
 
 <!-- DRAG FLOW -->
 <div class="section-label"><span class="section-label-text">🔀 Remets le flux Django dans l'ordre</span></div>
@@ -210,9 +243,20 @@ urlpatterns = [
     <div class="drag-list" id="dragList"></div>
     <div class="btn-row">
         <button class="action-btn primary" onclick="checkOrder()">Vérifier l'ordre</button>
-        <button class="action-btn" onclick="resetOrder()">Réinitialiser</button>
+        <button class="action-btn reveal" onclick="revealOrder()">👁 Voir les réponses</button>
+        <button class="action-btn" onclick="resetOrder()">🔀 Mélanger</button>
     </div>
     <div class="q-feedback" id="order-fb" style="margin-top:10px;border-radius:8px;padding:8px 12px;font-weight:600;"></div>
+    <div class="answers-reveal" id="order-answers">
+        <strong>Ordre correct — flux d'une requête Django</strong>
+        <div class="answer-line"><span class="answer-key">Étape 1</span><span class="answer-val">L'utilisateur envoie une requête HTTP</span></div>
+        <div class="answer-line"><span class="answer-key">Étape 2</span><span class="answer-val">Django cherche l'URL dans urls.py</span></div>
+        <div class="answer-line"><span class="answer-key">Étape 3</span><span class="answer-val">La View correspondante est appelée</span></div>
+        <div class="answer-line"><span class="answer-key">Étape 4</span><span class="answer-val">La View interroge la BDD via l'ORM</span></div>
+        <div class="answer-line"><span class="answer-key">Étape 5</span><span class="answer-val">La View passe les données au Template</span></div>
+        <div class="answer-line"><span class="answer-key">Étape 6</span><span class="answer-val">Le Template génère le HTML final</span></div>
+        <div class="answer-line"><span class="answer-key">Étape 7</span><span class="answer-val">Django renvoie la réponse HTTP</span></div>
+    </div>
 </div>
 
 <!-- SCÉNARIOS -->
@@ -301,8 +345,12 @@ function renderMatch(){
         var el=document.createElement('div');el.className='match-item';el.dataset.li=li;
         el.textContent=mtvLeft[li];el.style.marginBottom='8px';
         el.onclick=function(){
-            if(mDone[li])return;mSel=li;
-            document.querySelectorAll('#match-left .match-item').forEach(function(e){if(!mDone[parseInt(e.dataset.li)])e.classList.remove('selected-l');});
+            if(mDone[li])return;
+            /* Retire selected-l de tous les items gauche non terminés */
+            document.querySelectorAll('#match-left .match-item').forEach(function(e){
+                if(!mDone[parseInt(e.dataset.li)])e.classList.remove('selected-l');
+            });
+            mSel=li;
             el.classList.add('selected-l');
         };
         L.appendChild(el);
@@ -311,10 +359,21 @@ function renderMatch(){
         var el=document.createElement('div');el.className='match-item';el.dataset.ri=ri;
         el.textContent=mtvRight[ri];el.style.marginBottom='8px';
         el.onclick=function(){
-            if(mSel===null||mDone[mSel])return;
+            /* Retire selected-r de tous les items droite */
+            document.querySelectorAll('#match-right .match-item').forEach(function(e){e.classList.remove('selected-r');});
+            if(mSel===null||mDone[mSel]){
+                /* Rien de sélectionné à gauche — juste marquer visuellement */
+                el.classList.add('selected-r');
+                setTimeout(function(){el.classList.remove('selected-r');},400);
+                return;
+            }
             var li=mSel;
             mAns[li]=ri;mDone[li]=true;
-            document.querySelectorAll('#match-left .match-item').forEach(function(e){if(parseInt(e.dataset.li)===li){e.classList.remove('selected-l');e.classList.add('matched-ok');}});
+            /* Marque l'item gauche comme associé — sans couleur définitive avant Vérifier */
+            document.querySelectorAll('#match-left .match-item').forEach(function(e){
+                if(parseInt(e.dataset.li)===li){e.classList.remove('selected-l');e.classList.add('matched-ok');}
+            });
+            /* Vérifie si tous les attendus pour ce côté droit sont associés */
             var allForThis=mtvCorrect.filter(function(c){return c===ri;}).length;
             var posedForThis=Object.keys(mAns).filter(function(k){return mAns[k]===ri;}).length;
             if(posedForThis===allForThis)el.classList.add('matched-ok');
@@ -357,7 +416,7 @@ function checkGroup(groupIdx){
         var el=document.getElementById(id);if(!el)return;
         el.classList.remove('ok','ko');
         if(el.value.trim()===group.answers[i]){el.classList.add('ok');score++;}
-        else{el.classList.add('ko');if(!el.value.trim())el.value=group.answers[i];}
+        else{el.classList.add('ko');}   /* ← on n'écrase plus la valeur */
     });
     var r=document.getElementById(fillResultIds[groupIdx]);r.style.display='block';
     r.innerHTML='<div class="rl">'+(score===group.ids.length?'✅ Parfait !':'Résultat')+'</div>'+score+'/'+group.ids.length+' corrects.';
@@ -367,32 +426,47 @@ function checkAllFill(){
     var total=0,max=0;
     fillData.forEach(function(_,i){total+=checkGroup(i);max+=fillData[i].ids.length;});
     var g=document.getElementById('fill-global');g.style.display='block';
-    g.innerHTML='<div class="rl">Score global</div>'+total+'/'+max+' mots-clés corrects.'+(total<max?' Les cases en rouge affichent la bonne réponse.':'');
+    g.innerHTML='<div class="rl">Score global</div>'+total+'/'+max+' mots-clés corrects.'+(total<max?' Cliquez "Voir les réponses" pour découvrir les bonnes réponses.':'');
 }
-function resetFill(){
-    fillData.forEach(function(group){group.ids.forEach(function(id){var el=document.getElementById(id);if(el){el.value='';el.classList.remove('ok','ko');}});});
+function revealFill(){
+    fillData.forEach(function(group){
+        group.ids.forEach(function(id,i){
+            var el=document.getElementById(id);if(!el)return;
+            el.value=group.answers[i];
+            el.classList.remove('ok','ko');
+            el.style.borderColor='#FAC775';el.style.background='rgba(250,199,117,0.18)';el.style.color='#633806';
+        });
+    });
     fillResultIds.forEach(function(id){document.getElementById(id).style.display='none';});
     document.getElementById('fill-global').style.display='none';
+    var panel=document.getElementById('fill-answers');panel.classList.toggle('show');
+}
+function resetFill(){
+    fillData.forEach(function(group){group.ids.forEach(function(id){var el=document.getElementById(id);if(el){el.value='';el.classList.remove('ok','ko');el.style.borderColor='';el.style.background='';el.style.color='';}});});
+    fillResultIds.forEach(function(id){document.getElementById(id).style.display='none';});
+    document.getElementById('fill-global').style.display='none';
+    document.getElementById('fill-answers').classList.remove('show');
 }
 
 /* ===== DRAG — FLUX REQUÊTE ===== */
 var orderCorrect=[
-    '1️⃣ L\'utilisateur envoie une requête HTTP (ex: GET /blog/)',
-    '2️⃣ Django cherche l\'URL dans urls.py (routage)',
-    '3️⃣ La View correspondante est appelée avec la requête',
-    '4️⃣ La View interroge la BDD via l\'ORM (Model)',
-    '5️⃣ La View passe les données au Template',
-    '6️⃣ Le Template génère le HTML final',
-    '7️⃣ Django renvoie la réponse HTTP au navigateur'
+    'L\'utilisateur envoie une requête HTTP (ex: GET /blog/)',
+    'Django cherche l\'URL dans urls.py (routage)',
+    'La View correspondante est appelée avec la requête',
+    'La View interroge la BDD via l\'ORM (Model)',
+    'La View passe les données au Template',
+    'Le Template génère le HTML final',
+    'Django renvoie la réponse HTTP au navigateur'
 ];
 var orderShuffled=orderCorrect.slice();
 (function(){for(var i=orderShuffled.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=orderShuffled[i];orderShuffled[i]=orderShuffled[j];orderShuffled[j]=t;}})();
 var dragSrc=null;
-function renderDragList(){
+function renderDragList(showNums){
     var list=document.getElementById('dragList');list.innerHTML='';
     orderShuffled.forEach(function(step,i){
         var item=document.createElement('div');item.className='drag-item';item.draggable=true;item.dataset.index=i;
-        item.innerHTML='<span class="drag-handle">⠿</span><span>'+step+'</span>';
+        var numSpan='<span class="drag-num'+(showNums?' visible':'')+'>'+(i+1)+'</span>';
+        item.innerHTML='<span class="drag-handle">⠿</span>'+numSpan+'<span class="drag-text">'+step+'</span>';
         item.addEventListener('dragstart',function(e){dragSrc=i;item.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
         item.addEventListener('dragend',function(){item.classList.remove('dragging');});
         item.addEventListener('dragover',function(e){e.preventDefault();list.querySelectorAll('.drag-item').forEach(function(el){el.classList.remove('drag-over');});item.classList.add('drag-over');});
@@ -405,13 +479,40 @@ function renderDragList(){
 }
 function checkOrder(){
     var items=document.getElementById('dragList').querySelectorAll('.drag-item');var correct=true;
-    items.forEach(function(item,i){var txt=item.querySelector('span:last-child').textContent;if(txt===orderCorrect[i])item.classList.add('correct-order');else{item.classList.add('wrong-order');correct=false;}});
+    items.forEach(function(item,i){
+        var txt=item.querySelector('.drag-text').textContent;
+        item.classList.remove('correct-order','wrong-order');
+        /* Affiche le numéro de position actuelle */
+        var numEl=item.querySelector('.drag-num');if(numEl){numEl.textContent=i+1;numEl.classList.add('visible');}
+        if(txt===orderCorrect[i])item.classList.add('correct-order');
+        else{item.classList.add('wrong-order');correct=false;}
+    });
     var fb=document.getElementById('order-fb');fb.className='q-feedback show '+(correct?'ok':'ko');
     fb.style.background=correct?'#E1F5EE':'#FCEBEB';fb.style.color=correct?'#085041':'#791F1F';
-    fb.textContent=correct?'✅ Parfait ! Requête → urls.py → View → Model → Template → Réponse.':'✗ Pas tout à fait. Le flux : Requête HTTP → urls.py → View → ORM/Model → Template → HTML → Réponse.';
+    fb.textContent=correct?'✅ Parfait ! Requête → urls.py → View → Model → Template → Réponse.':'✗ Pas tout à fait. Cliquez "Voir les réponses" pour découvrir le bon ordre.';
 }
-function resetOrder(){(function(){for(var i=orderShuffled.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=orderShuffled[i];orderShuffled[i]=orderShuffled[j];orderShuffled[j]=t;}})();var fb=document.getElementById('order-fb');fb.className='q-feedback';fb.style.background='';renderDragList();}
-renderDragList();
+function revealOrder(){
+    /* Trier selon l'ordre correct */
+    orderShuffled=orderCorrect.slice();
+    renderDragList(true);
+    /* Colorer tous en vert + afficher numéros */
+    document.querySelectorAll('#dragList .drag-item').forEach(function(item,i){
+        item.classList.add('correct-order');
+        var numEl=item.querySelector('.drag-num');if(numEl){numEl.textContent=i+1;numEl.classList.add('visible');}
+    });
+    var fb=document.getElementById('order-fb');fb.className='q-feedback show ok';
+    fb.style.background='#FAEEDA';fb.style.color='#633806';
+    fb.textContent='👁 Voici le bon ordre — étudiez-le, puis cliquez Mélanger pour réessayer.';
+    document.getElementById('order-answers').classList.add('show');
+}
+function resetOrder(){
+    /* Mélanger */
+    for(var i=orderShuffled.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=orderShuffled[i];orderShuffled[i]=orderShuffled[j];orderShuffled[j]=t;}
+    renderDragList(false);
+    var fb=document.getElementById('order-fb');fb.className='q-feedback';fb.style.background='';fb.style.color='';fb.textContent='';
+    document.getElementById('order-answers').classList.remove('show');
+}
+renderDragList(false);
 
 /* ===== SCÉNARIOS ===== */
 var scenariosData=[

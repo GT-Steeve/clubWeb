@@ -33,17 +33,12 @@ v1.12.0 = ajout cours + exercice framework
 v1.12.1 = correctif exercice framework + exercice Django
 v1.13.0 = ajout cours et exercice commençement Django + cours CRUD + cours et exercice authentification 
 v1.13.1 = correctif exercice django auth + exercice django start
+v1.13.2 = correctif exercice django
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
 
 ** Next step ** 
-Corriger les exercice vrai / faux + ajouter le bouton voir la réponse pour mettre dans l'ordre
-
-fichier -> exercices-django.html
-exercice django corrige l'exercice Associe le fichier Django à son rôle MTV car il est bugué on ne voit pas nos choix, 
-ajoute le bouton voir la réponse à l'exercice ⌨️ Complète le code Django et 🔀 Remets le flux Django dans l'ordre, afficher le chiffre d'ordre uniquement pour la réponse et non par défaut
-
 bug affichage exercices-resume-global.html fin de page
 Revoir les cours Jeux Web URGENT !!
 prévoir exercice pour javascript jeux et canvas
