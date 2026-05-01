@@ -35,6 +35,7 @@ v1.13.0 = ajout cours et exercice commençement Django + cours CRUD + cours et e
 v1.13.1 = correctif exercice django auth + exercice django start
 v1.13.2 = correctif exercice django
 v1.14.0 = ajout cours structure django
+v1.14.1 = ajout exercice structure django
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/

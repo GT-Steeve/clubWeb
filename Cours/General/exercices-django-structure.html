@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Structure d'un projet Django</title>
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        /* HERO */
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+        /* CARDS */
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.8rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        /* SECTION LABEL */
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        /* PROGRESS */
+        .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.4s; width: 0%; }
+        .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .chip-ok { background: #E1F5EE; color: #085041; }
+        .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+        /* BUTTONS */
+        .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .action-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 10px; padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .action-btn:hover { background: #D3D1C7; }
+        .action-btn.primary { background: #2C2C2A; color: #FAC775; border-color: #2C2C2A; }
+        .action-btn.primary:hover { background: #444441; }
+        .action-btn.reveal { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+        .action-btn.reveal:hover { background: #CECBF6; }
+
+        /* SCORE PANEL */
+        .score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-top: 1rem; display: none; text-align: center; }
+        .score-panel.show { display: block; }
+        .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .score-big span { color: #5DCAA5; }
+        .score-sub { font-size: 0.9rem; color: #888780; }
+
+        /* FLASHCARDS */
+        .fc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 0.8rem; }
+        .fc { height: 130px; perspective: 700px; cursor: pointer; }
+        .fc-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.45s cubic-bezier(.4,0,.2,1); border-radius: 12px; }
+        .fc.flipped .fc-inner { transform: rotateY(180deg); }
+        .fc-front, .fc-back { position: absolute; inset: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 12px; text-align: center; backface-visibility: hidden; border: 0.5px solid #D3D1C7; }
+        .fc-front { background: #F1EFE8; font-family: 'Fira Code', monospace; font-size: 0.8rem; font-weight: 500; color: #2C2C2A; }
+        .fc-back  { background: #fff; font-size: 0.83rem; transform: rotateY(180deg); color: #085041; font-weight: 700; line-height: 1.5; }
+        .fc-hint  { font-size: 0.68rem; color: #B4B2A9; position: absolute; bottom: 7px; right: 9px; }
+
+        /* QCM */
+        .qcm-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 7px; }
+        .opt { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none; transition: background 0.12s, border-color 0.12s; }
+        .opt:hover { background: #D3D1C7; }
+        .opt.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .opt.correct  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .opt.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .opt-dot { width: 18px; height: 18px; min-width: 18px; border-radius: 50%; border: 2px solid #B4B2A9; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.12s; flex-shrink: 0; }
+        .opt.selected .opt-dot { border-color: #7F77DD; background: #7F77DD; }
+        .opt.correct  .opt-dot { border-color: #1D9E75; background: #1D9E75; }
+        .opt.wrong    .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+        .opt-dot-inner { width: 6px; height: 6px; background: white; border-radius: 50%; display: none; }
+        .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+        .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .q-feedback.show { display: block; }
+        .q-feedback.ok { color: #0F6E56; }
+        .q-feedback.ko { color: #A32D2D; }
+
+        /* VRAI / FAUX */
+        .vf-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .vf-statement { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .vf-btns { display: flex; gap: 10px; }
+        .vf-btn { flex: 1; padding: 8px 0; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s, border-color 0.12s; }
+        .vf-btn.vrai:hover:not(.correct-ans):not(.wrong-ans) { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .vf-btn.faux:hover:not(.correct-ans):not(.wrong-ans) { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-btn.vrai.selected { background: #E1F5EE; border-color: #5DCAA5; color: #085041; border-width: 2px; }
+        .vf-btn.faux.selected { background: #FCEBEB; border-color: #F09595; color: #791F1F; border-width: 2px; }
+        .vf-btn.correct-ans { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; font-weight: 800; }
+        .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+
+        /* SCÉNARIOS */
+        .scenario-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .scenario-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 8px; }
+        .scenario-situation { font-size: 0.95rem; font-weight: 700; color: #2C2C2A; line-height: 1.5; margin-bottom: 1rem; }
+        .scenario-choice { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; margin-bottom: 7px; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; transition: background 0.12s; user-select: none; }
+        .scenario-choice:hover { background: #D3D1C7; }
+        .scenario-choice.correct { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; font-weight: 700; }
+        .scenario-choice.wrong   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .scenario-choice.disabled { pointer-events: none; }
+        .scenario-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .scenario-feedback.show { display: block; }
+        .scenario-feedback.ok { color: #0F6E56; }
+        .scenario-feedback.ko { color: #A32D2D; }
+
+        /* AUTO / MANUEL — exercice clé */
+        .am-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 0.8rem; }
+        .am-col-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; text-align: center; padding: 6px; border-radius: 8px; }
+        .am-col-auto  .am-col-label { background: #E1F5EE; color: #085041; }
+        .am-col-manu  .am-col-label { background: #FAEEDA; color: #633806; }
+        .am-drop { min-height: 200px; border-radius: 10px; border: 2px dashed #D3D1C7; padding: 10px; display: flex; flex-direction: column; gap: 7px; transition: border-color 0.15s; }
+        .am-drop.drag-over { border-color: #5DCAA5; background: #f0fdf9; }
+        .am-col-auto  .am-drop { border-color: #9FE1CB; }
+        .am-col-manu  .am-drop { border-color: #FAC775; }
+        .am-bank { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.8rem; padding: 12px; background: #F1EFE8; border-radius: 10px; border: 0.5px solid #B4B2A9; min-height: 52px; }
+        .am-item { font-family: 'Fira Code', monospace; font-size: 0.8rem; font-weight: 500; background: #fff; border: 1.5px solid #B4B2A9; border-radius: 8px; padding: 5px 10px; cursor: grab; user-select: none; transition: box-shadow 0.15s, border-color 0.15s; white-space: nowrap; }
+        .am-item:hover { border-color: #7F77DD; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+        .am-item:active { cursor: grabbing; }
+        .am-item.placed-auto { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .am-item.placed-manu { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+        .am-item.correct-am { background: #E1F5EE; border-color: #1D9E75; color: #085041; cursor: default; }
+        .am-item.wrong-am   { background: #FCEBEB; border-color: #E24B4A; color: #791F1F; cursor: default; }
+        /* Touch drag */
+        .am-item.touch-selected { border-color: #7F77DD; background: #EEEDFE; color: #3C3489; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+
+        /* MATCHING */
+        .match-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .match-col-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .match-col { display: flex; flex-direction: column; gap: 7px; }
+        .match-item { padding: 9px 13px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.12s, border-color 0.12s; line-height: 1.4; }
+        .match-item:hover:not(.matched):not(.disabled) { background: #D3D1C7; }
+        .match-item.sel-l { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; border-width: 2px; }
+        .match-item.sel-r { background: #FAEEDA; border-color: #FAC775; color: #633806; border-width: 2px; }
+        .match-item.matched { background: #E1F5EE; border-color: #5DCAA5; color: #085041; pointer-events: none; font-weight: 700; }
+        .match-item.wrong-flash { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .match-code { font-family: 'Fira Code', monospace; font-size: 0.82rem; }
+        .match-result { font-size: 0.88rem; font-weight: 700; color: #085041; margin-top: 0.8rem; display: none; }
+        .match-result.show { display: block; }
+
+        /* ORDONNER */
+        .order-list { display: flex; flex-direction: column; gap: 7px; margin-top: 0.8rem; user-select: none; }
+        .order-item { display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #fff; font-size: 0.9rem; font-weight: 600; cursor: grab; transition: box-shadow 0.15s, background 0.12s; }
+        .order-item:active { cursor: grabbing; box-shadow: 0 4px 14px rgba(0,0,0,.1); }
+        .order-item.dragging  { opacity: 0.35; }
+        .order-item.drag-over { border-color: #5DCAA5; background: #E1F5EE; }
+        .order-item.tap-sel   { background: #EEEDFE; border-color: #AFA9EC; }
+        .order-item.correct   { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .order-item.wrong     { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .order-handle { color: #B4B2A9; font-size: 1rem; }
+        .order-num { font-size: 0.72rem; font-weight: 800; color: #888780; background: #F1EFE8; border-radius: 6px; padding: 2px 7px; min-width: 22px; text-align: center; display: none; }
+        .order-num.visible { display: block; }
+        .order-text { font-family: 'Fira Code', monospace; font-size: 0.82rem; }
+        .order-feedback { font-size: 0.88rem; font-weight: 700; margin-top: 0.8rem; display: none; line-height: 1.5; }
+        .order-feedback.show { display: block; }
+        .order-feedback.ok { color: #0F6E56; }
+        .order-feedback.ko { color: #A32D2D; }
+
+        /* COMPLÉTER */
+        .complete-wrap { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 2.1; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem; }
+        .blank { display: inline-block; min-width: 80px; border: none; border-bottom: 2px solid #AFA9EC; background: transparent; font-family: 'Fira Code', monospace; font-size: 0.84rem; color: #3C3489; font-weight: 700; padding: 0 4px; outline: none; vertical-align: baseline; transition: border-color 0.15s; }
+        .blank:focus { border-bottom-color: #7F77DD; }
+        .blank.ok { border-bottom-color: #1D9E75; color: #085041; }
+        .blank.ko { border-bottom-color: #E24B4A; color: #791F1F; }
+        .blank.revealed { border-bottom-color: #FAC775; color: #633806; background: rgba(250,199,117,0.18); }
+        .complete-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .complete-feedback.show { display: block; }
+        .complete-feedback.ok { color: #0F6E56; }
+        .complete-feedback.ko { color: #A32D2D; }
+
+        /* ANSWERS REVEAL */
+        .answers-reveal { background: #FAEEDA; border: 0.5px solid #FAC775; border-radius: 10px; padding: 0.9rem 1.1rem; margin-top: 0.8rem; display: none; font-size: 0.88rem; line-height: 1.8; color: #633806; }
+        .answers-reveal.show { display: block; }
+        .answers-reveal strong { display: block; margin-bottom: 6px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .answer-line { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
+        .answer-key { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: #888780; min-width: 90px; }
+        .answer-val { font-family: 'Fira Code', monospace; font-size: 0.84rem; font-weight: 700; color: #633806; }
+
+        /* SYNTAX */
+        .kw  { color: #3C3489; font-weight: 700; }
+        .fn  { color: #185FA5; }
+        .val { color: #0F6E56; }
+        .cm  { color: #888780; font-style: italic; }
+        .sel { color: #993C1D; }
+
+        /* CTA */
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 540px) { body { padding: 1rem; } .hero h1 { font-size: 1.7rem; } .match-wrap { grid-template-columns: 1fr; } .am-grid { grid-template-columns: 1fr; } .fc-grid { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+<body>
+    <a class="nav-prev" href="cours-django-structure.html">← Retour au cours</a>
+
+    <div class="hero">
+        <h1>📁 Exercices — Structure Django</h1>
+        <p>Flashcards, QCM, vrai/faux, scénarios, matching, tri automatique/manuel et code à compléter.</p>
+        <div class="badge-row">
+            <span class="badge b-teal">🃏 Flashcards</span>
+            <span class="badge b-purple">✅ QCM</span>
+            <span class="badge b-amber">⚖️ Vrai/Faux</span>
+            <span class="badge b-coral">🎬 Scénarios</span>
+            <span class="badge b-blue">🔗 Associer</span>
+            <span class="badge b-green">📂 Auto vs Manuel</span>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         01 — FLASHCARDS
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">01 — Flashcards — cliquer pour retourner</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">🃏</div>Fichiers et rôles</div>
+        <div class="fc-grid">
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>manage.py</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Le couteau suisse de Django — lance toutes les commandes : runserver, migrate, startapp…</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>settings.py</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Le cerveau de la configuration — BDD, INSTALLED_APPS, langue, fichiers statiques…</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>urls.py</code> projet<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Point d'entrée de toutes les URLs — délègue aux apps via <code>include()</code></div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>urls.py</code> app<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Routes spécifiques à l'app — à <strong>créer manuellement</strong>, Django ne le génère pas</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>models.py</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Décrit les tables de la BDD — chaque classe Python = une table SQL</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>views.py</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Logique de chaque page — reçoit une requête, renvoie une réponse HTML</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>admin.py</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Enregistre les models pour l'interface <code>/admin/</code> — <code>admin.site.register()</code></div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>apps.py</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Configuration de l'app — créé automatiquement, rarement modifié</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>migrations/</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Historique complet des modifications de la BDD — <strong>ne jamais supprimer</strong> à la main</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>templates/</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Fichiers HTML — chemin obligatoire : <code>templates/nom_app/fichier.html</code></div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>static/</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">CSS, JavaScript, images — chargés avec <code>{% load static %}</code> dans les templates</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>wsgi.py</code> / <code>asgi.py</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Points d'entrée pour déployer en production — on n'y touche pas en développement</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         02 — QCM
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">02 — QCM</span>
+    </div>
+    <div id="qcm-container"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkQCM()">Corriger le QCM</button>
+        <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="score-row" id="score-qcm"></div>
+    <div class="score-panel" id="qcm-score-panel">
+        <div class="score-big"><span id="qcm-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au QCM</div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         03 — VRAI / FAUX
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">03 — Vrai ou Faux</span>
+    </div>
+    <div id="vf-container"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkVF()">Corriger</button>
+        <button class="action-btn" onclick="resetVF()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-vf"></div></div>
+    <div class="score-row" id="score-vf"></div>
+    <div class="score-panel" id="vf-score-panel">
+        <div class="score-big"><span id="vf-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses Vrai/Faux</div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         04 — SCÉNARIOS
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">04 — Scénarios</span>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 1</div>
+        <div class="scenario-situation">🧑‍💻 Vous venez de créer votre app avec <code>python manage.py startapp blog</code>. Vous essayez de faire une migration mais Django dit qu'il ne trouve aucun model. Que vérifiez-vous en premier ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Que <code>models.py</code> n'est pas vide</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Que <code>'blog'</code> est bien dans <code>INSTALLED_APPS</code> dans <code>settings.py</code></div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Que le serveur est bien lancé avec <code>runserver</code></div>
+        <div class="scenario-feedback">✓ Sans <code>'blog'</code> dans <code>INSTALLED_APPS</code>, Django ignore complètement votre app — il ne voit ni vos models, ni vos templates, ni vos migrations.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 2</div>
+        <div class="scenario-situation">🧑‍💻 Vous avez créé une vue dans <code>views.py</code> et un template dans <code>blog/templates/liste.html</code>. Django affiche <code>TemplateDoesNotExist</code>. Où est le problème ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Le template HTML contient une erreur de syntaxe</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Le template est mal placé — il doit être dans <code>blog/templates/blog/liste.html</code> (sous-dossier obligatoire)</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Il faut relancer le serveur pour que Django détecte le nouveau template</div>
+        <div class="scenario-feedback">✓ Django cherche <code>templates/blog/liste.html</code> — le sous-dossier portant le nom de l'app est obligatoire pour éviter les conflits entre apps.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 3</div>
+        <div class="scenario-situation">🧑‍💻 Vous créez une route dans <code>blog/urls.py</code> mais la page affiche toujours une 404. Vous avez vérifié que la view existe. Que vérifiez-vous ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Que <code>monprojet/urls.py</code> inclut bien <code>include('blog.urls')</code></div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Que <code>models.py</code> n'a pas d'erreur de syntaxe</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Que le fichier <code>wsgi.py</code> est correctement configuré</div>
+        <div class="scenario-feedback">✓ Le <code>urls.py</code> de l'app doit être relié au <code>urls.py</code> du projet avec <code>include()</code>. Sans ça, Django ne connaît pas l'existence des routes de votre app.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 4</div>
+        <div class="scenario-situation">🧑‍💻 Vous modifiez un model dans <code>models.py</code> en ajoutant un champ. Vous rafraîchissez la page admin mais votre nouveau champ n'apparaît pas. Pourquoi ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Il faut vider le cache du navigateur</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Il faut re-enregistrer le model dans <code>admin.py</code></div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Il faut lancer <code>makemigrations</code> puis <code>migrate</code> — la BDD n'a pas été mise à jour</div>
+        <div class="scenario-feedback">✓ Modifier <code>models.py</code> ne suffit pas. Il faut toujours <code>python manage.py makemigrations</code> (crée la migration) puis <code>python manage.py migrate</code> (l'applique en BDD).</div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         05 — ASSOCIER
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">05 — Associer fichier → rôle</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">🔗</div>Chaque fichier à son rôle</div>
+        <div class="match-wrap">
+            <div>
+                <div class="match-col-label">Fichier</div>
+                <div class="match-col">
+                    <div class="match-item match-code" id="ml0" onclick="selectMatch('left',0)">manage.py</div>
+                    <div class="match-item match-code" id="ml1" onclick="selectMatch('left',1)">settings.py</div>
+                    <div class="match-item match-code" id="ml2" onclick="selectMatch('left',2)">models.py</div>
+                    <div class="match-item match-code" id="ml3" onclick="selectMatch('left',3)">views.py</div>
+                    <div class="match-item match-code" id="ml4" onclick="selectMatch('left',4)">admin.py</div>
+                    <div class="match-item match-code" id="ml5" onclick="selectMatch('left',5)">migrations/</div>
+                    <div class="match-item match-code" id="ml6" onclick="selectMatch('left',6)">templates/</div>
+                    <div class="match-item match-code" id="ml7" onclick="selectMatch('left',7)">static/</div>
+                </div>
+            </div>
+            <div>
+                <div class="match-col-label">Rôle</div>
+                <div class="match-col">
+                    <div class="match-item" id="mr0" onclick="selectMatch('right',0)">Lance toutes les commandes Django</div>
+                    <div class="match-item" id="mr1" onclick="selectMatch('right',1)">Configure BDD, apps, langue…</div>
+                    <div class="match-item" id="mr2" onclick="selectMatch('right',2)">Décrit les tables de la BDD</div>
+                    <div class="match-item" id="mr3" onclick="selectMatch('right',3)">Logique de chaque page</div>
+                    <div class="match-item" id="mr4" onclick="selectMatch('right',4)">Expose les models dans /admin/</div>
+                    <div class="match-item" id="mr5" onclick="selectMatch('right',5)">Historique des modifications BDD</div>
+                    <div class="match-item" id="mr6" onclick="selectMatch('right',6)">Fichiers HTML de l'app</div>
+                    <div class="match-item" id="mr7" onclick="selectMatch('right',7)">CSS, JavaScript, images</div>
+                </div>
+            </div>
+        </div>
+        <div class="match-result" id="matchResult">🎉 Parfait ! Toutes les associations sont correctes.</div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         06 — AUTO vs MANUEL ← exercice clé
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">06 — Créé automatiquement ou à la main ?</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-green">📂</div>Glissez chaque fichier dans la bonne colonne</div>
+        <p class="desc">Après <code>django-admin startproject monprojet</code> et <code>python manage.py startapp blog</code>, certains fichiers sont générés automatiquement, d'autres doivent être créés à la main. Faites le tri !</p>
+
+        <div style="margin-top:0.8rem;">
+            <div style="font-size:0.8rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:#888780;margin-bottom:6px;">Fichiers à trier</div>
+            <div class="am-bank" id="am-bank"></div>
+        </div>
+
+        <div class="am-grid" style="margin-top:14px;">
+            <div class="am-col-auto">
+                <div class="am-col-label">✅ Créé automatiquement</div>
+                <div class="am-drop" id="am-auto" ondragover="amDragOver(event,this)" ondragleave="amDragLeave(this)" ondrop="amDrop(event,'auto')"></div>
+            </div>
+            <div class="am-col-manu">
+                <div class="am-col-label">✏️ À créer manuellement</div>
+                <div class="am-drop" id="am-manu" ondragover="amDragOver(event,this)" ondragleave="amDragLeave(this)" ondrop="amDrop(event,'manu')"></div>
+            </div>
+        </div>
+
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="checkAM()">Vérifier</button>
+            <button class="action-btn reveal" onclick="revealAM()">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetAM()">🔄 Recommencer</button>
+        </div>
+        <div class="complete-feedback" id="am-feedback"></div>
+        <div class="answers-reveal" id="am-answers">
+            <strong>Réponses</strong>
+            <div style="margin-bottom:6px;font-size:0.85rem;font-weight:700;color:#085041;">✅ Créés automatiquement par Django</div>
+            <div class="answer-line"><span class="answer-key">startproject</span><span class="answer-val">manage.py · settings.py · urls.py (projet) · wsgi.py · asgi.py · __init__.py</span></div>
+            <div class="answer-line"><span class="answer-key">startapp</span><span class="answer-val">models.py · views.py · admin.py · apps.py · tests.py · migrations/__init__.py</span></div>
+            <div style="margin:8px 0 6px;font-size:0.85rem;font-weight:700;color:#633806;">✏️ À créer manuellement</div>
+            <div class="answer-line"><span class="answer-key">jamais générés</span><span class="answer-val">urls.py (app) · templates/ · static/ · forms.py</span></div>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         07 — ORDONNER les commandes
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">07 — Remettre les commandes dans l'ordre</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">↕️</div>Du venv au premier affichage</div>
+        <p class="desc">Glissez-déposez ces commandes dans le bon ordre pour démarrer un projet Django from scratch.</p>
+        <div class="order-list" id="orderList">
+            <div class="order-item" draggable="true" data-correct="5" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-text">python manage.py migrate</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="1" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-text">python -m venv env &amp;&amp; activer l'environnement</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="7" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-text">python manage.py runserver</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="4" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-text">Ajouter 'blog' dans INSTALLED_APPS (settings.py)</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="2" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-text">pip install django</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="6" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-text">python manage.py createsuperuser</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="3" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-text">django-admin startproject monprojet &amp;&amp; startapp blog</span>
+            </div>
+        </div>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateOrder()">Valider l'ordre</button>
+            <button class="action-btn reveal" onclick="revealOrder()">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="shuffleOrder()">🔀 Mélanger</button>
+        </div>
+        <div class="order-feedback" id="orderFeedback"></div>
+        <div class="answers-reveal" id="order-answers">
+            <strong>Ordre correct</strong>
+            <div class="answer-line"><span class="answer-key">Étape 1</span><span class="answer-val">python -m venv env &amp;&amp; activer</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 2</span><span class="answer-val">pip install django</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 3</span><span class="answer-val">startproject &amp;&amp; startapp blog</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 4</span><span class="answer-val">Ajouter 'blog' dans INSTALLED_APPS</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 5</span><span class="answer-val">python manage.py migrate</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 6</span><span class="answer-val">python manage.py createsuperuser</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 7</span><span class="answer-val">python manage.py runserver</span></div>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         08 — COMPLÉTER
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">08 — Compléter le code</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">①</div>settings.py — déclarer l'app</div>
+<pre class="complete-wrap">INSTALLED_APPS = [
+    <span class="val">'django.contrib.admin'</span>,
+    <span class="val">'django.contrib.auth'</span>,
+    <span class="val">'django.contrib.contenttypes'</span>,
+    <span class="val">'django.contrib.sessions'</span>,
+    <span class="val">'django.contrib.messages'</span>,
+    <span class="val">'django.contrib.staticfiles'</span>,
+    <span class="val">'<input class="blank" id="b1a" placeholder="???" style="min-width:55px" autocomplete="off">'</span>,  <span class="cm"># votre app</span>
+]
+
+LANGUAGE_CODE = <span class="val">'<input class="blank" id="b1b" placeholder="???" autocomplete="off">'</span>
+TIME_ZONE = <span class="val">'<input class="blank" id="b1c" placeholder="???" autocomplete="off">'</span>
+<input class="blank" id="b1d" placeholder="???" autocomplete="off"> = <span class="val">'/static/'</span></pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c1')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c1')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c1')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c1-feedback"></div>
+        <div class="answers-reveal" id="c1-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">app</span><span class="answer-val">blog</span></div>
+            <div class="answer-line"><span class="answer-key">langue</span><span class="answer-val">fr-fr</span></div>
+            <div class="answer-line"><span class="answer-key">timezone</span><span class="answer-val">Europe/Paris</span></div>
+            <div class="answer-line"><span class="answer-key">variable</span><span class="answer-val">STATIC_URL</span></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">②</div>urls.py projet — relier l'app</div>
+<pre class="complete-wrap"><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> django.urls <span class="kw">import</span> path, <input class="blank" id="b2a" placeholder="???" autocomplete="off">
+
+urlpatterns = [
+    <span class="fn">path</span>(<span class="val">'admin/'</span>, admin.site.urls),
+    <span class="fn">path</span>(<span class="val">'blog/'</span>, <input class="blank" id="b2b" placeholder="???" autocomplete="off">(<span class="val">'<input class="blank" id="b2c" placeholder="???" style="min-width:80px" autocomplete="off">'</span>)),
+    <span class="fn">path</span>(<span class="val">'accounts/'</span>, <span class="fn">include</span>(<span class="val">'django.contrib.auth.urls'</span>)),
+]</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c2')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c2')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c2')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c2-feedback"></div>
+        <div class="answers-reveal" id="c2-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">import ???</span><span class="answer-val">include</span></div>
+            <div class="answer-line"><span class="answer-key">path('blog/', ???(...))</span><span class="answer-val">include</span></div>
+            <div class="answer-line"><span class="answer-key">include('???')</span><span class="answer-val">blog.urls</span></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">③</div>admin.py — enregistrer un model</div>
+<pre class="complete-wrap"><span class="kw">from</span> django.contrib <span class="kw">import</span> <input class="blank" id="b3a" placeholder="???" autocomplete="off">
+<span class="kw">from</span> .models <span class="kw">import</span> <input class="blank" id="b3b" placeholder="???" autocomplete="off">
+
+<span class="cm"># Enregistrement simple</span>
+admin.site.<input class="blank" id="b3c" placeholder="???" autocomplete="off">(Article)
+
+<span class="cm"># Personnalisé — affiche des colonnes dans la liste</span>
+<span class="kw">@admin.</span><input class="blank" id="b3d" placeholder="???" style="min-width:65px" autocomplete="off">(Article)
+<span class="kw">class</span> <span class="fn">ArticleAdmin</span>(admin.ModelAdmin):
+    list_display = [<span class="val">'titre'</span>, <span class="val">'date'</span>, <span class="val">'publie'</span>]</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c3')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c3')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c3')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c3-feedback"></div>
+        <div class="answers-reveal" id="c3-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">from django.contrib import</span><span class="answer-val">admin</span></div>
+            <div class="answer-line"><span class="answer-key">from .models import</span><span class="answer-val">Article</span></div>
+            <div class="answer-line"><span class="answer-key">admin.site.???()</span><span class="answer-val">register</span></div>
+            <div class="answer-line"><span class="answer-key">@admin.???()</span><span class="answer-val">register</span></div>
+        </div>
+    </div>
+
+
+    <div class="cta-wrap">
+        <p>Bravo ! Vous maîtrisez la structure d'un projet Django.</p>
+        <a class="cta-btn" href="../sommaire.html">← Retour au sommaire</a>
+    </div>
+
+    <div class="footer-note">
+        manage.py → settings.py → models → views → urls → templates 📁<br>
+        <span style="font-size:0.82rem;">Exercices — Structure d'un projet Django</span>
+    </div>
+
+
+    <script>
+    /* ═══════════ QCM DATA ═══════════ */
+    var qcmData = [
+        { q: "Quelle commande crée la structure de base d'un projet Django (settings.py, urls.py, wsgi.py…) ?", opts: ["python manage.py startproject", "django-admin startproject monprojet", "python manage.py startapp", "pip install django"], correct: 1, expl: "✓ django-admin startproject monprojet génère le dossier projet avec settings.py, urls.py, wsgi.py, asgi.py et manage.py." },
+        { q: "Quelle commande crée les fichiers d'une application (models.py, views.py, admin.py…) ?", opts: ["django-admin startproject blog", "pip install blog", "python manage.py startapp blog", "python manage.py createapp blog"], correct: 2, expl: "✓ python manage.py startapp blog génère le dossier blog/ avec models.py, views.py, admin.py, apps.py, tests.py et migrations/." },
+        { q: "Lequel de ces fichiers doit être créé manuellement — Django ne le génère pas ?", opts: ["models.py", "views.py", "blog/urls.py", "admin.py"], correct: 2, expl: "✓ Le urls.py de l'app n'est pas généré par startapp. Il faut le créer manuellement et le relier depuis monprojet/urls.py avec include()." },
+        { q: "Dans quel fichier faut-il déclarer votre app pour que Django la reconnaisse ?", opts: ["models.py", "apps.py", "manage.py", "settings.py dans INSTALLED_APPS"], correct: 3, expl: "✓ INSTALLED_APPS dans settings.py est la liste de toutes les apps actives. Sans cette déclaration, Django ignore complètement votre app." },
+        { q: "Quelle est la structure de chemin correcte pour un template Django ?", opts: ["templates/liste.html", "blog/liste.html", "templates/blog/liste.html", "html/blog/liste.html"], correct: 2, expl: "✓ Le sous-dossier portant le nom de l'app est obligatoire : templates/blog/liste.html. Cela évite les conflits de noms entre différentes apps." },
+        { q: "Après avoir modifié models.py, quelles commandes doit-on lancer dans l'ordre ?", opts: ["migrate puis makemigrations", "makemigrations puis migrate", "startapp puis migrate", "runserver puis migrate"], correct: 1, expl: "✓ D'abord makemigrations (crée le fichier de migration décrivant les changements), ensuite migrate (applique ces changements à la vraie BDD)." },
+        { q: "À quoi sert le dossier migrations/ ?", opts: ["Stocker les fichiers HTML de l'app", "Garder l'historique de toutes les modifications de la base de données", "Contenir les images et fichiers CSS", "Configurer le déploiement en production"], correct: 1, expl: "✓ migrations/ est l'historique complet des modifications de votre BDD. Django le lit pour savoir dans quel état est votre base de données." },
+        { q: "Quelle est la différence entre wsgi.py et asgi.py ?", opts: ["wsgi.py est pour le développement, asgi.py pour la production", "wsgi.py est pour les serveurs classiques, asgi.py est pour les fonctionnalités async (WebSockets)", "wsgi.py gère les templates, asgi.py gère les fichiers statiques", "Il n'y a aucune différence"], correct: 1, expl: "✓ wsgi.py est le point d'entrée pour les serveurs classiques (Gunicorn, Apache). asgi.py est pour les serveurs qui supportent l'asynchrone comme les WebSockets." }
+    ];
+
+    /* ═══════════ VF DATA ═══════════ */
+    var vfData = [
+        { stmt: "<code>python manage.py startapp blog</code> crée automatiquement le fichier <code>blog/urls.py</code>.", correct: false, expl: "Faux. startapp crée models.py, views.py, admin.py, apps.py, tests.py et migrations/ — mais pas urls.py. Il faut le créer manuellement." },
+        { stmt: "Le dossier <code>templates/</code> est créé automatiquement par <code>startapp</code>.", correct: false, expl: "Faux. Django ne crée ni templates/ ni static/. Ces dossiers doivent être créés manuellement, avec un sous-dossier portant le nom de l'app." },
+        { stmt: "Si une app n'est pas dans <code>INSTALLED_APPS</code>, Django ne peut pas voir ses models.", correct: true, expl: "Vrai. INSTALLED_APPS est la liste des apps que Django reconnaît. Une app absente de cette liste est totalement invisible — pas de migrations, pas de templates, pas d'admin." },
+        { stmt: "On peut modifier directement les fichiers dans <code>migrations/</code> pour ajuster le schéma de BDD.", correct: false, expl: "Faux. Les fichiers de migration ne doivent jamais être modifiés manuellement. Il faut toujours passer par makemigrations qui génère ces fichiers automatiquement." },
+        { stmt: "<code>manage.py</code> doit être lancé depuis le dossier racine du projet qui le contient.", correct: true, expl: "Vrai. manage.py doit être lancé depuis le répertoire où il se trouve. Un terminal dans le mauvais dossier provoquera une erreur 'No such file or directory'." },
+        { stmt: "<code>wsgi.py</code> et <code>asgi.py</code> doivent être modifiés fréquemment pendant le développement.", correct: false, expl: "Faux. Ces fichiers ne se touchent que lors du déploiement en production. Pendant le développement, manage.py runserver s'en charge automatiquement." },
+        { stmt: "Le fichier <code>urls.py</code> du projet et celui de l'app ont le même rôle.", correct: false, expl: "Faux. Le urls.py du projet est le routeur principal — il contient des include(). Le urls.py de l'app contient les vraies routes vers les views. Ils se complètent." },
+        { stmt: "<code>forms.py</code> doit également être créé manuellement dans une app Django.", correct: true, expl: "Vrai. Comme urls.py, templates/ et static/, le fichier forms.py n'est pas généré par startapp. Il faut le créer manuellement si on veut utiliser des formulaires." }
+    ];
+
+    /* ═══════════ AUTO/MANUEL DATA ═══════════ */
+    var amData = [
+        { label: 'manage.py',       correct: 'auto' },
+        { label: 'settings.py',     correct: 'auto' },
+        { label: 'wsgi.py',         correct: 'auto' },
+        { label: 'asgi.py',         correct: 'auto' },
+        { label: 'models.py',       correct: 'auto' },
+        { label: 'views.py',        correct: 'auto' },
+        { label: 'admin.py',        correct: 'auto' },
+        { label: 'apps.py',         correct: 'auto' },
+        { label: 'tests.py',        correct: 'auto' },
+        { label: 'migrations/',     correct: 'auto' },
+        { label: 'blog/urls.py',    correct: 'manu' },
+        { label: 'templates/',      correct: 'manu' },
+        { label: 'static/',         correct: 'manu' },
+        { label: 'forms.py',        correct: 'manu' },
+    ];
+    var amPlacements = {}; // label → 'auto'|'manu'
+    var amDragItem = null;
+    var amTouchItem = null;
+
+    function buildAMBank() {
+        var bank = document.getElementById('am-bank');
+        bank.innerHTML = '';
+        // Mélanger
+        var shuffled = amData.slice().sort(function(){ return Math.random()-0.5; });
+        shuffled.forEach(function(d) {
+            var el = document.createElement('div');
+            el.className = 'am-item';
+            el.textContent = d.label;
+            el.draggable = true;
+            el.dataset.label = d.label;
+            el.addEventListener('dragstart', function(e) { amDragItem = d.label; e.dataTransfer.effectAllowed = 'move'; });
+            el.addEventListener('click', function() { amTouchPick(el, d.label); });
+            bank.appendChild(el);
+        });
+    }
+
+    function amTouchPick(el, label) {
+        if (amTouchItem === null) {
+            document.querySelectorAll('.am-item.touch-selected').forEach(function(e){ e.classList.remove('touch-selected'); });
+            amTouchItem = label;
+            el.classList.add('touch-selected');
+        } else {
+            amTouchItem = null;
+            document.querySelectorAll('.am-item.touch-selected').forEach(function(e){ e.classList.remove('touch-selected'); });
+        }
+    }
+
+    function amDropZoneClick(zone) {
+        if (amTouchItem === null) return;
+        moveToZone(amTouchItem, zone);
+        amTouchItem = null;
+        document.querySelectorAll('.am-item.touch-selected').forEach(function(e){ e.classList.remove('touch-selected'); });
+    }
+
+    function amDragOver(e, el) { e.preventDefault(); el.classList.add('drag-over'); }
+    function amDragLeave(el) { el.classList.remove('drag-over'); }
+    function amDrop(e, zone) {
+        e.preventDefault();
+        document.querySelectorAll('.am-drop').forEach(function(d){ d.classList.remove('drag-over'); });
+        if (amDragItem) { moveToZone(amDragItem, zone); amDragItem = null; }
+    }
+
+    function moveToZone(label, zone) {
+        // Retirer de partout
+        document.querySelectorAll('.am-item').forEach(function(el){
+            if (el.dataset.label === label) el.remove();
+        });
+        amPlacements[label] = zone;
+
+        var el = document.createElement('div');
+        el.className = 'am-item ' + (zone === 'auto' ? 'placed-auto' : 'placed-manu');
+        el.textContent = label;
+        el.draggable = true;
+        el.dataset.label = label;
+        el.addEventListener('dragstart', function(e){ amDragItem = label; e.dataTransfer.effectAllowed = 'move'; });
+        // Cliquer depuis une zone remet dans la bank
+        el.addEventListener('click', function(){
+            el.remove();
+            delete amPlacements[label];
+            var data = amData.find(function(d){ return d.label === label; });
+            var bankEl = document.createElement('div');
+            bankEl.className = 'am-item';
+            bankEl.textContent = label;
+            bankEl.draggable = true;
+            bankEl.dataset.label = label;
+            bankEl.addEventListener('dragstart', function(e){ amDragItem = label; e.dataTransfer.effectAllowed = 'move'; });
+            bankEl.addEventListener('click', function(){ amTouchPick(bankEl, label); });
+            document.getElementById('am-bank').appendChild(bankEl);
+        });
+        document.getElementById('am-' + zone).appendChild(el);
+    }
+
+    // Zones cliquables pour le touch
+    document.getElementById('am-auto').addEventListener('click', function(){ amDropZoneClick('auto'); });
+    document.getElementById('am-manu').addEventListener('click', function(e){ if(e.target === this || e.target.classList.contains('am-drop')) amDropZoneClick('manu'); });
+
+    function checkAM() {
+        var ok = 0, total = amData.length;
+        var allPlaced = Object.keys(amPlacements).length === total;
+        if (!allPlaced) {
+            var fb = document.getElementById('am-feedback');
+            fb.textContent = '⚠️ Placez tous les éléments avant de vérifier.';
+            fb.className = 'complete-feedback show ko';
+            return;
+        }
+        document.querySelectorAll('.am-item').forEach(function(el){
+            var label = el.dataset.label;
+            var data = amData.find(function(d){ return d.label === label; });
+            el.classList.remove('placed-auto','placed-manu','correct-am','wrong-am');
+            if (amPlacements[label] === data.correct) { el.classList.add('correct-am'); ok++; }
+            else el.classList.add('wrong-am');
+        });
+        var fb = document.getElementById('am-feedback');
+        if (ok === total) {
+            fb.textContent = '🎉 Parfait ! Vous savez exactement ce que Django génère et ce qu\'il faut créer manuellement.';
+            fb.className = 'complete-feedback show ok';
+        } else {
+            fb.textContent = '❌ ' + ok + '/' + total + ' corrects — les éléments en rouge sont mal classés.';
+            fb.className = 'complete-feedback show ko';
+        }
+    }
+
+    function revealAM() {
+        // Vider les zones
+        document.getElementById('am-auto').innerHTML = '';
+        document.getElementById('am-manu').innerHTML = '';
+        document.getElementById('am-bank').innerHTML = '';
+        amPlacements = {};
+        amData.forEach(function(d){
+            amPlacements[d.label] = d.correct;
+            var el = document.createElement('div');
+            el.className = 'am-item correct-am';
+            el.textContent = d.label;
+            el.dataset.label = d.label;
+            document.getElementById('am-' + d.correct).appendChild(el);
+        });
+        document.getElementById('am-answers').classList.add('show');
+        var fb = document.getElementById('am-feedback');
+        fb.textContent = '👁 Réponses affichées — cliquez Recommencer pour réessayer.';
+        fb.className = 'complete-feedback show';
+        fb.style.color = '#633806';
+    }
+
+    function resetAM() {
+        amPlacements = {};
+        document.getElementById('am-auto').innerHTML = '';
+        document.getElementById('am-manu').innerHTML = '';
+        document.getElementById('am-answers').classList.remove('show');
+        var fb = document.getElementById('am-feedback');
+        fb.className = 'complete-feedback';
+        fb.style.color = '';
+        buildAMBank();
+    }
+
+    /* ═══════════ QCM ═══════════ */
+    function renderQCM() {
+        var c = document.getElementById('qcm-container'); c.innerHTML = '';
+        qcmData.forEach(function(q, i) {
+            var opts = q.opts.map(function(o, j) {
+                return '<div class="opt" onclick="pickQCM(this,' + i + ',' + j + ')"><div class="opt-dot"><div class="opt-dot-inner"></div></div>' + o + '</div>';
+            }).join('');
+            c.innerHTML += '<div class="qcm-card" id="qcm-' + i + '"><div class="q-num">Question ' + (i+1) + ' / ' + qcmData.length + '</div><div class="q-text">' + q.q + '</div><div class="options">' + opts + '</div><div class="q-feedback" id="qfb-' + i + '"></div></div>';
+        });
+    }
+    function pickQCM(el, qi, oi) {
+        var card = document.getElementById('qcm-' + qi);
+        if (card.dataset.locked) return;
+        card.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('selected'); });
+        el.classList.add('selected'); card.dataset.picked = oi;
+    }
+    function checkQCM() {
+        var correct = 0, chips = '';
+        qcmData.forEach(function(q, i) {
+            var card = document.getElementById('qcm-' + i); card.dataset.locked = 1;
+            var picked = parseInt(card.dataset.picked);
+            var fb = document.getElementById('qfb-' + i);
+            card.querySelectorAll('.opt').forEach(function(o, j) {
+                o.classList.remove('selected');
+                if (j === q.correct) o.classList.add('correct');
+                else if (j === picked && picked !== q.correct) o.classList.add('wrong');
+            });
+            if (picked === q.correct) { correct++; chips += '<span class="chip chip-ok">Q' + (i+1) + ' ✓</span>'; fb.textContent = q.expl; fb.className = 'q-feedback show ok'; }
+            else { chips += '<span class="chip chip-ko">Q' + (i+1) + ' ✗</span>'; fb.textContent = '✗ ' + q.expl; fb.className = 'q-feedback show ko'; }
+        });
+        document.getElementById('prog-qcm').style.width = Math.round(correct / qcmData.length * 100) + '%';
+        document.getElementById('score-qcm').innerHTML = chips;
+        document.getElementById('qcm-score-val').textContent = correct;
+        document.getElementById('qcm-score-panel').classList.add('show');
+    }
+    function resetQCM() { renderQCM(); document.getElementById('prog-qcm').style.width='0%'; document.getElementById('score-qcm').innerHTML=''; document.getElementById('qcm-score-panel').classList.remove('show'); }
+
+    /* ═══════════ VRAI/FAUX ═══════════ */
+    function renderVF() {
+        var c = document.getElementById('vf-container'); c.innerHTML = '';
+        vfData.forEach(function(v, i) {
+            c.innerHTML += '<div class="vf-card" id="vf-' + i + '"><div class="vf-statement">' + v.stmt + '</div><div class="vf-btns"><button class="vf-btn vrai" onclick="pickVF(this,' + i + ',true)">✅ Vrai</button><button class="vf-btn faux" onclick="pickVF(this,' + i + ',false)">❌ Faux</button></div><div class="q-feedback" id="vfb-' + i + '"></div></div>';
+        });
+    }
+    function pickVF(btn, i, val) {
+        var card = document.getElementById('vf-' + i);
+        if (card.dataset.locked) return;
+        card.querySelectorAll('.vf-btn').forEach(function(b){ b.classList.remove('selected'); });
+        btn.classList.add('selected'); card.dataset.picked = val;
+    }
+    function checkVF() {
+        var correct = 0, chips = '';
+        vfData.forEach(function(v, i) {
+            var card = document.getElementById('vf-' + i); card.dataset.locked = 1;
+            var hasPicked = card.dataset.picked !== undefined;
+            var picked = card.dataset.picked === 'true';
+            var fb = document.getElementById('vfb-' + i);
+            card.querySelectorAll('.vf-btn').forEach(function(btn){
+                btn.classList.remove('selected');
+                var isVrai = btn.classList.contains('vrai');
+                if ((isVrai && v.correct) || (!isVrai && !v.correct)) btn.classList.add('correct-ans');
+                else if (hasPicked && ((isVrai && !v.correct && picked) || (!isVrai && v.correct && !picked))) btn.classList.add('wrong-ans');
+            });
+            if (hasPicked && picked === v.correct) { correct++; chips += '<span class="chip chip-ok">Q' + (i+1) + ' ✓</span>'; fb.textContent = '✓ ' + v.expl; fb.className = 'q-feedback show ok'; }
+            else { chips += '<span class="chip chip-ko">Q' + (i+1) + ' ✗</span>'; fb.textContent = '✗ ' + v.expl; fb.className = 'q-feedback show ko'; }
+        });
+        document.getElementById('prog-vf').style.width = Math.round(correct / vfData.length * 100) + '%';
+        document.getElementById('score-vf').innerHTML = chips;
+        document.getElementById('vf-score-val').textContent = correct;
+        document.getElementById('vf-score-panel').classList.add('show');
+    }
+    function resetVF() { renderVF(); document.getElementById('prog-vf').style.width='0%'; document.getElementById('score-vf').innerHTML=''; document.getElementById('vf-score-panel').classList.remove('show'); }
+
+    /* ═══════════ SCÉNARIOS ═══════════ */
+    function pickScenario(el, isCorrect) {
+        var card = el.closest('.scenario-card');
+        if (card.querySelector('.correct')) return;
+        var choices = card.querySelectorAll('.scenario-choice');
+        choices.forEach(function(c){ c.classList.add('disabled'); });
+        var fb = card.querySelector('.scenario-feedback');
+        if (isCorrect) { el.classList.add('correct'); fb.classList.add('show','ok'); }
+        else { el.classList.add('wrong'); choices.forEach(function(c){ if(c.onclick.toString().includes('true')) c.classList.add('correct'); }); fb.classList.add('show','ko'); }
+    }
+
+    /* ═══════════ MATCHING ═══════════ */
+    var matchCorrect = [0,1,2,3,4,5,6,7];
+    var selLeft = null, selRight = null, matchedCount = 0;
+    function selectMatch(side, idx) {
+        if (side === 'left') {
+            var el = document.getElementById('ml' + idx);
+            if (el.classList.contains('matched')) return;
+            if (selLeft !== null) document.getElementById('ml' + selLeft).classList.remove('sel-l');
+            selLeft = idx; el.classList.add('sel-l');
+        } else {
+            var er = document.getElementById('mr' + idx);
+            if (er.classList.contains('matched')) return;
+            if (selRight !== null) document.getElementById('mr' + selRight).classList.remove('sel-r');
+            selRight = idx; er.classList.add('sel-r');
+        }
+        if (selLeft !== null && selRight !== null) {
+            var lEl = document.getElementById('ml' + selLeft);
+            var rEl = document.getElementById('mr' + selRight);
+            if (matchCorrect[selLeft] === selRight) {
+                lEl.classList.remove('sel-l'); lEl.classList.add('matched');
+                rEl.classList.remove('sel-r'); rEl.classList.add('matched');
+                matchedCount++;
+                if (matchedCount === 8) document.getElementById('matchResult').classList.add('show');
+            } else {
+                lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+                setTimeout(function(){ lEl.classList.remove('sel-l','wrong-flash'); rEl.classList.remove('sel-r','wrong-flash'); }, 600);
+            }
+            selLeft = null; selRight = null;
+        }
+    }
+
+    /* ═══════════ DRAG ORDER ═══════════ */
+    var dragSrc = null;
+    function initDrag() {
+        document.querySelectorAll('.order-item').forEach(function(item) {
+            item.addEventListener('dragstart', function(){ dragSrc = this; this.classList.add('dragging'); });
+            item.addEventListener('dragend', function(){ this.classList.remove('dragging'); document.querySelectorAll('.order-item').forEach(function(i){ i.classList.remove('drag-over'); }); });
+            item.addEventListener('dragover', function(e){ e.preventDefault(); this.classList.add('drag-over'); });
+            item.addEventListener('dragleave', function(){ this.classList.remove('drag-over'); });
+            item.addEventListener('drop', function(e){ e.preventDefault(); this.classList.remove('drag-over'); if (dragSrc !== this) { var list = document.getElementById('orderList'), arr = Array.from(list.children), si = arr.indexOf(dragSrc), ti = arr.indexOf(this); if (si < ti) list.insertBefore(dragSrc, this.nextSibling); else list.insertBefore(dragSrc, this); } });
+        });
+    }
+    initDrag();
+
+    var tapFirst = null;
+    function tapOrder(el) {
+        if (tapFirst === null) { tapFirst = el; el.classList.add('tap-sel'); }
+        else { if (tapFirst !== el) { var list = document.getElementById('orderList'), arr = Array.from(list.children), i1 = arr.indexOf(tapFirst), i2 = arr.indexOf(el); if (i1 < i2) list.insertBefore(tapFirst, el.nextSibling); else list.insertBefore(tapFirst, el); } tapFirst.classList.remove('tap-sel'); tapFirst = null; }
+    }
+
+    function validateOrder() {
+        var list = document.getElementById('orderList'), items = Array.from(list.children), allOk = true;
+        items.forEach(function(item, idx){
+            var numEl = item.querySelector('.order-num');
+            numEl.textContent = idx + 1; numEl.classList.add('visible');
+            item.classList.remove('correct','wrong');
+            if (parseInt(item.dataset.correct) === idx + 1) item.classList.add('correct');
+            else { item.classList.add('wrong'); allOk = false; }
+        });
+        var fb = document.getElementById('orderFeedback');
+        if (allOk) { fb.textContent = '🎉 Parfait ! C\'est exactement le bon ordre pour démarrer un projet Django.'; fb.className = 'order-feedback show ok'; }
+        else { fb.textContent = '❌ Quelques étapes sont mal placées (en rouge). Réessayez !'; fb.className = 'order-feedback show ko'; }
+    }
+
+    function revealOrder() {
+        var list = document.getElementById('orderList'), items = Array.from(list.children);
+        items.sort(function(a,b){ return parseInt(a.dataset.correct) - parseInt(b.dataset.correct); });
+        items.forEach(function(item, idx){
+            list.appendChild(item);
+            var numEl = item.querySelector('.order-num');
+            numEl.textContent = idx + 1; numEl.classList.add('visible');
+            item.classList.remove('wrong','dragging','drag-over'); item.classList.add('correct');
+        });
+        var fb = document.getElementById('orderFeedback');
+        fb.textContent = '👁 Voici le bon ordre — étudiez-le, puis cliquez Mélanger pour réessayer.';
+        fb.className = 'order-feedback show'; fb.style.color = '#633806';
+        document.getElementById('order-answers').classList.add('show');
+    }
+
+    function shuffleOrder() {
+        var list = document.getElementById('orderList'), items = Array.from(list.children);
+        for (var i = items.length - 1; i > 0; i--){ var j = Math.floor(Math.random()*(i+1)); list.insertBefore(items[j], items[i]); var tmp = items[i]; items[i] = items[j]; items[j] = tmp; }
+        items.forEach(function(it){ it.className = 'order-item'; it.setAttribute('draggable','true'); var numEl = it.querySelector('.order-num'); numEl.textContent = '?'; numEl.classList.remove('visible'); });
+        var fb = document.getElementById('orderFeedback'); fb.className = 'order-feedback'; fb.style.color = '';
+        document.getElementById('order-answers').classList.remove('show');
+        initDrag();
+    }
+
+    /* ═══════════ COMPLÉTER ═══════════ */
+    var completeData = {
+        c1: { ids: ['b1a','b1b','b1c','b1d'], answers: ['blog','fr-fr','Europe/Paris','STATIC_URL'] },
+        c2: { ids: ['b2a','b2b','b2c'],       answers: ['include','include','blog.urls'] },
+        c3: { ids: ['b3a','b3b','b3c','b3d'], answers: ['admin','Article','register','register'] }
+    };
+    function validateComplete(cid) {
+        var data = completeData[cid], ok = 0;
+        data.ids.forEach(function(id, i){ var el = document.getElementById(id); el.classList.remove('ok','ko','revealed'); if (el.value.trim().toLowerCase() === data.answers[i].toLowerCase()){ el.classList.add('ok'); ok++; } else el.classList.add('ko'); });
+        var fb = document.getElementById(cid + '-feedback'), total = data.ids.length;
+        if (ok === total){ fb.textContent = '🎉 Parfait !'; fb.className = 'complete-feedback show ok'; }
+        else { fb.textContent = '❌ ' + ok + '/' + total + ' corrects — champs en rouge incorrects.'; fb.className = 'complete-feedback show ko'; }
+    }
+    function revealAnswers(cid) {
+        var data = completeData[cid];
+        data.ids.forEach(function(id, i){ var el = document.getElementById(id); el.value = data.answers[i]; el.classList.remove('ok','ko'); el.classList.add('revealed'); });
+        document.getElementById(cid + '-answers').classList.toggle('show');
+        var fb = document.getElementById(cid + '-feedback'); fb.textContent = '👁 Réponses affichées — cliquez Réinitialiser pour réessayer.'; fb.className = 'complete-feedback show'; fb.style.color = '#633806';
+    }
+    function resetComplete(cid) {
+        completeData[cid].ids.forEach(function(id){ var el = document.getElementById(id); el.value=''; el.classList.remove('ok','ko','revealed'); });
+        var fb = document.getElementById(cid + '-feedback'); fb.className = 'complete-feedback'; fb.style.color = '';
+        document.getElementById(cid + '-answers').classList.remove('show');
+    }
+
+    /* ═══════════ INIT ═══════════ */
+    renderQCM();
+    renderVF();
+    buildAMBank();
+    </script>
+</body>
+</html>
