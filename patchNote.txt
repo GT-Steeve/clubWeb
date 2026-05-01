@@ -37,6 +37,7 @@ v1.13.2 = correctif exercice django
 v1.14.0 = ajout cours structure django
 v1.14.1 = ajout exercice structure django
 v1.15.0 = ajout cours template django
+v1.15.1 = clean code
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/

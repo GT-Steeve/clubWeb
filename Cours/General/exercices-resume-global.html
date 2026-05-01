@@ -1024,6 +1024,9 @@
             la meilleure réaction.</p>
     </div>
     <div id="scenario-container"></div>
+    <div class="btn-row">
+        <button class="action-btn" onclick="resetScenarios()">Recommencer</button>
+    </div>
 
     <!-- V/F CROISÉ -->
     <div class="section-label"><span class="section-label-text">✅ Vrai / Faux — Révision croisée</span></div>
@@ -1088,7 +1091,7 @@
         /* ======= SCORE TRACKER ======= */
         var scores = { qcm: null, vf: null, sc: 0, scTotal: 0 };
         function tryShowGlobal() {
-            if (scores.qcm === null || scores.vf === null) return;
+            if (scores.qcm === null || scores.vf === null) return false;
             var total = scores.qcm + scores.vf + scores.sc;
             var max = 12 + 10 + 4;
             document.getElementById('gs-total').textContent = total;
@@ -1106,6 +1109,7 @@
             document.getElementById('gs-msg').textContent = msg;
             document.getElementById('global-panel').classList.add('show');
             document.getElementById('global-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return true;
         }
 
         /* ======= FLASHCARDS ======= */
@@ -1195,8 +1199,8 @@
             if (qcmData.length - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (qcmData.length - score) + ' erreur(s)</span>';
             document.getElementById('qcm-score-val').textContent = score;
             document.getElementById('qcm-score-panel').classList.add('show');
-            scores.qcm = score; tryShowGlobal();
-            document.getElementById('qcm-score-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            scores.qcm = score;
+            if (!tryShowGlobal()) document.getElementById('qcm-score-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         function resetQCM() {
             qcmAnswers = {}; scores.qcm = null;
@@ -1260,7 +1264,6 @@
             scenarioAnswers = {}; scScore = 0; scores.sc = 0;
             scenariosData.forEach(function (sc, si) {
                 var div = document.createElement('div'); div.className = 'card';
-                var tagCls = sc.m === '01+03' ? 'mt-all' : sc.m === '02+03' ? 'mt-all' : 'mt-all';
                 var choicesHtml = sc.choices.map(function (ch, ci) {
                     return '<div class="scenario-choice" id="sc-' + si + '-' + ci + '" onclick="answerScenario(' + si + ',' + ci + ')">' + ch.text + '</div>';
                 }).join('');
@@ -1288,6 +1291,11 @@
             fb.className = 'scenario-fb show ' + (isCorrect ? 'ok' : 'ko');
             fb.textContent = isCorrect ? '✓ ' + sc.fb_ok : '✗ ' + sc.fb_ko;
             if (Object.keys(scenarioAnswers).length === scenariosData.length) tryShowGlobal();
+        }
+        function resetScenarios() {
+            scenarioAnswers = {}; scScore = 0; scores.sc = 0;
+            document.getElementById('global-panel').classList.remove('show');
+            renderScenarios();
         }
         renderScenarios();
 
@@ -1353,8 +1361,8 @@
             if (vfData.length - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (vfData.length - score) + ' erreur(s)</span>';
             document.getElementById('vf-score-val').textContent = score;
             document.getElementById('vf-score-panel').classList.add('show');
-            scores.vf = score; tryShowGlobal();
-            document.getElementById('vf-score-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            scores.vf = score;
+            if (!tryShowGlobal()) document.getElementById('vf-score-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         function resetVF() {
             vfAnswers = {}; scores.vf = null;

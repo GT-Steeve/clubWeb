@@ -18,7 +18,7 @@ function updateScore() {
     const vals = Object.values(state);
     const done = vals.filter(v => v !== null).length;
     const good = vals.filter(v => v === true).length;
-    document.getElementById('prog1').style.width = (done / 6 * 100) + '%';
+    document.getElementById('prog1').style.width = (done / Object.keys(state).length * 100) + '%';
     const row = document.getElementById('score1');
     row.innerHTML = '';
     if (done > 0) {
