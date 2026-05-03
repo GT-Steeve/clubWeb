@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibecoding — Coder avec l'IA, assembler, comprendre</title>
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A4%96%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f5f4f0;
+            color: #2C2C2A;
+            padding: 1.5rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .nav-prev {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.88rem; font-weight: 700; color: #185FA5;
+            text-decoration: none; margin-bottom: 1.5rem;
+            background: #E6F1FB; border: 0.5px solid #85B7EB;
+            border-radius: 8px; padding: 6px 14px; transition: background 0.15s;
+        }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+        .p-gray   { background: #D3D1C7; color: #444441; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child { margin-bottom: 0; }
+        .desc strong { color: #2C2C2A; }
+
+        .code-block {
+            background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px;
+            padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace;
+            font-size: 0.84rem; line-height: 1.8; white-space: pre;
+            overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem;
+        }
+        .code-label {
+            font-family: 'Fira Code', monospace; font-size: 0.72rem; color: #888780;
+            background: #D3D1C7; display: inline-block; padding: 2px 9px;
+            border-radius: 5px 5px 0 0; margin-top: 0.8rem; margin-bottom: -1px;
+        }
+
+        .sel  { color: #993C1D; }
+        .prop { color: #185FA5; }
+        .val  { color: #0F6E56; }
+        .cm   { color: #888780; font-style: italic; }
+        .kw   { color: #3C3489; font-weight: 700; }
+        .fn   { color: #185FA5; }
+
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip strong { color: inherit; }
+        .tip-coral  { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber  { background: #FAEEDA; color: #633806; }
+        .tip-blue   { background: #E6F1FB; color: #0C447C; }
+        .tip-green  { background: #EBF5D9; color: #3B6D11; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.7; }
+        .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+        .cycle-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 0.8rem; }
+        .cycle-step { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 20px; padding: 5px 14px; font-size: 0.86rem; font-weight: 700; color: #2C2C2A; }
+        .cycle-step.teal   { background: #E1F5EE; border-color: #9FE1CB; color: #085041; }
+        .cycle-step.purple { background: #EEEDFE; border-color: #CECBF6; color: #3C3489; }
+        .cycle-step.blue   { background: #E6F1FB; border-color: #B5D4F4; color: #0C447C; }
+        .cycle-step.amber  { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+        .cycle-step.coral  { background: #FAECE7; border-color: #F5C4B3; color: #712B13; }
+        .cycle-arrow { color: #B4B2A9; font-size: 1rem; }
+
+        .tbl-wrap { overflow-x: auto; margin-top: 0.8rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        th { background: #F1EFE8; padding: 8px 12px; text-align: left; font-weight: 800; border-bottom: 1px solid #D3D1C7; }
+        td { padding: 8px 12px; border-bottom: 0.5px solid #D3D1C7; color: #5F5E5A; }
+        tr:last-child td { border-bottom: none; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        .file-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1.2rem; overflow: hidden; }
+        .file-header { display: flex; align-items: center; gap: 10px; padding: 12px 18px; font-weight: 800; font-size: 0.95rem; }
+        .file-header .filename { font-family: 'Fira Code', monospace; font-size: 0.9rem; font-weight: 500; }
+        .file-header .file-desc { font-size: 0.8rem; margin-left: auto; opacity: 0.8; font-weight: 600; }
+        .fh-teal   { background: #9FE1CB; color: #085041; }
+        .fh-purple { background: #CECBF6; color: #3C3489; }
+        .fh-blue   { background: #B5D4F4; color: #0C447C; }
+        .fh-amber  { background: #FAC775; color: #633806; }
+        .fh-green  { background: #C0DD97; color: #3B6D11; }
+        .fh-coral  { background: #F5C4B3; color: #712B13; }
+        .fh-gray   { background: #D3D1C7; color: #444441; }
+        .file-body { padding: 1.2rem 1.4rem; }
+        .file-body .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .file-body h3 { font-size: 0.95rem; font-weight: 800; margin: 1.1rem 0 0.4rem; color: #2C2C2A; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        /* AVANTAGES / INCONVÉNIENTS */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .col-box { border-radius: 12px; padding: 1rem; }
+        .col-green { background: #EBF5D9; border: 0.5px solid #C0DD97; }
+        .col-coral { background: #FAECE7; border: 0.5px solid #F5C4B3; }
+        .col-title { font-size: 0.88rem; font-weight: 800; margin-bottom: 0.6rem; }
+        .col-green .col-title { color: #3B6D11; }
+        .col-coral .col-title { color: #712B13; }
+        .col-item { font-size: 0.84rem; line-height: 1.6; margin-bottom: 0.4rem; display: flex; gap: 6px; }
+        .col-green .col-item { color: #3B6D11; }
+        .col-coral .col-item { color: #712B13; }
+
+        /* PROMPT BOX */
+        .prompt-box {
+            background: #2C2C2A; border-radius: 12px; padding: 1rem 1.2rem;
+            font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 1.8;
+            color: #FAC775; margin-top: 0.8rem; position: relative;
+        }
+        .prompt-box .prompt-label {
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; color: #888780; margin-bottom: 6px;
+            font-family: 'Nunito', sans-serif;
+        }
+        .prompt-box .cursor { color: #9FE1CB; }
+        .prompt-box .comment { color: #5F5E5A; font-style: italic; }
+        .prompt-box .highlight { color: #ffffff; }
+
+        /* STEPS */
+        .steps { counter-reset: step; }
+        .step { display: flex; gap: 14px; margin-bottom: 14px; }
+        .step-n { counter-increment: step; width: 28px; height: 28px; border-radius: 50%; background: #9FE1CB; color: #085041; font-weight: 800; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .step-n::before { content: counter(step); }
+        .step-body { flex: 1; padding-top: 3px; font-size: 0.92rem; color: #5F5E5A; line-height: 1.6; }
+        .step-body strong { color: #2C2C2A; display: block; margin-bottom: 1px; }
+
+        /* QUOTE */
+        .quote-box {
+            border-left: 3px solid #CECBF6; padding: 0.8rem 1rem;
+            background: #EEEDFE; border-radius: 0 10px 10px 0;
+            font-size: 0.94rem; color: #3C3489; font-style: italic;
+            line-height: 1.7; margin-top: 0.8rem;
+        }
+        .quote-box cite { display: block; margin-top: 6px; font-size: 0.78rem; font-style: normal; font-weight: 700; color: #7F77DD; }
+
+        /* NIVEAU BADGE */
+        .niveau-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.8rem; }
+        .niveau { font-size: 0.8rem; font-weight: 700; padding: 5px 14px; border-radius: 20px; border: 0.5px solid; }
+        .n-vibe  { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+        .n-dev   { background: #E1F5EE; color: #085041; border-color: #9FE1CB; }
+        .n-arch  { background: #FAEEDA; color: #633806; border-color: #FAC775; }
+
+        /* CTA */
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) {
+            body { padding: 1rem; }
+            .hero h1 { font-size: 1.7rem; }
+            .two-col { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="nav-prev" href="../sommaire.html#step1vibe">← Retour au sommaire</a>
+
+    <div class="hero">
+        <h1>🤖 Vibecoding</h1>
+        <p>Coder avec l'IA — assembler, comprendre, livrer vite.</p>
+        <div class="badge-row">
+            <span class="badge b-purple">IA générative</span>
+            <span class="badge b-teal">Méthode de travail</span>
+            <span class="badge b-amber">Fil rouge : projet Django</span>
+            <span class="badge b-coral">~40 min</span>
+            <span class="badge b-blue">Tous niveaux</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 00 — DÉFINITION ══ -->
+    <div class="section-label"><span class="section-label-text">00 — C'est quoi le vibecoding ?</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">?</div>Définition</div>
+        <p class="desc">Le <strong>vibecoding</strong> (ou « coder à l'instinct avec l'IA ») est une façon de programmer où tu <strong>décris ce que tu veux en langage naturel</strong> à une IA, et tu assembles le code qu'elle génère pour construire ton projet. Tu n'écris pas tout depuis zéro — tu <strong>guides, testes, corriges et assembles</strong>.</p>
+
+        <div class="quote-box">
+            « There's a new kind of coding I call 'vibe coding', where you fully give in to the vibes, embrace exponentials, and forget that the code even exists. »
+            <cite>— Andrej Karpathy, co-fondateur d'OpenAI, février 2025</cite>
+        </div>
+
+        <p class="desc" style="margin-top:0.9rem;">En pratique : tu parles à ChatGPT, Claude ou Copilot comme à un développeur senior. Tu lui décris une fonctionnalité, il génère le code, tu l'intègres dans ton projet, tu testes, et tu continues.</p>
+
+        <div class="tip tip-purple">
+            <span class="tip-i">💡</span>
+            <span><strong>Le vibecoding n'est pas de la triche</strong> — c'est une compétence. Savoir écrire de bons prompts, évaluer le code généré et l'assembler correctement est une vraie maîtrise professionnelle. Les développeurs seniors l'utilisent tous les jours.</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">→</div>Le cycle vibecoding en pratique</div>
+        <div class="cycle-wrap">
+            <div class="cycle-step purple">💬 Décrire<br><small>le besoin en français</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step blue">🤖 Générer<br><small>le code IA</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step teal">📋 Copier<br><small>dans le projet</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step amber">🧪 Tester<br><small>dans le navigateur</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step coral">🔁 Corriger<br><small>si besoin</small></div>
+        </div>
+        <p class="desc" style="margin-top:0.9rem;">Ce cycle se répète pour chaque fonctionnalité. L'IA génère, toi tu valides. Tu restes le <strong>chef de projet</strong>, l'IA est ton développeur.</p>
+    </div>
+
+
+    <!-- ══ 01 — AVANTAGES ══ -->
+    <div class="section-label"><span class="section-label-text">01 — Avantages &amp; inconvénients</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-green">⚖️</div>Ce que le vibecoding change — pour le meilleur et pour le pire</div>
+        <div class="two-col">
+            <div class="col-box col-green">
+                <div class="col-title">✅ Avantages</div>
+                <div class="col-item"><span>🚀</span><span><strong>Vitesse.</strong> Un formulaire Django qui prendrait 2 heures seul ? 10 minutes avec l'IA.</span></div>
+                <div class="col-item"><span>🧠</span><span><strong>Apprendre en faisant.</strong> On lit le code généré, on comprend la syntaxe en contexte réel.</span></div>
+                <div class="col-item"><span>🔓</span><span><strong>Débloquer rapidement.</strong> L'IA connaît la documentation — fini de chercher pendant 1h sur Stack Overflow.</span></div>
+                <div class="col-item"><span>🎯</span><span><strong>Se concentrer sur l'idée.</strong> Tu penses au produit, pas à la syntaxe.</span></div>
+                <div class="col-item"><span>♻️</span><span><strong>Prototyper vite.</strong> Tester une idée en quelques minutes avant de s'investir.</span></div>
+                <div class="col-item"><span>🌍</span><span><strong>Accessible.</strong> Un débutant peut créer des choses qui auraient nécessité des mois de formation.</span></div>
+            </div>
+            <div class="col-box col-coral">
+                <div class="col-title">❌ Inconvénients</div>
+                <div class="col-item"><span>🕳️</span><span><strong>Code qu'on ne comprend pas.</strong> Risque de copier sans savoir ce que ça fait.</span></div>
+                <div class="col-item"><span>🐛</span><span><strong>Bugs invisibles.</strong> L'IA fait des erreurs subtiles difficiles à détecter sans bases solides.</span></div>
+                <div class="col-item"><span>🔒</span><span><strong>Sécurité.</strong> Le code généré peut avoir des failles (SQL injection, secrets exposés…).</span></div>
+                <div class="col-item"><span>🍝</span><span><strong>Code spaghetti.</strong> Sans architecture, le projet devient vite ingérable.</span></div>
+                <div class="col-item"><span>📦</span><span><strong>Dépendance.</strong> Sans comprendre, on ne peut pas corriger seul quand l'IA échoue.</span></div>
+                <div class="col-item"><span>🔄</span><span><strong>Boucles infinies.</strong> On peut rester bloqué à corriger du code incompris.</span></div>
+            </div>
+        </div>
+
+        <div class="tip tip-amber">
+            <span class="tip-i">🎯</span>
+            <span><strong>La règle d'or</strong> — Ne colle jamais du code que tu ne peux pas lire et expliquer ligne par ligne. Si tu ne comprends pas, demande à l'IA d'expliquer avant d'intégrer.</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 02 — LES 3 NIVEAUX ══ -->
+    <div class="section-label"><span class="section-label-text">02 — Les 3 niveaux du vibecoder</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">📊</div>Comment progresser avec le vibecoding</div>
+        <p class="desc">Le vibecoding n'est pas un état fixe — c'est un spectre. Plus tu montes en compétences, plus tu utilises l'IA intelligemment.</p>
+
+        <div class="niveau-row">
+            <span class="niveau n-vibe">🤖 Niveau 1 — Vibe pur</span>
+            <span class="niveau n-dev">🧑‍💻 Niveau 2 — Dev assisté</span>
+            <span class="niveau n-arch">🏗️ Niveau 3 — Architecte IA</span>
+        </div>
+
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Niveau</th><th>Ce que tu fais</th><th>Risque</th></tr>
+                <tr>
+                    <td><strong>Niveau 1</strong><br><small>Vibe pur</small></td>
+                    <td>Tu copies le code sans le lire. L'IA fait tout.</td>
+                    <td style="color:#712B13;">🔴 Très élevé — tu ne comprends rien, tu ne peux pas déboguer.</td>
+                </tr>
+                <tr>
+                    <td><strong>Niveau 2</strong><br><small>Dev assisté</small></td>
+                    <td>Tu lis le code, tu poses des questions, tu adaptes. L'IA accélère.</td>
+                    <td style="color:#633806;">🟡 Modéré — tu apprends activement.</td>
+                </tr>
+                <tr>
+                    <td><strong>Niveau 3</strong><br><small>Architecte IA</small></td>
+                    <td>Tu conçois l'architecture, l'IA remplit les détails. Tu valides tout.</td>
+                    <td style="color:#3B6D11;">🟢 Faible — tu es en contrôle total.</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="tip">
+            <span class="tip-i">🎯</span>
+            <span>L'objectif de ce cours est de t'emmener au <strong>Niveau 2</strong> rapidement, puis de progresser vers le Niveau 3 naturellement en pratiquant.</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 03 — ÉCRIRE UN BON PROMPT ══ -->
+    <div class="section-label"><span class="section-label-text">03 — Écrire un bon prompt de code</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">💬</div>La structure d'un prompt efficace</div>
+        <p class="desc">La qualité du code généré dépend directement de la qualité de ta question. Un bon prompt de code contient <strong>4 éléments</strong> :</p>
+
+        <div class="result-box">
+            <div class="rl">Structure d'un prompt de code</div>
+            <strong>1. Le contexte</strong> — quel projet, quel langage, quel framework<br>
+            <strong>2. Ce que tu veux faire</strong> — la fonctionnalité précise<br>
+            <strong>3. Les contraintes</strong> — ce qui existe déjà, ce qu'il ne faut pas casser<br>
+            <strong>4. Le format attendu</strong> — fichier complet, snippet, explication incluse
+        </div>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-coral">
+            <span>❌</span>
+            <span class="filename">Mauvais prompt</span>
+            <span class="file-desc">Trop vague</span>
+        </div>
+        <div class="file-body">
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt utilisateur</div>
+                <span class="cursor">></span> <span class="highlight">fais moi un formulaire django</span>
+            </div>
+            <p class="desc" style="margin-top:0.8rem;">Ce prompt donne un résultat générique. L'IA ne sait pas quel model, quel champ, quelle vue, quel template — elle invente tout et rien ne correspondra à ton projet.</p>
+        </div>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-teal">
+            <span>✅</span>
+            <span class="filename">Bon prompt</span>
+            <span class="file-desc">Contexte + besoin + contraintes</span>
+        </div>
+        <div class="file-body">
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt utilisateur</div>
+                <span class="cursor">></span> <span class="highlight">Je travaille sur un projet Django 5.</span>
+<span class="comment">J'ai un model Article avec les champs :</span>
+<span class="comment">  - titre (CharField, max 200)</span>
+<span class="comment">  - contenu (TextField)</span>
+<span class="comment">  - publie (BooleanField, default False)</span>
+
+<span class="highlight">Génère-moi un ModelForm pour créer un article,</span>
+<span class="highlight">la vue qui le gère (create + redirect vers la liste),</span>
+<span class="highlight">et le template HTML qui étend "base.html".</span>
+<span class="comment">Inclus {% csrf_token %} dans le formulaire.</span>
+<span class="comment">Commente chaque partie pour que je comprenne.</span>
+            </div>
+            <div class="tip">
+                <span class="tip-i">✨</span>
+                <span>Ce prompt donne à l'IA tout ce dont elle a besoin : le model existant, la fonctionnalité voulue, les fichiers à générer, et la demande d'explication.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">📝</div>Formules de prompts à réutiliser</div>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Situation</th><th>Formule de prompt</th></tr>
+                <tr><td>Débuter une fonctionnalité</td><td><code>Je veux ajouter [fonctionnalité] à mon projet Django. Mon model ressemble à [coller le model]. Génère la vue, le template et l'URL.</code></td></tr>
+                <tr><td>Corriger une erreur</td><td><code>J'ai cette erreur : [coller l'erreur]. Voici mon code : [coller le code]. Explique pourquoi et corrige-le.</code></td></tr>
+                <tr><td>Comprendre du code</td><td><code>Explique-moi ce code ligne par ligne comme si j'étais débutant en Django : [coller le code]</code></td></tr>
+                <tr><td>Améliorer du code existant</td><td><code>Voici ma vue Django : [code]. Améliore-la pour [ajouter pagination / sécuriser / optimiser la requête ORM].</code></td></tr>
+                <tr><td>Générer des données de test</td><td><code>Génère un script Python pour créer 10 articles de test dans ma BDD Django avec des données réalistes.</code></td></tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ══ 04 — ASSEMBLER DU CODE IA ══ -->
+    <div class="section-label"><span class="section-label-text">04 — Comment assembler du code généré par l'IA</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">🔧</div>La méthode en 5 étapes</div>
+        <p class="desc">Recevoir du code de l'IA ne suffit pas. Il faut l'<strong>intégrer intelligemment</strong> dans ton projet sans tout casser.</p>
+        <div class="steps">
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Lire avant de coller</strong>Parcourir le code généré. Identifier les imports, les noms de classes, les chemins. Repérer ce que tu ne comprends pas.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Vérifier les dépendances</strong>L'IA a-t-elle importé quelque chose qui n'existe pas dans ton projet ? Un model qui ne s'appelle pas pareil ? Une variable de contexte différente ?</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Adapter au contexte</strong>Renommer les variables si besoin, ajuster les chemins de templates, corriger les noms d'URL pour correspondre à ton <code>urls.py</code>.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Tester immédiatement</strong>Coller, sauvegarder, lancer le serveur, tester dans le navigateur. Ne pas attendre d'avoir tout intégré pour tester.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Corriger en boucle</strong>Si erreur → copier le message d'erreur complet → le donner à l'IA → appliquer la correction → retester. Répéter jusqu'à ce que ça marche.</div></div>
+        </div>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-purple">
+            <span>🔍</span>
+            <span class="filename">Exemple concret — intégrer une vue de création</span>
+            <span class="file-desc">Fil rouge Blog</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">L'IA génère ce code. Voici comment le lire et l'intégrer étape par étape.</p>
+
+            <h3>Ce que l'IA génère</h3>
+<span class="code-label">blog/forms.py — généré par l'IA</span>
+<pre class="code-block"><span class="kw">from</span> django <span class="kw">import</span> forms
+<span class="kw">from</span> .models <span class="kw">import</span> Article  <span class="cm"># ← vérifier : Article existe bien dans models.py ?</span>
+
+<span class="kw">class</span> <span class="fn">ArticleForm</span>(forms.ModelForm):
+    <span class="kw">class</span> Meta:
+        model = Article           <span class="cm"># ← même nom que dans models.py ?</span>
+        fields = [<span class="val">'titre'</span>, <span class="val">'contenu'</span>, <span class="val">'publie'</span>]  <span class="cm"># ← champs corrects ?</span></pre>
+
+<span class="code-label">blog/views.py — à ajouter</span>
+<pre class="code-block"><span class="kw">from</span> django.shortcuts <span class="kw">import</span> render, redirect
+<span class="kw">from</span> .forms <span class="kw">import</span> ArticleForm   <span class="cm"># ← le fichier forms.py existe ?</span>
+
+<span class="kw">def</span> <span class="fn">creer_article</span>(request):
+    <span class="kw">if</span> request.method == <span class="val">'POST'</span>:
+        form = <span class="fn">ArticleForm</span>(request.POST)
+        <span class="kw">if</span> form.<span class="fn">is_valid</span>():
+            form.<span class="fn">save</span>()
+            <span class="kw">return</span> <span class="fn">redirect</span>(<span class="val">'blog:liste'</span>)  <span class="cm"># ← 'blog:liste' existe dans urls.py ?</span>
+    <span class="kw">else</span>:
+        form = <span class="fn">ArticleForm</span>()
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/creer_article.html'</span>, {<span class="val">'form'</span>: form})</pre>
+
+            <div class="tip tip-amber">
+                <span class="tip-i">🔍</span>
+                <span><strong>Lis les commentaires en orange</strong> — ce sont les 3 questions à te poser avant de coller du code IA. Si une réponse est non, corrige avant d'intégrer.</span>
+            </div>
+
+            <h3>Le template généré</h3>
+<span class="code-label">blog/templates/blog/creer_article.html</span>
+<pre class="code-block"><span class="kw">{% extends "base.html" %}</span>  <span class="cm">&lt;!-- base.html existe à la racine ? --&gt;</span>
+
+<span class="kw">{% block contenu %}</span>
+<span class="sel">&lt;h1&gt;</span>Créer un article<span class="sel">&lt;/h1&gt;</span>
+<span class="sel">&lt;form</span> <span class="prop">method</span>=<span class="val">"post"</span><span class="sel">&gt;</span>
+    <span class="kw">{% csrf_token %}</span>   <span class="cm">&lt;!-- obligatoire pour les formulaires POST --&gt;</span>
+    {{ form.<span class="fn">as_p</span>() }}    <span class="cm">&lt;!-- affiche chaque champ dans un &lt;p&gt; --&gt;</span>
+    <span class="sel">&lt;button</span> <span class="prop">type</span>=<span class="val">"submit"</span><span class="sel">&gt;</span>Publier<span class="sel">&lt;/button&gt;</span>
+<span class="sel">&lt;/form&gt;</span>
+<span class="kw">{% endblock %}</span></pre>
+        </div>
+    </div>
+
+
+    <!-- ══ 05 — FAIRE FONCTIONNER ENSEMBLE ══ -->
+    <div class="section-label"><span class="section-label-text">05 — Faire fonctionner plusieurs morceaux ensemble</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">🧩</div>Le problème de l'assemblage</div>
+        <p class="desc">L'IA génère souvent des <strong>morceaux de code séparés</strong>. La difficulté est de les faire <strong>communiquer ensemble</strong>. En Django, un flux complet nécessite que 4 fichiers se parlent :</p>
+        <div class="cycle-wrap">
+            <div class="cycle-step purple">forms.py<br><small>Formulaire</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step blue">views.py<br><small>Logique</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step teal">urls.py<br><small>Route</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step amber">template.html<br><small>Affichage</small></div>
+        </div>
+        <p class="desc" style="margin-top:0.9rem;">Chaque fichier doit référencer les bons <strong>noms</strong> des autres. C'est là que l'assemblage peut planter.</p>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-amber">
+            <span>⚡</span>
+            <span class="filename">Checklist d'assemblage</span>
+            <span class="file-desc">Avant de tester</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Avant de lancer le serveur après avoir intégré du code IA, vérifie ces points :</p>
+            <div class="tbl-wrap">
+                <table>
+                    <tr><th>Quoi vérifier</th><th>Exemple concret</th></tr>
+                    <tr><td><strong>Noms des models</strong></td><td>L'IA a écrit <code>Article</code> — ton model s'appelle bien <code>Article</code> dans <code>models.py</code> ?</td></tr>
+                    <tr><td><strong>Noms des vues dans urls.py</strong></td><td><code>redirect('blog:liste')</code> → la vue <code>liste</code> existe bien dans <code>blog/urls.py</code> ?</td></tr>
+                    <tr><td><strong>Chemin du template</strong></td><td><code>'blog/creer_article.html'</code> → le fichier est bien dans <code>blog/templates/blog/</code> ?</td></tr>
+                    <tr><td><strong>Noms des champs du form</strong></td><td><code>fields = ['titre', 'contenu']</code> → ces champs existent dans le model ?</td></tr>
+                    <tr><td><strong>Imports manquants</strong></td><td>L'IA a utilisé <code>get_object_or_404</code> sans l'importer ?</td></tr>
+                    <tr><td><strong>{% load static %}</strong></td><td>Si le template utilise <code>{% static %}</code>, la ligne <code>{% load static %}</code> est en haut ?</td></tr>
+                    <tr><td><strong>Migrations</strong></td><td>Si l'IA a modifié <code>models.py</code>, as-tu lancé <code>makemigrations</code> et <code>migrate</code> ?</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ 06 — DÉBOGUER AVEC L'IA ══ -->
+    <div class="section-label"><span class="section-label-text">06 — Déboguer avec l'IA</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">🐛</div>L'IA comme partenaire de débogage</div>
+        <p class="desc">Quand une erreur arrive après avoir intégré du code IA, <strong>ne la googler pas directement</strong> — colle-la à l'IA avec son contexte. C'est l'un des meilleurs usages du vibecoding.</p>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-coral">
+            <span>🔴</span>
+            <span class="filename">Erreur Django</span>
+            <span class="file-desc">Comment la traiter</span>
+        </div>
+        <div class="file-body">
+            <h3>L'erreur apparaît dans le navigateur</h3>
+<span class="code-label">Erreur Django — page de debug</span>
+<pre class="code-block">NoReverseMatch at /blog/creer/
+Reverse for 'liste' not found. 'liste' is not a valid view
+function or pattern name.</pre>
+
+            <h3>Le prompt idéal pour la corriger</h3>
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt à copier-coller</div>
+<span class="highlight">J'ai cette erreur Django :</span>
+<span class="comment">NoReverseMatch at /blog/creer/</span>
+<span class="comment">Reverse for 'liste' not found.</span>
+
+<span class="highlight">Voici mon views.py :</span>
+<span class="comment">[coller le code de la vue]</span>
+
+<span class="highlight">Voici mon blog/urls.py :</span>
+<span class="comment">[coller le contenu du fichier urls.py]</span>
+
+<span class="highlight">Explique-moi pourquoi et comment corriger.</span>
+            </div>
+
+            <div class="tip">
+                <span class="tip-i">🎯</span>
+                <span><strong>Toujours coller les 3 éléments</strong> : le message d'erreur exact + le code fautif + les fichiers liés. Sans contexte, l'IA ne peut pas deviner la cause réelle.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">⚠️</div>Quand l'IA se trompe — et comment le détecter</div>
+        <p class="desc">L'IA peut générer du code qui <strong>semble correct mais qui ne l'est pas</strong>. Voici les cas les plus fréquents en Django :</p>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Erreur courante de l'IA</th><th>Comment la repérer</th></tr>
+                <tr><td>Utiliser Django 3.x alors que tu es en 4.x ou 5.x</td><td>Les imports peuvent changer. Vérifier la doc Django officielle.</td></tr>
+                <tr><td>Inventer des noms de champs ou de variables</td><td>Comparer avec ton <code>models.py</code> réel.</td></tr>
+                <tr><td>Oublier <code>{% csrf_token %}</code> dans les formulaires</td><td>Toujours vérifier dans le template avant de tester.</td></tr>
+                <tr><td>Mettre la logique dans le template au lieu de la vue</td><td>Signal d'alarme : beaucoup de code Python dans le HTML.</td></tr>
+                <tr><td>Générer du code qui expose des secrets</td><td>Ne jamais coller une <code>SECRET_KEY</code> ou un mot de passe dans un fichier versionné.</td></tr>
+            </table>
+        </div>
+        <div class="tip tip-coral">
+            <span class="tip-i">🚨</span>
+            <span><strong>L'IA hallucine parfois</strong> — elle peut inventer une fonction Django qui n'existe pas, avec une syntaxe qui a l'air correcte. Si quelque chose te semble bizarre, vérifie toujours sur <a href="https://docs.djangoproject.com" style="color:inherit;">docs.djangoproject.com</a>.</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 07 — OUTILS ══ -->
+    <div class="section-label"><span class="section-label-text">07 — Les outils de vibecoding</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-gray">🛠️</div>Quel outil choisir ?</div>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Outil</th><th>Usage idéal</th><th>Gratuit ?</th></tr>
+                <tr><td><strong>ChatGPT</strong></td><td>Générer des blocs de code, expliquer, corriger des erreurs</td><td>Oui (GPT-4o limité)</td></tr>
+                <tr><td><strong>Claude (Anthropic)</strong></td><td>Code long et structuré, explications pédagogiques, relecture</td><td>Oui (limité)</td></tr>
+                <tr><td><strong>GitHub Copilot</strong></td><td>Autocomplétion dans VS Code — génère ligne par ligne en temps réel</td><td>Non (gratuit étudiant)</td></tr>
+                <tr><td><strong>Cursor</strong></td><td>VS Code dopé à l'IA — parle à tout ton projet en contexte</td><td>Oui (limité)</td></tr>
+                <tr><td><strong>Bolt.new / v0.dev</strong></td><td>Générer des interfaces complètes en un prompt</td><td>Oui (limité)</td></tr>
+            </table>
+        </div>
+        <div class="tip tip-blue">
+            <span class="tip-i">💻</span>
+            <span><strong>Pour débuter</strong> — utilise ChatGPT ou Claude dans le navigateur + ton éditeur VS Code. Pas besoin d'outils payants pour progresser efficacement.</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 08 — RÈGLES D'OR ══ -->
+    <div class="section-label"><span class="section-label-text">08 — Les règles d'or du vibecoder</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">✓</div>Ce qu'un bon vibecoder fait toujours</div>
+        <div class="steps">
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Il lit avant de coller</strong>Jamais de code aveugle. Lire, même en diagonale, permet de repérer les incohérences avec le projet existant.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Il demande des explications</strong>Après chaque génération : « Explique-moi ce que fait cette partie ». Comprendre est plus important qu'avancer vite.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Il teste petits morceaux</strong>Il n'intègre pas 5 fichiers d'un coup avant de tester. Un fichier → test → validation → suivant.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Il versionne avec Git</strong>Avant d'intégrer du code IA, un <code>git commit</code>. Si ça plante, un <code>git stash</code> pour revenir en arrière.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Il ne cache pas les secrets</strong>Jamais de <code>SECRET_KEY</code>, mot de passe ou clé API dans le code versionné — même généré par l'IA.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Il donne le contexte complet à l'IA</strong>Plus le prompt est précis (model existant, erreur exacte, fichiers liés), meilleur est le résultat.</div></div>
+        </div>
+    </div>
+
+    <div class="cta-wrap">
+        <p>Prêt à mettre en pratique ? Les exercices t'attendent.</p>
+        <a class="cta-btn" href="exercices-vibecoding-django.html">Faire les exercices →</a>
+    </div>
+
+    <div class="footer-note">
+        Prompt → Générer → Lire → Adapter → Tester 🤖<br>
+        <span style="font-size:0.82rem;">Vibecoding — coder avec l'IA intelligemment</span>
+    </div>
+
+</body>
+</html>
