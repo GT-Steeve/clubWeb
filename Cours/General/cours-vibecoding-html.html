@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibecoding HTML/CSS/JS — Coder une interface avec l'IA</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+        .p-gray   { background: #D3D1C7; color: #444441; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child { margin-bottom: 0; }
+        .desc strong { color: #2C2C2A; }
+
+        .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 1.8; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem; }
+        .code-label { font-family: 'Fira Code', monospace; font-size: 0.72rem; color: #888780; background: #D3D1C7; display: inline-block; padding: 2px 9px; border-radius: 5px 5px 0 0; margin-top: 0.8rem; margin-bottom: -1px; }
+
+        .sel  { color: #993C1D; }
+        .prop { color: #185FA5; }
+        .val  { color: #0F6E56; }
+        .cm   { color: #888780; font-style: italic; }
+        .kw   { color: #3C3489; font-weight: 700; }
+        .fn   { color: #185FA5; }
+        .str  { color: #0F6E56; }
+
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip strong { color: inherit; }
+        .tip-coral  { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber  { background: #FAEEDA; color: #633806; }
+        .tip-blue   { background: #E6F1FB; color: #0C447C; }
+        .tip-green  { background: #EBF5D9; color: #3B6D11; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.7; }
+        .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+        .cycle-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 0.8rem; }
+        .cycle-step { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 20px; padding: 5px 14px; font-size: 0.86rem; font-weight: 700; color: #2C2C2A; }
+        .cycle-step.teal   { background: #E1F5EE; border-color: #9FE1CB; color: #085041; }
+        .cycle-step.purple { background: #EEEDFE; border-color: #CECBF6; color: #3C3489; }
+        .cycle-step.blue   { background: #E6F1FB; border-color: #B5D4F4; color: #0C447C; }
+        .cycle-step.amber  { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+        .cycle-step.coral  { background: #FAECE7; border-color: #F5C4B3; color: #712B13; }
+        .cycle-arrow { color: #B4B2A9; font-size: 1rem; }
+
+        .tbl-wrap { overflow-x: auto; margin-top: 0.8rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        th { background: #F1EFE8; padding: 8px 12px; text-align: left; font-weight: 800; border-bottom: 1px solid #D3D1C7; }
+        td { padding: 8px 12px; border-bottom: 0.5px solid #D3D1C7; color: #5F5E5A; }
+        tr:last-child td { border-bottom: none; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        .file-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1.2rem; overflow: hidden; }
+        .file-header { display: flex; align-items: center; gap: 10px; padding: 12px 18px; font-weight: 800; font-size: 0.95rem; }
+        .file-header .filename { font-family: 'Fira Code', monospace; font-size: 0.9rem; font-weight: 500; }
+        .file-header .file-desc { font-size: 0.8rem; margin-left: auto; opacity: 0.8; font-weight: 600; }
+        .fh-teal   { background: #9FE1CB; color: #085041; }
+        .fh-purple { background: #CECBF6; color: #3C3489; }
+        .fh-blue   { background: #B5D4F4; color: #0C447C; }
+        .fh-amber  { background: #FAC775; color: #633806; }
+        .fh-green  { background: #C0DD97; color: #3B6D11; }
+        .fh-coral  { background: #F5C4B3; color: #712B13; }
+        .fh-gray   { background: #D3D1C7; color: #444441; }
+        .file-body { padding: 1.2rem 1.4rem; }
+        .file-body .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .file-body h3 { font-size: 0.95rem; font-weight: 800; margin: 1.1rem 0 0.4rem; color: #2C2C2A; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .col-box { border-radius: 12px; padding: 1rem; }
+        .col-green { background: #EBF5D9; border: 0.5px solid #C0DD97; }
+        .col-coral { background: #FAECE7; border: 0.5px solid #F5C4B3; }
+        .col-title { font-size: 0.88rem; font-weight: 800; margin-bottom: 0.6rem; }
+        .col-green .col-title { color: #3B6D11; }
+        .col-coral .col-title { color: #712B13; }
+        .col-item { font-size: 0.84rem; line-height: 1.6; margin-bottom: 0.4rem; display: flex; gap: 6px; }
+        .col-green .col-item { color: #3B6D11; }
+        .col-coral .col-item { color: #712B13; }
+
+        .prompt-box { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 12px; padding: 1rem 1.2rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 1.8; color: #2C2C2A; margin-top: 0.8rem; }
+        .prompt-box .prompt-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; margin-bottom: 6px; font-family: 'Nunito', sans-serif; }
+        .prompt-box .cursor { color: #633806; }
+        .prompt-box .comment { color: #888780; font-style: italic; }
+        .prompt-box .highlight { color: #1E1D1A; font-weight: 700; }
+
+        .steps { counter-reset: step; }
+        .step { display: flex; gap: 14px; margin-bottom: 14px; }
+        .step-n { counter-increment: step; width: 28px; height: 28px; border-radius: 50%; background: #9FE1CB; color: #085041; font-weight: 800; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .step-n::before { content: counter(step); }
+        .step-body { flex: 1; padding-top: 3px; font-size: 0.92rem; color: #5F5E5A; line-height: 1.6; }
+        .step-body strong { color: #2C2C2A; display: block; margin-bottom: 1px; }
+
+        /* PREVIEW BOX — simulate a browser window */
+        .browser-wrap { border-radius: 12px; border: 0.5px solid #D3D1C7; overflow: hidden; margin-top: 0.8rem; }
+        .browser-bar { background: #F1EFE8; border-bottom: 0.5px solid #D3D1C7; padding: 8px 14px; display: flex; align-items: center; gap: 8px; }
+        .browser-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .bd-red { background: #F09595; }
+        .bd-amber { background: #FAC775; }
+        .bd-green { background: #9FE1CB; }
+        .browser-url { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #888780; margin-left: 6px; }
+        .browser-body { background: #ffffff; padding: 1rem 1.2rem; }
+
+        /* LAYER TAG */
+        .layer-row { display: flex; flex-direction: column; gap: 6px; margin-top: 0.8rem; }
+        .layer { border-radius: 8px; padding: 8px 14px; font-size: 0.88rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .l-html   { background: #FAECE7; color: #712B13; border: 0.5px solid #F5C4B3; }
+        .l-css    { background: #EEEDFE; color: #3C3489; border: 0.5px solid #CECBF6; }
+        .l-js     { background: #FAEEDA; color: #633806; border: 0.5px solid #FAC775; }
+        .layer-tag { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; border-radius: 4px; padding: 2px 7px; margin-left: auto; }
+        .l-html .layer-tag { background: #F5C4B3; color: #712B13; }
+        .l-css  .layer-tag { background: #CECBF6; color: #3C3489; }
+        .l-js   .layer-tag { background: #FAC775; color: #633806; }
+
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) { body { padding: 1rem; } .hero h1 { font-size: 1.7rem; } .two-col { grid-template-columns: 1fr; } }
+    </style>
+</head>
+
+<body>
+    <a class="nav-prev" href="../sommaire.html#step1vibe">← Retour au sommaire</a>
+
+    <div class="hero">
+        <h1>🎨 Vibecoding<br>HTML · CSS · JS</h1>
+        <p>Construire et assembler des interfaces web avec l'IA — sans écrire tout le code soi-même.</p>
+        <div class="badge-row">
+            <span class="badge b-coral">HTML</span>
+            <span class="badge b-purple">CSS</span>
+            <span class="badge b-amber">JavaScript</span>
+            <span class="badge b-teal">Projet : landing page</span>
+            <span class="badge b-coral">~45 min</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 00 — RAPPEL ══ -->
+    <div class="section-label"><span class="section-label-text">00 — Pourquoi vibecoder du frontend ?</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">→</div>Ce que l'IA change pour HTML/CSS/JS</div>
+        <p class="desc">En frontend, l'IA excelle à générer du code <strong>répétitif et visuel</strong> : des composants, des mises en page, des animations CSS, des fonctions JavaScript standards. Ce qui prenait 1 heure de copier-coller peut se faire en 5 minutes.</p>
+        <div class="layer-row">
+            <div class="layer l-html">
+                <span>🏗️</span>
+                <span><strong>HTML</strong> — La structure. L'IA génère des squelettes de pages, des formulaires, des listes, des cartes, des navbars…</span>
+                <span class="layer-tag">Structure</span>
+            </div>
+            <div class="layer l-css">
+                <span>🎨</span>
+                <span><strong>CSS</strong> — L'apparence. L'IA code des flexbox, des grilles, des animations, des thèmes de couleurs, du responsive…</span>
+                <span class="layer-tag">Style</span>
+            </div>
+            <div class="layer l-js">
+                <span>⚡</span>
+                <span><strong>JavaScript</strong> — Le comportement. L'IA écrit des gestionnaires d'événements, des fetch API, des manipulations du DOM, des validations de formulaires…</span>
+                <span class="layer-tag">Logique</span>
+            </div>
+        </div>
+        <div class="tip tip-amber">
+            <span class="tip-i">🎯</span>
+            <span><strong>La vraie compétence</strong> — ce n'est pas d'écrire du CSS parfait de tête. C'est de savoir décrire précisément ce qu'on veut visuellement, d'évaluer le résultat dans le navigateur, et de savoir quoi modifier.</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">🔄</div>Le cycle vibecoding frontend</div>
+        <div class="cycle-wrap">
+            <div class="cycle-step coral">📝 Décrire<br><small>l'interface voulue</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step purple">🤖 Générer<br><small>HTML + CSS + JS</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step blue">👁 Visualiser<br><small>dans le navigateur</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step amber">✏️ Ajuster<br><small>couleurs, tailles…</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step teal">✅ Intégrer<br><small>dans le projet</small></div>
+        </div>
+        <p class="desc" style="margin-top:0.9rem;">Ce cycle est plus rapide qu'en backend car on <strong>voit immédiatement le résultat</strong> dans le navigateur — pas besoin de serveur ou de base de données pour tester.</p>
+    </div>
+
+
+    <!-- ══ 01 — HTML AVEC L'IA ══ -->
+    <div class="section-label"><span class="section-label-text">01 — Générer de la structure HTML</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">🏗️</div>Ce que l'IA génère bien en HTML</div>
+        <p class="desc">L'IA est particulièrement efficace pour produire des <strong>structures HTML sémantiques</strong> complexes qu'on aurait du mal à écrire de tête : navbars, cards, formulaires multi-champs, tableaux, modals…</p>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Demande</th><th>Ce que l'IA produit</th></tr>
+                <tr><td>« Une navbar responsive avec logo et 4 liens »</td><td>Balises <code>&lt;nav&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;li&gt;</code> correctement imbriquées, avec <code>aria-label</code></td></tr>
+                <tr><td>« Un formulaire d'inscription avec nom, email, mot de passe »</td><td><code>&lt;form&gt;</code> avec <code>&lt;label&gt;</code>, <code>&lt;input&gt;</code>, attributs <code>type</code>, <code>required</code>, <code>id</code></td></tr>
+                <tr><td>« Une grille de 3 cartes produit avec image, titre, prix »</td><td>Structure <code>&lt;article&gt;</code> ou <code>&lt;div class="card"&gt;</code> répétée 3 fois</td></tr>
+                <tr><td>« Une section hero avec titre, sous-titre et bouton CTA »</td><td><code>&lt;section class="hero"&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;a class="btn"&gt;</code></td></tr>
+                <tr><td>« Un footer avec 3 colonnes de liens »</td><td><code>&lt;footer&gt;</code> avec grille de <code>&lt;ul&gt;</code> par colonne</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-coral">
+            <span>❌</span><span class="filename">Mauvais prompt HTML</span><span class="file-desc">Résultat imprévisible</span>
+        </div>
+        <div class="file-body">
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt utilisateur</div>
+                <span class="cursor">></span> <span class="highlight">fais moi une carte produit</span>
+            </div>
+            <p class="desc" style="margin-top:0.8rem;">L'IA invente un produit fictif avec des données aléatoires, un design qu'elle choisit, des noms de classes CSS arbitraires. Impossible à intégrer directement dans un projet existant.</p>
+        </div>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-teal">
+            <span>✅</span><span class="filename">Bon prompt HTML</span><span class="file-desc">Contexte visuel + structure précise</span>
+        </div>
+        <div class="file-body">
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt utilisateur</div>
+<span class="cursor">></span> <span class="highlight">Génère le HTML d'une carte produit avec :</span>
+<span class="comment">- une image en haut (balise img avec src et alt)</span>
+<span class="comment">- un titre h3 pour le nom du produit</span>
+<span class="comment">- un paragraphe de description courte</span>
+<span class="comment">- un prix en gras</span>
+<span class="comment">- un bouton "Ajouter au panier"</span>
+
+<span class="highlight">Utilise des classes CSS avec le préfixe "card-"</span>
+<span class="comment">pour que je puisse styliser facilement.</span>
+<span class="highlight">N'inclus pas le CSS, juste la structure HTML.</span>
+            </div>
+            <div class="tip">
+                <span class="tip-i">💡</span>
+                <span>Séparer HTML et CSS dans les prompts donne plus de contrôle. L'IA génère d'abord la structure, puis tu demandes le style séparément avec tes contraintes de design.</span>
+            </div>
+
+            <h3>Résultat typique</h3>
+<span class="code-label">HTML généré</span>
+<pre class="code-block"><span class="sel">&lt;article</span> <span class="prop">class</span>=<span class="val">"card-produit"</span><span class="sel">&gt;</span>
+  <span class="sel">&lt;img</span>
+    <span class="prop">src</span>=<span class="val">"images/produit.jpg"</span>
+    <span class="prop">alt</span>=<span class="val">"Description du produit"</span>
+    <span class="prop">class</span>=<span class="val">"card-image"</span>
+  <span class="sel">&gt;</span>
+  <span class="sel">&lt;div</span> <span class="prop">class</span>=<span class="val">"card-body"</span><span class="sel">&gt;</span>
+    <span class="sel">&lt;h3</span> <span class="prop">class</span>=<span class="val">"card-titre"</span><span class="sel">&gt;</span>Nom du produit<span class="sel">&lt;/h3&gt;</span>
+    <span class="sel">&lt;p</span>  <span class="prop">class</span>=<span class="val">"card-desc"</span><span class="sel">&gt;</span>Description courte ici.<span class="sel">&lt;/p&gt;</span>
+    <span class="sel">&lt;strong</span> <span class="prop">class</span>=<span class="val">"card-prix"</span><span class="sel">&gt;</span>29,99 €<span class="sel">&lt;/strong&gt;</span>
+    <span class="sel">&lt;button</span> <span class="prop">class</span>=<span class="val">"card-btn"</span><span class="sel">&gt;</span>Ajouter au panier<span class="sel">&lt;/button&gt;</span>
+  <span class="sel">&lt;/div&gt;</span>
+<span class="sel">&lt;/article&gt;</span></pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">⚠️</div>Ce qu'il faut toujours vérifier dans le HTML généré</div>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Point de vérification</th><th>Pourquoi c'est important</th></tr>
+                <tr><td>Balises bien fermées</td><td>Une balise non fermée casse l'affichage de toute la page</td></tr>
+                <tr><td>Attribut <code>alt</code> sur les images</td><td>Obligatoire pour l'accessibilité et le référencement (SEO)</td></tr>
+                <tr><td>Attribut <code>for</code> sur les <code>&lt;label&gt;</code></td><td>Doit correspondre à l'<code>id</code> de l'input associé</td></tr>
+                <tr><td>Noms des classes CSS</td><td>Correspondent-ils à ce que tu as déjà dans ton fichier CSS ?</td></tr>
+                <tr><td>Balises sémantiques</td><td>L'IA utilise parfois trop de <code>&lt;div&gt;</code> — préférer <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;nav&gt;</code></td></tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ══ 02 — CSS AVEC L'IA ══ -->
+    <div class="section-label"><span class="section-label-text">02 — Générer et modifier du CSS</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">🎨</div>Ce que l'IA génère bien en CSS</div>
+        <p class="desc">L'IA brille particulièrement pour le CSS car les propriétés sont nombreuses et difficiles à mémoriser. Elle génère en quelques secondes ce qui prendrait 30 minutes de tâtonnements.</p>
+        <div class="two-col">
+            <div class="col-box col-green">
+                <div class="col-title">✅ L'IA excelle en CSS</div>
+                <div class="col-item"><span>✓</span><span>Flexbox et Grid complexes</span></div>
+                <div class="col-item"><span>✓</span><span>Animations et transitions</span></div>
+                <div class="col-item"><span>✓</span><span>Media queries responsive</span></div>
+                <div class="col-item"><span>✓</span><span>Variables CSS (custom properties)</span></div>
+                <div class="col-item"><span>✓</span><span>Centrage vertical/horizontal</span></div>
+                <div class="col-item"><span>✓</span><span>Effets hover et focus</span></div>
+                <div class="col-item"><span>✓</span><span>Dégradés, ombres, bordures</span></div>
+            </div>
+            <div class="col-box col-coral">
+                <div class="col-title">⚠️ À surveiller en CSS</div>
+                <div class="col-item"><span>!</span><span>Elle peut générer beaucoup de code inutile</span></div>
+                <div class="col-item"><span>!</span><span>Les valeurs de couleurs peuvent ne pas correspondre à ta charte</span></div>
+                <div class="col-item"><span>!</span><span>Elle invente parfois des pseudo-classes qui n'existent pas</span></div>
+                <div class="col-item"><span>!</span><span>Le responsive peut ne pas correspondre à tes breakpoints</span></div>
+                <div class="col-item"><span>!</span><span>Les noms de classes peuvent déjà exister dans ton projet</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-purple">
+            <span>🎨</span><span class="filename">Prompt CSS visuel — la clé</span><span class="file-desc">Parler en termes visuels</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Pour le CSS, décris ce que tu <strong>vois</strong> plutôt que ce que tu <strong>codes</strong>. Parle comme à un designer.</p>
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt CSS efficace</div>
+<span class="cursor">></span> <span class="highlight">Style la classe .card-produit avec :</span>
+<span class="comment">- fond blanc, coins arrondis (12px), légère ombre portée</span>
+<span class="comment">- largeur max 280px, padding interne de 16px</span>
+<span class="comment">- image qui prend toute la largeur, hauteur 200px, object-fit: cover</span>
+<span class="comment">- titre en gras, 18px, couleur #1a1a1a</span>
+<span class="comment">- prix en #e74c3c (rouge), font-size 20px</span>
+<span class="comment">- bouton : fond bleu #3498db, texte blanc, pleine largeur,</span>
+<span class="comment">  padding 10px, coins arrondis 8px, hover: fond plus foncé</span>
+
+<span class="highlight">Au survol de la card (.card-produit:hover) :</span>
+<span class="comment">légère élévation avec transform translateY(-4px) et transition douce</span>
+            </div>
+
+<span class="code-label">CSS généré</span>
+<pre class="code-block"><span class="sel">.card-produit</span> {
+  <span class="prop">background</span>: <span class="val">#ffffff</span>;
+  <span class="prop">border-radius</span>: <span class="val">12px</span>;
+  <span class="prop">box-shadow</span>: <span class="val">0 2px 12px rgba(0,0,0,.08)</span>;
+  <span class="prop">max-width</span>: <span class="val">280px</span>;
+  <span class="prop">padding</span>: <span class="val">16px</span>;
+  <span class="prop">transition</span>: <span class="val">transform .2s ease, box-shadow .2s ease</span>;
+}
+<span class="sel">.card-produit:hover</span> {
+  <span class="prop">transform</span>: <span class="val">translateY(-4px)</span>;
+  <span class="prop">box-shadow</span>: <span class="val">0 8px 24px rgba(0,0,0,.14)</span>;
+}
+<span class="sel">.card-image</span> {
+  <span class="prop">width</span>: <span class="val">100%</span>;
+  <span class="prop">height</span>: <span class="val">200px</span>;
+  <span class="prop">object-fit</span>: <span class="val">cover</span>;
+  <span class="prop">border-radius</span>: <span class="val">8px</span>;
+}
+<span class="sel">.card-btn</span> {
+  <span class="prop">background</span>: <span class="val">#3498db</span>;
+  <span class="prop">color</span>: <span class="val">#fff</span>;
+  <span class="prop">width</span>: <span class="val">100%</span>;
+  <span class="prop">padding</span>: <span class="val">10px</span>;
+  <span class="prop">border</span>: <span class="val">none</span>;
+  <span class="prop">border-radius</span>: <span class="val">8px</span>;
+  <span class="prop">cursor</span>: <span class="val">pointer</span>;
+  <span class="prop">transition</span>: <span class="val">background .15s</span>;
+}
+<span class="sel">.card-btn:hover</span> { <span class="prop">background</span>: <span class="val">#2177b0</span>; }</pre>
+
+            <div class="tip">
+                <span class="tip-i">✨</span>
+                <span><strong>Astuce couleurs</strong> — Donne toujours tes vraies couleurs hex à l'IA. Elle va sinon choisir des couleurs génériques qui ne correspondront pas à ta charte graphique.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-blue">
+            <span>📱</span><span class="filename">CSS Responsive avec l'IA</span><span class="file-desc">Mobile first</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Demander du responsive à l'IA — toujours préciser tes <strong>breakpoints</strong> et la stratégie (mobile-first ou desktop-first).</p>
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt responsive</div>
+<span class="cursor">></span> <span class="highlight">Rends cette grille de cartes responsive :</span>
+<span class="comment">- Mobile (&lt; 480px) : 1 colonne</span>
+<span class="comment">- Tablette (480px - 768px) : 2 colonnes</span>
+<span class="comment">- Desktop (&gt; 768px) : 3 colonnes</span>
+<span class="highlight">Utilise CSS Grid avec auto-fill.</span>
+<span class="comment">Approche mobile-first (écrire le CSS de base</span>
+<span class="comment">pour mobile, puis les media queries pour plus grand)</span>
+            </div>
+
+<span class="code-label">CSS Grid responsive généré</span>
+<pre class="code-block"><span class="cm">/* Mobile first : 1 colonne par défaut */</span>
+<span class="sel">.grille-produits</span> {
+  <span class="prop">display</span>: <span class="val">grid</span>;
+  <span class="prop">grid-template-columns</span>: <span class="val">1fr</span>;
+  <span class="prop">gap</span>: <span class="val">1.2rem</span>;
+  <span class="prop">padding</span>: <span class="val">1rem</span>;
+}
+<span class="cm">/* Tablette : 2 colonnes */</span>
+<span class="kw">@media</span> (<span class="prop">min-width</span>: <span class="val">480px</span>) {
+  <span class="sel">.grille-produits</span> {
+    <span class="prop">grid-template-columns</span>: <span class="val">repeat(2, 1fr)</span>;
+  }
+}
+<span class="cm">/* Desktop : 3 colonnes */</span>
+<span class="kw">@media</span> (<span class="prop">min-width</span>: <span class="val">768px</span>) {
+  <span class="sel">.grille-produits</span> {
+    <span class="prop">grid-template-columns</span>: <span class="val">repeat(3, 1fr)</span>;
+  }
+}</pre>
+        </div>
+    </div>
+
+
+    <!-- ══ 03 — JS AVEC L'IA ══ -->
+    <div class="section-label"><span class="section-label-text">03 — Générer du JavaScript</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">⚡</div>Ce que l'IA génère bien en JavaScript</div>
+        <p class="desc">JavaScript est le domaine où le vibecoding apporte le plus de valeur pour les débutants. La logique peut être complexe à écrire, mais facile à décrire.</p>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Besoin</th><th>Description à l'IA</th></tr>
+                <tr><td>Menu hamburger mobile</td><td>« Au clic sur le bouton #menu-toggle, ajouter/enlever la classe .open sur la nav »</td></tr>
+                <tr><td>Validation de formulaire</td><td>« Vérifier que l'email contient @ et que le mot de passe fait plus de 8 caractères avant la soumission »</td></tr>
+                <tr><td>Compteur dynamique</td><td>« Un compteur qui s'incrémente au clic sur un bouton et affiche la valeur dans un span »</td></tr>
+                <tr><td>Carousel d'images</td><td>« Faire défiler des images avec boutons précédent/suivant, en boucle »</td></tr>
+                <tr><td>Fetch d'une API</td><td>« Récupérer les données de cette URL et afficher chaque item dans une liste »</td></tr>
+                <tr><td>Thème sombre/clair</td><td>« Toggle dark mode en ajoutant la classe .dark sur le body et sauvegarder dans localStorage »</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-amber">
+            <span>⚡</span><span class="filename">Exemple complet — menu hamburger</span><span class="file-desc">HTML + CSS + JS assemblés</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Voici comment demander <strong>les 3 couches en même temps</strong> pour une fonctionnalité complète. Le prompt d'assemblage — la vraie compétence du vibecoding frontend.</p>
+
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt d'assemblage complet</div>
+<span class="cursor">></span> <span class="highlight">Crée un menu hamburger responsive complet :</span>
+
+<span class="highlight">HTML :</span>
+<span class="comment">- un bouton #menu-toggle avec 3 barres SVG (icône hamburger)</span>
+<span class="comment">- une nav#menu avec une liste de 4 liens</span>
+
+<span class="highlight">CSS :</span>
+<span class="comment">- sur mobile (&lt; 768px), la nav est cachée par défaut</span>
+<span class="comment">- quand la nav a la classe .ouvert, elle s'affiche (slide down)</span>
+<span class="comment">- sur desktop, la nav est toujours visible en flex horizontal</span>
+
+<span class="highlight">JavaScript :</span>
+<span class="comment">- au clic sur #menu-toggle, toggle la classe .ouvert sur #menu</span>
+<span class="comment">- fermer le menu si on clique ailleurs sur la page</span>
+<span class="comment">- changer l'icône hamburger → croix quand le menu est ouvert</span>
+
+<span class="comment">Tout dans un seul fichier HTML avec le CSS dans &lt;style&gt;</span>
+<span class="comment">et le JS dans &lt;script&gt; en bas du body.</span>
+            </div>
+
+            <h3>Ce que ça génère — le JS extrait</h3>
+<span class="code-label">JavaScript généré</span>
+<pre class="code-block"><span class="kw">const</span> toggle = document.<span class="fn">getElementById</span>(<span class="str">'menu-toggle'</span>);
+<span class="kw">const</span> menu   = document.<span class="fn">getElementById</span>(<span class="str">'menu'</span>);
+
+<span class="cm">// Ouvrir/fermer au clic sur le bouton</span>
+toggle.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>(e) {
+  e.<span class="fn">stopPropagation</span>();                 <span class="cm">// évite de déclencher le listener document</span>
+  menu.classList.<span class="fn">toggle</span>(<span class="str">'ouvert'</span>);
+  toggle.<span class="fn">setAttribute</span>(
+    <span class="str">'aria-expanded'</span>,
+    menu.classList.<span class="fn">contains</span>(<span class="str">'ouvert'</span>)
+  );
+});
+
+<span class="cm">// Fermer si clic à l'extérieur</span>
+document.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+  menu.classList.<span class="fn">remove</span>(<span class="str">'ouvert'</span>);
+  toggle.<span class="fn">setAttribute</span>(<span class="str">'aria-expanded'</span>, <span class="str">'false'</span>);
+});</pre>
+
+            <div class="tip tip-purple">
+                <span class="tip-i">🧩</span>
+                <span><strong>Lire ce code ligne par ligne</strong> — <code>addEventListener</code> écoute un événement. <code>toggle</code> ajoute ou enlève une classe. <code>stopPropagation</code> empêche l'événement de remonter au <code>document</code>. Demande à l'IA d'expliquer chaque ligne si tu bloques.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">⚠️</div>Ce qu'il faut vérifier dans le JS généré</div>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Vérification</th><th>Exemple d'erreur fréquente</th></tr>
+                <tr><td>Les <code>id</code> dans le JS correspondent au HTML</td><td>L'IA écrit <code>getElementById('menu')</code> mais le HTML a <code>id="nav"</code></td></tr>
+                <tr><td>Les noms de classes CSS sont cohérents</td><td>Le JS toggle <code>.ouvert</code> mais le CSS cible <code>.open</code></td></tr>
+                <tr><td>Le script est en bas du <code>&lt;body&gt;</code></td><td>Un script dans <code>&lt;head&gt;</code> ne trouve pas les éléments DOM, qui ne sont pas encore chargés</td></tr>
+                <tr><td>Pas d'erreur dans la console (F12)</td><td><code>Cannot read properties of null</code> → l'élément ciblé n'existe pas</td></tr>
+                <tr><td>Le JS ne casse pas la page sans interaction</td><td>Erreur au chargement → page blanche ou éléments qui disparaissent</td></tr>
+            </table>
+        </div>
+        <div class="tip tip-amber">
+            <span class="tip-i">🔧</span>
+            <span><strong>La console développeur (F12)</strong> est ton meilleur outil pour déboguer le JS. Chaque erreur y est listée avec le fichier et la ligne. Colle le message d'erreur complet à l'IA pour obtenir une correction précise.</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 04 — ASSEMBLER LES 3 COUCHES ══ -->
+    <div class="section-label"><span class="section-label-text">04 — Assembler HTML, CSS et JS ensemble</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">🧩</div>Comprendre les liaisons entre les 3 couches</div>
+        <p class="desc">Le danger du vibecoding frontend est de générer les 3 couches séparément et que <strong>les noms ne correspondent pas</strong>. Voici les 3 liaisons critiques à vérifier :</p>
+
+        <div class="result-box">
+            <div class="rl">Les 3 liaisons à vérifier absolument</div>
+            <strong>1. HTML → CSS</strong> : les <code>class</code> et <code>id</code> dans le HTML doivent correspondre exactement aux sélecteurs dans le CSS<br><br>
+            <strong>2. HTML → JS</strong> : les <code>id</code> référencés dans <code>getElementById()</code> ou <code>querySelector()</code> doivent exister dans le HTML<br><br>
+            <strong>3. CSS ↔ JS</strong> : les classes que le JS ajoute ou enlève (<code>classList.add/remove/toggle</code>) doivent être définies dans le CSS
+        </div>
+
+        <div class="tip tip-coral">
+            <span class="tip-i">🚨</span>
+            <span><strong>L'erreur classique</strong> — l'IA génère le CSS avec <code>.active</code> et le JS qui toggle <code>.is-active</code>. La classe ne correspond pas, rien ne se passe à l'écran. Toujours harmoniser les noms.</span>
+        </div>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-green">
+            <span>✅</span><span class="filename">Exemple d'assemblage — compteur interactif</span><span class="file-desc">HTML + CSS + JS cohérents</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Un compteur complet en un seul fichier. Observe comment les 3 couches se parlent via les <code>id</code> et les <code>class</code>.</p>
+
+<span class="code-label">index.html — les 3 couches dans un seul fichier</span>
+<pre class="code-block"><span class="sel">&lt;!DOCTYPE html&gt;</span>
+<span class="sel">&lt;html</span> <span class="prop">lang</span>=<span class="val">"fr"</span><span class="sel">&gt;</span>
+<span class="sel">&lt;head&gt;</span>
+  <span class="sel">&lt;style&gt;</span>
+    <span class="cm">/* ══ CSS ══ */</span>
+    <span class="sel">.compteur-wrap</span> { <span class="prop">text-align</span>: <span class="val">center</span>; <span class="prop">padding</span>: <span class="val">2rem</span>; }
+
+    <span class="cm">/* La classe .negatif est togglée par le JS */</span>
+    <span class="sel">#valeur</span>          { <span class="prop">font-size</span>: <span class="val">3rem</span>; <span class="prop">font-weight</span>: <span class="val">bold</span>; <span class="prop">color</span>: <span class="val">#2c2c2a</span>; }
+    <span class="sel">#valeur.negatif</span>  { <span class="prop">color</span>: <span class="val">#e74c3c</span>; } <span class="cm">← classe JS</span>
+
+    <span class="sel">.btn-compteur</span> { <span class="prop">padding</span>: <span class="val">10px 20px</span>; <span class="prop">font-size</span>: <span class="val">1.2rem</span>; <span class="prop">cursor</span>: <span class="val">pointer</span>; }
+  <span class="sel">&lt;/style&gt;</span>
+<span class="sel">&lt;/head&gt;</span>
+
+<span class="sel">&lt;body&gt;</span>
+  <span class="cm">&lt;!-- ══ HTML ══ --&gt;</span>
+  <span class="sel">&lt;div</span> <span class="prop">class</span>=<span class="val">"compteur-wrap"</span><span class="sel">&gt;</span>
+    <span class="cm">&lt;!-- id="valeur" ciblé par le JS --&gt;</span>
+    <span class="sel">&lt;p</span> <span class="prop">id</span>=<span class="val">"valeur"</span><span class="sel">&gt;</span>0<span class="sel">&lt;/p&gt;</span>
+    <span class="cm">&lt;!-- id="btn-moins" et "btn-plus" ciblés par le JS --&gt;</span>
+    <span class="sel">&lt;button</span> <span class="prop">id</span>=<span class="val">"btn-moins"</span> <span class="prop">class</span>=<span class="val">"btn-compteur"</span><span class="sel">&gt;</span>−<span class="sel">&lt;/button&gt;</span>
+    <span class="sel">&lt;button</span> <span class="prop">id</span>=<span class="val">"btn-plus"</span>  <span class="prop">class</span>=<span class="val">"btn-compteur"</span><span class="sel">&gt;</span>+<span class="sel">&lt;/button&gt;</span>
+  <span class="sel">&lt;/div&gt;</span>
+
+  <span class="cm">&lt;!-- ══ JS en bas du body ══ --&gt;</span>
+  <span class="sel">&lt;script&gt;</span>
+    <span class="kw">let</span> compte = <span class="val">0</span>;
+    <span class="kw">const</span> affichage = document.<span class="fn">getElementById</span>(<span class="str">'valeur'</span>);   <span class="cm">← lie au HTML</span>
+
+    document.<span class="fn">getElementById</span>(<span class="str">'btn-plus'</span>).<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+      compte++;
+      affichage.<span class="fn">textContent</span> = compte;
+      affichage.classList.<span class="fn">toggle</span>(<span class="str">'negatif'</span>, compte &lt; <span class="val">0</span>);  <span class="cm">← lie au CSS</span>
+    });
+    document.<span class="fn">getElementById</span>(<span class="str">'btn-moins'</span>).<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+      compte--;
+      affichage.<span class="fn">textContent</span> = compte;
+      affichage.classList.<span class="fn">toggle</span>(<span class="str">'negatif'</span>, compte &lt; <span class="val">0</span>);
+    });
+  <span class="sel">&lt;/script&gt;</span>
+<span class="sel">&lt;/body&gt;</span>
+<span class="sel">&lt;/html&gt;</span></pre>
+
+            <div class="result-box">
+                <div class="rl">Les 3 liaisons dans cet exemple</div>
+                HTML → CSS : <code>class="btn-compteur"</code> → <code>.btn-compteur { padding: ... }</code><br>
+                HTML → JS  : <code>id="valeur"</code> → <code>getElementById('valeur')</code><br>
+                CSS ↔ JS   : <code>.negatif { color: red }</code> → <code>classList.toggle('negatif', ...)</code>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ 05 — MODIFIER UN CODE EXISTANT ══ -->
+    <div class="section-label"><span class="section-label-text">05 — Modifier et améliorer du code existant</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">✏️</div>Le prompt de modification — plus puissant que le prompt de création</div>
+        <p class="desc">Une fois qu'une fonctionnalité existe, demander des <strong>modifications ciblées</strong> à l'IA est encore plus rapide que de repartir de zéro. La règle : <strong>coller le code existant + décrire précisément le changement voulu</strong>.</p>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-teal">
+            <span>✏️</span><span class="filename">Formules de modification CSS/JS</span><span class="file-desc">Adapter à ton besoin</span>
+        </div>
+        <div class="file-body">
+            <div class="tbl-wrap">
+                <table>
+                    <tr><th>Situation</th><th>Formule de prompt</th></tr>
+                    <tr><td>Changer une couleur</td><td><code>Dans ce CSS, remplace toutes les occurrences de #3498db par #6c63ff (violet)</code></td></tr>
+                    <tr><td>Ajouter une animation</td><td><code>Ajoute une animation d'apparition fade-in (opacity 0→1) de 0.4s quand la page se charge</code></td></tr>
+                    <tr><td>Rendre responsive</td><td><code>Ce composant n'est pas responsive. Adapte-le pour mobile (&lt;480px) avec 1 seule colonne</code></td></tr>
+                    <tr><td>Ajouter une fonctionnalité JS</td><td><code>À ce compteur existant, ajoute un bouton Reset qui remet la valeur à 0</code></td></tr>
+                    <tr><td>Optimiser le code</td><td><code>Simplifie ce JS — il y a probablement des répétitions à factoriser en fonction</code></td></tr>
+                    <tr><td>Corriger un bug visuel</td><td><code>Sur mobile, le texte déborde de la carte. Voici le CSS. Comment corriger ?</code></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ 06 — DÉBOGUER ══ -->
+    <div class="section-label"><span class="section-label-text">06 — Déboguer du frontend avec l'IA</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">🐛</div>Les bugs les plus fréquents et comment les signaler à l'IA</div>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Symptôme</th><th>Ce qu'il faut dire à l'IA</th></tr>
+                <tr><td>L'élément ne s'affiche pas</td><td>« Mon div.carte ne s'affiche pas. Voici le HTML et le CSS. » + coller les deux</td></tr>
+                <tr><td>Le CSS ne s'applique pas</td><td>« La classe .btn-rouge ne change pas la couleur. Voici le CSS et le HTML » — souvent un problème de spécificité ou un nom de classe différent</td></tr>
+                <tr><td>La mise en page est cassée sur mobile</td><td>« Sur mobile 375px, les cartes se chevauchent. Voici le CSS Grid. » + screenshot décrit en mots</td></tr>
+                <tr><td>Erreur JS dans la console</td><td>Copier le message exact : <code>TypeError: Cannot read properties of null</code> + le JS + le HTML</td></tr>
+                <tr><td>Le JS ne réagit pas au clic</td><td>« Le bouton #btn-toggle ne fait rien au clic. Voici le HTML et le JS. »</td></tr>
+                <tr><td>L'animation ne fonctionne pas</td><td>« La transition CSS ne s'applique pas au hover. Voici le CSS et la classe togglée. »</td></tr>
+            </table>
+        </div>
+
+        <div class="tip tip-blue">
+            <span class="tip-i">🔍</span>
+            <span><strong>Screenshot + description</strong> — Pour les bugs visuels CSS, décris ce que tu vois en mots : « la navbar est collée au bord gauche au lieu d'être centrée » est bien plus utile que « ça marche pas ».</span>
+        </div>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-amber">
+            <span>🛠️</span><span class="filename">La méthode de débogage frontend</span><span class="file-desc">En 4 étapes</span>
+        </div>
+        <div class="file-body">
+            <div class="steps">
+                <div class="step"><div class="step-n"></div><div class="step-body"><strong>Ouvrir F12 — Inspecter l'élément</strong>Clic droit → Inspecter. L'onglet <strong>Elements</strong> montre le HTML réel rendu. L'onglet <strong>Styles</strong> montre le CSS appliqué (et les règles barrées = surchargées). L'onglet <strong>Console</strong> montre les erreurs JS.</div></div>
+                <div class="step"><div class="step-n"></div><div class="step-body"><strong>Identifier le problème précisément</strong>Est-ce un problème HTML (l'élément n'existe pas), CSS (le style n'est pas appliqué) ou JS (erreur dans la console) ? Les 3 outils de l'onglet F12 répondent à ces 3 questions.</div></div>
+                <div class="step"><div class="step-n"></div><div class="step-body"><strong>Copier le bon contexte pour l'IA</strong>Erreur JS → copier le message de la console + le JS. Problème CSS → copier la règle CSS + le HTML de l'élément. Mise en page cassée → décrire ce qu'on voit + coller le CSS Grid/Flexbox.</div></div>
+                <div class="step"><div class="step-n"></div><div class="step-body"><strong>Tester la correction immédiatement</strong>Dans F12, tu peux modifier le CSS directement dans l'onglet Styles pour tester sans recharger — utile pour valider une correction avant de l'écrire dans le fichier.</div></div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ 07 — RÈGLES D'OR ══ -->
+    <div class="section-label"><span class="section-label-text">07 — Règles d'or du vibecoding frontend</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">✓</div>Ce qu'un bon vibecoder frontend fait toujours</div>
+        <div class="steps">
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Il teste dans le navigateur immédiatement</strong>Copier → sauvegarder → rafraîchir (Ctrl+R). Ne jamais accumuler beaucoup de code sans tester.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Il harmonise les noms HTML/CSS/JS</strong>Avant de tester, vérifier que les <code>id</code> et <code>class</code> sont cohérents entre les 3 fichiers.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Il met le JS en bas du <code>&lt;body&gt;</code></strong>Jamais dans le <code>&lt;head&gt;</code> sans <code>defer</code> — sinon le JS ne trouve pas les éléments HTML qui n'ont pas encore été lus.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Il ouvre F12 à chaque erreur</strong>La console est l'équivalent du terminal pour le frontend. Lire les erreurs avant de les coller à l'IA.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Il demande des explications pour le JS</strong>Le CSS est lisible, le JS peut contenir de la logique subtile. Toujours demander « explique-moi ce que fait cette fonction ».</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Il sépare les fichiers proprement</strong>HTML dans <code>index.html</code>, CSS dans <code>style.css</code>, JS dans <code>main.js</code> — même si l'IA propose parfois tout dans un seul fichier.</div></div>
+        </div>
+    </div>
+
+    <div class="cta-wrap">
+        <p>Prêt à pratiquer ? Les exercices t'attendent.</p>
+        <a class="cta-btn" href="exercices-vibecoding-html.html">Faire les exercices →</a>
+    </div>
+
+    <div class="footer-note">
+        HTML structure → CSS style → JS comportement 🎨<br>
+        <span style="font-size:0.82rem;">Vibecoding frontend — assembler avec l'IA</span>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibecoding Canvas — Créer un jeu navigateur avec l'IA</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+        .b-lime   { background: #EBF5D9; color: #3B6D11; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+        .p-gray   { background: #D3D1C7; color: #444441; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child { margin-bottom: 0; }
+        .desc strong { color: #2C2C2A; }
+
+        .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 1.8; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem; }
+        .code-label { font-family: 'Fira Code', monospace; font-size: 0.72rem; color: #888780; background: #D3D1C7; display: inline-block; padding: 2px 9px; border-radius: 5px 5px 0 0; margin-top: 0.8rem; margin-bottom: -1px; }
+
+        /* Syntaxe couleurs sur fond clair */
+        .sel  { color: #993C1D; }
+        .prop { color: #185FA5; }
+        .val  { color: #0F6E56; }
+        .cm   { color: #888780; font-style: italic; }
+        .kw   { color: #3C3489; font-weight: 700; }
+        .fn   { color: #185FA5; }
+        .str  { color: #0F6E56; }
+        .num  { color: #993C1D; }
+
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip strong { color: inherit; }
+        .tip-coral  { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber  { background: #FAEEDA; color: #633806; }
+        .tip-blue   { background: #E6F1FB; color: #0C447C; }
+        .tip-green  { background: #EBF5D9; color: #3B6D11; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.7; }
+        .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+        .cycle-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 0.8rem; }
+        .cycle-step { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 20px; padding: 5px 14px; font-size: 0.86rem; font-weight: 700; color: #2C2C2A; text-align: center; }
+        .cycle-step.teal   { background: #E1F5EE; border-color: #9FE1CB; color: #085041; }
+        .cycle-step.purple { background: #EEEDFE; border-color: #CECBF6; color: #3C3489; }
+        .cycle-step.blue   { background: #E6F1FB; border-color: #B5D4F4; color: #0C447C; }
+        .cycle-step.amber  { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+        .cycle-step.coral  { background: #FAECE7; border-color: #F5C4B3; color: #712B13; }
+        .cycle-step.green  { background: #EBF5D9; border-color: #C0DD97; color: #3B6D11; }
+        .cycle-arrow { color: #B4B2A9; font-size: 1rem; }
+
+        .tbl-wrap { overflow-x: auto; margin-top: 0.8rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        th { background: #F1EFE8; padding: 8px 12px; text-align: left; font-weight: 800; border-bottom: 1px solid #D3D1C7; }
+        td { padding: 8px 12px; border-bottom: 0.5px solid #D3D1C7; color: #5F5E5A; vertical-align: top; }
+        tr:last-child td { border-bottom: none; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        .file-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1.2rem; overflow: hidden; }
+        .file-header { display: flex; align-items: center; gap: 10px; padding: 12px 18px; font-weight: 800; font-size: 0.95rem; }
+        .file-header .filename { font-family: 'Fira Code', monospace; font-size: 0.9rem; font-weight: 500; }
+        .file-header .file-desc { font-size: 0.8rem; margin-left: auto; opacity: 0.8; font-weight: 600; }
+        .fh-teal   { background: #9FE1CB; color: #085041; }
+        .fh-purple { background: #CECBF6; color: #3C3489; }
+        .fh-blue   { background: #B5D4F4; color: #0C447C; }
+        .fh-amber  { background: #FAC775; color: #633806; }
+        .fh-green  { background: #C0DD97; color: #3B6D11; }
+        .fh-coral  { background: #F5C4B3; color: #712B13; }
+        .fh-dark   { background: #2C2C2A; color: #FAC775; }
+        .file-body { padding: 1.2rem 1.4rem; }
+        .file-body .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .file-body h3 { font-size: 0.95rem; font-weight: 800; margin: 1.1rem 0 0.4rem; color: #2C2C2A; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        /* COUCHES JEU */
+        .layer-row { display: flex; flex-direction: column; gap: 6px; margin-top: 0.8rem; }
+        .layer { border-radius: 8px; padding: 9px 14px; font-size: 0.88rem; font-weight: 700; display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+        .l-html   { background: #FAECE7; color: #712B13; border: 0.5px solid #F5C4B3; }
+        .l-css    { background: #EEEDFE; color: #3C3489; border: 0.5px solid #CECBF6; }
+        .l-js     { background: #FAEEDA; color: #633806; border: 0.5px solid #FAC775; }
+        .l-canvas { background: #1E1D1A; color: #FAC775; border: 0.5px solid #444441; }
+        .layer-tag { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; border-radius: 4px; padding: 2px 7px; margin-left: auto; flex-shrink: 0; }
+        .l-html .layer-tag   { background: #F5C4B3; color: #712B13; }
+        .l-css  .layer-tag   { background: #CECBF6; color: #3C3489; }
+        .l-js   .layer-tag   { background: #FAC775; color: #633806; }
+        .l-canvas .layer-tag { background: #444441; color: #FAC775; }
+
+        /* PROMPT BOX */
+        .prompt-box { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 12px; padding: 1rem 1.2rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 1.8; color: #2C2C2A; margin-top: 0.8rem; }
+        .prompt-box .prompt-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; margin-bottom: 6px; font-family: 'Nunito', sans-serif; display: block; }
+        .prompt-box .cursor  { color: #633806; }
+        .prompt-box .comment { color: #888780; font-style: italic; }
+        .prompt-box .highlight { color: #1E1D1A; font-weight: 700; }
+
+        /* ARCHITECTURE VISUELLE */
+        .arch-box { border-radius: 12px; border: 0.5px solid #D3D1C7; overflow: hidden; margin-top: 0.8rem; }
+        .arch-header { background: #1E1D1A; color: #FAC775; font-family: 'Fira Code', monospace; font-size: 0.8rem; font-weight: 700; padding: 8px 14px; }
+        .arch-row { display: flex; align-items: stretch; border-top: 0.5px solid #D3D1C7; }
+        .arch-fn { font-family: 'Fira Code', monospace; font-size: 0.82rem; font-weight: 700; padding: 8px 12px; min-width: 160px; border-right: 0.5px solid #D3D1C7; display: flex; align-items: center; }
+        .arch-desc { font-size: 0.84rem; color: #5F5E5A; padding: 8px 12px; display: flex; align-items: center; line-height: 1.4; flex: 1; }
+        .arch-row:nth-child(odd) { background: #F9F8F5; }
+        .arch-row:nth-child(even) { background: #ffffff; }
+        .fn-teal   { color: #085041; }
+        .fn-amber  { color: #633806; }
+        .fn-coral  { color: #712B13; }
+        .fn-purple { color: #3C3489; }
+        .fn-blue   { color: #0C447C; }
+        .fn-green  { color: #3B6D11; }
+
+        /* STEPS */
+        .steps { counter-reset: step; }
+        .step { display: flex; gap: 14px; margin-bottom: 14px; }
+        .step-n { counter-increment: step; width: 28px; height: 28px; border-radius: 50%; background: #9FE1CB; color: #085041; font-weight: 800; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .step-n::before { content: counter(step); }
+        .step-body { flex: 1; padding-top: 3px; font-size: 0.92rem; color: #5F5E5A; line-height: 1.6; }
+        .step-body strong { color: #2C2C2A; display: block; margin-bottom: 1px; }
+
+        /* CANVAS PREVIEW */
+        .canvas-preview { background: #1E1D1A; border-radius: 10px; padding: 0; overflow: hidden; margin-top: 0.8rem; position: relative; }
+        .canvas-preview canvas { display: block; width: 100%; }
+        .canvas-label { position: absolute; top: 8px; right: 10px; font-size: 0.68rem; font-weight: 700; color: #888780; text-transform: uppercase; letter-spacing: 0.08em; }
+
+        /* SCHEMA BOUCLE */
+        .loop-schema { background: #F1EFE8; border: 0.5px solid #D3D1C7; border-radius: 12px; padding: 1rem; margin-top: 0.8rem; text-align: center; }
+        .loop-main { display: flex; justify-content: center; align-items: center; gap: 0; flex-wrap: nowrap; overflow-x: auto; }
+        .loop-step { background: #ffffff; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 6px 12px; font-size: 0.82rem; font-weight: 800; white-space: nowrap; }
+        .loop-step.s1 { color: #3C3489; border-color: #CECBF6; background: #EEEDFE; }
+        .loop-step.s2 { color: #633806; border-color: #FAC775; background: #FAEEDA; }
+        .loop-step.s3 { color: #085041; border-color: #9FE1CB; background: #E1F5EE; }
+        .loop-step.s4 { color: #712B13; border-color: #F5C4B3; background: #FAECE7; }
+        .loop-arrow { color: #B4B2A9; font-size: 1.1rem; padding: 0 4px; font-weight: 700; }
+        .loop-label { font-size: 0.74rem; font-weight: 700; color: #888780; margin-top: 8px; }
+
+        /* TWO COL */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .col-box { border-radius: 12px; padding: 1rem; }
+        .col-green { background: #EBF5D9; border: 0.5px solid #C0DD97; }
+        .col-coral { background: #FAECE7; border: 0.5px solid #F5C4B3; }
+        .col-title { font-size: 0.88rem; font-weight: 800; margin-bottom: 0.6rem; }
+        .col-green .col-title { color: #3B6D11; }
+        .col-coral .col-title { color: #712B13; }
+        .col-item { font-size: 0.84rem; line-height: 1.6; margin-bottom: 0.4rem; display: flex; gap: 6px; }
+        .col-green .col-item { color: #3B6D11; }
+        .col-coral .col-item { color: #712B13; }
+
+        .cta-wrap { text-align: center; background: #1E1D1A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) { body { padding: 1rem; } .hero h1 { font-size: 1.7rem; } .two-col { grid-template-columns: 1fr; } .loop-main { flex-wrap: wrap; } }
+    </style>
+</head>
+<body>
+    <a class="nav-prev" href="../sommaire.html#step1vibe">← Retour au sommaire</a>
+
+    <div class="hero">
+        <h1>🕹️ Vibecoding<br>Jeu Canvas</h1>
+        <p>Créer un jeu navigateur complet avec l'IA — Canvas, boucle de jeu, collisions, score.</p>
+        <div class="badge-row">
+            <span class="badge b-amber">Canvas 2D</span>
+            <span class="badge b-purple">requestAnimationFrame</span>
+            <span class="badge b-teal">JavaScript natif</span>
+            <span class="badge b-coral">Projet : Shooter</span>
+            <span class="badge b-blue">~60 min</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 00 — POURQUOI LE CANVAS ══ -->
+    <div class="section-label"><span class="section-label-text">00 — Canvas : la scène de ton jeu</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">🎮</div>Ce que le Canvas change par rapport au DOM</div>
+        <p class="desc">Un site web affiche des <strong>balises HTML</strong> que le navigateur positionne. Un jeu, lui, dessine des <strong>pixels directement</strong> sur une toile vierge — le <code>&lt;canvas&gt;</code>. L'IA est particulièrement forte pour ce type de code car les formules (physique, collision, animation) sont bien documentées et répétitives.</p>
+
+        <div class="layer-row">
+            <div class="layer l-html">
+                <span>🏗️</span>
+                <span><strong>HTML</strong> — Une seule balise <code>&lt;canvas&gt;</code> + les éléments de l'interface (score, boutons, écrans).</span>
+                <span class="layer-tag">Contenant</span>
+            </div>
+            <div class="layer l-css">
+                <span>🎨</span>
+                <span><strong>CSS</strong> — Style de la page autour du canvas (fond, centrage, police du score). Pas de CSS dans le jeu lui-même.</span>
+                <span class="layer-tag">Décor</span>
+            </div>
+            <div class="layer l-js">
+                <span>⚡</span>
+                <span><strong>JavaScript</strong> — Toute la logique : déplacement, collisions, score, états. Rien dans le HTML ou CSS.</span>
+                <span class="layer-tag">Moteur</span>
+            </div>
+            <div class="layer l-canvas">
+                <span>🖼️</span>
+                <span><strong>Canvas 2D API</strong> — Les méthodes de dessin : <code>fillRect</code>, <code>arc</code>, <code>drawImage</code>, <code>fillText</code>… C'est le pinceau.</span>
+                <span class="layer-tag">Rendu</span>
+            </div>
+        </div>
+
+        <div class="tip tip-amber">
+            <span class="tip-i">💡</span>
+            <span><strong>La règle d'or du Canvas</strong> — à chaque image (frame), on <strong>efface tout</strong> puis on <strong>redessine tout</strong>. Le jeu n'a pas de mémoire visuelle — c'est le JS qui gère l'état.</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">🔁</div>La boucle de jeu — le cœur de tout</div>
+        <p class="desc">La boucle de jeu tourne en permanence, aussi vite que le navigateur peut — en général <strong>60 fois par seconde</strong>. C'est le rythme cardiaque du jeu. Chaque battement = 1 frame.</p>
+
+        <div class="loop-schema">
+            <div class="loop-main">
+                <div class="loop-step s1">update()<br><small>Déplacer</small></div>
+                <div class="loop-arrow">→</div>
+                <div class="loop-step s2">checkCollisions()<br><small>Tester</small></div>
+                <div class="loop-arrow">→</div>
+                <div class="loop-step s3">draw()<br><small>Dessiner</small></div>
+                <div class="loop-arrow">→</div>
+                <div class="loop-step s4">requestAnimationFrame<br><small>Attendre frame</small></div>
+                <div class="loop-arrow">↺</div>
+            </div>
+            <div class="loop-label">60 fois par seconde — tant que le jeu tourne</div>
+        </div>
+
+        <div class="tip tip-purple">
+            <span class="tip-i">🧠</span>
+            <span><strong><code>requestAnimationFrame(loop)</code></strong> est la clé. Il demande au navigateur d'appeler la fonction <code>loop</code> lors de la prochaine frame disponible, synchronisé avec le taux de rafraîchissement de l'écran. Jamais de <code>setInterval</code> pour un jeu.</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 01 — INITIALISER LE CANVAS ══ -->
+    <div class="section-label"><span class="section-label-text">01 — Initialiser le Canvas</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-dark">
+            <span>🖼️</span><span class="filename">index.html</span><span class="file-desc">Mettre en place la scène</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Le HTML d'un jeu Canvas est minimaliste : une balise <code>&lt;canvas&gt;</code>, un lien CSS, un lien JS. Tout le reste se passe en JavaScript.</p>
+<span class="code-label">index.html</span>
+<pre class="code-block"><span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="sel">&lt;html</span> <span class="prop">lang</span>=<span class="str">"fr"</span><span class="sel">&gt;</span>
+<span class="sel">&lt;head&gt;</span>
+  <span class="sel">&lt;meta</span> <span class="prop">charset</span>=<span class="str">"UTF-8"</span><span class="sel">&gt;</span>
+  <span class="sel">&lt;link</span> <span class="prop">rel</span>=<span class="str">"stylesheet"</span> <span class="prop">href</span>=<span class="str">"style.css"</span><span class="sel">&gt;</span>
+  <span class="sel">&lt;title&gt;</span>Mon Jeu<span class="sel">&lt;/title&gt;</span>
+<span class="sel">&lt;/head&gt;</span>
+<span class="sel">&lt;body&gt;</span>
+  <span class="cm">&lt;!-- L'écran du jeu — width/height en px OBLIGATOIRE ici --&gt;</span>
+  <span class="sel">&lt;canvas</span> <span class="prop">id</span>=<span class="str">"gameCanvas"</span> <span class="prop">width</span>=<span class="str">"800"</span> <span class="prop">height</span>=<span class="str">"500"</span><span class="sel">&gt;&lt;/canvas&gt;</span>
+
+  <span class="cm">&lt;!-- Score et interface --&gt;</span>
+  <span class="sel">&lt;div</span> <span class="prop">id</span>=<span class="str">"ui"</span><span class="sel">&gt;</span>
+    Score : <span class="sel">&lt;span</span> <span class="prop">id</span>=<span class="str">"score"</span><span class="sel">&gt;</span>0<span class="sel">&lt;/span&gt;</span>
+  <span class="sel">&lt;/div&gt;</span>
+
+  <span class="cm">&lt;!-- JS en bas du body --&gt;</span>
+  <span class="sel">&lt;script</span> <span class="prop">src</span>=<span class="str">"game.js"</span><span class="sel">&gt;&lt;/script&gt;</span>
+<span class="sel">&lt;/body&gt;</span>
+<span class="sel">&lt;/html&gt;</span></pre>
+
+<span class="code-label">game.js — Initialisation du Canvas</span>
+<pre class="code-block"><span class="cm">// Récupérer le canvas et son contexte de dessin 2D</span>
+<span class="kw">const</span> canvas = document.<span class="fn">getElementById</span>(<span class="str">'gameCanvas'</span>);
+<span class="kw">const</span> ctx    = canvas.<span class="fn">getContext</span>(<span class="str">'2d'</span>);  <span class="cm">// ctx = le pinceau</span>
+
+<span class="cm">// Dimensions accessibles partout dans le code</span>
+<span class="kw">const</span> W = canvas.width;   <span class="cm">// 800</span>
+<span class="kw">const</span> H = canvas.height;  <span class="cm">// 500</span></pre>
+
+            <div class="tip tip-coral">
+                <span class="tip-i">🚨</span>
+                <span><strong>width/height dans le HTML, pas dans le CSS</strong> — Si tu mets <code>width: 800px</code> dans le CSS sans le mettre dans la balise HTML, le canvas sera étiré mais sa résolution interne restera 300×150 (valeur par défaut). Les coordonnées seront toutes fausses.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">🖌️</div>Les méthodes Canvas essentielles à connaître</div>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Méthode</th><th>Rôle</th><th>Exemple</th></tr>
+                <tr><td><code>fillStyle</code></td><td>Couleur de remplissage</td><td><code>ctx.fillStyle = '#ff0000'</code></td></tr>
+                <tr><td><code>fillRect(x,y,w,h)</code></td><td>Rectangle plein</td><td><code>ctx.fillRect(10, 20, 50, 30)</code></td></tr>
+                <tr><td><code>clearRect(x,y,w,h)</code></td><td>Effacer une zone</td><td><code>ctx.clearRect(0, 0, W, H)</code></td></tr>
+                <tr><td><code>arc(x,y,r,0,Math.PI*2)</code></td><td>Cercle/disque</td><td><code>ctx.arc(100, 100, 20, 0, Math.PI*2)</code></td></tr>
+                <tr><td><code>beginPath()</code></td><td>Démarrer un tracé</td><td>Toujours avant <code>arc()</code></td></tr>
+                <tr><td><code>fill()</code></td><td>Remplir le tracé</td><td>Après <code>arc()</code> + <code>beginPath()</code></td></tr>
+                <tr><td><code>fillText(txt,x,y)</code></td><td>Écrire du texte</td><td><code>ctx.fillText('Game Over', 400, 250)</code></td></tr>
+                <tr><td><code>font</code></td><td>Police du texte</td><td><code>ctx.font = 'bold 24px Arial'</code></td></tr>
+                <tr><td><code>drawImage(img,x,y,w,h)</code></td><td>Afficher une image/sprite</td><td><code>ctx.drawImage(spriteJoueur, x, y, 40, 40)</code></td></tr>
+                <tr><td><code>save() / restore()</code></td><td>Sauvegarder/restaurer l'état</td><td>Pour les transformations locales</td></tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ══ 02 — ARCHITECTURE DU JEU ══ -->
+    <div class="section-label"><span class="section-label-text">02 — Architecture d'un jeu en fonctions</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">🏗️</div>Découper le jeu en fonctions — la clé de l'assemblage IA</div>
+        <p class="desc">Un jeu bien structuré est une suite de <strong>fonctions indépendantes</strong> qui jouent chacune un rôle précis. C'est cette architecture qui permet de demander à l'IA <strong>une fonction à la fois</strong>, puis de les assembler.</p>
+
+        <div class="arch-box">
+            <div class="arch-header">📋 game.js — Architecture complète d'un shooter</div>
+            <div class="arch-row"><div class="arch-fn fn-teal">init()</div><div class="arch-desc">Initialise l'état du jeu : position du joueur, tableau des ennemis vide, score à 0</div></div>
+            <div class="arch-row"><div class="arch-fn fn-amber">gameLoop()</div><div class="arch-desc">La boucle principale — appelle update(), checkCollisions(), draw() puis se rappelle elle-même via requestAnimationFrame</div></div>
+            <div class="arch-row"><div class="arch-fn fn-purple">update()</div><div class="arch-desc">Déplace tous les objets : joueur selon les touches, balles vers le haut, ennemis vers le bas</div></div>
+            <div class="arch-row"><div class="arch-fn fn-coral">checkCollisions()</div><div class="arch-desc">Teste si deux objets se chevauchent — supprime balle + ennemi en cas de contact, décrémente vie si ennemi touche le joueur</div></div>
+            <div class="arch-row"><div class="arch-fn fn-green">draw()</div><div class="arch-desc">Efface le canvas, puis redessine le fond, les ennemis, les balles, le joueur, le score</div></div>
+            <div class="arch-row"><div class="arch-fn fn-blue">spawnEnemy()</div><div class="arch-desc">Crée un ennemi à une position X aléatoire en haut du canvas et l'ajoute au tableau ennemis[]</div></div>
+            <div class="arch-row"><div class="arch-fn fn-teal">shoot()</div><div class="arch-desc">Crée une balle à la position du joueur et l'ajoute au tableau balles[]</div></div>
+            <div class="arch-row"><div class="arch-fn fn-coral">showGameOver()</div><div class="arch-desc">Arrête la boucle, affiche l'écran Game Over avec le score final et un bouton Rejouer</div></div>
+        </div>
+
+        <div class="tip">
+            <span class="tip-i">🧩</span>
+            <span><strong>Demande une fonction à la fois à l'IA.</strong> « Génère la fonction <code>checkCollisions()</code> qui teste si un rectangle et un cercle se chevauchent » donne un résultat bien plus précis que « génère tout le jeu ».</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 03 — L'ÉTAT DU JEU ══ -->
+    <div class="section-label"><span class="section-label-text">03 — L'état du jeu — les variables partagées</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-purple">
+            <span>📦</span><span class="filename">Variables globales</span><span class="file-desc">La mémoire du jeu</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Les objets et tableaux qui décrivent l'état du jeu sont <strong>déclarés en haut du fichier</strong>, accessibles par toutes les fonctions. C'est ce que l'IA doit connaître avant de générer chaque fonction.</p>
+<span class="code-label">game.js — Variables d'état</span>
+<pre class="code-block"><span class="cm">// ── JOUEUR ─────────────────────────────────────</span>
+<span class="kw">const</span> joueur = {
+  x: <span class="num">380</span>,        <span class="cm">// position horizontale</span>
+  y: <span class="num">450</span>,        <span class="cm">// position verticale (en bas)</span>
+  w: <span class="num">40</span>,         <span class="cm">// largeur</span>
+  h: <span class="num">30</span>,         <span class="cm">// hauteur</span>
+  vitesse: <span class="num">5</span>,   <span class="cm">// pixels par frame</span>
+  vies: <span class="num">3</span>
+};
+
+<span class="cm">// ── TABLEAUX (listes d'objets dynamiques) ──────</span>
+<span class="kw">let</span> balles  = [];  <span class="cm">// { x, y, vitesse }</span>
+<span class="kw">let</span> ennemis = [];  <span class="cm">// { x, y, w, h, vitesse }</span>
+
+<span class="cm">// ── SCORE ET ÉTAT ──────────────────────────────</span>
+<span class="kw">let</span> score     = <span class="num">0</span>;
+<span class="kw">let</span> enCours   = <span class="kw">false</span>;  <span class="cm">// true = jeu actif</span>
+<span class="kw">let</span> animId    = <span class="kw">null</span>;   <span class="cm">// id retourné par requestAnimationFrame</span>
+
+<span class="cm">// ── TOUCHES PRESSÉES ────────────────────────────</span>
+<span class="kw">const</span> touches = {};
+document.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, e => touches[e.key] = <span class="kw">true</span>);
+document.<span class="fn">addEventListener</span>(<span class="str">'keyup'</span>,   e => touches[e.key] = <span class="kw">false</span>);</pre>
+
+            <div class="result-box">
+                <div class="rl">Pourquoi l'objet touches{} ?</div>
+                <code>keydown</code> déclenche un événement quand une touche est appuyée. Mais si le joueur maintient la flèche gauche, le déplacement doit être continu à chaque frame. L'objet <code>touches</code> agit comme un registre permanent : vrai si la touche est enfoncée, faux dès qu'elle est relâchée. La fonction <code>update()</code> le consulte à chaque frame.
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ 04 — LES FONCTIONS CLÉS ══ -->
+    <div class="section-label"><span class="section-label-text">04 — Les fonctions clés — générées par l'IA</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-amber">
+            <span>🔄</span><span class="filename">update()</span><span class="file-desc">Déplacer les objets</span>
+        </div>
+        <div class="file-body">
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt pour générer update()</div>
+<span class="cursor">></span> <span class="highlight">Génère la fonction update() d'un jeu Canvas shooter.</span>
+<span class="comment">Variables disponibles : joueur {x,y,w,h,vitesse},</span>
+<span class="comment">balles[], ennemis[], touches{}, W=800, H=500.</span>
+<span class="highlight">La fonction doit :</span>
+<span class="comment">1. Déplacer le joueur gauche/droite avec ArrowLeft/ArrowRight</span>
+<span class="comment">   en le bloquant dans les bords du canvas</span>
+<span class="comment">2. Déplacer chaque balle vers le haut (y diminue)</span>
+<span class="comment">3. Supprimer les balles sorties du canvas (y &lt; 0)</span>
+<span class="comment">4. Déplacer chaque ennemi vers le bas (y augmente)</span>
+<span class="comment">5. Supprimer les ennemis sortis en bas</span>
+            </div>
+
+<span class="code-label">update() — généré par l'IA</span>
+<pre class="code-block"><span class="kw">function</span> <span class="fn">update</span>() {
+
+  <span class="cm">// 1. Déplacement joueur</span>
+  <span class="kw">if</span> (touches[<span class="str">'ArrowLeft'</span>])  joueur.x -= joueur.vitesse;
+  <span class="kw">if</span> (touches[<span class="str">'ArrowRight'</span>]) joueur.x += joueur.vitesse;
+  <span class="cm">// Bloquer dans les bords</span>
+  joueur.x = <span class="fn">Math.max</span>(<span class="num">0</span>, <span class="fn">Math.min</span>(W - joueur.w, joueur.x));
+
+  <span class="cm">// 2 & 3. Balles : déplacer vers le haut + filtrer hors canvas</span>
+  balles = balles
+    .<span class="fn">map</span>(b => ({ ...b, y: b.y - b.vitesse }))
+    .<span class="fn">filter</span>(b => b.y > <span class="num">0</span>);
+
+  <span class="cm">// 4 & 5. Ennemis : déplacer vers le bas + filtrer hors canvas</span>
+  ennemis = ennemis
+    .<span class="fn">map</span>(e => ({ ...e, y: e.y + e.vitesse }))
+    .<span class="fn">filter</span>(e => e.y < H + <span class="num">50</span>);
+}</pre>
+
+            <div class="tip tip-purple">
+                <span class="tip-i">🧠</span>
+                <span><strong><code>.map().filter()</code></strong> — <code>map</code> crée un nouveau tableau avec les objets déplacés. <code>filter</code> garde uniquement ceux qui vérifient la condition. Enchaîner les deux en une ligne évite les boucles <code>for</code> complexes avec des suppressions d'index.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-coral">
+            <span>💥</span><span class="filename">checkCollisions()</span><span class="file-desc">Détecter les impacts</span>
+        </div>
+        <div class="file-body">
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt pour checkCollisions()</div>
+<span class="cursor">></span> <span class="highlight">Génère la fonction checkCollisions() pour un shooter Canvas.</span>
+<span class="comment">Chaque balle : { x, y, r:5 } (cercle, rayon 5)</span>
+<span class="comment">Chaque ennemi : { x, y, w:40, h:30 } (rectangle)</span>
+<span class="comment">Joueur : { x, y, w:40, h:30 } (rectangle)</span>
+<span class="highlight">Tester :</span>
+<span class="comment">- balle touche ennemi → supprimer les deux, score += 10</span>
+<span class="comment">- ennemi touche joueur → supprimer ennemi, joueur.vies--</span>
+<span class="comment">  si vies == 0 → appeler showGameOver()</span>
+<span class="highlight">Utilise une détection AABB (rectangle vs rectangle) pour</span>
+<span class="comment">simplifier — la balle peut être traitée comme un carré 10x10.</span>
+            </div>
+
+<span class="code-label">checkCollisions() — généré par l'IA</span>
+<pre class="code-block"><span class="cm">// Test de chevauchement rectangle vs rectangle (AABB)</span>
+<span class="kw">function</span> <span class="fn">rectsSeChevanchent</span>(a, b) {
+  <span class="kw">return</span> a.x < b.x + b.w &&
+         a.x + a.w > b.x &&
+         a.y < b.y + b.h &&
+         a.y + a.h > b.y;
+}
+
+<span class="kw">function</span> <span class="fn">checkCollisions</span>() {
+
+  <span class="cm">// Balle vs Ennemi</span>
+  balles = balles.<span class="fn">filter</span>(balle => {
+    <span class="kw">let</span> toucheEnnemi = <span class="kw">false</span>;
+
+    ennemis = ennemis.<span class="fn">filter</span>(ennemi => {
+      <span class="kw">const</span> ballRect = { x: balle.x - <span class="num">5</span>, y: balle.y - <span class="num">5</span>, w: <span class="num">10</span>, h: <span class="num">10</span> };
+      <span class="kw">if</span> (<span class="fn">rectsSeChevanchent</span>(ballRect, ennemi)) {
+        score += <span class="num">10</span>;
+        toucheEnnemi = <span class="kw">true</span>;
+        <span class="kw">return false</span>; <span class="cm">// supprime l'ennemi</span>
+      }
+      <span class="kw">return true</span>;
+    });
+
+    <span class="kw">return</span> !toucheEnnemi; <span class="cm">// supprime la balle si elle a touché</span>
+  });
+
+  <span class="cm">// Ennemi vs Joueur</span>
+  ennemis = ennemis.<span class="fn">filter</span>(ennemi => {
+    <span class="kw">if</span> (<span class="fn">rectsSeChevanchent</span>(joueur, ennemi)) {
+      joueur.vies--;
+      <span class="kw">if</span> (joueur.vies <= <span class="num">0</span>) <span class="fn">showGameOver</span>();
+      <span class="kw">return false</span>; <span class="cm">// supprime l'ennemi qui touche</span>
+    }
+    <span class="kw">return true</span>;
+  });
+}</pre>
+        </div>
+    </div>
+
+    <div class="file-card">
+        <div class="file-header fh-green">
+            <span>🖼️</span><span class="filename">draw()</span><span class="file-desc">Dessiner chaque frame</span>
+        </div>
+        <div class="file-body">
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt pour draw()</div>
+<span class="cursor">></span> <span class="highlight">Génère la fonction draw() pour notre shooter Canvas.</span>
+<span class="comment">Ordre de dessin (du fond vers l'avant) :</span>
+<span class="comment">1. Effacer tout le canvas</span>
+<span class="comment">2. Fond noir / fond étoilé (simple)</span>
+<span class="comment">3. Ennemis : rectangles rouges avec un texte 👾 centré</span>
+<span class="comment">4. Balles : petits cercles jaunes</span>
+<span class="comment">5. Joueur : triangle vert pointé vers le haut</span>
+<span class="comment">6. HUD : score en haut à gauche, vies en haut à droite</span>
+            </div>
+
+<span class="code-label">draw() — généré par l'IA</span>
+<pre class="code-block"><span class="kw">function</span> <span class="fn">draw</span>() {
+  <span class="cm">// 1. Effacer</span>
+  ctx.<span class="fn">clearRect</span>(<span class="num">0</span>, <span class="num">0</span>, W, H);
+
+  <span class="cm">// 2. Fond</span>
+  ctx.fillStyle = <span class="str">'#0a0a1a'</span>;
+  ctx.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, W, H);
+
+  <span class="cm">// 3. Ennemis</span>
+  ennemis.<span class="fn">forEach</span>(e => {
+    ctx.fillStyle = <span class="str">'#e74c3c'</span>;
+    ctx.<span class="fn">fillRect</span>(e.x, e.y, e.w, e.h);
+    ctx.fillStyle = <span class="str">'#fff'</span>;
+    ctx.font = <span class="str">'20px serif'</span>;
+    ctx.textAlign = <span class="str">'center'</span>;
+    ctx.<span class="fn">fillText</span>(<span class="str">'👾'</span>, e.x + e.w/<span class="num">2</span>, e.y + e.h/<span class="num">2</span> + <span class="num">7</span>);
+  });
+
+  <span class="cm">// 4. Balles</span>
+  balles.<span class="fn">forEach</span>(b => {
+    ctx.<span class="fn">beginPath</span>();
+    ctx.<span class="fn">arc</span>(b.x, b.y, <span class="num">5</span>, <span class="num">0</span>, Math.PI * <span class="num">2</span>);
+    ctx.fillStyle = <span class="str">'#f1c40f'</span>;
+    ctx.<span class="fn">fill</span>();
+  });
+
+  <span class="cm">// 5. Joueur (triangle)</span>
+  ctx.<span class="fn">beginPath</span>();
+  ctx.<span class="fn">moveTo</span>(joueur.x + joueur.w/<span class="num">2</span>, joueur.y);          <span class="cm">// pointe</span>
+  ctx.<span class="fn">lineTo</span>(joueur.x,           joueur.y + joueur.h);  <span class="cm">// bas gauche</span>
+  ctx.<span class="fn">lineTo</span>(joueur.x + joueur.w, joueur.y + joueur.h); <span class="cm">// bas droite</span>
+  ctx.<span class="fn">closePath</span>();
+  ctx.fillStyle = <span class="str">'#2ecc71'</span>;
+  ctx.<span class="fn">fill</span>();
+
+  <span class="cm">// 6. HUD</span>
+  ctx.fillStyle = <span class="str">'#fff'</span>;
+  ctx.font = <span class="str">'bold 18px Arial'</span>;
+  ctx.textAlign = <span class="str">'left'</span>;
+  ctx.<span class="fn">fillText</span>(<span class="str">`Score : ${score}`</span>, <span class="num">16</span>, <span class="num">30</span>);
+  ctx.textAlign = <span class="str">'right'</span>;
+  ctx.<span class="fn">fillText</span>(<span class="str">`Vies : ${'❤️'.repeat(joueur.vies)}`</span>, W - <span class="num">16</span>, <span class="num">30</span>);
+}</pre>
+
+            <div class="tip">
+                <span class="tip-i">🎨</span>
+                <span><strong>L'ordre de dessin = les couches visuelles</strong> — Ce qui est dessiné en premier est "derrière". Fond → ennemis → balles → joueur → HUD. Si tu dessines le fond en dernier, il efface tout.</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ 05 — ASSEMBLER LA BOUCLE ══ -->
+    <div class="section-label"><span class="section-label-text">05 — Assembler la boucle de jeu</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-dark">
+            <span>🔗</span><span class="filename">gameLoop() + init() + spawn</span><span class="file-desc">Tout assembler</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Une fois toutes les fonctions générées séparément, on les assemble dans la boucle principale. C'est <strong>la fonction qui relie tout</strong>.</p>
+
+<span class="code-label">game.js — Boucle + Init + Spawn</span>
+<pre class="code-block"><span class="cm">// ── BOUCLE PRINCIPALE ──────────────────────────</span>
+<span class="kw">function</span> <span class="fn">gameLoop</span>() {
+  <span class="kw">if</span> (!enCours) <span class="kw">return</span>;  <span class="cm">// stopper si jeu terminé</span>
+
+  <span class="fn">update</span>();             <span class="cm">// 1. Déplacer</span>
+  <span class="fn">checkCollisions</span>();    <span class="cm">// 2. Tester les impacts</span>
+  <span class="fn">draw</span>();               <span class="cm">// 3. Dessiner</span>
+
+  animId = <span class="fn">requestAnimationFrame</span>(gameLoop);  <span class="cm">// 4. Rappeler</span>
+}
+
+<span class="cm">// ── INITIALISATION ─────────────────────────────</span>
+<span class="kw">function</span> <span class="fn">init</span>() {
+  joueur.x = W / <span class="num">2</span> - joueur.w / <span class="num">2</span>;
+  joueur.vies = <span class="num">3</span>;
+  balles  = [];
+  ennemis = [];
+  score   = <span class="num">0</span>;
+  enCours = <span class="kw">true</span>;
+
+  <span class="cm">// Spawn d'ennemis toutes les 1.5 secondes</span>
+  <span class="fn">clearInterval</span>(spawnTimer);
+  spawnTimer = <span class="fn">setInterval</span>(spawnEnemy, <span class="num">1500</span>);
+
+  <span class="fn">gameLoop</span>();  <span class="cm">// démarrer la boucle</span>
+}
+
+<span class="cm">// ── SPAWN D'ENNEMIS ────────────────────────────</span>
+<span class="kw">let</span> spawnTimer;
+<span class="kw">function</span> <span class="fn">spawnEnemy</span>() {
+  <span class="kw">if</span> (!enCours) <span class="kw">return</span>;
+  ennemis.<span class="fn">push</span>({
+    x: <span class="fn">Math.random</span>() * (W - <span class="num">40</span>),  <span class="cm">// position X aléatoire</span>
+    y: -<span class="num">40</span>,                          <span class="cm">// hors écran en haut</span>
+    w: <span class="num">40</span>, h: <span class="num">30</span>,
+    vitesse: <span class="num">2</span> + <span class="fn">Math.random</span>() * <span class="num">2</span>  <span class="cm">// vitesse aléatoire</span>
+  });
+}
+
+<span class="cm">// ── TIRER ──────────────────────────────────────</span>
+document.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, e => {
+  <span class="kw">if</span> (e.key === <span class="str">' '</span> && enCours) {  <span class="cm">// Espace = tirer</span>
+    balles.<span class="fn">push</span>({
+      x: joueur.x + joueur.w / <span class="num">2</span>,
+      y: joueur.y,
+      vitesse: <span class="num">8</span>
+    });
+  }
+});
+
+<span class="cm">// ── GAME OVER ──────────────────────────────────</span>
+<span class="kw">function</span> <span class="fn">showGameOver</span>() {
+  enCours = <span class="kw">false</span>;
+  <span class="fn">cancelAnimationFrame</span>(animId);
+  <span class="fn">clearInterval</span>(spawnTimer);
+
+  ctx.<span class="fn">fillStyle</span> = <span class="str">'rgba(0,0,0,0.75)'</span>;
+  ctx.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, W, H);
+  ctx.fillStyle = <span class="str">'#fff'</span>;
+  ctx.font = <span class="str">'bold 48px Arial'</span>;
+  ctx.textAlign = <span class="str">'center'</span>;
+  ctx.<span class="fn">fillText</span>(<span class="str">'GAME OVER'</span>, W/<span class="num">2</span>, H/<span class="num">2</span> - <span class="num">20</span>);
+  ctx.font = <span class="str">'24px Arial'</span>;
+  ctx.<span class="fn">fillText</span>(<span class="str">`Score final : ${score}`</span>, W/<span class="num">2</span>, H/<span class="num">2</span> + <span class="num">30</span>);
+}
+
+<span class="cm">// ── LANCER LE JEU ──────────────────────────────</span>
+<span class="fn">init</span>();</pre>
+        </div>
+    </div>
+
+
+    <!-- ══ 06 — COMMENT ASSEMBLER AVEC L'IA ══ -->
+    <div class="section-label"><span class="section-label-text">06 — Méthode d'assemblage avec l'IA</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">🔗</div>Comment imbriquer des fonctions qui se parlent</div>
+        <p class="desc">Le danger du vibecoding jeu est que l'IA génère des fonctions avec des <strong>noms de variables différents</strong> à chaque fois. Voici la méthode pour que tout se tienne.</p>
+
+        <div class="steps">
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Déclarer d'abord toutes les variables globales</strong>Avant de demander la moindre fonction, définir et coller à l'IA : noms et structure de <code>joueur</code>, <code>balles[]</code>, <code>ennemis[]</code>, <code>touches{}</code>, <code>W</code>, <code>H</code>. Ce sont les <strong>contrats</strong> que toutes les fonctions respecteront.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Toujours inclure le contexte dans chaque prompt</strong>Chaque prompt doit commencer par : « Voici mes variables disponibles : [coller les variables]. Génère la fonction X qui… ». L'IA ne peut pas deviner les noms que tu as choisis.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Tester chaque fonction isolément</strong>Après avoir intégré <code>draw()</code>, appeler <code>draw()</code> une fois directement dans la console F12 pour vérifier le rendu avant de connecter la boucle. Si ça plante, c'est dans <code>draw()</code>, pas ailleurs.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Vérifier les références croisées</strong>Si <code>checkCollisions()</code> appelle <code>showGameOver()</code>, cette fonction doit exister avant dans le fichier — ou au minimum être déclarée avec <code>function</code> (hoisting). Les fonctions fléchées <code>const fn = () =&gt; {}</code> ne bénéficient pas du hoisting.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Lire la console après chaque ajout</strong>F12 → Console. Une erreur dans <code>update()</code> empêche <code>draw()</code> de s'exécuter — la page est noire. Identifier la ligne, coller le message à l'IA avec le contexte.</div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">⚠️</div>Les erreurs d'assemblage les plus fréquentes</div>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Symptôme</th><th>Cause</th><th>Solution</th></tr>
+                <tr><td>Écran noir — rien ne s'affiche</td><td>Erreur JS dans la boucle — elle s'est arrêtée</td><td>F12 console → identifier et corriger l'erreur</td></tr>
+                <tr><td>Objet tombe à travers un autre</td><td>Collision non détectée — coordonnées dans le mauvais repère</td><td>Vérifier que <code>x</code>, <code>y</code>, <code>w</code>, <code>h</code> des deux objets ont le même format</td></tr>
+                <tr><td>Le jeu ralentit progressivement</td><td>Les tableaux grandissent sans fin — filtre manquant</td><td>Vérifier que <code>balles</code> et <code>ennemis</code> sont bien filtrés dans <code>update()</code></td></tr>
+                <tr><td>Le joueur sort du canvas</td><td><code>Math.max/min</code> de bornage manquant dans <code>update()</code></td><td>Ajouter <code>joueur.x = Math.max(0, Math.min(W - joueur.w, joueur.x))</code></td></tr>
+                <tr><td>requestAnimationFrame en double</td><td><code>init()</code> appelé deux fois — deux boucles tournent</td><td>Appeler <code>cancelAnimationFrame(animId)</code> avant de relancer <code>init()</code></td></tr>
+                <tr><td>Canvas flou sur écran Retina</td><td>Densité de pixels non gérée</td><td>Multiplier width/height par <code>devicePixelRatio</code> et scaler le contexte</td></tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ══ 07 — PROMPTS TYPES ══ -->
+    <div class="section-label"><span class="section-label-text">07 — Prompts types pour le vibecoding jeu</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">💬</div>Formules à réutiliser</div>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Fonctionnalité</th><th>Formule de prompt</th></tr>
+                <tr><td>Ajouter un fond animé</td><td><code>Génère une fonction drawBackground() qui dessine un fond étoilé animé (étoiles qui défilent vers le bas) sur un canvas 800×500. Variables disponibles : ctx, W, H.</code></td></tr>
+                <tr><td>Ajouter du son</td><td><code>Génère une fonction playSound(freq, duree) qui joue une note via l'API Web Audio. Utiliser AudioContext. Appelle-la quand une balle touche un ennemi.</code></td></tr>
+                <tr><td>Niveaux progressifs</td><td><code>Adapte la fonction spawnEnemy() pour qu'elle utilise une variable 'niveau' : vitesse des ennemis = 2 + niveau * 0.5. Le niveau augmente toutes les 50 points de score.</code></td></tr>
+                <tr><td>Écran de menu</td><td><code>Génère drawMenu() qui affiche sur le canvas un titre 'SHOOTER', un sous-titre 'Appuyez sur Entrée', centré sur W=800 H=500. Détecte la touche Entrée pour appeler init().</code></td></tr>
+                <tr><td>Sprite image joueur</td><td><code>Remplace le triangle du joueur dans draw() par drawImage() avec une image préchargée. Montre comment précharger l'image avant d'appeler init().</code></td></tr>
+                <tr><td>High score localStorage</td><td><code>Ajoute dans showGameOver() la logique pour sauvegarder le meilleur score dans localStorage. L'afficher dans drawMenu() et dans le HUD.</code></td></tr>
+                <tr><td>Explosions</td><td><code>Génère un tableau particules[] et une fonction createExplosion(x, y, couleur) qui ajoute des particules aléatoires. Elles se déplacent et s'estompent dans update() et sont dessinées dans draw().</code></td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">✓</div>Règles d'or du vibecoding jeu Canvas</div>
+        <div class="steps">
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Une fonction à la fois</strong>Ne jamais demander « génère tout le jeu ». Chaque fonction a un rôle unique — les demander séparément donne un code lisible et assemblable.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Toujours donner les variables à l'IA</strong>Coller les déclarations globales dans chaque prompt. L'IA ne connaît pas ton code précédent — elle recommence à chaque fois.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Tester dans le navigateur après chaque fonction</strong>Ajouter <code>update()</code> → F5 → tester. Ajouter <code>checkCollisions()</code> → F5 → tester. Ne jamais tout ajouter d'un coup.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>F12 est ton meilleur ami</strong>La console dit exactement quelle ligne a planté. Avant de coller une erreur à l'IA, la lire — 70% du temps la solution est évidente.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Commenter les liaisons entre fonctions</strong>Au-dessus de chaque appel dans <code>gameLoop()</code>, un commentaire court : ce que la fonction fait, ce qu'elle lit, ce qu'elle modifie. Ça te sauvera lors du débogage.</div></div>
+        </div>
+    </div>
+
+    <div class="cta-wrap">
+        <p>Prêt à tester tes connaissances ? Les exercices t'attendent.</p>
+        <a class="cta-btn" href="exercices-vibecoding-canvas.html">Faire les exercices →</a>
+    </div>
+
+    <div class="footer-note">
+        update() → checkCollisions() → draw() → requestAnimationFrame 🕹️<br>
+        <span style="font-size:0.82rem;">Vibecoding Canvas — Jeu navigateur avec l'IA</span>
+    </div>
+</body>
+</html>

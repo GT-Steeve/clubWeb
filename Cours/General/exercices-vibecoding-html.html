@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Vibecoding HTML/CSS/JS</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%A8%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral { background: #F5C4B3; color: #712B13; }
+        .p-amber { background: #FAC775; color: #633806; }
+        .p-blue { background: #B5D4F4; color: #0C447C; }
+        .p-green { background: #C0DD97; color: #3B6D11; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.4s; width: 0%; }
+        .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .chip-ok { background: #E1F5EE; color: #085041; }
+        .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .action-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 10px; padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .action-btn:hover { background: #D3D1C7; }
+        .action-btn.primary { background: #2C2C2A; color: #FAC775; border-color: #2C2C2A; }
+        .action-btn.primary:hover { background: #444441; }
+        .action-btn.reveal { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+        .action-btn.reveal:hover { background: #CECBF6; }
+
+        .score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-top: 1rem; display: none; text-align: center; }
+        .score-panel.show { display: block; }
+        .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .score-big span { color: #5DCAA5; }
+        .score-sub { font-size: 0.9rem; color: #888780; }
+
+        /* FLASHCARDS */
+        .fc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 0.8rem; }
+        .fc { height: 130px; perspective: 700px; cursor: pointer; }
+        .fc-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.45s cubic-bezier(.4,0,.2,1); border-radius: 12px; }
+        .fc.flipped .fc-inner { transform: rotateY(180deg); }
+        .fc-front, .fc-back { position: absolute; inset: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 12px; text-align: center; backface-visibility: hidden; border: 0.5px solid #D3D1C7; }
+        .fc-front { background: #F1EFE8; font-size: 0.85rem; font-weight: 700; color: #2C2C2A; }
+        .fc-back { background: #ffffff; font-size: 0.83rem; transform: rotateY(180deg); color: #085041; font-weight: 700; line-height: 1.5; }
+        .fc-hint { font-size: 0.68rem; color: #B4B2A9; position: absolute; bottom: 7px; right: 9px; }
+        .fc-front.coral  { background: #FAECE7; color: #712B13; }
+        .fc-front.purple { background: #EEEDFE; color: #3C3489; }
+        .fc-front.amber  { background: #FAEEDA; color: #633806; }
+        .fc-front.blue   { background: #E6F1FB; color: #0C447C; }
+        .fc-front.teal   { background: #E1F5EE; color: #085041; }
+
+        /* QCM */
+        .qcm-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 7px; }
+        .opt { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; transition: background 0.12s; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none; }
+        .opt:hover { background: #D3D1C7; }
+        .opt.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .opt.correct  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .opt.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .opt-dot { width: 18px; height: 18px; min-width: 18px; border-radius: 50%; border: 2px solid #B4B2A9; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+        .opt.selected .opt-dot { border-color: #7F77DD; background: #7F77DD; }
+        .opt.correct  .opt-dot { border-color: #1D9E75; background: #1D9E75; }
+        .opt.wrong    .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+        .opt-dot-inner { width: 6px; height: 6px; background: white; border-radius: 50%; display: none; }
+        .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+        .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .q-feedback.show { display: block; }
+        .q-feedback.ok { color: #0F6E56; }
+        .q-feedback.ko { color: #A32D2D; }
+
+        /* VF */
+        .vf-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .vf-statement { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .vf-btns { display: flex; gap: 10px; }
+        .vf-btn { flex: 1; padding: 8px 0; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .vf-btn.vrai:hover { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .vf-btn.faux:hover { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-btn.vrai.selected { background: #E1F5EE; border-color: #5DCAA5; color: #085041; border-width: 2px; }
+        .vf-btn.faux.selected { background: #FCEBEB; border-color: #F09595; color: #791F1F; border-width: 2px; }
+        .vf-btn.correct-ans { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+
+        /* SCÉNARIOS */
+        .scenario-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .scenario-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 8px; }
+        .scenario-situation { font-size: 0.95rem; font-weight: 700; color: #2C2C2A; line-height: 1.5; margin-bottom: 1rem; }
+        .scenario-choice { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; margin-bottom: 7px; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; transition: background 0.12s; user-select: none; }
+        .scenario-choice:hover { background: #D3D1C7; }
+        .scenario-choice.correct { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; font-weight: 700; }
+        .scenario-choice.wrong   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .scenario-choice.disabled { pointer-events: none; }
+        .scenario-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .scenario-feedback.show { display: block; }
+        .scenario-feedback.ok { color: #0F6E56; }
+        .scenario-feedback.ko { color: #A32D2D; }
+
+        /* MATCHING */
+        .match-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .match-col-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .match-col { display: flex; flex-direction: column; gap: 7px; }
+        .match-item { padding: 9px 13px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.12s; line-height: 1.4; }
+        .match-item:hover:not(.matched) { background: #D3D1C7; }
+        .match-item.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .match-item.matched  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; pointer-events: none; font-weight: 700; }
+        .match-item.wrong-flash { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .match-item.match-code { font-family: 'Fira Code', monospace; font-size: 0.8rem; }
+        .match-result { font-size: 0.88rem; font-weight: 700; color: #085041; margin-top: 0.8rem; display: none; }
+        .match-result.show { display: block; }
+
+        /* ORDONNER */
+        .order-list { display: flex; flex-direction: column; gap: 7px; margin-top: 0.8rem; user-select: none; }
+        .order-item { display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #ffffff; font-size: 0.9rem; font-weight: 600; cursor: grab; transition: box-shadow 0.15s, background 0.12s; }
+        .order-item:active { cursor: grabbing; box-shadow: 0 4px 14px rgba(0,0,0,.1); }
+        .order-item.dragging  { opacity: 0.35; }
+        .order-item.drag-over { border-color: #5DCAA5; background: #E1F5EE; }
+        .order-item.tap-sel   { background: #EEEDFE; border-color: #AFA9EC; }
+        .order-item.correct   { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .order-item.wrong     { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .order-handle { color: #B4B2A9; font-size: 1rem; }
+        .order-num { font-size: 0.72rem; font-weight: 800; color: #888780; background: #F1EFE8; border-radius: 6px; padding: 2px 7px; min-width: 22px; text-align: center; }
+        .order-feedback { font-size: 0.88rem; font-weight: 700; margin-top: 0.8rem; display: none; line-height: 1.5; }
+        .order-feedback.show { display: block; }
+        .order-feedback.ok { color: #0F6E56; }
+        .order-feedback.ko { color: #A32D2D; }
+
+        /* COMPLÉTER */
+        .complete-wrap { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 2; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem; }
+        .blank { display: inline-block; min-width: 70px; border: none; border-bottom: 2px solid #AFA9EC; background: transparent; font-family: 'Fira Code', monospace; font-size: 0.84rem; color: #3C3489; font-weight: 700; padding: 0 4px; outline: none; vertical-align: baseline; transition: border-color 0.15s; }
+        .blank:focus { border-bottom-color: #7F77DD; }
+        .blank.ok { border-bottom-color: #1D9E75; color: #085041; }
+        .blank.ko { border-bottom-color: #E24B4A; color: #791F1F; }
+        .blank.revealed { border-bottom-color: #FAC775; color: #633806; background: rgba(250,199,117,0.15); }
+        .complete-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .complete-feedback.show { display: block; }
+        .complete-feedback.ok { color: #0F6E56; }
+        .complete-feedback.ko { color: #A32D2D; }
+        .kw { color: #3C3489; font-weight: 700; }
+        .cm { color: #888780; font-style: italic; }
+        .sel { color: #993C1D; }
+        .prop { color: #185FA5; }
+        .val { color: #0F6E56; }
+        .fn { color: #185FA5; }
+        .str { color: #0F6E56; }
+
+        .answers-reveal { background: #FAEEDA; border: 0.5px solid #FAC775; border-radius: 10px; padding: 0.9rem 1.1rem; margin-top: 0.8rem; display: none; font-size: 0.88rem; line-height: 1.8; color: #633806; }
+        .answers-reveal.show { display: block; }
+        .answers-reveal strong { display: block; margin-bottom: 6px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .answer-line { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
+        .answer-key { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: #888780; min-width: 140px; }
+        .answer-val { font-family: 'Fira Code', monospace; font-size: 0.84rem; font-weight: 700; color: #633806; }
+
+        /* GLOBAL */
+        .global-score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-top: 2rem; display: none; text-align: center; }
+        .global-score-panel.show { display: block; }
+        .gs-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .gs-big span { color: #5DCAA5; }
+        .gs-sub { font-size: 0.9rem; color: #888780; margin-bottom: 1rem; }
+        .gs-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) { body { padding: 1rem; } .hero h1 { font-size: 1.7rem; } .match-wrap { grid-template-columns: 1fr; } .fc-grid { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+<body>
+    <a class="nav-prev" href="cours-vibecoding-html.html">← Retour au cours</a>
+
+    <div class="hero">
+        <h1>🎨 Exercices<br>Vibecoding HTML/CSS/JS</h1>
+        <p>Flashcards, QCM, vrai/faux, scénarios, matching, ordonnancement et code à compléter.</p>
+        <div class="badge-row">
+            <span class="badge b-teal">🃏 Flashcards</span>
+            <span class="badge b-coral">✅ QCM</span>
+            <span class="badge b-purple">⚖️ Vrai/Faux</span>
+            <span class="badge b-amber">🎬 Scénarios</span>
+            <span class="badge b-blue">🔗 Associer</span>
+            <span class="badge b-green">↕️ Ordonner</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 01 — FLASHCARDS ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">01 — Flashcards — cliquer pour retourner</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">🃏</div>Concepts clés du vibecoding HTML/CSS/JS</div>
+        <div class="fc-grid">
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front coral">Les 3 couches du frontend<span class="fc-hint">↻</span></div>
+                    <div class="fc-back"><strong>HTML</strong> = structure &amp; contenu<br><strong>CSS</strong> = apparence &amp; style<br><strong>JS</strong> = comportement &amp; logique</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front purple">Liaison HTML → CSS<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Les <code>class</code> et <code>id</code> dans le HTML doivent correspondre exactement aux sélecteurs dans le CSS.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front amber">Liaison JS → HTML<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Les <code>id</code> utilisés dans <code>getElementById()</code> doivent exister dans le HTML.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front blue">Liaison CSS ↔ JS<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Les classes que JS ajoute via <code>classList.toggle()</code> doivent être définies dans le CSS pour avoir un effet visuel.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front coral">Où placer le script JS ?<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">En bas du <code>&lt;body&gt;</code>, juste avant <code>&lt;/body&gt;</code> — pour que le HTML soit chargé avant que le JS essaie de l'atteindre.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front purple">Qu'est-ce que <code>object-fit: cover</code> ?<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Remplit le conteneur avec l'image sans déformer — recadre automatiquement si nécessaire. Indispensable pour les galeries.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front teal">Outil de débogage frontend<span class="fc-hint">↻</span></div>
+                    <div class="fc-back"><strong>F12</strong> — ouvre les DevTools. Onglet Elements pour le HTML/CSS, Console pour les erreurs JS, Network pour les requêtes.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front amber">Approche mobile-first<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">On écrit le CSS de base pour mobile, puis on ajoute des <code>@media (min-width: ...)</code> pour les écrans plus grands.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front">Que fait <code>classList.toggle('active')</code> ?<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Ajoute la classe <code>active</code> si elle n'est pas là, la supprime si elle est déjà là — idéal pour les menus et les accordéons.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front blue">Prompt CSS visuel — la règle<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Décrire ce qu'on <strong>voit</strong> plutôt que le code : « fond blanc, coins arrondis, ombre légère » plutôt que « background white ».</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ 02 — QCM ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">02 — QCM — Questions à choix multiples</span>
+    </div>
+    <div id="qcm-container"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkQCM()">Corriger le QCM</button>
+        <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="score-row" id="score-qcm"></div>
+    <div class="score-panel" id="qcm-score-panel">
+        <div class="score-big"><span id="qcm-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au QCM</div>
+    </div>
+
+
+    <!-- ══ 03 — VRAI / FAUX ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">03 — Quiz — Vrai ou Faux</span>
+    </div>
+    <div id="vf-container"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkVF()">Corriger le Quiz</button>
+        <button class="action-btn" onclick="resetVF()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-vf"></div></div>
+    <div class="score-row" id="score-vf"></div>
+    <div class="score-panel" id="vf-score-panel">
+        <div class="score-big"><span id="vf-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au Quiz V/F</div>
+    </div>
+
+
+    <!-- ══ 04 — SCÉNARIOS ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">04 — Scénarios — que faites-vous ?</span>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 1 — CSS</div>
+        <div class="scenario-situation">🎨 L'IA génère un CSS avec <code>.card:hover { transform: translateY(-4px); }</code>. Tu testes dans le navigateur : aucun effet au survol. Que vérifies-tu en premier ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Que la carte a bien une hauteur définie en CSS</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Que la classe dans le HTML est bien <code>class="card"</code> et non <code>class="carte"</code> ou un autre nom différent</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Que le fichier CSS est enregistré en UTF-8</div>
+        <div class="scenario-feedback">✓ Un effet hover qui ne fonctionne pas est presque toujours un problème de nom de sélecteur. Le CSS cible <code>.card</code> mais l'élément HTML a peut-être une classe différente. Vérifier dans F12 → Elements → Styles si la règle est bien présente et non barrée.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 2 — JS</div>
+        <div class="scenario-situation">⚡ Tu intègres du JS généré par l'IA. La console F12 affiche : <code>TypeError: Cannot read properties of null (reading 'addEventListener')</code> sur la ligne <code>document.getElementById('btn-toggle').addEventListener(...)</code>. Quelle est la cause la plus probable ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Le navigateur ne supporte pas <code>addEventListener</code></div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Le script est dans le <code>&lt;head&gt;</code> et s'exécute avant que le HTML soit chargé, <strong>ou</strong> l'élément avec <code>id="btn-toggle"</code> n'existe pas dans le HTML</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Il manque un point-virgule dans le JS</div>
+        <div class="scenario-feedback">✓ <code>Cannot read properties of null</code> signifie que <code>getElementById()</code> a retourné <code>null</code> — l'élément n'a pas été trouvé. Soit le script s'exécute avant que le HTML soit chargé (placer le script en bas du body), soit l'id dans le JS ne correspond pas à celui du HTML.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 3 — Assemblage</div>
+        <div class="scenario-situation">🧩 L'IA génère un menu mobile. Le CSS contient <code>.menu.open { display: flex; }</code> et le JS fait <code>menu.classList.toggle('active')</code>. Tu testes : le menu ne s'ouvre pas. Que se passe-t-il ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Le CSS est mal écrit — <code>display: flex</code> ne peut pas fonctionner ici</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Le JS toggle la classe <code>active</code> mais le CSS écoute la classe <code>open</code> — les deux noms ne correspondent pas</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Il manque un <code>{% load static %}</code> dans le template</div>
+        <div class="scenario-feedback">✓ C'est la liaison CSS ↔ JS cassée : le JS ajoute <code>.active</code> mais le CSS attend <code>.open</code>. Rien ne se passe visuellement même si le JS fonctionne. Solution : harmoniser les noms — soit changer le JS en <code>toggle('open')</code>, soit changer le CSS en <code>.menu.active</code>.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 4 — Responsive</div>
+        <div class="scenario-situation">📱 Tu demandes à l'IA de rendre une grille responsive. Elle génère du CSS Grid. Sur mobile, les cartes sont trop larges et débordent de l'écran. Quelle est l'erreur la plus courante dans ce cas ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Les cartes ont une police trop grande</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Les cartes ont une largeur fixe en pixels (<code>width: 300px</code>) au lieu d'utiliser <code>100%</code> ou <code>1fr</code>, et la meta viewport est peut-être absente dans le HTML</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Le navigateur mobile ne supporte pas CSS Grid</div>
+        <div class="scenario-feedback">✓ Le débordement sur mobile vient presque toujours d'une largeur fixe en pixels. En responsive, utiliser des unités relatives (<code>%</code>, <code>fr</code>, <code>vw</code>) ou <code>max-width</code>. Vérifier aussi que la balise <code>&lt;meta name="viewport" ...&gt;</code> est bien dans le <code>&lt;head&gt;</code>.</div>
+    </div>
+
+
+    <!-- ══ 05 — ASSOCIER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">05 — Associer — clic gauche puis clic droit</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">🔗</div>Propriété / méthode → Rôle exact</div>
+        <div class="match-wrap">
+            <div>
+                <div class="match-col-label">Code</div>
+                <div class="match-col" id="match-left">
+                    <div class="match-item match-code" id="ml0" onclick="selectMatch('left',0)">object-fit: cover</div>
+                    <div class="match-item match-code" id="ml1" onclick="selectMatch('left',1)">classList.toggle()</div>
+                    <div class="match-item match-code" id="ml2" onclick="selectMatch('left',2)">@media (min-width:768px)</div>
+                    <div class="match-item match-code" id="ml3" onclick="selectMatch('left',3)">display: grid</div>
+                    <div class="match-item match-code" id="ml4" onclick="selectMatch('left',4)">getElementById('x')</div>
+                    <div class="match-item match-code" id="ml5" onclick="selectMatch('left',5)">transition: all .3s</div>
+                    <div class="match-item match-code" id="ml6" onclick="selectMatch('left',6)">e.stopPropagation()</div>
+                    <div class="match-item match-code" id="ml7" onclick="selectMatch('left',7)">textContent = val</div>
+                </div>
+            </div>
+            <div>
+                <div class="match-col-label">Rôle</div>
+                <div class="match-col" id="match-right">
+                    <div class="match-item" id="mr0" onclick="selectMatch('right',0)">Recadrer une image sans déformer</div>
+                    <div class="match-item" id="mr1" onclick="selectMatch('right',1)">Ajouter ou enlever une classe CSS</div>
+                    <div class="match-item" id="mr2" onclick="selectMatch('right',2)">Appliquer du CSS à partir d'une largeur</div>
+                    <div class="match-item" id="mr3" onclick="selectMatch('right',3)">Créer une mise en page en colonnes et lignes</div>
+                    <div class="match-item" id="mr4" onclick="selectMatch('right',4)">Cibler un élément HTML par son id</div>
+                    <div class="match-item" id="mr5" onclick="selectMatch('right',5)">Animer les changements de style en douceur</div>
+                    <div class="match-item" id="mr6" onclick="selectMatch('right',6)">Empêcher l'événement de remonter au parent</div>
+                    <div class="match-item" id="mr7" onclick="selectMatch('right',7)">Mettre à jour le texte d'un élément HTML</div>
+                </div>
+            </div>
+        </div>
+        <div class="match-result" id="matchResult">🎉 Parfait ! Toutes les associations sont correctes.</div>
+    </div>
+
+
+    <!-- ══ 06 — ORDONNER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">06 — Remettre dans l'ordre</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">↕️</div>Ordre de création d'un composant web avec l'IA</div>
+        <p class="desc">Glissez-déposez ces étapes dans l'ordre logique pour créer une navbar responsive par vibecoding.</p>
+        <div class="order-list" id="orderList">
+            <div class="order-item" draggable="true" data-correct="4" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Coller le HTML dans le fichier et vérifier les noms de classes</span></div>
+            <div class="order-item" draggable="true" data-correct="6" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Demander le JS pour le menu hamburger en précisant les id et classes utilisés</span></div>
+            <div class="order-item" draggable="true" data-correct="2" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Rédiger le prompt HTML : structure de la nav, noms des liens, préfixe des classes</span></div>
+            <div class="order-item" draggable="true" data-correct="7" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Tester dans le navigateur et corriger les éventuelles incohérences de noms</span></div>
+            <div class="order-item" draggable="true" data-correct="5" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Demander le CSS responsive en précisant les breakpoints et les couleurs exactes</span></div>
+            <div class="order-item" draggable="true" data-correct="1" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Définir ce qu'on veut visuellement : navbar avec logo, 4 liens, hamburger sur mobile</span></div>
+            <div class="order-item" draggable="true" data-correct="3" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Générer le HTML avec l'IA et le lire pour vérifier les balises et attributs</span></div>
+        </div>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateOrder()">Valider l'ordre</button>
+            <button class="action-btn reveal" onclick="revealOrder()">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="shuffleOrder()">🔀 Mélanger</button>
+        </div>
+        <div class="order-feedback" id="orderFeedback"></div>
+        <div class="answers-reveal" id="order-answers">
+            <strong>Ordre correct</strong>
+            <div class="answer-line"><span class="answer-key">Étape 1</span><span class="answer-val">Définir le besoin visuel</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 2</span><span class="answer-val">Rédiger le prompt HTML</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 3</span><span class="answer-val">Générer et lire le HTML</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 4</span><span class="answer-val">Coller et vérifier les noms</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 5</span><span class="answer-val">Demander le CSS responsive</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 6</span><span class="answer-val">Demander le JS (hamburger)</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 7</span><span class="answer-val">Tester et corriger</span></div>
+        </div>
+    </div>
+
+
+    <!-- ══ 07 — COMPLÉTER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">07 — Compléter le code</span>
+    </div>
+
+    <!-- Bloc 1 : HTML -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">①</div>Complétez — structure HTML d'une carte produit</div>
+<pre class="complete-wrap"><span class="sel">&lt;<input class="blank" id="b1a" placeholder="???" autocomplete="off" style="min-width:70px"> class="card-produit"&gt;</span>
+
+  <span class="sel">&lt;img</span>
+    <span class="prop">src</span>=<span class="val">"images/produit.jpg"</span>
+    <span class="prop"><input class="blank" id="b1b" placeholder="???" autocomplete="off" style="min-width:30px"></span>=<span class="val">"Photo du produit"</span>
+    <span class="prop">class</span>=<span class="val">"card-image"</span>
+  <span class="sel">&gt;</span>
+
+  <span class="sel">&lt;div class="card-body"&gt;</span>
+    <span class="sel">&lt;<input class="blank" id="b1c" placeholder="???" autocomplete="off" style="min-width:20px"> class="card-titre"&gt;</span>Nom du produit<span class="sel">&lt;/h3&gt;</span>
+    <span class="sel">&lt;p class="card-desc"&gt;</span>Description courte.<span class="sel">&lt;/p&gt;</span>
+    <span class="sel">&lt;strong class="card-prix"&gt;</span>29,99 €<span class="sel">&lt;/strong&gt;</span>
+    <span class="sel">&lt;<input class="blank" id="b1d" placeholder="???" autocomplete="off" style="min-width:60px"> class="card-btn"&gt;</span>Ajouter au panier<span class="sel">&lt;/button&gt;</span>
+  <span class="sel">&lt;/div&gt;</span>
+
+<span class="sel">&lt;/article&gt;</span></pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c1')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c1')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c1')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c1-feedback"></div>
+        <div class="answers-reveal" id="c1-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">&lt;??? class="card..."&gt;</span><span class="answer-val">article</span></div>
+            <div class="answer-line"><span class="answer-key">attribut img ???</span><span class="answer-val">alt</span></div>
+            <div class="answer-line"><span class="answer-key">&lt;??? class="card-titre"&gt;</span><span class="answer-val">h3</span></div>
+            <div class="answer-line"><span class="answer-key">&lt;??? class="card-btn"&gt;</span><span class="answer-val">button</span></div>
+        </div>
+    </div>
+
+    <!-- Bloc 2 : CSS -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">②</div>Complétez — CSS responsive Grid</div>
+<pre class="complete-wrap"><span class="cm">/* Mobile first — 1 colonne */</span>
+<span class="sel">.<input class="blank" id="b2a" placeholder="???" autocomplete="off" style="min-width:100px"></span> {
+  <span class="prop">display</span>: <span class="val"><input class="blank" id="b2b" placeholder="???" autocomplete="off" style="min-width:50px"></span>;
+  <span class="prop">grid-template-columns</span>: <span class="val"><input class="blank" id="b2c" placeholder="???" autocomplete="off" style="min-width:30px"></span>;
+  <span class="prop">gap</span>: <span class="val">1.2rem</span>;
+}
+
+<span class="cm">/* Tablette : 2 colonnes */</span>
+<span class="kw">@<input class="blank" id="b2d" placeholder="???" autocomplete="off" style="min-width:50px"></span> (<span class="prop">min-width</span>: <span class="val">480px</span>) {
+  <span class="sel">.grille-produits</span> {
+    <span class="prop">grid-template-columns</span>: <span class="val">repeat(<input class="blank" id="b2e" placeholder="???" autocomplete="off" style="min-width:40px">, 1fr)</span>;
+  }
+}
+
+<span class="cm">/* Desktop : 3 colonnes */</span>
+<span class="kw">@media</span> (<span class="prop">min-width</span>: <span class="val"><input class="blank" id="b2f" placeholder="???" autocomplete="off" style="min-width:60px"></span>) {
+  <span class="sel">.grille-produits</span> {
+    <span class="prop">grid-template-columns</span>: <span class="val">repeat(3, 1fr)</span>;
+  }
+}</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c2')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c2')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c2')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c2-feedback"></div>
+        <div class="answers-reveal" id="c2-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">sélecteur ???</span><span class="answer-val">grille-produits</span></div>
+            <div class="answer-line"><span class="answer-key">display: ???</span><span class="answer-val">grid</span></div>
+            <div class="answer-line"><span class="answer-key">grid-template: ???</span><span class="answer-val">1fr</span></div>
+            <div class="answer-line"><span class="answer-key">@???</span><span class="answer-val">media</span></div>
+            <div class="answer-line"><span class="answer-key">repeat(???)</span><span class="answer-val">2</span></div>
+            <div class="answer-line"><span class="answer-key">min-width: ???</span><span class="answer-val">768px</span></div>
+        </div>
+    </div>
+
+    <!-- Bloc 3 : JS -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">③</div>Complétez — JS du compteur interactif</div>
+<pre class="complete-wrap"><span class="kw">let</span> compte = <span class="val">0</span>;
+<span class="kw">const</span> affichage = document.<span class="fn"><input class="blank" id="b3a" placeholder="???" autocomplete="off" style="min-width:130px"></span>(<span class="str">'valeur'</span>);
+
+document.<span class="fn">getElementById</span>(<span class="str">'btn-plus'</span>)
+  .<span class="fn"><input class="blank" id="b3b" placeholder="???" autocomplete="off" style="min-width:130px"></span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+    compte<span class="kw">++</span>;
+    affichage.<span class="fn"><input class="blank" id="b3c" placeholder="???" autocomplete="off" style="min-width:110px"></span> = compte;
+    affichage.classList.<span class="fn">toggle</span>(<span class="str">'negatif'</span>, compte <span class="kw">&lt;</span> <span class="val">0</span>);
+  });
+
+document.<span class="fn">getElementById</span>(<span class="str">'btn-moins'</span>)
+  .addEventListener(<span class="str">'click'</span>, <span class="kw">function</span>() {
+    compte<span class="kw">--</span>;
+    affichage.textContent = compte;
+    affichage.classList.<span class="fn"><input class="blank" id="b3d" placeholder="???" autocomplete="off" style="min-width:60px"></span>(<span class="str">'negatif'</span>, compte &lt; <span class="val">0</span>);
+  });</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c3')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c3')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c3')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c3-feedback"></div>
+        <div class="answers-reveal" id="c3-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">document.???()</span><span class="answer-val">getElementById</span></div>
+            <div class="answer-line"><span class="answer-key">.???('click', ...)</span><span class="answer-val">addEventListener</span></div>
+            <div class="answer-line"><span class="answer-key">affichage.??? = compte</span><span class="answer-val">textContent</span></div>
+            <div class="answer-line"><span class="answer-key">classList.???('negatif')</span><span class="answer-val">toggle</span></div>
+        </div>
+    </div>
+
+
+    <!-- ══ SCORE GLOBAL ══ -->
+    <div class="global-score-panel" id="globalScore">
+        <div class="gs-big"><span id="gs-val">—</span></div>
+        <div class="gs-sub" id="gs-sub">score global</div>
+        <div class="gs-chips" id="gs-chips"></div>
+    </div>
+
+    <div class="cta-wrap">
+        <p>Envie de revoir un point ? Retournez au cours.</p>
+        <a class="cta-btn" href="../sommaire.html">← Retour au sommaire</a>
+    </div>
+
+    <div class="footer-note">
+        HTML structure · CSS style · JS comportement 🎨<br>
+        <span style="font-size:0.82rem;">Exercices — Vibecoding HTML/CSS/JS</span>
+    </div>
+
+    <script>
+    var qcmData = [
+        { q: "Quelle est la bonne liaison entre HTML et CSS ?", opts: ["Les noms des balises HTML doivent être en minuscules","Les attributs <code>class</code> et <code>id</code> dans le HTML doivent correspondre exactement aux sélecteurs CSS","Le fichier CSS doit s'appeler style.css obligatoirement","Le CSS doit être placé avant le HTML dans le fichier"], correct: 1, expl: "✓ La liaison HTML→CSS passe par les class et id. Si le HTML a class='card' et que le CSS cible .carte, aucun style ne s'applique." },
+        { q: "Où doit être placé le script JavaScript dans un fichier HTML ?", opts: ["Dans la balise &lt;head&gt; pour qu'il se charge en premier","N'importe où, l'ordre n'a pas d'importance","En bas du &lt;body&gt; juste avant &lt;/body&gt;","Dans un fichier séparé obligatoirement"], correct: 2, expl: "✓ Le JS placé en bas du body s'exécute après que tout le HTML a été lu — il peut donc trouver les éléments avec getElementById(). Dans le head sans 'defer', le HTML n'est pas encore disponible." },
+        { q: "Que fait <code>classList.toggle('ouvert')</code> ?", opts: ["Affiche ou cache un élément avec display none/block","Ajoute la classe 'ouvert' si elle n'est pas là, la supprime si elle y est","Vérifie si la classe 'ouvert' existe","Change la valeur d'un attribut"], correct: 1, expl: "✓ toggle() est la méthode parfaite pour les menus et accordéons — elle inverse l'état à chaque appel, sans avoir besoin d'une condition." },
+        { q: "Quelle propriété CSS permet à une image de remplir son conteneur sans se déformer ?", opts: ["background-size: cover","object-position: center","object-fit: cover","image-fill: contain"], correct: 2, expl: "✓ object-fit: cover recadre l'image pour remplir entièrement le conteneur en conservant les proportions. Indispensable pour les galeries et les cartes avec images." },
+        { q: "La console F12 affiche <code>Cannot read properties of null</code>. Qu'est-ce que ça signifie ?", opts: ["La connexion internet est coupée","Une variable JavaScript vaut null","getElementById() n'a pas trouvé l'élément — l'id demandé n'existe pas dans le HTML ou le script s'exécute trop tôt","Le CSS n'est pas chargé"], correct: 2, expl: "✓ null signifie 'rien trouvé'. getElementById() retourne null si l'id n'existe pas. Causes : id mal orthographié, script dans le head (HTML pas encore lu), ou élément ajouté dynamiquement après coup." },
+        { q: "Qu'est-ce que l'approche 'mobile-first' en CSS ?", opts: ["Commencer par coder l'interface desktop, puis la réduire pour mobile","Écrire le CSS de base pour mobile, puis ajouter des media queries pour les écrans plus grands","Utiliser uniquement des unités en pixels","Tester d'abord sur un iPhone avant de coder"], correct: 1, expl: "✓ Mobile-first : le CSS de base cible les petits écrans. On ajoute @media (min-width: X) pour élargir progressivement — résultat plus propre et plus performant que l'approche inverse." },
+        { q: "Comment demander efficacement du CSS à l'IA ?", opts: ["Donner le nom des propriétés CSS qu'on veut utiliser","Décrire visuellement ce qu'on voit : 'fond blanc, coins arrondis 12px, ombre légère, hover avec élévation'","Donner uniquement la structure HTML sans explication","Demander d'abord le JS avant le CSS"], correct: 1, expl: "✓ Décrire visuellement est bien plus efficace que de nommer des propriétés CSS. L'IA traduit la description en code — c'est ce pour quoi elle est très forte en frontend." },
+        { q: "Quelle est l'erreur classique lors de l'assemblage HTML/CSS/JS généré par l'IA ?", opts: ["Le CSS est trop long","Les noms de classes ou d'id ne correspondent pas entre les 3 couches générées séparément","Le JavaScript manque de commentaires","Le HTML n'a pas de DOCTYPE"], correct: 1, expl: "✓ L'IA génère souvent .active dans le CSS et toggle('open') dans le JS — ou getElementById('menu') dans le JS et id='nav' dans le HTML. Vérifier la cohérence des noms entre les 3 couches est la première chose à faire." }
+    ];
+
+    var vfData = [
+        { stmt: "La propriété CSS <code>transition</code> doit être placée sur l'élément dans son état normal (pas dans :hover) pour fonctionner dans les deux sens.", correct: true, expl: "Vrai. La transition sur l'élément de base anime le changement dans les deux sens (aller et retour). Mise sur :hover, elle n'anime que l'aller — le retour est instantané." },
+        { stmt: "En CSS Grid, <code>grid-template-columns: repeat(3, 1fr)</code> crée 3 colonnes de largeur égale.", correct: true, expl: "Vrai. fr (fraction) divise l'espace disponible. repeat(3, 1fr) = 3 colonnes qui se partagent l'espace disponible en parts égales." },
+        { stmt: "Il est possible d'utiliser plusieurs fichiers CSS sur une même page HTML.", correct: true, expl: "Vrai. On peut avoir plusieurs balises &lt;link rel='stylesheet'&gt; dans le head. Les règles s'accumulent, les plus récentes peuvent surcharger les précédentes (cascade)." },
+        { stmt: "<code>document.querySelector('.card')</code> retourne tous les éléments avec la classe card.", correct: false, expl: "Faux. querySelector() retourne uniquement le premier élément correspondant. Pour tous les éléments, utiliser querySelectorAll() qui retourne une NodeList." },
+        { stmt: "En HTML, l'attribut <code>alt</code> sur une image est purement optionnel et n'a aucune importance.", correct: false, expl: "Faux. L'attribut alt est crucial pour l'accessibilité (lecteurs d'écran pour les malvoyants) et le SEO (référencement). Il est obligatoire selon les normes W3C." },
+        { stmt: "Un <code>id</code> HTML doit être unique sur la page — deux éléments ne peuvent pas avoir le même id.", correct: true, expl: "Vrai. L'id est un identifiant unique. getElementById() ne retourne qu'un seul élément. Des id dupliqués causent des comportements imprévisibles en CSS et en JS." },
+        { stmt: "Le CSS Flexbox et le CSS Grid sont incompatibles — on ne peut pas utiliser les deux dans le même projet.", correct: false, expl: "Faux. Flexbox et Grid sont complémentaires. Grid est idéal pour la mise en page globale (grilles 2D), Flexbox pour l'alignement dans une ligne ou colonne. On les combine souvent." },
+        { stmt: "Pour tester du CSS temporairement sans modifier le fichier, on peut utiliser l'onglet Styles des DevTools F12.", correct: true, expl: "Vrai. Les DevTools permettent d'éditer le CSS directement dans le navigateur pour tester rapidement. Les modifications sont perdues au rechargement — parfait pour valider une idée avant de la coder." }
+    ];
+
+    function renderQCM() {
+        var c = document.getElementById('qcm-container'); c.innerHTML = '';
+        qcmData.forEach(function(q, i) {
+            var opts = q.opts.map(function(o, j) { return '<div class="opt" onclick="pickQCM(this,' + i + ',' + j + ')"><div class="opt-dot"><div class="opt-dot-inner"></div></div>' + o + '</div>'; }).join('');
+            c.innerHTML += '<div class="qcm-card" id="qcm-' + i + '"><div class="q-num">Question ' + (i+1) + ' / ' + qcmData.length + '</div><div class="q-text">' + q.q + '</div><div class="options">' + opts + '</div><div class="q-feedback" id="qfb-' + i + '"></div></div>';
+        });
+    }
+    function pickQCM(el, qi, oi) { var card = document.getElementById('qcm-' + qi); if (card.dataset.locked) return; card.querySelectorAll('.opt').forEach(function(o) { o.classList.remove('selected'); }); el.classList.add('selected'); card.dataset.picked = oi; }
+    function checkQCM() {
+        var correct = 0, chips = '';
+        qcmData.forEach(function(q, i) {
+            var card = document.getElementById('qcm-' + i); card.dataset.locked = 1;
+            var picked = parseInt(card.dataset.picked), fb = document.getElementById('qfb-' + i);
+            card.querySelectorAll('.opt').forEach(function(o, j) { o.classList.remove('selected'); if (j === q.correct) o.classList.add('correct'); else if (j === picked && picked !== q.correct) o.classList.add('wrong'); });
+            if (picked === q.correct) { correct++; chips += '<span class="chip chip-ok">Q' + (i+1) + ' ✓</span>'; fb.textContent = q.expl; fb.className = 'q-feedback show ok'; }
+            else { chips += '<span class="chip chip-ko">Q' + (i+1) + ' ✗</span>'; fb.textContent = '✗ ' + q.expl; fb.className = 'q-feedback show ko'; }
+        });
+        document.getElementById('prog-qcm').style.width = Math.round(correct/qcmData.length*100) + '%';
+        document.getElementById('score-qcm').innerHTML = chips;
+        document.getElementById('qcm-score-val').textContent = correct;
+        document.getElementById('qcm-score-panel').classList.add('show');
+        updateGlobal();
+    }
+    function resetQCM() { renderQCM(); document.getElementById('prog-qcm').style.width = '0%'; document.getElementById('score-qcm').innerHTML = ''; document.getElementById('qcm-score-panel').classList.remove('show'); }
+
+    function renderVF() {
+        var c = document.getElementById('vf-container'); c.innerHTML = '';
+        vfData.forEach(function(v, i) { c.innerHTML += '<div class="vf-card" id="vf-' + i + '"><div class="vf-statement">' + v.stmt + '</div><div class="vf-btns"><button class="vf-btn vrai" onclick="pickVF(this,' + i + ',true)">✅ Vrai</button><button class="vf-btn faux" onclick="pickVF(this,' + i + ',false)">❌ Faux</button></div><div class="q-feedback" id="vfb-' + i + '"></div></div>'; });
+    }
+    function pickVF(btn, i, val) { var card = document.getElementById('vf-' + i); if (card.dataset.locked) return; card.querySelectorAll('.vf-btn').forEach(function(b) { b.classList.remove('selected'); }); btn.classList.add('selected'); card.dataset.picked = val; }
+    function checkVF() {
+        var correct = 0, chips = '';
+        vfData.forEach(function(v, i) {
+            var card = document.getElementById('vf-' + i); card.dataset.locked = 1;
+            var picked = card.dataset.picked === 'true', fb = document.getElementById('vfb-' + i);
+            card.querySelectorAll('.vf-btn').forEach(function(btn) { var isV = btn.classList.contains('vrai'); if ((isV && v.correct)||(!isV && !v.correct)) btn.classList.add('correct-ans'); else if (card.dataset.picked !== undefined && ((isV && !v.correct && picked)||(!isV && v.correct && !picked))) btn.classList.add('wrong-ans'); });
+            if (card.dataset.picked !== undefined && picked === v.correct) { correct++; chips += '<span class="chip chip-ok">Q' + (i+1) + ' ✓</span>'; fb.textContent = '✓ ' + v.expl; fb.className = 'q-feedback show ok'; }
+            else { chips += '<span class="chip chip-ko">Q' + (i+1) + ' ✗</span>'; fb.textContent = '✗ ' + v.expl; fb.className = 'q-feedback show ko'; }
+        });
+        document.getElementById('prog-vf').style.width = Math.round(correct/vfData.length*100) + '%';
+        document.getElementById('score-vf').innerHTML = chips;
+        document.getElementById('vf-score-val').textContent = correct;
+        document.getElementById('vf-score-panel').classList.add('show');
+        updateGlobal();
+    }
+    function resetVF() { renderVF(); document.getElementById('prog-vf').style.width = '0%'; document.getElementById('score-vf').innerHTML = ''; document.getElementById('vf-score-panel').classList.remove('show'); }
+
+    function pickScenario(el, isCorrect) {
+        var card = el.closest('.scenario-card');
+        if (card.querySelector('.correct')) return;
+        card.querySelectorAll('.scenario-choice').forEach(function(c) { c.classList.add('disabled'); });
+        var fb = card.querySelector('.scenario-feedback');
+        if (isCorrect) { el.classList.add('correct'); fb.classList.add('show','ok'); }
+        else { el.classList.add('wrong'); fb.classList.add('show','ko'); card.querySelectorAll('.scenario-choice').forEach(function(c) { if (c.onclick.toString().includes('true')) c.classList.add('correct'); }); }
+    }
+
+    var matchCorrect = [0,1,2,3,4,5,6,7], selLeft = null, selRight = null, matchedCount = 0;
+    function selectMatch(side, idx) {
+        if (side === 'left') { var el = document.getElementById('ml'+idx); if (el.classList.contains('matched')) return; if (selLeft!==null) document.getElementById('ml'+selLeft).classList.remove('selected'); selLeft=idx; el.classList.add('selected'); }
+        else { var er = document.getElementById('mr'+idx); if (er.classList.contains('matched')) return; if (selRight!==null) document.getElementById('mr'+selRight).classList.remove('selected'); selRight=idx; er.classList.add('selected'); }
+        if (selLeft!==null && selRight!==null) {
+            var lEl=document.getElementById('ml'+selLeft), rEl=document.getElementById('mr'+selRight);
+            if (matchCorrect[selLeft]===selRight) { lEl.classList.remove('selected'); lEl.classList.add('matched'); rEl.classList.remove('selected'); rEl.classList.add('matched'); matchedCount++; if (matchedCount===8) document.getElementById('matchResult').classList.add('show'); }
+            else { lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash'); setTimeout(function(){lEl.classList.remove('selected','wrong-flash');rEl.classList.remove('selected','wrong-flash');},600); }
+            selLeft=null; selRight=null;
+        }
+    }
+
+    var dragSrc = null;
+    function initDrag() {
+        document.querySelectorAll('.order-item').forEach(function(item) {
+            item.addEventListener('dragstart', function(){dragSrc=this;this.classList.add('dragging');});
+            item.addEventListener('dragend', function(){this.classList.remove('dragging');document.querySelectorAll('.order-item').forEach(function(i){i.classList.remove('drag-over');});});
+            item.addEventListener('dragover', function(e){e.preventDefault();this.classList.add('drag-over');});
+            item.addEventListener('dragleave', function(){this.classList.remove('drag-over');});
+            item.addEventListener('drop', function(e){e.preventDefault();this.classList.remove('drag-over');if(dragSrc!==this){var l=document.getElementById('orderList'),a=Array.from(l.children),si=a.indexOf(dragSrc),ti=a.indexOf(this);if(si<ti)l.insertBefore(dragSrc,this.nextSibling);else l.insertBefore(dragSrc,this);}});
+        });
+    }
+    initDrag();
+    var tapFirst=null;
+    function tapOrder(el){if(!tapFirst){tapFirst=el;el.classList.add('tap-sel');}else{if(tapFirst!==el){var l=document.getElementById('orderList'),a=Array.from(l.children),i1=a.indexOf(tapFirst),i2=a.indexOf(el);if(i1<i2)l.insertBefore(tapFirst,el.nextSibling);else l.insertBefore(tapFirst,el);}tapFirst.classList.remove('tap-sel');tapFirst=null;}}
+    function validateOrder(){var l=document.getElementById('orderList'),items=Array.from(l.children),ok=true;items.forEach(function(it,idx){var c=parseInt(it.dataset.correct);it.querySelector('.order-num').textContent=idx+1;it.classList.remove('correct','wrong');if(c===idx+1)it.classList.add('correct');else{it.classList.add('wrong');ok=false;}});var fb=document.getElementById('orderFeedback');if(ok){fb.textContent='🎉 Parfait ! Toutes les étapes sont dans le bon ordre.';fb.className='order-feedback show ok';}else{fb.textContent='❌ Quelques étapes sont mal placées (en rouge). Réordonnez et réessayez !';fb.className='order-feedback show ko';}}
+    function revealOrder(){var l=document.getElementById('orderList'),items=Array.from(l.children);items.sort(function(a,b){return parseInt(a.dataset.correct)-parseInt(b.dataset.correct);});items.forEach(function(it,idx){l.appendChild(it);it.querySelector('.order-num').textContent=idx+1;it.className='order-item correct';});var fb=document.getElementById('orderFeedback');fb.textContent='👁 Voici le bon ordre — mémorisez-le, puis mélangez pour réessayer.';fb.className='order-feedback show';fb.style.color='#633806';document.getElementById('order-answers').classList.add('show');}
+    function shuffleOrder(){var l=document.getElementById('orderList'),items=Array.from(l.children);for(var i=items.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));l.insertBefore(items[j],items[i]);var t=items[i];items[i]=items[j];items[j]=t;}items.forEach(function(it){it.className='order-item';it.setAttribute('draggable','true');it.querySelector('.order-num').textContent='?';});document.getElementById('orderFeedback').className='order-feedback';document.getElementById('orderFeedback').style.color='';document.getElementById('order-answers').classList.remove('show');initDrag();}
+
+    var completeData = {
+        c1:{ids:['b1a','b1b','b1c','b1d'],answers:['article','alt','h3','button']},
+        c2:{ids:['b2a','b2b','b2c','b2d','b2e','b2f'],answers:['grille-produits','grid','1fr','media','2','768px']},
+        c3:{ids:['b3a','b3b','b3c','b3d'],answers:['getElementById','addEventListener','textContent','toggle']}
+    };
+    function validateComplete(cid){var data=completeData[cid],ok=0;data.ids.forEach(function(id,i){var el=document.getElementById(id),val=el.value.trim().toLowerCase(),ans=data.answers[i].toLowerCase();el.classList.remove('ok','ko','revealed');if(val===ans){el.classList.add('ok');ok++;}else el.classList.add('ko');});var fb=document.getElementById(cid+'-feedback'),total=data.ids.length;if(ok===total){fb.textContent='🎉 Parfait ! Tous les champs sont corrects.';fb.className='complete-feedback show ok';}else{fb.textContent='❌ '+ok+'/'+total+' corrects — les champs en rouge sont incorrects.';fb.className='complete-feedback show ko';}updateGlobal();}
+    function revealAnswers(cid){var data=completeData[cid];data.ids.forEach(function(id,i){var el=document.getElementById(id);el.value=data.answers[i];el.classList.remove('ok','ko');el.classList.add('revealed');});document.getElementById(cid+'-answers').classList.toggle('show');var fb=document.getElementById(cid+'-feedback');fb.textContent='👁 Réponses affichées — réinitialisez pour réessayer.';fb.className='complete-feedback show';fb.style.color='#633806';}
+    function resetComplete(cid){var data=completeData[cid];data.ids.forEach(function(id){var el=document.getElementById(id);el.value='';el.classList.remove('ok','ko','revealed');});document.getElementById(cid+'-feedback').className='complete-feedback';document.getElementById(cid+'-feedback').style.color='';document.getElementById(cid+'-answers').classList.remove('show');}
+
+    function updateGlobal(){var qp=document.getElementById('qcm-score-panel'),vp=document.getElementById('vf-score-panel');if(!qp.classList.contains('show')||!vp.classList.contains('show'))return;var qs=parseInt(document.getElementById('qcm-score-val').textContent),vs=parseInt(document.getElementById('vf-score-val').textContent),total=qs+vs,max=qcmData.length+vfData.length,panel=document.getElementById('globalScore');panel.classList.add('show');document.getElementById('gs-val').textContent=total+' / '+max;var pct=Math.round(total/max*100),msg=pct>=90?'🏆 Excellent ! Maîtrise du vibecoding frontend.':pct>=70?'👍 Bien joué ! Quelques points à revoir.':'💪 Continue — relis le cours et recommence.';document.getElementById('gs-sub').textContent=msg;document.getElementById('gs-chips').innerHTML='<span class="chip chip-ok">QCM : '+qs+'/'+qcmData.length+'</span><span class="chip chip-ok">V/F : '+vs+'/'+vfData.length+'</span>';}
+
+    renderQCM(); renderVF();
+    </script>
+</body>
+</html>

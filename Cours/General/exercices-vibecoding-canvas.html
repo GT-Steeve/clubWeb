@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Vibecoding Jeu Canvas</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral { background: #F5C4B3; color: #712B13; }
+        .p-amber { background: #FAC775; color: #633806; }
+        .p-blue { background: #B5D4F4; color: #0C447C; }
+        .p-green { background: #C0DD97; color: #3B6D11; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.4s; width: 0%; }
+        .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .chip-ok { background: #E1F5EE; color: #085041; }
+        .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .action-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 10px; padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .action-btn:hover { background: #D3D1C7; }
+        .action-btn.primary { background: #1E1D1A; color: #FAC775; border-color: #1E1D1A; }
+        .action-btn.primary:hover { background: #444441; }
+        .action-btn.reveal { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+        .action-btn.reveal:hover { background: #CECBF6; }
+
+        .score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-top: 1rem; display: none; text-align: center; }
+        .score-panel.show { display: block; }
+        .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .score-big span { color: #5DCAA5; }
+        .score-sub { font-size: 0.9rem; color: #888780; }
+
+        /* FLASHCARDS */
+        .fc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 0.8rem; }
+        .fc { height: 130px; perspective: 700px; cursor: pointer; }
+        .fc-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.45s cubic-bezier(.4,0,.2,1); border-radius: 12px; }
+        .fc.flipped .fc-inner { transform: rotateY(180deg); }
+        .fc-front, .fc-back { position: absolute; inset: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 12px; text-align: center; backface-visibility: hidden; border: 0.5px solid #D3D1C7; }
+        .fc-front { background: #F1EFE8; font-size: 0.85rem; font-weight: 700; color: #2C2C2A; }
+        .fc-back { background: #ffffff; font-size: 0.84rem; transform: rotateY(180deg); color: #085041; font-weight: 700; line-height: 1.5; }
+        .fc-hint { font-size: 0.68rem; color: #B4B2A9; position: absolute; bottom: 7px; right: 9px; }
+        .fc-front.amber  { background: #FAEEDA; color: #633806; font-family: 'Nunito', sans-serif; font-size: 0.84rem; font-weight: 700; }
+        .fc-front.coral  { background: #FAECE7; color: #712B13; font-family: 'Nunito', sans-serif; font-size: 0.84rem; font-weight: 700; }
+        .fc-front.purple { background: #EEEDFE; color: #3C3489; font-family: 'Nunito', sans-serif; font-size: 0.84rem; font-weight: 700; }
+
+        /* QCM */
+        .qcm-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 7px; }
+        .opt { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; transition: background 0.12s; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none; }
+        .opt:hover { background: #D3D1C7; }
+        .opt.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .opt.correct  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .opt.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .opt-dot { width: 18px; height: 18px; min-width: 18px; border-radius: 50%; border: 2px solid #B4B2A9; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+        .opt.selected .opt-dot { border-color: #7F77DD; background: #7F77DD; }
+        .opt.correct  .opt-dot { border-color: #1D9E75; background: #1D9E75; }
+        .opt.wrong    .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+        .opt-dot-inner { width: 6px; height: 6px; background: white; border-radius: 50%; display: none; }
+        .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+        .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .q-feedback.show { display: block; }
+        .q-feedback.ok { color: #0F6E56; }
+        .q-feedback.ko { color: #A32D2D; }
+
+        /* VF */
+        .vf-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .vf-statement { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .vf-btns { display: flex; gap: 10px; }
+        .vf-btn { flex: 1; padding: 8px 0; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .vf-btn.vrai:hover { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .vf-btn.faux:hover { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-btn.vrai.selected { background: #E1F5EE; border-color: #5DCAA5; color: #085041; border-width: 2px; }
+        .vf-btn.faux.selected { background: #FCEBEB; border-color: #F09595; color: #791F1F; border-width: 2px; }
+        .vf-btn.correct-ans { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+
+        /* SCÉNARIOS */
+        .scenario-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .scenario-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 8px; }
+        .scenario-situation { font-size: 0.95rem; font-weight: 700; color: #2C2C2A; line-height: 1.5; margin-bottom: 1rem; }
+        .scenario-choice { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; margin-bottom: 7px; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; transition: background 0.12s; user-select: none; }
+        .scenario-choice:hover { background: #D3D1C7; }
+        .scenario-choice.correct { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; font-weight: 700; }
+        .scenario-choice.wrong   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .scenario-choice.disabled { pointer-events: none; }
+        .scenario-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .scenario-feedback.show { display: block; }
+        .scenario-feedback.ok { color: #0F6E56; }
+        .scenario-feedback.ko { color: #A32D2D; }
+
+        /* MATCHING */
+        .match-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .match-col-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .match-col { display: flex; flex-direction: column; gap: 7px; }
+        .match-item { padding: 9px 13px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; font-size: 0.84rem; font-weight: 600; cursor: pointer; transition: background 0.12s; line-height: 1.4; }
+        .match-item.code { font-family: 'Fira Code', monospace; font-size: 0.8rem; }
+        .match-item:hover:not(.matched) { background: #D3D1C7; }
+        .match-item.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .match-item.matched  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; pointer-events: none; font-weight: 700; }
+        .match-item.wrong-flash { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .match-result { font-size: 0.88rem; font-weight: 700; color: #085041; margin-top: 0.8rem; display: none; }
+        .match-result.show { display: block; }
+
+        /* ORDONNER */
+        .order-list { display: flex; flex-direction: column; gap: 7px; margin-top: 0.8rem; user-select: none; }
+        .order-item { display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #ffffff; font-size: 0.9rem; font-weight: 600; cursor: grab; transition: box-shadow 0.15s, background 0.12s; }
+        .order-item:active { cursor: grabbing; box-shadow: 0 4px 14px rgba(0,0,0,.1); }
+        .order-item.dragging  { opacity: 0.35; }
+        .order-item.drag-over { border-color: #5DCAA5; background: #E1F5EE; }
+        .order-item.tap-sel   { background: #EEEDFE; border-color: #AFA9EC; }
+        .order-item.correct   { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .order-item.wrong     { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .order-handle { color: #B4B2A9; font-size: 1rem; }
+        .order-num { font-size: 0.72rem; font-weight: 800; color: #888780; background: #F1EFE8; border-radius: 6px; padding: 2px 7px; min-width: 22px; text-align: center; }
+        .order-code { font-family: 'Fira Code', monospace; font-size: 0.82rem; }
+        .order-feedback { font-size: 0.88rem; font-weight: 700; margin-top: 0.8rem; display: none; line-height: 1.5; }
+        .order-feedback.show { display: block; }
+        .order-feedback.ok { color: #0F6E56; }
+        .order-feedback.ko { color: #A32D2D; }
+
+        /* COMPLÉTER */
+        .complete-wrap { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 2; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem; }
+        .blank { display: inline-block; min-width: 80px; border: none; border-bottom: 2px solid #AFA9EC; background: transparent; font-family: 'Fira Code', monospace; font-size: 0.84rem; color: #3C3489; font-weight: 700; padding: 0 4px; outline: none; vertical-align: baseline; transition: border-color 0.15s; }
+        .blank:focus { border-bottom-color: #7F77DD; }
+        .blank.ok { border-bottom-color: #1D9E75; color: #085041; }
+        .blank.ko { border-bottom-color: #E24B4A; color: #791F1F; }
+        .blank.revealed { border-bottom-color: #FAC775; color: #633806; background: rgba(250,199,117,0.15); }
+        .complete-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .complete-feedback.show { display: block; }
+        .complete-feedback.ok { color: #0F6E56; }
+        .complete-feedback.ko { color: #A32D2D; }
+        .kw { color: #3C3489; font-weight: 700; }
+        .fn { color: #185FA5; }
+        .str { color: #0F6E56; }
+        .cm { color: #888780; font-style: italic; }
+        .num { color: #993C1D; }
+
+        .answers-reveal { background: #FAEEDA; border: 0.5px solid #FAC775; border-radius: 10px; padding: 0.9rem 1.1rem; margin-top: 0.8rem; display: none; font-size: 0.88rem; line-height: 1.8; color: #633806; }
+        .answers-reveal.show { display: block; }
+        .answers-reveal strong { display: block; margin-bottom: 6px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .answer-line { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
+        .answer-key { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: #888780; min-width: 160px; }
+        .answer-val { font-family: 'Fira Code', monospace; font-size: 0.84rem; font-weight: 700; color: #633806; }
+
+        .global-score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-top: 2rem; display: none; text-align: center; }
+        .global-score-panel.show { display: block; }
+        .gs-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .gs-big span { color: #5DCAA5; }
+        .gs-sub { font-size: 0.9rem; color: #888780; margin-bottom: 1rem; }
+        .gs-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+        .cta-wrap { text-align: center; background: #1E1D1A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) { body { padding: 1rem; } .hero h1 { font-size: 1.7rem; } .match-wrap { grid-template-columns: 1fr; } .fc-grid { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+<body>
+    <a class="nav-prev" href="cours-vibecoding-canvas.html">← Retour au cours</a>
+
+    <div class="hero">
+        <h1>🕹️ Exercices<br>Vibecoding Canvas</h1>
+        <p>Flashcards, QCM, vrai/faux, scénarios de debug, matching, ordonnancement et code à compléter.</p>
+        <div class="badge-row">
+            <span class="badge b-amber">🃏 Flashcards</span>
+            <span class="badge b-purple">✅ QCM</span>
+            <span class="badge b-teal">⚖️ Vrai/Faux</span>
+            <span class="badge b-coral">🎬 Scénarios</span>
+            <span class="badge b-blue">🔗 Associer</span>
+            <span class="badge b-green">↕️ Ordonner</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 01 — FLASHCARDS ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">01 — Flashcards — cliquer pour retourner</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">🃏</div>Concepts clés du jeu Canvas</div>
+        <div class="fc-grid">
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front">requestAnimationFrame(loop)<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Demande au navigateur d'appeler <code>loop</code> à la prochaine frame — <strong>60 fois/s</strong>. Synchronisé avec l'écran. Jamais setInterval pour un jeu.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front amber">Ordre de la boucle de jeu<span class="fc-hint">↻</span></div>
+                    <div class="fc-back"><strong>update()</strong> → déplacer<br><strong>checkCollisions()</strong> → tester<br><strong>draw()</strong> → dessiner<br>→ requestAnimationFrame</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front">ctx.clearRect(0,0,W,H)<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Efface tout le canvas avant de redessiner. Sans ça, les objets laissent une traînée — le fond de la frame précédente reste visible.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front amber">Collision AABB<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Axis-Aligned Bounding Box — test de chevauchement de deux rectangles via 4 conditions sur x, y, w, h. Méthode la plus simple pour les jeux 2D.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front purple">Pourquoi l'objet touches{} ?<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">keydown déclenche une fois par appui. Pour un déplacement continu, on mémorise <code>true/false</code> par touche et on consulte l'état à chaque frame dans update().</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front">cancelAnimationFrame(animId)<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Arrête la boucle de jeu. <code>animId</code> est la valeur retournée par requestAnimationFrame. Indispensable dans showGameOver() pour stopper le rendu.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front purple">ctx.beginPath() + ctx.fill()<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Pour dessiner un cercle ou un chemin : toujours <code>beginPath()</code> avant <code>arc()</code>, puis <code>fill()</code> ou <code>stroke()</code> pour colorier. Sans beginPath, les chemins s'accumulent.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front">width/height sur la balise HTML<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">La résolution du canvas doit être définie <strong>dans la balise HTML</strong>, pas dans le CSS. Le CSS étire le canvas sans changer sa résolution interne → dessin flou et coordonnées fausses.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front amber">balles.filter() dans update()<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Supprimer les balles sorties du canvas. Sans filter(), les balles continuent à exister et à être calculées hors écran — le jeu ralentit progressivement.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front">Math.max(0, Math.min(W-w, x))<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Bornage du joueur dans le canvas. Empêche de sortir à gauche (min 0) et à droite (max W - largeur du joueur).</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ 02 — QCM ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">02 — QCM — Questions à choix multiples</span>
+    </div>
+    <div id="qcm-container"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkQCM()">Corriger le QCM</button>
+        <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="score-row" id="score-qcm"></div>
+    <div class="score-panel" id="qcm-score-panel">
+        <div class="score-big"><span id="qcm-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au QCM</div>
+    </div>
+
+
+    <!-- ══ 03 — VRAI / FAUX ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">03 — Quiz — Vrai ou Faux</span>
+    </div>
+    <div id="vf-container"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkVF()">Corriger le Quiz</button>
+        <button class="action-btn" onclick="resetVF()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-vf"></div></div>
+    <div class="score-row" id="score-vf"></div>
+    <div class="score-panel" id="vf-score-panel">
+        <div class="score-big"><span id="vf-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au Quiz V/F</div>
+    </div>
+
+
+    <!-- ══ 04 — SCÉNARIOS ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">04 — Scénarios de débogage — que faites-vous ?</span>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 1 — Écran noir</div>
+        <div class="scenario-situation">🕹️ Tu lances ton jeu pour la première fois. L'écran du canvas est complètement noir — rien ne s'affiche. La console F12 ne montre aucune erreur. Que vérifies-tu ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Recharger la page plusieurs fois jusqu'à ce que ça apparaisse</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Vérifier que <code>draw()</code> est bien appelée dans la boucle ET que <code>clearRect</code> n'efface pas après avoir dessiné — l'ordre compte</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Changer la couleur du fond en blanc dans le CSS</div>
+        <div class="scenario-feedback">✓ Un canvas noir sans erreur JS signifie soit que draw() n'est pas appelée (boucle non lancée ou enCours=false), soit que clearRect() est appelé après le dessin (qui efface tout). Vérifier l'ordre dans gameLoop() : update → checkCollisions → draw. Appeler draw() directement dans la console pour tester isolément.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 2 — Ralentissement progressif</div>
+        <div class="scenario-situation">🕹️ Ton jeu fonctionne parfaitement les 30 premières secondes, puis commence à ralentir de plus en plus jusqu'à se figer. Quelle est la cause la plus probable ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Le canvas n'est pas assez grand pour contenir tous les ennemis</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Les tableaux <code>balles[]</code> et/ou <code>ennemis[]</code> grossissent sans être filtrés — les objets sortis de l'écran sont encore calculés et dessinés</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>requestAnimationFrame est trop rapide pour ce navigateur</div>
+        <div class="scenario-feedback">✓ C'est la fuite mémoire classique des jeux Canvas. Sans <code>.filter()</code> dans update(), les tableaux accumulent des milliers d'objets invisibles. Chaque frame les calcule tous — le CPU est saturé. Solution : toujours filtrer les objets hors canvas à la fin de chaque update().</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 3 — Collision qui ne marche pas</div>
+        <div class="scenario-situation">🕹️ Les balles passent à travers les ennemis sans les détruire. Tu as bien généré <code>checkCollisions()</code> avec l'IA. La console ne montre aucune erreur. Que vérifies-tu ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Que <code>checkCollisions()</code> est bien appelée dans <code>gameLoop()</code>, ET que les propriétés utilisées (<code>x, y, w, h</code>) correspondent exactement à la structure de tes objets balle et ennemi</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Augmenter la taille des balles pour qu'elles soient plus faciles à toucher</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Changer requestAnimationFrame en setInterval pour ralentir le jeu</div>
+        <div class="scenario-feedback">✓ Deux causes classiques : (1) checkCollisions() n'est pas dans gameLoop() — facile à oublier lors de l'assemblage. (2) L'IA a généré la collision avec des propriétés différentes : si tes balles ont {x, y, rayon} mais que la collision attend {x, y, w, h}, les calculs échouent silencieusement. Toujours donner la structure exacte des objets dans le prompt.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 4 — Double boucle au restart</div>
+        <div class="scenario-situation">🕹️ Quand le joueur clique "Rejouer" après un Game Over, le jeu repart mais semble aller deux fois plus vite. À chaque mort, ça accélère encore. Pourquoi ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Le score n'est pas réinitialisé à zéro</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>La fonction <code>init()</code> relance <code>gameLoop()</code> sans avoir arrêté l'ancienne boucle — deux boucles tournent en parallèle, puis trois, etc.</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>requestAnimationFrame s'emballe après un Game Over</div>
+        <div class="scenario-feedback">✓ C'est l'erreur de boucle double. La solution : toujours appeler <code>cancelAnimationFrame(animId)</code> ET <code>clearInterval(spawnTimer)</code> au début de init() avant de relancer gameLoop(). Sans ça, l'ancienne boucle continue de tourner en parallèle avec la nouvelle — le rendu et les updates s'accumulent.</div>
+    </div>
+
+
+    <!-- ══ 05 — ASSOCIER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">05 — Associer — clic gauche puis clic droit</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">🔗</div>Fonction Canvas → Rôle dans le jeu</div>
+        <div class="match-wrap">
+            <div>
+                <div class="match-col-label">Méthode / Fonction</div>
+                <div class="match-col" id="match-left">
+                    <div class="match-item code" id="ml0" onclick="selectMatch('left',0)">requestAnimationFrame()</div>
+                    <div class="match-item code" id="ml1" onclick="selectMatch('left',1)">cancelAnimationFrame()</div>
+                    <div class="match-item code" id="ml2" onclick="selectMatch('left',2)">ctx.clearRect(0,0,W,H)</div>
+                    <div class="match-item code" id="ml3" onclick="selectMatch('left',3)">ctx.beginPath() + arc()</div>
+                    <div class="match-item code" id="ml4" onclick="selectMatch('left',4)">.filter() sur balles[]</div>
+                    <div class="match-item code" id="ml5" onclick="selectMatch('left',5)">touches[e.key] = true</div>
+                    <div class="match-item code" id="ml6" onclick="selectMatch('left',6)">ctx.drawImage()</div>
+                    <div class="match-item code" id="ml7" onclick="selectMatch('left',7)">setInterval(spawnEnemy, 1500)</div>
+                </div>
+            </div>
+            <div>
+                <div class="match-col-label">Rôle</div>
+                <div class="match-col" id="match-right">
+                    <div class="match-item" id="mr0" onclick="selectMatch('right',0)">Appeler la boucle à chaque frame</div>
+                    <div class="match-item" id="mr1" onclick="selectMatch('right',1)">Stopper la boucle (Game Over)</div>
+                    <div class="match-item" id="mr2" onclick="selectMatch('right',2)">Effacer le canvas avant de redessiner</div>
+                    <div class="match-item" id="mr3" onclick="selectMatch('right',3)">Dessiner un cercle (balle, explosion…)</div>
+                    <div class="match-item" id="mr4" onclick="selectMatch('right',4)">Supprimer les objets hors écran</div>
+                    <div class="match-item" id="mr5" onclick="selectMatch('right',5)">Mémoriser qu'une touche est pressée</div>
+                    <div class="match-item" id="mr6" onclick="selectMatch('right',6)">Afficher un sprite image sur le canvas</div>
+                    <div class="match-item" id="mr7" onclick="selectMatch('right',7)">Créer un ennemi toutes les 1.5s</div>
+                </div>
+            </div>
+        </div>
+        <div class="match-result" id="matchResult">🎉 Parfait ! Toutes les associations sont correctes.</div>
+    </div>
+
+
+    <!-- ══ 06 — ORDONNER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">06 — Remettre dans l'ordre</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">↕️</div>Ordre de développement d'un jeu Canvas par vibecoding</div>
+        <p class="desc">Glissez-déposez ces étapes dans l'ordre logique pour créer un shooter Canvas avec l'IA.</p>
+        <div class="order-list" id="orderList">
+            <div class="order-item" draggable="true" data-correct="5" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Demander draw() à l'IA en lui donnant les tableaux et couleurs</span></div>
+            <div class="order-item" draggable="true" data-correct="2" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Déclarer les variables globales : joueur, balles[], ennemis[], touches{}</span></div>
+            <div class="order-item" draggable="true" data-correct="7" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Assembler gameLoop() qui appelle update + checkCollisions + draw</span></div>
+            <div class="order-item" draggable="true" data-correct="3" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Demander update() à l'IA en lui donnant joueur, balles[], ennemis[], touches{}</span></div>
+            <div class="order-item" draggable="true" data-correct="8" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Tester le jeu complet et déboguer via la console F12</span></div>
+            <div class="order-item" draggable="true" data-correct="1" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Créer index.html avec le canvas 800×500 et relier game.js</span></div>
+            <div class="order-item" draggable="true" data-correct="6" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Demander checkCollisions() + spawnEnemy() + shoot() à l'IA</span></div>
+            <div class="order-item" draggable="true" data-correct="4" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span class="order-code">Tester update() seul (appel manuel dans la console) avant de continuer</span></div>
+        </div>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateOrder()">Valider l'ordre</button>
+            <button class="action-btn reveal" onclick="revealOrder()">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="shuffleOrder()">🔀 Mélanger</button>
+        </div>
+        <div class="order-feedback" id="orderFeedback"></div>
+        <div class="answers-reveal" id="order-answers">
+            <strong>Ordre correct</strong>
+            <div class="answer-line"><span class="answer-key">Étape 1</span><span class="answer-val">HTML canvas + relier game.js</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 2</span><span class="answer-val">Variables globales</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 3</span><span class="answer-val">update() via l'IA</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 4</span><span class="answer-val">Tester update() isolément</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 5</span><span class="answer-val">draw() via l'IA</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 6</span><span class="answer-val">checkCollisions + spawn + shoot</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 7</span><span class="answer-val">Assembler gameLoop()</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 8</span><span class="answer-val">Tester et déboguer</span></div>
+        </div>
+    </div>
+
+
+    <!-- ══ 07 — COMPLÉTER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">07 — Compléter le code</span>
+    </div>
+
+    <!-- Bloc 1 : update() -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">①</div>Complétez — fonction update()</div>
+<pre class="complete-wrap"><span class="kw">function</span> <span class="fn">update</span>() {
+
+  <span class="cm">// Déplacer le joueur</span>
+  <span class="kw">if</span> (touches[<span class="str">'ArrowLeft'</span>])  joueur.x -= joueur.<input class="blank" id="b1a" placeholder="???" autocomplete="off" style="min-width:60px">;
+  <span class="kw">if</span> (touches[<span class="str">'ArrowRight'</span>]) joueur.x += joueur.vitesse;
+
+  <span class="cm">// Bornage dans le canvas</span>
+  joueur.x = <span class="fn">Math.max</span>(<span class="num">0</span>, <span class="fn">Math.min</span>(W - joueur.w, joueur.x));
+
+  <span class="cm">// Déplacer balles vers le haut + supprimer hors canvas</span>
+  balles = balles
+    .<span class="fn">map</span>(b => ({ ...b, y: b.y - b.<input class="blank" id="b1b" placeholder="???" autocomplete="off" style="min-width:60px"> }))
+    .<span class="fn"><input class="blank" id="b1c" placeholder="???" autocomplete="off" style="min-width:50px"></span>(b => b.y > <span class="num">0</span>);
+
+  <span class="cm">// Déplacer ennemis vers le bas + supprimer hors canvas</span>
+  ennemis = ennemis
+    .<span class="fn">map</span>(e => ({ ...e, y: e.y + e.vitesse }))
+    .<span class="fn">filter</span>(e => e.y < <span class="fn"><input class="blank" id="b1d" placeholder="???" autocomplete="off" style="min-width:20px"></span> + <span class="num">50</span>);
+}</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c1')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c1')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c1')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c1-feedback"></div>
+        <div class="answers-reveal" id="c1-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">joueur.???</span><span class="answer-val">vitesse</span></div>
+            <div class="answer-line"><span class="answer-key">b.y - b.???</span><span class="answer-val">vitesse</span></div>
+            <div class="answer-line"><span class="answer-key">.???(b => b.y > 0)</span><span class="answer-val">filter</span></div>
+            <div class="answer-line"><span class="answer-key">e.y &lt; ??? + 50</span><span class="answer-val">H</span></div>
+        </div>
+    </div>
+
+    <!-- Bloc 2 : gameLoop -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">②</div>Complétez — boucle de jeu</div>
+<pre class="complete-wrap"><span class="kw">function</span> <span class="fn">gameLoop</span>() {
+  <span class="kw">if</span> (!<span class="fn"><input class="blank" id="b2a" placeholder="???" autocomplete="off" style="min-width:70px"></span>) <span class="kw">return</span>;
+
+  <span class="fn"><input class="blank" id="b2b" placeholder="???" autocomplete="off" style="min-width:60px"></span>();          <span class="cm">// 1. Déplacer</span>
+  <span class="fn">checkCollisions</span>();  <span class="cm">// 2. Tester les impacts</span>
+  <span class="fn"><input class="blank" id="b2c" placeholder="???" autocomplete="off" style="min-width:40px"></span>();              <span class="cm">// 3. Dessiner</span>
+
+  <span class="cm">// 4. Planifier la prochaine frame</span>
+  animId = <span class="fn"><input class="blank" id="b2d" placeholder="???" autocomplete="off" style="min-width:160px"></span>(<span class="fn">gameLoop</span>);
+}
+
+<span class="kw">function</span> <span class="fn">showGameOver</span>() {
+  enCours = <span class="kw">false</span>;
+  <span class="fn"><input class="blank" id="b2e" placeholder="???" autocomplete="off" style="min-width:160px"></span>(animId);
+  <span class="fn">clearInterval</span>(spawnTimer);
+  <span class="cm">// ... afficher écran game over</span>
+}</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c2')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c2')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c2')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c2-feedback"></div>
+        <div class="answers-reveal" id="c2-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">if (!???)</span><span class="answer-val">enCours</span></div>
+            <div class="answer-line"><span class="answer-key">???()</span><span class="answer-val">update</span></div>
+            <div class="answer-line"><span class="answer-key">???() // dessiner</span><span class="answer-val">draw</span></div>
+            <div class="answer-line"><span class="answer-key">animId = ???(gameLoop)</span><span class="answer-val">requestAnimationFrame</span></div>
+            <div class="answer-line"><span class="answer-key">???(animId)</span><span class="answer-val">cancelAnimationFrame</span></div>
+        </div>
+    </div>
+
+    <!-- Bloc 3 : draw -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">③</div>Complétez — fonction draw() partielle</div>
+<pre class="complete-wrap"><span class="kw">function</span> <span class="fn">draw</span>() {
+
+  <span class="cm">// Effacer le canvas</span>
+  ctx.<span class="fn"><input class="blank" id="b3a" placeholder="???" autocomplete="off" style="min-width:90px"></span>(<span class="num">0</span>, <span class="num">0</span>, W, H);
+
+  <span class="cm">// Fond noir</span>
+  ctx.fillStyle = <span class="str">'#0a0a1a'</span>;
+  ctx.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, W, H);
+
+  <span class="cm">// Dessiner chaque balle (cercle jaune)</span>
+  balles.<span class="fn">forEach</span>(b => {
+    ctx.<span class="fn"><input class="blank" id="b3b" placeholder="???" autocomplete="off" style="min-width:90px"></span>();
+    ctx.<span class="fn">arc</span>(b.x, b.y, <span class="num">5</span>, <span class="num">0</span>, Math.PI * <span class="num">2</span>);
+    ctx.fillStyle = <span class="str">'#f1c40f'</span>;
+    ctx.<span class="fn"><input class="blank" id="b3c" placeholder="???" autocomplete="off" style="min-width:40px"></span>();
+  });
+
+  <span class="cm">// HUD — score en haut à gauche</span>
+  ctx.fillStyle = <span class="str">'#fff'</span>;
+  ctx.font = <span class="str">'bold 18px Arial'</span>;
+  ctx.textAlign = <span class="str">'left'</span>;
+  ctx.<span class="fn">fillText</span>(<span class="str">`Score : <input class="blank" id="b3d" placeholder="???" autocomplete="off" style="min-width:70px">`</span>, <span class="num">16</span>, <span class="num">30</span>);
+}</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c3')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c3')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c3')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c3-feedback"></div>
+        <div class="answers-reveal" id="c3-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">ctx.???(0,0,W,H)</span><span class="answer-val">clearRect</span></div>
+            <div class="answer-line"><span class="answer-key">ctx.???() avant arc</span><span class="answer-val">beginPath</span></div>
+            <div class="answer-line"><span class="answer-key">ctx.???() // remplir</span><span class="answer-val">fill</span></div>
+            <div class="answer-line"><span class="answer-key">Score : ???</span><span class="answer-val">${score}</span></div>
+        </div>
+    </div>
+
+
+    <!-- ══ SCORE GLOBAL ══ -->
+    <div class="global-score-panel" id="globalScore">
+        <div class="gs-big"><span id="gs-val">—</span></div>
+        <div class="gs-sub" id="gs-sub">score global</div>
+        <div class="gs-chips" id="gs-chips"></div>
+    </div>
+
+    <div class="cta-wrap">
+        <p>Revoir un concept ? Le cours est là.</p>
+        <a class="cta-btn" href="../sommaire.html">← Retour au sommaire</a>
+    </div>
+
+    <div class="footer-note">
+        init → update → checkCollisions → draw → requestAnimationFrame 🕹️<br>
+        <span style="font-size:0.82rem;">Exercices — Vibecoding Canvas & Jeu navigateur</span>
+    </div>
+
+    <script>
+    var qcmData = [
+        { q: "Pourquoi utiliser requestAnimationFrame() plutôt que setInterval() pour la boucle de jeu ?", opts: ["setInterval est plus difficile à écrire","requestAnimationFrame synchronise avec le taux de rafraîchissement de l'écran et s'arrête automatiquement quand l'onglet est en arrière-plan","requestAnimationFrame est plus lent et donc plus facile à déboguer","setInterval ne fonctionne pas avec le Canvas"], correct: 1, expl: "✓ requestAnimationFrame est synchronisé avec le rafraîchissement écran (60fps), automatiquement en pause quand l'onglet est caché (économie CPU), et produit des animations plus fluides. setInterval peut dériver et n'est pas synchronisé." },
+        { q: "À quoi sert ctx.clearRect(0, 0, W, H) en début de draw() ?", opts: ["Changer la couleur de fond du canvas","Réinitialiser toutes les variables du jeu","Effacer le canvas pour éviter que les objets laissent une traînée de la frame précédente","Redimensionner le canvas à chaque frame"], correct: 2, expl: "✓ Sans clearRect, chaque frame s'ajoute sur la précédente. Le joueur et les ennemis laissent une traînée visible. On efface tout puis on redessine tout à chaque frame." },
+        { q: "Pourquoi déclarer un objet touches{} pour gérer les touches clavier ?", opts: ["Pour éviter que deux touches ne se pressent en même temps","Pour mémoriser l'état des touches à chaque frame — keydown ne déclenche qu'une fois par appui, pas en continu","Pour empêcher les touches de répéter automatiquement","Pour que le jeu fonctionne sur mobile"], correct: 1, expl: "✓ keydown déclenche une fois par appui (avec un délai de répétition). Pour un déplacement continu frame par frame, on mémorise true/false dans touches{} via keydown/keyup, et on consulte cet état dans update() à chaque frame." },
+        { q: "Qu'est-ce que la détection de collision AABB ?", opts: ["Un algorithme qui calcule la distance euclidienne entre deux points","Un test de chevauchement de deux rectangles alignés sur les axes — 4 conditions sur x, y, w, h","Une méthode pour détecter les collisions circulaires uniquement","Un standard de compression d'images pour le Canvas"], correct: 1, expl: "✓ AABB (Axis-Aligned Bounding Box) teste si deux rectangles se chevauchent avec 4 conditions simples : a.x < b.x+b.w, a.x+a.w > b.x, a.y < b.y+b.h, a.y+a.h > b.y. C'est la méthode de collision la plus simple et la plus utilisée pour les jeux 2D." },
+        { q: "Que se passe-t-il si on oublie le .filter() sur balles[] dans update() ?", opts: ["Les balles restent visibles à l'écran après être sorties","Le jeu plante immédiatement","Les tableaux grossissent indéfiniment — des milliers d'objets sont calculés chaque frame, causant un ralentissement puis un gel","Les balles reviennent en boucle de l'autre côté de l'écran"], correct: 2, expl: "✓ Sans filter, balles[] et ennemis[] accumulent tous les objets créés depuis le début. Après quelques minutes, des milliers d'objets invisibles sont calculés à 60fps — le CPU est saturé et le jeu ralentit ou se fige." },
+        { q: "Dans quel ordre dessiner les éléments dans draw() ?", opts: ["Joueur en premier pour qu'il soit toujours visible","N'importe quel ordre, le Canvas gère les couches automatiquement","Du fond vers l'avant : fond → ennemis → balles → joueur → HUD","HUD en premier, puis les objets du jeu par-dessus"], correct: 2, expl: "✓ Le Canvas dessine en couches : chaque dessin se superpose aux précédents. Le fond doit être dessiné en premier (sinon il efface tout), le HUD (score, vies) en dernier pour être toujours visible par-dessus tout." },
+        { q: "Comment empêcher un joueur de sortir du bord droit du canvas ?", opts: ["Tester if (joueur.x > W) et bloquer le déplacement","joueur.x = Math.min(W - joueur.w, joueur.x)","Ajouter un mur invisible avec fillRect","Rediriger le joueur de l'autre côté"], correct: 1, expl: "✓ Math.min(W - joueur.w, joueur.x) retourne la valeur la plus petite entre W-joueur.w et x actuel. Si x dépasse la limite droite, il est ramené exactement au bord. On combine avec Math.max(0, ...) pour le bord gauche en une seule ligne." },
+        { q: "Comment stopper la boucle de jeu lors du Game Over ?", opts: ["Mettre gameLoop dans un try/catch","Appeler cancelAnimationFrame(animId) avec l'id retourné par requestAnimationFrame","Fermer l'onglet du navigateur","Mettre un return dans update()"], correct: 1, expl: "✓ requestAnimationFrame retourne un identifiant numérique. cancelAnimationFrame(animId) annule la frame suivante programmée. Sans ça, la boucle continue même après le Game Over, gaspillant du CPU et pouvant causer des bugs si on relance le jeu." }
+    ];
+
+    var vfData = [
+        { stmt: "Le width et height d'un canvas peuvent être définis uniquement en CSS.", correct: false, expl: "Faux. La résolution interne du canvas doit être définie dans la balise HTML (width='800' height='500'). Le CSS peut redimensionner l'affichage, mais sans les attributs HTML, la résolution interne reste 300×150 et les coordonnées sont fausses." },
+        { stmt: "On peut dessiner un rectangle sur le Canvas avec ctx.fillRect(x, y, largeur, hauteur) sans appeler beginPath().", correct: true, expl: "Vrai. fillRect() est une méthode autonome qui dessine directement. beginPath() est uniquement nécessaire pour les tracés complexes comme arc(), lineTo(), moveTo()." },
+        { stmt: "Dans un jeu Canvas, les variables joueur, balles[] et ennemis[] doivent être déclarées à l'intérieur de la boucle gameLoop().", correct: false, expl: "Faux. Ces variables doivent être globales — déclarées au niveau supérieur du fichier, en dehors de toutes les fonctions. Si elles étaient dans gameLoop(), elles seraient réinitialisées à chaque frame (60×/s)." },
+        { stmt: "ctx.beginPath() doit être appelé avant de dessiner un cercle avec ctx.arc().", correct: true, expl: "Vrai. Sans beginPath(), les arcs s'accumulent dans le chemin courant. Des cercles dessinés précédemment peuvent s'ajouter à ta forme actuelle, causant des dessins parasites." },
+        { stmt: "setInterval(spawnEnemy, 1500) et la boucle requestAnimationFrame peuvent coexister dans le même jeu.", correct: true, expl: "Vrai. requestAnimationFrame gère le rendu frame par frame (60fps). setInterval gère des actions périodiques moins fréquentes comme le spawn d'ennemis. Les deux mécanismes sont indépendants et complémentaires." },
+        { stmt: "Appeler init() une deuxième fois (Rejouer) sans cancelAnimationFrame() au préalable créera deux boucles qui tournent en parallèle.", correct: true, expl: "Vrai. C'est le bug de 'double boucle'. Chaque appel à gameLoop() + requestAnimationFrame() démarre une nouvelle boucle indépendante. Sans cancelAnimationFrame(animId), l'ancienne continue — le jeu tourne deux fois plus vite et les calculs sont dupliqués." },
+        { stmt: "Les objets balles[] et ennemis[] se suppriment automatiquement quand ils sortent du canvas.", correct: false, expl: "Faux. JavaScript ne supprime jamais les éléments d'un tableau automatiquement. Il faut explicitement filtrer les tableaux avec .filter() dans update() pour supprimer les objets hors canvas. Sans ça, ils continuent à exister et à être calculés indéfiniment." },
+        { stmt: "Pour dessiner le joueur devant les ennemis, il faut les dessiner après les ennemis dans draw().", correct: true, expl: "Vrai. Le Canvas dessine en couches successives : ce qui est dessiné après est par-dessus. Ennemis → Balles → Joueur → HUD garantit que le joueur est visible devant les ennemis, et le score visible devant tout." }
+    ];
+
+    function renderQCM() {
+        var c = document.getElementById('qcm-container'); c.innerHTML = '';
+        qcmData.forEach(function(q, i) {
+            var opts = q.opts.map(function(o, j) { return '<div class="opt" onclick="pickQCM(this,'+i+','+j+')"><div class="opt-dot"><div class="opt-dot-inner"></div></div>'+o+'</div>'; }).join('');
+            c.innerHTML += '<div class="qcm-card" id="qcm-'+i+'"><div class="q-num">Question '+(i+1)+' / '+qcmData.length+'</div><div class="q-text">'+q.q+'</div><div class="options">'+opts+'</div><div class="q-feedback" id="qfb-'+i+'"></div></div>';
+        });
+    }
+    function pickQCM(el,qi,oi){var card=document.getElementById('qcm-'+qi);if(card.dataset.locked)return;card.querySelectorAll('.opt').forEach(function(o){o.classList.remove('selected');});el.classList.add('selected');card.dataset.picked=oi;}
+    function checkQCM(){var correct=0,chips='';qcmData.forEach(function(q,i){var card=document.getElementById('qcm-'+i);card.dataset.locked=1;var picked=parseInt(card.dataset.picked),fb=document.getElementById('qfb-'+i);card.querySelectorAll('.opt').forEach(function(o,j){o.classList.remove('selected');if(j===q.correct)o.classList.add('correct');else if(j===picked&&picked!==q.correct)o.classList.add('wrong');});if(picked===q.correct){correct++;chips+='<span class="chip chip-ok">Q'+(i+1)+' ✓</span>';fb.textContent=q.expl;fb.className='q-feedback show ok';}else{chips+='<span class="chip chip-ko">Q'+(i+1)+' ✗</span>';fb.textContent='✗ '+q.expl;fb.className='q-feedback show ko';}});document.getElementById('prog-qcm').style.width=Math.round(correct/qcmData.length*100)+'%';document.getElementById('score-qcm').innerHTML=chips;document.getElementById('qcm-score-val').textContent=correct;document.getElementById('qcm-score-panel').classList.add('show');updateGlobal();}
+    function resetQCM(){renderQCM();document.getElementById('prog-qcm').style.width='0%';document.getElementById('score-qcm').innerHTML='';document.getElementById('qcm-score-panel').classList.remove('show');}
+
+    function renderVF(){var c=document.getElementById('vf-container');c.innerHTML='';vfData.forEach(function(v,i){c.innerHTML+='<div class="vf-card" id="vf-'+i+'"><div class="vf-statement">'+v.stmt+'</div><div class="vf-btns"><button class="vf-btn vrai" onclick="pickVF(this,'+i+',true)">✅ Vrai</button><button class="vf-btn faux" onclick="pickVF(this,'+i+',false)">❌ Faux</button></div><div class="q-feedback" id="vfb-'+i+'"></div></div>';});}
+    function pickVF(btn,i,val){var card=document.getElementById('vf-'+i);if(card.dataset.locked)return;card.querySelectorAll('.vf-btn').forEach(function(b){b.classList.remove('selected');});btn.classList.add('selected');card.dataset.picked=val;}
+    function checkVF(){var correct=0,chips='';vfData.forEach(function(v,i){var card=document.getElementById('vf-'+i);card.dataset.locked=1;var picked=card.dataset.picked==='true',fb=document.getElementById('vfb-'+i);card.querySelectorAll('.vf-btn').forEach(function(btn){var isV=btn.classList.contains('vrai');if((isV&&v.correct)||(!isV&&!v.correct))btn.classList.add('correct-ans');else if(card.dataset.picked!==undefined&&((isV&&!v.correct&&picked)||(!isV&&v.correct&&!picked)))btn.classList.add('wrong-ans');});if(card.dataset.picked!==undefined&&picked===v.correct){correct++;chips+='<span class="chip chip-ok">Q'+(i+1)+' ✓</span>';fb.textContent='✓ '+v.expl;fb.className='q-feedback show ok';}else{chips+='<span class="chip chip-ko">Q'+(i+1)+' ✗</span>';fb.textContent='✗ '+v.expl;fb.className='q-feedback show ko';}});document.getElementById('prog-vf').style.width=Math.round(correct/vfData.length*100)+'%';document.getElementById('score-vf').innerHTML=chips;document.getElementById('vf-score-val').textContent=correct;document.getElementById('vf-score-panel').classList.add('show');updateGlobal();}
+    function resetVF(){renderVF();document.getElementById('prog-vf').style.width='0%';document.getElementById('score-vf').innerHTML='';document.getElementById('vf-score-panel').classList.remove('show');}
+
+    function pickScenario(el,isCorrect){var card=el.closest('.scenario-card');if(card.querySelector('.correct'))return;card.querySelectorAll('.scenario-choice').forEach(function(c){c.classList.add('disabled');});var fb=card.querySelector('.scenario-feedback');if(isCorrect){el.classList.add('correct');fb.classList.add('show','ok');}else{el.classList.add('wrong');fb.classList.add('show','ko');card.querySelectorAll('.scenario-choice').forEach(function(c){if(c.onclick.toString().includes('true'))c.classList.add('correct');});}}
+
+    var matchCorrect=[0,1,2,3,4,5,6,7],selLeft=null,selRight=null,matchedCount=0;
+    function selectMatch(side,idx){if(side==='left'){var el=document.getElementById('ml'+idx);if(el.classList.contains('matched'))return;if(selLeft!==null)document.getElementById('ml'+selLeft).classList.remove('selected');selLeft=idx;el.classList.add('selected');}else{var er=document.getElementById('mr'+idx);if(er.classList.contains('matched'))return;if(selRight!==null)document.getElementById('mr'+selRight).classList.remove('selected');selRight=idx;er.classList.add('selected');}if(selLeft!==null&&selRight!==null){var lEl=document.getElementById('ml'+selLeft),rEl=document.getElementById('mr'+selRight);if(matchCorrect[selLeft]===selRight){lEl.classList.remove('selected');lEl.classList.add('matched');rEl.classList.remove('selected');rEl.classList.add('matched');matchedCount++;if(matchedCount===8)document.getElementById('matchResult').classList.add('show');}else{lEl.classList.add('wrong-flash');rEl.classList.add('wrong-flash');setTimeout(function(){lEl.classList.remove('selected','wrong-flash');rEl.classList.remove('selected','wrong-flash');},600);}selLeft=null;selRight=null;}}
+
+    var dragSrc=null;
+    function initDrag(){document.querySelectorAll('.order-item').forEach(function(item){item.addEventListener('dragstart',function(){dragSrc=this;this.classList.add('dragging');});item.addEventListener('dragend',function(){this.classList.remove('dragging');document.querySelectorAll('.order-item').forEach(function(i){i.classList.remove('drag-over');});});item.addEventListener('dragover',function(e){e.preventDefault();this.classList.add('drag-over');});item.addEventListener('dragleave',function(){this.classList.remove('drag-over');});item.addEventListener('drop',function(e){e.preventDefault();this.classList.remove('drag-over');if(dragSrc!==this){var l=document.getElementById('orderList'),a=Array.from(l.children),si=a.indexOf(dragSrc),ti=a.indexOf(this);if(si<ti)l.insertBefore(dragSrc,this.nextSibling);else l.insertBefore(dragSrc,this);}});}); }
+    initDrag();
+    var tapFirst=null;
+    function tapOrder(el){if(!tapFirst){tapFirst=el;el.classList.add('tap-sel');}else{if(tapFirst!==el){var l=document.getElementById('orderList'),a=Array.from(l.children),i1=a.indexOf(tapFirst),i2=a.indexOf(el);if(i1<i2)l.insertBefore(tapFirst,el.nextSibling);else l.insertBefore(tapFirst,el);}tapFirst.classList.remove('tap-sel');tapFirst=null;}}
+    function validateOrder(){var l=document.getElementById('orderList'),items=Array.from(l.children),ok=true;items.forEach(function(it,idx){var c=parseInt(it.dataset.correct);it.querySelector('.order-num').textContent=idx+1;it.classList.remove('correct','wrong');if(c===idx+1)it.classList.add('correct');else{it.classList.add('wrong');ok=false;}});var fb=document.getElementById('orderFeedback');if(ok){fb.textContent='🎉 Parfait ! Le pipeline de développement est dans le bon ordre.';fb.className='order-feedback show ok';}else{fb.textContent='❌ Quelques étapes sont mal placées. Réordonnez et réessayez !';fb.className='order-feedback show ko';}}
+    function revealOrder(){var l=document.getElementById('orderList'),items=Array.from(l.children);items.sort(function(a,b){return parseInt(a.dataset.correct)-parseInt(b.dataset.correct);});items.forEach(function(it,idx){l.appendChild(it);it.querySelector('.order-num').textContent=idx+1;it.className='order-item correct';});var fb=document.getElementById('orderFeedback');fb.textContent='👁 Voici le bon ordre — mémorisez-le, puis mélangez pour réessayer.';fb.className='order-feedback show';fb.style.color='#633806';document.getElementById('order-answers').classList.add('show');}
+    function shuffleOrder(){var l=document.getElementById('orderList'),items=Array.from(l.children);for(var i=items.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));l.insertBefore(items[j],items[i]);var t=items[i];items[i]=items[j];items[j]=t;}items.forEach(function(it){it.className='order-item';it.setAttribute('draggable','true');it.querySelector('.order-num').textContent='?';});document.getElementById('orderFeedback').className='order-feedback';document.getElementById('orderFeedback').style.color='';document.getElementById('order-answers').classList.remove('show');initDrag();}
+
+    var completeData={
+        c1:{ids:['b1a','b1b','b1c','b1d'],answers:['vitesse','vitesse','filter','H']},
+        c2:{ids:['b2a','b2b','b2c','b2d','b2e'],answers:['enCours','update','draw','requestAnimationFrame','cancelAnimationFrame']},
+        c3:{ids:['b3a','b3b','b3c','b3d'],answers:['clearRect','beginPath','fill','${score}']}
+    };
+    function validateComplete(cid){var data=completeData[cid],ok=0;data.ids.forEach(function(id,i){var el=document.getElementById(id),val=el.value.trim(),ans=data.answers[i];el.classList.remove('ok','ko','revealed');if(val.toLowerCase()===ans.toLowerCase()){el.classList.add('ok');ok++;}else el.classList.add('ko');});var fb=document.getElementById(cid+'-feedback'),total=data.ids.length;if(ok===total){fb.textContent='🎉 Parfait ! Tous les champs sont corrects.';fb.className='complete-feedback show ok';}else{fb.textContent='❌ '+ok+'/'+total+' corrects — les champs en rouge sont incorrects.';fb.className='complete-feedback show ko';}updateGlobal();}
+    function revealAnswers(cid){var data=completeData[cid];data.ids.forEach(function(id,i){var el=document.getElementById(id);el.value=data.answers[i];el.classList.remove('ok','ko');el.classList.add('revealed');});document.getElementById(cid+'-answers').classList.toggle('show');var fb=document.getElementById(cid+'-feedback');fb.textContent='👁 Réponses affichées — réinitialisez pour réessayer.';fb.className='complete-feedback show';fb.style.color='#633806';}
+    function resetComplete(cid){var data=completeData[cid];data.ids.forEach(function(id){var el=document.getElementById(id);el.value='';el.classList.remove('ok','ko','revealed');});document.getElementById(cid+'-feedback').className='complete-feedback';document.getElementById(cid+'-feedback').style.color='';document.getElementById(cid+'-answers').classList.remove('show');}
+
+    function updateGlobal(){var qp=document.getElementById('qcm-score-panel'),vp=document.getElementById('vf-score-panel');if(!qp.classList.contains('show')||!vp.classList.contains('show'))return;var qs=parseInt(document.getElementById('qcm-score-val').textContent),vs=parseInt(document.getElementById('vf-score-val').textContent),total=qs+vs,max=qcmData.length+vfData.length,panel=document.getElementById('globalScore');panel.classList.add('show');document.getElementById('gs-val').textContent=total+' / '+max;var pct=Math.round(total/max*100),msg=pct>=90?'🏆 Excellent ! Tu maîtrises la game loop Canvas.':pct>=70?'👍 Bien joué ! Quelques concepts à revoir.':'💪 Continue — relis le cours et recommence.';document.getElementById('gs-sub').textContent=msg;document.getElementById('gs-chips').innerHTML='<span class="chip chip-ok">QCM : '+qs+'/'+qcmData.length+'</span><span class="chip chip-ok">V/F : '+vs+'/'+vfData.length+'</span>';}
+
+    renderQCM();renderVF();
+    </script>
+</body>
+</html>
