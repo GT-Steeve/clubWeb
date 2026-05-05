@@ -40,6 +40,7 @@ v1.15.0 = ajout cours template django
 v1.15.1 = clean code
 v1.16.0 = ajout vibe coding sur django
 v1.17.0 = ajout vibe coding web1 et jeux vidéo
+v1.18.0 = ajout cours déploiement + correctif résumé global
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
