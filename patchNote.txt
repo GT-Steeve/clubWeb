@@ -42,12 +42,12 @@ v1.16.0 = ajout vibe coding sur django
 v1.17.0 = ajout vibe coding web1 et jeux vidéo
 v1.18.0 = ajout cours déploiement + correctif résumé global
 v1.18.1 = correctif sommaire cours déploiement 
+v1.18.2 = amélioration sommaire.html
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
 
 ** Next step ** 
-bug affichage exercices-resume-global.html fin de page
 Revoir les cours Jeux Web URGENT !!
 prévoir exercice pour javascript jeux et canvas
 Revoir l'exercice 3 question 1 uniquement !
