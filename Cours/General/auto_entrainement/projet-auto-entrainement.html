@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Ma note sur l'auto-entraînement</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%94%81%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    /* Requirements */
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    /* Themes grid */
+    .themes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.6rem; }
+    .theme-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .theme-title { font-weight: 800; margin-bottom: 4px; font-size: 0.9rem; }
+
+    /* Format badges */
+    .format-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.6rem; }
+    .format-tag { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; border: 0.5px solid; }
+    .ft-html { background: #E6F1FB; border-color: #85B7EB; color: #0C447C; }
+    .ft-pdf  { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+    .ft-word { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+    .ft-md   { background: #EEEDFE; border-color: #CECBF6; color: #3C3489; }
+
+    /* Formula block */
+    .formula-block {
+      background: #1E1A2E; border-radius: 12px; padding: 1.2rem 1.4rem;
+      text-align: center; margin-top: 0.8rem;
+    }
+    .formula-text {
+      font-family: 'Fira Code', monospace; font-size: 1.15rem;
+      color: #CECBF6; font-weight: 700; letter-spacing: 0.04em;
+    }
+    .formula-label { font-size: 0.8rem; color: #888780; margin-top: 6px; }
+
+    /* Checklist */
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn {
+      display: inline-block; background: #FAC775; color: #412402;
+      font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+      border-radius: 10px; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.7rem; }
+      .themes-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="exercices-auto-entrainement.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>🔁 Projet — Ma note sur l'auto-entraînement</h1>
+    <p>Rédige ta note numérique personnelle sur la méthode d'apprentissage !</p>
+    <div class="badge-row">
+      <span class="badge b-blue">Projet libre</span>
+      <span class="badge b-purple">Note personnelle</span>
+      <span class="badge b-amber">Format numérique</span>
+      <span class="badge b-teal">Méthodologie</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Tu viens d'apprendre <strong>comment apprendre</strong> — la méthode d'auto-entraînement, le danger de l'effet spaghetti, la valeur de la répétition. Maintenant tu vas créer <strong>ta note numérique personnelle</strong> qui résume ce cours dans tes propres mots.</p>
+    <p class="desc">Ce n'est pas un résumé scolaire. C'est un document que tu pourras relire avant de commencer un nouveau cours ou un nouveau projet pour te rappeler <strong>comment travailler correctement</strong>. Dans 3 mois, cette note doit te permettre de retrouver les bons réflexes en quelques secondes.</p>
+    <div class="tip tip-purple">
+      <span class="tip-i">🧠</span>
+      <span>Rédiger ce résumé avec tes propres mots, c'est déjà de l'auto-entraînement en action. Tu reconstruis les concepts depuis ta compréhension, pas depuis ta mémoire à court terme.</span>
+    </div>
+  </div>
+
+  <!-- LA FORMULE CLEF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">∑</div>La formule à ne pas oublier</div>
+    <p class="desc">Ton projet doit absolument inclure cette formule — avec tes propres explications :</p>
+    <div class="formula-block">
+      <div class="formula-text">Expertise = Temps × Compréhension</div>
+      <div class="formula-label">Ce n'est pas le nombre d'heures qui compte — c'est la qualité de la compréhension à chaque heure.</div>
+    </div>
+    <div class="tip tip-amber" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span>Explique cette formule avec tes propres mots dans ta note. Qu'est-ce que ça veut dire pour toi ? Qu'est-ce qui change si la compréhension est proche de zéro, même avec beaucoup de temps ?</span>
+    </div>
+  </div>
+
+  <!-- CONTENU À COUVRIR -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-blue">📚</div>Contenu à inclure dans ta note</div>
+    <p class="desc">Ta note doit couvrir les thèmes essentiels du cours. Voici les sections recommandées — adapte-les à ta façon :</p>
+
+    <div class="themes-grid">
+      <div class="theme-card" style="background:#E1F5EE;border:0.5px solid #9FE1CB;">
+        <div class="theme-title" style="color:#085041;">🔁 Pourquoi s'entraîner</div>
+        <div style="font-size:0.83rem;color:#0D7A5F;">Lire ≠ comprendre. La répétition active construit la compréhension durable.</div>
+      </div>
+      <div class="theme-card" style="background:#FCEBEB;border:0.5px solid #F09595;">
+        <div class="theme-title" style="color:#791F1F;">⚠️ L'effet spaghetti</div>
+        <div style="font-size:0.83rem;color:#A32D2D;">Coller du code sans comprendre → bugs en chaîne → projet bloqué.</div>
+      </div>
+      <div class="theme-card" style="background:#EEEDFE;border:0.5px solid #CECBF6;">
+        <div class="theme-title" style="color:#3C3489;">🧠 Les 3 rounds</div>
+        <div style="font-size:0.83rem;color:#4D3B8A;">Round 1 hésitation → Round 2 confiance → Round 3 maîtrise réelle.</div>
+      </div>
+      <div class="theme-card" style="background:#FAEEDA;border:0.5px solid #FAC775;">
+        <div class="theme-title" style="color:#633806;">🚀 Créer un projet</div>
+        <div style="font-size:0.83rem;color:#8C5010;">5 étapes : idée → réflexion → IA pour informer → tester → recommencer plus grand.</div>
+      </div>
+      <div class="theme-card" style="background:#E6F1FB;border:0.5px solid #85B7EB;">
+        <div class="theme-title" style="color:#0C447C;">∑ La formule</div>
+        <div style="font-size:0.83rem;color:#185FA5;">Expertise = Temps × Compréhension — expliquée avec tes propres mots.</div>
+      </div>
+      <div class="theme-card" style="background:#F1EFE8;border:0.5px solid #B4B2A9;">
+        <div class="theme-title" style="color:#444441;">💡 Tes règles perso</div>
+        <div style="font-size:0.83rem;color:#5F5E5A;">2-3 engagements que tu te fixes pour tes prochaines sessions de code.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMATS ACCEPTÉS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">📄</div>Format de ta note</div>
+    <p class="desc">Ta note peut prendre la forme qui te convient. Le seul critère : elle doit être <strong>numérique et relisible facilement</strong>.</p>
+
+    <div class="rl">Formats acceptés</div>
+    <div class="format-row">
+      <span class="format-tag ft-html">🌐 Page HTML</span>
+      <span class="format-tag ft-pdf">📕 PDF</span>
+      <span class="format-tag ft-word">📘 Word / .docx</span>
+      <span class="format-tag ft-md">📝 Markdown .md</span>
+    </div>
+
+    <div class="tip tip-blue" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span>La page HTML est recommandée — tu peux y styliser la formule <code>Expertise = Temps × Compréhension</code>, visualiser le cycle des 3 rounds en CSS, et rendre la note interactive avec des cases à cocher. Mais Word ou un PDF bien structuré sont valides aussi.</span>
+    </div>
+  </div>
+
+  <!-- CAHIER DES CHARGES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Cahier des charges — Exigences obligatoires</div>
+    <p class="desc">Peu importe le format choisi, ces points sont non-négociables :</p>
+
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>La note s'ouvre et est lisible sans erreur.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Elle couvre <strong>au moins 4 des 6 thèmes</strong> listés ci-dessus avec tes propres mots.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Elle est <strong>structurée</strong> : un titre, des sections séparées, du contenu lisible d'un coup d'œil.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>La formule <strong>Expertise = Temps × Compréhension</strong> est présente et expliquée dans tes propres termes.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>L'effet spaghetti est expliqué : ce que c'est, comment il se produit, et comment l'éviter.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le contenu est rédigé par toi — pas copié-collé du cours, mais reformulé à ta façon.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus — Pour aller plus loin</div>
+    <p class="desc">Ces éléments enrichissent ta note et montrent une vraie appropriation du cours :</p>
+
+    <div class="req-list">
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Créer ta page HTML avec un fichier <code>style.css</code> séparé — en appliquant les conventions d'architecture du cours Architecture !</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Visualiser le <strong>schéma de l'effet spaghetti</strong> en HTML/CSS : les nœuds Bug → IA → Coller → Bug × 2.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter une section <strong>"Mes engagements de dev"</strong> : 3 règles personnelles que tu t'imposes pour éviter l'effet spaghetti.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter une <strong>checklist interactive</strong> (avec JavaScript) : les 4 étapes avant de commencer un projet (Lire → Exercices × 2 → Comprendre → Coder).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Lister les <strong>6 idées de mini-projets</strong> du cours avec une case "✓ fait" à cocher au fur et à mesure que tu les réalises.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTHODE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Relis le cours</strong> — Parcours <code>cours-auto-entrainement.html</code> et note les 6 thèmes. Pour chacun, écris 2-3 points clés dans tes propres mots, sans regarder le cours.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Choisis ton format</strong> — HTML pour la liberté maximale (et pour t'entraîner !), Word ou PDF si tu préfères un format plus classique.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Structure d'abord</strong> — Pose tous tes titres de sections avant de remplir le contenu. Pour HTML : tous les <code>&lt;h2&gt;</code>. Pour Word : tous les en-têtes. Ensuite seulement, tu remplis.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>Formule en évidence</strong> — Place <code>Expertise = Temps × Compréhension</code> dans un bloc visuel mis en valeur (fond coloré, grande police). C'est le cœur du cours — ça doit se voir.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>Ajoute tes règles perso</strong> — Ce qui fait la différence entre une note et ton document, c'est ce que <em>toi</em> tu retiens. Ajoute ta section "mes engagements" : 2-3 choses concrètes que tu feras différemment.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">6</div>
+        <div class="step-content"><strong>Utilise l'IA pour le style, pas pour le fond</strong> — Pour le CSS ou la mise en forme, demande de l'aide. Mais le contenu de ta note — les explications, la formule, tes règles — c'est toi qui les écris.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✓</div>Checklist de vérification</div>
+    <p class="desc">Coche chaque point avant de considérer ta note terminée :</p>
+
+    <div class="checklist">
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Ma note s'ouvre sans erreur dans le bon logiciel</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Elle a un titre principal clair et des sections séparées</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Au moins 4 des 6 thèmes du cours sont couverts</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>La formule Expertise = Temps × Compréhension est présente et expliquée</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>L'effet spaghetti est expliqué avec un exemple concret</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le contenu est rédigé avec mes propres mots</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Je peux retrouver la méthode des 3 rounds sans rouvrir le cours</span></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Comprendre &rarr; Pratiquer &rarr; Créer &rarr; Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html#step1">&larr; Retour au sommaire</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) {
+      box.classList.toggle('checked');
+    }
+  </script>
+
+</body>
+
+</html>

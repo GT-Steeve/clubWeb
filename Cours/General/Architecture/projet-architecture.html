@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Architecture de projet</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-green  { background: #EAF3DE; color: #3B6D11; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    /* File tree */
+    .tree {
+      background: #1D1D1B; border-radius: 12px; padding: 1.2rem 1.4rem;
+      font-family: 'Fira Code', monospace; font-size: 0.86rem; color: #D3D1C7;
+      margin-top: 0.8rem; display: flex; flex-direction: column;
+    }
+    .tl { display: flex; align-items: baseline; padding: 2px 0; white-space: pre; }
+    .tree-folder    { color: #FAC775; font-weight: 700; }
+    .tree-file-html { color: #85B7EB; }
+    .tree-file-css  { color: #9FE1CB; }
+    .tree-file-js   { color: #FAD075; }
+    .tree-file-img  { color: #F4C0D1; }
+    .tree-ln        { color: #5F5E5A; }
+    .tree-root      { color: #ffffff; font-weight: 700; }
+    .tree-comment   { color: #5F5E5A; font-style: italic; }
+
+    /* Requirements */
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    /* Checklist */
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber { background: #FAEEDA; color: #633806; }
+    .tip-blue  { background: #E6F1FB; color: #0C447C; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Path demo */
+    .path-demo { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin: 0.6rem 0 0.3rem; font-family: 'Fira Code', monospace; font-size: 0.88rem; }
+    .path-seg { padding: 4px 9px; border-radius: 6px; font-weight: 700; }
+    .path-sep { color: #888780; padding: 0 2px; }
+    .seg-folder { background: #FAEEDA; color: #633806; }
+    .seg-file   { background: #E6F1FB; color: #0C447C; }
+    .seg-up     { background: #FAECE7; color: #712B13; }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn {
+      display: inline-block; background: #FAC775; color: #412402;
+      font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+      border-radius: 10px; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) { .hero h1 { font-size: 1.7rem; } }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="exercices-architecture.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>🗂️ Projet — Architecture de projet</h1>
+    <p>Crée ton propre site multi-pages dans VS Code !</p>
+    <div class="badge-row">
+      <span class="badge b-blue">Projet guidé</span>
+      <span class="badge b-purple">Architecture</span>
+      <span class="badge b-amber">Chemins de fichiers</span>
+      <span class="badge b-green">VS Code</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Tu as compris comment organiser les fichiers d'un projet web et écrire des chemins relatifs. Maintenant, c'est à toi de le faire pour de vrai — dans <strong>VS Code</strong>, avec tes propres mains.</p>
+    <p class="desc">Le but : <strong>créer un petit site multi-pages</strong> en respectant l'architecture du cours. Le thème est entièrement libre — choisis un sujet qui te plaît ! Tu peux utiliser l'IA et le cours pour t'aider, mais c'est <strong>toi</strong> qui dois créer les fichiers, les dossiers et écrire les chemins.</p>
+    <div class="tip">
+      <span class="tip-i">💡</span>
+      <span>L'important ici n'est pas le design de ton site — c'est <strong>l'organisation de tes fichiers et la correction de tes chemins</strong>. Un site tout simple avec la bonne architecture vaut mieux qu'un beau site avec des erreurs de chemins !</span>
+    </div>
+  </div>
+
+  <!-- STRUCTURE REQUISE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-blue">📁</div>Structure de fichiers requise</div>
+    <p class="desc">Ton projet doit respecter cette architecture. Le nom du dossier racine et les contenus sont libres, mais les noms <code>index.html</code>, <code>Assets/</code>, <code>css/</code>, <code>js/</code> et <code>img/</code> sont obligatoires.</p>
+
+    <div class="tree">
+<div class="tl"><span class="tree-root">mon-projet/</span><span class="tree-comment">          &larr; ton dossier racine (nom libre)</span></div>
+<div class="tl"><span class="tree-ln">│</span></div>
+<div class="tl"><span class="tree-ln">├── </span><span class="tree-file-html">index.html</span><span class="tree-comment">        &larr; page d'accueil (obligatoire)</span></div>
+<div class="tl"><span class="tree-ln">│</span></div>
+<div class="tl"><span class="tree-ln">├── </span><span class="tree-folder">📁 pages/</span><span class="tree-comment">            &larr; sous-dossier pour les autres pages</span></div>
+<div class="tl"><span class="tree-ln">│   └── </span><span class="tree-file-html">contact.html</span><span class="tree-comment">  &larr; 2e page HTML (nom et contenu libres)</span></div>
+<div class="tl"><span class="tree-ln">│</span></div>
+<div class="tl"><span class="tree-ln">└── </span><span class="tree-folder">📁 Assets/</span><span class="tree-comment">           &larr; tous les fichiers de support</span></div>
+<div class="tl"><span class="tree-ln">    ├── </span><span class="tree-folder">📁 css/</span></div>
+<div class="tl"><span class="tree-ln">    │   └── </span><span class="tree-file-css">style.css</span><span class="tree-comment">     &larr; styles communs aux deux pages</span></div>
+<div class="tl"><span class="tree-ln">    ├── </span><span class="tree-folder">📁 js/</span></div>
+<div class="tl"><span class="tree-ln">    │   └── </span><span class="tree-file-js">script.js</span><span class="tree-comment">     &larr; javascript (peut être vide)</span></div>
+<div class="tl"><span class="tree-ln">    └── </span><span class="tree-folder">📁 img/</span></div>
+<div class="tl"><span class="tree-ln">        └── </span><span class="tree-file-img">image.png</span><span class="tree-comment">     &larr; au moins une image</span></div>
+    </div>
+
+    <div class="tip tip-amber" style="margin-top:0.9rem;">
+      <span class="tip-i">⚠️</span>
+      <span>Respecte les <strong>majuscules</strong> : le dossier s'appelle <code>Assets</code> (A majuscule). Les noms de fichiers et dossiers ne doivent <strong>jamais contenir d'espaces</strong> — utilise des tirets à la place.</span>
+    </div>
+  </div>
+
+  <!-- CAHIER DES CHARGES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Cahier des charges — Exigences obligatoires</div>
+    <p class="desc">Ces points techniques sont non-négociables. Le contenu et le design restent entièrement libres :</p>
+
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le dossier racine contient <strong>index.html</strong> et le dossier <strong>Assets/</strong> (avec A majuscule).</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Un dossier <strong>pages/</strong> existe avec au moins une deuxième page HTML.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Dans <strong>index.html</strong>, le CSS est lié avec le chemin relatif : <code>Assets/css/style.css</code></span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Depuis la page dans <code>pages/</code>, le CSS est lié avec : <code>../Assets/css/style.css</code></span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span><strong>index.html</strong> contient un lien vers la page dans <code>pages/</code> :<br><code>&lt;a href="pages/contact.html"&gt;…&lt;/a&gt;</code></span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>La page dans <code>pages/</code> a un lien de retour vers l'accueil :<br><code>&lt;a href="../index.html"&gt;…&lt;/a&gt;</code></span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Au moins une image dans <code>Assets/img/</code> est affichée dans le site avec le chemin relatif correct.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Aucun chemin absolu dans le code — pas de <code>C:/Users/…</code> ni <code>file:///</code>. Uniquement des chemins relatifs.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus — Pour aller plus loin</div>
+    <p class="desc">Ces éléments ne sont pas obligatoires, mais ils montrent que tu maîtrises bien le sujet :</p>
+
+    <div class="req-list">
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Créer une troisième page HTML dans <code>pages/</code> et la lier depuis <code>index.html</code>.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Lier <code>Assets/js/script.js</code> correctement depuis les deux pages (chemin différent selon la position).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Utiliser plusieurs images avec des chemins corrects depuis la racine ET depuis un sous-dossier.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter un <code>README.md</code> à la racine qui décrit brièvement ton projet.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAPPEL CHEMINS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">🧭</div>Rappel — Les chemins à écrire</div>
+    <p class="desc">Voici exactement les chemins que tu vas devoir utiliser selon d'où tu te trouves :</p>
+
+    <div style="margin-bottom:1.1rem;">
+      <div class="rl">Depuis index.html (à la racine du projet)</div>
+      <div class="path-demo">
+        <span class="path-seg seg-folder">Assets</span><span class="path-sep">/</span><span class="path-seg seg-folder">css</span><span class="path-sep">/</span><span class="path-seg seg-file">style.css</span>
+      </div>
+      <div class="path-demo" style="margin-top:4px;">
+        <span class="path-seg seg-folder">Assets</span><span class="path-sep">/</span><span class="path-seg seg-folder">img</span><span class="path-sep">/</span><span class="path-seg seg-file">image.png</span>
+      </div>
+      <div class="path-demo" style="margin-top:4px;">
+        <span class="path-seg seg-folder">pages</span><span class="path-sep">/</span><span class="path-seg seg-file">contact.html</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="rl">Depuis pages/contact.html (dans un sous-dossier)</div>
+      <div class="path-demo">
+        <span class="path-seg seg-up">..</span><span class="path-sep">/</span><span class="path-seg seg-folder">Assets</span><span class="path-sep">/</span><span class="path-seg seg-folder">css</span><span class="path-sep">/</span><span class="path-seg seg-file">style.css</span>
+      </div>
+      <div class="path-demo" style="margin-top:4px;">
+        <span class="path-seg seg-up">..</span><span class="path-sep">/</span><span class="path-seg seg-folder">Assets</span><span class="path-sep">/</span><span class="path-seg seg-folder">img</span><span class="path-sep">/</span><span class="path-seg seg-file">image.png</span>
+      </div>
+      <div class="path-demo" style="margin-top:4px;">
+        <span class="path-seg seg-up">..</span><span class="path-sep">/</span><span class="path-seg seg-file">index.html</span>
+      </div>
+    </div>
+
+    <div class="tip tip-blue" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span>Le <code>..</code> signifie "remonter d'un dossier". Depuis <code>pages/</code>, un <code>..</code> remonte à la racine du projet. N'oublie jamais le <code>/</code> après le <code>..</code> !</span>
+    </div>
+  </div>
+
+  <!-- MÉTHODE DE TRAVAIL -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Choisis un thème</strong> — Ton portfolio, un site sur ton jeu préféré, un restaurant fictif, un club sportif... Peu importe. Choisis quelque chose qui te motive à coder !</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Crée la structure dans VS Code</strong> — Ouvre VS Code, crée un nouveau dossier de projet, puis crée manuellement les fichiers et dossiers requis en suivant l'arbre ci-dessus. Clic droit dans l'explorateur → "Nouveau dossier" / "Nouveau fichier".</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Commence par les chemins</strong> — Dans chaque fichier HTML, commence par lier le CSS avec le bon chemin relatif AVANT d'écrire le contenu. Ouvre dans le navigateur et vérifie avec F12 → Console : aucune erreur en rouge.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>Construis le contenu</strong> — Maintenant que les chemins fonctionnent, ajoute ton contenu HTML et tes styles CSS. Personnalise comme tu le souhaites !</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>Teste la navigation</strong> — Clique sur tous les liens entre les pages et vérifie que tu peux naviguer sans erreur dans les deux sens.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">6</div>
+        <div class="step-content"><strong>Utilise le cours et l'IA pour débloquer</strong> — Si tu es bloqué, décris précisément ton problème : <em>"Mon CSS ne se charge pas depuis pages/contact.html, voici ma structure de fichiers..."</em>. L'IA t'aide à comprendre, pas à faire à ta place.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✓</div>Checklist de vérification</div>
+    <p class="desc">Coche chaque point avant de considérer ton projet terminé :</p>
+
+    <div class="checklist">
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>J'ai un dossier <code>Assets/</code> avec un A majuscule à la racine du projet</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Mon fichier <code>index.html</code> est bien à la racine (pas dans un sous-dossier)</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>J'ai un dossier <code>pages/</code> avec au moins une page HTML</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Dans <code>index.html</code>, le CSS est lié avec <code>Assets/css/style.css</code></span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Dans ma page dans <code>pages/</code>, le CSS est lié avec <code>../Assets/css/style.css</code></span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span><code>index.html</code> a un lien vers la page dans <code>pages/</code></span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Ma page dans <code>pages/</code> a un lien de retour vers <code>../index.html</code></span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Au moins une image s'affiche correctement avec un chemin relatif</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>F12 → Console : <strong>aucune erreur</strong> en rouge dans les deux pages</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Aucun chemin absolu (<code>C:/</code> ou <code>file:///</code>) dans mon code</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Aucun espace dans les noms de fichiers ou de dossiers</span></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Comprendre &rarr; Chercher &rarr; Coder &rarr; Tester &rarr; Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html#step4">&larr; Retour au sommaire</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) {
+      box.classList.toggle('checked');
+    }
+  </script>
+
+</body>
+
+</html>

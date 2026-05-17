@@ -281,6 +281,18 @@
 
     <div class="progress-wrap"><div class="progress-fill" id="prog-sort"></div></div>
     <div class="score-row" id="score-sort"></div>
+
+    <div class="btn-row" style="margin-top:0.4rem;">
+      <button class="action-btn" onclick="toggleAns('ans-sort')">Voir la réponse</button>
+    </div>
+    <div id="ans-sort" style="display:none;margin-top:0.8rem;background:#FAEEDA;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.8;color:#633806;">
+      <div style="font-weight:800;margin-bottom:6px;">✓ Distribution correcte :</div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-family:'Fira Code',monospace;font-size:0.83rem;">
+        <span>📁 Assets/css/</span><span>style.css, contact.css, reset.css</span>
+        <span>📁 Assets/js/</span><span>script.js, app.js</span>
+        <span>📁 Assets/img/</span><span>logo.png, banniere.jpg, photo.jpg</span>
+      </div>
+    </div>
   </div>
 
   <!-- EXERCICE 2 : QCM CHEMINS -->
@@ -376,6 +388,20 @@
 
     <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
     <div class="score-row" id="score-qcm"></div>
+
+    <div class="btn-row" style="margin-top:0.4rem;">
+      <button class="action-btn" onclick="toggleAns('ans-qcm')">Voir les réponses</button>
+    </div>
+    <div id="ans-qcm" style="display:none;margin-top:0.8rem;background:#FAEEDA;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.8;color:#633806;">
+      <div style="font-weight:800;margin-bottom:6px;">✓ Réponses correctes :</div>
+      <ol style="padding-left:1.2rem;display:flex;flex-direction:column;gap:4px;font-family:'Fira Code',monospace;font-size:0.83rem;">
+        <li>Assets/css/style.css</li>
+        <li>../Assets/img/logo.png</li>
+        <li>../index.html</li>
+        <li>apropos.html</li>
+        <li>../../Assets/css/style.css</li>
+      </ol>
+    </div>
   </div>
 
   <!-- EXERCICE 3 : RECONSTITUER LE CHEMIN -->
@@ -384,6 +410,18 @@
     <p class="desc">Clique sur les morceaux dans le bon ordre pour former le chemin correct. En cas d'erreur, clique sur un morceau plac&eacute; pour le retirer.</p>
 
     <div id="path-ex-container"></div>
+
+    <div class="btn-row" style="margin-top:0.4rem;">
+      <button class="action-btn" onclick="toggleAns('ans-path')">Voir les réponses</button>
+    </div>
+    <div id="ans-path" style="display:none;margin-top:0.8rem;background:#FAEEDA;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.8;color:#633806;">
+      <div style="font-weight:800;margin-bottom:6px;">✓ Chemins corrects :</div>
+      <ol style="padding-left:1.2rem;display:flex;flex-direction:column;gap:4px;font-family:'Fira Code',monospace;font-size:0.83rem;">
+        <li>Assets/js/script.js</li>
+        <li>../Assets/img/logo.png</li>
+        <li>../../Assets/css/style.css</li>
+      </ol>
+    </div>
 
     <div class="tip tip-purple" style="margin-top:0.9rem;">
       <span class="tip-i">💡</span>
@@ -395,7 +433,7 @@
     Tu sais maintenant organiser un projet et naviguer entre les fichiers ! 📁<br><br>
     <span style="font-size:0.82rem;">Comprendre → Chercher → Coder → Tester → Recommencer 🚀</span><br>
     <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
-    <a class="cta-btn" href="../sommaire.html#step4">&larr; Retour au sommaire</a>
+    <a class="cta-btn" href="projet-architecture.html">Passer à la pratique &rarr;</a>
   </div>
 
   <script>
@@ -705,6 +743,11 @@ var pathExercises = [
       builder.innerHTML = '<span style="font-size:0.8rem;color:#B4B2A9;font-family:\'Fira Code\',monospace;">Clique sur les morceaux dans l\'ordre...</span>';
       document.getElementById('fb-' + exId).textContent = '';
       document.getElementById('fb-' + exId).className = 'q-feedback';
+    }
+
+    function toggleAns(id) {
+      var el = document.getElementById(id);
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
     }
 
     buildPathExercises();

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — L'état d'esprit du développeur</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    /* Requirements */
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    /* Key concepts grid */
+    .concepts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.6rem; }
+    .concept-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .concept-title { font-weight: 800; margin-bottom: 4px; }
+
+    /* Checklist */
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-coral  { background: #FAECE7; color: #712B13; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    /* Format badges */
+    .format-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.6rem; }
+    .format-tag { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; border: 0.5px solid; }
+    .ft-html   { background: #E6F1FB; border-color: #85B7EB; color: #0C447C; }
+    .ft-css    { background: #FAECE7; border-color: #F0997B; color: #712B13; }
+    .ft-js     { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+    .ft-pdf    { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+    .ft-word   { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn {
+      display: inline-block; background: #FAC775; color: #412402;
+      font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+      border-radius: 10px; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.7rem; }
+      .concepts-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="exercices-mind-set.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>🧠 Projet — L'état d'esprit du développeur</h1>
+    <p>Crée ta fiche de synthèse du cours en format numérique !</p>
+    <div class="badge-row">
+      <span class="badge b-coral">Projet libre</span>
+      <span class="badge b-purple">Synthèse</span>
+      <span class="badge b-amber">Format numérique</span>
+      <span class="badge b-teal">VS Code</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Tu as étudié l'état d'esprit du développeur et répondu aux questions. Maintenant tu vas <strong>synthétiser ce cours sous forme de page web</strong> — une fiche de révision numérique que tu gardes et peux montrer.</p>
+    <p class="desc">C'est un projet de <strong>mise en forme et de compréhension</strong> : pas besoin de faire quelque chose de complexe techniquement, l'objectif est de <strong>reformuler le contenu du cours avec tes propres mots</strong>, dans un format clair et lisible.</p>
+    <div class="tip">
+      <span class="tip-i">💡</span>
+      <span>Si tu peux l'expliquer dans ta fiche, c'est que tu l'as vraiment compris. Si tu dois copier-coller la définition sans la comprendre... c'est exactement ce que le cours déconseille !</span>
+    </div>
+  </div>
+
+  <!-- CONTENU À COUVRIR -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">📚</div>Contenu à synthétiser</div>
+    <p class="desc">Ta fiche doit couvrir les <strong>concepts clés du cours</strong>. Voici les thèmes à traiter — reformule-les à ta façon, avec tes exemples :</p>
+
+    <div class="concepts-grid">
+      <div class="concept-card" style="background:#FAECE7;border:0.5px solid #F5C4B3;">
+        <div class="concept-title" style="color:#712B13;">🧠 Comprendre &gt; mémoriser</div>
+        <div style="font-size:0.83rem;color:#9E3459;">La vraie compétence c'est savoir chercher, pas tout retenir par cœur.</div>
+      </div>
+      <div class="concept-card" style="background:#FAEEDA;border:0.5px solid #FAC775;">
+        <div class="concept-title" style="color:#633806;">📐 La formule de l'expertise</div>
+        <div style="font-size:0.83rem;color:#8C5010;">Expertise = Temps passé à coder × Niveau de compréhension</div>
+      </div>
+      <div class="concept-card" style="background:#EEEDFE;border:0.5px solid #CECBF6;">
+        <div class="concept-title" style="color:#3C3489;">🔄 Le cycle du développeur</div>
+        <div style="font-size:0.83rem;color:#4D3B8A;">Idée → Chercher → Coder → Tester → Analyser → Recommencer</div>
+      </div>
+      <div class="concept-card" style="background:#E1F5EE;border:0.5px solid #9FE1CB;">
+        <div class="concept-title" style="color:#085041;">🤖 L'IA comme outil</div>
+        <div style="font-size:0.83rem;color:#0D7A5F;">L'IA aide, mais ne remplace pas la compréhension personnelle.</div>
+      </div>
+      <div class="concept-card" style="background:#F0FBF7;border:0.5px solid #9FE1CB;">
+        <div class="concept-title" style="color:#085041;">📖 Les ressources du développeur</div>
+        <div style="font-size:0.83rem;color:#0D7A5F;">Documentation, StackOverflow, cours, IA — savoir où chercher.</div>
+      </div>
+      <div class="concept-card" style="background:#F1EFE8;border:0.5px solid #B4B2A9;">
+        <div class="concept-title" style="color:#444441;">🎯 L'objectif : l'autonomie</div>
+        <div style="font-size:0.83rem;color:#5F5E5A;">Les fondations sont les mêmes quel que soit le langage.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMATS ACCEPTÉS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">📄</div>Formats acceptés</div>
+    <p class="desc">Ta fiche de synthèse peut prendre plusieurs formes. Au minimum une page web, mais tu peux combiner plusieurs formats :</p>
+
+    <div class="rl">Obligatoire</div>
+    <div class="format-row" style="margin-bottom:0.9rem;">
+      <span class="format-tag ft-html">🌐 index.html — page web principale</span>
+    </div>
+
+    <div class="rl">En bonus (optionnel)</div>
+    <div class="format-row">
+      <span class="format-tag ft-css">🎨 style.css — mise en forme</span>
+      <span class="format-tag ft-js">⚡ script.js — interactivité</span>
+      <span class="format-tag ft-pdf">📕 fiche.pdf — version imprimable</span>
+      <span class="format-tag ft-word">📘 fiche.docx — version Word</span>
+    </div>
+
+    <div class="tip tip-purple" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span>Si tu veux un PDF : fais ta page HTML bien stylée, puis <strong>Ctrl+P → Enregistrer en PDF</strong> dans le navigateur. C'est la méthode la plus simple !</span>
+    </div>
+  </div>
+
+  <!-- CAHIER DES CHARGES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Cahier des charges — Exigences obligatoires</div>
+    <p class="desc">Ces points sont non-négociables. Le design et la mise en forme sont entièrement libres :</p>
+
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>La page <strong>index.html</strong> existe et s'ouvre correctement dans un navigateur.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>La fiche couvre <strong>au moins 4 des 6 thèmes</strong> listés ci-dessus, reformulés avec tes propres mots.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>La page est <strong>structurée</strong> : elle a un titre principal, des sections clairement séparées, et chaque concept est lisible.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le contenu est <strong>rédigé par toi</strong> — pas de copier-coller brut du cours. Reformuler = comprendre.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>La page a <strong>au moins un style CSS</strong> appliqué (couleur de fond, police, marges...). Même simple, elle doit être agréable à lire.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus — Pour aller plus loin</div>
+    <p class="desc">Ces éléments ne sont pas obligatoires, mais ils montrent une vraie maîtrise :</p>
+
+    <div class="req-list">
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter du JavaScript : des sections repliables (toggle), un quiz récap interactif, un chrono de lecture...</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Créer une version PDF de ta fiche (Ctrl+P → PDF) et l'inclure dans le dossier du projet.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter tes propres exemples ou analogies pour chaque concept (ex : la formule de l'expertise appliquée à un sport que tu pratiques).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Rendre la page <strong>responsive</strong> (lisible sur mobile) avec des media queries CSS.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Organiser ton projet avec la structure <code>Assets/css/</code>, <code>Assets/js/</code> et des chemins relatifs corrects.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTHODE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Relis le cours</strong> — Avant de coder, relis <code>cours-mind-set.html</code>. Note les 6 thèmes et écris 1-2 phrases de résumé pour chacun, avec tes propres mots.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Crée ton fichier index.html</strong> — Commence par la structure HTML : un <code>&lt;h1&gt;</code> pour le titre, des <code>&lt;section&gt;</code> ou <code>&lt;div&gt;</code> pour chaque thème.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Ajoute le contenu</strong> — Remplis chaque section avec tes reformulations. Utilise des listes, des citations, des exemples concrets. Évite les blocs de texte trop longs.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>Stylise avec CSS</strong> — Crée un <code>style.css</code> ou écris le CSS dans un <code>&lt;style&gt;</code>. Couleurs, typographie, espacements — rends la fiche agréable à lire.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>Ouvre dans le navigateur</strong> — Vérifie que tout s'affiche bien. Lis ta propre fiche comme si tu la voyais pour la première fois. Est-ce clair ?</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">6</div>
+        <div class="step-content"><strong>Utilise l'IA pour débloquer</strong> — Décris précisément ce que tu veux faire : <em>"Je veux que mes sections soient dans des boîtes colorées, comment faire en CSS ?"</em>. L'IA t'aide à réaliser ta vision.</div>
+      </div>
+    </div>
+
+    <div class="tip tip-coral" style="margin-top:0.9rem;">
+      <span class="tip-i">⚠️</span>
+      <span>Ne laisse <strong>pas</strong> l’IA faire le travail à ta place. Le plus important, c’est que <strong>toi</strong> tu reformules le cours avec <strong>tes propres mots</strong> pour bien comprendre. Utilise l’IA pour t’aider, trouver des idées ou aller plus vite, mais garde toujours <strong>le contrôle de ton travail.</strong> L’IA propose, et <em>toi tu décides !</em></span>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✓</div>Checklist de vérification</div>
+    <p class="desc">Coche chaque point avant de considérer ta fiche terminée :</p>
+
+    <div class="checklist">
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Mon fichier <code>index.html</code> s'ouvre dans le navigateur sans erreur</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>La page a un titre principal (<code>&lt;h1&gt;</code>) clairement visible</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Au moins 4 des 6 thèmes du cours sont présents</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le contenu est rédigé avec mes propres mots (pas copié-collé)</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>La page a du CSS : au moins couleur de fond, police, et marges</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Je peux lire ma fiche et comprendre le cours rien qu'avec elle</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Je peux expliquer à voix haute chaque concept que j'ai écrit</span></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Comprendre &rarr; Chercher &rarr; Coder &rarr; Tester &rarr; Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html#step1">&larr; Retour au sommaire</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) {
+      box.classList.toggle('checked');
+    }
+  </script>
+
+</body>
+
+</html>

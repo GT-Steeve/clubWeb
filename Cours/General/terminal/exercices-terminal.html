@@ -844,10 +844,15 @@
     🎉 Bravo ! Tu peux naviguer dans un ordinateur en ligne de commande<br><br>
     <span style="font-size:0.82rem;">Comprendre → Chercher → Coder → Tester → Recommencer 🚀</span><br>
     <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
-    <a class="cta-btn" href="../sommaire.html#step4">&larr; Retour au sommaire</a>
+    <a class="cta-btn" href="projet-terminal.html">Passer à la pratique &rarr;</a>
   </div>
 
   <script>
+    function toggleAns(id) {
+      var el = document.getElementById(id);
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
     var okMsgs = ['Excellent !', 'Parfait !', 'Bravo !', 'Très bien !', 'Correct !'];
     function rnd(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
@@ -923,7 +928,11 @@
           + '</div>'
           + '<div style="display:flex;flex-wrap:wrap;gap:6px;margin:0.6rem 0;" id="pieces-' + ex.id + '"></div>'
           + '<div class="q-feedback" id="fb-' + ex.id + '"></div>'
-          + '<div class="btn-row"><button class="action-btn" onclick="resetSeq(\'' + ex.id + '\')">Recommencer</button></div>';
+          + '<div class="btn-row"><button class="action-btn" onclick="resetSeq(\'' + ex.id + '\')">Recommencer</button>'
+          + '<button class="action-btn" onclick="toggleAns(\'ans-' + ex.id + '\')">Voir la réponse</button></div>'
+          + '<div id="ans-' + ex.id + '" style="display:none;background:#0C0C0C;border-radius:8px;padding:0.75rem 1rem;margin-top:0.6rem;font-family:\'Fira Code\',monospace;font-size:0.84rem;color:#9FE1CB;line-height:2;">'
+          + ex.solution.map(function(s, i) { return (i > 0 ? '<span style="color:#555;"> → </span>' : '') + s; }).join('')
+          + '</div>';
         container.appendChild(div);
 
         var piecesDiv = div.querySelector('#pieces-' + ex.id);

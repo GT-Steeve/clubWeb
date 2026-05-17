@@ -210,6 +210,18 @@
     <div class="btn-row">
       <button class="action-btn primary" onclick="checkMatch()">Vérifier</button>
       <button class="action-btn" onclick="resetMatch()">Recommencer</button>
+      <button class="action-btn" onclick="toggleAns('ans-match')">Voir la réponse</button>
+    </div>
+    <div id="ans-match" style="display:none;margin-top:0.8rem;background:#FAEEDA;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.8;color:#633806;">
+      <div style="font-weight:800;margin-bottom:6px;">✓ Associations correctes :</div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 16px;font-family:'Fira Code',monospace;font-size:0.83rem;">
+        <span># Titre</span><span>&rarr; Titre principal H1</span>
+        <span>## Sous-titre</span><span>&rarr; Sous-titre H2</span>
+        <span>**gras**</span><span>&rarr; Texte en gras</span>
+        <span>*italique*</span><span>&rarr; Texte en italique</span>
+        <span>- élément</span><span>&rarr; Puce de liste</span>
+        <span>[texte](url)</span><span>&rarr; Lien cliquable</span>
+      </div>
     </div>
     <div class="progress-wrap"><div class="progress-fill" id="prog-match"></div></div>
     <div class="score-row" id="score-match"></div>
@@ -225,11 +237,26 @@
     <div class="btn-row">
       <button class="action-btn primary" onclick="checkSecOrder()">Vérifier l'ordre</button>
       <button class="action-btn" onclick="resetSecOrder()">Mélanger à nouveau</button>
+      <button class="action-btn" onclick="toggleAns('ans-sec')">Voir la réponse</button>
     </div>
     <div class="progress-wrap"><div class="progress-fill" id="prog-sec"></div></div>
     <div class="score-row" id="score-sec"></div>
 
     <div class="tip"><span class="tip-i">💡</span><span>L'ordre idéal : d'abord ce qui est le plus important pour comprendre immédiatement le projet (titre, description, lien), puis les détails techniques (technologies, fonctionnalités, structure), et enfin les infos secondaires (auteur, licence).</span></div>
+
+    <div id="ans-sec" style="display:none;margin-top:0.8rem;background:#FAEEDA;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.7;color:#633806;">
+      <div style="font-weight:800;margin-bottom:6px;">✓ Ordre correct des sections du README :</div>
+      <ol style="padding-left:1.2rem;display:flex;flex-direction:column;gap:3px;">
+        <li>🎨 # Titre du projet</li>
+        <li>🌐 Lien du site</li>
+        <li>📝 ## Description</li>
+        <li>🛠️ ## Technologies</li>
+        <li>🚀 ## Fonctionnalités</li>
+        <li>📁 ## Structure du projet</li>
+        <li>📋 ## Patch-notes</li>
+        <li>👤 ## Auteur</li>
+      </ol>
+    </div>
   </div>
 
   <div class="footer-note">
@@ -380,6 +407,11 @@
     }
 
     function resetSecOrder() { buildSecOrder(); }
+
+    function toggleAns(id) {
+      var el = document.getElementById(id);
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
 
     buildMatch();
     buildSecOrder();

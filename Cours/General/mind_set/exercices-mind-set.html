@@ -26,26 +26,6 @@
             margin: 0 auto;
         }
 
-        .nav-prev {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.88rem;
-            font-weight: 700;
-            color: #185FA5;
-            text-decoration: none;
-            margin-bottom: 1.5rem;
-            background: #E6F1FB;
-            border: 0.5px solid #85B7EB;
-            border-radius: 8px;
-            padding: 6px 14px;
-            transition: background 0.15s;
-        }
-
-        .nav-prev:hover {
-            background: #B5D4F4;
-        }
-
         /* HERO */
         .hero {
             text-align: center;
@@ -117,6 +97,26 @@
         }
 
         .back-link:hover {
+            background: #B5D4F4;
+        }
+
+        .nav-prev {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #185FA5;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            background: #E6F1FB;
+            border: 0.5px solid #85B7EB;
+            border-radius: 8px;
+            padding: 6px 14px;
+            transition: background 0.15s;
+        }
+
+        .nav-prev:hover {
             background: #B5D4F4;
         }
 
@@ -764,7 +764,7 @@
 </head>
 
 <body>
-    <a class="nav-prev" href="../sommaire.html">&larr; Retour au sommaire</a>
+    <a class="nav-prev" href="cours-mind-set.html">&larr; Retour au cours</a>
 
     <!-- HERO -->
     <div class="hero">
@@ -778,141 +778,46 @@
         </div>
     </div>
 
-    <!-- Comprendre pas mémoriser -->
-    <div class="card">
-        <div class="stitle">
-            <div class="pill p-teal">1</div>Comprendre, pas mémoriser
-        </div>
-        <p class="desc">L'informatique est un domaine tellement vaste qu'il est <strong>impossible de tout connaître par
-                cœur</strong>. Les meilleurs développeurs ne mémorisent pas chaque fonction ou chaque syntaxe — ils
-            comprennent comment les choses fonctionnent et savent où trouver l'information.</p>
-        <p class="desc">Pense à un cuisinier qui lit une recette, ou à un technicien qui consulte un manuel. Ils n'ont
-            pas tout mémorisé — ils savent <strong>lire et interpréter</strong>.</p>
-        <div class="tip">
-            <span class="tip-i">💡</span>
-            <span>La vraie compétence : comprendre le fonctionnement et savoir <strong>lire la documentation</strong>.
-                Pas réciter du code par cœur.</span>
-        </div>
+    <!-- ===== QCM ===== -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">QCM — Questions à choix multiples</span>
     </div>
 
-    <!-- Ressources -->
-    <div class="card">
-        <div class="stitle">
-            <div class="pill p-blue">2</div>Face à un problème : tes ressources
-        </div>
-        <p class="desc">Avant, débloquer un bug nécessitait de connaître quelqu'un qui avait la réponse, de fouiller la
-            documentation, ou de chercher sur Google et des forums comme <strong>StackOverflow</strong>. Aujourd'hui,
-            l'IA rassemble tout en un.</p>
-        <div class="res-grid">
-            <div class="res-card">
-                <div class="res-icon">📚</div>
-                <div class="res-title">Documentation</div>
-                <div class="res-desc">La source officielle, toujours la plus fiable</div>
-            </div>
-            <div class="res-card">
-                <div class="res-icon">🌐</div>
-                <div class="res-title">Google / Forums</div>
-                <div class="res-desc">StackOverflow, GitHub Issues, Reddit...</div>
-            </div>
-            <div class="res-card">
-                <div class="res-icon">🤖</div>
-                <div class="res-title">IA</div>
-                <div class="res-desc">Tout en un — rapide et contextuel</div>
-            </div>
-        </div>
-        <div class="tip tip-amber">
-            <span class="tip-i">⚠️</span>
-            <span>L'IA ne résout pas le problème fondamental : la <strong>compréhension</strong>. Tu peux obtenir du
-                code qui fonctionne, mais si tu ne comprends pas ce qu'il fait, tu seras bloqué dès que ton projet
-                évoluera.</span>
-        </div>
+    <div id="qcm-container"></div>
+
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkQCM()">Corriger le QCM</button>
+        <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+        <button class="action-btn" onclick="checkQCM()">Voir les réponses</button>
+    </div>
+    <div class="progress-wrap">
+        <div class="progress-fill" id="prog-qcm"></div>
+    </div>
+    <div class="score-row" id="score-qcm"></div>
+    <div class="score-panel" id="qcm-score-panel">
+        <div class="score-big"><span id="qcm-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au QCM</div>
     </div>
 
-    <!-- Expertise -->
-    <div class="card">
-        <div class="stitle">
-            <div class="pill p-coral">3</div>L'expertise : temps × compréhension
-        </div>
-        <p class="desc">L'expertise ne s'achète pas et ne s'obtient pas en copiant-collant du code généré par l'IA.
-            C'est un mélange de deux choses inséparables :</p>
-        <div class="code-block"><span class="cm">// Formule de l'expertise</span>
-            <span class="sel">Expertise</span> = <span class="val">Temps passé à coder</span> × <span class="val">Niveau
-                de compréhension</span>
-
-            <span class="cm">// Les deux sont indispensables !</span>
-            <span class="cm">// Sans compréhension → le temps passé ne t'avance pas</span>
-            <span class="cm">// Sans pratique → la compréhension reste théorique</span>
-        </div>
-        <div class="tip tip-purple">
-            <span class="tip-i">🎯</span>
-            <span>Utilise l'IA pour <strong>obtenir les informations pour construire</strong>, mais c'est à toi de
-                comprendre pour maintenir et faire avancer ton projet — sinon tu seras coincé.</span>
-        </div>
+    <!-- ===== QUIZ V/F ===== -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">Quiz — Vrai ou Faux</span>
     </div>
 
-    <!-- Cycle -->
-    <div class="card">
-        <div class="stitle">
-            <div class="pill p-amber">4</div>Le cycle du développeur
-        </div>
-        <p class="desc">Voici le processus que tout développeur applique, consciemment ou non, sur chaque nouveau projet
-            ou fonctionnalité :</p>
-        <div class="cycle-wrap">
-            <div class="cycle-step">💡 Idée</div>
-            <span class="cycle-arrow">→</span>
-            <div class="cycle-step">🔍 Chercher</div>
-            <span class="cycle-arrow">→</span>
-            <div class="cycle-step">⌨️ Coder</div>
-            <span class="cycle-arrow">→</span>
-            <div class="cycle-step">🧪 Tester</div>
-            <span class="cycle-arrow">→</span>
-            <div class="cycle-step">🔎 Analyser</div>
-            <span class="cycle-arrow">→</span>
-            <div class="cycle-step">🔄 Recommencer / Perfectionner</div>
-        </div>
-        <div class="result-box">
-            <div class="rl">À chaque itération</div>
-            Tu acquiers de l'expérience réutilisable pour tes prochains projets. Plus tu répètes le cycle, plus tu vas
-            vite. C'est ça, progresser.
-        </div>
-        <div class="tip">
-            <span class="tip-i">🌱</span>
-            <span>L'idée est-elle <strong>utile ou amusante</strong> ? Peu importe — commence. Durant ce process, tu
-                acquiers l'expérience pour tes prochaines idées. Puis tu recommences, tant que ça te passionne.</span>
-        </div>
-    </div>
+    <div id="vf-container"></div>
 
-    <!-- Autonomie -->
-    <div class="card">
-        <div class="stitle">
-            <div class="pill p-green">5</div>L'objectif : ton autonomie
-        </div>
-        <p class="desc">Les fondations de l'informatique reposent sur la <strong>même logique, les mêmes
-                procédés</strong>. Une fois ces bases comprises, tu peux construire n'importe quoi — seul, avec tes
-            propres idées.</p>
-        <div class="two-col">
-            <div class="tc" style="background:#FAECE7;color:#712B13;">
-                <strong>📖 Être guidé pour trouver</strong>
-                On t'indique où chercher l'information, pas juste quoi retenir
-            </div>
-            <div class="tc" style="background:#E1F5EE;color:#085041;">
-                <strong>🔨 Mettre en pratique</strong>
-                Des exercices pour ancrer ce que tu comprends
-            </div>
-            <div class="tc" style="background:#EEEDFE;color:#3C3489;">
-                <strong>🚀 Créer seul</strong>
-                Tes propres idées, avec les outils que tu maîtrises
-            </div>
-            <div class="tc" style="background:#FAEEDA;color:#633806;">
-                <strong>🔥 La passion accélère tout</strong>
-                La curiosité t'amène vers des horizons plus grands
-            </div>
-        </div>
-        <div class="tip tip-coral">
-            <span class="tip-i">💬</span>
-            <span>Je t'aiderai à aller plus vite <strong>si tu es motivé et concentré</strong>. Mais si tu es passionné,
-                ta curiosité t'amènera bien plus loin que n'importe quel cours.</span>
-        </div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkVF()">Corriger le Quiz</button>
+        <button class="action-btn" onclick="resetVF()">Recommencer</button>
+        <button class="action-btn" onclick="checkVF()">Voir les réponses</button>
+    </div>
+    <div class="progress-wrap">
+        <div class="progress-fill" id="prog-vf"></div>
+    </div>
+    <div class="score-row" id="score-vf"></div>
+    <div class="score-panel" id="vf-score-panel">
+        <div class="score-big"><span id="vf-score-val">0</span> / 7</div>
+        <div class="score-sub">bonnes réponses au Quiz V/F</div>
     </div>
 
     <!-- FOOTER -->
@@ -920,8 +825,309 @@
         Comprendre → Chercher → Coder → Tester → Recommencer 🚀<br>
         <span style="font-size:0.82rem;">L'état d'esprit du développeur</span>
         <br><br>
-        <a class="cta-btn" href="exercices-mind-set.html">Passer aux exercices →</a>
+        <a class="cta-btn" href="projet-mind-set.html">Passer à la pratique &rarr;</a>
     </div>
+
+    <script>
+        /* ===== DONNÉES QCM ===== */
+        var qcmData = [
+            {
+                q: "Quelle est la compétence fondamentale d'un bon développeur ?",
+                opts: [
+                    "Connaître par cœur toutes les syntaxes de tous les langages",
+                    "Comprendre le fonctionnement et savoir lire la documentation",
+                    "Coder le plus vite possible sans faire d'erreurs",
+                    "N'utiliser que ses connaissances personnelles"
+                ],
+                correct: 1,
+                expl: "✓ Un développeur efficace comprend la logique et sait où chercher — il ne mémorise pas tout."
+            },
+            {
+                q: "Pourquoi l'IA seule ne suffit-elle pas pour progresser en programmation ?",
+                opts: [
+                    "Parce qu'elle fait trop d'erreurs dans le code",
+                    "Parce qu'elle ne connaît pas tous les langages",
+                    "Parce qu'elle ne remplace pas la compréhension personnelle du développeur",
+                    "Parce qu'elle est trop lente à répondre"
+                ],
+                correct: 2,
+                expl: "✓ L'IA donne du code, mais sans compréhension tu seras bloqué dès que le projet évoluera."
+            },
+            {
+                q: "Quelle est la formule de l'expertise en programmation ?",
+                opts: [
+                    "Expertise = Nombre de langages × Vitesse de frappe",
+                    "Expertise = Temps passé à coder + Compréhension",
+                    "Expertise = Temps passé à coder × Niveau de compréhension",
+                    "Expertise = Quantité de code ÷ Nombre de bugs"
+                ],
+                correct: 2,
+                expl: "✓ C'est un produit : les deux facteurs sont indispensables et se renforcent mutuellement."
+            },
+            {
+                q: "Quelle est la première étape du cycle du développeur ?",
+                opts: ["Tester", "Coder", "Chercher la documentation", "Avoir une idée"],
+                correct: 3,
+                expl: "✓ Tout commence par une idée — c'est le moteur de tout projet."
+            },
+            {
+                q: "StackOverflow, c'est quoi ?",
+                opts: [
+                    "Un langage de programmation",
+                    "Un éditeur de code",
+                    "Un célèbre forum d'entraide pour développeurs",
+                    "Un framework JavaScript"
+                ],
+                correct: 2,
+                expl: "✓ StackOverflow est l'un des forums les plus utiles pour résoudre des problèmes techniques."
+            },
+            {
+                q: "Pourquoi l'objectif principal du cours est-il l'autonomie ?",
+                opts: [
+                    "Pour éviter de payer des professeurs",
+                    "Parce que les fondations de l'informatique reposent sur la même logique, permettant de créer seul",
+                    "Parce que travailler seul est plus rapide",
+                    "Pour ne pas utiliser d'IA"
+                ],
+                correct: 1,
+                expl: "✓ Une fois les fondations comprises, la logique se répète et tu peux construire n'importe quoi."
+            },
+            {
+                q: "Quelle attitude ressemble à celle d'un bon développeur face à la documentation ?",
+                opts: [
+                    "Un cuisinier qui suit une recette",
+                    "Un artiste qui crée sans instructions",
+                    "Un sportif qui mémorise des statistiques",
+                    "Un enfant qui attend qu'on lui explique tout"
+                ],
+                correct: 0,
+                expl: "✓ Comme un cuisinier avec sa recette : on lit, on comprend, on applique, on adapte."
+            },
+            {
+                q: "Que se passe-t-il à chaque itération du cycle Idée → Coder → Tester → Analyser ?",
+                opts: [
+                    "On oublie les anciennes notions",
+                    "On acquiert de l'expérience réutilisable pour les prochains projets",
+                    "On devient dépendant des tutoriels",
+                    "Le code devient de plus en plus difficile à comprendre"
+                ],
+                correct: 1,
+                expl: "✓ Chaque cycle te fait progresser. L'expérience accumulée accélère tes futurs projets."
+            }
+        ];
+
+        /* ===== DONNÉES QUIZ V/F ===== */
+        var vfData = [
+            {
+                s: "Un bon développeur connaît par cœur toutes les fonctions de chaque langage qu'il utilise.",
+                ans: false,
+                expl: "Faux. Un bon développeur sait où chercher l'information, pas tout mémoriser."
+            },
+            {
+                s: "L'IA peut remplacer la compréhension du développeur pour maintenir un projet sur le long terme.",
+                ans: false,
+                expl: "Faux. L'IA aide à trouver des informations, mais sans compréhension tu seras bloqué."
+            },
+            {
+                s: "StackOverflow est une ressource valide pour résoudre des bugs et des problèmes techniques.",
+                ans: true,
+                expl: "Vrai. C'est l'un des forums les plus utiles pour les développeurs du monde entier."
+            },
+            {
+                s: "L'expertise se construit uniquement par le temps passé à coder, sans avoir besoin de comprendre.",
+                ans: false,
+                expl: "Faux. Sans compréhension, le temps passé à coder ne crée pas de vraie expertise."
+            },
+            {
+                s: "Les fondations de la programmation reposent sur la même logique quel que soit le langage.",
+                ans: true,
+                expl: "Vrai. Variables, conditions, boucles, fonctions... ces concepts sont universels."
+            },
+            {
+                s: "Tester son code fait partie intégrante du cycle de développement.",
+                ans: true,
+                expl: "Vrai. Tester → Analyser → Corriger est une étape incontournable."
+            },
+            {
+                s: "Copier-coller du code généré par l'IA sans le lire suffit pour progresser en programmation.",
+                ans: false,
+                expl: "Faux. Il est indispensable de lire, comprendre et savoir maintenir le code qu'on utilise."
+            }
+        ];
+
+        var msgs_ok = ['Parfait !', 'Bravo !', "C'est ça !", 'Excellent !'];
+        var msgs_ko = ['Pas tout à fait...', 'Essaie encore !', 'Presque !'];
+        function rnd(a) { return a[Math.floor(Math.random() * a.length)]; }
+
+        /* ===== QCM ===== */
+        var qcmAnswers = {};
+
+        function renderQCM() {
+            var c = document.getElementById('qcm-container');
+            c.innerHTML = '';
+            qcmData.forEach(function (q, qi) {
+                var card = document.createElement('div');
+                card.className = 'qcm-card';
+                var optsHtml = q.opts.map(function (o, oi) {
+                    return '<div class="opt" id="qcm-opt-' + qi + '-' + oi + '" onclick="selectQCM(' + qi + ',' + oi + ')">' +
+                        '<div class="opt-dot"><div class="opt-dot-inner"></div></div>' +
+                        '<span>' + o + '</span></div>';
+                }).join('');
+                card.innerHTML =
+                    '<div class="q-num">Question ' + (qi + 1) + ' sur ' + qcmData.length + '</div>' +
+                    '<div class="q-text">' + q.q + '</div>' +
+                    '<div class="options">' + optsHtml + '</div>' +
+                    '<div class="q-feedback" id="qcm-fb-' + qi + '"></div>';
+                c.appendChild(card);
+            });
+        }
+
+        function selectQCM(qi, oi) {
+            if (document.getElementById('qcm-opt-' + qi + '-0').style.pointerEvents === 'none') return;
+            qcmAnswers[qi] = oi;
+            qcmData[qi].opts.forEach(function (_, i) {
+                var el = document.getElementById('qcm-opt-' + qi + '-' + i);
+                el.classList.toggle('selected', i === oi);
+            });
+        }
+
+        function checkQCM() {
+            var score = 0;
+            qcmData.forEach(function (q, qi) {
+                var chosen = qcmAnswers[qi];
+                var fb = document.getElementById('qcm-fb-' + qi);
+                q.opts.forEach(function (_, i) {
+                    var el = document.getElementById('qcm-opt-' + qi + '-' + i);
+                    el.style.pointerEvents = 'none';
+                    el.classList.remove('selected');
+                });
+                if (chosen !== undefined) {
+                    if (chosen === q.correct) {
+                        document.getElementById('qcm-opt-' + qi + '-' + chosen).classList.add('correct');
+                        score++;
+                        fb.className = 'q-feedback show ok';
+                        fb.textContent = q.expl;
+                    } else {
+                        document.getElementById('qcm-opt-' + qi + '-' + chosen).classList.add('wrong');
+                        document.getElementById('qcm-opt-' + qi + '-' + q.correct).classList.add('correct');
+                        fb.className = 'q-feedback show ko';
+                        fb.textContent = '✗ ' + q.expl.replace('✓ ', '');
+                    }
+                } else {
+                    document.getElementById('qcm-opt-' + qi + '-' + q.correct).classList.add('correct');
+                    fb.className = 'q-feedback show ko';
+                    fb.textContent = '— Sans réponse. ' + q.expl.replace('✓ ', '');
+                }
+            });
+            var pct = Math.round(score / qcmData.length * 100);
+            document.getElementById('prog-qcm').style.width = pct + '%';
+            var row = document.getElementById('score-qcm');
+            row.innerHTML = '<span class="chip chip-ok">' + score + ' / ' + qcmData.length + ' bonnes réponses</span>';
+            if (qcmData.length - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (qcmData.length - score) + ' erreur(s)</span>';
+            document.getElementById('qcm-score-val').textContent = score;
+            var panel = document.getElementById('qcm-score-panel');
+            panel.classList.add('show');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetQCM() {
+            qcmAnswers = {};
+            document.getElementById('qcm-score-panel').classList.remove('show');
+            document.getElementById('prog-qcm').style.width = '0%';
+            document.getElementById('score-qcm').innerHTML = '';
+            renderQCM();
+        }
+
+        /* ===== QUIZ V/F ===== */
+        var vfAnswers = {};
+
+        function renderVF() {
+            var c = document.getElementById('vf-container');
+            c.innerHTML = '';
+            vfData.forEach(function (q, qi) {
+                var card = document.createElement('div');
+                card.className = 'vf-card';
+                card.innerHTML =
+                    '<div class="q-num">Affirmation ' + (qi + 1) + ' sur ' + vfData.length + '</div>' +
+                    '<div class="vf-statement">' + q.s + '</div>' +
+                    '<div class="vf-btns">' +
+                    '<button class="vf-btn vrai" id="vf-v-' + qi + '" onclick="answerVF(' + qi + ',true)">✓ Vrai</button>' +
+                    '<button class="vf-btn faux" id="vf-f-' + qi + '" onclick="answerVF(' + qi + ',false)">✗ Faux</button>' +
+                    '</div>' +
+                    '<div class="q-feedback" id="vf-fb-' + qi + '"></div>';
+                c.appendChild(card);
+            });
+        }
+
+        function answerVF(qi, val) {
+            if (document.getElementById('vf-v-' + qi).disabled) return;
+            vfAnswers[qi] = val;
+            var vb = document.getElementById('vf-v-' + qi);
+            var fb2 = document.getElementById('vf-f-' + qi);
+            vb.className = 'vf-btn vrai' + (val ? ' selected-vf' : '');
+            fb2.className = 'vf-btn faux' + (!val ? ' selected-vf' : '');
+            vb.style.background = val ? '#EEEDFE' : '';
+            vb.style.borderColor = val ? '#AFA9EC' : '';
+            vb.style.color = val ? '#26215C' : '';
+            fb2.style.background = !val ? '#EEEDFE' : '';
+            fb2.style.borderColor = !val ? '#AFA9EC' : '';
+            fb2.style.color = !val ? '#26215C' : '';
+        }
+
+        function checkVF() {
+            var score = 0;
+            vfData.forEach(function (q, qi) {
+                var vb = document.getElementById('vf-v-' + qi);
+                var fb2 = document.getElementById('vf-f-' + qi);
+                var fb = document.getElementById('vf-fb-' + qi);
+                vb.disabled = true; fb2.disabled = true;
+                vb.style.background = ''; vb.style.borderColor = ''; vb.style.color = '';
+                fb2.style.background = ''; fb2.style.borderColor = ''; fb2.style.color = '';
+                vb.className = 'vf-btn vrai'; fb2.className = 'vf-btn faux';
+                var chosen = vfAnswers[qi];
+                if (chosen !== undefined) {
+                    var correct = (chosen === q.ans);
+                    if (correct) {
+                        score++;
+                        (chosen ? vb : fb2).classList.add('correct-ans');
+                        fb.className = 'q-feedback show ok';
+                        fb.textContent = rnd(msgs_ok) + ' ' + q.expl;
+                    } else {
+                        (chosen ? vb : fb2).classList.add('wrong-ans');
+                        (q.ans ? vb : fb2).classList.add('correct-ans');
+                        fb.className = 'q-feedback show ko';
+                        fb.textContent = rnd(msgs_ko) + ' ' + q.expl;
+                    }
+                } else {
+                    (q.ans ? vb : fb2).classList.add('correct-ans');
+                    fb.className = 'q-feedback show ko';
+                    fb.textContent = '— Sans réponse. ' + q.expl;
+                }
+            });
+            var pct = Math.round(score / vfData.length * 100);
+            document.getElementById('prog-vf').style.width = pct + '%';
+            var row = document.getElementById('score-vf');
+            row.innerHTML = '<span class="chip chip-ok">' + score + ' / ' + vfData.length + ' bonnes réponses</span>';
+            if (vfData.length - score > 0) row.innerHTML += '<span class="chip chip-ko">' + (vfData.length - score) + ' erreur(s)</span>';
+            document.getElementById('vf-score-val').textContent = score;
+            var panel = document.getElementById('vf-score-panel');
+            panel.classList.add('show');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetVF() {
+            vfAnswers = {};
+            document.getElementById('vf-score-panel').classList.remove('show');
+            document.getElementById('prog-vf').style.width = '0%';
+            document.getElementById('score-vf').innerHTML = '';
+            renderVF();
+        }
+
+        /* ===== INIT ===== */
+        renderQCM();
+        renderVF();
+    </script>
+
 </body>
 
 </html>

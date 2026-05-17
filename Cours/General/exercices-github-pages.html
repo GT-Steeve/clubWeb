@@ -210,6 +210,17 @@
     <p class="desc">Pour chaque profil ci-dessous, clique sur les bons morceaux pour assembler l'URL GitHub Pages correcte. L'URL doit être : <code>https://PSEUDO.github.io/DEPOT</code></p>
 
     <div id="url-exercises"></div>
+
+    <div class="btn-row" style="margin-top:0.6rem;">
+      <button class="action-btn" onclick="toggleAns('ans-url')">Voir la réponse</button>
+    </div>
+    <div id="ans-url" style="display:none;margin-top:0.8rem;background:#FAEEDA;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.8;color:#633806;">
+      <div style="font-weight:800;margin-bottom:6px;">✓ Réponses correctes :</div>
+      <div style="font-family:'Fira Code',monospace;font-size:0.85rem;">
+        Profil 1 &rarr; <strong>https://lucie-dev.github.io/portfolio</strong><br>
+        Profil 2 &rarr; <strong>https://tom42.github.io/jeu-dechiffrement</strong>
+      </div>
+    </div>
   </div>
 
   <!-- EX 3 : Remettre les étapes dans l'ordre -->
@@ -222,11 +233,24 @@
     <div class="btn-row">
       <button class="action-btn primary" onclick="checkStepsOrder()">Vérifier l'ordre</button>
       <button class="action-btn" onclick="resetStepsOrder()">Mélanger à nouveau</button>
+      <button class="action-btn" onclick="toggleAns('ans-steps')">Voir la réponse</button>
     </div>
     <div class="progress-wrap"><div class="progress-fill" id="prog-steps"></div></div>
     <div class="score-row" id="score-steps"></div>
 
     <div class="tip tip-green"><span class="tip-i">💡</span><span>Souviens-toi : avant d'activer GitHub Pages, ton projet doit <strong>déjà exister sur GitHub</strong> avec un <code>index.html</code>. On active Pages <strong>après</strong> le premier push !</span></div>
+
+    <div id="ans-steps" style="display:none;margin-top:0.8rem;background:#FAEEDA;border-radius:10px;padding:0.85rem 1rem;font-size:0.88rem;line-height:1.7;color:#633806;">
+      <div style="font-weight:800;margin-bottom:6px;">✓ Ordre correct des étapes :</div>
+      <ol style="padding-left:1.2rem;display:flex;flex-direction:column;gap:4px;">
+        <li>📦 Avoir un dépôt GitHub public avec index.html à la racine</li>
+        <li>🌿 Avoir fait au moins un git push pour envoyer le code sur GitHub</li>
+        <li>⚙️ Aller dans Settings &rarr; Pages sur GitHub.com</li>
+        <li>🎯 Choisir la branche "main" et le dossier "/" puis cliquer Save</li>
+        <li>⏱️ Attendre 1-2 minutes et actualiser la page</li>
+        <li>🔗 Copier le lien GitHub Pages et l'ajouter dans le README.md</li>
+      </ol>
+    </div>
   </div>
 
   <!-- Grand récap final -->
@@ -469,6 +493,11 @@
     }
 
     function resetStepsOrder() { buildStepsOrder(); }
+
+    function toggleAns(id) {
+      var el = document.getElementById(id);
+      el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
 
     buildUrlExercises();
     buildStepsOrder();

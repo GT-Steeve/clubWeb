@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Mon guide Terminal CMD</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%AC%9B%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+    .p-dark   { background: #3A3A3A; color: #FAC775; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #141414; border-radius: 4px; padding: 1px 7px; font-size: 0.87em; color: #FAC775; }
+
+    /* Requirements */
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    /* Themes grid */
+    .themes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.6rem; }
+    .theme-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .theme-title { font-weight: 800; margin-bottom: 4px; font-size: 0.9rem; }
+
+    /* Format badges */
+    .format-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.6rem; }
+    .format-tag { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; border: 0.5px solid; }
+    .ft-html { background: #E6F1FB; border-color: #85B7EB; color: #0C447C; }
+    .ft-pdf  { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+    .ft-word { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+    .ft-md   { background: #EEEDFE; border-color: #CECBF6; color: #3C3489; }
+
+    /* CMD demo window */
+    .cmd-window { background: #0C0C0C; border-radius: 10px; overflow: hidden; margin-top: 0.8rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; }
+    .cmd-titlebar { background: #1E1E1E; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; }
+    .cmd-titlebar-left { display: flex; align-items: center; gap: 8px; color: #C8C8C8; font-size: 0.8rem; }
+    .cmd-titlebar-btns { display: flex; gap: 5px; }
+    .tw-btn { width: 13px; height: 13px; border-radius: 50%; }
+    .tw-min { background: #F5A623; } .tw-max { background: #7ED321; } .tw-cls { background: #D0021B; }
+    .cmd-body { padding: 12px 14px; color: #C8C8C8; line-height: 1.9; white-space: pre; }
+    .p  { color: #9FE1CB; } .pa { color: #C8C8C8; }
+    .kw { color: #FAC775; } .ar { color: #85B7EB; }
+    .ok { color: #9FE1CB; } .cm { color: #666; font-style: italic; }
+
+    /* Challenge block */
+    .challenge-block {
+      background: #141414; border-radius: 12px; padding: 1.2rem 1.4rem;
+      border: 1.5px solid #3A3A3A; margin-top: 0.8rem;
+    }
+    .challenge-title { color: #FAC775; font-weight: 800; font-size: 0.95rem; margin-bottom: 0.7rem; }
+    .challenge-step { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 0.5rem; font-size: 0.88rem; color: #C8C8C8; line-height: 1.6; }
+    .challenge-num { color: #FAC775; font-weight: 800; flex-shrink: 0; }
+
+    /* Checklist */
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-dark   { background: #1E1E1E; color: #C8C8C8; border: 0.5px solid #3A3A3A; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn {
+      display: inline-block; background: #FAC775; color: #412402;
+      font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+      border-radius: 10px; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.7rem; }
+      .themes-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="exercices-terminal.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>⬛ Projet — Mon guide Terminal CMD</h1>
+    <p>Crée ton guide numérique du terminal, puis ouvre CMD et navigue jusqu'à lui !</p>
+    <div class="badge-row">
+      <span class="badge b-blue">Projet libre</span>
+      <span class="badge b-purple">Guide personnel</span>
+      <span class="badge b-amber">Format numérique</span>
+      <span class="badge b-teal">Pratique CMD</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Ce projet a <strong>deux parties</strong> qui se complètent : d'abord tu crées un guide numérique du terminal CMD — ta référence personnelle à garder et consulter. Ensuite, tu <strong>ouvres un vrai terminal</strong> et tu navigues jusqu'à ton guide en utilisant les commandes que tu as apprises.</p>
+    <p class="desc">La deuxième partie est la plus importante : ce n'est pas un exercice sur papier, c'est toi qui tapes de vraies commandes dans une vraie fenêtre noire pour retrouver ton propre fichier. <strong>La théorie devient pratique.</strong></p>
+    <div class="tip">
+      <span class="tip-i">💡</span>
+      <span>Astuce de méthode : <strong>crée d'abord ton guide</strong>, enregistre-le dans un dossier bien choisi sur ton PC, <strong>puis</strong> ouvre CMD et navigue jusqu'à ce dossier. La navigation sera d'autant plus facile que tu sais où tu l'as mis !</span>
+    </div>
+  </div>
+
+  <!-- CONTENU À COUVRIR -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-blue">📚</div>Contenu à inclure dans ton guide</div>
+    <p class="desc">Ton guide doit couvrir les thèmes clés du cours. Adapte les explications à ta façon — ce sont tes notes, pas une copie du cours :</p>
+
+    <div class="themes-grid">
+      <div class="theme-card" style="background:#141414;border:0.5px solid #3A3A3A;">
+        <div class="theme-title" style="color:#FAC775;">⬛ C'est quoi CMD</div>
+        <div style="font-size:0.83rem;color:#C8C8C8;">La fenêtre noire, le prompt, pourquoi l'apprendre.</div>
+      </div>
+      <div class="theme-card" style="background:#E6F1FB;border:0.5px solid #85B7EB;">
+        <div class="theme-title" style="color:#0C447C;">🚀 Ouvrir CMD</div>
+        <div style="font-size:0.83rem;color:#185FA5;">Les 3 méthodes — recherche, Win+R, barre d'adresse.</div>
+      </div>
+      <div class="theme-card" style="background:#E1F5EE;border:0.5px solid #9FE1CB;">
+        <div class="theme-title" style="color:#085041;">👀 La commande <code style="background:transparent;color:#085041;">dir</code></div>
+        <div style="font-size:0.83rem;color:#0D7A5F;">Lister les fichiers, &lt;DIR&gt; vs fichier, dir /B.</div>
+      </div>
+      <div class="theme-card" style="background:#FAEEDA;border:0.5px solid #FAC775;">
+        <div class="theme-title" style="color:#633806;">📂 La commande <code style="background:transparent;color:#633806;">cd</code></div>
+        <div style="font-size:0.83rem;color:#8C5010;">Entrer, remonter (cd ..), Tab pour compléter, backslash \.</div>
+      </div>
+      <div class="theme-card" style="background:#EEEDFE;border:0.5px solid #CECBF6;">
+        <div class="theme-title" style="color:#3C3489;">🛠️ <code style="background:transparent;color:#3C3489;">mkdir</code> et <code style="background:transparent;color:#3C3489;">cls</code></div>
+        <div style="font-size:0.83rem;color:#4D3B8A;">Créer un dossier, effacer l'écran, changer de disque.</div>
+      </div>
+      <div class="theme-card" style="background:#FAECE7;border:0.5px solid #F5C4B3;">
+        <div class="theme-title" style="color:#712B13;">⚠️ Erreurs courantes</div>
+        <div style="font-size:0.83rem;color:#9E3459;">Fautes de frappe, / au lieu de \, espaces dans les noms…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMATS ACCEPTÉS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">📄</div>Format de ton guide</div>
+    <p class="desc">Ton guide peut prendre la forme qui te convient le mieux. Le seul critère : il doit être <strong>numérique, enregistré quelque part sur ton PC</strong>, et tu dois pouvoir y naviguer en CMD.</p>
+
+    <div class="rl">Formats acceptés</div>
+    <div class="format-row">
+      <span class="format-tag ft-html">🌐 Page HTML</span>
+      <span class="format-tag ft-pdf">📕 PDF</span>
+      <span class="format-tag ft-word">📘 Word / .docx</span>
+      <span class="format-tag ft-md">📝 Markdown .md</span>
+    </div>
+
+    <div class="tip tip-blue" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span>La page HTML est recommandée : tu peux y ajouter des blocs de commandes CMD en police monospace pour imiter l'apparence du terminal — et c'est visuellement très convaincant avec un fond noir !</span>
+    </div>
+    <div class="tip tip-amber" style="margin-top:0.6rem;">
+      <span class="tip-i">⚠️</span>
+      <span>Peu importe le format, <strong>enregistre ton guide dans un dossier dont tu connais le chemin</strong>. Par exemple : <code style="background:#2C2C00;color:#FAC775;">C:\Users\toi\Documents\mes-guides\</code>. Tu devras naviguer jusqu'à ce dossier dans CMD !</span>
+    </div>
+  </div>
+
+  <!-- CAHIER DES CHARGES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Cahier des charges — Exigences obligatoires</div>
+    <p class="desc">Ces deux parties sont obligatoires — le guide ET la navigation :</p>
+
+    <div class="rl" style="margin-bottom:8px;">Partie 1 — Le guide numérique</div>
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le guide s'ouvre et est lisible sans erreur.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Il couvre <strong>au moins 4 des 6 thèmes</strong> listés ci-dessus avec tes propres mots.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Il est <strong>structuré</strong> : un titre principal, des sections séparées, du contenu lisible rapidement.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Les <strong>8 commandes essentielles</strong> (<code>dir</code>, <code>cd</code>, <code>cd ..</code>, <code>mkdir</code>, <code>cls</code>, <code>D:</code>, <code>help</code>…) sont présentées sous forme de tableau ou de liste claire.</span>
+      </div>
+    </div>
+
+    <div class="rl" style="margin-top:1.2rem;margin-bottom:8px;">Partie 2 — La navigation CMD</div>
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Tu as ouvert l'Invite de commandes (CMD) sur ton PC.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Tu as utilisé <code>cd</code> pour naviguer jusqu'au dossier contenant ton guide.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Tu as tapé <code>dir</code> (ou <code>dir /B</code>) et ton fichier guide apparaît dans la liste.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DÉFI CMD -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-dark">⬛</div>Le défi terminal — Navigue jusqu'à ton guide !</div>
+    <p class="desc">Voici ce que tu dois reproduire dans ton propre CMD, avec <strong>ton vrai chemin</strong> vers ton guide :</p>
+
+    <div class="challenge-block">
+      <div class="challenge-title">Exemple de session CMD réussie :</div>
+      <div class="cmd-window" style="border-radius:8px;margin-top:0;">
+        <div class="cmd-body"><span class="cm">:: Étape 1 — ouvre CMD, tu es ici par défaut</span>
+<span class="p">C:\Users\toi</span><span class="pa">&gt;</span>
+
+<span class="cm">:: Étape 2 — navigue vers ton dossier</span>
+<span class="p">C:\Users\toi</span><span class="pa">&gt;</span> <span class="kw">cd</span> <span class="ar">Documents\mes-guides</span>
+<span class="p">C:\Users\toi\Documents\mes-guides</span><span class="pa">&gt;</span>
+
+<span class="cm">:: Étape 3 — vérifie que ton guide est là</span>
+<span class="p">C:\Users\toi\Documents\mes-guides</span><span class="pa">&gt;</span> <span class="kw">dir</span> <span class="ar">/B</span>
+<span class="ok">guide-terminal.html</span>
+
+<span class="cm">:: Mission accomplie ! 🎉</span></div>
+      </div>
+    </div>
+
+    <div class="tip tip-dark" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span style="color:#C8C8C8;">Si ton guide est dans un dossier avec des espaces (ex : <code>Mes Documents</code>), entoure-le de guillemets : <code>cd "Mes Documents\mes-guides"</code>. Rappelle-toi aussi : sur CMD le séparateur c'est <code>\</code>, pas <code>/</code> !</span>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus — Pour aller plus loin</div>
+    <p class="desc">Ces éléments enrichissent ton projet et montrent une vraie maîtrise :</p>
+
+    <div class="req-list">
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Créer un dossier <code>mes-guides</code> directement dans CMD avec <code>mkdir</code>, puis naviguer dedans — sans passer par l'explorateur.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Inclure dans ton guide des <strong>exemples visuels</strong> de commandes : reproduis l'apparence du terminal avec un fond noir et du texte coloré en CSS.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Documenter les <strong>3 erreurs courantes</strong> du cours (faute de frappe, <code>/</code> au lieu de <code>\</code>, espaces dans les noms) avec l'erreur CMD affichée et la correction.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter une section <strong>CMD + Git</strong> dans ton guide : pourquoi on utilise CMD pour Git, et la routine de base (<code>cd</code> vers le projet → commandes Git).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Naviguer depuis ton guide jusqu'à un dossier de projet fictif que tu crées via <code>mkdir</code> dans CMD — et confirmer avec <code>dir</code> à chaque étape.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTHODE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Relis le cours</strong> — Parcours <code>cours-terminal.html</code> et note les 6 thèmes. Pour chacun, écris les points qui te semblent les plus utiles à garder en mémoire.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Décide d'un emplacement</strong> — Avant de créer ton guide, décide <em>où</em> tu vas l'enregistrer sur ton PC. Choisis un chemin simple et sans espaces, comme <code>C:\Users\toi\Documents\mes-guides\</code>. Tu en auras besoin pour la partie CMD.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Choisis ton format</strong> — HTML pour la liberté maximale et pour pratiquer CSS, Word ou PDF si tu préfères un format classique. Crée le fichier dans le dossier choisi à l'étape 2.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>Structure d'abord</strong> — Pose tous tes titres de sections avant de remplir le contenu. Pour HTML : tous les <code>&lt;h2&gt;</code>. Pour Word : tous les en-têtes. Ensuite seulement tu remplis.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>Remplis avec tes mots</strong> — Utilise tes formulations, tes astuces, tes pièges rencontrés. Présente les commandes dans un tableau ou une liste code. Utilise l'IA pour la mise en forme si besoin, mais le contenu c'est toi.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">6</div>
+        <div class="step-content"><strong>Lance le défi CMD !</strong> — Ouvre l'Invite de commandes. Utilise <code>cd</code> pour naviguer jusqu'au dossier de ton guide. Tape <code>dir /B</code> et vérifie que ton fichier apparaît. Si tu y arrives : mission accomplie !</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✓</div>Checklist de vérification</div>
+    <p class="desc">Coche chaque point avant de considérer ton projet terminé :</p>
+
+    <div class="checklist">
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Mon guide s'ouvre sans erreur dans le bon logiciel</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Il a un titre principal clair et des sections séparées</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Au moins 4 des 6 thèmes du cours sont couverts</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Les 8 commandes essentielles sont listées clairement</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Je sais expliquer la différence entre <code>cd ..</code> et <code>D:</code></span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>J'ai ouvert CMD et navigué jusqu'au dossier de mon guide avec <code>cd</code></span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>J'ai tapé <code>dir /B</code> et mon fichier guide apparaît dans la liste</span></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Comprendre &rarr; Chercher &rarr; Coder &rarr; Tester &rarr; Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html#step4">&larr; Retour au sommaire</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) {
+      box.classList.toggle('checked');
+    }
+  </script>
+
+</body>
+
+</html>

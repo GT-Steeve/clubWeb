@@ -1347,6 +1347,7 @@
         var orderShuffled = orderCorrect.slice();
         (function () { for (var i = orderShuffled.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = orderShuffled[i]; orderShuffled[i] = orderShuffled[j]; orderShuffled[j] = t; } })();
         var dragSrc = null;
+        var tapSrc = null;
 
         function renderDragList() {
             var list = document.getElementById('dragList'); list.innerHTML = '';
@@ -1365,7 +1366,6 @@
                         dragSrc = null; renderDragList();
                     }
                 });
-                var tapSrc = null;
                 item.addEventListener('touchstart', function () {
                     var idx = parseInt(item.dataset.index);
                     if (tapSrc === null) { tapSrc = idx; item.style.outline = '2px solid #7F77DD'; }

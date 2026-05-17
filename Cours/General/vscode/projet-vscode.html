@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Mon guide VS Code</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    /* Requirements */
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    /* Themes grid */
+    .themes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.6rem; }
+    .theme-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .theme-title { font-weight: 800; margin-bottom: 4px; font-size: 0.9rem; }
+
+    /* Format badges */
+    .format-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.6rem; }
+    .format-tag { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; border: 0.5px solid; }
+    .ft-html { background: #E6F1FB; border-color: #85B7EB; color: #0C447C; }
+    .ft-css  { background: #FAECE7; border-color: #F0997B; color: #712B13; }
+    .ft-js   { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+    .ft-pdf  { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+    .ft-word { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+    .ft-md   { background: #EEEDFE; border-color: #CECBF6; color: #3C3489; }
+
+    /* Checklist */
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn {
+      display: inline-block; background: #FAC775; color: #412402;
+      font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+      border-radius: 10px; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.7rem; }
+      .themes-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="exercices-vscode.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>💻 Projet — Mon guide VS Code</h1>
+    <p>Crée ta notice personnelle de VS Code en format numérique !</p>
+    <div class="badge-row">
+      <span class="badge b-blue">Projet libre</span>
+      <span class="badge b-purple">Guide personnel</span>
+      <span class="badge b-amber">Format numérique</span>
+      <span class="badge b-teal">VS Code</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Tu connais maintenant VS Code — son interface, ses raccourcis, ses extensions, ses fonctionnalités clés. Maintenant tu vas créer <strong>ton propre guide personnel</strong> : une notice numérique que tu gardes à portée de main pour t'y référer quand tu en as besoin.</p>
+    <p class="desc">Ce n'est pas un résumé scolaire — c'est <strong>ta note personnelle</strong>, écrite à ta façon, avec les infos qui te sont vraiment utiles. Dans 6 mois, ce guide doit te permettre de retrouver en 30 secondes comment faire quelque chose dans VS Code.</p>
+    <div class="tip">
+      <span class="tip-i">💡</span>
+      <span>Un bon guide personnel, c'est celui que TU comprends rapidement. Utilise tes propres mots, tes propres raccourcis favoris, tes propres captures d'écran si tu veux. Fais-le à ton image !</span>
+    </div>
+  </div>
+
+  <!-- CONTENU À COUVRIR -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-blue">📚</div>Contenu à inclure dans ton guide</div>
+    <p class="desc">Ton guide doit couvrir les thèmes essentiels du cours. Voici les sections recommandées — adapte-les à ta façon :</p>
+
+    <div class="themes-grid">
+      <div class="theme-card" style="background:#E6F1FB;border:0.5px solid #85B7EB;">
+        <div class="theme-title" style="color:#0C447C;">⬇️ Installation</div>
+        <div style="font-size:0.83rem;color:#185FA5;">Où télécharger, comment installer, pourquoi VS Code.</div>
+      </div>
+      <div class="theme-card" style="background:#EEEDFE;border:0.5px solid #CECBF6;">
+        <div class="theme-title" style="color:#3C3489;">🖥️ L'interface</div>
+        <div style="font-size:0.83rem;color:#4D3B8A;">Explorateur, éditeur, terminal, barre de statut — chaque zone.</div>
+      </div>
+      <div class="theme-card" style="background:#E1F5EE;border:0.5px solid #9FE1CB;">
+        <div class="theme-title" style="color:#085041;">📂 Ouvrir un projet</div>
+        <div style="font-size:0.83rem;color:#0D7A5F;">Ouvrir un dossier, créer des fichiers, nommer avec l'extension.</div>
+      </div>
+      <div class="theme-card" style="background:#FAEEDA;border:0.5px solid #FAC775;">
+        <div class="theme-title" style="color:#633806;">⌨️ Raccourcis clés</div>
+        <div style="font-size:0.83rem;color:#8C5010;">Formater, commenter, dupliquer, chercher — les essentiels.</div>
+      </div>
+      <div class="theme-card" style="background:#FAECE7;border:0.5px solid #F5C4B3;">
+        <div class="theme-title" style="color:#712B13;">🔌 Extensions utiles</div>
+        <div style="font-size:0.83rem;color:#9E3459;">Prettier, Live Server, et celles que tu utilises.</div>
+      </div>
+      <div class="theme-card" style="background:#F1EFE8;border:0.5px solid #B4B2A9;">
+        <div class="theme-title" style="color:#444441;">💡 Astuces personnelles</div>
+        <div style="font-size:0.83rem;color:#5F5E5A;">Tes trucs découverts, tes raccourcis préférés, tes pièges à éviter.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMATS ACCEPTÉS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">📄</div>Format de ton guide</div>
+    <p class="desc">Ton guide peut prendre la forme qui te convient le mieux. Le seul critère : il doit être <strong>numérique et consultable facilement</strong>.</p>
+
+    <div class="rl">Formats acceptés</div>
+    <div class="format-row">
+      <span class="format-tag ft-html">🌐 Page HTML</span>
+      <span class="format-tag ft-pdf">📕 PDF</span>
+      <span class="format-tag ft-word">📘 Word / .docx</span>
+      <span class="format-tag ft-md">📝 Markdown .md</span>
+    </div>
+
+    <div class="tip tip-blue" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span>La page HTML est recommandée — tu peux y ajouter du CSS pour la rendre agréable, et même du JS pour des sections interactives. Mais si tu préfères Word ou un PDF bien structuré, c'est valide aussi !</span>
+    </div>
+
+    <div class="tip tip-purple" style="margin-top:0.6rem;">
+      <span class="tip-i">💡</span>
+      <span>Pour créer un PDF depuis ta page HTML : ouvre-la dans le navigateur, fais <strong>Ctrl+P</strong> → <strong>"Enregistrer en PDF"</strong>. C'est la méthode la plus simple !</span>
+    </div>
+  </div>
+
+  <!-- CAHIER DES CHARGES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Cahier des charges — Exigences obligatoires</div>
+    <p class="desc">Peu importe le format choisi, ces points sont non-négociables :</p>
+
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le guide s'ouvre et est lisible sans erreur (dans un navigateur, Word, ou un lecteur PDF).</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Il couvre <strong>au moins 4 des 6 thèmes</strong> listés ci-dessus avec tes propres mots.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Il est <strong>structuré</strong> : un titre principal, des sections séparées, du contenu lisible d'un coup d'œil.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Les raccourcis clavier sont présents sous forme de tableau ou de liste claire (ex : <code>Ctrl+S</code> → Sauvegarder).</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le contenu est rédigé par toi — ce n'est pas une copie du cours, c'est ton interprétation personnelle.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus — Pour aller plus loin</div>
+    <p class="desc">Ces éléments ne sont pas obligatoires mais enrichissent vraiment ton guide :</p>
+
+    <div class="req-list">
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Créer ta page en HTML avec un fichier <code>style.css</code> séparé — et appliquer les bonnes conventions d'architecture de fichiers vues dans le cours Architecture !</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter des <strong>captures d'écran</strong> annotées de l'interface VS Code pour illustrer chaque section.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter une section <strong>"Mes extensions installées"</strong> avec le nom, le rôle et pourquoi tu les as choisies.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter du JavaScript : un menu de navigation rapide vers chaque section, ou un mode sombre toggleable.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Exporter une version PDF de ta page HTML et l'inclure dans ton dossier de projet.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTHODE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Relis le cours</strong> — Parcours <code>cours-vscode.html</code> et note les 6 thèmes. Pour chacun, écris 2-3 points clés à toi — les choses que tu retiens et qui te semblent importantes.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Choisis ton format</strong> — HTML pour la liberté maximale, Word ou PDF si tu préfères un format plus classique. Décide avant de commencer.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Structure d'abord</strong> — Crée la structure complète avant de remplir le contenu. Pour HTML : tous les titres de sections. Pour Word : tous les en-têtes. Ensuite seulement, tu remplis.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>Ajoute le contenu à ta façon</strong> — Utilise tes mots, tes exemples, tes astuces personnelles. Inclus tes raccourcis préférés, les extensions que tu as installées, les erreurs que tu as faites.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>Teste la lisibilité</strong> — Ouvre ton guide et imagine que tu l'utilises dans 6 mois. En 30 secondes, peux-tu trouver comment formater du code dans VS Code ? Si non, améliore la structure.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">6</div>
+        <div class="step-content"><strong>Utilise l'IA pour le style</strong> — Pour le CSS ou la mise en forme Word, demande de l'aide. Mais le contenu de ton guide, c'est toi qui le rédiges : <em>"Comment faire un tableau de raccourcis en CSS ?"</em> — ça c'est bien.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✓</div>Checklist de vérification</div>
+    <p class="desc">Coche chaque point avant de considérer ton guide terminé :</p>
+
+    <div class="checklist">
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Mon guide s'ouvre sans erreur dans le bon logiciel</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Il a un titre principal clair et des sections séparées</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Au moins 4 des 6 thèmes du cours sont présents</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Les raccourcis clavier sont listés clairement</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Les extensions principales sont mentionnées avec leur rôle</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le contenu est rédigé avec mes propres mots</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Je peux retrouver n'importe quelle info en moins de 30 secondes</span></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Comprendre &rarr; Chercher &rarr; Coder &rarr; Tester &rarr; Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html#step1">&larr; Retour au sommaire</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) {
+      box.classList.toggle('checked');
+    }
+  </script>
+
+</body>
+
+</html>
