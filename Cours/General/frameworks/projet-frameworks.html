@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Ma note Langages & Frameworks</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧩%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #B5D4F4; }
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue { background: #E6F1FB; color: #0C447C; } .b-purple { background: #EEEDFE; color: #3C3489; } .b-amber { background: #FAEEDA; color: #633806; } .b-teal { background: #E1F5EE; color: #085041; }
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue { background: #B5D4F4; color: #0C447C; } .p-teal { background: #9FE1CB; color: #085041; } .p-amber { background: #FAC775; color: #633806; } .p-purple { background: #CECBF6; color: #3C3489; } .p-green { background: #C0DD97; color: #3B6D11; } .p-coral { background: #F5C4B3; color: #712B13; }
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+    .themes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.6rem; }
+    .theme-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .theme-title { font-weight: 800; margin-bottom: 4px; font-size: 0.9rem; }
+    .format-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.6rem; }
+    .format-tag { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; border: 0.5px solid; }
+    .ft-html { background: #E6F1FB; border-color: #85B7EB; color: #0C447C; } .ft-pdf { background: #FCEBEB; border-color: #F09595; color: #791F1F; } .ft-word { background: #E1F5EE; border-color: #5DCAA5; color: #085041; } .ft-md { background: #EEEDFE; border-color: #CECBF6; color: #3C3489; }
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must { background: #F0FBF7; border-left: 3px solid #5DCAA5; } .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box { width: 20px; height: 20px; min-width: 20px; border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; color: transparent; transition: all 0.12s; }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #EF9F27; }
+    @media (max-width: 520px) { .hero h1 { font-size: 1.7rem; } .themes-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <a class="nav-prev" href="exercices-frameworks.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>🧩 Projet — Ma note Langages & Frameworks</h1>
+    <p>Crée ta note personnelle sur la relation entre les langages natifs et leurs frameworks.</p>
+    <div class="badge-row">
+      <span class="badge b-blue">Note numérique</span>
+      <span class="badge b-amber">JavaScript / React</span>
+      <span class="badge b-purple">PHP / Symfony</span>
+      <span class="badge b-teal">Python / Django</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Tu vas créer <strong>ta note personnelle</strong> sur les langages et leurs frameworks. Ce document doit te permettre de répondre clairement : "C'est quoi la différence entre JavaScript et React ?" ou "Quand est-ce qu'on utilise un framework ?"</p>
+    <div class="tip"><span class="tip-i">💡</span><span>L'analogie clé du cours : le langage natif c'est comme cuisiner de zéro — le framework c'est cuisiner avec une recette et des ingrédients préparés. Garde cette image dans ta note, elle vaut mille définitions.</span></div>
+  </div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-blue">📚</div>Thèmes à couvrir</div>
+    <div class="themes-grid">
+      <div class="theme-card" style="background:#E6F1FB;border:0.5px solid #85B7EB;">
+        <div class="theme-title" style="color:#0C447C;">🤔 Natif vs Framework</div>
+        <div style="font-size:0.83rem;color:#185FA5;">L'analogie clé, pourquoi les frameworks existent.</div>
+      </div>
+      <div class="theme-card" style="background:#FAEEDA;border:0.5px solid #FAC775;">
+        <div class="theme-title" style="color:#633806;">⚡ JS → React / Vue</div>
+        <div style="font-size:0.83rem;color:#8C5010;">JavaScript natif, ce que React apporte, quand choisir Vue.</div>
+      </div>
+      <div class="theme-card" style="background:#EEEDFE;border:0.5px solid #CECBF6;">
+        <div class="theme-title" style="color:#3C3489;">🐘 PHP → Symfony / Laravel</div>
+        <div style="font-size:0.83rem;color:#4D3B8A;">PHP natif, ce que Symfony/Laravel apportent.</div>
+      </div>
+      <div class="theme-card" style="background:#E1F5EE;border:0.5px solid #9FE1CB;">
+        <div class="theme-title" style="color:#085041;">🐍 Python → Django</div>
+        <div style="font-size:0.83rem;color:#0D7A5F;">Python natif, ce que Django apporte.</div>
+      </div>
+      <div class="theme-card" style="background:#FAECE7;border:0.5px solid #F5C4B3;">
+        <div class="theme-title" style="color:#712B13;">📊 Tableau récap</div>
+        <div style="font-size:0.83rem;color:#9E3459;">Langage → framework(s) associé(s) pour chaque technologie.</div>
+      </div>
+      <div class="theme-card" style="background:#F1EFE8;border:0.5px solid #B4B2A9;">
+        <div class="theme-title" style="color:#444441;">🚫 Quand ne pas utiliser</div>
+        <div style="font-size:0.83rem;color:#5F5E5A;">Cas où le langage natif suffit — pas besoin d'un framework.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">📄</div>Format de ta note</div>
+    <div class="rl">Formats acceptés</div>
+    <div class="format-row">
+      <span class="format-tag ft-html">🌐 Page HTML</span>
+      <span class="format-tag ft-pdf">📕 PDF</span>
+      <span class="format-tag ft-word">📘 Word / .docx</span>
+      <span class="format-tag ft-md">📝 Markdown .md</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Exigences obligatoires</div>
+    <div class="req-list">
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>La note s'ouvre et est lisible sans erreur.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>Elle couvre <strong>au moins 4 des 6 thèmes</strong> avec tes propres mots.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>Les 3 couples langage/framework (JS/React, PHP/Symfony, Python/Django) sont présents.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>L'explication "quand utiliser un framework" est rédigée avec tes propres mots ou une analogie personnelle.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>Le contenu est rédigé avec tes propres mots.</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus</div>
+    <div class="req-list">
+      <div class="req-item req-bonus"><span class="req-icon">🌟</span><span>Créer un tableau à 3 colonnes : Langage natif / Framework / Ce que le framework apporte.</span></div>
+      <div class="req-item req-bonus"><span class="req-icon">🌟</span><span>Ajouter ta propre analogie pour expliquer la relation natif/framework (différente de celle du cours).</span></div>
+      <div class="req-item req-bonus"><span class="req-icon">🌟</span><span>Inclure une section "Si je devais faire un projet web aujourd'hui, j'utiliserais…" et justifier ton choix.</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+    <div class="steps-list">
+      <div class="step-row"><div class="step-num">1</div><div class="step-content"><strong>Relis le cours</strong> et note les 6 thèmes. L'analogie natif/framework est le fil directeur — garde-la en tête.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-content"><strong>Structure ta note</strong> autour des 3 couples : JS/React, PHP/Symfony, Python/Django. C'est le cœur du cours.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-content"><strong>Pour chaque couple</strong>, explique ce que le framework apporte concrètement — pas de définition abstraite, des exemples.</div></div>
+      <div class="step-row"><div class="step-num">4</div><div class="step-content"><strong>Ajoute la section "quand ne pas utiliser"</strong> — c'est souvent ce qu'on oublie. Un framework, c'est de la complexité ajoutée si le projet est simple.</div></div>
+      <div class="step-row"><div class="step-num">5</div><div class="step-content"><strong>Teste la lisibilité.</strong> Peut-on comprendre la différence entre JavaScript et React en 30 secondes ?</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✓</div>Checklist de vérification</div>
+    <div class="checklist">
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Ma note s'ouvre sans erreur.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Elle couvre au moins 4 thèmes du cours.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Les 3 couples langage/framework sont présents.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>J'ai expliqué quand utiliser (et quand ne pas utiliser) un framework.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le contenu est rédigé avec mes propres mots.</span></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Comprendre → Chercher → Coder → Tester → Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html">↩ Retour au sommaire</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) { box.classList.toggle('checked'); }
+  </script>
+</body>
+</html>

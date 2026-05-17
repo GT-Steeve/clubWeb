@@ -1,0 +1,1051 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Vibecoding</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f5f4f0;
+            color: #2C2C2A;
+            padding: 1.5rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .nav-prev {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.88rem; font-weight: 700; color: #185FA5;
+            text-decoration: none; margin-bottom: 1.5rem;
+            background: #E6F1FB; border: 0.5px solid #85B7EB;
+            border-radius: 8px; padding: 6px 14px; transition: background 0.15s;
+        }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.4s; width: 0%; }
+        .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .chip-ok { background: #E1F5EE; color: #085041; }
+        .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .action-btn {
+            border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A;
+            border-radius: 10px; padding: 8px 20px; font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s;
+        }
+        .action-btn:hover { background: #D3D1C7; }
+        .action-btn.primary { background: #2C2C2A; color: #FAC775; border-color: #2C2C2A; }
+        .action-btn.primary:hover { background: #444441; }
+        .action-btn.reveal { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+        .action-btn.reveal:hover { background: #CECBF6; }
+
+        .score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-top: 1rem; display: none; text-align: center; }
+        .score-panel.show { display: block; }
+        .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .score-big span { color: #5DCAA5; }
+        .score-sub { font-size: 0.9rem; color: #888780; }
+
+        /* FLASHCARDS */
+        .fc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 0.8rem; }
+        .fc { height: 130px; perspective: 700px; cursor: pointer; }
+        .fc-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.45s cubic-bezier(.4,0,.2,1); border-radius: 12px; }
+        .fc.flipped .fc-inner { transform: rotateY(180deg); }
+        .fc-front, .fc-back { position: absolute; inset: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 12px; text-align: center; backface-visibility: hidden; border: 0.5px solid #D3D1C7; }
+        .fc-front { background: #F1EFE8; font-size: 0.88rem; font-weight: 700; color: #2C2C2A; }
+        .fc-back  { background: #ffffff; font-size: 0.84rem; transform: rotateY(180deg); color: #085041; font-weight: 700; line-height: 1.5; }
+        .fc-hint  { font-size: 0.68rem; color: #B4B2A9; position: absolute; bottom: 7px; right: 9px; }
+        .fc-front.purple { background: #EEEDFE; color: #3C3489; }
+        .fc-front.coral  { background: #FAECE7; color: #712B13; }
+        .fc-front.amber  { background: #FAEEDA; color: #633806; }
+
+        /* QCM */
+        .qcm-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 7px; }
+        .opt { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; transition: background 0.12s; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none; }
+        .opt:hover { background: #D3D1C7; }
+        .opt.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .opt.correct  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .opt.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .opt-dot { width: 18px; height: 18px; min-width: 18px; border-radius: 50%; border: 2px solid #B4B2A9; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+        .opt.selected .opt-dot { border-color: #7F77DD; background: #7F77DD; }
+        .opt.correct  .opt-dot { border-color: #1D9E75; background: #1D9E75; }
+        .opt.wrong    .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+        .opt-dot-inner { width: 6px; height: 6px; background: white; border-radius: 50%; display: none; }
+        .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+        .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .q-feedback.show { display: block; }
+        .q-feedback.ok { color: #0F6E56; }
+        .q-feedback.ko { color: #A32D2D; }
+
+        /* VF */
+        .vf-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .vf-statement { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .vf-btns { display: flex; gap: 10px; }
+        .vf-btn { flex: 1; padding: 8px 0; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .vf-btn.vrai:hover { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .vf-btn.faux:hover { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-btn.vrai.selected { background: #E1F5EE; border-color: #5DCAA5; color: #085041; border-width: 2px; }
+        .vf-btn.faux.selected { background: #FCEBEB; border-color: #F09595; color: #791F1F; border-width: 2px; }
+        .vf-btn.correct-ans { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+
+        /* SCÉNARIOS */
+        .scenario-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .scenario-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 8px; }
+        .scenario-situation { font-size: 0.95rem; font-weight: 700; color: #2C2C2A; line-height: 1.5; margin-bottom: 1rem; }
+        .scenario-choice { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; margin-bottom: 7px; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; transition: background 0.12s; user-select: none; }
+        .scenario-choice:hover { background: #D3D1C7; }
+        .scenario-choice.correct { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; font-weight: 700; }
+        .scenario-choice.wrong   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .scenario-choice.disabled { pointer-events: none; }
+        .scenario-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .scenario-feedback.show { display: block; }
+        .scenario-feedback.ok { color: #0F6E56; }
+        .scenario-feedback.ko { color: #A32D2D; }
+
+        /* MATCHING */
+        .match-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .match-col-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .match-col { display: flex; flex-direction: column; gap: 7px; }
+        .match-item { padding: 9px 13px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.12s; }
+        .match-item:hover:not(.matched) { background: #D3D1C7; }
+        .match-item.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .match-item.matched  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; pointer-events: none; font-weight: 700; }
+        .match-item.wrong-flash { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .match-item.match-code { font-family: 'Fira Code', monospace; font-size: 0.82rem; }
+        .match-result { font-size: 0.88rem; font-weight: 700; color: #085041; margin-top: 0.8rem; display: none; }
+        .match-result.show { display: block; }
+
+        /* ORDONNER */
+        .order-list { display: flex; flex-direction: column; gap: 7px; margin-top: 0.8rem; user-select: none; }
+        .order-item { display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #ffffff; font-size: 0.9rem; font-weight: 600; cursor: grab; transition: box-shadow 0.15s, background 0.12s; }
+        .order-item:active { cursor: grabbing; box-shadow: 0 4px 14px rgba(0,0,0,.1); }
+        .order-item.dragging  { opacity: 0.35; }
+        .order-item.drag-over { border-color: #5DCAA5; background: #E1F5EE; }
+        .order-item.tap-sel   { background: #EEEDFE; border-color: #AFA9EC; }
+        .order-item.correct   { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .order-item.wrong     { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .order-handle { color: #B4B2A9; font-size: 1rem; }
+        .order-num { font-size: 0.72rem; font-weight: 800; color: #888780; background: #F1EFE8; border-radius: 6px; padding: 2px 7px; min-width: 22px; text-align: center; }
+        .order-feedback { font-size: 0.88rem; font-weight: 700; margin-top: 0.8rem; display: none; line-height: 1.5; }
+        .order-feedback.show { display: block; }
+        .order-feedback.ok { color: #0F6E56; }
+        .order-feedback.ko { color: #A32D2D; }
+
+        /* COMPLÉTER */
+        .complete-wrap { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 2; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem; }
+        .blank { display: inline-block; min-width: 80px; border: none; border-bottom: 2px solid #AFA9EC; background: transparent; font-family: 'Fira Code', monospace; font-size: 0.84rem; color: #3C3489; font-weight: 700; padding: 0 4px; outline: none; vertical-align: baseline; transition: border-color 0.15s; }
+        .blank:focus { border-bottom-color: #7F77DD; }
+        .blank.ok { border-bottom-color: #1D9E75; color: #085041; }
+        .blank.ko { border-bottom-color: #E24B4A; color: #791F1F; }
+        .blank.revealed { border-bottom-color: #FAC775; color: #633806; background: rgba(250,199,117,0.15); }
+        .complete-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .complete-feedback.show { display: block; }
+        .complete-feedback.ok { color: #0F6E56; }
+        .complete-feedback.ko { color: #A32D2D; }
+        .kw { color: #3C3489; font-weight: 700; }
+        .cm { color: #888780; font-style: italic; }
+        .sel { color: #993C1D; }
+        .val { color: #0F6E56; }
+        .fn { color: #185FA5; }
+
+        .answers-reveal { background: #FAEEDA; border: 0.5px solid #FAC775; border-radius: 10px; padding: 0.9rem 1.1rem; margin-top: 0.8rem; display: none; font-size: 0.88rem; line-height: 1.8; color: #633806; }
+        .answers-reveal.show { display: block; }
+        .answers-reveal strong { display: block; margin-bottom: 6px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .answer-line { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
+        .answer-key { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: #888780; min-width: 130px; }
+        .answer-val { font-family: 'Fira Code', monospace; font-size: 0.84rem; font-weight: 700; color: #633806; }
+
+        /* PROMPT ÉVALUATION */
+        .prompt-eval { background: #2C2C2A; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 10px; font-family: 'Fira Code', monospace; font-size: 0.82rem; color: #D3D1C7; line-height: 1.7; }
+        .prompt-eval .label { font-family: 'Nunito', sans-serif; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; margin-bottom: 6px; display: block; }
+
+        /* SCORE GLOBAL */
+        .global-score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-top: 2rem; display: none; text-align: center; }
+        .global-score-panel.show { display: block; }
+        .gs-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .gs-big span { color: #5DCAA5; }
+        .gs-sub { font-size: 0.9rem; color: #888780; margin-bottom: 1rem; }
+        .gs-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+        /* CTA */
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) {
+            body { padding: 1rem; }
+            .hero h1 { font-size: 1.7rem; }
+            .match-wrap { grid-template-columns: 1fr; }
+            .fc-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="nav-prev" href="cours-vibecoding.html">← Retour au cours</a>
+
+    <div class="hero">
+        <h1>🤖 Exercices Vibecoding</h1>
+        <p>Flashcards, QCM, vrai/faux, évaluation de prompts, scénarios, matching et code à compléter.</p>
+        <div class="badge-row">
+            <span class="badge b-teal">🃏 Flashcards</span>
+            <span class="badge b-purple">✅ QCM</span>
+            <span class="badge b-amber">⚖️ Vrai/Faux</span>
+            <span class="badge b-coral">🎬 Scénarios</span>
+            <span class="badge b-blue">🔗 Associer</span>
+            <span class="badge b-green">↕️ Ordonner</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 01 — FLASHCARDS ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">01 — Flashcards — cliquer pour retourner</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">🃏</div>Concepts clés du vibecoding</div>
+        <div class="fc-grid">
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front purple">Qu'est-ce que le vibecoding ?<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Coder en décrivant ses besoins à une IA en langage naturel, puis assembler et adapter le code généré.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front">Qui a inventé le terme « vibecoding » ?<span class="fc-hint">↻</span></div>
+                    <div class="fc-back"><strong>Andrej Karpathy</strong>, co-fondateur d'OpenAI, en février 2025.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front amber">Les 4 éléments d'un bon prompt de code<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">1. Le contexte (projet, langage)<br>2. Ce que tu veux faire<br>3. Les contraintes<br>4. Le format attendu</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front coral">Le plus grand danger du vibecoding<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Copier du code sans le comprendre — si ça plante, on est incapable de déboguer seul.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front">Que faire avant de coller du code IA ?<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Le <strong>lire</strong>, vérifier les imports, les noms de variables et les références au projet existant.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front purple">Qu'est-ce qu'une hallucination de l'IA ?<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Quand l'IA invente une fonction ou une syntaxe qui n'existe pas, avec l'air parfaitement confiant.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front">Quoi faire quand on a une erreur Django ?<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Coller à l'IA : <strong>l'erreur exacte + le code fautif + les fichiers liés</strong> (views.py, urls.py…).</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front amber">La règle avant d'intégrer du code IA<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Faire un <strong>git commit</strong> avant — pour pouvoir revenir en arrière si le code génère une régression.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front coral">Ce qu'on ne doit jamais faire avec le vibecoding<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Mettre une <strong>SECRET_KEY, un mot de passe ou une clé API</strong> dans un fichier versionné sur Git.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front">Les 3 niveaux du vibecoder<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">1. Vibe pur (copie sans lire)<br>2. Dev assisté (lit + adapte)<br>3. Architecte IA (conçoit, l'IA remplit)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ 02 — QCM ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">02 — QCM — Questions à choix multiples</span>
+    </div>
+
+    <div id="qcm-container"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkQCM()">Corriger le QCM</button>
+        <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="score-row" id="score-qcm"></div>
+    <div class="score-panel" id="qcm-score-panel">
+        <div class="score-big"><span id="qcm-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au QCM</div>
+    </div>
+
+
+    <!-- ══ 03 — VRAI / FAUX ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">03 — Quiz — Vrai ou Faux</span>
+    </div>
+
+    <div id="vf-container"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkVF()">Corriger le Quiz</button>
+        <button class="action-btn" onclick="resetVF()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-vf"></div></div>
+    <div class="score-row" id="score-vf"></div>
+    <div class="score-panel" id="vf-score-panel">
+        <div class="score-big"><span id="vf-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au Quiz V/F</div>
+    </div>
+
+
+    <!-- ══ 04 — SCÉNARIOS ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">04 — Scénarios — que faites-vous ?</span>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 1</div>
+        <div class="scenario-situation">🧑‍💻 L'IA te génère une vue Django complète. Tu la colles dans views.py, tu lances le serveur et tu obtiens : <code>NameError: name 'Article' is not defined</code>. Que fais-tu ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)">
+            <div class="opt-dot"><div class="opt-dot-inner"></div></div>
+            Demander à l'IA de régénérer un code différent
+        </div>
+        <div class="scenario-choice" onclick="pickScenario(this, true)">
+            <div class="opt-dot"><div class="opt-dot-inner"></div></div>
+            Vérifier que l'import <code>from .models import Article</code> est bien présent en haut du fichier views.py
+        </div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)">
+            <div class="opt-dot"><div class="opt-dot-inner"></div></div>
+            Supprimer le fichier views.py et recommencer depuis zéro
+        </div>
+        <div class="scenario-feedback">✓ Un <code>NameError</code> sur un nom de model signale presque toujours un import manquant. L'IA génère parfois le code sans inclure toutes les lignes d'import nécessaires — vérification systématique en haut du fichier.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 2</div>
+        <div class="scenario-situation">🧑‍💻 Tu demandes à l'IA un formulaire Django pour ton model <code>Produit</code>. Elle génère un form avec <code>fields = ['name', 'price', 'stock']</code>. Mais dans ton models.py, les champs s'appellent <code>nom</code>, <code>prix</code> et <code>quantite</code>. Que fais-tu ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)">
+            <div class="opt-dot"><div class="opt-dot-inner"></div></div>
+            Renommer tous les champs de ton model pour correspondre au code IA
+        </div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)">
+            <div class="opt-dot"><div class="opt-dot-inner"></div></div>
+            Coller le form tel quel et voir si ça marche quand même
+        </div>
+        <div class="scenario-choice" onclick="pickScenario(this, true)">
+            <div class="opt-dot"><div class="opt-dot-inner"></div></div>
+            Adapter le code IA : remplacer <code>'name'</code> par <code>'nom'</code>, <code>'price'</code> par <code>'prix'</code>, etc. pour correspondre à ton vrai model
+        </div>
+        <div class="scenario-feedback">✓ L'IA ne connaît pas exactement ton projet — elle devine les noms. C'est ton rôle d'adapter ses noms génériques aux vrais noms de ton code. Toujours comparer avec ton models.py avant d'intégrer.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 3</div>
+        <div class="scenario-situation">🧑‍💻 L'IA t'a aidé à coder une belle fonctionnalité. Tout fonctionne. Elle te suggère maintenant d'ajouter directement la variable <code>DATABASE_URL = "postgres://user:monmotdepasse@host/db"</code> dans ton fichier <code>settings.py</code> que tu vas commiter sur GitHub. Que fais-tu ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)">
+            <div class="opt-dot"><div class="opt-dot-inner"></div></div>
+            Coller la variable dans settings.py et faire le commit — ça simplifie la configuration
+        </div>
+        <div class="scenario-choice" onclick="pickScenario(this, true)">
+            <div class="opt-dot"><div class="opt-dot-inner"></div></div>
+            Refuser — mettre cette valeur dans un fichier <code>.env</code> non versionné et utiliser <code>python-decouple</code> ou <code>os.environ</code> pour la lire
+        </div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)">
+            <div class="opt-dot"><div class="opt-dot-inner"></div></div>
+            Mettre la variable dans un commentaire pour qu'elle ne soit pas lue
+        </div>
+        <div class="scenario-feedback">✓ Un mot de passe ou une URL de base de données dans un repo Git public (ou même privé partagé) est une faille de sécurité majeure. L'IA peut suggérer des pratiques peu sécurisées — c'est toi qui décides. Toujours utiliser des variables d'environnement pour les secrets.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 4</div>
+        <div class="scenario-situation">🧑‍💻 Tu es bloqué depuis 30 minutes sur une erreur Django. L'IA t'a proposé 3 corrections différentes, aucune n'a fonctionné, et maintenant le code est un mélange des 3 suggestions. Que fais-tu ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)">
+            <div class="opt-dot"><div class="opt-dot-inner"></div></div>
+            Continuer à demander à l'IA des corrections jusqu'à ce que ça marche
+        </div>
+        <div class="scenario-choice" onclick="pickScenario(this, true)">
+            <div class="opt-dot"><div class="opt-dot-inner"></div></div>
+            Faire un <code>git stash</code> pour revenir à l'état qui fonctionnait, puis repartir proprement avec un nouveau prompt qui donne à l'IA l'erreur exacte + tout le code concerné
+        </div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)">
+            <div class="opt-dot"><div class="opt-dot-inner"></div></div>
+            Tout supprimer et recommencer le projet depuis zéro
+        </div>
+        <div class="scenario-feedback">✓ Quand on accumule des corrections IA sans comprendre, le code devient incontrôlable. Git est ton filet de sécurité. Revenir en arrière, repartir proprement avec un prompt précis vaut mieux qu'accumuler des patchs incompris.</div>
+    </div>
+
+
+    <!-- ══ 05 — ASSOCIER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">05 — Associer — clic gauche puis clic droit</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">🔗</div>Outil de vibecoding → Usage idéal</div>
+        <div class="match-wrap">
+            <div>
+                <div class="match-col-label">Outil</div>
+                <div class="match-col" id="match-left">
+                    <div class="match-item match-code" id="ml0" onclick="selectMatch('left',0)">ChatGPT / Claude</div>
+                    <div class="match-item match-code" id="ml1" onclick="selectMatch('left',1)">GitHub Copilot</div>
+                    <div class="match-item match-code" id="ml2" onclick="selectMatch('left',2)">Cursor</div>
+                    <div class="match-item match-code" id="ml3" onclick="selectMatch('left',3)">Bolt.new / v0.dev</div>
+                    <div class="match-item match-code" id="ml4" onclick="selectMatch('left',4)">git commit (avant IA)</div>
+                    <div class="match-item match-code" id="ml5" onclick="selectMatch('left',5)">fichier .env</div>
+                    <div class="match-item match-code" id="ml6" onclick="selectMatch('left',6)">docs.djangoproject.com</div>
+                    <div class="match-item match-code" id="ml7" onclick="selectMatch('left',7)">git stash</div>
+                </div>
+            </div>
+            <div>
+                <div class="match-col-label">Usage / Rôle</div>
+                <div class="match-col" id="match-right">
+                    <div class="match-item" id="mr0" onclick="selectMatch('right',0)">Générer du code, expliquer des erreurs</div>
+                    <div class="match-item" id="mr1" onclick="selectMatch('right',1)">Autocomplétion ligne par ligne dans VS Code</div>
+                    <div class="match-item" id="mr2" onclick="selectMatch('right',2)">VS Code avec contexte projet complet</div>
+                    <div class="match-item" id="mr3" onclick="selectMatch('right',3)">Générer une interface complète en un prompt</div>
+                    <div class="match-item" id="mr4" onclick="selectMatch('right',4)">Point de sauvegarde avant d'intégrer du code IA</div>
+                    <div class="match-item" id="mr5" onclick="selectMatch('right',5)">Stocker les secrets hors du code versionné</div>
+                    <div class="match-item" id="mr6" onclick="selectMatch('right',6)">Vérifier si une fonction Django existe vraiment</div>
+                    <div class="match-item" id="mr7" onclick="selectMatch('right',7)">Revenir à l'état fonctionnel précédent</div>
+                </div>
+            </div>
+        </div>
+        <div class="match-result" id="matchResult">🎉 Parfait ! Toutes les associations sont correctes.</div>
+    </div>
+
+
+    <!-- ══ 06 — ORDONNER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">06 — Remettre dans l'ordre</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">↕️</div>Le cycle d'intégration de code IA dans un projet Django</div>
+        <p class="desc">Glissez-déposez ces étapes dans l'ordre logique.</p>
+        <div class="order-list" id="orderList">
+            <div class="order-item" draggable="true" data-correct="4" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span>Copier le code dans le bon fichier du projet</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="2" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span>Écrire un prompt précis avec contexte + besoin + contraintes</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="6" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span>Tester dans le navigateur</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="3" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span>Lire le code généré et vérifier les imports et les noms</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="7" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span>Si erreur : coller l'erreur à l'IA avec le contexte et corriger</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="1" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span>Faire un git commit pour sauvegarder l'état actuel</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="5" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span>Adapter le code au contexte réel (noms des champs, URL, template)</span>
+            </div>
+        </div>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateOrder()">Valider l'ordre</button>
+            <button class="action-btn reveal" onclick="revealOrder()">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="shuffleOrder()">🔀 Mélanger</button>
+        </div>
+        <div class="order-feedback" id="orderFeedback"></div>
+        <div class="answers-reveal" id="order-answers">
+            <strong>Ordre correct</strong>
+            <div class="answer-line"><span class="answer-key">Étape 1</span><span class="answer-val">git commit (sauvegarde)</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 2</span><span class="answer-val">Écrire un bon prompt</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 3</span><span class="answer-val">Lire le code généré</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 4</span><span class="answer-val">Copier dans le projet</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 5</span><span class="answer-val">Adapter au contexte réel</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 6</span><span class="answer-val">Tester dans le navigateur</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 7</span><span class="answer-val">Si erreur : corriger avec l'IA</span></div>
+        </div>
+    </div>
+
+
+    <!-- ══ 07 — COMPLÉTER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">07 — Compléter le code</span>
+    </div>
+
+    <!-- Bloc 1 : Prompt à compléter -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">①</div>Complétez ce prompt pour qu'il soit efficace</div>
+        <p class="desc" style="margin-bottom:0.8rem;">Un élève veut demander à l'IA de créer une page de détail pour son model <code>Article</code>. Complétez son prompt.</p>
+<pre class="complete-wrap"><span class="cm">// Prompt à compléter</span>
+
+Je travaille sur un projet <input class="blank" id="b1a" placeholder="???" autocomplete="off" style="min-width:70px"> 5.
+
+Mon model Article a les champs :
+- titre (CharField)
+- contenu (<input class="blank" id="b1b" placeholder="???" autocomplete="off" style="min-width:80px">)
+- publie (BooleanField)
+
+Génère-moi :
+1. La <input class="blank" id="b1c" placeholder="???" autocomplete="off" style="min-width:60px"> qui récupère un article par son pk
+   avec <input class="blank" id="b1d" placeholder="???" autocomplete="off" style="min-width:140px"> si l'article n'existe pas
+2. L'URL correspondante dans blog/urls.py
+3. Le template qui étend "<input class="blank" id="b1e" placeholder="???" autocomplete="off" style="min-width:80px">"
+
+Commente chaque partie pour que je comprenne.</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c1')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c1')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c1')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c1-feedback"></div>
+        <div class="answers-reveal" id="c1-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">projet ???</span><span class="answer-val">Django</span></div>
+            <div class="answer-line"><span class="answer-key">champ ???</span><span class="answer-val">TextField</span></div>
+            <div class="answer-line"><span class="answer-key">La ???</span><span class="answer-val">vue</span></div>
+            <div class="answer-line"><span class="answer-key">avec ???</span><span class="answer-val">get_object_or_404</span></div>
+            <div class="answer-line"><span class="answer-key">étend "???"</span><span class="answer-val">base.html</span></div>
+        </div>
+    </div>
+
+    <!-- Bloc 2 : Checklist d'assemblage -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">②</div>Complétez — checklist avant de tester le code IA</div>
+<pre class="complete-wrap"><span class="cm">// Avant de lancer runserver après avoir intégré du code IA :</span>
+
+<span class="kw">✓</span> Les noms des <input class="blank" id="b2a" placeholder="???" autocomplete="off" style="min-width:70px"> dans le form correspondent au models.py
+<span class="kw">✓</span> Le <input class="blank" id="b2b" placeholder="???" autocomplete="off" style="min-width:120px"> dans la vue existe bien dans urls.py
+<span class="kw">✓</span> Le chemin du <input class="blank" id="b2c" placeholder="???" autocomplete="off" style="min-width:80px"> est correct : app/templates/app/
+<span class="kw">✓</span> Tous les imports sont présents (render, <input class="blank" id="b2d" placeholder="???" autocomplete="off" style="min-width:160px">…)
+<span class="kw">✓</span> Si models.py a changé : lancer <input class="blank" id="b2e" placeholder="???" autocomplete="off" style="min-width:140px">
+<span class="kw">✓</span> Aucun <input class="blank" id="b2f" placeholder="???" autocomplete="off" style="min-width:100px"> (mot de passe, clé API) dans le code versionné</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c2')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c2')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c2')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c2-feedback"></div>
+        <div class="answers-reveal" id="c2-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">noms des ???</span><span class="answer-val">champs</span></div>
+            <div class="answer-line"><span class="answer-key">Le ??? dans la vue</span><span class="answer-val">redirect('blog:liste')</span></div>
+            <div class="answer-line"><span class="answer-key">chemin du ???</span><span class="answer-val">template</span></div>
+            <div class="answer-line"><span class="answer-key">render, ???</span><span class="answer-val">get_object_or_404</span></div>
+            <div class="answer-line"><span class="answer-key">lancer ???</span><span class="answer-val">makemigrations + migrate</span></div>
+            <div class="answer-line"><span class="answer-key">Aucun ???</span><span class="answer-val">secret</span></div>
+        </div>
+    </div>
+
+    <!-- Bloc 3 : Prompt de débogage -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">③</div>Complétez — le prompt de débogage idéal</div>
+<pre class="complete-wrap"><span class="cm">// Quand une erreur Django arrive après du vibecoding</span>
+
+J'ai cette <input class="blank" id="b3a" placeholder="???" autocomplete="off" style="min-width:70px"> Django :
+[coller le message <input class="blank" id="b3b" placeholder="???" autocomplete="off" style="min-width:70px"> complet]
+
+Voici mon <input class="blank" id="b3c" placeholder="???" autocomplete="off" style="min-width:70px">.py (le fichier fautif) :
+[coller le code]
+
+Voici mon blog/<input class="blank" id="b3d" placeholder="???" autocomplete="off" style="min-width:60px">.py :
+[coller le contenu]
+
+<input class="blank" id="b3e" placeholder="???" autocomplete="off" style="min-width:200px">
+et comment corriger.</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c3')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c3')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c3')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c3-feedback"></div>
+        <div class="answers-reveal" id="c3-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">cette ???</span><span class="answer-val">erreur</span></div>
+            <div class="answer-line"><span class="answer-key">message ???</span><span class="answer-val">d'erreur</span></div>
+            <div class="answer-line"><span class="answer-key">mon ???.py</span><span class="answer-val">views</span></div>
+            <div class="answer-line"><span class="answer-key">blog/???.py</span><span class="answer-val">urls</span></div>
+            <div class="answer-line"><span class="answer-key">??? et comment...</span><span class="answer-val">Explique-moi pourquoi</span></div>
+        </div>
+    </div>
+
+
+    <!-- ══ SCORE GLOBAL ══ -->
+    <div class="global-score-panel" id="globalScore">
+        <div class="gs-big"><span id="gs-val">—</span></div>
+        <div class="gs-sub" id="gs-sub">score global</div>
+        <div class="gs-chips" id="gs-chips"></div>
+    </div>
+
+    <div class="cta-wrap">
+        <p>Envie de revoir un point ? Retournez au cours.</p>
+        <a class="cta-btn" href="../../sommaire.html">← Retour au sommaire</a>
+    </div>
+
+    <div class="footer-note">
+        Prompt → Lire → Adapter → Tester → Corriger 🤖<br>
+        <span style="font-size:0.82rem;">Exercices — Vibecoding</span>
+    </div>
+
+
+    <script>
+    var qcmData = [
+        {
+            q: "Que signifie « vibecoding » ?",
+            opts: [
+                "Coder en écoutant de la musique pour être plus productif",
+                "Décrire ses besoins à une IA en langage naturel et assembler le code généré",
+                "Utiliser des raccourcis clavier pour coder plus vite",
+                "Coder sans documentation, de mémoire"
+            ],
+            correct: 1,
+            expl: "✓ Le vibecoding est l'art de guider une IA avec des descriptions en langage naturel, puis d'assembler, adapter et tester le code qu'elle génère."
+        },
+        {
+            q: "Quel est le premier réflexe avant d'intégrer du code généré par une IA ?",
+            opts: [
+                "Tester immédiatement dans le navigateur",
+                "Le partager avec un collègue pour validation",
+                "Faire un git commit pour pouvoir revenir en arrière si besoin",
+                "Supprimer les commentaires pour que le code soit plus propre"
+            ],
+            correct: 2,
+            expl: "✓ Git est ton filet de sécurité. Un commit avant d'intégrer du code IA permet de revenir à un état stable si le code génère des problèmes."
+        },
+        {
+            q: "Qu'est-ce qu'une « hallucination » dans le contexte de l'IA ?",
+            opts: [
+                "Quand l'IA génère du code trop lent à exécuter",
+                "Quand l'IA invente une fonction ou une syntaxe qui n'existe pas, avec l'air confiant",
+                "Quand l'IA refuse de répondre à une question",
+                "Quand l'IA génère trop de commentaires dans le code"
+            ],
+            correct: 1,
+            expl: "✓ Les hallucinations IA sont des informations inventées mais présentées avec confiance. En code, ça peut être une fonction Django inexistante ou une mauvaise syntaxe — d'où l'importance de vérifier sur la doc officielle."
+        },
+        {
+            q: "Qu'est-ce qu'un « bon prompt » de code contient impérativement ?",
+            opts: [
+                "Le langage de programmation uniquement",
+                "Contexte + besoin précis + contraintes + format attendu",
+                "Le nom du framework et la fonctionnalité voulue",
+                "Une question la plus courte possible pour économiser des tokens"
+            ],
+            correct: 1,
+            expl: "✓ Un bon prompt de code donne 4 éléments : le contexte (projet, langage), ce qu'on veut, les contraintes (ce qui existe, ce qu'il ne faut pas casser) et le format attendu (fichier complet, snippet, avec explication)."
+        },
+        {
+            q: "Tu obtiens une erreur après avoir intégré du code IA. Que colles-tu à l'IA pour la corriger ?",
+            opts: [
+                "Uniquement le message d'erreur",
+                "Uniquement le code qui plante",
+                "L'erreur exacte + le code fautif + les fichiers liés (views.py, urls.py…)",
+                "Une description de l'erreur dans tes propres mots"
+            ],
+            correct: 2,
+            expl: "✓ Plus le contexte est complet, meilleure est la correction. L'IA ne peut pas deviner la cause d'une erreur sans voir le code qui l'entoure."
+        },
+        {
+            q: "Pourquoi ne faut-il JAMAIS mettre une SECRET_KEY ou un mot de passe dans un fichier versionné sur Git ?",
+            opts: [
+                "Parce que Git ne gère pas les caractères spéciaux dans les chaînes",
+                "Parce que ces données seraient visibles par quiconque accède au dépôt, représentant une faille de sécurité",
+                "Parce que ça ralentit les commits",
+                "Parce que Django refuse de démarrer si ces variables sont dans settings.py"
+            ],
+            correct: 1,
+            expl: "✓ Un dépôt Git (même privé) peut être partagé ou compromis. Les secrets (clés, mots de passe, tokens) doivent toujours être dans un fichier .env non versionné, lu via os.environ ou python-decouple."
+        },
+        {
+            q: "Quel est le signe que tu es au « Niveau 1 — Vibe pur » du vibecoding ?",
+            opts: [
+                "Tu demandes toujours des explications après chaque génération",
+                "Tu testes le code dans un environnement isolé avant d'intégrer",
+                "Tu colles le code sans le lire ni le comprendre",
+                "Tu utilises Git pour sauvegarder avant chaque intégration"
+            ],
+            correct: 2,
+            expl: "✓ Le Niveau 1 est dangereux : on copie sans comprendre, donc on ne peut pas déboguer seul quand ça plante. L'objectif est d'évoluer vers le Niveau 2 (lire + adapter) puis le Niveau 3 (concevoir l'architecture)."
+        },
+        {
+            q: "Quel outil permet l'autocomplétion du code ligne par ligne directement dans VS Code ?",
+            opts: [
+                "Cursor",
+                "Bolt.new",
+                "ChatGPT",
+                "GitHub Copilot"
+            ],
+            correct: 3,
+            expl: "✓ GitHub Copilot est l'extension VS Code qui génère des suggestions de code en temps réel à mesure que tu tapes. Cursor est lui un éditeur complet basé sur VS Code avec IA intégrée au niveau projet."
+        }
+    ];
+
+    var vfData = [
+        { stmt: "Le vibecoding permet de coder sans jamais apprendre les bases du développement.", correct: false, expl: "Faux. Sans bases, on ne peut pas évaluer la qualité du code généré, ni déboguer seul. Le vibecoding accélère l'apprentissage mais ne le remplace pas." },
+        { stmt: "Il est conseillé de demander à l'IA d'expliquer le code qu'elle génère.", correct: true, expl: "Vrai. Demander des explications est une des meilleures pratiques du vibecoding — comprendre le code généré est plus important qu'avancer vite." },
+        { stmt: "L'IA génère toujours du code correct et fonctionnel en Django.", correct: false, expl: "Faux. L'IA peut halluciner (inventer des fonctions), utiliser une ancienne syntaxe ou produire du code adapté à une version différente de Django. Toujours vérifier." },
+        { stmt: "Tester petit morceau par morceau est plus efficace qu'intégrer 5 fichiers d'un coup.", correct: true, expl: "Vrai. Intégrer et tester par petits incréments permet de localiser précisément les erreurs. Intégrer en masse rend le débogage très difficile." },
+        { stmt: "Le vibecoding est une pratique réservée aux débutants — les développeurs seniors ne l'utilisent pas.", correct: false, expl: "Faux. Les développeurs seniors utilisent massivement les outils IA (Copilot, Cursor, Claude) pour accélérer. La différence est qu'ils savent évaluer et adapter le code généré." },
+        { stmt: "Un prompt court et vague donne souvent un meilleur résultat car l'IA a plus de liberté.", correct: false, expl: "Faux. Plus le prompt est précis (contexte, contraintes, format attendu), plus le code généré est proche de ce dont tu as besoin. La précision est une compétence clé du vibecoding." },
+        { stmt: "Si l'IA propose une correction qui ne fonctionne pas, on peut utiliser git stash pour revenir en arrière.", correct: true, expl: "Vrai. git stash met de côté les modifications non commitées et restaure le dernier état commité — pratique pour repartir proprement après une série de corrections ratées." },
+        { stmt: "Le code généré par l'IA ne peut jamais contenir de failles de sécurité.", correct: false, expl: "Faux. L'IA peut générer du code avec des failles (validation insuffisante, exposition de données, mauvaise gestion des permissions). La sécurité reste la responsabilité du développeur." }
+    ];
+
+    function renderQCM() {
+        var c = document.getElementById('qcm-container');
+        c.innerHTML = '';
+        qcmData.forEach(function(q, i) {
+            var opts = q.opts.map(function(o, j) {
+                return '<div class="opt" onclick="pickQCM(this,' + i + ',' + j + ')">'
+                    + '<div class="opt-dot"><div class="opt-dot-inner"></div></div>' + o + '</div>';
+            }).join('');
+            c.innerHTML += '<div class="qcm-card" id="qcm-' + i + '">'
+                + '<div class="q-num">Question ' + (i + 1) + ' / ' + qcmData.length + '</div>'
+                + '<div class="q-text">' + q.q + '</div>'
+                + '<div class="options">' + opts + '</div>'
+                + '<div class="q-feedback" id="qfb-' + i + '"></div></div>';
+        });
+    }
+    function pickQCM(el, qi, oi) {
+        var card = document.getElementById('qcm-' + qi);
+        if (card.dataset.locked) return;
+        card.querySelectorAll('.opt').forEach(function(o) { o.classList.remove('selected'); });
+        el.classList.add('selected');
+        card.dataset.picked = oi;
+    }
+    function checkQCM() {
+        var correct = 0, chips = '';
+        qcmData.forEach(function(q, i) {
+            var card = document.getElementById('qcm-' + i);
+            card.dataset.locked = 1;
+            var picked = parseInt(card.dataset.picked);
+            var fb = document.getElementById('qfb-' + i);
+            card.querySelectorAll('.opt').forEach(function(o, j) {
+                o.classList.remove('selected');
+                if (j === q.correct) o.classList.add('correct');
+                else if (j === picked && picked !== q.correct) o.classList.add('wrong');
+            });
+            if (picked === q.correct) {
+                correct++;
+                chips += '<span class="chip chip-ok">Q' + (i+1) + ' ✓</span>';
+                fb.textContent = q.expl; fb.className = 'q-feedback show ok';
+            } else {
+                chips += '<span class="chip chip-ko">Q' + (i+1) + ' ✗</span>';
+                fb.textContent = '✗ ' + q.expl; fb.className = 'q-feedback show ko';
+            }
+        });
+        var pct = Math.round(correct / qcmData.length * 100);
+        document.getElementById('prog-qcm').style.width = pct + '%';
+        document.getElementById('score-qcm').innerHTML = chips;
+        document.getElementById('qcm-score-val').textContent = correct;
+        document.getElementById('qcm-score-panel').classList.add('show');
+        updateGlobal();
+    }
+    function resetQCM() {
+        renderQCM();
+        document.getElementById('prog-qcm').style.width = '0%';
+        document.getElementById('score-qcm').innerHTML = '';
+        document.getElementById('qcm-score-panel').classList.remove('show');
+    }
+
+    function renderVF() {
+        var c = document.getElementById('vf-container');
+        c.innerHTML = '';
+        vfData.forEach(function(v, i) {
+            c.innerHTML += '<div class="vf-card" id="vf-' + i + '">'
+                + '<div class="vf-statement">' + v.stmt + '</div>'
+                + '<div class="vf-btns">'
+                + '<button class="vf-btn vrai" onclick="pickVF(this,' + i + ',true)">✅ Vrai</button>'
+                + '<button class="vf-btn faux" onclick="pickVF(this,' + i + ',false)">❌ Faux</button>'
+                + '</div>'
+                + '<div class="q-feedback" id="vfb-' + i + '"></div></div>';
+        });
+    }
+    function pickVF(btn, i, val) {
+        var card = document.getElementById('vf-' + i);
+        if (card.dataset.locked) return;
+        card.querySelectorAll('.vf-btn').forEach(function(b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        card.dataset.picked = val;
+    }
+    function checkVF() {
+        var correct = 0, chips = '';
+        vfData.forEach(function(v, i) {
+            var card = document.getElementById('vf-' + i);
+            card.dataset.locked = 1;
+            var picked = card.dataset.picked === 'true';
+            var fb = document.getElementById('vfb-' + i);
+            card.querySelectorAll('.vf-btn').forEach(function(btn) {
+                var isVrai = btn.classList.contains('vrai');
+                if ((isVrai && v.correct) || (!isVrai && !v.correct)) btn.classList.add('correct-ans');
+                else if (card.dataset.picked !== undefined && ((isVrai && !v.correct && picked) || (!isVrai && v.correct && !picked))) btn.classList.add('wrong-ans');
+            });
+            if (card.dataset.picked !== undefined && picked === v.correct) {
+                correct++;
+                chips += '<span class="chip chip-ok">Q' + (i+1) + ' ✓</span>';
+                fb.textContent = '✓ ' + v.expl; fb.className = 'q-feedback show ok';
+            } else {
+                chips += '<span class="chip chip-ko">Q' + (i+1) + ' ✗</span>';
+                fb.textContent = '✗ ' + v.expl; fb.className = 'q-feedback show ko';
+            }
+        });
+        var pct = Math.round(correct / vfData.length * 100);
+        document.getElementById('prog-vf').style.width = pct + '%';
+        document.getElementById('score-vf').innerHTML = chips;
+        document.getElementById('vf-score-val').textContent = correct;
+        document.getElementById('vf-score-panel').classList.add('show');
+        updateGlobal();
+    }
+    function resetVF() {
+        renderVF();
+        document.getElementById('prog-vf').style.width = '0%';
+        document.getElementById('score-vf').innerHTML = '';
+        document.getElementById('vf-score-panel').classList.remove('show');
+    }
+
+    function pickScenario(el, isCorrect) {
+        var card = el.closest('.scenario-card');
+        if (card.querySelector('.correct')) return;
+        var choices = card.querySelectorAll('.scenario-choice');
+        choices.forEach(function(c) { c.classList.add('disabled'); });
+        var fb = card.querySelector('.scenario-feedback');
+        if (isCorrect) {
+            el.classList.add('correct'); fb.classList.add('show', 'ok');
+        } else {
+            el.classList.add('wrong'); fb.classList.add('show', 'ko');
+            choices.forEach(function(c) { if (c.onclick.toString().includes('true')) c.classList.add('correct'); });
+        }
+    }
+
+    var matchCorrect = [0,1,2,3,4,5,6,7];
+    var selLeft = null, selRight = null, matchedCount = 0;
+    function selectMatch(side, idx) {
+        if (side === 'left') {
+            var el = document.getElementById('ml' + idx);
+            if (el.classList.contains('matched')) return;
+            if (selLeft !== null) document.getElementById('ml' + selLeft).classList.remove('selected');
+            selLeft = idx; el.classList.add('selected');
+        } else {
+            var er = document.getElementById('mr' + idx);
+            if (er.classList.contains('matched')) return;
+            if (selRight !== null) document.getElementById('mr' + selRight).classList.remove('selected');
+            selRight = idx; er.classList.add('selected');
+        }
+        if (selLeft !== null && selRight !== null) {
+            var lEl = document.getElementById('ml' + selLeft);
+            var rEl = document.getElementById('mr' + selRight);
+            if (matchCorrect[selLeft] === selRight) {
+                lEl.classList.remove('selected'); lEl.classList.add('matched');
+                rEl.classList.remove('selected'); rEl.classList.add('matched');
+                matchedCount++;
+                if (matchedCount === 8) document.getElementById('matchResult').classList.add('show');
+            } else {
+                lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+                setTimeout(function() { lEl.classList.remove('selected','wrong-flash'); rEl.classList.remove('selected','wrong-flash'); }, 600);
+            }
+            selLeft = null; selRight = null;
+        }
+    }
+
+    var dragSrc = null;
+    function initDrag() {
+        var items = document.querySelectorAll('.order-item');
+        items.forEach(function(item) {
+            item.addEventListener('dragstart', function() { dragSrc = this; this.classList.add('dragging'); });
+            item.addEventListener('dragend', function() { this.classList.remove('dragging'); document.querySelectorAll('.order-item').forEach(function(i) { i.classList.remove('drag-over'); }); });
+            item.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('drag-over'); });
+            item.addEventListener('dragleave', function() { this.classList.remove('drag-over'); });
+            item.addEventListener('drop', function(e) {
+                e.preventDefault(); this.classList.remove('drag-over');
+                if (dragSrc !== this) {
+                    var list = document.getElementById('orderList');
+                    var arr = Array.from(list.children);
+                    var si = arr.indexOf(dragSrc), ti = arr.indexOf(this);
+                    if (si < ti) list.insertBefore(dragSrc, this.nextSibling);
+                    else list.insertBefore(dragSrc, this);
+                }
+            });
+        });
+    }
+    initDrag();
+
+    var tapFirst = null;
+    function tapOrder(el) {
+        if (tapFirst === null) { tapFirst = el; el.classList.add('tap-sel'); }
+        else {
+            if (tapFirst !== el) {
+                var list = document.getElementById('orderList');
+                var arr = Array.from(list.children);
+                var i1 = arr.indexOf(tapFirst), i2 = arr.indexOf(el);
+                if (i1 < i2) list.insertBefore(tapFirst, el.nextSibling);
+                else list.insertBefore(tapFirst, el);
+            }
+            tapFirst.classList.remove('tap-sel'); tapFirst = null;
+        }
+    }
+    function validateOrder() {
+        var list = document.getElementById('orderList');
+        var items = Array.from(list.children);
+        var allOk = true;
+        items.forEach(function(item, idx) {
+            var correct = parseInt(item.getAttribute('data-correct'));
+            item.querySelector('.order-num').textContent = idx + 1;
+            item.classList.remove('correct','wrong');
+            if (correct === idx + 1) item.classList.add('correct');
+            else { item.classList.add('wrong'); allOk = false; }
+        });
+        var fb = document.getElementById('orderFeedback');
+        if (allOk) { fb.textContent = '🎉 Parfait ! Le cycle est dans le bon ordre.'; fb.className = 'order-feedback show ok'; }
+        else { fb.textContent = '❌ Quelques étapes sont mal placées (en rouge). Réordonnez et réessayez !'; fb.className = 'order-feedback show ko'; }
+    }
+    function revealOrder() {
+        var list = document.getElementById('orderList');
+        var items = Array.from(list.children);
+        items.sort(function(a,b) { return parseInt(a.dataset.correct) - parseInt(b.dataset.correct); });
+        items.forEach(function(item, idx) {
+            list.appendChild(item);
+            item.querySelector('.order-num').textContent = idx + 1;
+            item.classList.remove('correct','wrong','dragging','drag-over');
+            item.classList.add('correct');
+        });
+        var fb = document.getElementById('orderFeedback');
+        fb.textContent = '👁 Voici le bon ordre — mémorisez-le, puis cliquez Mélanger pour réessayer.';
+        fb.className = 'order-feedback show'; fb.style.color = '#633806';
+        document.getElementById('order-answers').classList.add('show');
+    }
+    function shuffleOrder() {
+        var list = document.getElementById('orderList');
+        var items = Array.from(list.children);
+        for (var i = items.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            list.insertBefore(items[j], items[i]);
+            var tmp = items[i]; items[i] = items[j]; items[j] = tmp;
+        }
+        items.forEach(function(it) { it.className = 'order-item'; it.setAttribute('draggable','true'); it.querySelector('.order-num').textContent = '?'; });
+        var fb = document.getElementById('orderFeedback');
+        fb.className = 'order-feedback'; fb.style.color = '';
+        document.getElementById('order-answers').classList.remove('show');
+        initDrag();
+    }
+
+    var completeData = {
+        c1: { ids: ['b1a','b1b','b1c','b1d','b1e'], answers: ['Django','TextField','vue','get_object_or_404','base.html'] },
+        c2: { ids: ['b2a','b2b','b2c','b2d','b2e','b2f'], answers: ['champs','redirect','template','get_object_or_404','makemigrations + migrate','secret'] },
+        c3: { ids: ['b3a','b3b','b3c','b3d','b3e'], answers: ['erreur','d\'erreur','views','urls','Explique-moi pourquoi'] }
+    };
+    function validateComplete(cid) {
+        var data = completeData[cid];
+        var ok = 0;
+        data.ids.forEach(function(id, i) {
+            var el = document.getElementById(id);
+            var val = el.value.trim().toLowerCase();
+            var ans = data.answers[i].toLowerCase();
+            el.classList.remove('ok','ko','revealed');
+            if (val === ans || ans.includes(val) && val.length >= 4) { el.classList.add('ok'); ok++; }
+            else el.classList.add('ko');
+        });
+        var fb = document.getElementById(cid + '-feedback');
+        var total = data.ids.length;
+        if (ok === total) { fb.textContent = '🎉 Parfait ! Tous les champs sont corrects.'; fb.className = 'complete-feedback show ok'; }
+        else { fb.textContent = '❌ ' + ok + '/' + total + ' corrects — les champs en rouge sont incorrects.'; fb.className = 'complete-feedback show ko'; }
+        updateGlobal();
+    }
+    function revealAnswers(cid) {
+        var data = completeData[cid];
+        data.ids.forEach(function(id, i) {
+            var el = document.getElementById(id);
+            el.value = data.answers[i];
+            el.classList.remove('ok','ko'); el.classList.add('revealed');
+        });
+        document.getElementById(cid + '-answers').classList.toggle('show');
+        var fb = document.getElementById(cid + '-feedback');
+        fb.textContent = '👁 Réponses affichées — étudiez-les, puis réinitialisez pour réessayer.';
+        fb.className = 'complete-feedback show'; fb.style.color = '#633806';
+    }
+    function resetComplete(cid) {
+        var data = completeData[cid];
+        data.ids.forEach(function(id) { var el = document.getElementById(id); el.value = ''; el.classList.remove('ok','ko','revealed'); });
+        document.getElementById(cid + '-feedback').className = 'complete-feedback';
+        document.getElementById(cid + '-feedback').style.color = '';
+        document.getElementById(cid + '-answers').classList.remove('show');
+    }
+
+    function updateGlobal() {
+        var qcmPanel = document.getElementById('qcm-score-panel');
+        var vfPanel  = document.getElementById('vf-score-panel');
+        if (!qcmPanel.classList.contains('show') || !vfPanel.classList.contains('show')) return;
+        var qcmScore = parseInt(document.getElementById('qcm-score-val').textContent);
+        var vfScore  = parseInt(document.getElementById('vf-score-val').textContent);
+        var total = qcmScore + vfScore;
+        var max   = qcmData.length + vfData.length;
+        var panel = document.getElementById('globalScore');
+        panel.classList.add('show');
+        document.getElementById('gs-val').textContent = total + ' / ' + max;
+        var pct = Math.round(total / max * 100);
+        var msg = pct >= 90 ? '🏆 Excellent ! Tu maîtrises le vibecoding.' : pct >= 70 ? '👍 Bien joué ! Quelques points à revoir.' : '💪 Continue — relis le cours et recommence.';
+        document.getElementById('gs-sub').textContent = msg;
+        document.getElementById('gs-chips').innerHTML =
+            '<span class="chip chip-ok">QCM : ' + qcmScore + '/' + qcmData.length + '</span>' +
+            '<span class="chip chip-ok">V/F : ' + vfScore + '/' + vfData.length + '</span>';
+    }
+
+    renderQCM();
+    renderVF();
+    </script>
+</body>
+</html>

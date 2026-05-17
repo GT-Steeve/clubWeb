@@ -1,0 +1,773 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système de Templates Django — DTL, CSS, JS, héritage</title>
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f5f4f0;
+            color: #2C2C2A;
+            padding: 1.5rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .nav-prev {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.88rem; font-weight: 700; color: #185FA5;
+            text-decoration: none; margin-bottom: 1.5rem;
+            background: #E6F1FB; border: 0.5px solid #85B7EB;
+            border-radius: 8px; padding: 6px 14px; transition: background 0.15s;
+        }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        /* HERO */
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+        /* CARD */
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+        .p-gray   { background: #D3D1C7; color: #444441; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child { margin-bottom: 0; }
+        .desc strong { color: #2C2C2A; }
+
+        /* CODE */
+        .code-block {
+            background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px;
+            padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace;
+            font-size: 0.84rem; line-height: 1.8; white-space: pre;
+            overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem;
+        }
+        .code-label {
+            font-family: 'Fira Code', monospace; font-size: 0.72rem; color: #888780;
+            background: #D3D1C7; display: inline-block; padding: 2px 9px;
+            border-radius: 5px 5px 0 0; margin-top: 0.8rem; margin-bottom: -1px;
+        }
+
+        .sel  { color: #993C1D; }
+        .prop { color: #185FA5; }
+        .val  { color: #0F6E56; }
+        .cm   { color: #888780; font-style: italic; }
+        .kw   { color: #3C3489; font-weight: 700; }
+        .fn   { color: #185FA5; }
+
+        /* TIPS */
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip strong { color: inherit; }
+        .tip-coral  { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber  { background: #FAEEDA; color: #633806; }
+        .tip-blue   { background: #E6F1FB; color: #0C447C; }
+        .tip-green  { background: #EBF5D9; color: #3B6D11; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        /* RESULT BOX */
+        .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.7; }
+        .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+        /* FLOW */
+        .cycle-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 0.8rem; }
+        .cycle-step { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 20px; padding: 5px 14px; font-size: 0.86rem; font-weight: 700; color: #2C2C2A; }
+        .cycle-step.teal   { background: #E1F5EE; border-color: #9FE1CB; color: #085041; }
+        .cycle-step.purple { background: #EEEDFE; border-color: #CECBF6; color: #3C3489; }
+        .cycle-step.blue   { background: #E6F1FB; border-color: #B5D4F4; color: #0C447C; }
+        .cycle-step.amber  { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+        .cycle-step.coral  { background: #FAECE7; border-color: #F5C4B3; color: #712B13; }
+        .cycle-arrow { color: #B4B2A9; font-size: 1rem; }
+
+        /* TABLE */
+        .tbl-wrap { overflow-x: auto; margin-top: 0.8rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        th { background: #F1EFE8; padding: 8px 12px; text-align: left; font-weight: 800; border-bottom: 1px solid #D3D1C7; }
+        td { padding: 8px 12px; border-bottom: 0.5px solid #D3D1C7; color: #5F5E5A; }
+        tr:last-child td { border-bottom: none; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        /* FILE CARD */
+        .file-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1.2rem; overflow: hidden; }
+        .file-header { display: flex; align-items: center; gap: 10px; padding: 12px 18px; font-weight: 800; font-size: 0.95rem; }
+        .file-header .filename { font-family: 'Fira Code', monospace; font-size: 0.9rem; font-weight: 500; }
+        .file-header .file-desc { font-size: 0.8rem; margin-left: auto; opacity: 0.8; font-weight: 600; }
+        .fh-teal   { background: #9FE1CB; color: #085041; }
+        .fh-purple { background: #CECBF6; color: #3C3489; }
+        .fh-blue   { background: #B5D4F4; color: #0C447C; }
+        .fh-amber  { background: #FAC775; color: #633806; }
+        .fh-green  { background: #C0DD97; color: #3B6D11; }
+        .fh-coral  { background: #F5C4B3; color: #712B13; }
+        .file-body { padding: 1.2rem 1.4rem; }
+        .file-body .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .file-body h3 { font-size: 0.95rem; font-weight: 800; margin: 1.1rem 0 0.4rem; color: #2C2C2A; }
+
+        /* SECTION LABEL */
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        /* STEPS */
+        .steps { counter-reset: step; }
+        .step { display: flex; gap: 14px; margin-bottom: 14px; }
+        .step-n { counter-increment: step; width: 28px; height: 28px; border-radius: 50%; background: #9FE1CB; color: #085041; font-weight: 800; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .step-n::before { content: counter(step); }
+        .step-body { flex: 1; padding-top: 3px; font-size: 0.92rem; color: #5F5E5A; line-height: 1.6; }
+        .step-body strong { color: #2C2C2A; display: block; margin-bottom: 1px; }
+
+        /* CTA */
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) {
+            body { padding: 1rem; }
+            .hero h1 { font-size: 1.7rem; }
+            .file-header .file-desc { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="nav-prev" href="../../sommaire.html#step2Dynamique">← Retour au sommaire</a>
+
+    <div class="hero">
+        <h1>&lt; / &gt; Templates HTML Django</h1>
+        <p>Créer, relier et organiser vos fichiers HTML avec le Django Template Language.</p>
+        <div class="badge-row">
+            <span class="badge b-teal">Django 4.x / 5.x</span>
+            <span class="badge b-purple">DTL</span>
+            <span class="badge b-amber">Fil rouge : Blog</span>
+            <span class="badge b-coral">~45 min</span>
+            <span class="badge b-blue">CSS &amp; JS inclus</span>
+        </div>
+    </div>
+
+    <!-- ══ INTRO ══ -->
+    <div class="section-label"><span class="section-label-text">Introduction — Qu'est-ce qu'un template ?</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">→</div>Le rôle du système de templates</div>
+        <p class="desc">Un template Django est un fichier HTML enrichi avec le <strong>Django Template Language (DTL)</strong>. Il sert à <strong>séparer le code Python de la présentation HTML</strong> : la vue prépare les données, le template les affiche.</p>
+        <div class="cycle-wrap">
+            <div class="cycle-step teal">views.py<br><small>Données</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step blue">contexte { }<br><small>Dictionnaire</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step purple">template.html<br><small>Rendu</small></div>
+            <span class="cycle-arrow">→</span>
+            <div class="cycle-step amber">Réponse HTTP<br><small>HTML final</small></div>
+        </div>
+        <p class="desc" style="margin-top:0.8rem;">Le DTL offre deux types de balises : <strong><code>{{ variable }}</code></strong> pour afficher des données, et <strong><code>{% tag %}</code></strong> pour la logique (boucles, conditions, héritage).</p>
+        <div class="tip">
+            <span class="tip-i">💡</span>
+            <span><strong>DTL ≠ Python</strong> — Le Django Template Language est volontairement simplifié. On ne peut pas exécuter du code Python arbitraire dans un template. C'est un choix de conception : les templates restent lisibles par des non-développeurs.</span>
+        </div>
+    </div>
+
+    <!-- ══ 00 — STRUCTURE ══ -->
+    <div class="section-label"><span class="section-label-text">00 — Structure des dossiers templates</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-teal">
+            <span>📁</span>
+            <span class="filename">Arborescence du projet</span>
+            <span class="file-desc">Où placer vos templates</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Django cherche les templates dans un dossier <code>templates/</code> à l'intérieur de chaque app déclarée dans <code>INSTALLED_APPS</code>. La convention est d'ajouter un sous-dossier au nom de l'app pour éviter les conflits de noms.</p>
+<span class="code-label">Structure recommandée</span>
+<pre class="code-block">monsite/
+├── monsite/
+│   ├── settings.py
+│   └── urls.py
+├── blog/
+│   ├── models.py
+│   ├── views.py
+│   ├── urls.py
+│   └── templates/            <span class="cm"># ← dossier templates de l'app</span>
+│       └── blog/             <span class="cm"># ← sous-dossier au nom de l'app</span>
+│           ├── base.html     <span class="cm"># template parent (layout)</span>
+│           ├── article_list.html
+│           └── article_detail.html
+└── static/                   <span class="cm"># CSS, JS, images (globaux)</span>
+    ├── css/
+    │   └── style.css
+    └── js/
+        └── main.js</pre>
+
+            <div class="tip tip-coral">
+                <span class="tip-i">🚨</span>
+                <span><strong>Erreur classique</strong> — Placer le template directement dans <code>blog/templates/article_list.html</code> sans le sous-dossier <code>blog/</code>. Django peut confondre des templates d'apps différentes qui ont le même nom. Respectez toujours la convention <code>templates/&lt;nom_app&gt;/&lt;fichier&gt;.html</code>.</span>
+            </div>
+
+            <h3>Deux approches possibles</h3>
+            <div class="tbl-wrap">
+                <table>
+                    <tr><th>Approche</th><th>Chemin</th><th>Quand l'utiliser</th></tr>
+                    <tr><td><strong>Par app</strong> ✅</td><td><code>blog/templates/blog/</code></td><td>Petits projets, templates spécifiques à l'app</td></tr>
+                    <tr><td><strong>Dossier global</strong></td><td><code>templates/</code> à la racine</td><td>Templates partagés (base, 404, 500…)</td></tr>
+                </table>
+            </div>
+
+            <div class="tip tip-amber">
+                <span class="tip-i">🗂️</span>
+                <span><strong>Bonne pratique</strong> — Combinez les deux : un dossier <code>templates/</code> global à la racine pour le <code>base.html</code> et les pages d'erreur, et un dossier <code>templates/&lt;app&gt;/</code> par app pour ses propres templates.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 01 — SETTINGS ══ -->
+    <div class="section-label"><span class="section-label-text">01 — Configurer les templates dans settings.py</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-green">
+            <span>⚙️</span>
+            <span class="filename">monsite/settings.py</span>
+            <span class="file-desc">Déclarer où Django cherche les templates</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">La configuration des templates se fait dans la variable <code>TEMPLATES</code> de <code>settings.py</code>. Par défaut, Django utilise le moteur DTL et cherche les templates dans chaque app. Vous pouvez aussi ajouter un dossier global.</p>
+<span class="code-label">monsite/settings.py</span>
+<pre class="code-block"><span class="kw">import</span> os
+
+TEMPLATES = [
+    {
+        <span class="val">'BACKEND'</span>: <span class="val">'django.template.backends.django.DjangoTemplates'</span>,
+
+        <span class="cm"># Dossier(s) global(aux) à la racine du projet</span>
+        <span class="val">'DIRS'</span>: [os.path.join(BASE_DIR, <span class="val">'templates'</span>)],
+
+        <span class="cm"># Chercher aussi dans templates/ de chaque app</span>
+        <span class="val">'APP_DIRS'</span>: <span class="kw">True</span>,
+
+        <span class="val">'OPTIONS'</span>: {
+            <span class="val">'context_processors'</span>: [
+                <span class="val">'django.template.context_processors.debug'</span>,
+                <span class="val">'django.template.context_processors.request'</span>,
+                <span class="val">'django.contrib.auth.context_processors.auth'</span>,
+                <span class="val">'django.contrib.messages.context_processors.messages'</span>,
+            ],
+        },
+    },
+]</pre>
+
+            <div class="result-box">
+                <div class="rl">Ce que ça configure</div>
+                <code>DIRS</code> — Liste les dossiers globaux où chercher en premier<br>
+                <code>APP_DIRS: True</code> — Active la recherche dans chaque <code>app/templates/</code><br>
+                <code>context_processors</code> — Variables automatiquement disponibles dans tous les templates (user, request, messages…)
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 02 — BASE HTML ══ -->
+    <div class="section-label"><span class="section-label-text">02 — Créer le template parent base.html</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-purple">
+            <span>🏗️</span>
+            <span class="filename">templates/base.html</span>
+            <span class="file-desc">Le layout partagé de tout le site</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Le <strong>template de base</strong> (ou layout) définit la structure HTML commune à toutes les pages : l'en-tête, le pied de page, les imports CSS/JS. Les templates enfants <strong>héritent</strong> de ce layout et ne surchargent que des blocs spécifiques.</p>
+<span class="code-label">templates/base.html</span>
+<pre class="code-block"><span class="cm">&lt;!DOCTYPE html&gt;</span>
+<span class="sel">&lt;html</span> <span class="prop">lang</span>=<span class="val">"fr"</span><span class="sel">&gt;</span>
+<span class="sel">&lt;head&gt;</span>
+    <span class="sel">&lt;meta</span> <span class="prop">charset</span>=<span class="val">"UTF-8"</span><span class="sel">&gt;</span>
+    <span class="sel">&lt;meta</span> <span class="prop">name</span>=<span class="val">"viewport"</span> <span class="prop">content</span>=<span class="val">"width=device-width, initial-scale=1"</span><span class="sel">&gt;</span>
+
+    <span class="cm">&lt;!-- Titre dynamique avec valeur par défaut --&gt;</span>
+    <span class="sel">&lt;title&gt;</span>{% block titre %}Mon Blog{% endblock %}<span class="sel">&lt;/title&gt;</span>
+
+    <span class="cm">&lt;!-- ① Charger les fichiers statiques --&gt;</span>
+    <span class="kw">{% load static %}</span>
+
+    <span class="cm">&lt;!-- ② Lier le CSS depuis le dossier static/ --&gt;</span>
+    <span class="sel">&lt;link</span> <span class="prop">rel</span>=<span class="val">"stylesheet"</span> <span class="prop">href</span>=<span class="val">"</span><span class="kw">{% static 'css/style.css' %}</span><span class="val">"</span><span class="sel">&gt;</span>
+
+    <span class="cm">&lt;!-- Bloc CSS supplémentaire pour les pages enfants --&gt;</span>
+    <span class="kw">{% block extra_css %}{% endblock %}</span>
+<span class="sel">&lt;/head&gt;</span>
+
+<span class="sel">&lt;body&gt;</span>
+
+    <span class="cm">&lt;!-- Barre de navigation commune --&gt;</span>
+    <span class="sel">&lt;nav&gt;</span>
+        <span class="sel">&lt;a</span> <span class="prop">href</span>=<span class="val">"</span><span class="kw">{% url 'blog:liste' %}</span><span class="val">"</span><span class="sel">&gt;</span>🏠 Accueil<span class="sel">&lt;/a&gt;</span>
+    <span class="sel">&lt;/nav&gt;</span>
+
+    <span class="cm">&lt;!-- ③ Afficher les messages flash (succès, erreurs…) --&gt;</span>
+    <span class="kw">{% if messages %}</span>
+      <span class="sel">&lt;ul</span> <span class="prop">class</span>=<span class="val">"messages"</span><span class="sel">&gt;</span>
+        <span class="kw">{% for message in messages %}</span>
+          <span class="sel">&lt;li</span> <span class="prop">class</span>=<span class="val">"{{ message.tags }}"</span><span class="sel">&gt;</span>{{ message }}<span class="sel">&lt;/li&gt;</span>
+        <span class="kw">{% endfor %}</span>
+      <span class="sel">&lt;/ul&gt;</span>
+    <span class="kw">{% endif %}</span>
+
+    <span class="cm">&lt;!-- ④ Bloc principal — chaque page enfant remplit ce bloc --&gt;</span>
+    <span class="sel">&lt;main&gt;</span>
+        <span class="kw">{% block contenu %}{% endblock %}</span>
+    <span class="sel">&lt;/main&gt;</span>
+
+    <span class="sel">&lt;footer&gt;</span>
+        <span class="sel">&lt;p&gt;</span>Mon Blog — <span class="kw">{% now "Y" %}</span><span class="sel">&lt;/p&gt;</span>
+    <span class="sel">&lt;/footer&gt;</span>
+
+    <span class="cm">&lt;!-- ⑤ JS en bas de page --&gt;</span>
+    <span class="sel">&lt;script</span> <span class="prop">src</span>=<span class="val">"</span><span class="kw">{% static 'js/main.js' %}</span><span class="val">"</span><span class="sel">&gt;&lt;/script&gt;</span>
+
+    <span class="cm">&lt;!-- Bloc JS supplémentaire pour les pages enfants --&gt;</span>
+    <span class="kw">{% block extra_js %}{% endblock %}</span>
+
+<span class="sel">&lt;/body&gt;</span>
+<span class="sel">&lt;/html&gt;</span></pre>
+
+            <div class="tip tip-blue">
+                <span class="tip-i">🧩</span>
+                <span><strong>Les blocs (<code>{% block %}</code>) sont des espaces réservés</strong> — Chaque bloc nommé peut être remplacé ou complété par un template enfant. Si un enfant ne redéfinit pas le bloc, le contenu par défaut du parent s'affiche.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 03 — HÉRITAGE ══ -->
+    <div class="section-label"><span class="section-label-text">03 — Héritage de templates avec extends</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-amber">
+            <span>🎨</span>
+            <span class="filename">blog/templates/blog/article_list.html</span>
+            <span class="file-desc">Template enfant — hérite du parent</span>
+        </div>
+        <div class="file-body">
+            <p class="desc"><code>{% extends %}</code> doit toujours être la <strong>toute première ligne</strong> du fichier. Le template enfant n'écrit que ce qui est différent du parent, à l'intérieur des blocs.</p>
+<span class="code-label">blog/templates/blog/article_list.html</span>
+<pre class="code-block"><span class="cm">&lt;!-- ① Hériter du template parent --&gt;</span>
+<span class="kw">{% extends "base.html" %}</span>
+
+<span class="cm">&lt;!-- ② Charger des tags supplémentaires si besoin --&gt;</span>
+<span class="kw">{% load static %}</span>
+
+<span class="cm">&lt;!-- ③ Surcharger le titre de la page --&gt;</span>
+<span class="kw">{% block titre %}</span>{{ titre_page }} — Mon Blog<span class="kw">{% endblock %}</span>
+
+<span class="cm">&lt;!-- ④ Remplir le bloc principal --&gt;</span>
+<span class="kw">{% block contenu %}</span>
+
+<span class="sel">&lt;h1&gt;</span>{{ titre_page }}<span class="sel">&lt;/h1&gt;</span>
+
+<span class="cm">&lt;!-- Boucle sur la liste d'articles --&gt;</span>
+<span class="kw">{% for article in articles %}</span>
+  <span class="sel">&lt;article&gt;</span>
+    <span class="sel">&lt;h2&gt;</span>
+      <span class="sel">&lt;a</span> <span class="prop">href</span>=<span class="val">"</span><span class="kw">{% url 'blog:detail' article.pk %}</span><span class="val">"</span><span class="sel">&gt;</span>{{ article.titre }}<span class="sel">&lt;/a&gt;</span>
+    <span class="sel">&lt;/h2&gt;</span>
+    <span class="sel">&lt;p&gt;</span>Par {{ article.auteur }} — {{ article.publie_le|<span class="val">date:"d/m/Y"</span> }}<span class="sel">&lt;/p&gt;</span>
+    <span class="sel">&lt;p&gt;</span>{{ article.contenu|<span class="val">truncatewords:30</span> }}<span class="sel">&lt;/p&gt;</span>
+  <span class="sel">&lt;/article&gt;</span>
+<span class="kw">{% empty %}</span>
+  <span class="sel">&lt;p&gt;</span>Aucun article publié pour le moment.<span class="sel">&lt;/p&gt;</span>
+<span class="kw">{% endfor %}</span>
+
+<span class="kw">{% endblock %}</span></pre>
+
+            <div class="result-box">
+                <div class="rl">Ce que produit ce template</div>
+                Le template enfant n'écrit que le contenu de la page.<br>
+                Django fusionne automatiquement parent + enfant.<br>
+                Le <code>&lt;nav&gt;</code>, le <code>&lt;footer&gt;</code>, et les imports CSS/JS viennent du <code>base.html</code>.
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 04 — DTL VARIABLES & TAGS ══ -->
+    <div class="section-label"><span class="section-label-text">04 — Le Django Template Language (DTL)</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">{ }</div>Variables — afficher des données</div>
+        <p class="desc">Les <strong>doubles accolades</strong> <code>{{ }}</code> affichent la valeur d'une variable du contexte envoyé par la vue. Django gère automatiquement l'échappement HTML pour prévenir les failles XSS.</p>
+<span class="code-label">Syntaxe des variables</span>
+<pre class="code-block"><span class="cm">&lt;!-- Variable simple --&gt;</span>
+{{ titre_page }}
+
+<span class="cm">&lt;!-- Accès à une propriété d'objet --&gt;</span>
+{{ article.titre }}
+{{ article.auteur.username }}
+
+<span class="cm">&lt;!-- Accès à un élément de liste --&gt;</span>
+{{ articles.0 }}          <span class="cm">&lt;!-- premier élément --&gt;</span>
+
+<span class="cm">&lt;!-- Variable avec valeur par défaut --&gt;</span>
+{{ user.nom|<span class="val">default:"Visiteur"</span> }}
+
+<span class="cm">&lt;!-- Afficher du HTML brut (⚠️ uniquement pour contenu sûr) --&gt;</span>
+{{ article.contenu|<span class="val">safe</span> }}</pre>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">%</div>Tags — logique et structure</div>
+        <p class="desc">Les <strong>balises de template</strong> <code>{% %}</code> permettent les conditions, les boucles, l'héritage, les liens, et bien plus. Elles contiennent de la logique, pas des valeurs.</p>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Tag</th><th>Rôle</th><th>Exemple</th></tr>
+                <tr><td><code>{% if %} … {% endif %}</code></td><td>Condition</td><td><code>{% if user.is_authenticated %}</code></td></tr>
+                <tr><td><code>{% for %} … {% endfor %}</code></td><td>Boucle</td><td><code>{% for art in articles %}</code></td></tr>
+                <tr><td><code>{% extends "" %}</code></td><td>Héritage parent</td><td><code>{% extends "base.html" %}</code></td></tr>
+                <tr><td><code>{% block %} … {% endblock %}</code></td><td>Zone à surcharger</td><td><code>{% block contenu %}{% endblock %}</code></td></tr>
+                <tr><td><code>{% include "" %}</code></td><td>Inclure un sous-template</td><td><code>{% include "blog/carte.html" %}</code></td></tr>
+                <tr><td><code>{% url "" %}</code></td><td>Générer une URL</td><td><code>{% url 'blog:detail' pk %}</code></td></tr>
+                <tr><td><code>{% static "" %}</code></td><td>Lier un fichier statique</td><td><code>{% static 'css/style.css' %}</code></td></tr>
+                <tr><td><code>{% load %}</code></td><td>Charger un jeu de tags</td><td><code>{% load static %}</code></td></tr>
+                <tr><td><code>{% comment %}</code></td><td>Commentaire ignoré</td><td><code>{% comment %} notes {% endcomment %}</code></td></tr>
+                <tr><td><code>{% csrf_token %}</code></td><td>Sécuriser un formulaire</td><td>Dans toute balise <code>&lt;form&gt;</code></td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">|</div>Filtres — transformer les valeurs</div>
+        <p class="desc">Les <strong>filtres</strong> s'appliquent avec le pipe <code>|</code> et transforment une variable avant de l'afficher. On peut en chaîner plusieurs.</p>
+<span class="code-label">Filtres essentiels</span>
+<pre class="code-block"><span class="cm">&lt;!-- Tronquer à N mots --&gt;</span>
+{{ article.contenu|<span class="val">truncatewords:30</span> }}
+
+<span class="cm">&lt;!-- Formater une date --&gt;</span>
+{{ article.publie_le|<span class="val">date:"d/m/Y"</span> }}
+{{ article.publie_le|<span class="val">date:"D d M Y"</span> }}  <span class="cm">&lt;!-- Jeu 01 Jan 2025 --&gt;</span>
+
+<span class="cm">&lt;!-- Mettre en majuscules / minuscules --&gt;</span>
+{{ article.titre|<span class="val">upper</span> }}
+{{ article.titre|<span class="val">lower</span> }}
+{{ article.titre|<span class="val">title</span> }}
+
+<span class="cm">&lt;!-- Compter les caractères / mots --&gt;</span>
+{{ article.contenu|<span class="val">length</span> }}
+{{ article.contenu|<span class="val">wordcount</span> }}
+
+<span class="cm">&lt;!-- Valeur par défaut si vide --&gt;</span>
+{{ article.image|<span class="val">default:"placeholder.jpg"</span> }}
+
+<span class="cm">&lt;!-- Remplacer les sauts de ligne par des &lt;br&gt; --&gt;</span>
+{{ article.contenu|<span class="val">linebreaksbr</span> }}
+
+<span class="cm">&lt;!-- Chaîner des filtres --&gt;</span>
+{{ article.titre|<span class="val">lower</span>|<span class="val">title</span> }}</pre>
+    </div>
+
+    <!-- ══ 05 — CONDITIONS & BOUCLES ══ -->
+    <div class="section-label"><span class="section-label-text">05 — Conditions et boucles avancées</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">if</div>Conditions dans les templates</div>
+<span class="code-label">Exemples de conditions DTL</span>
+<pre class="code-block"><span class="cm">&lt;!-- Condition simple --&gt;</span>
+<span class="kw">{% if article.publie %}</span>
+  <span class="sel">&lt;span</span> <span class="prop">class</span>=<span class="val">"badge-vert"</span><span class="sel">&gt;</span>Publié<span class="sel">&lt;/span&gt;</span>
+<span class="kw">{% else %}</span>
+  <span class="sel">&lt;span</span> <span class="prop">class</span>=<span class="val">"badge-gris"</span><span class="sel">&gt;</span>Brouillon<span class="sel">&lt;/span&gt;</span>
+<span class="kw">{% endif %}</span>
+
+<span class="cm">&lt;!-- elif : plusieurs branches --&gt;</span>
+<span class="kw">{% if articles|length == 0 %}</span>
+  <span class="sel">&lt;p&gt;</span>Aucun article.<span class="sel">&lt;/p&gt;</span>
+<span class="kw">{% elif articles|length == 1 %}</span>
+  <span class="sel">&lt;p&gt;</span>Un seul article.<span class="sel">&lt;/p&gt;</span>
+<span class="kw">{% else %}</span>
+  <span class="sel">&lt;p&gt;</span>{{ articles|length }} articles.<span class="sel">&lt;/p&gt;</span>
+<span class="kw">{% endif %}</span>
+
+<span class="cm">&lt;!-- Opérateurs : and, or, not, ==, !=, &lt;, &gt;, in --&gt;</span>
+<span class="kw">{% if user.is_authenticated and user.is_staff %}</span>
+  <span class="sel">&lt;a</span> <span class="prop">href</span>=<span class="val">"/admin/"</span><span class="sel">&gt;</span>Admin<span class="sel">&lt;/a&gt;</span>
+<span class="kw">{% endif %}</span></pre>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-green">for</div>Boucles et variables de boucle</div>
+<span class="code-label">Variables automatiques dans {% for %}</span>
+<pre class="code-block"><span class="kw">{% for article in articles %}</span>
+  <span class="sel">&lt;article</span> <span class="prop">class</span>=<span class="val">"</span><span class="kw">{% if forloop.first %}</span><span class="val">premier</span><span class="kw">{% endif %}</span><span class="val">"</span><span class="sel">&gt;</span>
+
+    <span class="cm">&lt;!-- forloop.counter : numéro 1, 2, 3… --&gt;</span>
+    <span class="sel">&lt;span&gt;</span>{{ forloop.counter }}<span class="sel">&lt;/span&gt;</span>
+
+    <span class="cm">&lt;!-- forloop.counter0 : numéro 0, 1, 2… --&gt;</span>
+    <span class="cm">&lt;!-- forloop.first : True pour le 1er élément --&gt;</span>
+    <span class="cm">&lt;!-- forloop.last  : True pour le dernier --&gt;</span>
+    <span class="cm">&lt;!-- forloop.revcounter : compte à rebours --&gt;</span>
+
+    <span class="sel">&lt;h2&gt;</span>{{ article.titre }}<span class="sel">&lt;/h2&gt;</span>
+  <span class="sel">&lt;/article&gt;</span>
+
+<span class="kw">{% empty %}</span>
+  <span class="cm">&lt;!-- Affiché si la liste est vide --&gt;</span>
+  <span class="sel">&lt;p&gt;</span>Aucun résultat.<span class="sel">&lt;/p&gt;</span>
+<span class="kw">{% endfor %}</span></pre>
+        <div class="tip tip-purple">
+            <span class="tip-i">✨</span>
+            <span><strong><code>{% empty %}</code></strong> — Toujours ajouter un bloc <code>{% empty %}</code> dans vos boucles. Il s'affiche si la liste est vide et évite une page blanche silencieuse.</span>
+        </div>
+    </div>
+
+    <!-- ══ 06 — INCLUDE ══ -->
+    <div class="section-label"><span class="section-label-text">06 — Inclusion de sous-templates</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-coral">
+            <span>🧩</span>
+            <span class="filename">{% include %}</span>
+            <span class="file-desc">Réutiliser des morceaux de HTML</span>
+        </div>
+        <div class="file-body">
+            <p class="desc"><code>{% include %}</code> insère le contenu d'un autre template. Pratique pour les composants réutilisables : carte d'article, menu, pagination…</p>
+<span class="code-label">blog/templates/blog/article_list.html</span>
+<pre class="code-block"><span class="kw">{% for article in articles %}</span>
+  <span class="cm">&lt;!-- Inclure un composant carte pour chaque article --&gt;</span>
+  <span class="kw">{% include "blog/composants/carte_article.html" with article=article %}</span>
+<span class="kw">{% endfor %}</span></pre>
+
+<span class="code-label">blog/templates/blog/composants/carte_article.html</span>
+<pre class="code-block"><span class="sel">&lt;article</span> <span class="prop">class</span>=<span class="val">"carte"</span><span class="sel">&gt;</span>
+  <span class="sel">&lt;h2&gt;</span>
+    <span class="sel">&lt;a</span> <span class="prop">href</span>=<span class="val">"</span><span class="kw">{% url 'blog:detail' article.pk %}</span><span class="val">"</span><span class="sel">&gt;</span>{{ article.titre }}<span class="sel">&lt;/a&gt;</span>
+  <span class="sel">&lt;/h2&gt;</span>
+  <span class="sel">&lt;p&gt;</span>{{ article.contenu|<span class="val">truncatewords:20</span> }}<span class="sel">&lt;/p&gt;</span>
+<span class="sel">&lt;/article&gt;</span></pre>
+
+            <div class="tip">
+                <span class="tip-i">🔑</span>
+                <span><strong><code>with variable=valeur</code></strong> — Le mot-clé <code>with</code> passe des variables au sous-template. Sans <code>with</code>, le sous-template hérite de tout le contexte de la page parente.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 07 — STATIC FILES ══ -->
+    <div class="section-label"><span class="section-label-text">07 — Inclure CSS, JS et images (fichiers statiques)</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-blue">
+            <span>🎨</span>
+            <span class="filename">static/ — CSS, JS, images</span>
+            <span class="file-desc">Lier vos ressources frontend</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Les fichiers statiques (CSS, JS, images) sont gérés par <code>django.contrib.staticfiles</code>. On les référence dans les templates avec <strong><code>{% static %}</code></strong> — jamais avec un chemin en dur.</p>
+
+            <h3>1. Configurer settings.py</h3>
+<span class="code-label">monsite/settings.py</span>
+<pre class="code-block"><span class="cm"># Déjà dans INSTALLED_APPS :</span>
+<span class="val">'django.contrib.staticfiles'</span>,
+
+<span class="cm"># URL publique des fichiers statiques</span>
+STATIC_URL = <span class="val">'static/'</span>
+
+<span class="cm"># Dossier(s) supplémentaires à la racine (optionnel)</span>
+STATICFILES_DIRS = [
+    BASE_DIR / <span class="val">'static'</span>,
+]
+
+<span class="cm"># Dossier de collecte pour la prod (manage.py collectstatic)</span>
+STATIC_ROOT = BASE_DIR / <span class="val">'staticfiles'</span></pre>
+
+            <h3>2. Utiliser {% static %} dans les templates</h3>
+<span class="code-label">templates/base.html</span>
+<pre class="code-block"><span class="cm">&lt;!-- TOUJOURS charger le tag en premier --&gt;</span>
+<span class="kw">{% load static %}</span>
+
+<span class="cm">&lt;!-- CSS --&gt;</span>
+<span class="sel">&lt;link</span> <span class="prop">rel</span>=<span class="val">"stylesheet"</span> <span class="prop">href</span>=<span class="val">"</span><span class="kw">{% static 'css/style.css' %}</span><span class="val">"</span><span class="sel">&gt;</span>
+
+<span class="cm">&lt;!-- JavaScript --&gt;</span>
+<span class="sel">&lt;script</span> <span class="prop">src</span>=<span class="val">"</span><span class="kw">{% static 'js/main.js' %}</span><span class="val">"</span><span class="sel">&gt;&lt;/script&gt;</span>
+
+<span class="cm">&lt;!-- Image --&gt;</span>
+<span class="sel">&lt;img</span> <span class="prop">src</span>=<span class="val">"</span><span class="kw">{% static 'images/logo.png' %}</span><span class="val">"</span> <span class="prop">alt</span>=<span class="val">"Logo"</span><span class="sel">&gt;</span>
+
+<span class="cm">&lt;!-- Stocker l'URL dans une variable --&gt;</span>
+<span class="kw">{% static 'images/default.jpg' as img_defaut %}</span>
+<span class="sel">&lt;img</span> <span class="prop">src</span>=<span class="val">"{{ img_defaut }}"</span> <span class="prop">alt</span>=<span class="val">"Image par défaut"</span><span class="sel">&gt;</span></pre>
+
+            <div class="tip tip-coral">
+                <span class="tip-i">🚨</span>
+                <span><strong>N'oubliez jamais <code>{% load static %}</code></strong> — Sans cette ligne, Django ne reconnaît pas le tag <code>{% static %}</code> et vous obtenez une erreur <code>TemplateSyntaxError: Invalid block tag 'static'</code>. C'est l'erreur n°1 avec les fichiers statiques.</span>
+            </div>
+
+            <h3>3. Lancer le serveur de développement</h3>
+<pre class="code-block">python manage.py runserver
+<span class="cm"># En dev, Django sert automatiquement les fichiers statiques</span>
+<span class="cm"># Django recherche dans static/ de chaque app ET dans STATICFILES_DIRS</span></pre>
+
+            <div class="tip tip-amber">
+                <span class="tip-i">🏭</span>
+                <span><strong>En production</strong> — Django ne sert pas les fichiers statiques lui-même. Lancez <code>python manage.py collectstatic</code> pour rassembler tous les fichiers dans <code>STATIC_ROOT</code>, puis configurez Nginx ou Apache pour les servir.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 08 — URL TAG ══ -->
+    <div class="section-label"><span class="section-label-text">08 — Générer des URLs avec {% url %}</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-teal">
+            <span>🔗</span>
+            <span class="filename">{% url %} — liens dynamiques</span>
+            <span class="file-desc">Ne jamais coder les URLs en dur</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Le tag <code>{% url %}</code> génère une URL à partir du <strong>nom</strong> de la vue défini dans <code>urls.py</code>. Si vous changez le chemin, tous les liens se mettent à jour automatiquement.</p>
+<span class="code-label">Syntaxe du tag {% url %}</span>
+<pre class="code-block"><span class="cm">&lt;!-- URL sans paramètre --&gt;</span>
+<span class="sel">&lt;a</span> <span class="prop">href</span>=<span class="val">"</span><span class="kw">{% url 'blog:liste' %}</span><span class="val">"</span><span class="sel">&gt;</span>Tous les articles<span class="sel">&lt;/a&gt;</span>
+
+<span class="cm">&lt;!-- URL avec paramètre entier (pk) --&gt;</span>
+<span class="sel">&lt;a</span> <span class="prop">href</span>=<span class="val">"</span><span class="kw">{% url 'blog:detail' article.pk %}</span><span class="val">"</span><span class="sel">&gt;</span>Lire l'article<span class="sel">&lt;/a&gt;</span>
+
+<span class="cm">&lt;!-- URL avec paramètre slug --&gt;</span>
+<span class="sel">&lt;a</span> <span class="prop">href</span>=<span class="val">"</span><span class="kw">{% url 'blog:detail' article.slug %}</span><span class="val">"</span><span class="sel">&gt;</span>{{ article.titre }}<span class="sel">&lt;/a&gt;</span>
+
+<span class="cm">&lt;!-- Stocker l'URL dans une variable --&gt;</span>
+<span class="kw">{% url 'blog:detail' article.pk as url_detail %}</span>
+<span class="sel">&lt;a</span> <span class="prop">href</span>=<span class="val">"{{ url_detail }}"</span><span class="sel">&gt;</span>Détail<span class="sel">&lt;/a&gt;</span>
+
+<span class="cm">&lt;!-- URL vers l'admin --&gt;</span>
+<span class="sel">&lt;a</span> <span class="prop">href</span>=<span class="val">"</span><span class="kw">{% url 'admin:index' %}</span><span class="val">"</span><span class="sel">&gt;</span>Administration<span class="sel">&lt;/a&gt;</span></pre>
+
+            <div class="result-box">
+                <div class="rl">Rappel — le namespace dans urls.py</div>
+                Le préfixe <code>blog:</code> vient de <code>app_name = 'blog'</code> dans <code>blog/urls.py</code>.<br>
+                Sans namespace : <code>{% url 'liste' %}</code><br>
+                Avec namespace : <code>{% url 'blog:liste' %}</code> ← recommandé
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 09 — RELIER VUE & TEMPLATE ══ -->
+    <div class="section-label"><span class="section-label-text">09 — Relier la vue au template</span></div>
+
+    <div class="file-card">
+        <div class="file-header fh-purple">
+            <span>⚡</span>
+            <span class="filename">blog/views.py</span>
+            <span class="file-desc">Envoyer le contexte au template</span>
+        </div>
+        <div class="file-body">
+            <p class="desc">La vue Python utilise <code>render()</code> pour associer un template à un dictionnaire de données appelé <strong>contexte</strong>. Les clés du dictionnaire deviennent des variables accessibles dans le template.</p>
+<span class="code-label">blog/views.py</span>
+<pre class="code-block"><span class="kw">from</span> django.shortcuts <span class="kw">import</span> render, get_object_or_404
+<span class="kw">from</span> .models <span class="kw">import</span> Article
+
+<span class="kw">def</span> <span class="fn">liste_articles</span>(request):
+    articles = Article.objects.<span class="fn">filter</span>(publie=<span class="kw">True</span>).<span class="fn">order_by</span>(<span class="val">'-publie_le'</span>)
+
+    <span class="cm"># Le contexte = dictionnaire clé:valeur</span>
+    <span class="cm"># Les clés sont les noms de variables dans le template</span>
+    contexte = {
+        <span class="val">'articles'</span>: articles,       <span class="cm"># → {{ articles }} dans le template</span>
+        <span class="val">'titre_page'</span>: <span class="val">'Mon Blog'</span>,   <span class="cm"># → {{ titre_page }}</span>
+        <span class="val">'nb_articles'</span>: articles.<span class="fn">count</span>(),
+    }
+
+    <span class="cm"># render(requête, chemin_template, contexte)</span>
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/article_list.html'</span>, contexte)
+
+
+<span class="kw">def</span> <span class="fn">detail_article</span>(request, pk):
+    article = <span class="fn">get_object_or_404</span>(Article, pk=pk, publie=<span class="kw">True</span>)
+
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/article_detail.html'</span>, {
+        <span class="val">'article'</span>: article,
+    })</pre>
+
+            <div class="result-box">
+                <div class="rl">Correspondance vue ↔ template</div>
+                Clé Python <code>'articles'</code> → variable DTL <code>{{ articles }}</code><br>
+                Clé Python <code>'titre_page'</code> → variable DTL <code>{{ titre_page }}</code><br>
+                Chemin <code>'blog/article_list.html'</code> → fichier <code>blog/templates/blog/article_list.html</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 10 — CHECKLIST ══ -->
+    <div class="section-label"><span class="section-label-text">10 — Checklist complète</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">✓</div>Mettre en place le système de templates from scratch</div>
+        <div class="steps">
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Configurer TEMPLATES dans settings.py</strong>Vérifier que <code>APP_DIRS: True</code> et ajouter un dossier global dans <code>DIRS</code> si besoin.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Configurer STATIC_URL et STATICFILES_DIRS</strong>Déclarer le dossier <code>static/</code> global et vérifier que <code>django.contrib.staticfiles</code> est dans <code>INSTALLED_APPS</code>.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Créer le dossier templates/blog/ dans l'app</strong>Respecter la convention <code>blog/templates/blog/</code> pour éviter les conflits de noms.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Créer le template parent base.html</strong>Avec <code>{% load static %}</code>, les blocs <code>{% block titre %}</code>, <code>{% block contenu %}</code>, et les liens CSS/JS.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Créer les templates enfants</strong>Commencer par <code>{% extends "base.html" %}</code> et ne remplir que les blocs nécessaires.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Lier la vue au template avec render()</strong>Passer un dictionnaire contexte — les clés deviennent des variables DTL.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Utiliser {% url %} pour tous les liens</strong>Jamais de chemins en dur — toujours passer par le nom de la vue.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Utiliser {% static %} pour CSS, JS, images</strong>Toujours précédé de <code>{% load static %}</code> en haut du fichier.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Extraire les composants réutilisables avec {% include %}</strong>Cartes, navbars, pagination — un fichier par composant dans un dossier <code>composants/</code>.</div></div>
+            <div class="step"><div class="step-n"></div><div class="step-body"><strong>Tester dans le navigateur</strong><code>python manage.py runserver</code> → inspecter les erreurs Django avec la page de debug.</div></div>
+        </div>
+    </div>
+
+    <!-- ══ 11 — ERREURS ══ -->
+    <div class="section-label"><span class="section-label-text">11 — Erreurs fréquentes</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">!</div>Les erreurs qui bloquent les débutants</div>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Message d'erreur</th><th>Cause</th><th>Solution</th></tr>
+                <tr><td><code>TemplateDoesNotExist</code></td><td>Mauvais chemin ou <code>APP_DIRS</code> à False</td><td>Vérifier <code>blog/templates/blog/</code> et <code>APP_DIRS: True</code></td></tr>
+                <tr><td><code>Invalid block tag 'static'</code></td><td><code>{% load static %}</code> manquant</td><td>Ajouter <code>{% load static %}</code> en haut du template</td></tr>
+                <tr><td><code>NoReverseMatch</code></td><td>Nom de vue ou namespace incorrect dans <code>{% url %}</code></td><td>Vérifier <code>name=</code> dans urls.py et le namespace <code>blog:</code></td></tr>
+                <tr><td>CSS/JS non chargés (404)</td><td>Mauvais chemin dans <code>{% static %}</code></td><td>Vérifier <code>STATICFILES_DIRS</code> et le chemin relatif depuis <code>static/</code></td></tr>
+                <tr><td><code>TemplateSyntaxError</code></td><td>Tag DTL mal fermé ou mal écrit</td><td>Vérifier <code>{% endblock %}</code>, <code>{% endfor %}</code>, <code>{% endif %}</code></td></tr>
+                <tr><td>Variable affichée vide</td><td>Mauvaise clé dans le contexte de la vue</td><td>Vérifier que la clé dans <code>render()</code> correspond exactement à <code>{{ variable }}</code></td></tr>
+            </table>
+        </div>
+        <div class="tip tip-purple">
+            <span class="tip-i">🔍</span>
+            <span><strong>Lisez toujours la page d'erreur Django en entier</strong> — En mode debug, Django vous indique précisément le fichier, la ligne et souvent la solution. Ne la fermez pas.</span>
+        </div>
+    </div>
+
+    <div class="cta-wrap">
+        <p>Cours lu ? Ancrez ces concepts avec les exercices interactifs.</p>
+        <a class="cta-btn" href="exercices-django-templates.html">Faire les exercices →</a>
+    </div>
+
+    <div class="footer-note">
+        extends → block → static → url → include 🎨<br>
+        <span style="font-size:0.82rem;">Système de templates Django &amp; DTL</span>
+    </div>
+
+</body>
+</html>

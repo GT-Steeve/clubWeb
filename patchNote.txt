@@ -46,6 +46,7 @@ v1.18.2 = amélioration sommaire.html
 v1.18.3 = correctif patchNote.txt + cours jeux vidéo web ver sommaire
 v1.19.0 = rework architecture + ajout projet aux section Introduction et Organisation & Navigation
 v1.19.1 = correctif UI sommaire.html + ajout projet aux section Vibe Coding et Web Statique
+v1.19.2 = rework architecture tous les cours "Général" + ajout projet à la section culture dévellopement web
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/

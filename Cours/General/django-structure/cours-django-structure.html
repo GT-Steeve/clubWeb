@@ -1,0 +1,601 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django — Structure d'un projet</title>
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+        .p-gray   { background: #D3D1C7; color: #444441; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child { margin-bottom: 0; }
+        .desc strong { color: #2C2C2A; }
+
+        .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 1.8; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem; }
+        .code-label { font-family: 'Fira Code', monospace; font-size: 0.72rem; color: #888780; background: #D3D1C7; display: inline-block; padding: 2px 9px; border-radius: 5px 5px 0 0; margin-top: 0.8rem; margin-bottom: -1px; }
+
+        .sel  { color: #993C1D; }
+        .val  { color: #0F6E56; }
+        .cm   { color: #888780; font-style: italic; }
+        .kw   { color: #3C3489; font-weight: 700; }
+        .fn   { color: #185FA5; }
+
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip strong { color: inherit; }
+        .tip-coral  { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber  { background: #FAEEDA; color: #633806; }
+        .tip-blue   { background: #E6F1FB; color: #0C447C; }
+        .tip-green  { background: #EBF5D9; color: #3B6D11; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.7; }
+        .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+        .tbl-wrap { overflow-x: auto; margin-top: 0.8rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        th { background: #F1EFE8; padding: 8px 12px; text-align: left; font-weight: 800; border-bottom: 1px solid #D3D1C7; }
+        td { padding: 8px 12px; border-bottom: 0.5px solid #D3D1C7; color: #5F5E5A; vertical-align: top; }
+        tr:last-child td { border-bottom: none; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        .file-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1.2rem; overflow: hidden; }
+        .file-header { display: flex; align-items: center; gap: 10px; padding: 12px 18px; font-weight: 800; font-size: 0.95rem; }
+        .file-header .filename { font-family: 'Fira Code', monospace; font-size: 0.9rem; font-weight: 500; }
+        .file-header .file-desc { font-size: 0.8rem; margin-left: auto; opacity: 0.8; font-weight: 600; }
+        .fh-teal   { background: #9FE1CB; color: #085041; }
+        .fh-purple { background: #CECBF6; color: #3C3489; }
+        .fh-blue   { background: #B5D4F4; color: #0C447C; }
+        .fh-amber  { background: #FAC775; color: #633806; }
+        .fh-green  { background: #C0DD97; color: #3B6D11; }
+        .fh-coral  { background: #F5C4B3; color: #712B13; }
+        .fh-gray   { background: #D3D1C7; color: #444441; }
+        .file-body { padding: 1.2rem 1.4rem; }
+        .file-body .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .file-body h3 { font-size: 0.95rem; font-weight: 800; margin: 1.1rem 0 0.4rem; color: #2C2C2A; }
+
+        /* ARBORESCENCE VISUELLE */
+        .tree {
+        background: #F1EFE8;
+        border: 0.5px solid #B4B2A9;
+        border-radius: 10px;
+        padding: 1rem 1.2rem;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.84rem;
+        line-height: 1.5;
+        margin-top: 0.8rem;
+        overflow-x: auto; /* scroll horizontal */
+        }
+
+        /* Bloc texte */
+        .tree pre {
+        margin: 0;
+        white-space: pre;
+        letter-spacing: 0.3px; /* lisibilité des branches */
+        tab-size: 2;
+        }
+
+        /* Racine */
+        .tree-root {
+        color: #2C2C2A;
+        font-weight: 700;
+        }
+
+        /* Dossiers */
+        .tree-dir {
+        color: #185FA5;
+        font-weight: 700;
+        }
+
+        /* Fichiers */
+        .tree-file {
+        color: #2C2C2A;
+        }
+
+        /* Highlights */
+        .tree-file.hl-teal   { color: #085041; font-weight: 700; }
+        .tree-file.hl-purple { color: #3C3489; font-weight: 700; }
+        .tree-file.hl-amber  { color: #633806; font-weight: 700; }
+        .tree-file.hl-coral  { color: #712B13; font-weight: 700; }
+        .tree-file.hl-green  { color: #3B6D11; font-weight: 700; }
+        .tree-file.hl-blue   { color: #0C447C; font-weight: 700; }
+
+        /* Commentaires */
+        .tree-cm {
+        color: #888780;
+        font-style: italic;
+        margin-left: 8px;
+        }
+        
+        /* IMPORTANCE BADGE */
+        .imp { display: inline-flex; align-items: center; gap: 5px; font-size: 0.75rem; font-weight: 800; padding: 2px 10px; border-radius: 20px; margin-left: 8px; vertical-align: middle; }
+        .imp-critical { background: #FAECE7; color: #712B13; }
+        .imp-high     { background: #FAEEDA; color: #633806; }
+        .imp-normal   { background: #F1EFE8; color: #888780; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) { body { padding: 1rem; } .hero h1 { font-size: 1.7rem; } .file-header .file-desc { display: none; } }
+    </style>
+</head>
+
+<body>
+    <a class="nav-prev" href="../../sommaire.html#step2Dynamique">← Retour au sommaire</a>
+
+    <div class="hero">
+        <h1>📁 Structure d'un projet Django</h1>
+        <p>Chaque fichier, son rôle, son importance — comprendre l'architecture avant de coder.</p>
+        <div class="badge-row">
+            <span class="badge b-teal">Django 4.x / 5.x</span>
+            <span class="badge b-blue">Architecture</span>
+            <span class="badge b-amber">12 fichiers clés</span>
+            <span class="badge b-coral">~30 min</span>
+        </div>
+    </div>
+
+
+    <!-- ══ INTRO ══ -->
+    <div class="section-label"><span class="section-label-text">Vue d'ensemble</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-gray">📁</div>Pourquoi comprendre la structure ?</div>
+        <p class="desc">Quand on débute avec Django, on crée un projet et on se retrouve face à une dizaine de fichiers générés automatiquement. Sans comprendre à quoi sert chacun, on est vite perdu — on ne sait pas où écrire son code, ni pourquoi ça plante.</p>
+        <p class="desc">Ce cours vous fait visiter <strong>chaque fichier et dossier</strong>, de la racine jusqu'aux apps, avec le rôle exact de chacun et les erreurs classiques associées.</p>
+        <div class="tip">
+            <span class="tip-i">🗺️</span>
+            <span><strong>Analogie</strong> — Un projet Django c'est comme un restaurant. <code>settings.py</code> est le règlement intérieur, <code>urls.py</code> est le plan de table, <code>models.py</code> est la carte des plats, <code>views.py</code> est le chef cuisiner, et les <code>templates/</code> sont la présentation dans l'assiette.</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-gray">🌲</div>La commande qui créer la base du projet</div>
+        <p class="desc">Deux commandes génèrent l'arborescence minimum d'un projet Django :</p>
+<pre class="code-block"><span class="cm"># 1. Crée le dossier projet (settings, urls, wsgi, asgi...)</span>
+django-admin startproject monprojet
+
+<span class="cm"># 2. Crée une app (models, views, admin, migrations...)</span>
+python manage.py startapp blog</pre>
+
+        <p class="desc" style="margin-top:0.8rem;">Un aperçu d'un arborescence avancé, <strong>les éléments colorés seront expliqué dans ce cours</strong> :</p>
+        <div class="tree">
+<pre>
+<span class="tree-root">monprojet/</span>
+├── <span class="tree-file hl-teal">manage.py</span>          <span class="tree-cm"># ① Chef d'orchestre</span>
+│
+├── <span class="tree-dir">monprojet/</span>         <span class="tree-cm"># Dossier de config du projet</span>
+│   ├── <span class="tree-file hl-amber">settings.py</span>    <span class="tree-cm"># ② Cerveau de la config</span>
+│   ├── <span class="tree-file hl-purple">urls.py</span>        <span class="tree-cm"># ③ Plan des routes du projet</span>
+│   ├── <span class="tree-file">wsgi.py</span>        <span class="tree-cm"># ④ Déploiement classique</span>
+│   └── <span class="tree-file">asgi.py</span>        <span class="tree-cm"># ⑤ Déploiement async</span>
+│
+└── <span class="tree-dir">blog/</span>              <span class="tree-cm"># Dossier de l'app</span>
+    ├── <span class="tree-file hl-teal">models.py</span>      <span class="tree-cm"># ⑥ Schéma de la BDD</span>
+    ├── <span class="tree-file hl-purple">views.py</span>       <span class="tree-cm"># ⑦ Logique des pages</span>
+    ├── <span class="tree-file hl-blue">urls.py</span>        <span class="tree-cm"># ⑧ Routes de l'app</span>
+    ├── <span class="tree-file hl-coral">admin.py</span>       <span class="tree-cm"># ⑨ Interface admin</span>
+    ├── <span class="tree-file">apps.py</span>        <span class="tree-cm"># ⑩ Config de l'app</span>
+    ├── <span class="tree-file">tests.py</span>       <span class="tree-cm"># ⑩ Vérification de l'app</span>
+    ├── <span class="tree-dir">migrations/</span>    <span class="tree-cm"># ⑪ Historique BDD</span>
+    ├── <span class="tree-dir">templates/</span>     <span class="tree-cm"># ⑫ Fichiers HTML</span>
+    └── <span class="tree-dir">static/</span>        <span class="tree-cm"># ⑬ CSS, JS, images</span>
+</pre>
+        </div>
+        <div class="tip tip-amber">
+            <span class="tip-i">⚠️</span>
+            <span><strong>ATTENTION</strong> Certains éléments comme les dossiers <code>templates/</code>, <code>static/</code> ou certains fichiers <code>urls.py</code>, <code>tests.py</code> et d'autres doivent être créés manuellement.</span>
+        </div>
+    </div>
+
+
+    <!-- ══ PARTIE 1 — RACINE ══ -->
+    <div class="section-label"><span class="section-label-text">Partie 1 — La racine du projet</span></div>
+
+    <!-- manage.py -->
+    <div class="file-card">
+        <div class="file-header fh-teal">
+            <span>🎛️</span>
+            <span class="filename">manage.py</span>
+            <span class="file-desc">Le chef d'orchestre <span class="imp imp-critical">Indispensable</span></span>
+        </div>
+        <div class="file-body">
+            <p class="desc"><code>manage.py</code> est le <strong>couteau suisse de Django</strong>. C'est lui qu'on appelle dans le terminal pour toutes les opérations de gestion du projet. Il est à la racine — jamais dans un sous-dossier.</p>
+
+            <h3>Ce qu'on fait avec lui</h3>
+            <div class="tbl-wrap">
+                <table>
+                    <tr><th>Commande</th><th>Ce qu'elle fait</th></tr>
+                    <tr><td><code>python manage.py runserver</code></td><td>Lance le serveur de développement local</td></tr>
+                    <tr><td><code>python manage.py makemigrations</code></td><td>Prépare les modifications de BDD</td></tr>
+                    <tr><td><code>python manage.py migrate</code></td><td>Applique les modifications en BDD</td></tr>
+                    <tr><td><code>python manage.py startapp blog</code></td><td>Crée une nouvelle application</td></tr>
+                    <tr><td><code>python manage.py createsuperuser</code></td><td>Crée un compte administrateur</td></tr>
+                    <tr><td><code>python manage.py shell</code></td><td>Ouvre un interpréteur Python avec Django chargé</td></tr>
+                </table>
+            </div>
+
+            <div class="tip tip-amber">
+                <span class="tip-i">⚠️</span>
+                <span><strong>Toujours depuis le dossier racine</strong> — <code>manage.py</code> doit être lancé depuis le dossier qui le contient. Si votre terminal est au mauvais endroit, vous obtenez une erreur <code>No such file or directory</code>.</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ PARTIE 2 — DOSSIER PROJET ══ -->
+    <div class="section-label"><span class="section-label-text">Partie 2 — Le dossier de configuration</span></div>
+
+    <!-- settings.py -->
+    <div class="file-card">
+        <div class="file-header fh-amber">
+            <span>⚙️</span>
+            <span class="filename">settings.py</span>
+            <span class="file-desc">Le cerveau de la configuration <span class="imp imp-critical">Critique</span></span>
+        </div>
+        <div class="file-body">
+            <p class="desc"><code>settings.py</code> est le <strong>fichier de configuration central</strong>. Il dit à Django comment se comporter : quelle base de données utiliser, quelles apps sont actives, où trouver les templates, etc. <strong>Si ce fichier est mal configuré, le projet ne démarre pas.</strong></p>
+
+            <h3>Les sections les plus importantes</h3>
+<span class="code-label">monprojet/settings.py</span>
+<pre class="code-block"><span class="cm"># Toutes les apps actives — votre app doit être ici</span>
+INSTALLED_APPS = [
+    <span class="val">'django.contrib.admin'</span>,
+    <span class="val">'django.contrib.auth'</span>,
+    ...
+    <span class="val">'blog'</span>,  <span class="cm"># ← votre app</span>
+]
+
+<span class="cm"># Base de données — SQLite par défaut (parfait pour débuter)</span>
+DATABASES = {
+    <span class="val">'default'</span>: {
+        <span class="val">'ENGINE'</span>: <span class="val">'django.db.backends.sqlite3'</span>,
+        <span class="val">'NAME'</span>: BASE_DIR / <span class="val">'db.sqlite3'</span>,
+    }
+}
+
+<span class="cm"># Langue et fuseau horaire</span>
+LANGUAGE_CODE = <span class="val">'fr-fr'</span>
+TIME_ZONE = <span class="val">'Europe/Paris'</span>
+
+<span class="cm"># Fichiers statiques (CSS, JS, images)</span>
+STATIC_URL = <span class="val">'/static/'</span>
+
+<span class="cm"># Redirection après connexion</span>
+LOGIN_REDIRECT_URL = <span class="val">'/'</span></pre>
+
+            <div class="tip tip-coral">
+                <span class="tip-i">🍝</span>
+                <span><strong>Effet spaghetti classique</strong> — Oublier d'ajouter votre app dans <code>INSTALLED_APPS</code>. Résultat : les migrations ne trouvent pas vos models, les templates ne sont pas détectés, tout semble planter sans raison apparente.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- urls.py projet -->
+    <div class="file-card">
+        <div class="file-header fh-purple">
+            <span>🗺️</span>
+            <span class="filename">monprojet/urls.py</span>
+            <span class="file-desc">Le routeur principal <span class="imp imp-critical">Critique</span></span>
+        </div>
+        <div class="file-body">
+            <p class="desc">C'est le <strong>point d'entrée de toutes les URLs</strong> du site. Il ne gère pas directement les routes des apps — il délègue aux <code>urls.py</code> des apps avec <code>include()</code>.</p>
+<span class="code-label">monprojet/urls.py</span>
+<pre class="code-block"><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> django.urls <span class="kw">import</span> path, include
+
+urlpatterns = [
+    <span class="fn">path</span>(<span class="val">'admin/'</span>, admin.site.urls),
+    <span class="fn">path</span>(<span class="val">'blog/'</span>, <span class="fn">include</span>(<span class="val">'blog.urls'</span>)),      <span class="cm"># délègue à l'app</span>
+    <span class="fn">path</span>(<span class="val">'accounts/'</span>, <span class="fn">include</span>(<span class="val">'django.contrib.auth.urls'</span>)),
+]</pre>
+            <div class="tip">
+                <span class="tip-i">💡</span>
+                <span><strong>Règle d'or</strong> — Ce fichier ne contient que des <code>include()</code>. Les vraies routes (vers les views) sont dans le <code>urls.py</code> de chaque app.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- wsgi / asgi -->
+    <div class="file-card">
+        <div class="file-header fh-gray">
+            <span>🚀</span>
+            <span class="filename">wsgi.py &amp; asgi.py</span>
+            <span class="file-desc">Déploiement en production <span class="imp imp-normal">Avancé</span></span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Ces deux fichiers sont les <strong>portes d'entrée pour déployer Django</strong> sur un vrai serveur. En développement, on ne les touche pas — c'est <code>manage.py runserver</code> qui s'en charge.</p>
+            <div class="tbl-wrap">
+                <table>
+                    <tr><th>Fichier</th><th>Usage</th><th>Quand ?</th></tr>
+                    <tr><td><code>wsgi.py</code></td><td>Serveurs classiques (Gunicorn, Apache)</td><td>Déploiement standard</td></tr>
+                    <tr><td><code>asgi.py</code></td><td>Serveurs async (Daphne, Uvicorn)</td><td>WebSockets, temps réel</td></tr>
+                </table>
+            </div>
+            <div class="tip tip-blue">
+                <span class="tip-i">📌</span>
+                <span><strong>Pour débuter</strong> — Ignorez ces fichiers pour l'instant. Ils ne vous concernent qu'au moment de mettre votre site en ligne sur un serveur réel.</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ PARTIE 3 — DOSSIER APP ══ -->
+    <div class="section-label"><span class="section-label-text">Partie 3 — Le dossier de l'application</span></div>
+
+    <!-- models.py -->
+    <div class="file-card">
+        <div class="file-header fh-teal">
+            <span>🗄️</span>
+            <span class="filename">blog/models.py</span>
+            <span class="file-desc">Le schéma de la base de données <span class="imp imp-critical">Indispensable</span></span>
+        </div>
+        <div class="file-body">
+            <p class="desc">C'est ici que vous <strong>décrivez vos données</strong>. Chaque classe Python = une table en base de données. Django lit ces classes et crée les vraies tables SQL via les migrations.</p>
+<span class="code-label">blog/models.py</span>
+<pre class="code-block"><span class="kw">from</span> django.db <span class="kw">import</span> models
+
+<span class="kw">class</span> <span class="fn">Article</span>(models.Model):
+    titre    = models.<span class="fn">CharField</span>(max_length=<span class="val">200</span>)
+    contenu  = models.<span class="fn">TextField</span>()
+    publie   = models.<span class="fn">BooleanField</span>(default=<span class="kw">False</span>)
+    date     = models.<span class="fn">DateTimeField</span>(auto_now_add=<span class="kw">True</span>)
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(self):
+        <span class="kw">return</span> self.titre</pre>
+            <div class="tip tip-amber">
+                <span class="tip-i">⚠️</span>
+                <span><strong>Règle absolue</strong> — Après chaque modification de <code>models.py</code>, il faut obligatoirement lancer <code>python manage.py makemigrations</code> puis <code>python manage.py migrate</code>. Sans ça, la vraie base de données n'est pas mise à jour.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- views.py -->
+    <div class="file-card">
+        <div class="file-header fh-purple">
+            <span>⚙️</span>
+            <span class="filename">blog/views.py</span>
+            <span class="file-desc">La logique de chaque page <span class="imp imp-critical">Indispensable</span></span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Les <strong>views sont les chefs cuisiniers</strong> du projet. Chaque function reçoit une requête HTTP, fait ce qu'elle doit faire (récupérer des données, vérifier des permissions…), puis renvoie une réponse — généralement un template HTML rempli de données.</p>
+<span class="code-label">blog/views.py</span>
+<pre class="code-block"><span class="kw">from</span> django.shortcuts <span class="kw">import</span> render
+<span class="kw">from</span> .models <span class="kw">import</span> Article
+
+<span class="kw">def</span> <span class="fn">liste_articles</span>(request):
+    articles = Article.objects.<span class="fn">filter</span>(publie=<span class="kw">True</span>)
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/liste.html'</span>, {<span class="val">'articles'</span>: articles})</pre>
+            <div class="result-box">
+                <div class="rl">Flow d'une view</div>
+                Reçoit la requête → Interroge le model → Prépare les données → Renvoie le template rempli
+            </div>
+        </div>
+    </div>
+
+    <!-- urls.py app -->
+    <div class="file-card">
+        <div class="file-header fh-blue">
+            <span>🔗</span>
+            <span class="filename">blog/urls.py</span>
+            <span class="file-desc">Les routes de l'app <span class="imp imp-critical">Indispensable</span></span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Ce fichier est à <strong>créer manuellement</strong> — Django ne le génère pas. Il contient les routes spécifiques à l'app et est inclus depuis le <code>urls.py</code> du projet via <code>include()</code>.</p>
+<span class="code-label">blog/urls.py — À créer manuellement</span>
+<pre class="code-block"><span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> . <span class="kw">import</span> views
+
+app_name = <span class="val">'blog'</span>
+
+urlpatterns = [
+    <span class="fn">path</span>(<span class="val">''</span>,             views.liste_articles, name=<span class="val">'liste'</span>),
+    <span class="fn">path</span>(<span class="val">'&lt;int:pk&gt;/'</span>,   views.detail_article, name=<span class="val">'detail'</span>),
+]</pre>
+            <div class="tip tip-coral">
+                <span class="tip-i">🚨</span>
+                <span><strong>Piège classique</strong> — Ne pas oublier de relier ce fichier depuis <code>monprojet/urls.py</code> avec <code>include('blog.urls')</code>. Sinon Django ne trouvera jamais les routes de votre app.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- admin.py -->
+    <div class="file-card">
+        <div class="file-header fh-coral">
+            <span>🛠️</span>
+            <span class="filename">blog/admin.py</span>
+            <span class="file-desc">L'interface d'administration <span class="imp imp-high">Important</span></span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Django génère automatiquement une interface d'administration complète à l'adresse <code>/admin/</code>. Pour qu'un model y apparaisse, il suffit de l'enregistrer dans ce fichier.</p>
+<span class="code-label">blog/admin.py</span>
+<pre class="code-block"><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> .models <span class="kw">import</span> Article
+
+<span class="cm"># Enregistrement simple</span>
+admin.site.<span class="fn">register</span>(Article)
+
+<span class="cm"># Enregistrement personnalisé — affiche titre, date et statut</span>
+<span class="kw">@admin.register</span>(Article)
+<span class="kw">class</span> <span class="fn">ArticleAdmin</span>(admin.ModelAdmin):
+    list_display = [<span class="val">'titre'</span>, <span class="val">'date'</span>, <span class="val">'publie'</span>]
+    list_filter  = [<span class="val">'publie'</span>]
+    search_fields = [<span class="val">'titre'</span>]</pre>
+        </div>
+    </div>
+
+    <!-- apps.py -->
+    <div class="file-card">
+        <div class="file-header fh-gray">
+            <span>📋</span>
+            <span class="filename">blog/apps.py</span>
+            <span class="file-desc">Configuration de l'app <span class="imp imp-normal">Secondaire</span></span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Créé automatiquement par Django, ce fichier déclare la configuration de l'app. En pratique, <strong>on ne le modifie presque jamais</strong> quand on débute.</p>
+<span class="code-label">blog/apps.py</span>
+<pre class="code-block"><span class="kw">from</span> django.apps <span class="kw">import</span> AppConfig
+
+<span class="kw">class</span> <span class="fn">BlogConfig</span>(AppConfig):
+    default_auto_field = <span class="val">'django.db.models.BigAutoField'</span>
+    name = <span class="val">'blog'</span></pre>
+            <div class="tip">
+                <span class="tip-i">📌</span>
+                <span>Dans <code>INSTALLED_APPS</code>, vous pouvez écrire <code>'blog'</code> (raccourci) ou <code>'blog.apps.BlogConfig'</code> (chemin complet). Les deux fonctionnent.</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ PARTIE 4 — DOSSIERS ══ -->
+    <div class="section-label"><span class="section-label-text">Partie 4 — Les dossiers spéciaux</span></div>
+
+    <!-- migrations -->
+    <div class="file-card">
+        <div class="file-header fh-green">
+            <span>📜</span>
+            <span class="filename">blog/migrations/</span>
+            <span class="file-desc">L'historique de la base de données <span class="imp imp-high">Important</span></span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Ce dossier contient l'<strong>historique complet de toutes les modifications de votre base de données</strong>. Chaque fois que vous modifiez un model et lancez <code>makemigrations</code>, un nouveau fichier est créé ici.</p>
+<span class="code-label">Structure typique de migrations/</span>
+<pre class="code-block">migrations/
+├── __init__.py
+├── 0001_initial.py          <span class="cm"># Création des tables</span>
+├── 0002_article_slug.py     <span class="cm"># Ajout du champ slug</span>
+└── 0003_article_auteur.py   <span class="cm"># Ajout de la relation auteur</span></pre>
+            <div class="tip tip-purple">
+                <span class="tip-i">💡</span>
+                <span><strong>Ne supprimez jamais</strong> les fichiers de migration à la main. Django les utilise pour savoir dans quel état est votre BDD. Si vous devez tout remettre à zéro, il existe des commandes prévues pour ça.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- templates -->
+    <div class="file-card">
+        <div class="file-header fh-amber">
+            <span>🎨</span>
+            <span class="filename">templates/</span>
+            <span class="file-desc">Les fichiers HTML <span class="imp imp-high">Important</span></span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Le dossier <code>templates/</code> contient tous les fichiers HTML de l'app. Django les cherche selon une convention de nommage précise : <code>templates/nom_app/nom_template.html</code>.</p>
+<span class="code-label">Organisation recommandée</span>
+<pre class="code-block">blog/
+└── templates/
+    └── blog/                   <span class="cm"># sous-dossier = nom de l'app</span>
+        ├── base.html            <span class="cm"># template parent (layout commun)</span>
+        ├── article_list.html    <span class="cm"># liste des articles</span>
+        └── article_detail.html  <span class="cm"># détail d'un article</span></pre>
+            <div class="tip">
+                <span class="tip-i">🔑</span>
+                <span><strong>Le sous-dossier est obligatoire</strong> — Sans <code>templates/blog/</code>, Django peut confondre des templates de même nom entre différentes apps. Toujours nommer le sous-dossier comme l'app.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- static -->
+    <div class="file-card">
+        <div class="file-header fh-blue">
+            <span>🎭</span>
+            <span class="filename">static/</span>
+            <span class="file-desc">CSS, JavaScript, images <span class="imp imp-high">Important</span></span>
+        </div>
+        <div class="file-body">
+            <p class="desc">Les <strong>fichiers statiques</strong> — tout ce qui ne change pas selon l'utilisateur — vont dans <code>static/</code>. CSS, JavaScript, polices, images de design.</p>
+<span class="code-label">Organisation recommandée</span>
+<pre class="code-block">blog/
+└── static/
+    └── blog/                <span class="cm"># sous-dossier = nom de l'app</span>
+        ├── css/
+        │   └── style.css
+        ├── js/
+        │   └── main.js
+        └── img/
+            └── logo.png</pre>
+<span class="code-label">Dans un template — charger un fichier statique</span>
+<pre class="code-block"><span class="kw">{% load static %}</span>
+<span class="sel">&lt;link</span> <span class="fn">rel</span>=<span class="val">"stylesheet"</span> <span class="fn">href</span>=<span class="val">"{% static 'blog/css/style.css' %}"</span><span class="sel">&gt;</span></pre>
+        </div>
+    </div>
+
+
+    <!-- ══ RÉCAP ══ -->
+    <div class="section-label"><span class="section-label-text">Récapitulatif — Les indispensables</span></div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">⭐</div>Les 5 fichiers critiques à retenir</div>
+        <p class="desc">Si vous ne deviez retenir qu'une chose de ce cours :</p>
+        <div class="tbl-wrap">
+            <table>
+                <tr><th>Fichier</th><th>Rôle en une phrase</th><th>Priorité</th></tr>
+                <tr><td><code>manage.py</code></td><td>Lance toutes les commandes Django</td><td><span class="imp imp-critical">🔴 Critique</span></td></tr>
+                <tr><td><code>settings.py</code></td><td>Configure tout le projet</td><td><span class="imp imp-critical">🔴 Critique</span></td></tr>
+                <tr><td><code>models.py</code></td><td>Décrit les tables de la BDD</td><td><span class="imp imp-critical">🔴 Critique</span></td></tr>
+                <tr><td><code>views.py</code></td><td>Contient la logique de chaque page</td><td><span class="imp imp-critical">🔴 Critique</span></td></tr>
+                <tr><td><code>urls.py</code></td><td>Relie les URLs aux views</td><td><span class="imp imp-critical">🔴 Critique</span></td></tr>
+                <tr><td><code>admin.py</code></td><td>Expose les données dans /admin/</td><td><span class="imp imp-high">🟠 Important</span></td></tr>
+                <tr><td><code>migrations/</code></td><td>Historique des changements BDD</td><td><span class="imp imp-high">🟠 Important</span></td></tr>
+                <tr><td><code>templates/</code></td><td>Les fichiers HTML de l'app</td><td><span class="imp imp-high">🟠 Important</span></td></tr>
+                <tr><td><code>static/</code></td><td>CSS, JS et images</td><td><span class="imp imp-high">🟠 Important</span></td></tr>
+                <tr><td><code>apps.py</code></td><td>Config de l'app (rarement modifié)</td><td><span class="imp imp-normal">⚪ Secondaire</span></td></tr>
+                <tr><td><code>wsgi.py</code></td><td>Déploiement serveur classique</td><td><span class="imp imp-normal">⚪ Avancé</span></td></tr>
+                <tr><td><code>asgi.py</code></td><td>Déploiement async/WebSockets</td><td><span class="imp imp-normal">⚪ Avancé</span></td></tr>
+            </table>
+        </div>
+        <div class="tip tip-green">
+            <span class="tip-i">✅</span>
+            <span><strong>Mémo MTV</strong> — Les 3 fichiers du cœur de Django forment le pattern MTV : <code>models.py</code> (M), <code>templates/</code> (T), <code>views.py</code> (V). Tout le reste est de la configuration ou du support.</span>
+        </div>
+    </div>
+
+
+    <div class="cta-wrap">
+        <p>Structure comprise ? Testez vos connaissances avec les exercices.</p>
+        <a class="cta-btn" href="exercices-django-structure.html">Faire les exercices →</a>
+    </div>
+
+    <div class="footer-note">
+        manage.py → settings.py → models → views → urls → templates 📁<br>
+        <span style="font-size:0.82rem;">Django — Structure d'un projet</span>
+    </div>
+</body>
+</html>

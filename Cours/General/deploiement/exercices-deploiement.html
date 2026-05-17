@@ -1,0 +1,618 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Déploiement Django</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9A%80%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral { background: #F5C4B3; color: #712B13; }
+        .p-amber { background: #FAC775; color: #633806; }
+        .p-blue { background: #B5D4F4; color: #0C447C; }
+        .p-green { background: #C0DD97; color: #3B6D11; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.4s; width: 0%; }
+        .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .chip-ok { background: #E1F5EE; color: #085041; }
+        .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .action-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 10px; padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .action-btn:hover { background: #D3D1C7; }
+        .action-btn.primary { background: #2C2C2A; color: #FAC775; border-color: #2C2C2A; }
+        .action-btn.primary:hover { background: #444441; }
+        .action-btn.reveal { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+        .action-btn.reveal:hover { background: #CECBF6; }
+
+        .score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-top: 1rem; display: none; text-align: center; }
+        .score-panel.show { display: block; }
+        .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .score-big span { color: #5DCAA5; }
+        .score-sub { font-size: 0.9rem; color: #888780; }
+
+        /* FLASHCARDS */
+        .fc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 0.8rem; }
+        .fc { height: 130px; perspective: 700px; cursor: pointer; }
+        .fc-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.45s cubic-bezier(.4,0,.2,1); border-radius: 12px; }
+        .fc.flipped .fc-inner { transform: rotateY(180deg); }
+        .fc-front, .fc-back { position: absolute; inset: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 12px; text-align: center; backface-visibility: hidden; border: 0.5px solid #D3D1C7; }
+        .fc-front { background: #F1EFE8; font-size: 0.84rem; font-weight: 700; color: #2C2C2A; }
+        .fc-back { background: #ffffff; font-size: 0.83rem; transform: rotateY(180deg); color: #085041; font-weight: 700; line-height: 1.5; }
+        .fc-hint { font-size: 0.68rem; color: #B4B2A9; position: absolute; bottom: 7px; right: 9px; }
+        .fc-front.dark   { background: #E1F5EE; color: #085041; font-family: 'Fira Code', monospace; font-size: 0.8rem; font-weight: 600; border-color: #9FE1CB; }
+        .fc-front.coral  { background: #FAECE7; color: #712B13; }
+        .fc-front.purple { background: #EEEDFE; color: #3C3489; }
+        .fc-front.amber  { background: #FAEEDA; color: #633806; }
+        .fc-front.blue   { background: #E6F1FB; color: #0C447C; }
+
+        /* QCM */
+        .qcm-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 7px; }
+        .opt { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; transition: background 0.12s; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none; }
+        .opt:hover { background: #D3D1C7; }
+        .opt.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .opt.correct  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .opt.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .opt-dot { width: 18px; height: 18px; min-width: 18px; border-radius: 50%; border: 2px solid #B4B2A9; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+        .opt.selected .opt-dot { border-color: #7F77DD; background: #7F77DD; }
+        .opt.correct  .opt-dot { border-color: #1D9E75; background: #1D9E75; }
+        .opt.wrong    .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+        .opt-dot-inner { width: 6px; height: 6px; background: white; border-radius: 50%; display: none; }
+        .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+        .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .q-feedback.show { display: block; }
+        .q-feedback.ok { color: #0F6E56; }
+        .q-feedback.ko { color: #A32D2D; }
+
+        /* VF */
+        .vf-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .vf-statement { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .vf-btns { display: flex; gap: 10px; }
+        .vf-btn { flex: 1; padding: 8px 0; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .vf-btn.vrai:hover { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .vf-btn.faux:hover { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-btn.vrai.selected { background: #E1F5EE; border-color: #5DCAA5; color: #085041; border-width: 2px; }
+        .vf-btn.faux.selected { background: #FCEBEB; border-color: #F09595; color: #791F1F; border-width: 2px; }
+        .vf-btn.correct-ans { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+
+        /* SCÉNARIOS */
+        .scenario-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .scenario-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 8px; }
+        .scenario-situation { font-size: 0.95rem; font-weight: 700; color: #2C2C2A; line-height: 1.5; margin-bottom: 1rem; }
+        .scenario-choice { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; margin-bottom: 7px; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; transition: background 0.12s; user-select: none; }
+        .scenario-choice:hover { background: #D3D1C7; }
+        .scenario-choice.correct { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; font-weight: 700; }
+        .scenario-choice.wrong   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .scenario-choice.disabled { pointer-events: none; }
+        .scenario-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .scenario-feedback.show { display: block; }
+        .scenario-feedback.ok { color: #0F6E56; }
+        .scenario-feedback.ko { color: #A32D2D; }
+
+        /* MATCHING */
+        .match-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .match-col-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .match-col { display: flex; flex-direction: column; gap: 7px; }
+        .match-item { padding: 9px 13px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; font-size: 0.84rem; font-weight: 600; cursor: pointer; transition: background 0.12s; line-height: 1.4; }
+        .match-item.code { font-family: 'Fira Code', monospace; font-size: 0.8rem; background: #EBF5D9; color: #3B6D11; border-color: #C0DD97; }
+        .match-item:hover:not(.matched) { background: #D3D1C7; }
+        .match-item.code:hover:not(.matched) { background: #C0DD97; }
+        .match-item.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .match-item.code.selected { background: #CECBF6; border-color: #AFA9EC; color: #26215C; }
+        .match-item.matched  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; pointer-events: none; font-weight: 700; }
+        .match-item.wrong-flash { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .match-result { font-size: 0.88rem; font-weight: 700; color: #085041; margin-top: 0.8rem; display: none; }
+        .match-result.show { display: block; }
+
+        /* ORDONNER */
+        .order-list { display: flex; flex-direction: column; gap: 7px; margin-top: 0.8rem; user-select: none; }
+        .order-item { display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #ffffff; font-size: 0.9rem; font-weight: 600; cursor: grab; transition: box-shadow 0.15s, background 0.12s; }
+        .order-item:active { cursor: grabbing; box-shadow: 0 4px 14px rgba(0,0,0,.1); }
+        .order-item.dragging  { opacity: 0.35; }
+        .order-item.drag-over { border-color: #5DCAA5; background: #E1F5EE; }
+        .order-item.tap-sel   { background: #EEEDFE; border-color: #AFA9EC; }
+        .order-item.correct   { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .order-item.wrong     { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .order-handle { color: #B4B2A9; font-size: 1rem; }
+        .order-num { font-size: 0.72rem; font-weight: 800; color: #888780; background: #F1EFE8; border-radius: 6px; padding: 2px 7px; min-width: 22px; text-align: center; }
+        .order-feedback { font-size: 0.88rem; font-weight: 700; margin-top: 0.8rem; display: none; line-height: 1.5; }
+        .order-feedback.show { display: block; }
+        .order-feedback.ok { color: #0F6E56; }
+        .order-feedback.ko { color: #A32D2D; }
+
+        /* COMPLÉTER */
+        .complete-wrap { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 2; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem; }
+        .blank { display: inline-block; min-width: 80px; border: none; border-bottom: 2px solid #AFA9EC; background: transparent; font-family: 'Fira Code', monospace; font-size: 0.84rem; color: #3C3489; font-weight: 700; padding: 0 4px; outline: none; vertical-align: baseline; transition: border-color 0.15s; }
+        .blank:focus { border-bottom-color: #7F77DD; }
+        .blank.ok { border-bottom-color: #1D9E75; color: #085041; }
+        .blank.ko { border-bottom-color: #E24B4A; color: #A32D2D; }
+        .blank.revealed { border-bottom-color: #FAC775; color: #633806; background: rgba(250,199,117,0.25); }
+        .complete-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .complete-feedback.show { display: block; }
+        .complete-feedback.ok { color: #0F6E56; }
+        .complete-feedback.ko { color: #A32D2D; }
+        .kw  { color: #3C3489; font-weight: 700; }
+        .fn  { color: #633806; }
+        .str { color: #085041; }
+        .cm  { color: #888780; font-style: italic; }
+        .prop{ color: #185FA5; }
+        .val { color: #085041; }
+
+        .answers-reveal { background: #FAEEDA; border: 0.5px solid #FAC775; border-radius: 10px; padding: 0.9rem 1.1rem; margin-top: 0.8rem; display: none; font-size: 0.88rem; line-height: 1.8; color: #633806; }
+        .answers-reveal.show { display: block; }
+        .answers-reveal strong { display: block; margin-bottom: 6px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .answer-line { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
+        .answer-key { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: #888780; min-width: 160px; }
+        .answer-val { font-family: 'Fira Code', monospace; font-size: 0.84rem; font-weight: 700; color: #633806; }
+
+        .global-score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-top: 2rem; display: none; text-align: center; }
+        .global-score-panel.show { display: block; }
+        .gs-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .gs-big span { color: #5DCAA5; }
+        .gs-sub { font-size: 0.9rem; color: #888780; margin-bottom: 1rem; }
+        .gs-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) { body { padding: 1rem; } .hero h1 { font-size: 1.7rem; } .match-wrap { grid-template-columns: 1fr; } .fc-grid { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+<body>
+    <a class="nav-prev" href="cours-deploiement.html">← Retour au cours</a>
+
+    <div class="hero">
+        <h1>🚀 Exercices<br>Déploiement</h1>
+        <p>Flashcards, QCM, vrai/faux, scénarios de prod, matching, ordonnancement et settings à compléter.</p>
+        <div class="badge-row">
+            <span class="badge b-teal">🃏 Flashcards</span>
+            <span class="badge b-coral">✅ QCM</span>
+            <span class="badge b-purple">⚖️ Vrai/Faux</span>
+            <span class="badge b-amber">🎬 Scénarios</span>
+            <span class="badge b-blue">🔗 Associer</span>
+            <span class="badge b-green">↕️ Ordonner</span>
+        </div>
+    </div>
+
+
+    <!-- ══ 01 — FLASHCARDS ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">01 — Flashcards — cliquer pour retourner</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">🃏</div>Concepts clés du déploiement</div>
+        <div class="fc-grid">
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front dark">DEBUG = True en production<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Faille de sécurité critique — expose le code source, les variables d'env. et la config en cas d'erreur. Toujours <strong>False</strong> en prod.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front purple">DNS<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Domain Name System — traduit un nom de domaine (<code>monprojet.com</code>) en adresse IP (<code>162.55.12.48</code>). L'annuaire d'internet.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front coral">SECRET_KEY dans Git<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Faille de sécurité majeure. La clé secrète doit être dans un fichier <code>.env</code> ignoré par Git, et lue via <code>python-decouple</code> ou <code>os.environ</code>.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front amber">Pré-production (staging)<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Environnement identique à la prod mais avec des données de test. Permet de valider les changements <strong>avant</strong> que les vrais utilisateurs les voient.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front blue">Gunicorn<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Serveur WSGI Python pour la production. <code>python manage.py runserver</code> est uniquement pour le développement local — jamais en prod.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front">CNAME record<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Enregistrement DNS qui crée un alias — pointe un domaine vers un autre. <code>www.monprojet.com → xxx.up.railway.app</code></div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front dark">collectstatic<span class="fc-hint">↻</span></div>
+                    <div class="fc-back"><code>python manage.py collectstatic</code> copie tous les fichiers statiques dans <code>STATIC_ROOT</code> pour qu'ils soient servis par WhiteNoise ou un CDN en prod.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front coral">WhiteNoise<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Package Python qui permet à Django de servir ses propres fichiers statiques en production — sans avoir besoin de Nginx. Ajouter dans MIDDLEWARE.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front purple">Propagation DNS<span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Délai entre la configuration d'un DNS et sa visibilité mondiale. Peut aller de quelques minutes à 48 heures selon les TTL des serveurs.</div>
+                </div>
+            </div>
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front amber">PaaS vs VPS<span class="fc-hint">↻</span></div>
+                    <div class="fc-back"><strong>PaaS</strong> (Railway, Render) : déploiement depuis Git, zéro admin serveur, idéal pour débuter. <strong>VPS</strong> : serveur nu à configurer, plus de contrôle, plus complexe.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══ 02 — QCM ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">02 — QCM — Questions à choix multiples</span>
+    </div>
+    <div id="qcm-container"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkQCM()">Corriger le QCM</button>
+        <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="score-row" id="score-qcm"></div>
+    <div class="score-panel" id="qcm-score-panel">
+        <div class="score-big"><span id="qcm-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au QCM</div>
+    </div>
+
+
+    <!-- ══ 03 — VRAI / FAUX ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">03 — Quiz — Vrai ou Faux</span>
+    </div>
+    <div id="vf-container"></div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkVF()">Corriger le Quiz</button>
+        <button class="action-btn" onclick="resetVF()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-vf"></div></div>
+    <div class="score-row" id="score-vf"></div>
+    <div class="score-panel" id="vf-score-panel">
+        <div class="score-big"><span id="vf-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au Quiz V/F</div>
+    </div>
+
+
+    <!-- ══ 04 — SCÉNARIOS ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">04 — Scénarios de production — que faites-vous ?</span>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 1 — DisallowedHost</div>
+        <div class="scenario-situation">🚀 Tu viens de déployer sur Railway. En accédant à l'URL <code>ton-projet.up.railway.app</code>, tu obtiens l'erreur : <code>DisallowedHost at / Invalid HTTP_HOST header</code>. Que fais-tu ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Mettre <code>DEBUG = True</code> pour désactiver la vérification</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Ajouter <code>ton-projet.up.railway.app</code> dans la variable d'environnement <code>ALLOWED_HOSTS</code> sur Railway</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Redéployer le projet depuis zéro</div>
+        <div class="scenario-feedback">✓ DisallowedHost signifie que Django reçoit une requête depuis un domaine qui ne figure pas dans ALLOWED_HOSTS. En production, ce paramètre doit contenir exactement les domaines autorisés. Mettre DEBUG=True pour contourner est dangereux — ça expose tout le code source en cas d'erreur.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 2 — Fuite de secrets</div>
+        <div class="scenario-situation">🔐 En relisant ton code avant de pousser sur GitHub, tu réalises que ton fichier <code>settings.py</code> contient en clair <code>SECRET_KEY = 'django-insecure-abc123'</code>. Tu n'as pas encore committé. Que fais-tu ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Committer quand même — ce n'est que la clé de développement</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Déplacer la clé dans un fichier <code>.env</code>, la lire avec <code>python-decouple</code> dans settings.py, et vérifier que <code>.env</code> est dans <code>.gitignore</code> avant de committer</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Renommer le fichier settings.py pour qu'il ne soit pas versionné</div>
+        <div class="scenario-feedback">✓ Même une clé de dev en clair sur GitHub public sera collectée par des robots en quelques minutes. La bonne pratique : toujours dans .env, toujours dans .gitignore, lue via python-decouple ou os.environ. Si tu as déjà committé une clé secrète sur GitHub : la régénérer immédiatement avec get_random_secret_key() et purger l'historique Git.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 3 — CSS manquant en prod</div>
+        <div class="scenario-situation">🎨 Ton projet fonctionne sur Railway mais toutes les pages s'affichent sans CSS — les styles ne chargent pas (erreur 404 sur les fichiers .css). Quelle est la cause la plus probable ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Le CSS est trop volumineux pour Railway</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>WhiteNoise n'est pas installé ou pas ajouté dans <code>MIDDLEWARE</code>, et/ou <code>collectstatic</code> n'a pas été exécuté dans la commande de démarrage</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Il faut désactiver HTTPS pour que les fichiers statiques se chargent</div>
+        <div class="scenario-feedback">✓ En production, Django ne sert pas les fichiers statiques lui-même (contrairement au mode DEBUG). WhiteNoise doit être dans MIDDLEWARE (avant SessionMiddleware), STATICFILES_STORAGE doit pointer vers WhiteNoise, et la commande de démarrage doit inclure python manage.py collectstatic --noinput avant gunicorn.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 4 — Domaine personnalisé</div>
+        <div class="scenario-situation">🌐 Tu as acheté <code>monblog.fr</code> sur OVH. Tu l'as configuré en CNAME vers ton URL Railway il y a 20 minutes. Mais <code>monblog.fr</code> n'affiche pas encore ton projet. Que fais-tu ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Supprimer le domaine et en racheter un autre</div>
+        <div class="scenario-choice" onclick="pickScenario(this,false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Contacter le support Railway car c'est de leur faute</div>
+        <div class="scenario-choice" onclick="pickScenario(this,true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Attendre — la propagation DNS peut prendre jusqu'à 48h. Vérifier la configuration sur dnschecker.org et s'assurer que <code>monblog.fr</code> est bien dans <code>ALLOWED_HOSTS</code> sur Railway</div>
+        <div class="scenario-feedback">✓ La propagation DNS est un processus mondial qui prend du temps — c'est inhérent au fonctionnement d'internet, pas un bug. Vérifier sur dnschecker.org si le CNAME se propage correctement. Vérifier aussi que le domaine est dans ALLOWED_HOSTS, sinon Django renverra DisallowedHost même après propagation complète.</div>
+    </div>
+
+
+    <!-- ══ 05 — ASSOCIER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">05 — Associer — clic gauche puis clic droit</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">🔗</div>Concept / fichier → Rôle dans le déploiement</div>
+        <div class="match-wrap">
+            <div>
+                <div class="match-col-label">Élément</div>
+                <div class="match-col" id="match-left">
+                    <div class="match-item code" id="ml0" onclick="selectMatch('left',0)">Procfile</div>
+                    <div class="match-item code" id="ml1" onclick="selectMatch('left',1)">.env</div>
+                    <div class="match-item code" id="ml2" onclick="selectMatch('left',2)">requirements.txt</div>
+                    <div class="match-item code" id="ml3" onclick="selectMatch('left',3)">gunicorn</div>
+                    <div class="match-item code" id="ml4" onclick="selectMatch('left',4)">collectstatic</div>
+                    <div class="match-item code" id="ml5" onclick="selectMatch('left',5)">A record DNS</div>
+                    <div class="match-item code" id="ml6" onclick="selectMatch('left',6)">CNAME record DNS</div>
+                    <div class="match-item code" id="ml7" onclick="selectMatch('left',7)">DATABASE_URL</div>
+                </div>
+            </div>
+            <div>
+                <div class="match-col-label">Rôle</div>
+                <div class="match-col" id="match-right">
+                    <div class="match-item" id="mr0" onclick="selectMatch('right',0)">Commande de démarrage sur le PaaS</div>
+                    <div class="match-item" id="mr1" onclick="selectMatch('right',1)">Variables secrètes — jamais dans Git</div>
+                    <div class="match-item" id="mr2" onclick="selectMatch('right',2)">Liste des dépendances Python du projet</div>
+                    <div class="match-item" id="mr3" onclick="selectMatch('right',3)">Serveur Python WSGI pour la production</div>
+                    <div class="match-item" id="mr4" onclick="selectMatch('right',4)">Regroupe les fichiers statiques pour la prod</div>
+                    <div class="match-item" id="mr5" onclick="selectMatch('right',5)">Pointe un domaine vers une adresse IPv4</div>
+                    <div class="match-item" id="mr6" onclick="selectMatch('right',6)">Alias — pointe un domaine vers un autre domaine</div>
+                    <div class="match-item" id="mr7" onclick="selectMatch('right',7)">Variable d'environnement pour connecter PostgreSQL</div>
+                </div>
+            </div>
+        </div>
+        <div class="match-result" id="matchResult">🎉 Parfait ! Toutes les associations sont correctes.</div>
+    </div>
+
+
+    <!-- ══ 06 — ORDONNER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">06 — Remettre dans l'ordre</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">↕️</div>Étapes pour déployer sur Railway pour la première fois</div>
+        <p class="desc">Glissez-déposez ces étapes dans l'ordre logique.</p>
+        <div class="order-list" id="orderList">
+            <div class="order-item" draggable="true" data-correct="5" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Configurer les variables d'env. sur Railway (SECRET_KEY, DEBUG, ALLOWED_HOSTS)</span></div>
+            <div class="order-item" draggable="true" data-correct="2" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Préparer settings.py : lire DEBUG/SECRET_KEY depuis les variables d'env.</span></div>
+            <div class="order-item" draggable="true" data-correct="7" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Tester toutes les pages et vérifier les logs Railway</span></div>
+            <div class="order-item" draggable="true" data-correct="3" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Créer requirements.txt, Procfile et vérifier .gitignore (.env absent)</span></div>
+            <div class="order-item" draggable="true" data-correct="6" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Configurer la commande de démarrage (migrate + collectstatic + gunicorn)</span></div>
+            <div class="order-item" draggable="true" data-correct="1" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Tester le projet en local et s'assurer que tout fonctionne</span></div>
+            <div class="order-item" draggable="true" data-correct="4" ontouchstart="tapOrder(this)"><span class="order-handle">⠿</span><span class="order-num">?</span><span>Pousser le code sur GitHub et connecter le repo à Railway, ajouter PostgreSQL</span></div>
+        </div>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateOrder()">Valider l'ordre</button>
+            <button class="action-btn reveal" onclick="revealOrder()">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="shuffleOrder()">🔀 Mélanger</button>
+        </div>
+        <div class="order-feedback" id="orderFeedback"></div>
+        <div class="answers-reveal" id="order-answers">
+            <strong>Ordre correct</strong>
+            <div class="answer-line"><span class="answer-key">Étape 1</span><span class="answer-val">Tester en local d'abord</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 2</span><span class="answer-val">Préparer settings.py</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 3</span><span class="answer-val">requirements.txt + Procfile + .gitignore</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 4</span><span class="answer-val">GitHub + Railway + PostgreSQL</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 5</span><span class="answer-val">Variables d'environnement</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 6</span><span class="answer-val">Commande de démarrage</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 7</span><span class="answer-val">Tester et vérifier les logs</span></div>
+        </div>
+    </div>
+
+
+    <!-- ══ 07 — COMPLÉTER ══ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">07 — Compléter le code</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">①</div>Complétez — settings.py de production</div>
+<pre class="complete-wrap"><span class="kw">from</span> decouple <span class="kw">import</span> config
+<span class="kw">import</span> dj_database_url
+
+<span class="cm"># Lire depuis le fichier .env ou les variables serveur</span>
+<span class="prop">SECRET_KEY</span> = <span class="fn">config</span>(<span class="str">'<input class="blank" id="b1a" placeholder="???" autocomplete="off" style="min-width:90px">'</span>)
+<span class="prop">DEBUG</span>      = <span class="fn">config</span>(<span class="str">'DEBUG'</span>, default=<span class="kw">False</span>, cast=<input class="blank" id="b1b" placeholder="???" autocomplete="off" style="min-width:40px">)
+
+<span class="cm"># Domaines autorisés — séparés par des virgules dans .env</span>
+<span class="prop">ALLOWED_HOSTS</span> = <span class="fn">config</span>(<span class="str">'ALLOWED_HOSTS'</span>, default=<span class="str">''</span>).<span class="fn"><input class="blank" id="b1c" placeholder="???" autocomplete="off" style="min-width:50px"></span>(<span class="str">','</span>)
+
+<span class="cm"># PostgreSQL via DATABASE_URL, SQLite en local par défaut</span>
+<span class="prop">DATABASES</span> = {
+    <span class="str">'default'</span>: dj_database_url.<span class="fn">config</span>(
+        default=<span class="str">'<input class="blank" id="b1d" placeholder="???" autocomplete="off" style="min-width:120px">'</span>
+    )
+}
+
+<span class="cm"># Fichiers statiques en production</span>
+<span class="prop">STATIC_ROOT</span> = BASE_DIR / <span class="str">'<input class="blank" id="b1e" placeholder="???" autocomplete="off" style="min-width:80px">'</span></pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c1')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c1')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c1')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c1-feedback"></div>
+        <div class="answers-reveal" id="c1-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">config('???')</span><span class="answer-val">SECRET_KEY</span></div>
+            <div class="answer-line"><span class="answer-key">cast=???</span><span class="answer-val">bool</span></div>
+            <div class="answer-line"><span class="answer-key">.???(',')</span><span class="answer-val">split</span></div>
+            <div class="answer-line"><span class="answer-key">default='???'</span><span class="answer-val">sqlite:///db.sqlite3</span></div>
+            <div class="answer-line"><span class="answer-key">BASE_DIR / '???'</span><span class="answer-val">staticfiles</span></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">②</div>Complétez — fichiers de déploiement</div>
+<pre class="complete-wrap"><span class="cm"># requirements.txt</span>
+django==5.0.6
+<span class="fn"><input class="blank" id="b2a" placeholder="???" autocomplete="off" style="min-width:100px"></span>==22.0.0      <span class="cm"># serveur Python WSGI</span>
+<span class="fn"><input class="blank" id="b2b" placeholder="???" autocomplete="off" style="min-width:100px"></span>==6.7.0   <span class="cm"># fichiers statiques</span>
+dj-database-url==2.1.0
+python-decouple==3.8
+
+<span class="cm"># Procfile</span>
+<span class="prop">web</span>: <span class="fn"><input class="blank" id="b2c" placeholder="???" autocomplete="off" style="min-width:100px"></span> monsite.wsgi --log-file -
+
+<span class="cm"># .gitignore — fichiers à NE PAS versionner</span>
+.<span class="fn"><input class="blank" id="b2d" placeholder="???" autocomplete="off" style="min-width:40px"></span>               <span class="cm"># variables secrètes</span>
+*.<span class="fn"><input class="blank" id="b2e" placeholder="???" autocomplete="off" style="min-width:60px"></span>        <span class="cm"># base de données locale</span>
+staticfiles/</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c2')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c2')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c2')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c2-feedback"></div>
+        <div class="answers-reveal" id="c2-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">???==22.0.0</span><span class="answer-val">gunicorn</span></div>
+            <div class="answer-line"><span class="answer-key">???==6.7.0</span><span class="answer-val">whitenoise</span></div>
+            <div class="answer-line"><span class="answer-key">web: ???</span><span class="answer-val">gunicorn</span></div>
+            <div class="answer-line"><span class="answer-key">.??? // secrets</span><span class="answer-val">env</span></div>
+            <div class="answer-line"><span class="answer-key">*.??? // BDD locale</span><span class="answer-val">sqlite3</span></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">③</div>Complétez — commande de démarrage Railway</div>
+<pre class="complete-wrap"><span class="cm"># Commande de démarrage dans Railway → Settings → Deploy</span>
+<span class="cm"># 3 actions dans l'ordre :</span>
+
+python manage.py <span class="fn"><input class="blank" id="b3a" placeholder="???" autocomplete="off" style="min-width:70px"></span>  &amp;&amp;  <span class="cm"># appliquer les migrations BDD</span>
+
+python manage.py <span class="fn"><input class="blank" id="b3b" placeholder="???" autocomplete="off" style="min-width:110px"></span> --noinput  &amp;&amp; <span class="cm"># copier les fichiers statiques</span>
+
+<span class="fn"><input class="blank" id="b3c" placeholder="???" autocomplete="off" style="min-width:80px"></span> monsite.<span class="fn"><input class="blank" id="b3d" placeholder="???" autocomplete="off" style="min-width:60px"></span>  <span class="cm"># démarrer le serveur</span></pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c3')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c3')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c3')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c3-feedback"></div>
+        <div class="answers-reveal" id="c3-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">manage.py ???</span><span class="answer-val">migrate</span></div>
+            <div class="answer-line"><span class="answer-key">manage.py ???</span><span class="answer-val">collectstatic</span></div>
+            <div class="answer-line"><span class="answer-key">??? monsite.wsgi</span><span class="answer-val">gunicorn</span></div>
+            <div class="answer-line"><span class="answer-key">gunicorn monsite.???</span><span class="answer-val">wsgi</span></div>
+        </div>
+    </div>
+
+
+    <!-- ══ SCORE GLOBAL ══ -->
+    <div class="global-score-panel" id="globalScore">
+        <div class="gs-big"><span id="gs-val">—</span></div>
+        <div class="gs-sub" id="gs-sub">score global</div>
+        <div class="gs-chips" id="gs-chips"></div>
+    </div>
+
+    <div class="cta-wrap">
+        <p>Revoir un concept ? Le cours est là.</p>
+        <a class="cta-btn" href="#">Passer à la pratique &rarr;</a>
+    </div>
+
+    <div class="footer-note">
+        local → staging → production · DNS → IP → serveur 🚀<br>
+        <span style="font-size:0.82rem;">Exercices — Déploiement Django</span>
+    </div>
+
+    <script>
+    var qcmData = [
+        { q: "Pourquoi ne doit-on jamais mettre DEBUG = True en production ?", opts: ["Ça ralentit le serveur de 50%","Ça affiche le code source complet, les variables d'environnement et la config en cas d'erreur — accessible publiquement","Ça empêche les migrations de fonctionner","Django ne démarre pas en production avec DEBUG = True"], correct: 1, expl: "✓ DEBUG=True est une faille de sécurité critique. En cas d'erreur, Django génère une page détaillée avec tout le code, les chemins de fichiers et les variables — dont potentiellement des secrets. Toujours False en production." },
+        { q: "Qu'est-ce que la propagation DNS ?", opts: ["Le temps que met Django à démarrer sur le serveur","Le délai entre la configuration d'un enregistrement DNS et sa visibilité sur tous les serveurs DNS du monde","La vitesse de chargement d'une page web","Le transfert des fichiers de local vers le serveur"], correct: 1, expl: "✓ Internet est composé de milliers de serveurs DNS qui se synchronisent. Quand tu modifies un enregistrement, il faut attendre que tous les serveurs du monde aient mis à jour leur cache — entre quelques minutes et 48 heures selon le TTL." },
+        { q: "Quelle est la différence entre un A record et un CNAME record DNS ?", opts: ["Il n'y a aucune différence — les deux font la même chose","A record pointe vers une adresse IP, CNAME pointe vers un autre nom de domaine","A record est pour les sous-domaines, CNAME pour le domaine principal","CNAME est plus sécurisé que A record"], correct: 1, expl: "✓ A record = domaine → IP. CNAME = domaine → autre domaine (alias). Sur Railway/Render, on utilise souvent un CNAME : www.monprojet.com pointe vers xxx.up.railway.app, qui pointe lui vers l'IP du serveur. Avantage : si l'IP change, on n'a pas besoin de toucher au DNS." },
+        { q: "Quel serveur Python utiliser en production à la place de 'python manage.py runserver' ?", opts: ["Apache","Nginx","Gunicorn","uwsgi uniquement"], correct: 2, expl: "✓ runserver est uniquement pour le développement — il n'est pas conçu pour gérer plusieurs requêtes simultanées et n'est pas sécurisé pour la production. Gunicorn (Green Unicorn) est le serveur WSGI Python recommandé pour Django en production." },
+        { q: "À quoi sert le fichier Procfile sur Railway ou Render ?", opts: ["Il liste les dépendances Python du projet","Il contient les variables d'environnement secrètes","Il définit la commande de démarrage du projet sur le serveur","Il configure le nom de domaine"], correct: 2, expl: "✓ Procfile (sans extension) contient la commande que le PaaS doit exécuter pour démarrer l'application. Exemple : 'web: gunicorn monsite.wsgi'. C'est la façon standard de déclarer le point d'entrée d'une application sur les PaaS comme Railway, Render, Heroku." },
+        { q: "Pourquoi PostgreSQL en production plutôt que SQLite ?", opts: ["PostgreSQL est open source, SQLite est payant","SQLite est un fichier local non conçu pour les accès concurrents — PostgreSQL gère des milliers de connexions simultanées et est robuste pour la production","PostgreSQL est plus rapide pour les petits projets","Django ne supporte pas SQLite en production"], correct: 1, expl: "✓ SQLite est un fichier local parfait pour le développement — simple et sans configuration. Mais en production avec plusieurs utilisateurs simultanés, les écritures concurrentes causent des blocages. PostgreSQL est conçu pour la concurrence, les sauvegardes, et la robustesse en production." },
+        { q: "Que fait 'python manage.py collectstatic' ?", opts: ["Lance le serveur Django avec les fichiers statiques","Copie tous les fichiers statiques (CSS, JS, images) dans le dossier STATIC_ROOT pour qu'ils soient servis en production","Supprime les fichiers statiques inutilisés","Compresse les images du projet"], correct: 1, expl: "✓ En développement, Django sert les fichiers statiques depuis les dossiers static/ de chaque app. En production, collectstatic les rassemble tous dans un seul dossier (STATIC_ROOT) que WhiteNoise ou un CDN peut servir efficacement." },
+        { q: "Quelle est la bonne pratique pour stocker la SECRET_KEY en production ?", opts: ["La mettre directement dans settings.py pour simplifier","La stocker dans une variable d'environnement sur le serveur, jamais dans le code versionné","La mettre dans requirements.txt","La mettre dans un commentaire dans settings.py pour qu'elle ne soit pas lue"] , correct: 1, expl: "✓ La SECRET_KEY doit être stockée dans les variables d'environnement du serveur (interface Railway/Render → Variables) et lue via os.environ ou python-decouple dans settings.py. Jamais dans Git, jamais en clair dans le code source." }
+    ];
+
+    var vfData = [
+        { stmt: "Le fichier <code>.env</code> doit être committé sur Git pour que le serveur puisse lire les variables d'environnement.", correct: false, expl: "Faux. Le fichier .env est uniquement pour le développement local. En production, les variables sont configurées directement dans l'interface du PaaS (Railway, Render) ou du VPS. Le .env ne doit jamais être sur Git — il contient des secrets." },
+        { stmt: "La pré-production sert à détecter les problèmes de configuration serveur AVANT que les vrais utilisateurs en subissent les conséquences.", correct: true, expl: "Vrai. C'est exactement le rôle de la pré-prod — un environnement identique à la production mais avec des données de test. On valide les migrations, les variables d'env., les fichiers statiques et les fonctionnalités dans un contexte réel avant de toucher à la vraie production." },
+        { stmt: "Sur un PaaS comme Railway, il faut configurer Nginx manuellement pour servir les fichiers statiques.", correct: false, expl: "Faux. C'est l'avantage d'un PaaS — pas de configuration serveur manuelle. WhiteNoise dans settings.py permet à Django lui-même de servir les fichiers statiques. Sur un VPS, Nginx est souvent nécessaire, mais pas sur Railway/Render." },
+        { stmt: "ALLOWED_HOSTS = [] en production est acceptable si DEBUG = False.", correct: false, expl: "Faux. ALLOWED_HOSTS vide avec DEBUG=False refusera toutes les requêtes (Django renverra une erreur 400). Il faut lister explicitement les domaines autorisés : le domaine Railway, le domaine personnalisé, etc." },
+        { stmt: "Pousser directement sur la branche main (production) sans passer par staging est une mauvaise pratique.", correct: true, expl: "Vrai. La règle professionnelle est : développement → branche feature → staging (pré-prod) → main (production). Pousser directement en prod sans test préalable expose les utilisateurs aux bugs non détectés." },
+        { stmt: "WhiteNoise permet à Django de servir ses fichiers statiques en production sans avoir besoin de Nginx.", correct: true, expl: "Vrai. WhiteNoise est un package Python qui s'intègre dans le middleware Django et sert les fichiers statiques directement depuis Gunicorn. C'est la solution recommandée sur les PaaS. En VPS, Nginx prend généralement ce rôle pour des raisons de performance." },
+        { stmt: "Un TTL DNS court signifie que les changements DNS se propagent plus lentement dans le monde.", correct: false, expl: "Faux. TTL (Time To Live) est la durée pendant laquelle les serveurs DNS mettent en cache une entrée. Un TTL court (ex: 300s) signifie que les serveurs revalident l'entrée plus souvent → propagation plus rapide des changements. Un TTL long = cache plus durable = propagation plus lente." },
+        { stmt: "La commande 'python manage.py runserver' peut être utilisée en production sur un serveur partagé léger.", correct: false, expl: "Faux. runserver n'est absolument pas conçu pour la production. Il est mono-thread (une requête à la fois), sans timeout, sans sécurité, et Django affiche lui-même des avertissements pour ne pas l'utiliser en prod. Toujours utiliser Gunicorn ou uWSGI." }
+    ];
+
+    function renderQCM(){var c=document.getElementById('qcm-container');c.innerHTML='';qcmData.forEach(function(q,i){var opts=q.opts.map(function(o,j){return'<div class="opt" onclick="pickQCM(this,'+i+','+j+')"><div class="opt-dot"><div class="opt-dot-inner"></div></div>'+o+'</div>';}).join('');c.innerHTML+='<div class="qcm-card" id="qcm-'+i+'"><div class="q-num">Question '+(i+1)+' / '+qcmData.length+'</div><div class="q-text">'+q.q+'</div><div class="options">'+opts+'</div><div class="q-feedback" id="qfb-'+i+'"></div></div>';});}
+    function pickQCM(el,qi,oi){var card=document.getElementById('qcm-'+qi);if(card.dataset.locked)return;card.querySelectorAll('.opt').forEach(function(o){o.classList.remove('selected');});el.classList.add('selected');card.dataset.picked=oi;}
+    function checkQCM(){var correct=0,chips='';qcmData.forEach(function(q,i){var card=document.getElementById('qcm-'+i);card.dataset.locked=1;var picked=parseInt(card.dataset.picked),fb=document.getElementById('qfb-'+i);card.querySelectorAll('.opt').forEach(function(o,j){o.classList.remove('selected');if(j===q.correct)o.classList.add('correct');else if(j===picked&&picked!==q.correct)o.classList.add('wrong');});if(picked===q.correct){correct++;chips+='<span class="chip chip-ok">Q'+(i+1)+' ✓</span>';fb.textContent=q.expl;fb.className='q-feedback show ok';}else{chips+='<span class="chip chip-ko">Q'+(i+1)+' ✗</span>';fb.textContent='✗ '+q.expl;fb.className='q-feedback show ko';}});document.getElementById('prog-qcm').style.width=Math.round(correct/qcmData.length*100)+'%';document.getElementById('score-qcm').innerHTML=chips;document.getElementById('qcm-score-val').textContent=correct;document.getElementById('qcm-score-panel').classList.add('show');updateGlobal();}
+    function resetQCM(){renderQCM();document.getElementById('prog-qcm').style.width='0%';document.getElementById('score-qcm').innerHTML='';document.getElementById('qcm-score-panel').classList.remove('show');}
+
+    function renderVF(){var c=document.getElementById('vf-container');c.innerHTML='';vfData.forEach(function(v,i){c.innerHTML+='<div class="vf-card" id="vf-'+i+'"><div class="vf-statement">'+v.stmt+'</div><div class="vf-btns"><button class="vf-btn vrai" onclick="pickVF(this,'+i+',true)">✅ Vrai</button><button class="vf-btn faux" onclick="pickVF(this,'+i+',false)">❌ Faux</button></div><div class="q-feedback" id="vfb-'+i+'"></div></div>';});}
+    function pickVF(btn,i,val){var card=document.getElementById('vf-'+i);if(card.dataset.locked)return;card.querySelectorAll('.vf-btn').forEach(function(b){b.classList.remove('selected');});btn.classList.add('selected');card.dataset.picked=val;}
+    function checkVF(){var correct=0,chips='';vfData.forEach(function(v,i){var card=document.getElementById('vf-'+i);card.dataset.locked=1;var picked=card.dataset.picked==='true',fb=document.getElementById('vfb-'+i);card.querySelectorAll('.vf-btn').forEach(function(btn){var isV=btn.classList.contains('vrai');if((isV&&v.correct)||(!isV&&!v.correct))btn.classList.add('correct-ans');else if(card.dataset.picked!==undefined&&((isV&&!v.correct&&picked)||(!isV&&v.correct&&!picked)))btn.classList.add('wrong-ans');});if(card.dataset.picked!==undefined&&picked===v.correct){correct++;chips+='<span class="chip chip-ok">Q'+(i+1)+' ✓</span>';fb.textContent='✓ '+v.expl;fb.className='q-feedback show ok';}else{chips+='<span class="chip chip-ko">Q'+(i+1)+' ✗</span>';fb.textContent='✗ '+v.expl;fb.className='q-feedback show ko';}});document.getElementById('prog-vf').style.width=Math.round(correct/vfData.length*100)+'%';document.getElementById('score-vf').innerHTML=chips;document.getElementById('vf-score-val').textContent=correct;document.getElementById('vf-score-panel').classList.add('show');updateGlobal();}
+    function resetVF(){renderVF();document.getElementById('prog-vf').style.width='0%';document.getElementById('score-vf').innerHTML='';document.getElementById('vf-score-panel').classList.remove('show');}
+
+    function pickScenario(el,isCorrect){var card=el.closest('.scenario-card');if(card.querySelector('.correct'))return;card.querySelectorAll('.scenario-choice').forEach(function(c){c.classList.add('disabled');});var fb=card.querySelector('.scenario-feedback');if(isCorrect){el.classList.add('correct');fb.classList.add('show','ok');}else{el.classList.add('wrong');fb.classList.add('show','ko');card.querySelectorAll('.scenario-choice').forEach(function(c){if(c.onclick.toString().includes('true'))c.classList.add('correct');});}}
+
+    var matchCorrect=[0,1,2,3,4,5,6,7],selLeft=null,selRight=null,matchedCount=0;
+    function selectMatch(side,idx){if(side==='left'){var el=document.getElementById('ml'+idx);if(el.classList.contains('matched'))return;if(selLeft!==null)document.getElementById('ml'+selLeft).classList.remove('selected');selLeft=idx;el.classList.add('selected');}else{var er=document.getElementById('mr'+idx);if(er.classList.contains('matched'))return;if(selRight!==null)document.getElementById('mr'+selRight).classList.remove('selected');selRight=idx;er.classList.add('selected');}if(selLeft!==null&&selRight!==null){var lEl=document.getElementById('ml'+selLeft),rEl=document.getElementById('mr'+selRight);if(matchCorrect[selLeft]===selRight){lEl.classList.remove('selected');lEl.classList.add('matched');rEl.classList.remove('selected');rEl.classList.add('matched');matchedCount++;if(matchedCount===8)document.getElementById('matchResult').classList.add('show');}else{lEl.classList.add('wrong-flash');rEl.classList.add('wrong-flash');setTimeout(function(){lEl.classList.remove('selected','wrong-flash');rEl.classList.remove('selected','wrong-flash');},600);}selLeft=null;selRight=null;}}
+
+    var dragSrc=null;
+    function initDrag(){document.querySelectorAll('.order-item').forEach(function(item){item.addEventListener('dragstart',function(){dragSrc=this;this.classList.add('dragging');});item.addEventListener('dragend',function(){this.classList.remove('dragging');document.querySelectorAll('.order-item').forEach(function(i){i.classList.remove('drag-over');});});item.addEventListener('dragover',function(e){e.preventDefault();this.classList.add('drag-over');});item.addEventListener('dragleave',function(){this.classList.remove('drag-over');});item.addEventListener('drop',function(e){e.preventDefault();this.classList.remove('drag-over');if(dragSrc!==this){var l=document.getElementById('orderList'),a=Array.from(l.children),si=a.indexOf(dragSrc),ti=a.indexOf(this);if(si<ti)l.insertBefore(dragSrc,this.nextSibling);else l.insertBefore(dragSrc,this);}});}); }
+    initDrag();
+    var tapFirst=null;
+    function tapOrder(el){if(!tapFirst){tapFirst=el;el.classList.add('tap-sel');}else{if(tapFirst!==el){var l=document.getElementById('orderList'),a=Array.from(l.children),i1=a.indexOf(tapFirst),i2=a.indexOf(el);if(i1<i2)l.insertBefore(tapFirst,el.nextSibling);else l.insertBefore(tapFirst,el);}tapFirst.classList.remove('tap-sel');tapFirst=null;}}
+    function validateOrder(){var l=document.getElementById('orderList'),items=Array.from(l.children),ok=true;items.forEach(function(it,idx){var c=parseInt(it.dataset.correct);it.querySelector('.order-num').textContent=idx+1;it.classList.remove('correct','wrong');if(c===idx+1)it.classList.add('correct');else{it.classList.add('wrong');ok=false;}});var fb=document.getElementById('orderFeedback');if(ok){fb.textContent='🎉 Parfait ! Le pipeline de déploiement est dans le bon ordre.';fb.className='order-feedback show ok';}else{fb.textContent='❌ Quelques étapes sont mal placées. Réordonnez et réessayez !';fb.className='order-feedback show ko';}}
+    function revealOrder(){var l=document.getElementById('orderList'),items=Array.from(l.children);items.sort(function(a,b){return parseInt(a.dataset.correct)-parseInt(b.dataset.correct);});items.forEach(function(it,idx){l.appendChild(it);it.querySelector('.order-num').textContent=idx+1;it.className='order-item correct';});var fb=document.getElementById('orderFeedback');fb.textContent='👁 Voici le bon ordre — mémorisez-le, puis mélangez pour réessayer.';fb.className='order-feedback show';fb.style.color='#633806';document.getElementById('order-answers').classList.add('show');}
+    function shuffleOrder(){var l=document.getElementById('orderList'),items=Array.from(l.children);for(var i=items.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));l.insertBefore(items[j],items[i]);var t=items[i];items[i]=items[j];items[j]=t;}items.forEach(function(it){it.className='order-item';it.setAttribute('draggable','true');it.querySelector('.order-num').textContent='?';});document.getElementById('orderFeedback').className='order-feedback';document.getElementById('orderFeedback').style.color='';document.getElementById('order-answers').classList.remove('show');initDrag();}
+
+    var completeData={
+        c1:{ids:['b1a','b1b','b1c','b1d','b1e'],answers:['SECRET_KEY','bool','split','sqlite:///db.sqlite3','staticfiles']},
+        c2:{ids:['b2a','b2b','b2c','b2d','b2e'],answers:['gunicorn','whitenoise','gunicorn','env','sqlite3']},
+        c3:{ids:['b3a','b3b','b3c','b3d'],answers:['migrate','collectstatic','gunicorn','wsgi']}
+    };
+    function validateComplete(cid){var data=completeData[cid],ok=0;data.ids.forEach(function(id,i){var el=document.getElementById(id),val=el.value.trim().toLowerCase(),ans=data.answers[i].toLowerCase();el.classList.remove('ok','ko','revealed');if(val===ans){el.classList.add('ok');ok++;}else el.classList.add('ko');});var fb=document.getElementById(cid+'-feedback'),total=data.ids.length;if(ok===total){fb.textContent='🎉 Parfait ! Tous les champs sont corrects.';fb.className='complete-feedback show ok';}else{fb.textContent='❌ '+ok+'/'+total+' corrects — les champs en rouge sont incorrects.';fb.className='complete-feedback show ko';}updateGlobal();}
+    function revealAnswers(cid){var data=completeData[cid];data.ids.forEach(function(id,i){var el=document.getElementById(id);el.value=data.answers[i];el.classList.remove('ok','ko');el.classList.add('revealed');});document.getElementById(cid+'-answers').classList.toggle('show');var fb=document.getElementById(cid+'-feedback');fb.textContent='👁 Réponses affichées — réinitialisez pour réessayer.';fb.className='complete-feedback show';fb.style.color='#633806';}
+    function resetComplete(cid){var data=completeData[cid];data.ids.forEach(function(id){var el=document.getElementById(id);el.value='';el.classList.remove('ok','ko','revealed');});document.getElementById(cid+'-feedback').className='complete-feedback';document.getElementById(cid+'-feedback').style.color='';document.getElementById(cid+'-answers').classList.remove('show');}
+
+    function updateGlobal(){var qp=document.getElementById('qcm-score-panel'),vp=document.getElementById('vf-score-panel');if(!qp.classList.contains('show')||!vp.classList.contains('show'))return;var qs=parseInt(document.getElementById('qcm-score-val').textContent),vs=parseInt(document.getElementById('vf-score-val').textContent),total=qs+vs,max=qcmData.length+vfData.length,panel=document.getElementById('globalScore');panel.classList.add('show');document.getElementById('gs-val').textContent=total+' / '+max;var pct=Math.round(total/max*100),msg=pct>=90?'🏆 Excellent ! Tu maîtrises le déploiement.':pct>=70?'👍 Bien joué ! Quelques concepts à revoir.':'💪 Continue — relis le cours et recommence.';document.getElementById('gs-sub').textContent=msg;document.getElementById('gs-chips').innerHTML='<span class="chip chip-ok">QCM : '+qs+'/'+qcmData.length+'</span><span class="chip chip-ok">V/F : '+vs+'/'+vfData.length+'</span>';}
+
+    renderQCM();renderVF();
+    </script>
+</body>
+</html>

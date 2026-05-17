@@ -1,0 +1,1154 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Django CRUD & Formulaires</title>
+    <link rel="icon"
+href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+
+        /* HERO */
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal   { background: #E1F5EE; color: #085041; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+        /* CARDS */
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-green  { background: #C0DD97; color: #3B6D11; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F1EFE8; padding: 1px 5px; border-radius: 4px; color: #2C2C2A; }
+
+        /* SECTION LABEL */
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        /* PROGRESS */
+        .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.4s; width: 0%; }
+        .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .chip-ok { background: #E1F5EE; color: #085041; }
+        .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+        /* BUTTONS */
+        .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .action-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 10px; padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .action-btn:hover { background: #D3D1C7; }
+        .action-btn.primary { background: #2C2C2A; color: #FAC775; border-color: #2C2C2A; }
+        .action-btn.primary:hover { background: #444441; }
+        .action-btn.reveal { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+        .action-btn.reveal:hover { background: #CECBF6; }
+
+        /* SCORE PANEL */
+        .score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-top: 1rem; display: none; text-align: center; }
+        .score-panel.show { display: block; }
+        .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .score-big span { color: #5DCAA5; }
+        .score-sub { font-size: 0.9rem; color: #888780; }
+
+        /* FLASHCARDS */
+        .fc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 0.8rem; }
+        .fc { height: 130px; perspective: 700px; cursor: pointer; }
+        .fc-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.45s cubic-bezier(.4,0,.2,1); border-radius: 12px; }
+        .fc.flipped .fc-inner { transform: rotateY(180deg); }
+        .fc-front, .fc-back { position: absolute; inset: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 12px; text-align: center; backface-visibility: hidden; border: 0.5px solid #D3D1C7; }
+        .fc-front { background: #F1EFE8; font-family: 'Fira Code', monospace; font-size: 0.8rem; font-weight: 500; color: #2C2C2A; }
+        .fc-back  { background: #ffffff; font-size: 0.84rem; transform: rotateY(180deg); color: #085041; font-weight: 700; }
+        .fc-hint  { font-size: 0.68rem; color: #B4B2A9; position: absolute; bottom: 7px; right: 9px; }
+
+        /* QCM */
+        .qcm-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 7px; }
+        .opt { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; transition: background 0.12s, border-color 0.12s; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none; }
+        .opt:hover { background: #D3D1C7; }
+        .opt.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .opt.correct  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+        .opt.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .opt-dot { width: 18px; height: 18px; min-width: 18px; border-radius: 50%; border: 2px solid #B4B2A9; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+        .opt.selected .opt-dot { border-color: #7F77DD; background: #7F77DD; }
+        .opt.correct  .opt-dot { border-color: #1D9E75; background: #1D9E75; }
+        .opt.wrong    .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+        .opt-dot-inner { width: 6px; height: 6px; background: white; border-radius: 50%; display: none; }
+        .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+        .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .q-feedback.show { display: block; }
+        .q-feedback.ok { color: #0F6E56; }
+        .q-feedback.ko { color: #A32D2D; }
+
+        /* VRAI / FAUX — sélection visible + correction */
+        .vf-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .vf-statement { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .vf-btns { display: flex; gap: 10px; }
+        .vf-btn { flex: 1; padding: 8px 0; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s, border-color 0.12s; }
+        .vf-btn.vrai:hover:not(.correct-ans):not(.wrong-ans) { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .vf-btn.faux:hover:not(.correct-ans):not(.wrong-ans) { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        /* Sélection visible avant correction */
+        .vf-btn.vrai.selected { background: #E1F5EE; border-color: #5DCAA5; color: #085041; border-width: 2px; }
+        .vf-btn.faux.selected { background: #FCEBEB; border-color: #F09595; color: #791F1F; border-width: 2px; }
+        /* Résultat après correction */
+        .vf-btn.correct-ans { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; font-weight: 800; }
+        .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+
+        /* SCÉNARIOS */
+        .scenario-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .scenario-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 8px; }
+        .scenario-situation { font-size: 0.95rem; font-weight: 700; color: #2C2C2A; line-height: 1.5; margin-bottom: 1rem; }
+        .scenario-choice { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; margin-bottom: 7px; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; transition: background 0.12s, border-color 0.12s; user-select: none; }
+        .scenario-choice:hover { background: #D3D1C7; }
+        .scenario-choice.correct { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; font-weight: 700; }
+        .scenario-choice.wrong   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .scenario-choice.disabled { pointer-events: none; }
+        .scenario-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .scenario-feedback.show { display: block; }
+        .scenario-feedback.ok { color: #0F6E56; }
+        .scenario-feedback.ko { color: #A32D2D; }
+
+        /* MATCHING */
+        .match-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .match-col-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .match-col { display: flex; flex-direction: column; gap: 7px; }
+        .match-item { padding: 9px 13px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.12s, border-color 0.12s; line-height: 1.4; }
+        .match-item:hover:not(.matched):not(.disabled) { background: #D3D1C7; }
+        .match-item.selected { background: #EEEDFE; border-color: #AFA9EC; color: #26215C; }
+        .match-item.matched  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; pointer-events: none; font-weight: 700; }
+        .match-item.wrong-flash { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .match-code { font-family: 'Fira Code', monospace; font-size: 0.82rem; }
+        .match-result { font-size: 0.88rem; font-weight: 700; color: #085041; margin-top: 0.8rem; display: none; }
+        .match-result.show { display: block; }
+
+        /* ORDONNER */
+        .order-list { display: flex; flex-direction: column; gap: 7px; margin-top: 0.8rem; user-select: none; }
+        .order-item { display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #ffffff; font-size: 0.9rem; font-weight: 600; cursor: grab; transition: box-shadow 0.15s, background 0.12s; }
+        .order-item:active { cursor: grabbing; box-shadow: 0 4px 14px rgba(0,0,0,.1); }
+        .order-item.dragging  { opacity: 0.35; }
+        .order-item.drag-over { border-color: #5DCAA5; background: #E1F5EE; }
+        .order-item.tap-sel   { background: #EEEDFE; border-color: #AFA9EC; }
+        .order-item.correct   { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .order-item.wrong     { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .order-handle { color: #B4B2A9; font-size: 1rem; }
+        .order-num { font-size: 0.72rem; font-weight: 800; color: #888780; background: #F1EFE8; border-radius: 6px; padding: 2px 7px; min-width: 22px; text-align: center; }
+        .order-code { font-family: 'Fira Code', monospace; font-size: 0.82rem; }
+        .order-feedback { font-size: 0.88rem; font-weight: 700; margin-top: 0.8rem; display: none; line-height: 1.5; }
+        .order-feedback.show { display: block; }
+        .order-feedback.ok { color: #0F6E56; }
+        .order-feedback.ko { color: #A32D2D; }
+
+        /* COMPLÉTER */
+        .complete-wrap { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 2.1; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; margin-top: 0.8rem; }
+        .blank { display: inline-block; min-width: 80px; border: none; border-bottom: 2px solid #AFA9EC; background: transparent; font-family: 'Fira Code', monospace; font-size: 0.84rem; color: #3C3489; font-weight: 700; padding: 0 4px; outline: none; vertical-align: baseline; transition: border-color 0.15s; }
+        .blank:focus { border-bottom-color: #7F77DD; }
+        .blank.ok { border-bottom-color: #1D9E75; color: #085041; }
+        .blank.ko { border-bottom-color: #E24B4A; color: #791F1F; }
+        .blank.revealed { border-bottom-color: #FAC775; color: #633806; background: rgba(250,199,117,0.18); }
+        .complete-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .complete-feedback.show { display: block; }
+        .complete-feedback.ok { color: #0F6E56; }
+        .complete-feedback.ko { color: #A32D2D; }
+
+        /* ANSWER REVEAL PANEL */
+        .answers-reveal { background: #FAEEDA; border: 0.5px solid #FAC775; border-radius: 10px; padding: 0.9rem 1.1rem; margin-top: 0.8rem; display: none; font-size: 0.88rem; line-height: 1.8; color: #633806; }
+        .answers-reveal.show { display: block; }
+        .answers-reveal strong { display: block; margin-bottom: 6px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .answer-line { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
+        .answer-key { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: #888780; min-width: 100px; }
+        .answer-val { font-family: 'Fira Code', monospace; font-size: 0.84rem; font-weight: 700; color: #633806; }
+
+        /* SYNTAX COLORS */
+        .kw  { color: #3C3489; font-weight: 700; }
+        .fn  { color: #185FA5; }
+        .val { color: #0F6E56; }
+        .cm  { color: #888780; font-style: italic; }
+        .sel { color: #993C1D; }
+
+        /* CTA */
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) { body { padding: 1rem; } .hero h1 { font-size: 1.7rem; } .match-wrap { grid-template-columns: 1fr; } .fc-grid { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+
+<body>
+    <a class="nav-prev" href="cours-django-crud.html">← Retour au cours</a>
+
+    <div class="hero">
+        <h1>📝 Exercices — CRUD</h1>
+        <p>Flashcards, QCM, vrai/faux, scénarios, matching, drag & drop et code à compléter.</p>
+        <div class="badge-row">
+            <span class="badge b-teal">🃏 Flashcards</span>
+            <span class="badge b-purple">✅ QCM</span>
+            <span class="badge b-amber">⚖️ Vrai/Faux</span>
+            <span class="badge b-coral">🎬 Scénarios</span>
+            <span class="badge b-blue">🔗 Associer</span>
+            <span class="badge b-green">↕️ Ordonner</span>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         01 — FLASHCARDS
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">01 — Flashcards — cliquer pour retourner</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">🃏</div>Concepts clés du CRUD</div>
+        <div class="fc-grid">
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>CRUD</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back"><strong>C</strong>reate · <strong>R</strong>ead · <strong>U</strong>pdate · <strong>D</strong>elete — les 4 opérations fondamentales de tout site web</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>ModelForm</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Génère automatiquement un formulaire HTML depuis un model Django — avec validation incluse</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>form.save(commit=False)</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Crée l'objet Python sans l'écrire en BDD — permet d'ajouter des champs comme <code>auteur</code> avant</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>instance=article</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Paramètre clé du Update — pré-remplit le formulaire avec les données existantes et met à jour l'article</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>form.is_valid()</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Vérifie que toutes les données du formulaire respectent les règles du model — retourne True ou False</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>article.delete()</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Supprime l'objet de la base de données — toujours déclenché par une requête <strong>POST</strong>, jamais GET</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>fields = ['titre', ...]</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Dans la classe Meta du ModelForm — liste explicite des champs à afficher. Jamais <code>'__all__'</code></div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>messages.success()</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Envoie un message flash à afficher dans le template après une action réussie (création, suppression…)</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>article.auteur != request.user</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Vérification de sécurité dans Update et Delete — seul l'auteur peut modifier ou supprimer son article</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>{% csrf_token %}</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Obligatoire dans tous les formulaires POST — protège contre les attaques CSRF</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>request.method == 'POST'</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Distingue l'affichage du formulaire (GET) de sa soumission (POST) dans les vues Create et Update</div>
+                </div>
+            </div>
+
+            <div class="fc" onclick="this.classList.toggle('flipped')">
+                <div class="fc-inner">
+                    <div class="fc-front"><code>blog/forms.py</code><span class="fc-hint">↻</span></div>
+                    <div class="fc-back">Fichier à créer manuellement — contient les classes ModelForm de l'application</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         02 — QCM
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">02 — QCM</span>
+    </div>
+
+    <div id="qcm-container"></div>
+
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkQCM()">Corriger le QCM</button>
+        <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+    <div class="score-row" id="score-qcm"></div>
+    <div class="score-panel" id="qcm-score-panel">
+        <div class="score-big"><span id="qcm-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses au QCM</div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         03 — VRAI / FAUX
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">03 — Vrai ou Faux</span>
+    </div>
+
+    <div id="vf-container"></div>
+
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkVF()">Corriger</button>
+        <button class="action-btn" onclick="resetVF()">Recommencer</button>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="prog-vf"></div></div>
+    <div class="score-row" id="score-vf"></div>
+    <div class="score-panel" id="vf-score-panel">
+        <div class="score-big"><span id="vf-score-val">0</span> / 8</div>
+        <div class="score-sub">bonnes réponses Vrai/Faux</div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         04 — SCÉNARIOS
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">04 — Scénarios</span>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 1</div>
+        <div class="scenario-situation">🧑‍💻 Vous avez un ModelForm avec <code>fields = '__all__'</code>. Un utilisateur malveillant inspecte votre HTML et soumet le formulaire avec un champ <code>auteur</code> modifié. Que risque-t-il de se passer ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Django ignore automatiquement les champs non autorisés</div>
+        <div class="scenario-choice" onclick="pickScenario(this, true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>L'utilisateur peut s'attribuer des articles appartenant à d'autres — faille de sécurité</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Le formulaire lève une erreur de validation automatiquement</div>
+        <div class="scenario-feedback">✓ <code>fields = '__all__'</code> expose tous les champs du model — y compris <code>auteur</code>. Listez toujours explicitement les champs autorisés avec <code>fields = ['titre', 'contenu', 'publie']</code> et ajoutez <code>auteur</code> manuellement via <code>save(commit=False)</code>.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 2</div>
+        <div class="scenario-situation">🧑‍💻 Dans votre vue de modification, vous écrivez <code>form = ArticleForm(request.POST)</code> au lieu de <code>ArticleForm(request.POST, instance=article)</code>. Que se passe-t-il ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>L'article existant est mis à jour normalement</div>
+        <div class="scenario-choice" onclick="pickScenario(this, true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Un nouvel article est créé au lieu de modifier l'existant — doublon en BDD</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Django lève une erreur car l'article existe déjà</div>
+        <div class="scenario-feedback">✓ Sans <code>instance=article</code>, Django ne sait pas quel objet mettre à jour — il en crée un nouveau. Le paramètre <code>instance</code> est la clé qui transforme un Create en Update.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 3</div>
+        <div class="scenario-situation">🧑‍💻 Pour supprimer un article, vous créez un simple lien <code>&lt;a href="/blog/42/supprimer/"&gt;Supprimer&lt;/a&gt;</code> sans formulaire POST. Un moteur de recherche indexe votre site. Que risque-t-il d'arriver ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Rien — les moteurs de recherche n'exécutent pas les liens de suppression</div>
+        <div class="scenario-choice" onclick="pickScenario(this, true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Le robot suit le lien avec une requête GET et supprime l'article sans que personne ne clique</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Django refuse automatiquement les suppressions via GET</div>
+        <div class="scenario-feedback">✓ Les robots d'indexation suivent tous les liens. La suppression via GET est dangereuse — n'importe qui ou n'importe quoi peut déclencher l'action. Toujours utiliser un formulaire POST avec <code>{% csrf_token %}</code>.</div>
+    </div>
+
+    <div class="scenario-card">
+        <div class="scenario-label">Scénario 4</div>
+        <div class="scenario-situation">🧑‍💻 Dans la vue <code>modifier_article</code>, vous avez oublié la vérification <code>if article.auteur != request.user: redirect()</code>. Un utilisateur connecté connaît l'URL <code>/blog/42/modifier/</code>. Que peut-il faire ?</div>
+        <div class="scenario-choice" onclick="pickScenario(this, true)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Modifier l'article de quelqu'un d'autre en tapant directement l'URL</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Rien — Django vérifie automatiquement la propriété de l'article</div>
+        <div class="scenario-choice" onclick="pickScenario(this, false)"><div class="opt-dot"><div class="opt-dot-inner"></div></div>Il voit une erreur 403 car il n'est pas l'auteur</div>
+        <div class="scenario-feedback">✓ @login_required vérifie qu'on est connecté, mais pas qu'on est le bon utilisateur. La vérification <code>article.auteur != request.user</code> est indispensable dans toutes les vues Update et Delete.</div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         05 — ASSOCIER
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">05 — Associer — clic gauche puis clic droit</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-blue">🔗</div>Opération CRUD → Caractéristiques</div>
+        <div class="match-wrap">
+            <div>
+                <div class="match-col-label">Élément / Concept</div>
+                <div class="match-col">
+                    <div class="match-item match-code" id="ml0" onclick="selectMatch('left',0)">forms.py</div>
+                    <div class="match-item match-code" id="ml1" onclick="selectMatch('left',1)">instance=article</div>
+                    <div class="match-item match-code" id="ml2" onclick="selectMatch('left',2)">commit=False</div>
+                    <div class="match-item match-code" id="ml3" onclick="selectMatch('left',3)">article.delete()</div>
+                    <div class="match-item match-code" id="ml4" onclick="selectMatch('left',4)">request.method == 'POST'</div>
+                    <div class="match-item match-code" id="ml5" onclick="selectMatch('left',5)">messages.success()</div>
+                    <div class="match-item match-code" id="ml6" onclick="selectMatch('left',6)">fields = ['titre', ...]</div>
+                    <div class="match-item match-code" id="ml7" onclick="selectMatch('left',7)">confirmer_suppression.html</div>
+                </div>
+            </div>
+            <div>
+                <div class="match-col-label">Rôle</div>
+                <div class="match-col">
+                    <div class="match-item" id="mr0" onclick="selectMatch('right',0)">Contient les classes ModelForm</div>
+                    <div class="match-item" id="mr1" onclick="selectMatch('right',1)">Pré-remplit le formulaire pour Update</div>
+                    <div class="match-item" id="mr2" onclick="selectMatch('right',2)">Crée l'objet sans sauvegarder en BDD</div>
+                    <div class="match-item" id="mr3" onclick="selectMatch('right',3)">Supprime l'objet de la base de données</div>
+                    <div class="match-item" id="mr4" onclick="selectMatch('right',4)">Détecte la soumission du formulaire</div>
+                    <div class="match-item" id="mr5" onclick="selectMatch('right',5)">Envoie un message flash à l'utilisateur</div>
+                    <div class="match-item" id="mr6" onclick="selectMatch('right',6)">Limite les champs exposés dans le form</div>
+                    <div class="match-item" id="mr7" onclick="selectMatch('right',7)">Page de confirmation avant Delete</div>
+                </div>
+            </div>
+        </div>
+        <div class="match-result" id="matchResult">🎉 Parfait ! Toutes les associations sont correctes.</div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         06 — ORDONNER
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">06 — Remettre dans l'ordre</span>
+    </div>
+
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">↕️</div>Flow complet d'une vue Create</div>
+        <p class="desc">Glissez-déposez ces étapes dans le bon ordre d'exécution quand un utilisateur soumet le formulaire de création.</p>
+        <div class="order-list" id="orderList">
+            <div class="order-item" draggable="true" data-correct="5" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-code">article.save() — sauvegarde en BDD</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="1" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-code">Le navigateur envoie une requête POST</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="6" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-code">redirect() vers la page de détail</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="3" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-code">form.is_valid() — validation des données</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="2" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-code">ArticleForm(request.POST) — instancier le form</span>
+            </div>
+            <div class="order-item" draggable="true" data-correct="4" ontouchstart="tapOrder(this)">
+                <span class="order-handle">⠿</span><span class="order-num">?</span>
+                <span class="order-code">form.save(commit=False) + article.auteur = request.user</span>
+            </div>
+        </div>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateOrder()">Valider l'ordre</button>
+            <button class="action-btn reveal" onclick="revealOrder()">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="shuffleOrder()">🔀 Mélanger</button>
+        </div>
+        <div class="order-feedback" id="orderFeedback"></div>
+        <div class="answers-reveal" id="order-answers">
+            <strong>Ordre correct — flow d'une vue Create</strong>
+            <div class="answer-line"><span class="answer-key">Étape 1</span><span class="answer-val">Le navigateur envoie une requête POST</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 2</span><span class="answer-val">ArticleForm(request.POST) — instancier le form</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 3</span><span class="answer-val">form.is_valid() — validation des données</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 4</span><span class="answer-val">form.save(commit=False) + article.auteur = request.user</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 5</span><span class="answer-val">article.save() — sauvegarde en BDD</span></div>
+            <div class="answer-line"><span class="answer-key">Étape 6</span><span class="answer-val">redirect() vers la page de détail</span></div>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════
+         07 — COMPLÉTER LE CODE
+    ═══════════════════════════════ -->
+    <div class="section-label" style="margin-top:2.5rem">
+        <span class="section-label-text">07 — Compléter le code</span>
+    </div>
+
+    <!-- Bloc 1 : forms.py -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-teal">①</div>Complétez — blog/forms.py</div>
+        <p class="desc">Tapez les mots manquants dans les champs soulignés.</p>
+<pre class="complete-wrap"><span class="kw">from</span> django <span class="kw">import</span> <input class="blank" id="b1a" placeholder="???" autocomplete="off">
+<span class="kw">from</span> .models <span class="kw">import</span> Article
+
+<span class="kw">class</span> <span class="fn">ArticleForm</span>(forms.<input class="blank" id="b1b" placeholder="???" autocomplete="off">):
+    <span class="kw">class</span> Meta:
+        model = <input class="blank" id="b1c" placeholder="???" autocomplete="off">
+        fields = [
+            <span class="val">'titre'</span>,
+            <span class="val">'contenu'</span>,
+            <span class="val">'<input class="blank" id="b1d" placeholder="???" style="min-width:60px" autocomplete="off">'</span>,
+        ]</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c1')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c1')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c1')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c1-feedback"></div>
+        <div class="answers-reveal" id="c1-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">from django import</span><span class="answer-val">forms</span></div>
+            <div class="answer-line"><span class="answer-key">forms.???</span><span class="answer-val">ModelForm</span></div>
+            <div class="answer-line"><span class="answer-key">model =</span><span class="answer-val">Article</span></div>
+            <div class="answer-line"><span class="answer-key">3e champ</span><span class="answer-val">publie</span></div>
+        </div>
+    </div>
+
+    <!-- Bloc 2 : vue creer -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-purple">②</div>Complétez — vue creer_article</div>
+<pre class="complete-wrap"><span class="kw">from</span> .forms <span class="kw">import</span> ArticleForm
+
+<span class="kw">@login_required</span>
+<span class="kw">def</span> <span class="fn">creer_article</span>(request):
+    <span class="kw">if</span> request.<input class="blank" id="b2a" placeholder="???" style="min-width:55px" autocomplete="off"> == <span class="val">'POST'</span>:
+        form = <span class="fn">ArticleForm</span>(request.POST)
+        <span class="kw">if</span> form.<span class="fn">is_valid</span>():
+            article = form.<span class="fn">save</span>(commit=<input class="blank" id="b2b" placeholder="???" style="min-width:45px" autocomplete="off">)
+            article.<input class="blank" id="b2c" placeholder="???" autocomplete="off"> = request.user
+            article.<span class="fn">save</span>()
+            <span class="kw">return</span> <span class="fn">redirect</span>(<span class="val">'blog:liste'</span>)
+    <span class="kw">else</span>:
+        form = <span class="fn">ArticleForm</span>()
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/article_form.html'</span>, {<span class="val">'form'</span>: <input class="blank" id="b2d" placeholder="???" style="min-width:45px" autocomplete="off">})</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c2')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c2')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c2')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c2-feedback"></div>
+        <div class="answers-reveal" id="c2-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">request.???</span><span class="answer-val">method</span></div>
+            <div class="answer-line"><span class="answer-key">commit=???</span><span class="answer-val">False</span></div>
+            <div class="answer-line"><span class="answer-key">article.???</span><span class="answer-val">auteur</span></div>
+            <div class="answer-line"><span class="answer-key">'form': ???</span><span class="answer-val">form</span></div>
+        </div>
+    </div>
+
+    <!-- Bloc 3 : vue modifier -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-amber">③</div>Complétez — vue modifier_article</div>
+<pre class="complete-wrap"><span class="kw">@login_required</span>
+<span class="kw">def</span> <span class="fn">modifier_article</span>(request, pk):
+    article = <span class="fn">get_object_or_404</span>(Article, pk=pk)
+
+    <span class="cm"># Sécurité : seul l'auteur peut modifier</span>
+    <span class="kw">if</span> article.<input class="blank" id="b3a" placeholder="???" autocomplete="off"> != request.user:
+        <span class="kw">return</span> <span class="fn">redirect</span>(<span class="val">'blog:liste'</span>)
+
+    <span class="kw">if</span> request.method == <span class="val">'POST'</span>:
+        form = <span class="fn">ArticleForm</span>(request.POST, <input class="blank" id="b3b" placeholder="???" autocomplete="off">=article)
+        <span class="kw">if</span> form.<span class="fn">is_valid</span>():
+            form.<span class="fn">save</span>()
+            <span class="kw">return</span> <span class="fn">redirect</span>(<span class="val">'blog:detail'</span>, pk=article.pk)
+    <span class="kw">else</span>:
+        form = <span class="fn">ArticleForm</span>(<input class="blank" id="b3c" placeholder="???" autocomplete="off">=article)
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/article_form.html'</span>, {<span class="val">'form'</span>: form})</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c3')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c3')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c3')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c3-feedback"></div>
+        <div class="answers-reveal" id="c3-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">article.???</span><span class="answer-val">auteur</span></div>
+            <div class="answer-line"><span class="answer-key">ArticleForm(request.POST, ???=article)</span><span class="answer-val">instance</span></div>
+            <div class="answer-line"><span class="answer-key">ArticleForm(???=article)</span><span class="answer-val">instance</span></div>
+        </div>
+    </div>
+
+    <!-- Bloc 4 : vue supprimer -->
+    <div class="card">
+        <div class="stitle"><div class="pill p-coral">④</div>Complétez — vue supprimer_article</div>
+<pre class="complete-wrap"><span class="kw">@login_required</span>
+<span class="kw">def</span> <span class="fn">supprimer_article</span>(request, pk):
+    article = <span class="fn">get_object_or_404</span>(<input class="blank" id="b4a" placeholder="???" autocomplete="off">, pk=pk)
+
+    <span class="kw">if</span> article.auteur != <input class="blank" id="b4b" placeholder="???" autocomplete="off">:
+        <span class="kw">return</span> <span class="fn">redirect</span>(<span class="val">'blog:liste'</span>)
+
+    <span class="kw">if</span> request.method == <span class="val">'POST'</span>:
+        article.<input class="blank" id="b4c" placeholder="???" style="min-width:65px" autocomplete="off">()
+        messages.<span class="fn">success</span>(request, <span class="val">'Article supprimé.'</span>)
+        <span class="kw">return</span> <span class="fn">redirect</span>(<span class="val">'blog:liste'</span>)
+
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/<input class="blank" id="b4d" placeholder="???" style="min-width:180px" autocomplete="off">.html'</span>, {<span class="val">'article'</span>: article})</pre>
+        <div class="btn-row">
+            <button class="action-btn primary" onclick="validateComplete('c4')">Valider</button>
+            <button class="action-btn reveal" onclick="revealAnswers('c4')">👁 Voir les réponses</button>
+            <button class="action-btn" onclick="resetComplete('c4')">Réinitialiser</button>
+        </div>
+        <div class="complete-feedback" id="c4-feedback"></div>
+        <div class="answers-reveal" id="c4-answers">
+            <strong>Réponses</strong>
+            <div class="answer-line"><span class="answer-key">get_object_or_404(???)</span><span class="answer-val">Article</span></div>
+            <div class="answer-line"><span class="answer-key">!= ???</span><span class="answer-val">request.user</span></div>
+            <div class="answer-line"><span class="answer-key">article.???()</span><span class="answer-val">delete</span></div>
+            <div class="answer-line"><span class="answer-key">template</span><span class="answer-val">confirmer_suppression</span></div>
+        </div>
+    </div>
+
+
+    <div class="cta-wrap">
+        <p>Bravo ! Vous maîtrisez le CRUD Django de bout en bout.</p>
+        <a class="cta-btn" href="../../sommaire.html">← Retour au sommaire</a>
+    </div>
+
+    <div class="footer-note">
+        Create → Read → Update → Delete 📝<br>
+        <span style="font-size:0.82rem;">Exercices — Django CRUD &amp; Formulaires</span>
+    </div>
+
+
+    <script>
+    /* ═══════════════════════════════════════════
+       DONNÉES QCM
+    ═══════════════════════════════════════════ */
+    var qcmData = [
+        {
+            q: "Quel fichier contient les classes ModelForm d'une application Django ?",
+            opts: ["models.py", "views.py", "forms.py", "admin.py"],
+            correct: 2,
+            expl: "✓ forms.py est le fichier conventionnel pour les formulaires Django. Il est à créer manuellement — Django ne le génère pas."
+        },
+        {
+            q: "Quelle est la différence clé entre une vue Create et une vue Update dans Django ?",
+            opts: [
+                "La vue Update utilise la méthode PUT au lieu de POST",
+                "La vue Update passe instance=article à ArticleForm pour pré-remplir et cibler l'objet existant",
+                "La vue Update n'a pas besoin de form.is_valid()",
+                "La vue Update sauvegarde automatiquement sans appeler form.save()"
+            ],
+            correct: 1,
+            expl: "✓ instance=article est le paramètre qui fait toute la différence : il pré-remplit le formulaire et dit à Django de mettre à jour cet objet précis plutôt d'en créer un nouveau."
+        },
+        {
+            q: "Pourquoi ne faut-il jamais écrire fields = '__all__' dans un ModelForm ?",
+            opts: [
+                "Parce que Django ne supporte pas cette syntaxe",
+                "Pour des raisons de performance — tous les champs ralentissent le rendu",
+                "Pour éviter d'exposer des champs sensibles comme auteur — risque de manipulation par l'utilisateur",
+                "Parce que ça empêche la validation côté serveur"
+            ],
+            correct: 2,
+            expl: "✓ '__all__' expose tous les champs du model, y compris auteur, is_staff, etc. Un utilisateur malveillant peut injecter des valeurs via l'inspecteur du navigateur."
+        },
+        {
+            q: "Pourquoi la suppression d'un objet doit-elle toujours passer par une requête POST ?",
+            opts: [
+                "POST est plus rapide que GET pour les suppressions",
+                "Django n'accepte pas article.delete() dans une vue GET",
+                "Une requête GET peut être déclenchée automatiquement (robots, prefetch) — POST nécessite une action intentionnelle",
+                "Pour des raisons de SEO — Google ne doit pas indexer les suppressions"
+            ],
+            correct: 2,
+            expl: "✓ Les requêtes GET peuvent être déclenchées par des robots, des outils de test, ou le navigateur lui-même. POST avec csrf_token exige une intention délibérée."
+        },
+        {
+            q: "Que retourne form.save(commit=False) ?",
+            opts: [
+                "None — le formulaire n'est pas encore valide",
+                "Un objet Python créé mais pas encore écrit en base de données",
+                "Un QuerySet vide",
+                "Le formulaire avec les erreurs de validation"
+            ],
+            correct: 1,
+            expl: "✓ commit=False crée l'objet Python en mémoire sans toucher à la BDD, ce qui permet d'ajouter des champs comme auteur = request.user avant le vrai article.save()."
+        },
+        {
+            q: "Dans le template, comment déclenche-t-on la suppression d'un article en respectant les bonnes pratiques ?",
+            opts: [
+                "<a href=\"{% url 'blog:supprimer' article.pk %}\">Supprimer</a>",
+                "<form method='post'> avec {% csrf_token %} et un bouton submit",
+                "<input type='hidden' name='delete' value='true'>",
+                "fetch('/supprimer/42', {method: 'DELETE'}) en JavaScript"
+            ],
+            correct: 1,
+            expl: "✓ La suppression passe toujours par un formulaire POST avec csrf_token. Un simple lien <a> serait déclenché par GET — dangereux."
+        },
+        {
+            q: "Quelle vérification est indispensable dans les vues Update et Delete avant de modifier un objet ?",
+            opts: [
+                "Vérifier que request.method == 'POST'",
+                "Vérifier que form.is_valid() retourne True",
+                "Vérifier que article.auteur == request.user — seul l'auteur peut modifier ou supprimer",
+                "Vérifier que l'article est publié"
+            ],
+            correct: 2,
+            expl: "✓ @login_required vérifie qu'on est connecté, mais pas qu'on est le bon utilisateur. Sans article.auteur == request.user, n'importe quel utilisateur connecté peut modifier les articles des autres."
+        },
+        {
+            q: "À quoi sert le Django Messages Framework (messages.success()) ?",
+            opts: [
+                "À envoyer des emails de confirmation à l'utilisateur",
+                "À logger les erreurs dans la console serveur",
+                "À afficher un message flash dans le template après une action (création, suppression, etc.)",
+                "À valider le formulaire côté client avant soumission"
+            ],
+            correct: 2,
+            expl: "✓ messages.success(request, 'Texte') stocke un message en session. Le template l'affiche via {% for message in messages %}. Le message disparaît après affichage."
+        }
+    ];
+
+    /* ═══════════════════════════════════════════
+       DONNÉES VRAI/FAUX
+    ═══════════════════════════════════════════ */
+    var vfData = [
+        {
+            stmt: "Un ModelForm peut valider les données et sauvegarder directement en BDD avec <code>form.save()</code>.",
+            correct: true,
+            expl: "Vrai. C'est l'avantage principal du ModelForm — il connaît les types de champs du model et peut sauvegarder directement, sans écrire chaque champ manuellement."
+        },
+        {
+            stmt: "Dans une vue Update, si on oublie <code>instance=article</code>, Django lève une erreur et refuse de sauvegarder.",
+            correct: false,
+            expl: "Faux. Django ne lève pas d'erreur — il crée silencieusement un nouvel article. Le bug peut passer inaperçu et remplir la BDD de doublons."
+        },
+        {
+            stmt: "Le fichier <code>forms.py</code> est créé automatiquement par Django lors de <code>startapp</code>.",
+            correct: false,
+            expl: "Faux. Django crée models.py, views.py, admin.py, apps.py — mais pas forms.py. Il faut le créer manuellement."
+        },
+        {
+            stmt: "Il est possible de réutiliser le même template HTML pour la vue Create et la vue Update.",
+            correct: true,
+            expl: "Vrai. C'est une bonne pratique — article_form.html affiche {{ form.as_p }} et un bouton submit. On passe juste un contexte différent (titre_page, bouton) selon la vue."
+        },
+        {
+            stmt: "La vérification <code>article.auteur != request.user</code> dans une vue est inutile si la vue est déjà protégée par <code>@login_required</code>.",
+            correct: false,
+            expl: "Faux. @login_required vérifie qu'on est connecté, pas qu'on est le bon utilisateur. Sans cette vérification, n'importe quel compte connecté peut modifier ou supprimer les articles des autres."
+        },
+        {
+            stmt: "<code>form.save(commit=False)</code> suivi de <code>article.save()</code> est équivalent à un simple <code>form.save()</code>.",
+            correct: false,
+            expl: "Faux. Ce n'est pas exactement équivalent — commit=False + save() permet d'intercaler des modifications (comme ajouter auteur = request.user) entre la création de l'objet et son écriture en BDD."
+        },
+        {
+            stmt: "Pour afficher les messages flash Django dans un template, il faut les importer explicitement dans la vue avec <code>from django.contrib import messages</code>.",
+            correct: true,
+            expl: "Vrai. L'import est nécessaire dans la vue. Dans le template, {% for message in messages %} suffit — les messages sont automatiquement disponibles via le context processor."
+        },
+        {
+            stmt: "Un formulaire DELETE peut être déclenché par un simple lien <code>&lt;a href&gt;</code> si on ajoute l'attribut <code>method='DELETE'</code>.",
+            correct: false,
+            expl: "Faux. Les formulaires HTML ne supportent que GET et POST. Il faut un <form method='post'> avec csrf_token et un bouton submit. La méthode DELETE n'existe pas nativement en HTML."
+        }
+    ];
+
+    /* ═══════════════════════════════════════════
+       DONNÉES COMPLÉTER
+    ═══════════════════════════════════════════ */
+    var completeData = {
+        c1: { ids: ['b1a','b1b','b1c','b1d'], answers: ['forms','ModelForm','Article','publie'] },
+        c2: { ids: ['b2a','b2b','b2c','b2d'], answers: ['method','False','auteur','form'] },
+        c3: { ids: ['b3a','b3b','b3c'], answers: ['auteur','instance','instance'] },
+        c4: { ids: ['b4a','b4b','b4c','b4d'], answers: ['Article','request.user','delete','confirmer_suppression'] }
+    };
+
+    /* ═══════════════════════════════════════════
+       QCM
+    ═══════════════════════════════════════════ */
+    function renderQCM() {
+        var c = document.getElementById('qcm-container');
+        c.innerHTML = '';
+        qcmData.forEach(function(q, i) {
+            var opts = q.opts.map(function(o, j) {
+                return '<div class="opt" onclick="pickQCM(this,' + i + ',' + j + ')">'
+                     + '<div class="opt-dot"><div class="opt-dot-inner"></div></div>'
+                     + o + '</div>';
+            }).join('');
+            c.innerHTML += '<div class="qcm-card" id="qcm-' + i + '">'
+                + '<div class="q-num">Question ' + (i+1) + ' / ' + qcmData.length + '</div>'
+                + '<div class="q-text">' + q.q + '</div>'
+                + '<div class="options">' + opts + '</div>'
+                + '<div class="q-feedback" id="qfb-' + i + '"></div>'
+                + '</div>';
+        });
+    }
+
+    function pickQCM(el, qi, oi) {
+        var card = document.getElementById('qcm-' + qi);
+        if (card.dataset.locked) return;
+        card.querySelectorAll('.opt').forEach(function(o) { o.classList.remove('selected'); });
+        el.classList.add('selected');
+        card.dataset.picked = oi;
+    }
+
+    function checkQCM() {
+        var correct = 0, chips = '';
+        qcmData.forEach(function(q, i) {
+            var card = document.getElementById('qcm-' + i);
+            card.dataset.locked = 1;
+            var picked = parseInt(card.dataset.picked);
+            var fb = document.getElementById('qfb-' + i);
+            card.querySelectorAll('.opt').forEach(function(o, j) {
+                o.classList.remove('selected');
+                if (j === q.correct) o.classList.add('correct');
+                else if (j === picked && picked !== q.correct) o.classList.add('wrong');
+            });
+            if (picked === q.correct) {
+                correct++;
+                chips += '<span class="chip chip-ok">Q' + (i+1) + ' ✓</span>';
+                fb.textContent = q.expl;
+                fb.className = 'q-feedback show ok';
+            } else {
+                chips += '<span class="chip chip-ko">Q' + (i+1) + ' ✗</span>';
+                fb.textContent = '✗ ' + q.expl;
+                fb.className = 'q-feedback show ko';
+            }
+        });
+        document.getElementById('prog-qcm').style.width = Math.round(correct / qcmData.length * 100) + '%';
+        document.getElementById('score-qcm').innerHTML = chips;
+        document.getElementById('qcm-score-val').textContent = correct;
+        document.getElementById('qcm-score-panel').classList.add('show');
+    }
+
+    function resetQCM() {
+        renderQCM();
+        document.getElementById('prog-qcm').style.width = '0%';
+        document.getElementById('score-qcm').innerHTML = '';
+        document.getElementById('qcm-score-panel').classList.remove('show');
+    }
+
+    /* ═══════════════════════════════════════════
+       VRAI / FAUX — sélection visible avant correction
+    ═══════════════════════════════════════════ */
+    function renderVF() {
+        var c = document.getElementById('vf-container');
+        c.innerHTML = '';
+        vfData.forEach(function(v, i) {
+            c.innerHTML += '<div class="vf-card" id="vf-' + i + '">'
+                + '<div class="vf-statement">' + v.stmt + '</div>'
+                + '<div class="vf-btns">'
+                + '<button class="vf-btn vrai" onclick="pickVF(this,' + i + ',true)">✅ Vrai</button>'
+                + '<button class="vf-btn faux" onclick="pickVF(this,' + i + ',false)">❌ Faux</button>'
+                + '</div>'
+                + '<div class="q-feedback" id="vfb-' + i + '"></div>'
+                + '</div>';
+        });
+    }
+
+    function pickVF(btn, i, val) {
+        var card = document.getElementById('vf-' + i);
+        if (card.dataset.locked) return;
+        /* Retire la sélection des deux boutons puis marque celui cliqué */
+        card.querySelectorAll('.vf-btn').forEach(function(b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        card.dataset.picked = val;
+    }
+
+    function checkVF() {
+        var correct = 0, chips = '';
+        vfData.forEach(function(v, i) {
+            var card = document.getElementById('vf-' + i);
+            card.dataset.locked = 1;
+            var hasPicked = card.dataset.picked !== undefined;
+            var picked = card.dataset.picked === 'true';
+            var fb = document.getElementById('vfb-' + i);
+
+            card.querySelectorAll('.vf-btn').forEach(function(btn) {
+                btn.classList.remove('selected'); /* retire la sélection visuelle */
+                var isVrai = btn.classList.contains('vrai');
+                /* Marque la bonne réponse en vert */
+                if ((isVrai && v.correct) || (!isVrai && !v.correct)) {
+                    btn.classList.add('correct-ans');
+                }
+                /* Marque le mauvais choix de l'utilisateur en rouge */
+                if (hasPicked && ((isVrai && !v.correct && picked) || (!isVrai && v.correct && !picked))) {
+                    btn.classList.add('wrong-ans');
+                }
+            });
+
+            if (hasPicked && picked === v.correct) {
+                correct++;
+                chips += '<span class="chip chip-ok">Q' + (i+1) + ' ✓</span>';
+                fb.textContent = '✓ ' + v.expl;
+                fb.className = 'q-feedback show ok';
+            } else {
+                chips += '<span class="chip chip-ko">Q' + (i+1) + ' ✗</span>';
+                fb.textContent = '✗ ' + v.expl;
+                fb.className = 'q-feedback show ko';
+            }
+        });
+        document.getElementById('prog-vf').style.width = Math.round(correct / vfData.length * 100) + '%';
+        document.getElementById('score-vf').innerHTML = chips;
+        document.getElementById('vf-score-val').textContent = correct;
+        document.getElementById('vf-score-panel').classList.add('show');
+    }
+
+    function resetVF() {
+        renderVF();
+        document.getElementById('prog-vf').style.width = '0%';
+        document.getElementById('score-vf').innerHTML = '';
+        document.getElementById('vf-score-panel').classList.remove('show');
+    }
+
+    /* ═══════════════════════════════════════════
+       SCÉNARIOS
+    ═══════════════════════════════════════════ */
+    function pickScenario(el, isCorrect) {
+        var card = el.closest('.scenario-card');
+        if (card.querySelector('.correct')) return;
+        var choices = card.querySelectorAll('.scenario-choice');
+        choices.forEach(function(c) { c.classList.add('disabled'); });
+        var fb = card.querySelector('.scenario-feedback');
+        if (isCorrect) {
+            el.classList.add('correct');
+            fb.classList.add('show', 'ok');
+        } else {
+            el.classList.add('wrong');
+            choices.forEach(function(c) {
+                if (c.onclick.toString().includes('true')) c.classList.add('correct');
+            });
+            fb.classList.add('show', 'ko');
+        }
+    }
+
+    /* ═══════════════════════════════════════════
+       MATCHING
+    ═══════════════════════════════════════════ */
+    var matchCorrect = [0, 1, 2, 3, 4, 5, 6, 7];
+    var selLeft = null, selRight = null, matchedCount = 0;
+
+    function selectMatch(side, idx) {
+        if (side === 'left') {
+            var el = document.getElementById('ml' + idx);
+            if (el.classList.contains('matched')) return;
+            if (selLeft !== null) document.getElementById('ml' + selLeft).classList.remove('selected');
+            selLeft = idx;
+            el.classList.add('selected');
+        } else {
+            var er = document.getElementById('mr' + idx);
+            if (er.classList.contains('matched')) return;
+            if (selRight !== null) document.getElementById('mr' + selRight).classList.remove('selected');
+            selRight = idx;
+            er.classList.add('selected');
+        }
+        if (selLeft !== null && selRight !== null) {
+            var lEl = document.getElementById('ml' + selLeft);
+            var rEl = document.getElementById('mr' + selRight);
+            if (matchCorrect[selLeft] === selRight) {
+                lEl.classList.remove('selected'); lEl.classList.add('matched');
+                rEl.classList.remove('selected'); rEl.classList.add('matched');
+                matchedCount++;
+                if (matchedCount === 8) document.getElementById('matchResult').classList.add('show');
+            } else {
+                lEl.classList.add('wrong-flash'); rEl.classList.add('wrong-flash');
+                setTimeout(function() {
+                    lEl.classList.remove('selected', 'wrong-flash');
+                    rEl.classList.remove('selected', 'wrong-flash');
+                }, 600);
+            }
+            selLeft = null; selRight = null;
+        }
+    }
+
+    /* ═══════════════════════════════════════════
+       DRAG & DROP + TAP ORDER
+    ═══════════════════════════════════════════ */
+    var dragSrc = null;
+
+    function initDrag() {
+        document.querySelectorAll('.order-item').forEach(function(item) {
+            item.addEventListener('dragstart', function() { dragSrc = this; this.classList.add('dragging'); });
+            item.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+                document.querySelectorAll('.order-item').forEach(function(i) { i.classList.remove('drag-over'); });
+            });
+            item.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('drag-over'); });
+            item.addEventListener('dragleave', function() { this.classList.remove('drag-over'); });
+            item.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                if (dragSrc !== this) {
+                    var list = document.getElementById('orderList');
+                    var arr = Array.from(list.children);
+                    var si = arr.indexOf(dragSrc), ti = arr.indexOf(this);
+                    if (si < ti) list.insertBefore(dragSrc, this.nextSibling);
+                    else list.insertBefore(dragSrc, this);
+                }
+            });
+        });
+    }
+    initDrag();
+
+    var tapFirst = null;
+    function tapOrder(el) {
+        if (tapFirst === null) {
+            tapFirst = el;
+            el.classList.add('tap-sel');
+        } else {
+            if (tapFirst !== el) {
+                var list = document.getElementById('orderList');
+                var arr = Array.from(list.children);
+                var i1 = arr.indexOf(tapFirst), i2 = arr.indexOf(el);
+                if (i1 < i2) list.insertBefore(tapFirst, el.nextSibling);
+                else list.insertBefore(tapFirst, el);
+            }
+            tapFirst.classList.remove('tap-sel');
+            tapFirst = null;
+        }
+    }
+
+    function validateOrder() {
+        var list = document.getElementById('orderList');
+        var items = Array.from(list.children);
+        var allOk = true;
+        items.forEach(function(item, idx) {
+            item.querySelector('.order-num').textContent = idx + 1;
+            item.classList.remove('correct', 'wrong');
+            if (parseInt(item.dataset.correct) === idx + 1) item.classList.add('correct');
+            else { item.classList.add('wrong'); allOk = false; }
+        });
+        var fb = document.getElementById('orderFeedback');
+        if (allOk) {
+            fb.textContent = '🎉 Parfait ! Toutes les étapes sont dans le bon ordre.';
+            fb.className = 'order-feedback show ok';
+        } else {
+            fb.textContent = '❌ Quelques étapes sont mal placées (en rouge). Réessayez !';
+            fb.className = 'order-feedback show ko';
+        }
+    }
+
+    function revealOrder() {
+        var list = document.getElementById('orderList');
+        var items = Array.from(list.children);
+        items.sort(function(a, b) { return parseInt(a.dataset.correct) - parseInt(b.dataset.correct); });
+        items.forEach(function(item, idx) {
+            list.appendChild(item);
+            item.querySelector('.order-num').textContent = idx + 1;
+            item.classList.remove('correct', 'wrong', 'dragging', 'drag-over');
+            item.classList.add('correct');
+        });
+        var fb = document.getElementById('orderFeedback');
+        fb.textContent = '👁 Voici le bon ordre — étudiez-le, puis cliquez Mélanger pour réessayer.';
+        fb.className = 'order-feedback show';
+        fb.style.color = '#633806';
+        document.getElementById('order-answers').classList.add('show');
+    }
+
+    function shuffleOrder() {
+        var list = document.getElementById('orderList');
+        var items = Array.from(list.children);
+        for (var i = items.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            list.insertBefore(items[j], items[i]);
+            var tmp = items[i]; items[i] = items[j]; items[j] = tmp;
+        }
+        items.forEach(function(it) {
+            it.className = 'order-item';
+            it.setAttribute('draggable', 'true');
+            it.querySelector('.order-num').textContent = '?';
+        });
+        var fb = document.getElementById('orderFeedback');
+        fb.className = 'order-feedback';
+        fb.style.color = '';
+        document.getElementById('order-answers').classList.remove('show');
+        initDrag();
+    }
+
+    /* ═══════════════════════════════════════════
+       COMPLÉTER LE CODE
+    ═══════════════════════════════════════════ */
+    function validateComplete(cid) {
+        var data = completeData[cid];
+        var ok = 0;
+        data.ids.forEach(function(id, i) {
+            var el = document.getElementById(id);
+            var val = el.value.trim();
+            el.classList.remove('ok', 'ko', 'revealed');
+            if (val.toLowerCase() === data.answers[i].toLowerCase()) {
+                el.classList.add('ok'); ok++;
+            } else {
+                el.classList.add('ko');
+            }
+        });
+        var fb = document.getElementById(cid + '-feedback');
+        var total = data.ids.length;
+        if (ok === total) {
+            fb.textContent = '🎉 Parfait ! Tous les champs sont corrects.';
+            fb.className = 'complete-feedback show ok';
+        } else {
+            fb.textContent = '❌ ' + ok + '/' + total + ' corrects — champs en rouge incorrects. Réessayez ou cliquez "Voir les réponses".';
+            fb.className = 'complete-feedback show ko';
+        }
+    }
+
+    function revealAnswers(cid) {
+        var data = completeData[cid];
+        data.ids.forEach(function(id, i) {
+            var el = document.getElementById(id);
+            el.value = data.answers[i];
+            el.classList.remove('ok', 'ko');
+            el.classList.add('revealed');
+        });
+        document.getElementById(cid + '-answers').classList.toggle('show');
+        var fb = document.getElementById(cid + '-feedback');
+        fb.textContent = '👁 Réponses affichées — étudiez-les, puis Réinitialiser pour réessayer.';
+        fb.className = 'complete-feedback show';
+        fb.style.color = '#633806';
+    }
+
+    function resetComplete(cid) {
+        var data = completeData[cid];
+        data.ids.forEach(function(id) {
+            var el = document.getElementById(id);
+            el.value = '';
+            el.classList.remove('ok', 'ko', 'revealed');
+        });
+        var fb = document.getElementById(cid + '-feedback');
+        fb.className = 'complete-feedback';
+        fb.style.color = '';
+        document.getElementById(cid + '-answers').classList.remove('show');
+    }
+
+    /* ═══════════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════════ */
+    renderQCM();
+    renderVF();
+    </script>
+</body>
+</html>

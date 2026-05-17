@@ -1,0 +1,316 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python — Le langage le plus puissant du web et des données</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐍%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal { background: #E1F5EE; color: #085041; }
+        .b-blue { background: #E6F1FB; color: #0C447C; }
+        .b-amber { background: #FAEEDA; color: #633806; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-coral { background: #FAECE7; color: #712B13; }
+        .b-green { background: #E8F5D8; color: #3B6D11; }
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-teal { background: #9FE1CB; color: #085041; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral { background: #F5C4B3; color: #712B13; }
+        .p-amber { background: #FAC775; color: #633806; }
+        .p-blue { background: #B5D4F4; color: #0C447C; }
+        .p-green { background: #C0DD97; color: #3B6D11; }
+        .p-gray { background: #D3D1C7; color: #444441; }
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .desc:last-child { margin-bottom: 0; }
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-amber { background: #FAEEDA; color: #633806; }
+        .tip-blue { background: #E6F1FB; color: #0C447C; }
+        .tip-coral { background: #FAECE7; color: #712B13; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+        .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.8; }
+        .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+        .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.9; white-space: pre; overflow-x: auto; color: #2C2C2A; margin-top: 0.8rem; }
+        .kw { color: #993C1D; font-weight: 700; }
+        .str { color: #0F6E56; }
+        .cm { color: #888780; font-style: italic; }
+        .var { color: #185FA5; }
+        .fn { color: #534AB7; }
+        .num { color: #E8760A; }
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; white-space: nowrap; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+        .tc { border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.88rem; font-weight: 600; line-height: 1.6; }
+        .use-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+        .use-card { border-radius: 12px; border: 0.5px solid #D3D1C7; padding: 0.9rem 1rem; background: #FAFAF8; }
+        .use-icon { font-size: 1.2rem; margin-bottom: 5px; }
+        .use-title { font-size: 0.88rem; font-weight: 800; color: #2C2C2A; margin-bottom: 4px; }
+        .use-desc { font-size: 0.78rem; color: #5F5E5A; line-height: 1.5; }
+        .lib-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid #EEEcE5; }
+        .lib-row:last-child { border-bottom: none; }
+        .lib-name { font-family: 'Fira Code', monospace; font-size: 0.82rem; font-weight: 700; color: #993C1D; background: #FAECE7; border-radius: 5px; padding: 2px 8px; white-space: nowrap; flex-shrink: 0; }
+        .lib-desc { font-size: 0.88rem; color: #5F5E5A; line-height: 1.5; }
+        .ic { font-family: 'Fira Code', monospace; font-size: 0.83em; background: #F1EFE8; border-radius: 4px; padding: 1px 5px; color: #993C1D; }
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .cta-btn.sec { background: #3D3D3A; color: #D3D1C7; margin-left: 8px; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+        @media (max-width: 500px) { .two-col, .use-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="../../sommaire.html#step2Advence">← Retour au sommaire</a>
+
+<div class="hero">
+    <h1>🐍 Python</h1>
+    <p>Le langage le plus polyvalent — du web aux données, de l'IA à l'automatisation.</p>
+    <div class="badge-row">
+        <span class="badge b-teal">Django</span>
+        <span class="badge b-blue">Data Science</span>
+        <span class="badge b-amber">IA & Machine Learning</span>
+        <span class="badge b-purple">Automatisation</span>
+        <span class="badge b-green">Débutant-friendly</span>
+    </div>
+</div>
+
+<!-- 1. QU'EST-CE QUE PYTHON -->
+<div class="card">
+    <div class="stitle"><div class="pill p-teal">1</div>Pourquoi Python est-il si populaire ?</div>
+    <p class="desc">Python a été créé en 1991 par Guido van Rossum. Depuis 2020, il est <strong>le langage de programmation le plus populaire au monde</strong> (indice TIOBE). Sa philosophie repose sur la lisibilité : un code Python se lit presque comme de l'anglais.</p>
+    <p class="desc">Sa puissance vient de sa <strong>polyvalence extrême</strong> : un seul langage permet de faire du web, de l'analyse de données, de l'intelligence artificielle, de l'automatisation, des scripts système — et bien plus.</p>
+
+    <div class="use-grid">
+        <div class="use-card">
+            <div class="use-icon">🌐</div>
+            <div class="use-title">Web (backend)</div>
+            <div class="use-desc">Django, Flask, FastAPI — créer des APIs et des applications web</div>
+        </div>
+        <div class="use-card">
+            <div class="use-icon">📊</div>
+            <div class="use-title">Data Science</div>
+            <div class="use-desc">Pandas, NumPy — analyser et manipuler de grandes quantités de données</div>
+        </div>
+        <div class="use-card">
+            <div class="use-icon">🤖</div>
+            <div class="use-title">IA & Machine Learning</div>
+            <div class="use-desc">TensorFlow, PyTorch, scikit-learn — entraîner des modèles d'IA</div>
+        </div>
+        <div class="use-card">
+            <div class="use-icon">⚙️</div>
+            <div class="use-title">Automatisation</div>
+            <div class="use-desc">Scripts, web scraping, automatisation de tâches répétitives</div>
+        </div>
+    </div>
+
+    <div class="tip">
+        <span class="tip-i">💡</span>
+        <span>Python est souvent le <strong>premier langage recommandé aux débutants</strong> — sa syntaxe est claire, l'indentation remplace les accolades, et les erreurs sont lisibles. Mais c'est aussi le langage des experts en IA chez Google, OpenAI, et Meta.</span>
+    </div>
+</div>
+
+<!-- 2. SYNTAXE PYTHON -->
+<div class="section-label"><span class="section-label-text">📝 Syntaxe Python — fondamentaux</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">2</div>Syntaxe Python — ce qui change tout</div>
+    <p class="desc">Python se distingue par l'<strong>indentation obligatoire</strong> — pas d'accolades <span class="ic">{}</span>. L'indentation <em>est</em> la structure du code.</p>
+
+    <div class="code-block"><span class="cm"># Variables — pas de type à déclarer</span>
+<span class="var">prenom</span> = <span class="str">"Alice"</span>
+<span class="var">age</span>    = 28
+<span class="var">actif</span>  = <span class="kw">True</span>
+
+<span class="cm"># Condition — l'indentation remplace les {}</span>
+<span class="kw">if</span> <span class="var">age</span> >= 18:
+    <span class="fn">print</span>(<span class="str">"Majeur"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Mineur"</span>)
+
+<span class="cm"># f-string — la meilleure façon d'insérer des variables</span>
+<span class="fn">print</span>(<span class="str">f"Bonjour {<span class="var">prenom</span>}, tu as {<span class="var">age</span>} ans"</span>)
+
+<span class="cm"># Listes</span>
+<span class="var">fruits</span> = [<span class="str">"pomme"</span>, <span class="str">"banane"</span>, <span class="str">"kiwi"</span>]
+<span class="kw">for</span> <span class="var">fruit</span> <span class="kw">in</span> <span class="var">fruits</span>:
+    <span class="fn">print</span>(<span class="var">fruit</span>)
+
+<span class="cm"># Dictionnaire (équivalent tableau associatif PHP)</span>
+<span class="var">user</span> = {<span class="str">"nom"</span>: <span class="str">"Dupont"</span>, <span class="str">"email"</span>: <span class="str">"alice@mail.com"</span>}
+<span class="fn">print</span>(<span class="var">user</span>[<span class="str">"nom"</span>])   <span class="cm"># "Dupont"</span>
+
+<span class="cm"># Fonction</span>
+<span class="kw">def</span> <span class="fn">saluer</span>(<span class="var">nom</span>):
+    <span class="kw">return</span> <span class="str">f"Bonjour, {<span class="var">nom</span>} !"</span>
+
+<span class="fn">print</span>(<span class="fn">saluer</span>(<span class="str">"Bob"</span>))   <span class="cm"># "Bonjour, Bob !"</span></div>
+</div>
+
+<!-- 3. PYTHON VS PHP -->
+<div class="card">
+    <div class="stitle"><div class="pill p-purple">3</div>Python vs PHP — pourquoi Python est "plus puissant"</div>
+    <p class="desc">PHP est excellent pour le web — mais il est <strong>limité au web</strong>. Python est polyvalent : il excelle dans les domaines que PHP ne peut pas toucher.</p>
+    <div class="two-col">
+        <div class="tc" style="background:#EEEDFE;color:#3C3489;">
+            <strong style="display:block;margin-bottom:6px;">🐘 PHP</strong>
+            ✅ Web dynamique<br>
+            ✅ CMS (WordPress, Drupal)<br>
+            ✅ Grande communauté web<br>
+            ❌ Data Science<br>
+            ❌ Machine Learning<br>
+            ❌ Scripts système avancés
+        </div>
+        <div class="tc" style="background:#E1F5EE;color:#085041;">
+            <strong style="display:block;margin-bottom:6px;">🐍 Python</strong>
+            ✅ Web (Django, FastAPI)<br>
+            ✅ Data Science & IA 🏆<br>
+            ✅ Automatisation<br>
+            ✅ Scripts système<br>
+            ✅ Recherche scientifique<br>
+            ✅ Le futur (GenAI, LLM)
+        </div>
+    </div>
+    <div class="tip tip-amber">
+        <span class="tip-i">🎯</span>
+        <span>Si ton objectif est de <strong>travailler avec les données, l'IA, ou créer des outils puissants</strong> — Python est le choix évident. Si tu veux créer des sites web rapidement avec une communauté établie, PHP + Laravel reste une excellente option.</span>
+    </div>
+</div>
+
+<!-- 4. LIBRAIRIES CLÉS -->
+<div class="section-label"><span class="section-label-text">📦 L'écosystème Python</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-green">4</div>Les librairies Python incontournables</div>
+    <p class="desc">La vraie puissance de Python vient de son <strong>écosystème de librairies</strong> — des milliers de modules prêts à l'emploi, installables en une commande <span class="ic">pip install</span>.</p>
+
+    <div class="result-box" style="margin-top:0;">
+        <div class="rl">Web</div>
+        <div class="lib-row"><span class="lib-name">Django</span><div class="lib-desc">Framework web complet — batteries included. Le plus utilisé pour les apps web Python solides.</div></div>
+        <div class="lib-row"><span class="lib-name">Flask</span><div class="lib-desc">Framework minimaliste. Parfait pour les APIs légères et les microservices.</div></div>
+        <div class="lib-row"><span class="lib-name">FastAPI</span><div class="lib-desc">Framework moderne ultra-rapide pour les APIs. Génère automatiquement la documentation.</div></div>
+    </div>
+
+    <div class="result-box">
+        <div class="rl">Data Science & IA</div>
+        <div class="lib-row"><span class="lib-name">Pandas</span><div class="lib-desc">Manipulation de données tabulaires (comme Excel, mais en code). Incontournable.</div></div>
+        <div class="lib-row"><span class="lib-name">NumPy</span><div class="lib-desc">Calcul numérique haute performance. La base de tout l'écosystème data.</div></div>
+        <div class="lib-row"><span class="lib-name">Matplotlib</span><div class="lib-desc">Visualisation de données — graphiques, courbes, histogrammes.</div></div>
+        <div class="lib-row"><span class="lib-name">scikit-learn</span><div class="lib-desc">Machine Learning classique — algorithmes de classification, régression, clustering.</div></div>
+        <div class="lib-row"><span class="lib-name">TensorFlow</span><div class="lib-desc">Deep Learning par Google. Entraîner des réseaux de neurones.</div></div>
+        <div class="lib-row"><span class="lib-name">PyTorch</span><div class="lib-desc">Deep Learning par Meta. Favori de la recherche et des LLMs.</div></div>
+    </div>
+
+    <div class="code-block"><span class="cm"># Installer une librairie (dans le terminal)</span>
+pip install django
+pip install pandas numpy matplotlib
+
+<span class="cm"># Exemple Pandas — analyser des données</span>
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+<span class="cm"># Charger un fichier CSV</span>
+<span class="var">df</span> = pd.<span class="fn">read_csv</span>(<span class="str">"ventes.csv"</span>)
+
+<span class="cm"># Filtrer, calculer, analyser en une ligne</span>
+<span class="var">ventes_2024</span> = <span class="var">df</span>[<span class="var">df</span>[<span class="str">"annee"</span>] == <span class="num">2024</span>]
+<span class="fn">print</span>(<span class="var">ventes_2024</span>[<span class="str">"montant"</span>].<span class="fn">sum</span>())   <span class="cm"># Total des ventes 2024</span></div>
+</div>
+
+<!-- 5. DJANGO INTRO -->
+<div class="section-label"><span class="section-label-text">🎸 Django — le framework Python pour le web</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-coral">5</div>Django — "batteries included"</div>
+    <p class="desc">Créé en 2005, <strong>Django</strong> est le framework web Python le plus complet. Sa devise : <em>"batteries included"</em> — tout ce dont tu as besoin est déjà là : authentification, admin, ORM, formulaires, sécurité.</p>
+    <p class="desc">Il suit le pattern <strong>MTV (Model-Template-View)</strong> — l'équivalent du MVC :</p>
+    <div class="two-col">
+        <div class="tc" style="background:#FAECE7;color:#712B13;">
+            <strong style="display:block;margin-bottom:4px;">📦 Model</strong>
+            Définit la structure des données en base de données via des classes Python.
+        </div>
+        <div class="tc" style="background:#FAEEDA;color:#633806;">
+            <strong style="display:block;margin-bottom:4px;">🖼️ Template</strong>
+            Le HTML avec des variables Python injectées — l'interface utilisateur.
+        </div>
+    </div>
+    <div class="tc" style="background:#E1F5EE;color:#085041;border-radius:10px;padding:0.75rem 1rem;font-size:0.88rem;font-weight:600;line-height:1.5;margin-top:10px;">
+        <strong style="display:block;margin-bottom:4px;">⚙️ View</strong>
+        La logique métier — reçoit une requête, interroge le Model, retourne un Template.
+    </div>
+
+    <div class="result-box" style="margin-top:0.9rem;">
+        <div class="rl">Ce que Django fournit out-of-the-box</div>
+        🔐 <strong>Authentification complète</strong> — login, logout, gestion des mots de passe<br>
+        🛠️ <strong>Interface d'administration automatique</strong> — générée à partir des Models<br>
+        🗄️ <strong>ORM puissant</strong> — manipule PostgreSQL, MySQL, SQLite sans écrire de SQL<br>
+        🛡️ <strong>Sécurité intégrée</strong> — CSRF, XSS, injection SQL — protégé par défaut<br>
+        🔄 <strong>Migrations BDD</strong> — gestion des changements de schéma automatisée
+    </div>
+
+    <div class="tip tip-purple">
+        <span class="tip-i">🎯</span>
+        <span>Des sites comme <strong>Instagram, Pinterest, Disqus, Mozilla</strong> ont été construits avec Django. C'est un framework qui passe à l'échelle — du prototype au projet mondial.</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">6</div>Django — premier coup d'œil au code</div>
+    <div class="code-block"><span class="cm"># models.py — définir les données</span>
+<span class="kw">from</span> django.db <span class="kw">import</span> models
+
+<span class="kw">class</span> <span class="fn">Article</span>(models.Model):
+    <span class="var">titre</span>   = models.<span class="fn">CharField</span>(max_length=<span class="num">200</span>)
+    <span class="var">contenu</span> = models.<span class="fn">TextField</span>()
+    <span class="var">date</span>    = models.<span class="fn">DateTimeField</span>(auto_now_add=<span class="kw">True</span>)
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="var">self</span>.<span class="var">titre</span>
+
+<span class="cm"># views.py — la logique</span>
+<span class="kw">from</span> django.shortcuts <span class="kw">import</span> render
+<span class="kw">from</span> .models <span class="kw">import</span> Article
+
+<span class="kw">def</span> <span class="fn">liste_articles</span>(<span class="var">request</span>):
+    <span class="var">articles</span> = Article.objects.<span class="fn">all</span>().<span class="fn">order_by</span>(<span class="str">'-date'</span>)
+    <span class="kw">return</span> <span class="fn">render</span>(<span class="var">request</span>, <span class="str">'articles/liste.html'</span>, {<span class="str">'articles'</span>: <span class="var">articles</span>})
+
+<span class="cm"># urls.py — les routes</span>
+<span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> . <span class="kw">import</span> views
+
+urlpatterns = [
+    path(<span class="str">''</span>, views.<span class="var">liste_articles</span>, name=<span class="str">'articles'</span>),
+]
+
+<span class="cm"># template : articles/liste.html</span>
+<span class="cm">{% for article in articles %}</span>
+  &lt;h2&gt;<span class="cm">{{ article.titre }}</span>&lt;/h2&gt;
+  &lt;p&gt;<span class="cm">{{ article.contenu }}</span>&lt;/p&gt;
+<span class="cm">{% endfor %}</span></div>
+</div>
+
+<div class="cta-wrap">
+    <p>Cours lu ✓ &nbsp; Python & Django aperçu ✓ &nbsp; Prêt à tester ?</p>
+    <a class="cta-btn" href="exercices-python.html">Passer aux exercices →</a>
+</div>
+
+<div class="footer-note">
+    Python → Data → Django → Créer 🐍<br>
+    <span style="font-size:0.82rem;">Cours — Python & Django</span>
+</div>
+</body>
+</html>
