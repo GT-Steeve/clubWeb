@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Mon site web par vibe coding</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%A8%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    /* Ideas grid */
+    .ideas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.6rem; }
+    .idea-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .idea-title { font-weight: 800; margin-bottom: 4px; font-size: 0.9rem; }
+
+    /* Layer stack */
+    .layer-stack { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .layer-item { display: flex; gap: 12px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .layer-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .layer-html { background: #FAECE7; border-left: 3px solid #F5C4B3; }
+    .layer-css  { background: #EEEDFE; border-left: 3px solid #CECBF6; }
+    .layer-js   { background: #FAEEDA; border-left: 3px solid #FAC775; }
+
+    /* Requirements */
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    /* Explain block */
+    .explain-block { background: #1E1A2E; border-radius: 12px; padding: 1.2rem 1.4rem; margin-top: 0.8rem; }
+    .explain-title { color: #CECBF6; font-weight: 800; font-size: 0.95rem; margin-bottom: 0.8rem; }
+    .explain-q { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 0.5rem; font-size: 0.87rem; color: #C8C8C8; line-height: 1.6; }
+    .explain-num { color: #FAC775; font-weight: 800; flex-shrink: 0; }
+
+    /* Checklist */
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn {
+      display: inline-block; background: #FAC775; color: #412402;
+      font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+      border-radius: 10px; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.7rem; }
+      .ideas-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="exercices-vibecoding-html.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>🎨 Projet — Mon site web par vibe coding</h1>
+    <p>Crée un vrai site HTML/CSS/JS sur le sujet de ton choix — et sois capable d'expliquer comment il fonctionne !</p>
+    <div class="badge-row">
+      <span class="badge b-coral">HTML</span>
+      <span class="badge b-purple">CSS</span>
+      <span class="badge b-amber">JavaScript</span>
+      <span class="badge b-teal">Projet libre</span>
+      <span class="badge b-blue">Vibe Coding</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Tu vas créer <strong>un vrai site web</strong> sur un sujet qui te motive — un portfolio, une page fan, un quiz, une landing page, un mini-blog. Peu importe le thème, tant que le site est complet, fonctionnel et que <strong>tu peux expliquer son fonctionnement</strong>.</p>
+    <p class="desc">L'IA t'aide à coder — c'est autorisé et encouragé. Mais tu dois être capable de lire le code généré, d'expliquer le rôle de chaque partie (HTML structure, CSS style, JS comportement), et de faire des modifications toi-même.</p>
+    <div class="tip tip-amber">
+      <span class="tip-i">⚠️</span>
+      <span>Coller du code sans le lire, c'est l'effet spaghetti en action. Pour chaque bloc généré par l'IA, pose-toi la question : <em>"Qu'est-ce que ce code fait exactement ?"</em> Si tu ne peux pas répondre, demande à l'IA de te l'expliquer avant de continuer.</span>
+    </div>
+  </div>
+
+  <!-- IDÉES DE PROJETS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">💡</div>Idées de sujets — choisis ce qui te motive</div>
+    <p class="desc">Ton sujet peut être n'importe quoi. Voici des idées pour t'inspirer :</p>
+
+    <div class="ideas-grid">
+      <div class="idea-card" style="background:#E6F1FB;border:0.5px solid #85B7EB;">
+        <div class="idea-title" style="color:#0C447C;">🧑‍💻 Portfolio personnel</div>
+        <div style="font-size:0.83rem;color:#185FA5;">Présente-toi : qui tu es, tes projets, tes compétences, un formulaire de contact.</div>
+      </div>
+      <div class="idea-card" style="background:#EEEDFE;border:0.5px solid #CECBF6;">
+        <div class="idea-title" style="color:#3C3489;">🎮 Page fan / univers</div>
+        <div style="font-size:0.83rem;color:#4D3B8A;">Un jeu, un film, une série, un artiste — présente l'univers que tu aimes.</div>
+      </div>
+      <div class="idea-card" style="background:#FAEEDA;border:0.5px solid #FAC775;">
+        <div class="idea-title" style="color:#633806;">❓ Quiz interactif</div>
+        <div style="font-size:0.83rem;color:#8C5010;">Questions + réponses, score final, feedback. Thème libre (sport, culture, jeux…).</div>
+      </div>
+      <div class="idea-card" style="background:#E1F5EE;border:0.5px solid #9FE1CB;">
+        <div class="idea-title" style="color:#085041;">🛍️ Landing page produit</div>
+        <div style="font-size:0.83rem;color:#0D7A5F;">Présente un produit fictif ou réel : hero, features, CTA, section prix.</div>
+      </div>
+      <div class="idea-card" style="background:#FAECE7;border:0.5px solid #F5C4B3;">
+        <div class="idea-title" style="color:#712B13;">📋 Tableau de bord</div>
+        <div style="font-size:0.83rem;color:#9E3459;">Météo, tâches à faire, planning, calculatrice — une page utile au quotidien.</div>
+      </div>
+      <div class="idea-card" style="background:#F1EFE8;border:0.5px solid #B4B2A9;">
+        <div class="idea-title" style="color:#444441;">✍️ Mini-blog</div>
+        <div style="font-size:0.83rem;color:#5F5E5A;">Articles, catégories, pagination simulée — un site de lecture en HTML statique.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LES 3 COUCHES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-blue">🏗️</div>Les 3 couches obligatoires</div>
+    <p class="desc">Ton site doit utiliser les trois langages du cours, chacun dans son rôle :</p>
+
+    <div class="layer-stack">
+      <div class="layer-item layer-html">
+        <span class="layer-icon">🏗️</span>
+        <div><strong>HTML</strong> — La structure. Balises sémantiques (<code>&lt;header&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>…), contenu bien organisé, images avec <code>alt</code>.</div>
+      </div>
+      <div class="layer-item layer-css">
+        <span class="layer-icon">🎨</span>
+        <div><strong>CSS</strong> — Le style. Mise en page (Flexbox ou Grid), couleurs, typographie, responsive. Fichier <code>style.css</code> séparé de l'HTML.</div>
+      </div>
+      <div class="layer-item layer-js">
+        <span class="layer-icon">⚡</span>
+        <div><strong>JavaScript</strong> — Le comportement. Au minimum une interaction : menu hamburger, quiz, modal, filtre de contenu, animation au clic… Fichier <code>script.js</code> séparé.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L'EXPLICATION — LA PARTIE CLÉ -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">🗣️</div>L'explication — la vraie épreuve</div>
+    <p class="desc">Créer le site est la première moitié du projet. La deuxième : <strong>être capable de l'expliquer</strong>. Pour chaque partie de ton site, tu dois pouvoir répondre à ces questions :</p>
+
+    <div class="explain-block">
+      <div class="explain-title">Questions à savoir répondre sur ton site :</div>
+      <div class="explain-q"><span class="explain-num">1.</span><span>Quel est le rôle de chaque fichier ? (<code>index.html</code>, <code>style.css</code>, <code>script.js</code>)</span></div>
+      <div class="explain-q"><span class="explain-num">2.</span><span>Quelle balise HTML est utilisée pour la navigation principale et pourquoi ?</span></div>
+      <div class="explain-q"><span class="explain-num">3.</span><span>Comment fonctionne ta mise en page ? (Flexbox ? Grid ? Explique le principe.)</span></div>
+      <div class="explain-q"><span class="explain-num">4.</span><span>Quelle interaction JavaScript as-tu ajoutée ? Que se passe-t-il quand l'utilisateur interagit ?</span></div>
+      <div class="explain-q"><span class="explain-num">5.</span><span>Si tu changes une couleur dans le CSS, quel fichier tu modifies et où exactement ?</span></div>
+      <div class="explain-q"><span class="explain-num">6.</span><span>Si tu veux ajouter une nouvelle section au site, quelle est la première chose que tu fais ?</span></div>
+    </div>
+
+    <div class="tip tip-purple" style="margin-top:0.9rem;">
+      <span class="tip-i">🧠</span>
+      <span>Tu n'as pas besoin d'avoir tout codé toi-même pour expliquer. Mais tu dois avoir <strong>lu et compris</strong> chaque ligne. Si l'IA a généré une fonction JS, tu dois savoir ce qu'elle fait — même si tu n'aurais pas su l'écrire seul.</span>
+    </div>
+  </div>
+
+  <!-- CAHIER DES CHARGES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Cahier des charges — Exigences obligatoires</div>
+
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le site s'ouvre dans le navigateur sans erreur (aucun lien cassé, aucune image manquante).</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>3 fichiers séparés : <code>index.html</code>, <code>style.css</code>, <code>script.js</code> — liés correctement.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le HTML utilise des balises sémantiques (<code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;footer&gt;</code>…), pas uniquement des <code>&lt;div&gt;</code>.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le CSS assure une mise en page lisible sur ordinateur (Flexbox ou Grid, au choix).</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le JavaScript ajoute au moins <strong>une interaction</strong> fonctionnelle visible pour l'utilisateur.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Tu es capable de répondre aux 6 questions d'explication ci-dessus sur ton propre site.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus</div>
+
+    <div class="req-list">
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Le site est <strong>responsive</strong> : il s'adapte correctement sur mobile (media queries CSS).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Appliquer l'architecture du cours Architecture : dossiers <code>css/</code>, <code>js/</code>, <code>img/</code> avec les bons chemins relatifs.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter une <strong>2e interaction JS</strong> : animation, filtre, dark mode, localStorage pour mémoriser une préférence…</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Publier le site sur <strong>GitHub Pages</strong> et partager le lien (cours GitHub Pages disponible dans le sommaire).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Utiliser des <strong>variables CSS</strong> (<code>:root { --couleur-principale: … }</code>) pour centraliser la palette de couleurs.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTHODE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Choisis ton sujet</strong> — Prends quelque chose qui te motive vraiment. Un projet ennuyeux avance 3× plus lentement.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Dessine les sections</strong> — Sur papier ou dans ta tête : header, hero, section principale, footer. Décide du contenu de chaque partie avant de coder.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Crée la structure HTML d'abord</strong> — Toutes les sections en HTML vide avant de toucher au CSS. Vérifie dans le navigateur que la structure est logique. Ensuite seulement, passe au style.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>Demande à l'IA des blocs précis</strong> — Pas « fais mon site ». Mais « génère le CSS de ma navbar avec Flexbox, logo à gauche, liens à droite, fond sombre ». Un bloc à la fois, lu et compris avant de passer au suivant.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>Ajoute le JavaScript en dernier</strong> — Une fois que l'HTML et le CSS sont stables. Décris précisément l'interaction voulue, lis la fonction générée, teste-la, comprends-la.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">6</div>
+        <div class="step-content"><strong>Prépare ton explication</strong> — Avant de déclarer le projet terminé, réponds aux 6 questions de la section "L'explication". Si tu bloques sur une question, relis le code concerné jusqu'à comprendre.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✓</div>Checklist de vérification</div>
+
+    <div class="checklist">
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Mon site s'ouvre sans erreur dans le navigateur</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>J'ai 3 fichiers séparés correctement liés (HTML, CSS, JS)</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Mon HTML utilise des balises sémantiques (pas que des div)</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Mon CSS met en page le site avec Flexbox ou Grid</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Mon JS ajoute au moins une interaction visible</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Je sais expliquer le rôle de chaque fichier</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Je peux expliquer comment fonctionne ma mise en page CSS</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Je peux expliquer ce que fait mon code JavaScript</span></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Comprendre &rarr; Chercher &rarr; Coder &rarr; Tester &rarr; Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html#step1vibe">&larr; Retour au sommaire</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) {
+      box.classList.toggle('checked');
+    }
+  </script>
+
+</body>
+
+</html>

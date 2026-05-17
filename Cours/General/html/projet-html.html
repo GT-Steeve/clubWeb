@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Ma première page HTML</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌐%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    /* Ideas grid */
+    .ideas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.6rem; }
+    .idea-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .idea-title { font-weight: 800; margin-bottom: 4px; font-size: 0.9rem; }
+
+    /* Nesting block */
+    .nest-block { background: #1A1E2E; border-radius: 12px; padding: 1.2rem 1.4rem; margin-top: 0.8rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 2.1; }
+    .nest-tag    { color: #85B7EB; }
+    .nest-attr   { color: #9FE1CB; }
+    .nest-text   { color: #F1EFE8; }
+    .nest-indent { display: inline-block; }
+    .nest-comment { color: #666; font-style: italic; }
+
+    /* Requirements */
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    /* Checklist */
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn {
+      display: inline-block; background: #FAC775; color: #412402;
+      font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+      border-radius: 10px; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.7rem; }
+      .ideas-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="exercices-html.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>🌐 Projet — Ma première page HTML</h1>
+    <p>Construis une page HTML propre sur le sujet de ton choix — la structure et l'imbrication sont la vraie priorité.</p>
+    <div class="badge-row">
+      <span class="badge b-coral">HTML</span>
+      <span class="badge b-blue">Léger CSS</span>
+      <span class="badge b-teal">Structure</span>
+      <span class="badge b-purple">Imbrication</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Tu vas créer <strong>une page HTML complète</strong> sur un sujet qui te plaît. L'objectif principal n'est pas le rendu visuel — c'est <strong>la qualité de la structure HTML</strong> : les bonnes balises, au bon endroit, bien imbriquées, avec une mise en forme du code lisible.</p>
+    <p class="desc">Un léger CSS est autorisé pour les couleurs uniquement (fond, texte, titres). Pas de mise en page complexe pour l'instant — ce sera le prochain projet.</p>
+    <div class="tip tip-amber">
+      <span class="tip-i">⚠️</span>
+      <span><strong>L'imbrication, c'est la règle des poupées russes :</strong> la dernière balise ouverte est la première à fermer. Une balise mal fermée peut casser toute la page. Utilise <strong>Shift+Alt+F</strong> dans VS Code pour formater et vérifier l'indentation.</span>
+    </div>
+  </div>
+
+  <!-- IDÉES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">💡</div>Idées de sujets — choisis ce qui te motive</div>
+    <p class="desc">N'importe quel sujet fonctionne. Ce qui compte, c'est d'avoir assez de contenu pour utiliser plusieurs types de balises :</p>
+
+    <div class="ideas-grid">
+      <div class="idea-card" style="background:#E6F1FB;border:0.5px solid #85B7EB;">
+        <div class="idea-title" style="color:#0C447C;">🎮 Jeu vidéo favori</div>
+        <div style="font-size:0.83rem;color:#185FA5;">Présentation du jeu, histoire, personnages, conseils pour débuter.</div>
+      </div>
+      <div class="idea-card" style="background:#EEEDFE;border:0.5px solid #CECBF6;">
+        <div class="idea-title" style="color:#3C3489;">🎵 Artiste ou groupe</div>
+        <div style="font-size:0.83rem;color:#4D3B8A;">Biographie, discographie, chansons préférées, liens.</div>
+      </div>
+      <div class="idea-card" style="background:#FAEEDA;border:0.5px solid #FAC775;">
+        <div class="idea-title" style="color:#633806;">🍕 Recette de cuisine</div>
+        <div style="font-size:0.83rem;color:#8C5010;">Ingrédients en liste, étapes numérotées, astuces du chef.</div>
+      </div>
+      <div class="idea-card" style="background:#E1F5EE;border:0.5px solid #9FE1CB;">
+        <div class="idea-title" style="color:#085041;">🐾 Animal ou sport</div>
+        <div style="font-size:0.83rem;color:#0D7A5F;">Faits intéressants, caractéristiques, images, pourquoi tu aimes ça.</div>
+      </div>
+      <div class="idea-card" style="background:#FAECE7;border:0.5px solid #F5C4B3;">
+        <div class="idea-title" style="color:#712B13;">🌍 Pays ou ville</div>
+        <div style="font-size:0.83rem;color:#9E3459;">Culture, gastronomie, monuments, langue — une page encyclopédique.</div>
+      </div>
+      <div class="idea-card" style="background:#F1EFE8;border:0.5px solid #B4B2A9;">
+        <div class="idea-title" style="color:#444441;">🧑‍💻 Présentation de toi</div>
+        <div style="font-size:0.83rem;color:#5F5E5A;">Qui tu es, ce que tu aimes, tes projets, tes passions — ton mini portfolio.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRUCTURE ATTENDUE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-blue">🏗️</div>Structure HTML attendue</div>
+    <p class="desc">Ta page doit respecter l'ordre suivant et utiliser ces types de balises :</p>
+
+    <div class="nest-block">
+      <div><span class="nest-tag">&lt;!DOCTYPE html&gt;</span></div>
+      <div><span class="nest-tag">&lt;html</span> <span class="nest-attr">lang</span>=<span class="nest-text">"fr"</span><span class="nest-tag">&gt;</span></div>
+      <div><span class="nest-indent" style="margin-left:1.5rem;"></span><span class="nest-tag">&lt;head&gt;</span> <span class="nest-comment">— titre, charset, meta viewport</span></div>
+      <div><span class="nest-indent" style="margin-left:1.5rem;"></span><span class="nest-tag">&lt;body&gt;</span></div>
+      <div><span class="nest-indent" style="margin-left:3rem;"></span><span class="nest-tag">&lt;header&gt;</span> <span class="nest-comment">— titre h1 + sous-titre</span></div>
+      <div><span class="nest-indent" style="margin-left:3rem;"></span><span class="nest-tag">&lt;main&gt;</span></div>
+      <div><span class="nest-indent" style="margin-left:4.5rem;"></span><span class="nest-tag">&lt;h2&gt;</span> <span class="nest-comment">— titre de section</span></div>
+      <div><span class="nest-indent" style="margin-left:4.5rem;"></span><span class="nest-tag">&lt;p&gt;</span> <span class="nest-comment">— paragraphes</span></div>
+      <div><span class="nest-indent" style="margin-left:4.5rem;"></span><span class="nest-tag">&lt;ul&gt; &lt;li&gt;</span> <span class="nest-comment">— listes</span></div>
+      <div><span class="nest-indent" style="margin-left:4.5rem;"></span><span class="nest-tag">&lt;img&gt;</span> <span class="nest-comment">— avec src + alt</span></div>
+      <div><span class="nest-indent" style="margin-left:4.5rem;"></span><span class="nest-tag">&lt;a&gt;</span> <span class="nest-comment">— lien vers l'extérieur</span></div>
+      <div><span class="nest-indent" style="margin-left:3rem;"></span><span class="nest-tag">&lt;/main&gt;</span></div>
+      <div><span class="nest-indent" style="margin-left:3rem;"></span><span class="nest-tag">&lt;footer&gt;</span> <span class="nest-comment">— mention, auteur</span></div>
+      <div><span class="nest-indent" style="margin-left:1.5rem;"></span><span class="nest-tag">&lt;/body&gt;</span></div>
+      <div><span class="nest-tag">&lt;/html&gt;</span></div>
+    </div>
+
+    <div class="tip tip-blue" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span>Utilise <strong>Shift+Alt+F</strong> dans VS Code après chaque section pour formater le code et vérifier l'indentation. Un code bien indenté révèle immédiatement les erreurs d'imbrication.</span>
+    </div>
+  </div>
+
+  <!-- CAHIER DES CHARGES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Cahier des charges — Exigences obligatoires</div>
+
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Un fichier <code>index.html</code> valide avec <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Un <code>&lt;header&gt;</code> avec un <code>&lt;h1&gt;</code> clair et un sous-titre en <code>&lt;p&gt;</code>.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Un <code>&lt;main&gt;</code> contenant au moins <strong>2 sections</strong> avec chacune un <code>&lt;h2&gt;</code> et des paragraphes.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Au moins <strong>une liste</strong> (<code>&lt;ul&gt;</code> ou <code>&lt;ol&gt;</code>) avec plusieurs <code>&lt;li&gt;</code>.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Au moins <strong>une image</strong> (<code>&lt;img&gt;</code>) avec les attributs <code>src</code> et <code>alt</code> remplis.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Au moins <strong>un lien</strong> (<code>&lt;a href="..."&gt;</code>) vers une source externe.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Un <code>&lt;footer&gt;</code> avec ton prénom et l'année.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>CSS limité aux couleurs uniquement : fond de page, couleur du texte, couleur des titres — dans une balise <code>&lt;style&gt;</code> dans le <code>&lt;head&gt;</code>.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le code est <strong>correctement indenté</strong> et lisible (Shift+Alt+F pour formatter).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus</div>
+
+    <div class="req-list">
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Utiliser <code>&lt;strong&gt;</code> et <code>&lt;em&gt;</code> pour mettre en valeur des mots importants dans tes paragraphes.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter une <code>&lt;ol&gt;</code> (liste numérotée) pour un classement ou une série d'étapes.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Utiliser un <code>&lt;hr&gt;</code> comme séparateur visuel entre deux sections.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter un attribut <code>title</code> sur les liens pour donner une info supplémentaire au survol.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Utiliser <code>&lt;h3&gt;</code> à l'intérieur d'une section pour créer une hiérarchie de titres à 3 niveaux.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTHODE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Choisis ton sujet</strong> et liste mentalement tout ce que tu veux dire dessus : les sections, le contenu, les listes.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Crée le fichier <code>index.html</code></strong> dans un nouveau dossier. Tape <code>!</code> + Entrée dans VS Code pour le squelette de base.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Construis le squelette HTML</strong> d'abord : <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code> vides. Vérifie l'imbrication avant d'ajouter du contenu.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>Remplis le contenu</strong> section par section — <code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;ul&gt;</code>. Formate (Shift+Alt+F) après chaque section.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>Ajoute l'image et le lien.</strong> Assure-toi que l'image a un <code>alt</code> descriptif (pas juste "image").</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">6</div>
+        <div class="step-content"><strong>Ajoute le CSS couleurs</strong> dans un <code>&lt;style&gt;</code> dans le <code>&lt;head&gt;</code> : 3 règles maximum (body, h1/h2, éventuellement a).</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">7</div>
+        <div class="step-content"><strong>Ouvre dans le navigateur</strong> et vérifie que tout s'affiche correctement. Fais une dernière passe de formatage.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✅</div>Checklist avant de rendre</div>
+    <p class="desc">Coche chaque point avant de soumettre ton projet :</p>
+
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Mon fichier <code>index.html</code> s'ouvre sans erreur dans le navigateur.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai un <code>&lt;!DOCTYPE html&gt;</code>, un <code>&lt;head&gt;</code> avec <code>&lt;title&gt;</code> et un <code>&lt;body&gt;</code>.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai un <code>&lt;header&gt;</code>, un <code>&lt;main&gt;</code> et un <code>&lt;footer&gt;</code>.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai au moins 2 sections avec <code>&lt;h2&gt;</code> et plusieurs <code>&lt;p&gt;</code>.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai une liste <code>&lt;ul&gt;</code> ou <code>&lt;ol&gt;</code> avec au moins 3 <code>&lt;li&gt;</code>.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai une image <code>&lt;img src="..." alt="..."&gt;</code> avec un alt descriptif.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai au moins un lien <code>&lt;a href="..."&gt;</code> fonctionnel.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Mon code est bien indenté et lisible (Shift+Alt+F utilisé).</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    La structure HTML, c'est la fondation de tout. Un code propre aujourd'hui = moins de bugs demain.<br><br>
+    <span style="font-size:0.82rem;">Comprendre → Chercher → Coder → Tester → Recommencer 🚀</span><br><br>
+    <a class="cta-btn" href="../css/projet-css.html">Passer au CSS &rarr;</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) {
+      box.classList.toggle('checked');
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Mon site stylisé en CSS</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎨%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    /* Ideas grid */
+    .ideas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.6rem; }
+    .idea-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .idea-title { font-weight: 800; margin-bottom: 4px; font-size: 0.9rem; }
+
+    /* CSS themes grid */
+    .themes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.6rem; }
+    .theme-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .theme-title { font-weight: 800; margin-bottom: 4px; font-size: 0.9rem; }
+
+    /* Requirements */
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    /* Checklist */
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn {
+      display: inline-block; background: #FAC775; color: #412402;
+      font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+      border-radius: 10px; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.7rem; }
+      .ideas-grid { grid-template-columns: 1fr; }
+      .themes-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="exercices-css.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>🎨 Projet — Mon site stylisé en CSS</h1>
+    <p>Reprends ta page HTML et transforme-la visuellement — mise en page, typographie, espace, couleurs.</p>
+    <div class="badge-row">
+      <span class="badge b-coral">HTML</span>
+      <span class="badge b-purple">CSS complet</span>
+      <span class="badge b-teal">Flexbox / Grid</span>
+      <span class="badge b-blue">Typographie</span>
+      <span class="badge b-amber">Responsive</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Ce projet est la <strong>suite directe du projet HTML</strong>. Tu repars du même fichier <code>index.html</code> que tu as déjà créé — et tu y ajoutes un <strong>fichier CSS séparé</strong> (<code>style.css</code>) pour lui donner du style.</p>
+    <p class="desc">L'objectif : transformer une page fonctionnelle mais brute en une page <strong>visuellement agréable, bien organisée et lisible</strong>. Tu dois travailler la mise en page avec Flexbox ou Grid, la typographie, les espacements et les couleurs.</p>
+    <div class="tip tip-blue">
+      <span class="tip-i">💡</span>
+      <span>Le CSS va dans un fichier séparé <code>style.css</code> lié dans le <code>&lt;head&gt;</code> : <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>. Plus de CSS dans le HTML — sauf exception justifiée.</span>
+    </div>
+  </div>
+
+  <!-- CE QUE TU VAS APPRENDRE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">📚</div>Ce que tu vas mettre en pratique</div>
+    <p class="desc">Tu vas utiliser les 6 grands domaines du CSS pour habiller ta page :</p>
+
+    <div class="themes-grid">
+      <div class="theme-card" style="background:#E6F1FB;border:0.5px solid #85B7EB;">
+        <div class="theme-title" style="color:#0C447C;">📦 Box model</div>
+        <div style="font-size:0.83rem;color:#185FA5;"><code>margin</code>, <code>padding</code>, <code>border</code>, <code>width</code> — l'espace autour et à l'intérieur.</div>
+      </div>
+      <div class="theme-card" style="background:#EEEDFE;border:0.5px solid #CECBF6;">
+        <div class="theme-title" style="color:#3C3489;">🔤 Typographie</div>
+        <div style="font-size:0.83rem;color:#4D3B8A;"><code>font-family</code>, <code>font-size</code>, <code>font-weight</code>, <code>line-height</code>, <code>text-align</code>.</div>
+      </div>
+      <div class="theme-card" style="background:#FAEEDA;border:0.5px solid #FAC775;">
+        <div class="theme-title" style="color:#633806;">🎨 Couleurs</div>
+        <div style="font-size:0.83rem;color:#8C5010;"><code>color</code>, <code>background-color</code>, <code>border-color</code> — avec une palette cohérente.</div>
+      </div>
+      <div class="theme-card" style="background:#E1F5EE;border:0.5px solid #9FE1CB;">
+        <div class="theme-title" style="color:#085041;">🏗️ Flexbox / Grid</div>
+        <div style="font-size:0.83rem;color:#0D7A5F;">Mise en page de sections, centrage, colonnes — <code>display: flex</code> ou <code>grid</code>.</div>
+      </div>
+      <div class="theme-card" style="background:#FAECE7;border:0.5px solid #F5C4B3;">
+        <div class="theme-title" style="color:#712B13;">✨ Effets</div>
+        <div style="font-size:0.83rem;color:#9E3459;"><code>border-radius</code>, <code>box-shadow</code>, <code>transition</code> — le côté soigné et moderne.</div>
+      </div>
+      <div class="theme-card" style="background:#F1EFE8;border:0.5px solid #B4B2A9;">
+        <div class="theme-title" style="color:#444441;">📱 Responsive</div>
+        <div style="font-size:0.83rem;color:#5F5E5A;"><code>@media</code> — la page s'adapte sur mobile avec quelques règles simples.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAHIER DES CHARGES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Cahier des charges — Exigences obligatoires</div>
+
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Un fichier <code>style.css</code> séparé, lié correctement au HTML avec <code>&lt;link&gt;</code>.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le <code>&lt;header&gt;</code> est visuellement distinct : couleur de fond, centrage du texte, padding généreux.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Une mise en page avec <strong>Flexbox ou Grid</strong> pour au moins une section (ex : cards côte à côte, deux colonnes…).</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>La typographie est soignée : police lisible, taille cohérente entre <code>h1</code>, <code>h2</code>, <code>p</code>, espacements.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Les liens (<code>&lt;a&gt;</code>) ont un style au survol (<code>:hover</code>) différent de l'état normal.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le <code>&lt;footer&gt;</code> est visuellement distinct du contenu principal.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>La largeur de la page est limitée (ex : <code>max-width: 900px; margin: 0 auto;</code>) — le texte ne s'étire pas sur tout l'écran.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus</div>
+
+    <div class="req-list">
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Utiliser des <strong>variables CSS</strong> (<code>:root { --couleur: #3C3489; }</code>) pour centraliser toute la palette de couleurs.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter une <code>@media</code> query pour que la page soit lisible sur mobile (colonnes → 1 colonne, texte plus petit…).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter des <strong>transitions CSS</strong> sur les liens ou les cards (<code>transition: 0.2s ease</code>).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Styliser les listes : supprimer les puces par défaut, ajouter une icône ou un style personnalisé.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Utiliser une <strong>Google Font</strong> importée dans le <code>&lt;head&gt;</code> pour une typographie personnalisée.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTHODE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Reprends ton dossier HTML</strong> du projet précédent. Crée un fichier <code>style.css</code> dans le même dossier et lie-le dans le <code>&lt;head&gt;</code>.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Commence par le <code>body</code></strong> : police, couleur de fond, <code>max-width</code>, <code>margin: 0 auto</code>. C'est la base de tout le reste.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Style le header</strong> en premier — couleur de fond, padding, centrage. Il donne le ton visuel de toute la page.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>Travaille section par section</strong>. Pour chaque partie du contenu : espacements, couleurs, éventuellement une mise en page Flexbox.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>Ajoute les effets</strong> : <code>border-radius</code> sur les images, <code>box-shadow</code> sur les cards, <code>:hover</code> sur les liens.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">6</div>
+        <div class="step-content"><strong>Vérifie sur un écran plus petit</strong> (DevTools → mode responsive) et ajuste si nécessaire avec une <code>@media</code>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✅</div>Checklist avant de rendre</div>
+    <p class="desc">Coche chaque point avant de soumettre ton projet :</p>
+
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Mon fichier <code>style.css</code> est lié correctement dans le <code>&lt;head&gt;</code>.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Le <code>&lt;header&gt;</code> est visuellement distinct avec fond + centrage + padding.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai utilisé Flexbox ou Grid pour au moins une section de mise en page.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>La typographie est cohérente : tailles, poids, espacements.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Les liens ont un style <code>:hover</code> différent de l'état normal.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>La largeur de la page est limitée avec <code>max-width</code>.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>La page est lisible et agréable — pas de couleurs qui "crient", bon contraste texte/fond.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai testé dans le navigateur et il n'y a aucune erreur dans la console.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Un bon CSS, c'est 20% de créativité et 80% de rigueur. Espacement, contraste, cohérence.<br><br>
+    <span style="font-size:0.82rem;">Comprendre → Chercher → Coder → Tester → Recommencer 🚀</span><br><br>
+    <a class="cta-btn" href="../html-avance/projet-html-avance.html">Passer au HTML avancé &rarr;</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) {
+      box.classList.toggle('checked');
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Jeu de plateforme par vibe coding</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%95%B9%EF%B8%8F%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    /* Levels grid */
+    .levels-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 0.6rem; }
+    .level-card { border-radius: 12px; padding: 1rem 1.2rem; font-size: 0.88rem; line-height: 1.5; }
+    .level-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .level-badge { font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 20px; }
+
+    /* Architecture */
+    .arch-block { background: #1E1D1A; border-radius: 12px; padding: 1.2rem 1.4rem; margin-top: 0.8rem; }
+    .arch-title { color: #FAC775; font-weight: 800; font-size: 0.9rem; margin-bottom: 0.8rem; }
+    .arch-fn { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 0.5rem; font-size: 0.85rem; line-height: 1.6; }
+    .fn-name { font-family: 'Fira Code', monospace; color: #9FE1CB; font-weight: 700; white-space: nowrap; min-width: 160px; flex-shrink: 0; }
+    .fn-desc { color: #C8C8C8; }
+
+    /* Requirements */
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    /* Checklist */
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn {
+      display: inline-block; background: #FAC775; color: #412402;
+      font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+      border-radius: 10px; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.7rem; }
+      .fn-name { min-width: 120px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="exercices-vibecoding-canvas.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>🕹️ Projet — Jeu de plateforme Canvas</h1>
+    <p>Crée un jeu de plateforme classique avec 3 niveaux progressifs en JavaScript Canvas !</p>
+    <div class="badge-row">
+      <span class="badge b-amber">Canvas 2D</span>
+      <span class="badge b-purple">JavaScript</span>
+      <span class="badge b-teal">3 niveaux</span>
+      <span class="badge b-coral">Vibe Coding</span>
+      <span class="badge b-blue">Projet guidé</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Tu vas créer un <strong>jeu de plateforme classique</strong> — personnage qui saute, plateformes, ennemis, collectibles — avec 3 niveaux de difficulté croissante. Le jeu tourne entièrement dans le navigateur via Canvas HTML5 et JavaScript.</p>
+    <p class="desc">L'IA génère les fonctions — <strong>toi tu assembles, tu lis, tu testes, tu débogues</strong>. Le résultat doit être un jeu jouable du début à la fin, avec une vraie progression entre les niveaux.</p>
+    <div class="tip tip-amber">
+      <span class="tip-i">⚠️</span>
+      <span>Demande les fonctions <strong>une par une</strong> à l'IA. Commence par la boucle de jeu, puis le joueur, puis les plateformes, puis les ennemis. N'essaie pas de tout générer en une seule demande — c'est la recette garantie de l'effet spaghetti.</span>
+    </div>
+  </div>
+
+  <!-- LES 3 NIVEAUX -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">🗺️</div>Les 3 niveaux — progression obligatoire</div>
+    <p class="desc">Chaque niveau doit être <strong>noticeablement différent</strong> du précédent. Voici la progression attendue :</p>
+
+    <div class="levels-grid">
+      <div class="level-card" style="background:#E1F5EE;border:0.5px solid #9FE1CB;">
+        <div class="level-header">
+          <span style="font-size:1.3rem;">🟢</span>
+          <div>
+            <div style="font-weight:800;color:#085041;font-size:0.95rem;">Niveau 1 — Initiation</div>
+            <span class="level-badge" style="background:#D0F4EA;color:#085041;">Facile</span>
+          </div>
+        </div>
+        <div style="font-size:0.84rem;color:#0D7A5F;line-height:1.6;">
+          Plateformes fixes et larges · Gravité normale · Aucun ennemi · 1 collectible à atteindre pour passer au niveau 2. Le joueur apprend à sauter et se déplacer.
+        </div>
+      </div>
+
+      <div class="level-card" style="background:#FAEEDA;border:0.5px solid #FAC775;">
+        <div class="level-header">
+          <span style="font-size:1.3rem;">🟡</span>
+          <div>
+            <div style="font-weight:800;color:#633806;font-size:0.95rem;">Niveau 2 — Difficulté</div>
+            <span class="level-badge" style="background:#FEF3C7;color:#b45309;">Moyen</span>
+          </div>
+        </div>
+        <div style="font-size:0.84rem;color:#8C5010;line-height:1.6;">
+          Plateformes plus petites et espacées · 1 ou 2 ennemis qui patrouillent · Collectibles multiples (ex : 3 étoiles) à ramasser avant de passer. Contact avec un ennemi = retour début du niveau.
+        </div>
+      </div>
+
+      <div class="level-card" style="background:#FCEBEB;border:0.5px solid #F09595;">
+        <div class="level-header">
+          <span style="font-size:1.3rem;">🔴</span>
+          <div>
+            <div style="font-weight:800;color:#791F1F;font-size:0.95rem;">Niveau 3 — Challenge</div>
+            <span class="level-badge" style="background:#FFE4E6;color:#be123c;">Difficile</span>
+          </div>
+        </div>
+        <div style="font-size:0.84rem;color:#A32D2D;line-height:1.6;">
+          Plateformes mobiles ou très étroites · Ennemis plus rapides · Obstacles supplémentaires (pics, chutes mortelles) · Boss ou nombre de collectibles plus élevé. Écran victoire à l'issue du niveau 3.
+        </div>
+      </div>
+    </div>
+
+    <div class="tip tip-blue" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span>Chaque niveau peut être défini par un <strong>objet de données</strong> : <code>{ plateformes: [...], ennemis: [...], collectibles: [...] }</code>. Dis à l'IA que tu veux que les niveaux soient configurables via des données — c'est la meilleure architecture pour 3 niveaux.</span>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE RECOMMANDÉE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-blue">🏗️</div>Architecture recommandée</div>
+    <p class="desc">Découpe ton jeu en fonctions claires. Montre cet organigramme à l'IA quand tu commences — elle s'y conformera :</p>
+
+    <div class="arch-block">
+      <div class="arch-title">📋 game.js — fonctions à construire une par une</div>
+      <div class="arch-fn"><span class="fn-name">init(niveau)</span><span class="fn-desc">Charge les données du niveau (plateformes, ennemis, collectibles), remet le joueur à sa position de départ.</span></div>
+      <div class="arch-fn"><span class="fn-name">gameLoop()</span><span class="fn-desc">La boucle principale : update() → checkCollisions() → draw() → requestAnimationFrame.</span></div>
+      <div class="arch-fn"><span class="fn-name">update()</span><span class="fn-desc">Applique la gravité au joueur, déplace le joueur selon les touches, déplace les ennemis.</span></div>
+      <div class="arch-fn"><span class="fn-name">applyGravity()</span><span class="fn-desc">Ajoute une vélocité verticale au joueur et détecte l'atterrissage sur une plateforme.</span></div>
+      <div class="arch-fn"><span class="fn-name">checkCollisions()</span><span class="fn-desc">Joueur vs ennemi (reset niveau), joueur vs collectible (supprime + compteur), joueur vs sortie (niveau suivant).</span></div>
+      <div class="arch-fn"><span class="fn-name">draw()</span><span class="fn-desc">Efface le canvas, redessine fond + plateformes + collectibles + ennemis + joueur + HUD (score, niveau, vies).</span></div>
+      <div class="arch-fn"><span class="fn-name">nextLevel()</span><span class="fn-desc">Incrémente le numéro de niveau, appelle init() si niveau ≤ 3, sinon affiche l'écran victoire.</span></div>
+      <div class="arch-fn"><span class="fn-name">showVictory()</span><span class="fn-desc">Arrête la boucle, affiche "Bravo ! Jeu terminé !" avec score total et bouton Rejouer.</span></div>
+    </div>
+  </div>
+
+  <!-- CAHIER DES CHARGES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Cahier des charges — Exigences obligatoires</div>
+
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le jeu se lance dans le navigateur sans erreur JavaScript dans la console.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le personnage se déplace (gauche/droite) et saute avec un contrôle clavier fonctionnel.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>La gravité est implémentée : le personnage tombe et atterrit correctement sur les plateformes.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span><strong>3 niveaux distincts</strong> avec une difficulté croissante clairement visible.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Une condition de passage au niveau suivant (collectible, sortie, score…) et un écran victoire au niveau 3.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Un HUD visible : numéro de niveau actuel + score ou vies.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Tu peux expliquer le rôle de la boucle de jeu et des fonctions principales.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus</div>
+
+    <div class="req-list">
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Des <strong>sprites ou images</strong> à la place des rectangles colorés pour le personnage et les ennemis (<code>drawImage()</code>).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Des <strong>plateformes mobiles</strong> au niveau 3 (va-et-vient horizontal ou vertical).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Un <strong>système de vies</strong> : 3 vies, perte d'une vie au contact d'un ennemi, game over à 0 vie.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Des <strong>effets sonores</strong> simples via l'API Web Audio (saut, collecte, mort, victoire).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Un <strong>écran d'accueil</strong> avec le titre du jeu et un bouton "Jouer" avant le lancement de la boucle de jeu.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTHODE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Pose le canvas et la boucle</strong> — Commence par le minimum : un canvas qui s'affiche, une boucle <code>requestAnimationFrame</code> qui tourne, un carré qui représente le joueur. Vérifie que ça s'affiche avant de continuer.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Ajoute le mouvement et la gravité</strong> — Touches clavier pour gauche/droite, gravité qui fait tomber le joueur, détection d'atterrissage sur une plateforme horizontale. Teste chaque étape dans le navigateur.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Construis le niveau 1</strong> — Définis les plateformes comme un tableau d'objets <code>{x, y, w, h}</code>. Fais traverser le niveau de gauche à droite avec un collectible à atteindre. Le joueur doit pouvoir le finir.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>Ajoute les ennemis pour le niveau 2</strong> — Un ennemi = un objet avec position et vitesse. La détection de collision avec le joueur est une condition AABB (rectangle contre rectangle). Demande à l'IA la fonction <code>checkCollisions()</code>.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>Crée le niveau 3</strong> — Augmente la difficulté : ennemis plus rapides, plateformes plus petites, obstacles. Assure-toi que le niveau est difficile mais faisable.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">6</div>
+        <div class="step-content"><strong>Peaufine et teste</strong> — Joue à ton propre jeu du début à la fin. Chaque bug que tu trouves et corriges est de l'apprentissage. Demande à l'IA d'expliquer les bugs si tu ne comprends pas leur cause.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✓</div>Checklist de vérification</div>
+
+    <div class="checklist">
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le jeu se lance sans erreur dans la console du navigateur</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le personnage se déplace et saute correctement</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>La gravité fonctionne — le joueur atterrit sur les plateformes</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Les 3 niveaux sont jouables et ont une difficulté croissante</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le passage au niveau suivant fonctionne correctement</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Un écran de victoire s'affiche après le niveau 3</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Je sais expliquer le rôle de <code>requestAnimationFrame</code> dans mon jeu</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Je peux expliquer comment fonctionne la détection de collision</span></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Comprendre &rarr; Chercher &rarr; Coder &rarr; Tester &rarr; Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html#step1vibe">&larr; Retour au sommaire</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) {
+      box.classList.toggle('checked');
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Adapter un template</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎨%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    /* Context cards */
+    .context-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.6rem; }
+    .context-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .context-title { font-weight: 800; margin-bottom: 4px; font-size: 0.9rem; }
+
+    /* Modification list */
+    .mod-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .mod-item { display: flex; gap: 12px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; background: #F5F4F0; border-left: 3px solid #B4B2A9; }
+    .mod-num { font-weight: 800; color: #633806; flex-shrink: 0; font-size: 0.95rem; }
+
+    /* Requirements */
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    /* Checklist */
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn {
+      display: inline-block; background: #FAC775; color: #412402;
+      font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+      border-radius: 10px; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.7rem; }
+      .context-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="exercices-templates.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>🎨 Projet — Adapter un template</h1>
+    <p>Trouve un template HTML/CSS, comprends-le, et adapte-le pour représenter ton école ou le club journal.</p>
+    <div class="badge-row">
+      <span class="badge b-purple">Template</span>
+      <span class="badge b-coral">HTML/CSS</span>
+      <span class="badge b-teal">Adaptation</span>
+      <span class="badge b-blue">Lecture de code</span>
+      <span class="badge b-amber">Contenu réel</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Tu vas <strong>trouver un template HTML/CSS</strong> sur CodePen, HTML5up, ou un autre site — puis le modifier pour qu'il représente <strong>ton établissement scolaire ou le club journal</strong>.</p>
+    <p class="desc">Le but principal est de <strong>lire et comprendre du code que tu n'as pas écrit</strong>, puis de le modifier avec confiance : changer les couleurs, les textes, les images, la navigation, les sections.</p>
+    <div class="tip tip-purple">
+      <span class="tip-i">🧠</span>
+      <span>Un dev passe souvent plus de temps à <strong>lire</strong> du code qu'à en écrire. Savoir comprendre un template inconnu rapidement, c'est une compétence fondamentale.</span>
+    </div>
+  </div>
+
+  <!-- CONTEXTE DU SITE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">🏫</div>Choisir le contexte de ton site</div>
+    <p class="desc">Tu adaptes le template pour l'un de ces deux contextes — choisis celui qui t'inspire le plus :</p>
+
+    <div class="context-grid">
+      <div class="context-card" style="background:#E6F1FB;border:0.5px solid #85B7EB;">
+        <div class="context-title" style="color:#0C447C;">🏫 L'établissement scolaire</div>
+        <div style="font-size:0.83rem;color:#185FA5;margin-top:4px;">Nom de l'école, sections (accueil, à propos, activités, contact), photos, couleurs de l'école.</div>
+      </div>
+      <div class="context-card" style="background:#EEEDFE;border:0.5px solid #CECBF6;">
+        <div class="context-title" style="color:#3C3489;">📰 Le club journal</div>
+        <div style="font-size:0.83rem;color:#4D3B8A;margin-top:4px;">Présentation du club, derniers articles, membres de la rédaction, comment rejoindre, archives.</div>
+      </div>
+    </div>
+
+    <div class="tip tip-amber" style="margin-top:0.9rem;">
+      <span class="tip-i">💡</span>
+      <span>Bons endroits pour trouver un template : <strong>CodePen.io</strong> (recherche "landing page HTML CSS"), <strong>HTML5up.net</strong> (templates libres), ou cherche "free HTML template" sur Google. Prends quelque chose de relativement simple.</span>
+    </div>
+  </div>
+
+  <!-- CE QU'IL FAUT MODIFIER -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-blue">✏️</div>Modifications obligatoires</div>
+    <p class="desc">Une fois ton template choisi, tu dois effectuer ces modifications :</p>
+
+    <div class="mod-list">
+      <div class="mod-item">
+        <span class="mod-num">1.</span>
+        <span><strong>Textes :</strong> Remplace TOUS les textes de placeholder (Lorem ipsum, titres génériques) par le vrai contenu de ton établissement ou club.</span>
+      </div>
+      <div class="mod-item">
+        <span class="mod-num">2.</span>
+        <span><strong>Couleurs :</strong> Adapte la palette de couleurs pour correspondre à l'identité visuelle de l'école ou du club (couleurs officielles si connues, sinon cohérence propre).</span>
+      </div>
+      <div class="mod-item">
+        <span class="mod-num">3.</span>
+        <span><strong>Navigation :</strong> Les liens du <code>&lt;nav&gt;</code> correspondent aux vraies sections de ton site (pas "Home, About, Services, Contact" génériques).</span>
+      </div>
+      <div class="mod-item">
+        <span class="mod-num">4.</span>
+        <span><strong>Images :</strong> Remplace les images de placeholder par des images pertinentes (photos réelles ou libres de droits sur Unsplash, Pexels).</span>
+      </div>
+      <div class="mod-item">
+        <span class="mod-num">5.</span>
+        <span><strong>Structure :</strong> Ajoute ou supprime des sections du template pour que ça corresponde à ce que tu veux présenter — pas obligé de garder tout.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAHIER DES CHARGES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Cahier des charges — Exigences obligatoires</div>
+
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le template est identifié — note son nom et sa source dans un commentaire HTML en haut du fichier.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Tous les textes placeholder sont remplacés par du vrai contenu lié au contexte choisi.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>La palette de couleurs est adaptée — au moins les couleurs principales du template sont changées.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>La navigation correspond aux vraies sections du site.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le site s'ouvre sans erreur — aucun lien cassé, aucune image manquante.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Tu es capable d'expliquer comment 3 éléments du template fonctionnent (une mise en page, un effet, une section).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus</div>
+
+    <div class="req-list">
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter une section qui n'était pas dans le template original (créée toi-même en HTML/CSS).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter une interaction JavaScript simple : menu hamburger mobile, animation au scroll, modal…</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Publier le site sur <strong>GitHub Pages</strong> et partager le lien.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Utiliser des <strong>variables CSS</strong> (<code>:root { --couleur: … }</code>) pour refactoriser les couleurs du template.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTHODE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Trouve ton template</strong> sur CodePen ou HTML5up. Télécharge-le ou copie le code dans un nouveau dossier local.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Lis le code avant de modifier.</strong> Ouvre les fichiers HTML et CSS, survole les classes, comprends les grandes sections. Note le nom du template en commentaire.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Modifie les textes d'abord</strong> — c'est le plus rapide. Remplace tout le contenu placeholder par le vrai texte de ton contexte.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>Change les couleurs</strong> dans le CSS. Cherche les couleurs hexadécimales (ex: <code>#3498db</code>) et remplace-les par ta palette. Utilise Ctrl+H pour chercher/remplacer.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>Adapte les images.</strong> Remplace les <code>src</code> des <code>&lt;img&gt;</code> par tes propres images ou des images libres de droits (Unsplash, Pexels).</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">6</div>
+        <div class="step-content"><strong>Ajuste la structure</strong> : supprime les sections non pertinentes, ajoute ce qui manque. Teste dans le navigateur après chaque modification importante.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✅</div>Checklist avant de rendre</div>
+
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Le nom et la source du template sont notés en commentaire en haut du fichier HTML.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Aucun texte "Lorem ipsum" ou placeholder générique ne reste visible.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Les couleurs principales sont adaptées au contexte (établissement ou club journal).</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>La navigation contient les bonnes sections, pas des labels génériques.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Le site s'ouvre sans erreur dans le navigateur.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Je peux expliquer comment 3 parties du template fonctionnent.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Le résultat représente réellement mon établissement ou mon club journal.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Adapter un template, c'est la réalité du métier. Peu de sites partent de zéro — savoir lire et modifier du code existant est une compétence clé.<br><br>
+    <span style="font-size:0.82rem;">Comprendre → Chercher → Coder → Tester → Recommencer 🚀</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html">Retour au sommaire &rarr;</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) {
+      box.classList.toggle('checked');
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Mon site enrichi en HTML avancé</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🏗️%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    /* Tags table */
+    .tags-table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.88rem; }
+    .tags-table th { text-align: left; padding: 8px 10px; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #888780; border-bottom: 1px solid #E8E6DE; }
+    .tags-table td { padding: 8px 10px; border-bottom: 0.5px solid #F1EFE8; vertical-align: top; }
+    .tags-table tr:last-child td { border-bottom: none; }
+    .tag-chip { font-family: 'Fira Code', monospace; background: #EEEDFE; color: #3C3489; border-radius: 4px; padding: 1px 7px; font-size: 0.83em; font-weight: 500; white-space: nowrap; }
+    .tag-chip.orange { background: #FAEEDA; color: #633806; }
+    .tag-chip.teal { background: #E1F5EE; color: #085041; }
+    .tag-chip.coral { background: #FAECE7; color: #712B13; }
+
+    /* Requirements */
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    /* Checklist */
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn {
+      display: inline-block; background: #FAC775; color: #412402;
+      font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+      border-radius: 10px; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="exercices-html-avance.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>🏗️ Projet — Mon site enrichi en HTML avancé</h1>
+    <p>Reprends ton site CSS et ajoute les nouvelles balises sémantiques — navigation, vidéo, articles, sections et plus.</p>
+    <div class="badge-row">
+      <span class="badge b-coral">HTML sémantique</span>
+      <span class="badge b-purple">CSS existant</span>
+      <span class="badge b-teal">&lt;nav&gt; &lt;article&gt;</span>
+      <span class="badge b-amber">&lt;video&gt; &lt;details&gt;</span>
+      <span class="badge b-blue">Structure avancée</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Ce projet est la <strong>suite directe du projet CSS</strong>. Tu repars du même site que tu as déjà stylisé — et tu l'enrichis avec les <strong>nouvelles balises sémantiques</strong> du cours HTML avancé.</p>
+    <p class="desc">L'objectif : rendre la page <strong>plus riche, plus professionnelle et plus accessible</strong> grâce à un balisage sémantique correct. Une page bien balisée est mieux comprise par les moteurs de recherche, les lecteurs d'écran et les autres développeurs qui liront ton code.</p>
+    <div class="tip tip-purple">
+      <span class="tip-i">🧠</span>
+      <span>Sémantique = donner du <strong>sens</strong> à chaque partie du code. <code>&lt;nav&gt;</code> dit "c'est un menu", <code>&lt;article&gt;</code> dit "c'est un contenu autonome", <code>&lt;aside&gt;</code> dit "c'est une info secondaire". Les <code>&lt;div&gt;</code> ne disent rien — utilise-les en dernier recours.</span>
+    </div>
+  </div>
+
+  <!-- NOUVELLES BALISES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-blue">🏷️</div>Les balises à utiliser dans ce projet</div>
+    <p class="desc">Tu dois intégrer au moins <strong>5 de ces balises</strong> dans ton site, là où elles ont du sens :</p>
+
+    <table class="tags-table">
+      <tr>
+        <th>Balise</th>
+        <th>Rôle</th>
+        <th>Exemple d'usage</th>
+      </tr>
+      <tr>
+        <td><span class="tag-chip">&lt;nav&gt;</span></td>
+        <td>Menu de navigation principal</td>
+        <td>Liens vers les sections de la page</td>
+      </tr>
+      <tr>
+        <td><span class="tag-chip orange">&lt;article&gt;</span></td>
+        <td>Contenu autonome et réutilisable</td>
+        <td>Une fiche, un post, une recette</td>
+      </tr>
+      <tr>
+        <td><span class="tag-chip">&lt;section&gt;</span></td>
+        <td>Groupe thématique avec un titre</td>
+        <td>Une rubrique de la page</td>
+      </tr>
+      <tr>
+        <td><span class="tag-chip teal">&lt;aside&gt;</span></td>
+        <td>Information complémentaire</td>
+        <td>Citation, fun fact, encart de stats</td>
+      </tr>
+      <tr>
+        <td><span class="tag-chip coral">&lt;video&gt;</span></td>
+        <td>Vidéo intégrée avec contrôles</td>
+        <td>Trailer, tutoriel, présentation</td>
+      </tr>
+      <tr>
+        <td><span class="tag-chip">&lt;figure&gt; / &lt;figcaption&gt;</span></td>
+        <td>Image avec légende</td>
+        <td>Photo illustrée + description</td>
+      </tr>
+      <tr>
+        <td><span class="tag-chip orange">&lt;details&gt; / &lt;summary&gt;</span></td>
+        <td>Accordéon natif HTML</td>
+        <td>FAQ, anecdote cachée, spoiler</td>
+      </tr>
+      <tr>
+        <td><span class="tag-chip teal">&lt;time&gt;</span></td>
+        <td>Date ou heure sémantique</td>
+        <td>Date de publication, année</td>
+      </tr>
+    </table>
+
+    <div class="tip tip-amber" style="margin-top:0.9rem;">
+      <span class="tip-i">⚠️</span>
+      <span>Ne remplace pas toutes tes <code>&lt;div&gt;</code> d'un coup au hasard. Pose-toi la question : <em>"Ce contenu est-il un menu ? Un article ? Une section ?"</em> Si oui, utilise la balise correspondante. Sinon, garde la <code>&lt;div&gt;</code>.</span>
+    </div>
+  </div>
+
+  <!-- CAHIER DES CHARGES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Cahier des charges — Exigences obligatoires</div>
+
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Ajouter un <code>&lt;nav&gt;</code> avec au moins <strong>3 liens internes</strong> vers des sections de la page (ancres <code>#id</code>).</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Remplacer les <code>&lt;div&gt;</code> de contenu principal par des <code>&lt;section&gt;</code> avec un <code>id</code> correspondant aux liens du nav.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Utiliser <code>&lt;article&gt;</code> pour au moins <strong>un élément de contenu autonome</strong> (une fiche, une recette, un post…).</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Utiliser <code>&lt;aside&gt;</code> pour une information complémentaire à côté du contenu principal (fun fact, encart…).</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Ajouter une <code>&lt;figure&gt;</code> avec une <code>&lt;figcaption&gt;</code> pour au moins une image.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Ajouter au moins un bloc <code>&lt;details&gt;</code> + <code>&lt;summary&gt;</code> (accordéon/FAQ ou anecdote cachée).</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le CSS existant du projet précédent est conservé et ajusté pour les nouvelles balises (le site reste visuellement cohérent).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus</div>
+
+    <div class="req-list">
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Intégrer une <code>&lt;video&gt;</code> avec <code>controls</code> et un texte de remplacement entre les balises.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Utiliser <code>&lt;time datetime="..."&gt;</code> pour dater une information (ex : année de sortie, date de publication).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Styliser le <code>&lt;nav&gt;</code> en CSS pour en faire une barre de navigation visuellement distincte (fond, liens côte à côte).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Rendre le <code>&lt;nav&gt;</code> "sticky" (<code>position: sticky; top: 0;</code>) pour qu'il reste visible en scrollant.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter plusieurs <code>&lt;details&gt;</code> pour créer une FAQ complète sur ton sujet.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTHODE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Ouvre ton projet CSS</strong> existant. Relis le code HTML pour identifier les <code>&lt;div&gt;</code> qui pourraient être remplacées par des balises sémantiques.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Ajoute le <code>&lt;nav&gt;</code></strong> juste après le <code>&lt;header&gt;</code>. Donne un <code>id</code> à chaque section principale et crée les liens correspondants.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Remplace les <code>&lt;div&gt;</code> de section</strong> par des <code>&lt;section&gt;</code> et identifie les contenus qui méritent d'être des <code>&lt;article&gt;</code>.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>Ajoute l'<code>&lt;aside&gt;</code></strong> dans une section qui a une info complémentaire naturelle. Stylise-le différemment (fond légèrement teinté, bordure…).</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>Remplace un <code>&lt;img&gt;</code></strong> par une <code>&lt;figure&gt;&lt;img&gt;&lt;figcaption&gt;…&lt;/figcaption&gt;&lt;/figure&gt;</code> et ajoute un bloc <code>&lt;details&gt;</code>.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">6</div>
+        <div class="step-content"><strong>Ajuste le CSS</strong> pour les nouvelles balises. Vérifie que le site reste cohérent visuellement. Teste dans le navigateur.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✅</div>Checklist avant de rendre</div>
+    <p class="desc">Coche chaque point avant de soumettre ton projet :</p>
+
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Mon site s'ouvre sans erreur et le CSS du projet précédent est toujours actif.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai un <code>&lt;nav&gt;</code> avec au moins 3 liens vers des sections de la page.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai des <code>&lt;section&gt;</code> avec des <code>id</code> correspondant aux liens du nav.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai au moins un <code>&lt;article&gt;</code> pour un contenu autonome.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai un <code>&lt;aside&gt;</code> avec une info complémentaire.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai une <code>&lt;figure&gt;</code> avec une <code>&lt;figcaption&gt;</code>.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>J'ai au moins un <code>&lt;details&gt;</code> + <code>&lt;summary&gt;</code> fonctionnel.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Le site est visuellement cohérent — les nouvelles balises sont stylisées dans le CSS.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Je peux expliquer pourquoi j'ai utilisé chaque balise sémantique à l'endroit où je l'ai mise.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Le HTML sémantique, c'est le respect — pour les moteurs de recherche, pour l'accessibilité, pour les développeurs qui liront ton code.<br><br>
+    <span style="font-size:0.82rem;">Comprendre → Chercher → Coder → Tester → Recommencer 🚀</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html">Retour au sommaire &rarr;</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) {
+      box.classList.toggle('checked');
+    }
+  </script>
+
+</body>
+
+</html>

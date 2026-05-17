@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Mon site interactif JavaScript</title>
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⚡%3C/text%3E%3C/svg%3E">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f5f4f0;
+      color: #2C2C2A;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .nav-prev {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px;
+      transition: background 0.15s;
+    }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+
+    .card {
+      border-radius: 16px; border: 0.5px solid #D3D1C7;
+      background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    /* Feature cards */
+    .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.6rem; }
+    .feature-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .feature-title { font-weight: 800; margin-bottom: 4px; font-size: 0.9rem; }
+
+    /* Code block */
+    .code-block { background: #1A1E2E; border-radius: 12px; padding: 1.2rem 1.4rem; margin-top: 0.8rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 2; }
+    .c-tag   { color: #85B7EB; }
+    .c-fn    { color: #FAC775; }
+    .c-str   { color: #9FE1CB; }
+    .c-kw    { color: #CECBF6; }
+    .c-comment { color: #555; font-style: italic; }
+
+    /* Requirements */
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    /* Checklist */
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    /* Tips */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #FAC775; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn {
+      display: inline-block; background: #FAC775; color: #412402;
+      font-weight: 800; font-size: 0.97rem; padding: 10px 28px;
+      border-radius: 10px; text-decoration: none; transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.7rem; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="nav-prev" href="exercices-javascript-web.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>⚡ Projet — Mon site interactif JavaScript</h1>
+    <p>Reprends ton site HTML avancé et ajoute 3 features JavaScript DOM : pop-up, carrousel et notification.</p>
+    <div class="badge-row">
+      <span class="badge b-amber">JavaScript</span>
+      <span class="badge b-coral">DOM</span>
+      <span class="badge b-purple">Événements</span>
+      <span class="badge b-teal">HTML avancé</span>
+      <span class="badge b-blue">Interactions</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Ce projet est la <strong>suite directe du projet HTML avancé</strong>. Tu repars du même site — et tu y ajoutes <strong>3 features JavaScript</strong> qui rendent la page réellement interactive pour l'utilisateur.</p>
+    <p class="desc">L'objectif n'est pas de faire un site parfait — c'est de <strong>comprendre comment JavaScript interagit avec le DOM</strong> : sélectionner des éléments, écouter des événements, modifier l'affichage en réponse à une action utilisateur.</p>
+    <div class="tip tip-amber">
+      <span class="tip-i">⚠️</span>
+      <span>Tout ton JavaScript doit être dans un fichier <code>script.js</code> séparé, lié en bas du <code>&lt;body&gt;</code> avec <code>&lt;script src="script.js"&gt;&lt;/script&gt;</code>. Pas de JS inline dans le HTML.</span>
+    </div>
+  </div>
+
+  <!-- LES 3 FEATURES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⚡</div>Les 3 features à implémenter</div>
+    <p class="desc">Tu dois ajouter exactement ces 3 interactions. Chacune utilise des concepts DOM différents :</p>
+
+    <div class="features-grid">
+      <div class="feature-card" style="background:#FAEEDA;border:0.5px solid #FAC775;">
+        <div class="feature-title" style="color:#633806;">🪟 Pop-up / Modal</div>
+        <div style="font-size:0.83rem;color:#8C5010;">Un bouton ouvre une fenêtre modale. Un bouton "Fermer" ou un clic hors de la modale la referme.</div>
+      </div>
+      <div class="feature-card" style="background:#EEEDFE;border:0.5px solid #CECBF6;">
+        <div class="feature-title" style="color:#3C3489;">🖼️ Carrousel / Galerie</div>
+        <div style="font-size:0.83rem;color:#4D3B8A;">Des boutons "Précédent" et "Suivant" font défiler des images ou des cartes de contenu.</div>
+      </div>
+      <div class="feature-card" style="background:#E1F5EE;border:0.5px solid #9FE1CB;" style="grid-column: 1 / -1;">
+        <div class="feature-title" style="color:#085041;">🔔 Notification / Toast</div>
+        <div style="font-size:0.83rem;color:#0D7A5F;">Un message apparaît en bas ou en haut de l'écran après une action (clic, envoi de formulaire…) et disparaît automatiquement après 3 secondes.</div>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div><span class="c-comment">// Exemple — ouvrir une modale</span></div>
+      <div><span class="c-kw">const</span> btn = <span class="c-tag">document</span>.<span class="c-fn">querySelector</span>(<span class="c-str">'#open-modal'</span>);</div>
+      <div><span class="c-kw">const</span> modal = <span class="c-tag">document</span>.<span class="c-fn">querySelector</span>(<span class="c-str">'#modal'</span>);</div>
+      <div>btn.<span class="c-fn">addEventListener</span>(<span class="c-str">'click'</span>, () =&gt; {</div>
+      <div>&nbsp;&nbsp;modal.<span class="c-tag">style</span>.display = <span class="c-str">'flex'</span>;</div>
+      <div>});</div>
+    </div>
+
+    <div class="tip tip-purple" style="margin-top:0.9rem;">
+      <span class="tip-i">🧠</span>
+      <span>Pour la notification : utilise <code>setTimeout(() =&gt; { ... }, 3000)</code> pour la faire disparaître automatiquement après 3 secondes.</span>
+    </div>
+  </div>
+
+  <!-- CAHIER DES CHARGES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Cahier des charges — Exigences obligatoires</div>
+
+    <div class="req-list">
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Tout le JavaScript est dans un fichier <code>script.js</code> séparé, lié en bas du <code>&lt;body&gt;</code>.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span><strong>Pop-up / Modal :</strong> un bouton l'ouvre, un bouton "Fermer" la referme. La modale est masquée par défaut (<code>display: none</code>).</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span><strong>Carrousel :</strong> au moins 3 éléments (images ou cartes), boutons Précédent/Suivant fonctionnels, retour au début après le dernier élément.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span><strong>Notification :</strong> apparaît après une action spécifique, disparaît automatiquement après 3 secondes avec <code>setTimeout</code>.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Aucun <code>alert()</code> utilisé — tout se passe dans la page via le DOM.</span>
+      </div>
+      <div class="req-item req-must">
+        <span class="req-icon">✅</span>
+        <span>Le site reste visuellement cohérent avec le projet HTML avancé — le CSS existant est conservé.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">⭐</div>Points bonus</div>
+
+    <div class="req-list">
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Fermer la modale en cliquant sur le fond sombre derrière elle (écouter le clic sur l'overlay).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter des <strong>points de navigation</strong> au carrousel (• • •) qui indiquent l'élément actif.</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>La notification a une animation CSS d'entrée et de sortie (<code>transition</code> ou <code>animation</code>).</span>
+      </div>
+      <div class="req-item req-bonus">
+        <span class="req-icon">🌟</span>
+        <span>Ajouter une <strong>4e feature</strong> : dark mode toggle, compteur de clics, filtrage de contenu par catégorie…</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTHODE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">🚀</div>Comment réaliser ce projet</div>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>Reprends ton dossier HTML avancé.</strong> Crée <code>script.js</code> et lie-le en bas du <code>&lt;body&gt;</code>. Vérifie que <code>console.log('JS chargé')</code> s'affiche bien dans la console.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>Commence par la pop-up</strong> — c'est la plus simple. Ajoute le HTML de la modale (masquée par défaut), puis en JS : sélectionne le bouton, ajoute un <code>addEventListener('click', ...)</code>.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>Implémente le carrousel.</strong> Crée un tableau d'éléments en JS, une variable <code>index = 0</code>, et deux fonctions <code>prev()</code> et <code>next()</code> qui modifient l'affichage.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>Ajoute la notification.</strong> Crée une <code>&lt;div&gt;</code> de notification masquée dans le HTML. En JS, une fonction <code>showNotif(message)</code> l'affiche et appelle <code>setTimeout</code> pour la masquer.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>Teste chaque feature</strong> dans le navigateur, ouvre la console (F12) pour déboguer. Assure-toi que les 3 fonctionnent sans erreur.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✅</div>Checklist avant de rendre</div>
+
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Mon <code>script.js</code> est lié en bas du <code>&lt;body&gt;</code> et la console ne montre aucune erreur.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>La pop-up s'ouvre et se ferme correctement.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Le carrousel défile avec les boutons Précédent / Suivant et boucle en fin de liste.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>La notification apparaît après une action et disparaît automatiquement après 3 secondes.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Aucun <code>alert()</code> — tout se passe dans la page.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Le site est toujours visuellement cohérent avec les projets précédents.</span>
+      </div>
+      <div class="check-item">
+        <div class="check-box" onclick="toggleCheck(this)">✓</div>
+        <span>Je peux expliquer comment chaque feature fonctionne (DOM, événements, setTimeout).</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    JavaScript, c'est le moteur de toute l'interactivité du web. Maîtrise le DOM, et tu peux tout faire.<br><br>
+    <span style="font-size:0.82rem;">Comprendre → Chercher → Coder → Tester → Recommencer 🚀</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html">Retour au sommaire &rarr;</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) {
+      box.classList.toggle('checked');
+    }
+  </script>
+
+</body>
+
+</html>
