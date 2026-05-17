@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet — Django & ORM</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.1rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal { background: #E1F5EE; color: #085041; }
+        .b-blue { background: #E6F1FB; color: #0C447C; }
+        .b-amber { background: #FAEEDA; color: #633806; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-coral { background: #FAECE7; color: #712B13; }
+
+        /* PROGRESS BAR */
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+        .progress-label { font-size: 0.82rem; font-weight: 700; color: #888780; }
+        .progress-count { font-size: 0.82rem; font-weight: 700; color: #085041; }
+        .progress-wrap { height: 8px; background: #D3D1C7; border-radius: 10px; margin-bottom: 1.8rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.5s ease; width: 0%; }
+
+        /* STEPS */
+        .step-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1rem; overflow: hidden; transition: border-color 0.2s; }
+        .step-card.done { border-color: #5DCAA5; }
+        .step-header { display: flex; align-items: center; gap: 12px; padding: 1.1rem 1.4rem; cursor: pointer; user-select: none; }
+        .step-num { width: 34px; height: 34px; min-width: 34px; border-radius: 10px; background: #F1EFE8; border: 0.5px solid #D3D1C7; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; color: #888780; transition: all 0.2s; }
+        .step-card.done .step-num { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .step-card.done .step-num::after { content: '✓'; }
+        .step-card.done .step-num-text { display: none; }
+        .step-title { font-size: 1rem; font-weight: 800; flex: 1; }
+        .step-chevron { color: #B4B2A9; font-size: 1rem; transition: transform 0.2s; }
+        .step-card.open .step-chevron { transform: rotate(180deg); }
+        .step-body { display: none; padding: 0 1.4rem 1.4rem; }
+        .step-card.open .step-body { display: block; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.9; white-space: pre; overflow-x: auto; color: #2C2C2A; margin-top: 0.8rem; margin-bottom: 0.8rem; }
+        .kw { color: #993C1D; font-weight: 700; }
+        .str { color: #0F6E56; }
+        .cm { color: #888780; font-style: italic; }
+        .fn { color: #534AB7; }
+        .dec { color: #7F77DD; }
+        .num { color: #E8760A; }
+
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip-amber { background: #FAEEDA; color: #633806; }
+        .tip-blue { background: #E6F1FB; color: #0C447C; }
+        .tip-coral { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .terminal { background: #1E1E1E; color: #D4D4D4; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.8; margin-top: 0.8rem; overflow-x: auto; }
+        .terminal .prompt { color: #5DCAA5; }
+        .terminal .out { color: #9CDCFE; }
+
+        .section-mini { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin: 1rem 0 0.4rem; }
+
+        .mark-done-btn { display: inline-flex; align-items: center; gap: 7px; margin-top: 1.2rem; background: #2C2C2A; color: #FAC775; border: none; border-radius: 10px; padding: 9px 22px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: background 0.15s; }
+        .mark-done-btn:hover { background: #444441; }
+        .step-card.done .mark-done-btn { background: #E1F5EE; color: #085041; cursor: default; }
+
+        .chain-box { border-radius: 12px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.88rem; color: #5F5E5A; line-height: 1.7; }
+        .chain-box strong { color: #2C2C2A; }
+
+        .file-tree { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 2; margin: 0.8rem 0; }
+        .ft-new { color: #085041; font-weight: 700; }
+        .ft-mod { color: #E8760A; font-weight: 700; }
+        .ft-gray { color: #888780; }
+
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="exercices-django.html">← Retour aux exercices</a>
+
+<div class="hero">
+    <h1>🗄️ Projet — ORM & Admin Django</h1>
+    <p>Suite du projet blog : on remplace les données codées en dur par une vraie base de données.</p>
+    <div class="badge-row">
+        <span class="badge b-teal">models.py</span>
+        <span class="badge b-blue">migrations</span>
+        <span class="badge b-amber">admin.py</span>
+        <span class="badge b-purple">ORM queries</span>
+        <span class="badge b-coral">superuser</span>
+    </div>
+</div>
+
+<div class="chain-box">
+    <strong>Suite de :</strong> projet-django-templates.html — tu as un blog avec templates, héritage et DTL.<br>
+    <strong>Objectif :</strong> Créer le Model <code style="background:#E1F5EE;border-radius:4px;padding:1px 5px;font-family:'Fira Code',monospace;font-size:0.82em;">Article</code>, appliquer les migrations et connecter la base de données à tes vues.
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-header">
+    <span class="progress-label">Progression</span>
+    <span class="progress-count" id="prog-count">0 / 6 étapes</span>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-fill"></div></div>
+
+<!-- ÉTAPE 1 -->
+<div class="step-card open" id="step1">
+    <div class="step-header" onclick="toggleStep('step1')">
+        <div class="step-num"><span class="step-num-text">1</span></div>
+        <div class="step-title">Créer le Model Article</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Dans <code style="font-family:'Fira Code',monospace;font-size:0.85em;background:#F1EFE8;padding:1px 5px;border-radius:4px;">blog/models.py</code>, définis la classe <strong>Article</strong> qui hérite de <code style="font-family:'Fira Code',monospace;font-size:0.85em;background:#F1EFE8;padding:1px 5px;border-radius:4px;">models.Model</code>. Chaque attribut de la classe devient une colonne en base de données.</p>
+        <div class="section-mini">blog/models.py</div>
+        <div class="code-block"><span class="kw">from</span> django.db <span class="kw">import</span> models
+<span class="kw">from</span> django.contrib.auth.models <span class="kw">import</span> User
+
+<span class="kw">class</span> <span class="fn">Article</span>(models.Model):
+    titre        = models.<span class="fn">CharField</span>(max_length=<span class="num">200</span>)
+    contenu      = models.<span class="fn">TextField</span>()
+    auteur       = models.<span class="fn">ForeignKey</span>(User, on_delete=models.CASCADE)
+    date_creation = models.<span class="fn">DateTimeField</span>(auto_now_add=<span class="kw">True</span>)
+    publie       = models.<span class="fn">BooleanField</span>(default=<span class="kw">True</span>)
+
+    <span class="kw">class</span> Meta:
+        ordering = [<span class="str">'-date_creation'</span>]
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(<span class="kw">self</span>):
+        <span class="kw">return</span> <span class="kw">self</span>.titre</div>
+        <div class="tip"><span class="tip-i">ℹ️</span> <div><strong>ForeignKey</strong> crée une relation N:1 — un utilisateur peut avoir plusieurs articles. <code style="font-family:'Fira Code',monospace;font-size:0.85em;">on_delete=models.CASCADE</code> supprime les articles si l'utilisateur est supprimé.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step1')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 2 -->
+<div class="step-card" id="step2">
+    <div class="step-header" onclick="toggleStep('step2')">
+        <div class="step-num"><span class="step-num-text">2</span></div>
+        <div class="step-title">Appliquer les migrations</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Django doit transformer ton Model Python en table SQL. Deux commandes sont nécessaires :</p>
+        <div class="section-mini">Terminal</div>
+        <div class="terminal">
+<span class="prompt">$</span> python manage.py makemigrations
+<span class="out">Migrations for 'blog':
+  blog/migrations/0001_initial.py
+    - Create model Article</span>
+
+<span class="prompt">$</span> python manage.py migrate
+<span class="out">Operations to perform:
+  Apply all migrations: admin, auth, blog, contenttypes, sessions
+Running migrations:
+  Applying blog.0001_initial... OK</span>
+        </div>
+        <div class="tip tip-amber"><span class="tip-i">⚠️</span> <div><strong>makemigrations</strong> génère le fichier de migration (comme un "plan"). <strong>migrate</strong> l'applique à la base de données. Ne jamais oublier les deux.</div></div>
+        <div class="tip"><span class="tip-i">💡</span> <div>Si tu modifies un Model existant (ajouter un champ, changer un type), relance toujours <code style="font-family:'Fira Code',monospace;font-size:0.85em;">makemigrations</code> puis <code style="font-family:'Fira Code',monospace;font-size:0.85em;">migrate</code>.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step2')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 3 -->
+<div class="step-card" id="step3">
+    <div class="step-header" onclick="toggleStep('step3')">
+        <div class="step-num"><span class="step-num-text">3</span></div>
+        <div class="step-title">Enregistrer dans l'Admin Django</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Django génère automatiquement une interface d'administration pour gérer tes données. Il suffit d'enregistrer ton Model dans <code style="font-family:'Fira Code',monospace;font-size:0.85em;background:#F1EFE8;padding:1px 5px;border-radius:4px;">blog/admin.py</code>.</p>
+        <div class="section-mini">blog/admin.py</div>
+        <div class="code-block"><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> .models <span class="kw">import</span> Article
+
+<span class="dec">@admin.register</span>(Article)
+<span class="kw">class</span> <span class="fn">ArticleAdmin</span>(admin.ModelAdmin):
+    list_display  = [<span class="str">'titre'</span>, <span class="str">'auteur'</span>, <span class="str">'date_creation'</span>, <span class="str">'publie'</span>]
+    list_filter   = [<span class="str">'publie'</span>, <span class="str">'auteur'</span>]
+    search_fields = [<span class="str">'titre'</span>, <span class="str">'contenu'</span>]</div>
+        <div class="tip tip-purple"><span class="tip-i">✨</span> <div><code style="font-family:'Fira Code',monospace;font-size:0.85em;">list_display</code> choisit les colonnes visibles dans la liste admin. <code style="font-family:'Fira Code',monospace;font-size:0.85em;">list_filter</code> ajoute des filtres latéraux. <code style="font-family:'Fira Code',monospace;font-size:0.85em;">search_fields</code> active la barre de recherche.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step3')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 4 -->
+<div class="step-card" id="step4">
+    <div class="step-header" onclick="toggleStep('step4')">
+        <div class="step-num"><span class="step-num-text">4</span></div>
+        <div class="step-title">Créer un superutilisateur</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Pour accéder à l'interface d'administration, tu as besoin d'un compte administrateur. Django fournit une commande dédiée :</p>
+        <div class="section-mini">Terminal</div>
+        <div class="terminal">
+<span class="prompt">$</span> python manage.py createsuperuser
+<span class="out">Username: admin
+Email address: admin@blog.com
+Password: ********
+Password (again): ********
+Superuser created successfully.</span>
+        </div>
+        <p class="desc" style="margin-top:0.8rem;">Lance ensuite le serveur et visite <strong>http://127.0.0.1:8000/admin/</strong>. Connecte-toi, puis crée quelques articles depuis l'interface graphique.</p>
+        <div class="terminal">
+<span class="prompt">$</span> python manage.py runserver
+        </div>
+        <div class="tip tip-blue"><span class="tip-i">🔗</span> <div>Rends-toi sur <strong>http://127.0.0.1:8000/admin/</strong> → clique sur "Articles" → "Ajouter un article" → remplis le formulaire et sauvegarde. Tu verras les données apparaître dans la BDD.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step4')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 5 -->
+<div class="step-card" id="step5">
+    <div class="step-header" onclick="toggleStep('step5')">
+        <div class="step-num"><span class="step-num-text">5</span></div>
+        <div class="step-title">Connecter la BDD à la vue index</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Remplace le dictionnaire Python codé en dur par une vraie requête ORM. La vue récupère les articles publiés depuis la base de données.</p>
+        <div class="section-mini">blog/views.py — avant vs après</div>
+        <div class="code-block"><span class="cm"># AVANT — données codées en dur</span>
+<span class="kw">def</span> <span class="fn">index</span>(request):
+    contexte = {
+        <span class="str">'articles'</span>: [
+            {<span class="str">'titre'</span>: <span class="str">'Mon premier article'</span>, <span class="str">'auteur'</span>: <span class="str">'Alice'</span>},
+        ]
+    }
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="str">'blog/index.html'</span>, contexte)
+
+<span class="cm"># APRÈS — requête ORM</span>
+<span class="kw">from</span> .models <span class="kw">import</span> Article
+
+<span class="kw">def</span> <span class="fn">index</span>(request):
+    articles = Article.objects.<span class="fn">filter</span>(publie=<span class="kw">True</span>)
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="str">'blog/index.html'</span>, {<span class="str">'articles'</span>: articles})</div>
+        <div class="tip"><span class="tip-i">💡</span> <div><code style="font-family:'Fira Code',monospace;font-size:0.85em;">Article.objects.filter(publie=True)</code> retourne un QuerySet — tous les articles dont le champ <code style="font-family:'Fira Code',monospace;font-size:0.85em;">publie</code> vaut True. L'ORM traduit ça en SQL automatiquement.</div></div>
+        <div class="section-mini" style="margin-top:1rem;">Ajouter aussi la vue détail</div>
+        <div class="code-block"><span class="kw">from</span> django.shortcuts <span class="kw">import</span> render, get_object_or_404
+
+<span class="kw">def</span> <span class="fn">detail</span>(request, pk):
+    article = <span class="fn">get_object_or_404</span>(Article, pk=pk, publie=<span class="kw">True</span>)
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="str">'blog/detail.html'</span>, {<span class="str">'article'</span>: article})</div>
+        <button class="mark-done-btn" onclick="markDone('step5')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 6 -->
+<div class="step-card" id="step6">
+    <div class="step-header" onclick="toggleStep('step6')">
+        <div class="step-num"><span class="step-num-text">6</span></div>
+        <div class="step-title">Mettre à jour les templates & URLs</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Les objets Article retournés par l'ORM ont des attributs Python — adapte tes templates pour accéder aux vrais champs du model.</p>
+        <div class="section-mini">templates/blog/index.html — boucle mise à jour</div>
+        <div class="code-block">{% <span class="kw">for</span> article <span class="kw">in</span> articles %}
+&lt;article class=<span class="str">"article-card"</span>&gt;
+    &lt;h2&gt;&lt;a href=<span class="str">"{% url 'blog:detail' article.pk %}"</span>&gt;{{ article.titre }}&lt;/a&gt;&lt;/h2&gt;
+    &lt;p class=<span class="str">"meta"</span>&gt;
+        par {{ article.auteur.username }} —
+        {{ article.date_creation|date:<span class="str">"d F Y"</span> }}
+    &lt;/p&gt;
+    &lt;p&gt;{{ article.contenu|truncatewords:<span class="num">30</span> }}&lt;/p&gt;
+&lt;/article&gt;
+{% <span class="kw">empty</span> %}
+    &lt;p&gt;Aucun article publié pour l'instant.&lt;/p&gt;
+{% <span class="kw">endfor</span> %}</div>
+        <div class="section-mini" style="margin-top:1rem;">blog/urls.py — ajouter l'URL de détail</div>
+        <div class="code-block"><span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> . <span class="kw">import</span> views
+
+app_name = <span class="str">'blog'</span>
+urlpatterns = [
+    <span class="fn">path</span>(<span class="str">''</span>, views.index, name=<span class="str">'index'</span>),
+    <span class="fn">path</span>(<span class="str">'article/&lt;int:pk&gt;/'</span>, views.detail, name=<span class="str">'detail'</span>),
+]</div>
+        <div class="tip tip-amber"><span class="tip-i">⚠️</span> <div>Le filtre <code style="font-family:'Fira Code',monospace;font-size:0.85em;">|date:"d F Y"</code> formate une date Python en français. <code style="font-family:'Fira Code',monospace;font-size:0.85em;">|truncatewords:30</code> coupe le texte après 30 mots — pratique pour les aperçus.</div></div>
+        <div class="tip"><span class="tip-i">✅</span> <div>Visite <strong>http://127.0.0.1:8000/blog/</strong> — tu dois voir les articles créés dans l'admin. Clique sur un titre pour voir la page de détail.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step6')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<div class="cta-wrap" style="margin-top:1rem;background:#085041;">
+    <p>Le blog lit maintenant de vraies données depuis la base de données ✓</p>
+    <a class="cta-btn" href="../../sommaire.html#step2Dynamique">↩ Retour au sommaire</a>
+</div>
+
+<div class="footer-note">
+    Model → Migration → Admin → ORM 🗄️<br>
+    <span style="font-size:0.82rem;">Projet — Django & ORM</span>
+</div>
+
+<script>
+var totalSteps = 6;
+var doneSteps = 0;
+
+function toggleStep(id) {
+    var card = document.getElementById(id);
+    card.classList.toggle('open');
+}
+
+function markDone(id) {
+    var card = document.getElementById(id);
+    if (card.classList.contains('done')) return;
+    card.classList.add('done');
+    card.classList.remove('open');
+    doneSteps++;
+    updateProgress();
+    var steps = ['step1','step2','step3','step4','step5','step6'];
+    var idx = steps.indexOf(id);
+    if (idx < steps.length - 1) {
+        var next = document.getElementById(steps[idx + 1]);
+        next.classList.add('open');
+        next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function updateProgress() {
+    var pct = Math.round(doneSteps / totalSteps * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-count').textContent = doneSteps + ' / ' + totalSteps + ' étapes';
+}
+</script>
+</body>
+</html>

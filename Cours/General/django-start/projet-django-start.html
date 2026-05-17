@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Mon premier projet Django</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%8D%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+    .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+    .desc strong { color: #2C2C2A; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    .code-label { font-family: 'Fira Code', monospace; font-size: 0.72rem; color: #888780; background: #D3D1C7; display: inline-block; padding: 2px 9px; border-radius: 5px 5px 0 0; margin-top: 0.8rem; margin-bottom: -1px; }
+    .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 0 10px 10px 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 1.8; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; }
+    .cm  { color: #888780; font-style: italic; }
+    .kw  { color: #3C3489; font-weight: 700; }
+    .ok  { color: #085041; font-weight: 700; }
+    .err { color: #712B13; font-weight: 700; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip strong { color: inherit; }
+    .tip-coral  { background: #FAECE7; color: #712B13; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* PIPELINE */
+    .pipeline { display: flex; align-items: center; gap: 0; margin-top: 0.9rem; flex-wrap: wrap; row-gap: 6px; }
+    .pipe-step { display: flex; flex-direction: column; align-items: center; gap: 3px; border-radius: 10px; padding: 8px 14px; font-size: 0.78rem; font-weight: 800; text-align: center; min-width: 80px; }
+    .pipe-arrow { color: #B4B2A9; font-size: 1rem; padding: 0 2px; }
+    .ps-a { background: #EEEDFE; color: #3C3489; }
+    .ps-b { background: #E1F5EE; color: #085041; }
+    .ps-c { background: #FAEEDA; color: #633806; }
+    .ps-d { background: #E6F1FB; color: #0C447C; }
+    .ps-e { background: #EBF5D9; color: #3B6D11; }
+    .ps-f { background: #FAECE7; color: #712B13; }
+
+    /* STEP CARDS */
+    .step-card { border-radius: 14px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1rem; overflow: hidden; }
+    .step-header { display: flex; align-items: center; gap: 12px; padding: 0.85rem 1.1rem; cursor: pointer; user-select: none; }
+    .step-num-badge { width: 36px; height: 36px; border-radius: 50%; font-weight: 800; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+    .step-header-text { flex: 1; }
+    .step-title { font-weight: 800; font-size: 1rem; line-height: 1.3; }
+    .step-sub { font-size: 0.82rem; color: #888780; margin-top: 2px; }
+    .step-check { width: 24px; height: 24px; border: 2px solid #B4B2A9; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; color: transparent; transition: all 0.15s; flex-shrink: 0; }
+    .step-card.done .step-check { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+    .step-body { padding: 0 1.2rem 1.2rem; display: none; }
+    .step-body.open { display: block; }
+
+    /* Colors per step */
+    .s1 .step-num-badge { background: #CECBF6; color: #3C3489; }
+    .s2 .step-num-badge { background: #9FE1CB; color: #085041; }
+    .s3 .step-num-badge { background: #FAC775; color: #633806; }
+    .s4 .step-num-badge { background: #B5D4F4; color: #0C447C; }
+    .s5 .step-num-badge { background: #C0DD97; color: #3B6D11; }
+    .s6 .step-num-badge { background: #F5C4B3; color: #712B13; }
+    .s1.done .step-num-badge { background: #5DCAA5; color: white; }
+    .s2.done .step-num-badge { background: #5DCAA5; color: white; }
+    .s3.done .step-num-badge { background: #5DCAA5; color: white; }
+    .s4.done .step-num-badge { background: #5DCAA5; color: white; }
+    .s5.done .step-num-badge { background: #5DCAA5; color: white; }
+    .s6.done .step-num-badge { background: #5DCAA5; color: white; }
+
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    /* PROGRESS */
+    .progress-wrap { background: #F1EFE8; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
+    .progress-bar-bg { background: #D3D1C7; border-radius: 20px; height: 10px; }
+    .progress-bar { background: #5DCAA5; border-radius: 20px; height: 10px; width: 0%; transition: width 0.35s ease; }
+
+    .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.9rem; margin-top: 0.8rem; line-height: 1.7; font-family: 'Fira Code', monospace; }
+
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box { width: 20px; height: 20px; min-width: 20px; border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; color: transparent; transition: all 0.12s; }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) { .hero h1 { font-size: 1.7rem; } .pipeline { gap: 4px; } }
+  </style>
+</head>
+<body>
+
+  <a class="nav-prev" href="exercices-django-start.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>🐍 Mon premier projet Django</h1>
+    <p>De zéro à <code>localhost:8000</code> — prérequis, environnement virtuel, création du projet, lancement du serveur.</p>
+    <div class="badge-row">
+      <span class="badge b-teal">Django 4.x / 5.x</span>
+      <span class="badge b-purple">Projet guidé</span>
+      <span class="badge b-amber">6 étapes</span>
+      <span class="badge b-blue">~30 min</span>
+      <span class="badge b-green">Projet vierge</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Tu vas créer <strong>un projet Django vierge fonctionnel</strong>, étape par étape, depuis la vérification de l'installation de Python jusqu'à l'affichage de la page de bienvenue Django dans ton navigateur.</p>
+    <p class="desc">Aucun template à copier-coller. Tu suis les étapes, tu lis les messages du terminal, tu comprends ce que tu fais.</p>
+    <div class="pipeline">
+      <div class="pipe-step ps-a">✅<br>Prérequis</div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step ps-b">🧪<br>Venv</div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step ps-c">📦<br>Django</div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step ps-d">🏗️<br>Projet</div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step ps-e">🚀<br>Serveur</div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step ps-f">🌐<br>Page !</div>
+    </div>
+    <div class="tip"><span class="tip-i">💡</span><span><strong>Règle d'or</strong> — Lis toujours le message affiché dans le terminal avant de passer à l'étape suivante. C'est là que Django te dit si tout va bien ou si quelque chose cloche.</span></div>
+  </div>
+
+  <!-- PROGRESSION -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Progression</span>
+      <span id="progress-text">0 / 6 étapes</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar" id="progress-bar"></div></div>
+  </div>
+
+  <!-- ÉTAPE 1 — PRÉREQUIS -->
+  <div class="step-card s1" id="step1">
+    <div class="step-header" onclick="toggleStep('step1')">
+      <div class="step-num-badge">1</div>
+      <div class="step-header-text">
+        <div class="step-title">Vérifier les prérequis</div>
+        <div class="step-sub">Python installé ? pip disponible ? On vérifie avant tout.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body1">
+      <p class="desc">Avant d'installer Django, assure-toi que Python est bien installé sur ta machine. Ouvre un terminal (PowerShell sur Windows, Terminal sur Mac/Linux) et tape ces commandes :</p>
+
+      <span class="code-label">Terminal</span>
+<pre class="code-block"><span class="cm"># Vérifier la version de Python (doit afficher 3.10 ou plus)</span>
+python --version
+
+<span class="cm"># Si la commande n'est pas trouvée, essaie :</span>
+python3 --version
+
+<span class="cm"># Vérifier que pip est disponible</span>
+pip --version</pre>
+
+      <div class="rl" style="margin-top:0.9rem;">Résultat attendu</div>
+      <div class="result-box"><span class="ok">Python 3.12.2</span>
+<span class="ok">pip 24.0 from C:\...\pip (python 3.12)</span></div>
+
+      <div class="tip tip-coral" style="margin-top:0.9rem;">
+        <span class="tip-i">🚨</span>
+        <span><strong>Python non trouvé ?</strong> Télécharge Python depuis <strong>python.org</strong> et coche bien "Add Python to PATH" lors de l'installation. Relance ensuite le terminal.</span>
+      </div>
+      <div style="margin-top:0.9rem;">
+        <button class="mark-done-btn" onclick="markDone('step1')">✓ Étape terminée</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 2 — VENV -->
+  <div class="step-card s2" id="step2">
+    <div class="step-header" onclick="toggleStep('step2')">
+      <div class="step-num-badge">2</div>
+      <div class="step-header-text">
+        <div class="step-title">Créer un environnement virtuel</div>
+        <div class="step-sub">Un espace isolé pour le projet — jamais d'installation globale.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body2">
+      <p class="desc">L'environnement virtuel (<code>venv</code>) réserve un espace privé pour ton projet. Django et toutes ses dépendances s'installent dedans, sans polluer le reste de ta machine.</p>
+
+      <span class="code-label">Terminal — dans ton dossier de projets</span>
+<pre class="code-block"><span class="cm"># Crée un dossier pour le projet</span>
+mkdir monprojet-django
+cd monprojet-django
+
+<span class="cm"># Crée l'environnement virtuel dans un dossier "env"</span>
+python -m venv env</pre>
+
+      <div class="tip tip-amber">
+        <span class="tip-i">📁</span>
+        <span>Un dossier <code>env/</code> vient d'apparaître dans ton dossier. C'est ton environnement isolé. Tu ne touches <strong>jamais</strong> à son contenu manuellement.</span>
+      </div>
+      <div style="margin-top:0.9rem;">
+        <button class="mark-done-btn" onclick="markDone('step2')">✓ Étape terminée</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 — ACTIVER LE VENV -->
+  <div class="step-card s3" id="step3">
+    <div class="step-header" onclick="toggleStep('step3')">
+      <div class="step-num-badge">3</div>
+      <div class="step-header-text">
+        <div class="step-title">Activer l'environnement virtuel &amp; installer Django</div>
+        <div class="step-sub">Sans activation, pip installe Django au mauvais endroit.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body3">
+      <p class="desc">L'activation "entre" dans l'environnement virtuel. Tout ce que tu installes ensuite avec <code>pip</code> ira dans <code>env/</code> et uniquement là.</p>
+
+      <span class="code-label">Windows (PowerShell)</span>
+<pre class="code-block">.\env\Scripts\activate</pre>
+
+      <span class="code-label">macOS / Linux</span>
+<pre class="code-block">source env/bin/activate</pre>
+
+      <div class="rl" style="margin-top:0.9rem;">Comment savoir si l'environnement est actif ?</div>
+      <div class="result-box"><span class="ok">(env)</span> user@machine monprojet-django %</div>
+
+      <p class="desc" style="margin-top:0.9rem;">Le préfixe <code>(env)</code> à gauche du terminal confirme que tu es dans l'environnement. Maintenant, installe Django :</p>
+
+      <span class="code-label">Terminal — avec (env) actif</span>
+<pre class="code-block">pip install django
+
+<span class="cm"># Vérifie l'installation</span>
+django-admin --version</pre>
+
+      <div class="rl" style="margin-top:0.9rem;">Résultat attendu</div>
+      <div class="result-box"><span class="cm">Collecting django
+  Downloading Django-5.x.x-py3-none-any.whl ...</span>
+<span class="ok">Successfully installed django-5.x.x</span>
+
+<span class="ok">5.x.x</span></div>
+
+      <div class="tip tip-coral">
+        <span class="tip-i">🚨</span>
+        <span><strong>Tu ne vois pas <code>(env)</code> ?</strong> L'environnement n'est pas activé. Relance la commande d'activation avant de faire <code>pip install django</code>.</span>
+      </div>
+      <div style="margin-top:0.9rem;">
+        <button class="mark-done-btn" onclick="markDone('step3')">✓ Étape terminée</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 4 — CRÉER LE PROJET -->
+  <div class="step-card s4" id="step4">
+    <div class="step-header" onclick="toggleStep('step4')">
+      <div class="step-num-badge">4</div>
+      <div class="step-header-text">
+        <div class="step-title">Créer le projet Django</div>
+        <div class="step-sub">Une commande génère toute la structure du projet.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body4">
+      <p class="desc">La commande <code>django-admin startproject</code> génère automatiquement la structure de base du projet. Le point <code>.</code> à la fin évite de créer un sous-dossier en double.</p>
+
+      <span class="code-label">Terminal — avec (env) actif, dans monprojet-django/</span>
+<pre class="code-block"><span class="cm"># Crée le projet dans le dossier courant</span>
+django-admin startproject monsite .</pre>
+
+      <div class="rl" style="margin-top:0.9rem;">Structure générée</div>
+<pre class="code-block">monprojet-django/
+├── env/                 <span class="cm"># Ton environnement virtuel</span>
+├── monsite/
+│   ├── __init__.py
+│   ├── settings.py      <span class="cm"># Configuration du projet</span>
+│   ├── urls.py          <span class="cm"># Routes principales</span>
+│   ├── asgi.py
+│   └── wsgi.py
+└── manage.py            <span class="cm"># Commande centrale de Django</span></pre>
+
+      <div class="tip">
+        <span class="tip-i">📌</span>
+        <span><strong><code>manage.py</code></strong> est ton outil principal. C'est lui que tu utiliseras pour lancer le serveur, créer des apps, appliquer les migrations, etc.</span>
+      </div>
+      <div style="margin-top:0.9rem;">
+        <button class="mark-done-btn" onclick="markDone('step4')">✓ Étape terminée</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 5 — LANCER LE SERVEUR -->
+  <div class="step-card s5" id="step5">
+    <div class="step-header" onclick="toggleStep('step5')">
+      <div class="step-num-badge">5</div>
+      <div class="step-header-text">
+        <div class="step-title">Lancer le serveur de développement</div>
+        <div class="step-sub">Le serveur intégré de Django — uniquement en développement.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body5">
+      <p class="desc">Django inclut un serveur web de développement léger. Il suffit d'une commande pour le démarrer.</p>
+
+      <span class="code-label">Terminal — avec (env) actif, dans monprojet-django/</span>
+<pre class="code-block">python manage.py runserver</pre>
+
+      <div class="rl" style="margin-top:0.9rem;">Résultat attendu dans le terminal</div>
+      <div class="result-box"><span class="cm">Watching for file changes with StatReloader
+Performing system checks...</span>
+
+<span class="ok">System check identified no issues (0 silenced).</span>
+<span class="cm">
+You have 18 unapplied migration(s)...
+May 17, 2026 - 10:42:15
+Django version 5.x.x, using settings 'monsite.settings'
+Starting development server at</span> <span class="ok">http://127.0.0.1:8000/</span>
+<span class="cm">Quit the server with CONTROL-C.</span></div>
+
+      <div class="tip tip-amber">
+        <span class="tip-i">⚠️</span>
+        <span><strong>Le message sur les migrations</strong> est normal à ce stade. Django te signale que les tables de sa base de données interne n'ont pas encore été créées. Ce n'est pas une erreur — ton serveur fonctionne quand même.</span>
+      </div>
+      <div class="tip tip-coral">
+        <span class="tip-i">🚨</span>
+        <span><strong>Erreur "That port is already in use" ?</strong> Un autre serveur tourne sur le port 8000. Lance sur un autre port : <code>python manage.py runserver 8080</code></span>
+      </div>
+      <div style="margin-top:0.9rem;">
+        <button class="mark-done-btn" onclick="markDone('step5')">✓ Étape terminée</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 6 — AFFICHER LA PAGE -->
+  <div class="step-card s6" id="step6">
+    <div class="step-header" onclick="toggleStep('step6')">
+      <div class="step-num-badge">6</div>
+      <div class="step-header-text">
+        <div class="step-title">Ouvrir la page dans le navigateur</div>
+        <div class="step-sub">La fusée Django — preuve que tout fonctionne.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body6">
+      <p class="desc">Ouvre ton navigateur et va à l'adresse :</p>
+
+      <div class="result-box" style="text-align:center;font-size:1.1rem;padding:1rem;">
+        <strong>http://127.0.0.1:8000/</strong>
+        <div style="font-size:0.82rem;color:#888780;margin-top:4px;font-family:'Nunito',sans-serif;">ou <strong>http://localhost:8000/</strong></div>
+      </div>
+
+      <p class="desc" style="margin-top:0.9rem;">Tu dois voir la page de bienvenue de Django — une fusée verte sur fond noir avec le message <em>"The install worked successfully! Congratulations!"</em></p>
+
+      <div class="tip">
+        <span class="tip-i">🎉</span>
+        <span><strong>Tu vois la fusée ?</strong> Bravo — ton projet Django vierge est opérationnel. Le serveur tourne, le projet est créé, l'environnement virtuel est actif. Tu peux maintenant commencer à créer des apps avec <code>python manage.py startapp</code>.</span>
+      </div>
+      <div class="tip tip-coral">
+        <span class="tip-i">🚨</span>
+        <span><strong>Page inaccessible ?</strong> Vérifie que le terminal affiche bien "Starting development server at http://127.0.0.1:8000/" et que tu n'as pas fermé le terminal par erreur. Le serveur doit rester ouvert pendant que tu utilises le site.</span>
+      </div>
+      <div style="margin-top:0.9rem;">
+        <button class="mark-done-btn" onclick="markDone('step6')">✓ Étape terminée</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXIGENCES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Ce qu'on doit voir à la fin</div>
+    <div class="req-list">
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>Le terminal affiche <code>(env)</code> avant le prompt — l'environnement virtuel est activé.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span><code>django-admin --version</code> affiche un numéro de version sans erreur.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>Le dossier <code>monsite/</code> et le fichier <code>manage.py</code> existent dans le projet.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span><code>python manage.py runserver</code> démarre sans erreur (les warnings migrations sont OK).</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>La page de bienvenue Django (la fusée) s'affiche sur <code>http://127.0.0.1:8000/</code>.</span></div>
+    </div>
+    <div class="req-list" style="margin-top:0.8rem;">
+      <div class="req-item req-bonus"><span class="req-icon">🌟</span><span>Créer un fichier <code>requirements.txt</code> avec <code>pip freeze > requirements.txt</code> et vérifier qu'il contient Django.</span></div>
+      <div class="req-item req-bonus"><span class="req-icon">🌟</span><span>Ajouter <code>env/</code> à un fichier <code>.gitignore</code> et expliquer pourquoi en une phrase.</span></div>
+      <div class="req-item req-bonus"><span class="req-icon">🌟</span><span>Créer une première app avec <code>python manage.py startapp blog</code> et l'enregistrer dans <code>settings.py</code>.</span></div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST FINALE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✓</div>Checklist de vérification</div>
+    <div class="checklist">
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Python 3.10+ est installé et reconnu par le terminal.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>L'environnement virtuel est créé et activé — je vois <code>(env)</code> dans le terminal.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Django est installé dans l'environnement virtuel (<code>django-admin --version</code> fonctionne).</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le projet Django a été créé avec <code>django-admin startproject</code>.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le serveur démarre avec <code>python manage.py runserver</code>.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>La page de bienvenue Django s'affiche sur <code>http://127.0.0.1:8000/</code>.</span></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Comprendre → Chercher → Coder → Tester → Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html#step2Dynamique">↩ Retour au sommaire</a>
+  </div>
+
+  <style>
+    .mark-done-btn { background: #E1F5EE; border: 0.5px solid #9FE1CB; color: #085041; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.88rem; padding: 7px 18px; border-radius: 8px; cursor: pointer; transition: background 0.15s; }
+    .mark-done-btn:hover { background: #9FE1CB; }
+    .step-card.done .mark-done-btn { background: #5DCAA5; color: white; border-color: #5DCAA5; }
+  </style>
+
+  <script>
+    function toggleCheck(box) { box.classList.toggle('checked'); }
+
+    function toggleStep(id) {
+      const card = document.getElementById(id);
+      const body = card.querySelector('.step-body');
+      body.classList.toggle('open');
+    }
+
+    function markDone(id) {
+      const card = document.getElementById(id);
+      card.classList.toggle('done');
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const total = 6;
+      const done = document.querySelectorAll('.step-card.done').length;
+      document.getElementById('progress-text').textContent = done + ' / ' + total + ' étapes';
+      document.getElementById('progress-bar').style.width = (done / total * 100) + '%';
+    }
+
+    // Ouvrir la première étape par défaut
+    document.getElementById('body1').classList.add('open');
+  </script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet — CRUD & Formulaires Django</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.1rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal { background: #E1F5EE; color: #085041; }
+        .b-blue { background: #E6F1FB; color: #0C447C; }
+        .b-amber { background: #FAEEDA; color: #633806; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-coral { background: #FAECE7; color: #712B13; }
+
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+        .progress-label { font-size: 0.82rem; font-weight: 700; color: #888780; }
+        .progress-count { font-size: 0.82rem; font-weight: 700; color: #085041; }
+        .progress-wrap { height: 8px; background: #D3D1C7; border-radius: 10px; margin-bottom: 1.8rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.5s ease; width: 0%; }
+
+        .step-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1rem; overflow: hidden; transition: border-color 0.2s; }
+        .step-card.done { border-color: #5DCAA5; }
+        .step-header { display: flex; align-items: center; gap: 12px; padding: 1.1rem 1.4rem; cursor: pointer; user-select: none; }
+        .step-num { width: 34px; height: 34px; min-width: 34px; border-radius: 10px; background: #F1EFE8; border: 0.5px solid #D3D1C7; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; color: #888780; transition: all 0.2s; }
+        .step-card.done .step-num { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .step-card.done .step-num::after { content: '✓'; }
+        .step-card.done .step-num-text { display: none; }
+        .step-title { font-size: 1rem; font-weight: 800; flex: 1; }
+        .step-chevron { color: #B4B2A9; font-size: 1rem; transition: transform 0.2s; }
+        .step-card.open .step-chevron { transform: rotate(180deg); }
+        .step-body { display: none; padding: 0 1.4rem 1.4rem; }
+        .step-card.open .step-body { display: block; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.9; white-space: pre; overflow-x: auto; color: #2C2C2A; margin-top: 0.8rem; margin-bottom: 0.8rem; }
+        .kw { color: #993C1D; font-weight: 700; }
+        .str { color: #0F6E56; }
+        .cm { color: #888780; font-style: italic; }
+        .fn { color: #534AB7; }
+        .dec { color: #7F77DD; }
+        .num { color: #E8760A; }
+
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip-amber { background: #FAEEDA; color: #633806; }
+        .tip-coral { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-blue { background: #E6F1FB; color: #0C447C; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .section-mini { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin: 1rem 0 0.4rem; }
+
+        .mark-done-btn { display: inline-flex; align-items: center; gap: 7px; margin-top: 1.2rem; background: #2C2C2A; color: #FAC775; border: none; border-radius: 10px; padding: 9px 22px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: background 0.15s; }
+        .mark-done-btn:hover { background: #444441; }
+        .step-card.done .mark-done-btn { background: #E1F5EE; color: #085041; cursor: default; }
+
+        .chain-box { border-radius: 12px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.88rem; color: #5F5E5A; line-height: 1.7; }
+        .chain-box strong { color: #2C2C2A; }
+
+        .security-box { border-radius: 12px; border: 1.5px solid #F5C4B3; background: #FAECE7; padding: 0.9rem 1.1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #712B13; line-height: 1.6; }
+        .security-box strong { display: block; margin-bottom: 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: #993C1D; }
+
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="exercices-django-crud.html">← Retour aux exercices</a>
+
+<div class="hero">
+    <h1>📝 Djanjo — CRUD</h1>
+    <p>Suite du projet blog : créer, modifier et supprimer des articles avec des formulaires.</p>
+    <div class="badge-row">
+        <span class="badge b-teal">ModelForm</span>
+        <span class="badge b-blue">Create</span>
+        <span class="badge b-amber">Update</span>
+        <span class="badge b-purple">Delete</span>
+        <span class="badge b-coral">Sécurité</span>
+    </div>
+</div>
+
+<div class="chain-box">
+    <strong>Suite de :</strong> projet-django.html — tu as un blog avec un Model Article et une vraie BDD.<br>
+    <strong>Objectif :</strong> Permettre aux utilisateurs de créer, modifier et supprimer leurs articles via des formulaires Django.
+</div>
+
+<div class="progress-header">
+    <span class="progress-label">Progression</span>
+    <span class="progress-count" id="prog-count">0 / 7 étapes</span>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-fill"></div></div>
+
+<!-- ÉTAPE 1 -->
+<div class="step-card open" id="step1">
+    <div class="step-header" onclick="toggleStep('step1')">
+        <div class="step-num"><span class="step-num-text">1</span></div>
+        <div class="step-title">Créer blog/forms.py</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Django ne crée pas <code style="font-family:'Fira Code',monospace;font-size:0.85em;background:#F1EFE8;padding:1px 5px;border-radius:4px;">forms.py</code> automatiquement — c'est un fichier à créer manuellement dans le dossier <code style="font-family:'Fira Code',monospace;font-size:0.85em;background:#F1EFE8;padding:1px 5px;border-radius:4px;">blog/</code>. Le ModelForm génère un formulaire HTML directement depuis le Model.</p>
+        <div class="section-mini">blog/forms.py (nouveau fichier)</div>
+        <div class="code-block"><span class="kw">from</span> django <span class="kw">import</span> forms
+<span class="kw">from</span> .models <span class="kw">import</span> Article
+
+<span class="kw">class</span> <span class="fn">ArticleForm</span>(forms.ModelForm):
+    <span class="kw">class</span> Meta:
+        model  = Article
+        fields = [<span class="str">'titre'</span>, <span class="str">'contenu'</span>, <span class="str">'publie'</span>]
+        <span class="cm"># Ne jamais utiliser '__all__' — expose des champs sensibles</span></div>
+        <div class="security-box"><strong>⚠️ Sécurité</strong>Ne jamais écrire <code style="font-family:'Fira Code',monospace;font-size:0.85em;">fields = '__all__'</code>. Cela exposerait le champ <code style="font-family:'Fira Code',monospace;font-size:0.85em;">auteur</code> au formulaire — un utilisateur malveillant pourrait se l'attribuer. Listez toujours les champs explicitement.</div>
+        <button class="mark-done-btn" onclick="markDone('step1')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 2 -->
+<div class="step-card" id="step2">
+    <div class="step-header" onclick="toggleStep('step2')">
+        <div class="step-num"><span class="step-num-text">2</span></div>
+        <div class="step-title">Vue Create — creer_article</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">La vue de création distingue deux cas : GET (afficher le formulaire vide) et POST (traiter les données soumises).</p>
+        <div class="section-mini">blog/views.py — ajouter</div>
+        <div class="code-block"><span class="kw">from</span> django.shortcuts <span class="kw">import</span> render, redirect, get_object_or_404
+<span class="kw">from</span> django.contrib.auth.decorators <span class="kw">import</span> login_required
+<span class="kw">from</span> .forms <span class="kw">import</span> ArticleForm
+
+<span class="dec">@login_required</span>
+<span class="kw">def</span> <span class="fn">creer_article</span>(request):
+    <span class="kw">if</span> request.method == <span class="str">'POST'</span>:
+        form = <span class="fn">ArticleForm</span>(request.POST)
+        <span class="kw">if</span> form.<span class="fn">is_valid</span>():
+            article = form.<span class="fn">save</span>(commit=<span class="kw">False</span>)
+            article.auteur = request.user  <span class="cm"># on assigne l'auteur manuellement</span>
+            article.<span class="fn">save</span>()
+            <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">'blog:detail'</span>, pk=article.pk)
+    <span class="kw">else</span>:
+        form = <span class="fn">ArticleForm</span>()
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="str">'blog/article_form.html'</span>, {<span class="str">'form'</span>: form})</div>
+        <div class="tip"><span class="tip-i">💡</span> <div><code style="font-family:'Fira Code',monospace;font-size:0.85em;">save(commit=False)</code> crée l'objet Python sans l'écrire en BDD — ça permet d'ajouter <code style="font-family:'Fira Code',monospace;font-size:0.85em;">auteur</code> avant l'enregistrement final.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step2')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 3 -->
+<div class="step-card" id="step3">
+    <div class="step-header" onclick="toggleStep('step3')">
+        <div class="step-num"><span class="step-num-text">3</span></div>
+        <div class="step-title">Template article_form.html</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Un seul template sert à la fois pour Create et Update — la vue passe les données du formulaire, Django s'occupe du rendu.</p>
+        <div class="section-mini">templates/blog/article_form.html</div>
+        <div class="code-block">{% extends <span class="str">'blog/base.html'</span> %}
+{% block title %}
+  {% <span class="kw">if</span> form.instance.pk %}Modifier{% <span class="kw">else</span> %}Créer{% <span class="kw">endif</span> %} un article
+{% endblock %}
+
+{% block content %}
+&lt;h1&gt;
+  {% <span class="kw">if</span> form.instance.pk %}✏️ Modifier{% <span class="kw">else</span> %}✍️ Écrire{% <span class="kw">endif</span> %} un article
+&lt;/h1&gt;
+
+&lt;form method=<span class="str">"post"</span>&gt;
+  {% csrf_token %}
+  {{ form.as_p }}
+  &lt;button type=<span class="str">"submit"</span>&gt;
+    {% <span class="kw">if</span> form.instance.pk %}Enregistrer les modifications{% <span class="kw">else</span> %}Publier{% <span class="kw">endif</span> %}
+  &lt;/button&gt;
+&lt;/form&gt;
+{% endblock %}</div>
+        <div class="tip tip-amber"><span class="tip-i">⚠️</span> <div><code style="font-family:'Fira Code',monospace;font-size:0.85em;">{% csrf_token %}</code> est <strong>obligatoire</strong> dans tout formulaire POST. Il protège contre les attaques CSRF (Cross-Site Request Forgery). Django refusera le formulaire sans lui.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step3')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 4 -->
+<div class="step-card" id="step4">
+    <div class="step-header" onclick="toggleStep('step4')">
+        <div class="step-num"><span class="step-num-text">4</span></div>
+        <div class="step-title">Vue Update — modifier_article</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">La vue de modification est identique à Create, sauf qu'elle passe <code style="font-family:'Fira Code',monospace;font-size:0.85em;background:#F1EFE8;padding:1px 5px;border-radius:4px;">instance=article</code> pour pré-remplir le formulaire et identifier l'objet à mettre à jour.</p>
+        <div class="section-mini">blog/views.py — ajouter</div>
+        <div class="code-block"><span class="dec">@login_required</span>
+<span class="kw">def</span> <span class="fn">modifier_article</span>(request, pk):
+    article = <span class="fn">get_object_or_404</span>(Article, pk=pk)
+
+    <span class="kw">if</span> article.auteur != request.user:
+        <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">'blog:liste'</span>)
+
+    <span class="kw">if</span> request.method == <span class="str">'POST'</span>:
+        form = <span class="fn">ArticleForm</span>(request.POST, instance=article)
+        <span class="kw">if</span> form.<span class="fn">is_valid</span>():
+            form.<span class="fn">save</span>()
+            <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">'blog:detail'</span>, pk=article.pk)
+    <span class="kw">else</span>:
+        form = <span class="fn">ArticleForm</span>(instance=article)
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="str">'blog/article_form.html'</span>, {<span class="str">'form'</span>: form})</div>
+        <div class="security-box"><strong>⚠️ Sécurité — vérification de propriété</strong><code style="font-family:'Fira Code',monospace;font-size:0.85em;">@login_required</code> vérifie qu'on est connecté, mais pas qu'on est le bon utilisateur. Sans <code style="font-family:'Fira Code',monospace;font-size:0.85em;">article.auteur != request.user</code>, n'importe quel utilisateur connecté peut modifier les articles des autres en tapant l'URL directement.</div>
+        <button class="mark-done-btn" onclick="markDone('step4')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 5 -->
+<div class="step-card" id="step5">
+    <div class="step-header" onclick="toggleStep('step5')">
+        <div class="step-num"><span class="step-num-text">5</span></div>
+        <div class="step-title">Vue Delete — supprimer_article</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">La suppression nécessite une confirmation — on affiche une page intermédiaire avec un formulaire POST. Jamais via un simple lien GET.</p>
+        <div class="section-mini">blog/views.py — ajouter</div>
+        <div class="code-block"><span class="kw">from</span> django.contrib <span class="kw">import</span> messages
+
+<span class="dec">@login_required</span>
+<span class="kw">def</span> <span class="fn">supprimer_article</span>(request, pk):
+    article = <span class="fn">get_object_or_404</span>(Article, pk=pk)
+
+    <span class="kw">if</span> article.auteur != request.user:
+        <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">'blog:liste'</span>)
+
+    <span class="kw">if</span> request.method == <span class="str">'POST'</span>:
+        article.<span class="fn">delete</span>()
+        messages.<span class="fn">success</span>(request, <span class="str">'Article supprimé.'</span>)
+        <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">'blog:index'</span>)
+
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="str">'blog/confirmer_suppression.html'</span>, {<span class="str">'article'</span>: article})</div>
+        <div class="section-mini" style="margin-top:1rem;">templates/blog/confirmer_suppression.html</div>
+        <div class="code-block">{% extends <span class="str">'blog/base.html'</span> %}
+{% block content %}
+&lt;h1&gt;🗑️ Supprimer cet article ?&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;{{ article.titre }}&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Cette action est irréversible.&lt;/p&gt;
+&lt;form method=<span class="str">"post"</span>&gt;
+  {% csrf_token %}
+  &lt;button type=<span class="str">"submit"</span>&gt;Oui, supprimer&lt;/button&gt;
+  &lt;a href=<span class="str">"{% url 'blog:detail' article.pk %}"</span>&gt;Annuler&lt;/a&gt;
+&lt;/form&gt;
+{% endblock %}</div>
+        <div class="tip tip-coral"><span class="tip-i">🚫</span> <div>Ne jamais supprimer via un lien <code style="font-family:'Fira Code',monospace;font-size:0.85em;">&lt;a href&gt;</code> — un robot d'indexation pourrait suivre le lien et supprimer tes données. La suppression passe <strong>toujours</strong> par un formulaire POST.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step5')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 6 -->
+<div class="step-card" id="step6">
+    <div class="step-header" onclick="toggleStep('step6')">
+        <div class="step-num"><span class="step-num-text">6</span></div>
+        <div class="step-title">Ajouter les URLs CRUD</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Connecte les trois nouvelles vues dans <code style="font-family:'Fira Code',monospace;font-size:0.85em;background:#F1EFE8;padding:1px 5px;border-radius:4px;">blog/urls.py</code>. Les URLs avec <code style="font-family:'Fira Code',monospace;font-size:0.85em;background:#F1EFE8;padding:1px 5px;border-radius:4px;">&lt;int:pk&gt;</code> capturent l'identifiant de l'article.</p>
+        <div class="section-mini">blog/urls.py — version complète</div>
+        <div class="code-block"><span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> . <span class="kw">import</span> views
+
+app_name = <span class="str">'blog'</span>
+urlpatterns = [
+    <span class="fn">path</span>(<span class="str">''</span>,                              views.index,            name=<span class="str">'index'</span>),
+    <span class="fn">path</span>(<span class="str">'article/&lt;int:pk&gt;/'</span>,           views.detail,           name=<span class="str">'detail'</span>),
+    <span class="fn">path</span>(<span class="str">'article/creer/'</span>,               views.creer_article,    name=<span class="str">'creer'</span>),
+    <span class="fn">path</span>(<span class="str">'article/&lt;int:pk&gt;/modifier/'</span>,  views.modifier_article, name=<span class="str">'modifier'</span>),
+    <span class="fn">path</span>(<span class="str">'article/&lt;int:pk&gt;/supprimer/'</span>, views.supprimer_article,name=<span class="str">'supprimer'</span>),
+]</div>
+        <button class="mark-done-btn" onclick="markDone('step6')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 7 -->
+<div class="step-card" id="step7">
+    <div class="step-header" onclick="toggleStep('step7')">
+        <div class="step-num"><span class="step-num-text">7</span></div>
+        <div class="step-title">Liens dans les templates & vérification</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Ajoute des boutons "Modifier" et "Supprimer" dans le template de détail, visibles uniquement pour l'auteur de l'article.</p>
+        <div class="section-mini">templates/blog/detail.html — ajouter après le contenu</div>
+        <div class="code-block">{% <span class="kw">if</span> user == article.auteur %}
+&lt;div class=<span class="str">"article-actions"</span>&gt;
+    &lt;a href=<span class="str">"{% url 'blog:modifier' article.pk %}"</span>&gt;✏️ Modifier&lt;/a&gt;
+    &lt;a href=<span class="str">"{% url 'blog:supprimer' article.pk %}"</span>&gt;🗑️ Supprimer&lt;/a&gt;
+&lt;/div&gt;
+{% <span class="kw">endif</span> %}</div>
+        <div class="section-mini" style="margin-top:1rem;">Afficher les messages flash dans base.html</div>
+        <div class="code-block">{% <span class="kw">if</span> messages %}
+&lt;ul class=<span class="str">"messages"</span>&gt;
+  {% <span class="kw">for</span> message <span class="kw">in</span> messages %}
+    &lt;li class=<span class="str">"{{ message.tags }}"</span>&gt;{{ message }}&lt;/li&gt;
+  {% <span class="kw">endfor</span> %}
+&lt;/ul&gt;
+{% <span class="kw">endif</span> %}</div>
+        <div class="tip"><span class="tip-i">✅</span> <div><strong>Checklist :</strong> Crée un article → redirige vers le détail ✓ · Modifie-le → le formulaire est pré-rempli ✓ · Supprime-le → page de confirmation puis message flash ✓ · Un autre utilisateur ne voit pas les boutons ✓</div></div>
+        <button class="mark-done-btn" onclick="markDone('step7')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<div class="cta-wrap" style="margin-top:1rem;background:#085041;">
+    <p>Le blog CRUD est complet — create, read, update, delete fonctionnent ✓</p>
+    <a class="cta-btn" href="../../sommaire.html#step2Dynamique">↩ Retour au sommaire</a>
+</div>
+
+<div class="footer-note">
+    Create → Read → Update → Delete 📝<br>
+    <span style="font-size:0.82rem;">Projet — CRUD & Formulaires Django</span>
+</div>
+
+<script>
+var totalSteps = 7;
+var doneSteps = 0;
+
+function toggleStep(id) {
+    var card = document.getElementById(id);
+    card.classList.toggle('open');
+}
+
+function markDone(id) {
+    var card = document.getElementById(id);
+    if (card.classList.contains('done')) return;
+    card.classList.add('done');
+    card.classList.remove('open');
+    doneSteps++;
+    updateProgress();
+    var steps = ['step1','step2','step3','step4','step5','step6','step7'];
+    var idx = steps.indexOf(id);
+    if (idx < steps.length - 1) {
+        var next = document.getElementById(steps[idx + 1]);
+        next.classList.add('open');
+        next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function updateProgress() {
+    var pct = Math.round(doneSteps / totalSteps * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-count').textContent = doneSteps + ' / ' + totalSteps + ' étapes';
+}
+</script>
+</body>
+</html>

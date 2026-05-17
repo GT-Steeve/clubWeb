@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Vibe Coding Django</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A4%96%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+    .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+    .desc strong { color: #2C2C2A; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    .code-label { font-family: 'Fira Code', monospace; font-size: 0.72rem; color: #888780; background: #D3D1C7; display: inline-block; padding: 2px 9px; border-radius: 5px 5px 0 0; margin-top: 0.8rem; margin-bottom: -1px; }
+    .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 0 10px 10px 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 1.8; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; }
+    .cm  { color: #888780; font-style: italic; }
+    .kw  { color: #3C3489; font-weight: 700; }
+    .val { color: #0F6E56; }
+    .sel { color: #993C1D; }
+    .fn  { color: #185FA5; }
+
+    /* PROMPT BOX */
+    .prompt-box { background: #EEEDFE; border: 0.5px solid #CECBF6; border-radius: 12px; padding: 1rem 1.2rem; margin-top: 0.8rem; font-size: 0.9rem; line-height: 1.7; color: #3C3489; }
+    .prompt-box .prompt-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #7F77DD; margin-bottom: 6px; }
+    .prompt-box .prompt-text { font-style: italic; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip strong { color: inherit; }
+    .tip-coral  { background: #FAECE7; color: #712B13; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* STEP CARDS */
+    .step-card { border-radius: 14px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1rem; overflow: hidden; }
+    .step-header { display: flex; align-items: center; gap: 12px; padding: 0.85rem 1.1rem; cursor: pointer; user-select: none; }
+    .step-num-badge { width: 36px; height: 36px; border-radius: 50%; font-weight: 800; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+    .step-header-text { flex: 1; }
+    .step-title { font-weight: 800; font-size: 1rem; line-height: 1.3; }
+    .step-sub { font-size: 0.82rem; color: #888780; margin-top: 2px; }
+    .step-check { width: 24px; height: 24px; border: 2px solid #B4B2A9; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; color: transparent; transition: all 0.15s; flex-shrink: 0; }
+    .step-card.done .step-check { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+    .step-body { padding: 0 1.2rem 1.2rem; display: none; }
+    .step-body.open { display: block; }
+
+    .s1 .step-num-badge { background: #CECBF6; color: #3C3489; }
+    .s2 .step-num-badge { background: #9FE1CB; color: #085041; }
+    .s3 .step-num-badge { background: #FAC775; color: #633806; }
+    .s4 .step-num-badge { background: #F5C4B3; color: #712B13; }
+    .s5 .step-num-badge { background: #B5D4F4; color: #0C447C; }
+    .s6 .step-num-badge { background: #C0DD97; color: #3B6D11; }
+    .step-card.done .step-num-badge { background: #5DCAA5 !important; color: white !important; }
+
+    /* PROGRESS */
+    .progress-wrap { background: #F1EFE8; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
+    .progress-bar-bg { background: #D3D1C7; border-radius: 20px; height: 10px; }
+    .progress-bar { background: #5DCAA5; border-radius: 20px; height: 10px; width: 0%; transition: width 0.35s ease; }
+
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box { width: 20px; height: 20px; min-width: 20px; border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; color: transparent; transition: all 0.12s; }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.9rem; margin-top: 0.8rem; line-height: 1.7; }
+
+    .mark-done-btn { background: #E1F5EE; border: 0.5px solid #9FE1CB; color: #085041; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.88rem; padding: 7px 18px; border-radius: 8px; cursor: pointer; transition: background 0.15s; margin-top: 0.9rem; display: inline-block; }
+    .mark-done-btn:hover { background: #9FE1CB; }
+    .step-card.done .mark-done-btn { background: #5DCAA5; color: white; border-color: #5DCAA5; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) { .hero h1 { font-size: 1.7rem; } }
+  </style>
+</head>
+<body>
+
+  <a class="nav-prev" href="exercices-vibecoding-django.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>🤖 Vibe Coding Django</h1>
+    <p>Suite de django-structure — utilise l'IA pour créer ton premier template HTML et sa view.</p>
+    <div class="badge-row">
+      <span class="badge b-teal">Suite de django-structure</span>
+      <span class="badge b-purple">IA générative</span>
+      <span class="badge b-amber">6 étapes</span>
+      <span class="badge b-blue">~20 min</span>
+      <span class="badge b-coral">template + view</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">🎯</div>Objectif du projet</div>
+    <p class="desc">Tu repars du projet Django avec l'app <code>blog</code> et sa structure complète (dossiers <code>templates/</code>, <code>static/</code>, <code>urls.py</code>). Tu vas utiliser le <strong>vibe coding</strong> — écrire des prompts précis à une IA — pour générer un template HTML et une view fonctionnelle, puis les intégrer correctement dans le projet.</p>
+    <div class="tip tip-purple"><span class="tip-i">💡</span><span><strong>Règle d'or du vibe coding</strong> — Ne colle jamais du code que tu ne peux pas lire et expliquer. Lis le code généré, assure-toi que les noms de fichiers, de views et d'URLs correspondent à <em>ton</em> projet avant de l'intégrer.</span></div>
+  </div>
+
+  <!-- PROGRESSION -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Progression</span>
+      <span id="progress-text">0 / 6 étapes</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar" id="progress-bar"></div></div>
+  </div>
+
+  <!-- ÉTAPE 1 — CONTEXTE DU PROMPT -->
+  <div class="step-card s1" id="step1">
+    <div class="step-header" onclick="toggleStep('step1')">
+      <div class="step-num-badge">1</div>
+      <div class="step-header-text">
+        <div class="step-title">Préparer le contexte à donner à l'IA</div>
+        <div class="step-sub">Un bon prompt commence par un bon contexte — rien n'est inventé.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body1">
+      <p class="desc">Avant de demander quoi que ce soit à l'IA, fournis-lui l'état exact de ton projet. Ouvre ChatGPT, Claude ou Copilot et commence par ce message de contexte :</p>
+
+      <div class="prompt-box">
+        <div class="prompt-label">💬 Prompt de contexte — colle ce texte tel quel</div>
+        <div class="prompt-text">
+          Je travaille sur un projet Django 5. Mon app s'appelle <strong>blog</strong>. J'ai déjà la structure suivante :<br><br>
+          — <code>blog/models.py</code> (vide pour l'instant)<br>
+          — <code>blog/views.py</code> (vide)<br>
+          — <code>blog/urls.py</code> avec app_name = 'blog' et urlpatterns vide<br>
+          — <code>blog/templates/blog/</code> (dossier vide)<br>
+          — <code>blog/static/blog/css/style.css</code> (vide)<br>
+          — <code>monprojet/urls.py</code> avec include('blog.urls') déjà relié<br><br>
+          Garde ce contexte en tête pour toutes mes prochaines demandes.
+        </div>
+      </div>
+
+      <div class="tip"><span class="tip-i">🎯</span><span><strong>Pourquoi ce contexte ?</strong> Sans lui, l'IA invente les noms de fichiers, de views et de variables. Avec ce contexte, elle génère du code qui s'intègre directement dans <em>ton</em> projet.</span></div>
+      <button class="mark-done-btn" onclick="markDone('step1')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 2 — GÉNÉRER LE TEMPLATE -->
+  <div class="step-card s2" id="step2">
+    <div class="step-header" onclick="toggleStep('step2')">
+      <div class="step-num-badge">2</div>
+      <div class="step-header-text">
+        <div class="step-title">Générer le template HTML avec l'IA</div>
+        <div class="step-sub">Demander à l'IA de créer <code>blog/templates/blog/index.html</code>.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body2">
+      <p class="desc">Dans la même conversation, envoie ce prompt à l'IA :</p>
+
+      <div class="prompt-box">
+        <div class="prompt-label">💬 Prompt — template HTML</div>
+        <div class="prompt-text">
+          Génère le fichier <code>blog/templates/blog/index.html</code> pour une page d'accueil simple du blog. Elle doit :<br>
+          — Avoir un titre h1 "Mon Blog"<br>
+          — Afficher un message de bienvenue en paragraphe<br>
+          — Charger le fichier CSS <code>blog/css/style.css</code> avec {% load static %}<br>
+          — Utiliser les balises de bloc Django {% block %} pour être extensible<br>
+          Rien d'autre pour l'instant.
+        </div>
+      </div>
+
+      <p class="desc" style="margin-top:0.9rem;"><strong>Lis attentivement</strong> le code généré avant de l'utiliser. Vérifie que :</p>
+      <div class="checklist" style="margin-top:0;">
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span><code>{% load static %}</code> est présent en haut du fichier.</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le chemin du CSS correspond bien à <code>'blog/css/style.css'</code>.</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Il n'y a pas d'imports ou de balises inconnues.</span></div>
+      </div>
+
+      <p class="desc" style="margin-top:0.9rem;">Crée le fichier <code>blog/templates/blog/index.html</code> et colle le code généré dedans.</p>
+
+      <div class="tip tip-amber"><span class="tip-i">⚠️</span><span>Si l'IA génère des balises Django que tu ne reconnais pas (comme <code>{% extends %}</code> avec un fichier qui n'existe pas encore), demande-lui de simplifier : <em>"Génère une version sans extends, juste une page HTML standalone."</em></span></div>
+      <button class="mark-done-btn" onclick="markDone('step2')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 — GÉNÉRER LA VIEW -->
+  <div class="step-card s3" id="step3">
+    <div class="step-header" onclick="toggleStep('step3')">
+      <div class="step-num-badge">3</div>
+      <div class="step-header-text">
+        <div class="step-title">Générer la view avec l'IA</div>
+        <div class="step-sub">La fonction qui rend le template — dans <code>blog/views.py</code>.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body3">
+      <p class="desc">Dans la même conversation, envoie ce prompt :</p>
+
+      <div class="prompt-box">
+        <div class="prompt-label">💬 Prompt — view Django</div>
+        <div class="prompt-text">
+          Génère la view Django pour <code>blog/views.py</code> qui rend le template <code>blog/index.html</code>. La fonction s'appellera <code>index</code>. Elle reçoit <code>request</code> et retourne un <code>render()</code> avec un contexte vide pour l'instant.
+        </div>
+      </div>
+
+      <p class="desc" style="margin-top:0.9rem;">La view générée doit ressembler à ceci — vérifie que c'est bien le cas :</p>
+
+      <span class="code-label">blog/views.py — résultat attendu</span>
+<pre class="code-block"><span class="kw">from</span> django.shortcuts <span class="kw">import</span> render
+
+<span class="kw">def</span> <span class="fn">index</span>(request):
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/index.html'</span>, {})</pre>
+
+      <p class="desc" style="margin-top:0.9rem;">Colle ce code dans <code>blog/views.py</code>.</p>
+
+      <div class="tip tip-coral"><span class="tip-i">🚨</span><span>Si l'IA génère une <strong>class-based view</strong> (<code>class IndexView(TemplateView)</code>), demande-lui de la convertir en <strong>function-based view</strong> : <em>"Convertis en fonction simple, pas de classe."</em> On reste sur le format du cours.</span></div>
+      <button class="mark-done-btn" onclick="markDone('step3')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 4 — RELIER L'URL -->
+  <div class="step-card s4" id="step4">
+    <div class="step-header" onclick="toggleStep('step4')">
+      <div class="step-num-badge">4</div>
+      <div class="step-header-text">
+        <div class="step-title">Relier la view dans <code>blog/urls.py</code></div>
+        <div class="step-sub">Sans cette étape, la page est inaccessible.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body4">
+      <p class="desc">Ouvre <code>blog/urls.py</code> et ajoute la route vers la view <code>index</code> :</p>
+
+      <span class="code-label">blog/urls.py — à modifier</span>
+<pre class="code-block"><span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> . <span class="kw">import</span> views
+
+app_name = <span class="val">'blog'</span>
+
+urlpatterns = [
+    path(<span class="val">''</span>, views.index, name=<span class="val">'index'</span>),  <span class="cm"># ← ajoute cette ligne</span>
+]</pre>
+
+      <div class="tip"><span class="tip-i">📌</span><span>Le chemin <code>''</code> (vide) signifie que la page d'accueil du blog sera accessible à <code>/blog/</code>, puisque le préfixe <code>blog/</code> est défini dans <code>monprojet/urls.py</code>.</span></div>
+      <button class="mark-done-btn" onclick="markDone('step4')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 5 — TESTER -->
+  <div class="step-card s5" id="step5">
+    <div class="step-header" onclick="toggleStep('step5')">
+      <div class="step-num-badge">5</div>
+      <div class="step-header-text">
+        <div class="step-title">Lancer le serveur et tester</div>
+        <div class="step-sub">Voir la page générée par l'IA s'afficher dans le navigateur.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body5">
+      <p class="desc">Lance le serveur et ouvre la page blog dans le navigateur :</p>
+
+      <span class="code-label">Terminal — avec (env) actif</span>
+<pre class="code-block">python manage.py runserver</pre>
+
+      <div class="result-box" style="text-align:center;font-size:1.05rem;padding:1rem;font-family:'Fira Code',monospace;">
+        <strong>http://127.0.0.1:8000/blog/</strong>
+      </div>
+
+      <p class="desc" style="margin-top:0.9rem;">Tu dois voir la page d'accueil HTML générée par l'IA — le titre "Mon Blog" et le message de bienvenue.</p>
+
+      <div class="tip tip-coral"><span class="tip-i">🚨</span><span><strong>Erreur <code>TemplateDoesNotExist</code> ?</strong> Le fichier HTML n'est pas au bon endroit. Vérifie que le chemin est exactement <code>blog/templates/blog/index.html</code> — pas <code>blog/templates/index.html</code>.</span></div>
+      <div class="tip tip-amber"><span class="tip-i">⚠️</span><span><strong>Erreur <code>NoReverseMatch</code> ou <code>404</code> ?</strong> La route n'est pas reliée. Vérifie que <code>path('', views.index, ...)</code> est dans <code>blog/urls.py</code> et que <code>include('blog.urls')</code> est dans <code>monprojet/urls.py</code>.</span></div>
+      <button class="mark-done-btn" onclick="markDone('step5')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 6 — AMÉLIORER AVEC L'IA -->
+  <div class="step-card s6" id="step6">
+    <div class="step-header" onclick="toggleStep('step6')">
+      <div class="step-num-badge">6</div>
+      <div class="step-header-text">
+        <div class="step-title">Améliorer le CSS avec l'IA</div>
+        <div class="step-sub">Appliquer le cycle vibe coding : décrire → générer → intégrer → tester.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body6">
+      <p class="desc">La page s'affiche mais elle est sans style. Utilise l'IA pour générer un CSS minimal :</p>
+
+      <div class="prompt-box">
+        <div class="prompt-label">💬 Prompt — CSS minimal</div>
+        <div class="prompt-text">
+          Génère un CSS minimal pour <code>blog/static/blog/css/style.css</code>. Police propre, fond clair, largeur max 700px centrée, titre h1 en couleur foncée, paragraphe lisible. Rien de complexe — juste du propre.
+        </div>
+      </div>
+
+      <p class="desc" style="margin-top:0.9rem;">Colle le CSS généré dans <code>blog/static/blog/css/style.css</code> et recharge la page.</p>
+
+      <div class="tip"><span class="tip-i">🎉</span><span><strong>Tu as appliqué le cycle complet du vibe coding</strong> — contexte → prompt → code généré → lecture → intégration → test. C'est exactement cette boucle qui t'accompagnera sur tous les prochains projets Django.</span></div>
+      <button class="mark-done-btn" onclick="markDone('step6')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- EXIGENCES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Ce qu'on doit avoir à la fin</div>
+    <div class="req-list">
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>Le fichier <code>blog/templates/blog/index.html</code> existe et contient du HTML valide avec <code>{% load static %}</code>.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span><code>blog/views.py</code> contient une fonction <code>index(request)</code> qui fait un <code>render()</code>.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span><code>blog/urls.py</code> contient un <code>path('', views.index, name='index')</code>.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>La page s'affiche sans erreur sur <code>http://127.0.0.1:8000/blog/</code>.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>Tu es capable d'expliquer chaque ligne du code intégré.</span></div>
+    </div>
+    <div class="req-list" style="margin-top:0.8rem;">
+      <div class="req-item req-bonus"><span class="req-icon">🌟</span><span>Créer une deuxième page <code>about.html</code> avec sa view <code>about(request)</code> et son URL <code>/blog/about/</code>, toujours via des prompts IA.</span></div>
+      <div class="req-item req-bonus"><span class="req-icon">🌟</span><span>Ajouter un lien de navigation entre les deux pages dans le template HTML.</span></div>
+      <div class="req-item req-bonus"><span class="req-icon">🌟</span><span>Utiliser <code>{% url 'blog:index' %}</code> dans le template plutôt qu'un lien en dur.</span></div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✓</div>Checklist de vérification</div>
+    <div class="checklist">
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>J'ai fourni le contexte exact de mon projet à l'IA avant de demander du code.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span><code>blog/templates/blog/index.html</code> existe avec <code>{% load static %}</code>.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>La view <code>index</code> est dans <code>views.py</code> et fait un <code>render()</code>.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>L'URL <code>path('', views.index, name='index')</code> est dans <code>blog/urls.py</code>.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>La page s'affiche sur <code>/blog/</code> sans erreur.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>J'ai lu et compris chaque ligne de code intégré.</span></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Comprendre → Chercher → Coder → Tester → Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html#step2Dynamique">↩ Retour au sommaire</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) { box.classList.toggle('checked'); }
+
+    function toggleStep(id) {
+      const num = id.replace('step', '');
+      document.getElementById('body' + num).classList.toggle('open');
+    }
+
+    function markDone(id) {
+      document.getElementById(id).classList.toggle('done');
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const done = document.querySelectorAll('.step-card.done').length;
+      document.getElementById('progress-text').textContent = done + ' / 6 étapes';
+      document.getElementById('progress-bar').style.width = (done / 6 * 100) + '%';
+    }
+
+    document.getElementById('body1').classList.add('open');
+  </script>
+</body>
+</html>

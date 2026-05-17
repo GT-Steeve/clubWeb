@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet — Authentification Django</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.1rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-teal { background: #E1F5EE; color: #085041; }
+        .b-blue { background: #E6F1FB; color: #0C447C; }
+        .b-amber { background: #FAEEDA; color: #633806; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-coral { background: #FAECE7; color: #712B13; }
+
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+        .progress-label { font-size: 0.82rem; font-weight: 700; color: #888780; }
+        .progress-count { font-size: 0.82rem; font-weight: 700; color: #085041; }
+        .progress-wrap { height: 8px; background: #D3D1C7; border-radius: 10px; margin-bottom: 1.8rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: #5DCAA5; border-radius: 10px; transition: width 0.5s ease; width: 0%; }
+
+        .step-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1rem; overflow: hidden; transition: border-color 0.2s; }
+        .step-card.done { border-color: #5DCAA5; }
+        .step-header { display: flex; align-items: center; gap: 12px; padding: 1.1rem 1.4rem; cursor: pointer; user-select: none; }
+        .step-num { width: 34px; height: 34px; min-width: 34px; border-radius: 10px; background: #F1EFE8; border: 0.5px solid #D3D1C7; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; color: #888780; transition: all 0.2s; }
+        .step-card.done .step-num { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+        .step-card.done .step-num::after { content: '✓'; }
+        .step-card.done .step-num-text { display: none; }
+        .step-title { font-size: 1rem; font-weight: 800; flex: 1; }
+        .step-chevron { color: #B4B2A9; font-size: 1rem; transition: transform 0.2s; }
+        .step-card.open .step-chevron { transform: rotate(180deg); }
+        .step-body { display: none; padding: 0 1.4rem 1.4rem; }
+        .step-card.open .step-body { display: block; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.9; white-space: pre; overflow-x: auto; color: #2C2C2A; margin-top: 0.8rem; margin-bottom: 0.8rem; }
+        .kw { color: #993C1D; font-weight: 700; }
+        .str { color: #0F6E56; }
+        .cm { color: #888780; font-style: italic; }
+        .fn { color: #534AB7; }
+        .dec { color: #7F77DD; }
+        .num { color: #E8760A; }
+
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+        .tip-amber { background: #FAEEDA; color: #633806; }
+        .tip-coral { background: #FAECE7; color: #712B13; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-blue { background: #E6F1FB; color: #0C447C; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .section-mini { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin: 1rem 0 0.4rem; }
+
+        .mark-done-btn { display: inline-flex; align-items: center; gap: 7px; margin-top: 1.2rem; background: #2C2C2A; color: #FAC775; border: none; border-radius: 10px; padding: 9px 22px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: background 0.15s; }
+        .mark-done-btn:hover { background: #444441; }
+        .step-card.done .mark-done-btn { background: #E1F5EE; color: #085041; cursor: default; }
+
+        .chain-box { border-radius: 12px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.88rem; color: #5F5E5A; line-height: 1.7; }
+        .chain-box strong { color: #2C2C2A; }
+
+        .finish-box { border-radius: 16px; border: 2px solid #5DCAA5; background: #E1F5EE; padding: 1.4rem 1.5rem; margin-top: 1rem; }
+        .finish-box h3 { font-size: 1.1rem; font-weight: 800; color: #085041; margin-bottom: 0.7rem; }
+        .check-list { list-style: none; padding: 0; }
+        .check-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 0.92rem; color: #054032; font-weight: 600; margin-bottom: 0.5rem; line-height: 1.5; }
+        .check-list li::before { content: '✓'; color: #1D9E75; font-weight: 800; flex-shrink: 0; }
+
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EF9F27; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="exercices-django-auth.html">← Retour aux exercices</a>
+
+<div class="hero">
+    <h1>🔐 Django — Authentification</h1>
+    <p>Suite finale du projet blog : inscription, connexion, déconnexion et accès protégé.</p>
+    <div class="badge-row">
+        <span class="badge b-teal">login / logout</span>
+        <span class="badge b-blue">UserCreationForm</span>
+        <span class="badge b-amber">@login_required</span>
+        <span class="badge b-purple">request.user</span>
+        <span class="badge b-coral">auth URLs</span>
+    </div>
+</div>
+
+<div class="chain-box">
+    <strong>Suite de :</strong> projet-django-crud.html — tu as un blog CRUD fonctionnel.<br>
+    <strong>Objectif :</strong> Ajouter un système d'inscription et de connexion — seuls les utilisateurs connectés peuvent créer, modifier ou supprimer des articles.
+</div>
+
+<div class="progress-header">
+    <span class="progress-label">Progression</span>
+    <span class="progress-count" id="prog-count">0 / 6 étapes</span>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-fill"></div></div>
+
+<!-- ÉTAPE 1 -->
+<div class="step-card open" id="step1">
+    <div class="step-header" onclick="toggleStep('step1')">
+        <div class="step-num"><span class="step-num-text">1</span></div>
+        <div class="step-title">Brancher les URLs Django Auth</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Django fournit des vues prêtes à l'emploi pour la connexion et la déconnexion. Il suffit d'inclure leurs URLs dans ton projet.</p>
+        <div class="section-mini">monprojet/urls.py — ajouter</div>
+        <div class="code-block"><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> django.urls <span class="kw">import</span> path, include
+
+urlpatterns = [
+    <span class="fn">path</span>(<span class="str">'admin/'</span>, admin.site.urls),
+    <span class="fn">path</span>(<span class="str">'blog/'</span>, <span class="fn">include</span>(<span class="str">'blog.urls'</span>)),
+    <span class="fn">path</span>(<span class="str">'accounts/'</span>, <span class="fn">include</span>(<span class="str">'django.contrib.auth.urls'</span>)),
+    <span class="fn">path</span>(<span class="str">'accounts/inscription/'</span>, blog_views.inscription, name=<span class="str">'inscription'</span>),
+]</div>
+        <div class="tip"><span class="tip-i">💡</span> <div><code style="font-family:'Fira Code',monospace;font-size:0.85em;">django.contrib.auth.urls</code> fournit automatiquement les routes pour <code style="font-family:'Fira Code',monospace;font-size:0.85em;">/accounts/login/</code>, <code style="font-family:'Fira Code',monospace;font-size:0.85em;">/accounts/logout/</code>, changement de mot de passe, etc.</div></div>
+        <div class="section-mini" style="margin-top:1rem;">monprojet/settings.py — ajouter en bas</div>
+        <div class="code-block"><span class="cm"># Redirections après login/logout</span>
+LOGIN_REDIRECT_URL  = <span class="str">'blog:index'</span>
+LOGOUT_REDIRECT_URL = <span class="str">'blog:index'</span></div>
+        <button class="mark-done-btn" onclick="markDone('step1')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 2 -->
+<div class="step-card" id="step2">
+    <div class="step-header" onclick="toggleStep('step2')">
+        <div class="step-num"><span class="step-num-text">2</span></div>
+        <div class="step-title">Template de connexion</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Django cherche le template de connexion dans <code style="font-family:'Fira Code',monospace;font-size:0.85em;background:#F1EFE8;padding:1px 5px;border-radius:4px;">templates/registration/login.html</code>. Crée ce dossier et ce fichier.</p>
+        <div class="section-mini">templates/registration/login.html</div>
+        <div class="code-block">{% extends <span class="str">'blog/base.html'</span> %}
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+&lt;h1&gt;🔑 Connexion&lt;/h1&gt;
+&lt;form method=<span class="str">"post"</span>&gt;
+  {% csrf_token %}
+  {{ form.as_p }}
+  &lt;button type=<span class="str">"submit"</span>&gt;Se connecter&lt;/button&gt;
+&lt;/form&gt;
+&lt;p&gt;Pas encore de compte ?
+  &lt;a href=<span class="str">"{% url 'inscription' %}"</span>&gt;S'inscrire&lt;/a&gt;
+&lt;/p&gt;
+{% endblock %}</div>
+        <div class="tip tip-amber"><span class="tip-i">📂</span> <div>Le dossier <code style="font-family:'Fira Code',monospace;font-size:0.85em;">registration/</code> doit se trouver dans un dossier <code style="font-family:'Fira Code',monospace;font-size:0.85em;">templates/</code> visible par Django — vérifie que <code style="font-family:'Fira Code',monospace;font-size:0.85em;">TEMPLATES[0]['DIRS']</code> inclut le bon chemin dans settings.py.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step2')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 3 -->
+<div class="step-card" id="step3">
+    <div class="step-header" onclick="toggleStep('step3')">
+        <div class="step-num"><span class="step-num-text">3</span></div>
+        <div class="step-title">Vue d'inscription avec UserCreationForm</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Django fournit <code style="font-family:'Fira Code',monospace;font-size:0.85em;background:#F1EFE8;padding:1px 5px;border-radius:4px;">UserCreationForm</code> — un formulaire prêt à l'emploi pour créer un compte utilisateur avec validation des mots de passe.</p>
+        <div class="section-mini">blog/views.py — ajouter</div>
+        <div class="code-block"><span class="kw">from</span> django.contrib.auth.forms <span class="kw">import</span> UserCreationForm
+<span class="kw">from</span> django.contrib.auth <span class="kw">import</span> login
+
+<span class="kw">def</span> <span class="fn">inscription</span>(request):
+    <span class="kw">if</span> request.method == <span class="str">'POST'</span>:
+        form = <span class="fn">UserCreationForm</span>(request.POST)
+        <span class="kw">if</span> form.<span class="fn">is_valid</span>():
+            user = form.<span class="fn">save</span>()
+            <span class="fn">login</span>(request, user)  <span class="cm"># connexion automatique après inscription</span>
+            <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">'blog:index'</span>)
+    <span class="kw">else</span>:
+        form = <span class="fn">UserCreationForm</span>()
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="str">'registration/inscription.html'</span>, {<span class="str">'form'</span>: form})</div>
+        <div class="section-mini" style="margin-top:1rem;">templates/registration/inscription.html</div>
+        <div class="code-block">{% extends <span class="str">'blog/base.html'</span> %}
+{% block title %}Inscription{% endblock %}
+
+{% block content %}
+&lt;h1&gt;📝 Créer un compte&lt;/h1&gt;
+&lt;form method=<span class="str">"post"</span>&gt;
+  {% csrf_token %}
+  {{ form.as_p }}
+  &lt;button type=<span class="str">"submit"</span>&gt;Créer mon compte&lt;/button&gt;
+&lt;/form&gt;
+&lt;p&gt;Déjà un compte ? &lt;a href=<span class="str">"{% url 'login' %}"</span>&gt;Se connecter&lt;/a&gt;&lt;/p&gt;
+{% endblock %}</div>
+        <div class="tip tip-purple"><span class="tip-i">✨</span> <div><code style="font-family:'Fira Code',monospace;font-size:0.85em;">login(request, user)</code> connecte automatiquement l'utilisateur après son inscription — pas besoin de le rediriger vers la page de connexion.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step3')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 4 -->
+<div class="step-card" id="step4">
+    <div class="step-header" onclick="toggleStep('step4')">
+        <div class="step-num"><span class="step-num-text">4</span></div>
+        <div class="step-title">Protéger les vues avec @login_required</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Le décorateur <code style="font-family:'Fira Code',monospace;font-size:0.85em;background:#F1EFE8;padding:1px 5px;border-radius:4px;">@login_required</code> redirige automatiquement vers la page de connexion si l'utilisateur n'est pas authentifié. Ajoute-le sur toutes les vues d'écriture.</p>
+        <div class="section-mini">blog/views.py — vérification des décorateurs</div>
+        <div class="code-block"><span class="kw">from</span> django.contrib.auth.decorators <span class="kw">import</span> login_required
+
+<span class="dec">@login_required</span>  <span class="cm">✓ déjà présent depuis le projet CRUD</span>
+<span class="kw">def</span> <span class="fn">creer_article</span>(request): ...
+
+<span class="dec">@login_required</span>  <span class="cm">✓</span>
+<span class="kw">def</span> <span class="fn">modifier_article</span>(request, pk): ...
+
+<span class="dec">@login_required</span>  <span class="cm">✓</span>
+<span class="kw">def</span> <span class="fn">supprimer_article</span>(request, pk): ...</div>
+        <div class="section-mini" style="margin-top:1rem;">monprojet/settings.py — configurer la redirection</div>
+        <div class="code-block"><span class="cm"># Quand @login_required redirige vers la connexion</span>
+LOGIN_URL = <span class="str">'login'</span>  <span class="cm"># nom de l'URL de connexion fournie par auth.urls</span></div>
+        <div class="tip tip-blue"><span class="tip-i">🔒</span> <div>Sans <code style="font-family:'Fira Code',monospace;font-size:0.85em;">LOGIN_URL</code>, Django utilise <code style="font-family:'Fira Code',monospace;font-size:0.85em;">/accounts/login/</code> par défaut — qui correspond à l'URL incluse via <code style="font-family:'Fira Code',monospace;font-size:0.85em;">django.contrib.auth.urls</code>. Dans la plupart des cas, aucune configuration supplémentaire n'est nécessaire.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step4')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 5 -->
+<div class="step-card" id="step5">
+    <div class="step-header" onclick="toggleStep('step5')">
+        <div class="step-num"><span class="step-num-text">5</span></div>
+        <div class="step-title">Navigation dynamique dans base.html</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">La variable <code style="font-family:'Fira Code',monospace;font-size:0.85em;background:#F1EFE8;padding:1px 5px;border-radius:4px;">user</code> est disponible dans tous les templates Django. Affiche des liens différents selon l'état de connexion.</p>
+        <div class="section-mini">templates/blog/base.html — barre de navigation</div>
+        <div class="code-block">&lt;nav&gt;
+  &lt;a href=<span class="str">"{% url 'blog:index' %}"</span>&gt;🏠 Accueil&lt;/a&gt;
+
+  {% <span class="kw">if</span> user.is_authenticated %}
+    &lt;a href=<span class="str">"{% url 'blog:creer' %}"</span>&gt;✍️ Écrire&lt;/a&gt;
+    &lt;span&gt;👤 {{ user.username }}&lt;/span&gt;
+    &lt;form method=<span class="str">"post"</span> action=<span class="str">"{% url 'logout' %}"</span> style=<span class="str">"display:inline"</span>&gt;
+      {% csrf_token %}
+      &lt;button type=<span class="str">"submit"</span>&gt;Déconnexion&lt;/button&gt;
+    &lt;/form&gt;
+  {% <span class="kw">else</span> %}
+    &lt;a href=<span class="str">"{% url 'login' %}"</span>&gt;Connexion&lt;/a&gt;
+    &lt;a href=<span class="str">"{% url 'inscription' %}"</span>&gt;Inscription&lt;/a&gt;
+  {% <span class="kw">endif</span> %}
+&lt;/nav&gt;</div>
+        <div class="tip"><span class="tip-i">💡</span> <div><code style="font-family:'Fira Code',monospace;font-size:0.85em;">user.is_authenticated</code> retourne <code style="font-family:'Fira Code',monospace;font-size:0.85em;">True</code> si l'utilisateur est connecté. <code style="font-family:'Fira Code',monospace;font-size:0.85em;">user.username</code> affiche son nom. La déconnexion passe par un formulaire POST depuis Django 5.x.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step5')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 6 -->
+<div class="step-card" id="step6">
+    <div class="step-header" onclick="toggleStep('step6')">
+        <div class="step-num"><span class="step-num-text">6</span></div>
+        <div class="step-title">Vérification finale — le projet complet</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Lance le serveur et teste l'ensemble du flux d'authentification sur ton blog.</p>
+        <div class="finish-box">
+            <h3>🎯 Checklist de validation</h3>
+            <ul class="check-list">
+                <li>Visite <strong>/accounts/inscription/</strong> → crée un compte → tu es connecté automatiquement</li>
+                <li>Visite <strong>/blog/article/creer/</strong> → tu vois le formulaire (car connecté)</li>
+                <li>Déconnecte-toi → essaie de visiter <strong>/blog/article/creer/</strong> → redirigé vers la connexion</li>
+                <li>Reconnecte-toi avec tes identifiants</li>
+                <li>Crée un article → les boutons Modifier/Supprimer sont visibles uniquement pour toi</li>
+                <li>La nav affiche ton username quand connecté, les liens Connexion/Inscription sinon</li>
+            </ul>
+        </div>
+        <div class="tip tip-amber"><span class="tip-i">🏆</span> <div><strong>Félicitations !</strong> Ton blog Django est complet : structure → templates → ORM → CRUD → authentification. C'est un projet fullstack Python de bout en bout.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step6')">✓ Projet terminé !</button>
+    </div>
+</div>
+
+<div class="cta-wrap" style="margin-top:1rem;background:#085041;">
+    <p>🎉 Projet Django complet — de zéro jusqu'à l'authentification !</p>
+    <a class="cta-btn" href="../../sommaire.html#step2Dynamique">↩ Retour au sommaire</a>
+</div>
+
+<div class="footer-note">
+    Inscription → Connexion → CRUD → Déconnexion 🔐<br>
+    <span style="font-size:0.82rem;">Projet — Authentification Django</span>
+</div>
+
+<script>
+var totalSteps = 6;
+var doneSteps = 0;
+
+function toggleStep(id) {
+    var card = document.getElementById(id);
+    card.classList.toggle('open');
+}
+
+function markDone(id) {
+    var card = document.getElementById(id);
+    if (card.classList.contains('done')) return;
+    card.classList.add('done');
+    card.classList.remove('open');
+    doneSteps++;
+    updateProgress();
+    var steps = ['step1','step2','step3','step4','step5','step6'];
+    var idx = steps.indexOf(id);
+    if (idx < steps.length - 1) {
+        var next = document.getElementById(steps[idx + 1]);
+        next.classList.add('open');
+        next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function updateProgress() {
+    var pct = Math.round(doneSteps / totalSteps * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-count').textContent = doneSteps + ' / ' + totalSteps + ' étapes';
+}
+</script>
+</body>
+</html>

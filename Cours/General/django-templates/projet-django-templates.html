@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Templates HTML Django</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%3C%2F%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-blue   { background: #E6F1FB; color: #0C447C; }
+    .b-purple { background: #EEEDFE; color: #3C3489; }
+    .b-amber  { background: #FAEEDA; color: #633806; }
+    .b-teal   { background: #E1F5EE; color: #085041; }
+    .b-coral  { background: #FAECE7; color: #712B13; }
+    .b-green  { background: #EBF5D9; color: #3B6D11; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #ffffff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+    .desc strong { color: #2C2C2A; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #0C447C; }
+
+    .code-label { font-family: 'Fira Code', monospace; font-size: 0.72rem; color: #888780; background: #D3D1C7; display: inline-block; padding: 2px 9px; border-radius: 5px 5px 0 0; margin-top: 0.8rem; margin-bottom: -1px; }
+    .code-block { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 0 10px 10px 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.84rem; line-height: 1.8; white-space: pre; overflow-x: auto; color: #2C2C2A; display: block; }
+    .cm  { color: #888780; font-style: italic; }
+    .kw  { color: #3C3489; font-weight: 700; }
+    .val { color: #0F6E56; }
+    .sel { color: #993C1D; }
+    .fn  { color: #185FA5; }
+    .dtl { color: #712B13; font-weight: 700; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip strong { color: inherit; }
+    .tip-coral  { background: #FAECE7; color: #712B13; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* STEP CARDS */
+    .step-card { border-radius: 14px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1rem; overflow: hidden; }
+    .step-header { display: flex; align-items: center; gap: 12px; padding: 0.85rem 1.1rem; cursor: pointer; user-select: none; }
+    .step-num-badge { width: 36px; height: 36px; border-radius: 50%; font-weight: 800; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+    .step-header-text { flex: 1; }
+    .step-title { font-weight: 800; font-size: 1rem; line-height: 1.3; }
+    .step-sub { font-size: 0.82rem; color: #888780; margin-top: 2px; }
+    .step-check { width: 24px; height: 24px; border: 2px solid #B4B2A9; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; color: transparent; transition: all 0.15s; flex-shrink: 0; }
+    .step-card.done .step-check { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+    .step-body { padding: 0 1.2rem 1.2rem; display: none; }
+    .step-body.open { display: block; }
+
+    .s1 .step-num-badge { background: #9FE1CB; color: #085041; }
+    .s2 .step-num-badge { background: #CECBF6; color: #3C3489; }
+    .s3 .step-num-badge { background: #FAC775; color: #633806; }
+    .s4 .step-num-badge { background: #F5C4B3; color: #712B13; }
+    .s5 .step-num-badge { background: #B5D4F4; color: #0C447C; }
+    .s6 .step-num-badge { background: #C0DD97; color: #3B6D11; }
+    .s7 .step-num-badge { background: #D3D1C7; color: #444441; }
+    .step-card.done .step-num-badge { background: #5DCAA5 !important; color: white !important; }
+
+    /* PROGRESS */
+    .progress-wrap { background: #F1EFE8; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
+    .progress-bar-bg { background: #D3D1C7; border-radius: 20px; height: 10px; }
+    .progress-bar { background: #5DCAA5; border-radius: 20px; height: 10px; width: 0%; transition: width 0.35s ease; }
+
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #5DCAA5; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FAC775; }
+
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box { width: 20px; height: 20px; min-width: 20px; border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; color: transparent; transition: all 0.12s; }
+    .check-box.checked { background: #5DCAA5; border-color: #5DCAA5; color: white; }
+
+    .mark-done-btn { background: #E1F5EE; border: 0.5px solid #9FE1CB; color: #085041; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.88rem; padding: 7px 18px; border-radius: 8px; cursor: pointer; transition: background 0.15s; margin-top: 0.9rem; display: inline-block; }
+    .mark-done-btn:hover { background: #9FE1CB; }
+    .step-card.done .mark-done-btn { background: #5DCAA5; color: white; border-color: #5DCAA5; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+    .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #EF9F27; }
+
+    @media (max-width: 520px) { .hero h1 { font-size: 1.7rem; } }
+  </style>
+</head>
+<body>
+
+  <a class="nav-prev" href="exercices-django-templates.html">&larr; Retour aux exercices</a>
+
+  <div class="hero">
+    <h1>&lt;/&gt; Templates HTML Django</h1>
+    <p>Suite de vibecoding-django — construire un vrai système de templates avec héritage et affichage de données.</p>
+    <div class="badge-row">
+      <span class="badge b-teal">Suite de vibecoding-django</span>
+      <span class="badge b-purple">DTL</span>
+      <span class="badge b-amber">7 étapes</span>
+      <span class="badge b-blue">~35 min</span>
+      <span class="badge b-coral">base.html + données</span>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+    <p class="desc">Tu repars du projet avec la page <code>/blog/</code> fonctionnelle. Cette fois tu vas <strong>structurer un vrai système de templates</strong> : un <code>base.html</code> parent, des templates enfants avec <code>{% extends %}</code>, et surtout <strong>afficher de vraies données</strong> transmises depuis la vue via le contexte.</p>
+    <div class="tip"><span class="tip-i">💡</span><span><strong>Le principe clé du cours</strong> — La vue prépare les données dans un dictionnaire de contexte, le template les affiche avec <code>{{ variable }}</code>. Ce mécanisme est au cœur de tout projet Django.</span></div>
+  </div>
+
+  <!-- PROGRESSION -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Progression</span>
+      <span id="progress-text">0 / 7 étapes</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar" id="progress-bar"></div></div>
+  </div>
+
+  <!-- ÉTAPE 1 — BASE.HTML -->
+  <div class="step-card s1" id="step1">
+    <div class="step-header" onclick="toggleStep('step1')">
+      <div class="step-num-badge">1</div>
+      <div class="step-header-text">
+        <div class="step-title">Créer le template parent <code>base.html</code></div>
+        <div class="step-sub">Le squelette HTML commun à toutes les pages du blog.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body1">
+      <p class="desc">Remplace le contenu de <code>blog/templates/blog/base.html</code> par ce squelette complet avec les blocs Django :</p>
+
+      <span class="code-label">blog/templates/blog/base.html</span>
+<pre class="code-block">{% load static %}
+<span class="sel">&lt;!DOCTYPE html&gt;</span>
+<span class="sel">&lt;html</span> <span class="fn">lang</span>=<span class="val">"fr"</span><span class="sel">&gt;</span>
+<span class="sel">&lt;head&gt;</span>
+  <span class="sel">&lt;meta</span> <span class="fn">charset</span>=<span class="val">"UTF-8"</span><span class="sel">&gt;</span>
+  <span class="sel">&lt;title&gt;</span><span class="dtl">{% block title %}</span>Mon Blog<span class="dtl">{% endblock %}</span><span class="sel">&lt;/title&gt;</span>
+  <span class="sel">&lt;link</span> <span class="fn">rel</span>=<span class="val">"stylesheet"</span> <span class="fn">href</span>=<span class="val">"{% static 'blog/css/style.css' %}"</span><span class="sel">&gt;</span>
+<span class="sel">&lt;/head&gt;</span>
+<span class="sel">&lt;body&gt;</span>
+  <span class="sel">&lt;nav&gt;</span>
+    <span class="sel">&lt;a</span> <span class="fn">href</span>=<span class="val">"{% url 'blog:index' %}"</span><span class="sel">&gt;</span>Accueil<span class="sel">&lt;/a&gt;</span>
+  <span class="sel">&lt;/nav&gt;</span>
+
+  <span class="sel">&lt;main&gt;</span>
+    <span class="dtl">{% block content %}</span>
+    <span class="dtl">{% endblock %}</span>
+  <span class="sel">&lt;/main&gt;</span>
+<span class="sel">&lt;/body&gt;</span>
+<span class="sel">&lt;/html&gt;</span></pre>
+
+      <div class="tip"><span class="tip-i">🔑</span><span><strong>Les blocs <code>{% block %}</code></strong> sont les zones que les templates enfants vont remplacer. <code>title</code> pour le titre de l'onglet, <code>content</code> pour le contenu de la page. Tout le reste (nav, CSS) est partagé automatiquement.</span></div>
+      <button class="mark-done-btn" onclick="markDone('step1')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 2 — INDEX.HTML AVEC EXTENDS -->
+  <div class="step-card s2" id="step2">
+    <div class="step-header" onclick="toggleStep('step2')">
+      <div class="step-num-badge">2</div>
+      <div class="step-header-text">
+        <div class="step-title">Faire hériter <code>index.html</code> de <code>base.html</code></div>
+        <div class="step-sub"><code>{% extends %}</code> — le template enfant hérite de la structure parente.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body2">
+      <p class="desc">Remplace le contenu de <code>blog/templates/blog/index.html</code> par cette version qui hérite de <code>base.html</code> :</p>
+
+      <span class="code-label">blog/templates/blog/index.html</span>
+<pre class="code-block"><span class="dtl">{% extends 'blog/base.html' %}</span>
+
+<span class="dtl">{% block title %}</span>Accueil — Mon Blog<span class="dtl">{% endblock %}</span>
+
+<span class="dtl">{% block content %}</span>
+  <span class="sel">&lt;h1&gt;</span>Bienvenue sur le Blog<span class="sel">&lt;/h1&gt;</span>
+  <span class="sel">&lt;p&gt;</span>{{ message }}<span class="sel">&lt;/p&gt;</span>
+<span class="dtl">{% endblock %}</span></pre>
+
+      <div class="tip tip-purple"><span class="tip-i">💡</span><span><code>{% extends %}</code> doit être la <strong>toute première ligne</strong> du fichier. Si ce n'est pas le cas, Django lève une erreur. Il ne peut y avoir qu'un seul <code>extends</code> par template.</span></div>
+      <div class="tip tip-amber"><span class="tip-i">⚠️</span><span><code>{{ message }}</code> est une variable — elle sera remplie par le contexte que la vue envoie. Si la vue n'envoie pas <code>message</code>, Django affiche simplement rien (pas d'erreur).</span></div>
+      <button class="mark-done-btn" onclick="markDone('step2')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 — PASSER DES DONNÉES DEPUIS LA VUE -->
+  <div class="step-card s3" id="step3">
+    <div class="step-header" onclick="toggleStep('step3')">
+      <div class="step-num-badge">3</div>
+      <div class="step-header-text">
+        <div class="step-title">Passer des données depuis la vue</div>
+        <div class="step-sub">Le dictionnaire de contexte — le pont entre <code>views.py</code> et le template.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body3">
+      <p class="desc">Mets à jour la view <code>index</code> dans <code>blog/views.py</code> pour envoyer des données au template via le contexte :</p>
+
+      <span class="code-label">blog/views.py</span>
+<pre class="code-block"><span class="kw">from</span> django.shortcuts <span class="kw">import</span> render
+
+<span class="kw">def</span> <span class="fn">index</span>(request):
+    contexte = {
+        <span class="val">'message'</span>: <span class="val">'Bienvenue sur mon blog Django !'</span>,
+        <span class="val">'articles'</span>: [
+            {<span class="val">'titre'</span>: <span class="val">'Mon premier article'</span>, <span class="val">'auteur'</span>: <span class="val">'Alice'</span>},
+            {<span class="val">'titre'</span>: <span class="val">'Apprendre Django'</span>,    <span class="val">'auteur'</span>: <span class="val">'Bob'</span>},
+            {<span class="val">'titre'</span>: <span class="val">'Les templates DTL'</span>,   <span class="val">'auteur'</span>: <span class="val">'Alice'</span>},
+        ]
+    }
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/index.html'</span>, contexte)</pre>
+
+      <div class="tip"><span class="tip-i">📌</span><span>On utilise une <strong>liste de dictionnaires Python</strong> pour simuler des articles — pas encore de base de données. C'est suffisant pour apprendre à afficher des données dans les templates.</span></div>
+      <button class="mark-done-btn" onclick="markDone('step3')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 4 — AFFICHER LES DONNÉES AVEC DTL -->
+  <div class="step-card s4" id="step4">
+    <div class="step-header" onclick="toggleStep('step4')">
+      <div class="step-num-badge">4</div>
+      <div class="step-header-text">
+        <div class="step-title">Afficher la liste d'articles avec <code>{% for %}</code></div>
+        <div class="step-sub">Variables, boucles et filtres DTL en pratique.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body4">
+      <p class="desc">Mets à jour <code>blog/templates/blog/index.html</code> pour afficher la liste des articles passés par la vue :</p>
+
+      <span class="code-label">blog/templates/blog/index.html — version complète</span>
+<pre class="code-block"><span class="dtl">{% extends 'blog/base.html' %}</span>
+
+<span class="dtl">{% block title %}</span>Accueil — Mon Blog<span class="dtl">{% endblock %}</span>
+
+<span class="dtl">{% block content %}</span>
+  <span class="sel">&lt;h1&gt;</span>{{ message }}<span class="sel">&lt;/h1&gt;</span>
+
+  <span class="dtl">{% if articles %}</span>
+    <span class="sel">&lt;ul&gt;</span>
+      <span class="dtl">{% for article in articles %}</span>
+        <span class="sel">&lt;li&gt;</span>
+          <span class="sel">&lt;strong&gt;</span>{{ article.titre }}<span class="sel">&lt;/strong&gt;</span>
+          — par {{ article.auteur|title }}
+        <span class="sel">&lt;/li&gt;</span>
+      <span class="dtl">{% endfor %}</span>
+    <span class="sel">&lt;/ul&gt;</span>
+  <span class="dtl">{% else %}</span>
+    <span class="sel">&lt;p&gt;</span>Aucun article pour l'instant.<span class="sel">&lt;/p&gt;</span>
+  <span class="dtl">{% endif %}</span>
+
+  <span class="sel">&lt;p&gt;</span>{{ articles|length }} article(s) au total.<span class="sel">&lt;/p&gt;</span>
+<span class="dtl">{% endblock %}</span></pre>
+
+      <div class="tip"><span class="tip-i">🎯</span><span>Trois éléments du DTL en une seule page : <code>{{ variable }}</code> pour afficher, <code>{% if/for %}</code> pour la logique, <code>|title</code> et <code>|length</code> pour les filtres. Ce sont les outils les plus courants de tout projet Django.</span></div>
+      <button class="mark-done-btn" onclick="markDone('step4')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 5 — DEUXIÈME TEMPLATE -->
+  <div class="step-card s5" id="step5">
+    <div class="step-header" onclick="toggleStep('step5')">
+      <div class="step-num-badge">5</div>
+      <div class="step-header-text">
+        <div class="step-title">Créer une page <code>about.html</code></div>
+        <div class="step-sub">Un deuxième template enfant pour valider l'héritage.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body5">
+      <p class="desc">Crée le fichier <code>blog/templates/blog/about.html</code> :</p>
+
+      <span class="code-label">blog/templates/blog/about.html</span>
+<pre class="code-block"><span class="dtl">{% extends 'blog/base.html' %}</span>
+
+<span class="dtl">{% block title %}</span>À propos — Mon Blog<span class="dtl">{% endblock %}</span>
+
+<span class="dtl">{% block content %}</span>
+  <span class="sel">&lt;h1&gt;</span>À propos<span class="sel">&lt;/h1&gt;</span>
+  <span class="sel">&lt;p&gt;</span>Ce blog est fait avec Django {{ django_version }}.<span class="sel">&lt;/p&gt;</span>
+<span class="dtl">{% endblock %}</span></pre>
+
+      <p class="desc" style="margin-top:0.9rem;">Ajoute la view et la route correspondantes :</p>
+
+      <span class="code-label">blog/views.py — ajouter</span>
+<pre class="code-block"><span class="kw">import</span> django
+
+<span class="kw">def</span> <span class="fn">about</span>(request):
+    <span class="kw">return</span> <span class="fn">render</span>(request, <span class="val">'blog/about.html'</span>, {
+        <span class="val">'django_version'</span>: django.get_version()
+    })</pre>
+
+      <span class="code-label">blog/urls.py — ajouter</span>
+<pre class="code-block">path(<span class="val">'about/'</span>, views.about, name=<span class="val">'about'</span>),</pre>
+
+      <p class="desc" style="margin-top:0.9rem;">Puis ajoute le lien dans la navigation de <code>base.html</code> :</p>
+      <span class="code-label">blog/templates/blog/base.html — nav</span>
+<pre class="code-block"><span class="sel">&lt;nav&gt;</span>
+  <span class="sel">&lt;a</span> <span class="fn">href</span>=<span class="val">"{% url 'blog:index' %}"</span><span class="sel">&gt;</span>Accueil<span class="sel">&lt;/a&gt;</span>
+  <span class="sel">&lt;a</span> <span class="fn">href</span>=<span class="val">"{% url 'blog:about' %}"</span><span class="sel">&gt;</span>À propos<span class="sel">&lt;/a&gt;</span>
+<span class="sel">&lt;/nav&gt;</span></pre>
+
+      <div class="tip tip-purple"><span class="tip-i">💡</span><span><code>{% url 'blog:about' %}</code> génère l'URL dynamiquement. Si tu changes le chemin dans <code>urls.py</code>, tous les liens se mettent à jour automatiquement — jamais d'URL en dur dans les templates.</span></div>
+      <button class="mark-done-btn" onclick="markDone('step5')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 6 — CSS -->
+  <div class="step-card s6" id="step6">
+    <div class="step-header" onclick="toggleStep('step6')">
+      <div class="step-num-badge">6</div>
+      <div class="step-header-text">
+        <div class="step-title">Styler la navigation et la liste</div>
+        <div class="step-sub">CSS minimal dans <code>static/blog/css/style.css</code>.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body6">
+      <p class="desc">Mets à jour <code>blog/static/blog/css/style.css</code> pour rendre le blog lisible :</p>
+
+      <span class="code-label">blog/static/blog/css/style.css</span>
+<pre class="code-block"><span class="sel">body</span> {
+  font-family: sans-serif;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: #f9f9f7;
+  color: #2c2c2a;
+}
+
+<span class="sel">nav</span> {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+}
+
+<span class="sel">nav a</span> { color: #185fa5; text-decoration: none; font-weight: 700; }
+<span class="sel">nav a:hover</span> { text-decoration: underline; }
+
+<span class="sel">h1</span> { font-size: 1.8rem; margin-bottom: 1rem; }
+
+<span class="sel">ul</span> { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+<span class="sel">li</span> { background: #fff; border: 0.5px solid #ddd; border-radius: 8px; padding: 0.7rem 1rem; }</pre>
+
+      <div class="tip tip-amber"><span class="tip-i">⚠️</span><span>Si le CSS ne s'applique pas après modification, vide le cache du navigateur avec <strong>Ctrl+Shift+R</strong> (ou Cmd+Shift+R sur Mac). Django ne force pas le rechargement des fichiers statiques en développement.</span></div>
+      <button class="mark-done-btn" onclick="markDone('step6')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 7 — VÉRIFIER -->
+  <div class="step-card s7" id="step7">
+    <div class="step-header" onclick="toggleStep('step7')">
+      <div class="step-num-badge">7</div>
+      <div class="step-header-text">
+        <div class="step-title">Vérifier le résultat final</div>
+        <div class="step-sub">Deux pages, un système de templates complet, des données affichées.</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="step-body" id="body7">
+      <p class="desc">Lance le serveur et teste les deux pages :</p>
+
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:0.8rem;">
+        <div style="background:#F1EFE8;border-radius:10px;padding:0.8rem 1rem;font-family:'Fira Code',monospace;font-size:0.9rem;"><strong>http://127.0.0.1:8000/blog/</strong> <span style="color:#888780;font-size:0.8rem;">→ liste des 3 articles</span></div>
+        <div style="background:#F1EFE8;border-radius:10px;padding:0.8rem 1rem;font-family:'Fira Code',monospace;font-size:0.9rem;"><strong>http://127.0.0.1:8000/blog/about/</strong> <span style="color:#888780;font-size:0.8rem;">→ version Django affichée</span></div>
+      </div>
+
+      <div class="checklist" style="margin-top:0.9rem;">
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>La navigation apparaît sur les deux pages (héritage de <code>base.html</code> fonctionnel).</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Les 3 articles s'affichent en liste sur <code>/blog/</code>.</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le filtre <code>|title</code> met le nom de l'auteur en majuscule.</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le filtre <code>|length</code> affiche "3 article(s) au total."</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>La version Django s'affiche sur <code>/blog/about/</code>.</span></div>
+      </div>
+
+      <div class="tip"><span class="tip-i">🎉</span><span><strong>Système de templates complet.</strong> Tu as un <code>base.html</code> parent, deux templates enfants, des données passées depuis les vues, du DTL (variables, boucles, filtres) et de la navigation avec <code>{% url %}</code>. C'est le cœur de tout projet Django.</span></div>
+      <button class="mark-done-btn" onclick="markDone('step7')">✓ Étape terminée</button>
+    </div>
+  </div>
+
+  <!-- EXIGENCES -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">📋</div>Ce qu'on doit avoir à la fin</div>
+    <div class="req-list">
+      <div class="req-item req-must"><span class="req-icon">✅</span><span><code>base.html</code> avec <code>{% block title %}</code> et <code>{% block content %}</code>.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span><code>index.html</code> hérite de <code>base.html</code> via <code>{% extends %}</code>.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>La view <code>index</code> envoie un contexte avec <code>message</code> et <code>articles</code>.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>La liste des articles s'affiche avec <code>{% for %}</code> et <code>{% if %}</code>.</span></div>
+      <div class="req-item req-must"><span class="req-icon">✅</span><span>La navigation utilise <code>{% url %}</code> — pas de liens en dur.</span></div>
+    </div>
+    <div class="req-list" style="margin-top:0.8rem;">
+      <div class="req-item req-bonus"><span class="req-icon">🌟</span><span>Ajouter un filtre <code>|upper</code> ou <code>|truncatechars:30</code> sur le titre des articles.</span></div>
+      <div class="req-item req-bonus"><span class="req-icon">🌟</span><span>Créer un sous-template <code>_article_card.html</code> et l'inclure avec <code>{% include %}</code>.</span></div>
+      <div class="req-item req-bonus"><span class="req-icon">🌟</span><span>Afficher le numéro de chaque article avec <code>{{ forloop.counter }}</code> dans la boucle.</span></div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST FINALE -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">✓</div>Checklist de vérification</div>
+    <div class="checklist">
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span><code>base.html</code> contient les blocs <code>title</code> et <code>content</code>.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span><code>index.html</code> commence par <code>{% extends 'blog/base.html' %}</code>.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>La view envoie <code>articles</code> dans le contexte.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>La boucle <code>{% for article in articles %}</code> affiche les données.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>La page <code>/blog/about/</code> fonctionne et hérite bien du nav.</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)">✓</div><span>Le CSS est chargé via <code>{% load static %}</code> dans <code>base.html</code>.</span></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Comprendre → Chercher → Coder → Tester → Recommencer 🚀<br>
+    <span style="font-size:0.82rem;">L'état d'esprit du développeur</span><br><br>
+    <a class="cta-btn" href="../../sommaire.html#step2Dynamique">↩ Retour au sommaire</a>
+  </div>
+
+  <script>
+    function toggleCheck(box) { box.classList.toggle('checked'); }
+
+    function toggleStep(id) {
+      const num = id.replace('step', '');
+      document.getElementById('body' + num).classList.toggle('open');
+    }
+
+    function markDone(id) {
+      document.getElementById(id).classList.toggle('done');
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const done = document.querySelectorAll('.step-card.done').length;
+      document.getElementById('progress-text').textContent = done + ' / 7 étapes';
+      document.getElementById('progress-bar').style.width = (done / 7 * 100) + '%';
+    }
+
+    document.getElementById('body1').classList.add('open');
+  </script>
+</body>
+</html>
