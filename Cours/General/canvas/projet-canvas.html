@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet — Platformer 2D Canvas</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #9A3412; text-decoration: none; margin-bottom: 1.5rem; background: #FFF7ED; border: 0.5px solid #FED7AA; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #FFEDD5; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.1rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-orange { background: #FFF7ED; color: #9A3412; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-green  { background: #EAF3DE; color: #3B6D11; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+        .progress-label { font-size: 0.82rem; font-weight: 700; color: #888780; }
+        .progress-count { font-size: 0.82rem; font-weight: 700; color: #F97316; }
+        .progress-wrap { height: 8px; background: #D3D1C7; border-radius: 10px; margin-bottom: 1.8rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: #F97316; border-radius: 10px; transition: width 0.5s ease; width: 0%; }
+
+        .step-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1rem; overflow: hidden; transition: border-color 0.2s; }
+        .step-card.done { border-color: #F97316; }
+        .step-header { display: flex; align-items: center; gap: 12px; padding: 1.1rem 1.4rem; cursor: pointer; user-select: none; }
+        .step-num { width: 34px; height: 34px; min-width: 34px; border-radius: 10px; background: #F1EFE8; border: 0.5px solid #D3D1C7; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; color: #888780; transition: all 0.2s; }
+        .step-card.done .step-num { background: #FFF7ED; border-color: #F97316; color: #9A3412; }
+        .step-card.done .step-num::after { content: '✓'; }
+        .step-card.done .step-num-text { display: none; }
+        .step-title { font-size: 1rem; font-weight: 800; flex: 1; }
+        .step-chevron { color: #B4B2A9; font-size: 1rem; transition: transform 0.2s; }
+        .step-card.open .step-chevron { transform: rotate(180deg); }
+        .step-body { display: none; padding: 0 1.4rem 1.4rem; }
+        .step-card.open .step-body { display: block; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #FFF7ED; padding: 1px 5px; border-radius: 4px; color: #9A3412; }
+
+        .js-block {
+            background: #1A1A1A; border-left: 3px solid #F97316; border-radius: 10px;
+            padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem;
+            line-height: 1.9; white-space: pre; overflow-x: auto; color: #D4D4D4;
+            margin: 0.8rem 0;
+        }
+        .html-block {
+            background: #1A1A1A; border-left: 3px solid #85B7EB; border-radius: 10px;
+            padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem;
+            line-height: 1.9; white-space: pre; overflow-x: auto; color: #D4D4D4;
+            margin: 0.8rem 0;
+        }
+        .css-block {
+            background: #1A1A1A; border-left: 3px solid #C084FC; border-radius: 10px;
+            padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem;
+            line-height: 1.9; white-space: pre; overflow-x: auto; color: #D4D4D4;
+            margin: 0.8rem 0;
+        }
+        .kw   { color: #C084FC; font-weight: 700; }
+        .fn   { color: #60A5FA; }
+        .str  { color: #86EFAC; }
+        .num  { color: #FB923C; }
+        .cm   { color: #6B7280; font-style: italic; }
+        .op   { color: #F472B6; }
+        .var  { color: #FCD34D; }
+        .dom  { color: #67E8F9; }
+        .tag  { color: #85B7EB; }
+        .atr  { color: #FAC775; }
+        .val  { color: #86EFAC; }
+        .prop { color: #C084FC; }
+        .csval{ color: #86EFAC; }
+        .hl   { color: #F97316; font-weight: 700; }
+
+        .section-mini { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin: 1rem 0 0.4rem; }
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #FFF7ED; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #9A3412; line-height: 1.5; }
+        .tip-blue   { background: #E6F1FB; color: #0C447C; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-green  { background: #EAF3DE; color: #3B6D11; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .mark-done-btn { display: inline-flex; align-items: center; gap: 7px; margin-top: 1.2rem; background: #1A0700; color: #F97316; border: none; border-radius: 10px; padding: 9px 22px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: background 0.15s; }
+        .mark-done-btn:hover { background: #2D1200; }
+        .step-card.done .mark-done-btn { background: #FFF7ED; color: #9A3412; cursor: default; border: 0.5px solid #F97316; }
+
+        /* VIBE CODING BOX */
+        .vibe-box { border-radius: 12px; border: 2px dashed #C084FC; background: #F5F3FF; padding: 1rem 1.2rem; margin: 0.9rem 0; }
+        .vibe-label { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #6D28D9; margin-bottom: 8px; }
+        .vibe-prompt { background: #1A1A1A; border-radius: 8px; padding: 0.75rem 1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; color: #C084FC; line-height: 1.7; white-space: pre-wrap; margin-top: 0.5rem; }
+
+        /* GAME PREVIEW */
+        .game-preview-wrap { background: #0F172A; border-radius: 16px; padding: 1rem; margin: 1rem 0; border: 0.5px solid #1F2937; text-align: center; }
+        .game-preview-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #6B7280; margin-bottom: 8px; }
+        .game-hud { color: #FBBF24; font-family: 'Fira Code', monospace; font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+        #demo-canvas { border-radius: 10px; display: block; margin: 0 auto; }
+        .game-controls-hint { font-size: 0.78rem; color: #4B5563; margin-top: 6px; font-family: 'Fira Code', monospace; }
+
+        /* FILE TREE */
+        .file-tree { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 2; margin: 0.8rem 0; color: #2C2C2A; }
+        .ft-new  { color: #3B6D11; font-weight: 700; }
+        .ft-mod  { color: #E8760A; font-weight: 700; }
+        .ft-gray { color: #888780; }
+
+        .chain-box { border-radius: 12px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.88rem; color: #5F5E5A; line-height: 1.7; }
+        .chain-box strong { color: #2C2C2A; }
+
+        /* IDEAS (pour aller plus loin) */
+        .ideas-section { margin-top: 2rem; }
+        .ideas-header { font-size: 1.3rem; font-weight: 800; color: #2C2C2A; margin-bottom: 0.5rem; }
+        .ideas-intro { font-size: 0.92rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 1.2rem; }
+        .idea-card { display: flex; gap: 1rem; background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.1rem 1.2rem; margin-bottom: 0.8rem; }
+        .idea-icon { font-size: 1.8rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+        .idea-title { font-size: 0.97rem; font-weight: 800; color: #2C2C2A; margin-bottom: 0.3rem; }
+        .idea-desc { font-size: 0.88rem; color: #5F5E5A; line-height: 1.65; }
+        .idea-card-free { background: #FFF7ED; border-color: #F97316; }
+
+        .cta-wrap { text-align: center; background: #085041; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #F97316; color: #fff; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EA580C; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="exercices-canvas.html">← Retour aux exercices</a>
+
+<div class="hero">
+    <h1>🕹️ Projet — Platformer 2D</h1>
+    <p>Construis un vrai jeu de plateforme en Canvas : un personnage qui saute, des plateformes, et des pièces à collecter.</p>
+    <div class="badge-row">
+        <span class="badge b-orange">index.html</span>
+        <span class="badge b-purple">style.css</span>
+        <span class="badge b-blue">script.js</span>
+        <span class="badge b-green">Game Loop</span>
+        <span class="badge b-coral">Vibe coding</span>
+    </div>
+</div>
+
+<!-- DEMO LIVE -->
+<div class="game-preview-wrap">
+    <div class="game-preview-label">🎮 Aperçu — Résultat final du projet</div>
+    <div class="game-hud" id="demo-hud">Pièces : 0 / 5</div>
+    <canvas id="demo-canvas" width="560" height="300"></canvas>
+    <div class="game-controls-hint">← → pour se déplacer &nbsp;|&nbsp; ↑ ou Espace pour sauter &nbsp;|&nbsp; clique ici d'abord</div>
+</div>
+
+<!-- CHAIN BOX -->
+<div class="chain-box">
+    <strong>Ce projet fait suite au projet Clicker.</strong> Tu connais déjà les variables, le DOM et addEventListener. On passe maintenant au Canvas 2D : une zone de dessin contrôlée entièrement par JavaScript, frame par frame. Le résultat : un vrai jeu de plateforme dans le navigateur.
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-header">
+    <span class="progress-label">Progression</span>
+    <span class="progress-count" id="prog-count">0 / 7 étapes</span>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-fill"></div></div>
+
+<!-- ════ STEP 1 ════ -->
+<div class="step-card open" id="step1">
+    <div class="step-header" onclick="toggleStep('step1')">
+        <div class="step-num"><span class="step-num-text">1</span></div>
+        <div class="step-title">HTML — La structure de base</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Crée un dossier <code>platformer/</code> avec trois fichiers. Le canvas est la zone de jeu — toute la magie se passera dedans.</p>
+        <div class="file-tree">📁 platformer/
+├── <span class="ft-new">index.html</span>   ← la structure
+├── <span class="ft-new">style.css</span>    ← l'apparence
+└── <span class="ft-new">script.js</span>    ← le jeu</div>
+        <div class="section-mini">index.html</div>
+        <div class="html-block"><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="atr">lang</span>=<span class="val">"fr"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="atr">charset</span>=<span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Mon Platformer<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;link</span> <span class="atr">rel</span>=<span class="val">"stylesheet"</span> <span class="atr">href</span>=<span class="val">"style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+  <span class="cm">&lt;!-- HUD : affiche le nombre de pièces --&gt;</span>
+  <span class="tag">&lt;div</span> <span class="atr">id</span>=<span class="val">"hud"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;span</span> <span class="atr">id</span>=<span class="val">"score-pieces"</span><span class="tag">&gt;</span>Pièces : 0 / 5<span class="tag">&lt;/span&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="cm">&lt;!-- La zone de jeu --&gt;</span>
+  <span class="tag">&lt;canvas</span> <span class="atr">id</span>=<span class="val">"jeu"</span> <span class="atr">width</span>=<span class="val">"600"</span> <span class="atr">height</span>=<span class="val">"380"</span><span class="tag">&gt;&lt;/canvas&gt;</span>
+
+  <span class="tag">&lt;script</span> <span class="atr">src</span>=<span class="val">"script.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></div>
+        <div class="tip"><span class="tip-i">💡</span><div>Le <code>width</code> et <code>height</code> du canvas définissent sa résolution interne, pas sa taille d'affichage CSS. Ne pas les oublier — sans eux le canvas fait 300×150 par défaut.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step1')">✓ Fait</button>
+    </div>
+</div>
+
+<!-- ════ STEP 2 ════ -->
+<div class="step-card" id="step2">
+    <div class="step-header" onclick="toggleStep('step2')">
+        <div class="step-num"><span class="step-num-text">2</span></div>
+        <div class="step-title">CSS — Le style du jeu</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Un fond sombre, le canvas centré, et le HUD bien visible. Sobre et efficace.</p>
+        <div class="section-mini">style.css</div>
+        <div class="css-block"><span class="op">*</span> { <span class="prop">box-sizing</span>: <span class="csval">border-box</span>; <span class="prop">margin</span>: <span class="csval">0</span>; <span class="prop">padding</span>: <span class="csval">0</span>; }
+
+<span class="prop">body</span> {
+  <span class="prop">background</span>: <span class="csval">#0F0F13</span>;
+  <span class="prop">display</span>: <span class="csval">flex</span>;
+  <span class="prop">flex-direction</span>: <span class="csval">column</span>;
+  <span class="prop">align-items</span>: <span class="csval">center</span>;
+  <span class="prop">justify-content</span>: <span class="csval">center</span>;
+  <span class="prop">min-height</span>: <span class="csval">100vh</span>;
+  <span class="prop">font-family</span>: <span class="csval">'Courier New', monospace</span>;
+}
+
+<span class="prop">#hud</span> {
+  <span class="prop">color</span>: <span class="csval">#FBBF24</span>;
+  <span class="prop">font-size</span>: <span class="csval">1.2rem</span>;
+  <span class="prop">font-weight</span>: <span class="csval">bold</span>;
+  <span class="prop">margin-bottom</span>: <span class="csval">10px</span>;
+}
+
+<span class="prop">#jeu</span> {
+  <span class="prop">border-radius</span>: <span class="csval">12px</span>;
+  <span class="prop">border</span>: <span class="csval">2px solid #1F2937</span>;
+  <span class="prop">display</span>: <span class="csval">block</span>;
+}</div>
+        <button class="mark-done-btn" onclick="markDone('step2')">✓ Fait</button>
+    </div>
+</div>
+
+<!-- ════ STEP 3 ════ -->
+<div class="step-card" id="step3">
+    <div class="step-header" onclick="toggleStep('step3')">
+        <div class="step-num"><span class="step-num-text">3</span></div>
+        <div class="step-title">Variables + clavier — Les fondations JS</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">On initialise le canvas, les constantes physiques, l'objet joueur et la gestion du clavier. C'est le socle de tout le reste.</p>
+        <div class="section-mini">script.js — début du fichier</div>
+        <div class="js-block"><span class="cm">// Initialiser le canvas</span>
+<span class="kw">const</span> <span class="var">canvas</span> <span class="op">=</span> <span class="dom">document.getElementById</span>(<span class="str">'jeu'</span>);
+<span class="kw">const</span> <span class="var">ctx</span>    <span class="op">=</span> <span class="var">canvas</span>.<span class="fn">getContext</span>(<span class="str">'2d'</span>);
+
+<span class="cm">// Constantes physiques</span>
+<span class="kw">const</span> <span class="var">GRAVITE</span>    <span class="op">=</span> <span class="num">0.5</span>;   <span class="cm">// accélération vers le bas (px/frame²)</span>
+<span class="kw">const</span> <span class="var">FORCE_SAUT</span> <span class="op">=</span> <span class="op">-</span><span class="num">12</span>;   <span class="cm">// impulsion vers le haut (négatif = haut)</span>
+
+<span class="cm">// ← Change ce chiffre pour fixer l'objectif du niveau !</span>
+<span class="kw">const</span> <span class="var">NB_PIECES</span>  <span class="op">=</span> <span class="hl">5</span>;
+
+<span class="cm">// L'objet joueur : position, vitesse, taille</span>
+<span class="kw">const</span> <span class="var">joueur</span> <span class="op">=</span> {
+  x: <span class="num">40</span>, y: <span class="num">280</span>,
+  vx: <span class="num">0</span>, vy: <span class="num">0</span>,
+  w: <span class="num">32</span>, h: <span class="num">32</span>,
+  auSol: <span class="kw">false</span>
+};
+
+<span class="kw">let</span> <span class="var">piecesRecuperees</span> <span class="op">=</span> <span class="num">0</span>;
+
+<span class="cm">// Mémoriser les touches enfoncées (bonne approche !)</span>
+<span class="kw">const</span> <span class="var">touches</span> <span class="op">=</span> {};
+<span class="dom">document</span>.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, <span class="kw">function</span>(<span class="var">e</span>) {
+  <span class="var">touches</span>[<span class="var">e</span>.key] <span class="op">=</span> <span class="kw">true</span>;
+  <span class="cm">// Empêcher la page de défiler avec les flèches</span>
+  <span class="kw">if</span> ([<span class="str">'ArrowUp'</span>,<span class="str">'ArrowDown'</span>,<span class="str">'ArrowLeft'</span>,<span class="str">'ArrowRight'</span>,<span class="str">' '</span>].<span class="fn">includes</span>(<span class="var">e</span>.key)) {
+    <span class="var">e</span>.<span class="fn">preventDefault</span>();
+  }
+});
+<span class="dom">document</span>.<span class="fn">addEventListener</span>(<span class="str">'keyup'</span>, <span class="kw">function</span>(<span class="var">e</span>) { <span class="var">touches</span>[<span class="var">e</span>.key] <span class="op">=</span> <span class="kw">false</span>; });</div>
+        <div class="tip"><span class="tip-i">🎯</span><div><strong>NB_PIECES</strong> détermine le nombre de pièces du niveau. Mets 3 pour un niveau facile, 10 pour un défi ! Le HUD et la condition de victoire s'adaptent automatiquement.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step3')">✓ Fait</button>
+    </div>
+</div>
+
+<!-- ════ STEP 4 ════ -->
+<div class="step-card" id="step4">
+    <div class="step-header" onclick="toggleStep('step4')">
+        <div class="step-num"><span class="step-num-text">4</span></div>
+        <div class="step-title">Plateformes — Le niveau</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Chaque plateforme est un objet simple <code>{x, y, w, h}</code>. On les met dans un tableau et on les dessine avec <code>forEach</code>. Tu peux en ajouter ou les repositionner librement.</p>
+        <div class="section-mini">script.js — ajouter après les variables</div>
+        <div class="js-block"><span class="cm">// Définir les plateformes (sol + plateformes en l'air)</span>
+<span class="kw">const</span> <span class="var">plateformes</span> <span class="op">=</span> [
+  { x: <span class="num">0</span>,   y: <span class="num">340</span>, w: <span class="num">600</span>, h: <span class="num">40</span>  },  <span class="cm">// sol complet</span>
+  { x: <span class="num">90</span>,  y: <span class="num">270</span>, w: <span class="num">130</span>, h: <span class="num">15</span>  },
+  { x: <span class="num">290</span>, y: <span class="num">210</span>, w: <span class="num">130</span>, h: <span class="num">15</span>  },
+  { x: <span class="num">430</span>, y: <span class="num">275</span>, w: <span class="num">130</span>, h: <span class="num">15</span>  },
+  { x: <span class="num">170</span>, y: <span class="num">170</span>, w: <span class="num">100</span>, h: <span class="num">15</span>  },
+  { x: <span class="num">390</span>, y: <span class="num">155</span>, w: <span class="num">110</span>, h: <span class="num">15</span>  },
+];</div>
+        <div class="section-mini">Dans la fonction draw() — dessiner les plateformes</div>
+        <div class="js-block"><span class="kw">function</span> <span class="fn">draw</span>() {
+  <span class="cm">// Fond sombre</span>
+  <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#0F172A'</span>;
+  <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">canvas</span>.width, <span class="var">canvas</span>.height);
+
+  <span class="cm">// Plateformes</span>
+  <span class="var">plateformes</span>.<span class="fn">forEach</span>(<span class="kw">function</span>(<span class="var">p</span>) {
+    <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#374151'</span>;
+    <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="var">p</span>.x, <span class="var">p</span>.y, <span class="var">p</span>.w, <span class="var">p</span>.h);
+    <span class="cm">// Ligne verte sur le dessus pour effet herbe</span>
+    <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#4B5563'</span>;
+    <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="var">p</span>.x, <span class="var">p</span>.y, <span class="var">p</span>.w, <span class="num">4</span>);
+  });
+}</div>
+        <div class="tip tip-blue"><span class="tip-i">📐</span><div>Change librement les coordonnées des plateformes pour créer ton propre niveau ! Dessine-le d'abord sur papier : canvas = 600×380 px. x=0 est à gauche, y=0 en haut.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step4')">✓ Fait</button>
+    </div>
+</div>
+
+<!-- ════ STEP 5 ════ -->
+<div class="step-card" id="step5">
+    <div class="step-header" onclick="toggleStep('step5')">
+        <div class="step-num"><span class="step-num-text">5</span></div>
+        <div class="step-title">Joueur — Gravité, saut et collisions</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Le joueur commence comme un carré jaune. On ajoute la physique : gravité, déplacement horizontal, saut conditionné au sol, et atterrissage sur les plateformes.</p>
+        <div class="section-mini">script.js — fonctions update() et drawJoueur()</div>
+        <div class="js-block"><span class="kw">function</span> <span class="fn">update</span>() {
+  <span class="cm">// Déplacements horizontaux</span>
+  <span class="kw">if</span> (<span class="var">touches</span>[<span class="str">'ArrowLeft'</span>])       <span class="var">joueur</span>.vx <span class="op">=</span> <span class="op">-</span><span class="num">4</span>;
+  <span class="kw">else if</span> (<span class="var">touches</span>[<span class="str">'ArrowRight'</span>]) <span class="var">joueur</span>.vx <span class="op">=</span> <span class="num">4</span>;
+  <span class="kw">else</span>                             <span class="var">joueur</span>.vx <span class="op">=</span> <span class="num">0</span>;
+
+  <span class="cm">// Saut — seulement si les pieds touchent le sol</span>
+  <span class="kw">if</span> ((<span class="var">touches</span>[<span class="str">'ArrowUp'</span>] <span class="op">||</span> <span class="var">touches</span>[<span class="str">' '</span>]) <span class="op">&amp;&amp;</span> <span class="var">joueur</span>.auSol) {
+    <span class="var">joueur</span>.vy    <span class="op">=</span> <span class="var">FORCE_SAUT</span>;
+    <span class="var">joueur</span>.auSol <span class="op">=</span> <span class="kw">false</span>;
+  }
+
+  <span class="cm">// Physique : gravité + mouvement</span>
+  <span class="var">joueur</span>.vy <span class="op">+=</span> <span class="var">GRAVITE</span>;
+  <span class="var">joueur</span>.x  <span class="op">+=</span> <span class="var">joueur</span>.vx;
+  <span class="var">joueur</span>.y  <span class="op">+=</span> <span class="var">joueur</span>.vy;
+  <span class="var">joueur</span>.auSol <span class="op">=</span> <span class="kw">false</span>;  <span class="cm">// sera mis à true si on atterrit</span>
+
+  <span class="cm">// Limites gauche/droite</span>
+  <span class="kw">if</span> (<span class="var">joueur</span>.x <span class="op">&lt;</span> <span class="num">0</span>) <span class="var">joueur</span>.x <span class="op">=</span> <span class="num">0</span>;
+  <span class="kw">if</span> (<span class="var">joueur</span>.x <span class="op">+</span> <span class="var">joueur</span>.w <span class="op">&gt;</span> <span class="var">canvas</span>.width) <span class="var">joueur</span>.x <span class="op">=</span> <span class="var">canvas</span>.width <span class="op">-</span> <span class="var">joueur</span>.w;
+
+  <span class="cm">// Atterrissage sur les plateformes</span>
+  <span class="var">plateformes</span>.<span class="fn">forEach</span>(<span class="kw">function</span>(<span class="var">p</span>) {
+    <span class="kw">if</span> (<span class="var">joueur</span>.x <span class="op">+</span> <span class="var">joueur</span>.w <span class="op">&gt;</span> <span class="var">p</span>.x <span class="op">&amp;&amp;</span> <span class="var">joueur</span>.x <span class="op">&lt;</span> <span class="var">p</span>.x <span class="op">+</span> <span class="var">p</span>.w <span class="op">&amp;&amp;</span>
+        <span class="var">joueur</span>.y <span class="op">+</span> <span class="var">joueur</span>.h <span class="op">&gt;=</span> <span class="var">p</span>.y <span class="op">&amp;&amp;</span> <span class="var">joueur</span>.y <span class="op">+</span> <span class="var">joueur</span>.h <span class="op">&lt;=</span> <span class="var">p</span>.y <span class="op">+</span> <span class="num">20</span> <span class="op">&amp;&amp;</span>
+        <span class="var">joueur</span>.vy <span class="op">&gt;=</span> <span class="num">0</span>) {
+      <span class="var">joueur</span>.y    <span class="op">=</span> <span class="var">p</span>.y <span class="op">-</span> <span class="var">joueur</span>.h;
+      <span class="var">joueur</span>.vy   <span class="op">=</span> <span class="num">0</span>;
+      <span class="var">joueur</span>.auSol <span class="op">=</span> <span class="kw">true</span>;
+    }
+  });
+}
+
+<span class="cm">// Dessiner le joueur — carré jaune avec des yeux</span>
+<span class="kw">function</span> <span class="fn">drawJoueur</span>() {
+  <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#EAB308'</span>;
+  <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="var">joueur</span>.x, <span class="var">joueur</span>.y, <span class="var">joueur</span>.w, <span class="var">joueur</span>.h);
+  <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#1C1C1C'</span>;
+  <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="var">joueur</span>.x <span class="op">+</span> <span class="num">7</span>, <span class="var">joueur</span>.y <span class="op">+</span> <span class="num">9</span>, <span class="num">6</span>, <span class="num">6</span>);
+  <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="var">joueur</span>.x <span class="op">+</span> <span class="num">19</span>, <span class="var">joueur</span>.y <span class="op">+</span> <span class="num">9</span>, <span class="num">6</span>, <span class="num">6</span>);
+}</div>
+        <div class="vibe-box" style="margin-top:1rem;">
+            <div class="vibe-label">🖼️ Variante — Utiliser une image PNG à la place</div>
+            <div class="vibe-prompt">// Charger une image (ex: joueur.png dans le même dossier)
+const imgJoueur = new Image();
+imgJoueur.src = 'joueur.png';
+
+// Dans drawJoueur(), remplacer fillRect par :
+ctx.drawImage(imgJoueur, joueur.x, joueur.y, joueur.w, joueur.h);</div>
+        </div>
+        <button class="mark-done-btn" onclick="markDone('step5')">✓ Fait</button>
+    </div>
+</div>
+
+<!-- ════ STEP 6 ════ -->
+<div class="step-card" id="step6">
+    <div class="step-header" onclick="toggleStep('step6')">
+        <div class="step-num"><span class="step-num-text">6</span></div>
+        <div class="step-title">Pièces — Générer, ramasser, victoire</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">On génère <code>NB_PIECES</code> pièces réparties sur les plateformes. La collision AABB détecte quand le joueur en touche une. Quand tout est ramassé : écran de victoire !</p>
+        <div class="section-mini">script.js — ajouter après les plateformes</div>
+        <div class="js-block"><span class="cm">// Positions prédéfinies (sur les plateformes)</span>
+<span class="kw">const</span> <span class="var">posPieces</span> <span class="op">=</span> [
+  { x: <span class="num">140</span>, y: <span class="num">248</span> }, { x: <span class="num">340</span>, y: <span class="num">188</span> },
+  { x: <span class="num">462</span>, y: <span class="num">253</span> }, { x: <span class="num">200</span>, y: <span class="num">148</span> }, { x: <span class="num">420</span>, y: <span class="num">133</span> },
+];
+
+<span class="kw">let</span> <span class="var">pieces</span> <span class="op">=</span> [];
+
+<span class="kw">function</span> <span class="fn">genererPieces</span>() {
+  <span class="kw">for</span> (<span class="kw">let</span> <span class="var">i</span> <span class="op">=</span> <span class="num">0</span>; <span class="var">i</span> <span class="op">&lt;</span> <span class="var">NB_PIECES</span>; <span class="var">i</span><span class="op">++</span>) {
+    <span class="kw">const</span> <span class="var">pos</span> <span class="op">=</span> <span class="var">posPieces</span>[<span class="var">i</span> <span class="op">%</span> <span class="var">posPieces</span>.length];
+    <span class="var">pieces</span>.<span class="fn">push</span>({ x: <span class="var">pos</span>.x, y: <span class="var">pos</span>.y, w: <span class="num">20</span>, h: <span class="num">20</span>, ramassee: <span class="kw">false</span> });
+  }
+}
+<span class="fn">genererPieces</span>();</div>
+        <div class="section-mini">La fonction collision (AABB)</div>
+        <div class="js-block"><span class="kw">function</span> <span class="fn">collision</span>(<span class="var">a</span>, <span class="var">b</span>) {
+  <span class="kw">return</span> <span class="var">a</span>.x <span class="op">&lt;</span> <span class="var">b</span>.x <span class="op">+</span> <span class="var">b</span>.w <span class="op">&amp;&amp;</span> <span class="var">a</span>.x <span class="op">+</span> <span class="var">a</span>.w <span class="op">&gt;</span> <span class="var">b</span>.x <span class="op">&amp;&amp;</span>
+         <span class="var">a</span>.y <span class="op">&lt;</span> <span class="var">b</span>.y <span class="op">+</span> <span class="var">b</span>.h <span class="op">&amp;&amp;</span> <span class="var">a</span>.y <span class="op">+</span> <span class="var">a</span>.h <span class="op">&gt;</span> <span class="var">b</span>.y;
+}</div>
+        <div class="section-mini">Dans update() — ramasser les pièces</div>
+        <div class="js-block"><span class="cm">// À ajouter à la fin de update(), après les plateformes</span>
+<span class="var">pieces</span>.<span class="fn">forEach</span>(<span class="kw">function</span>(<span class="var">p</span>) {
+  <span class="kw">if</span> (<span class="op">!</span><span class="var">p</span>.ramassee <span class="op">&amp;&amp;</span> <span class="fn">collision</span>(<span class="var">joueur</span>, <span class="var">p</span>)) {
+    <span class="var">p</span>.ramassee <span class="op">=</span> <span class="kw">true</span>;
+    <span class="var">piecesRecuperees</span><span class="op">++</span>;
+    <span class="dom">document.getElementById</span>(<span class="str">'score-pieces'</span>).textContent <span class="op">=</span>
+      <span class="str">'Pièces : '</span> <span class="op">+</span> <span class="var">piecesRecuperees</span> <span class="op">+</span> <span class="str">' / '</span> <span class="op">+</span> <span class="var">NB_PIECES</span>;
+  }
+});</div>
+        <div class="section-mini">Dans draw() — dessiner les pièces + victoire</div>
+        <div class="js-block"><span class="cm">// Dessiner les pièces non ramassées</span>
+<span class="var">pieces</span>.<span class="fn">forEach</span>(<span class="kw">function</span>(<span class="var">p</span>) {
+  <span class="kw">if</span> (<span class="op">!</span><span class="var">p</span>.ramassee) {
+    <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#FBBF24'</span>;
+    <span class="var">ctx</span>.<span class="fn">beginPath</span>();
+    <span class="var">ctx</span>.<span class="fn">arc</span>(<span class="var">p</span>.x <span class="op">+</span> <span class="num">10</span>, <span class="var">p</span>.y <span class="op">+</span> <span class="num">10</span>, <span class="num">10</span>, <span class="num">0</span>, Math.PI <span class="op">*</span> <span class="num">2</span>);
+    <span class="var">ctx</span>.<span class="fn">fill</span>();
+  }
+});
+
+<span class="cm">// Écran de victoire</span>
+<span class="kw">if</span> (<span class="var">piecesRecuperees</span> <span class="op">&gt;=</span> <span class="var">NB_PIECES</span>) {
+  <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'rgba(0,0,0,0.75)'</span>;
+  <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">canvas</span>.width, <span class="var">canvas</span>.height);
+  <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#FBBF24'</span>;
+  <span class="var">ctx</span>.font <span class="op">=</span> <span class="str">'bold 52px monospace'</span>;
+  <span class="var">ctx</span>.textAlign <span class="op">=</span> <span class="str">'center'</span>;
+  <span class="var">ctx</span>.<span class="fn">fillText</span>(<span class="str">'🏆 VICTOIRE !'</span>, <span class="var">canvas</span>.width <span class="op">/</span> <span class="num">2</span>, <span class="var">canvas</span>.height <span class="op">/</span> <span class="num">2</span> <span class="op">-</span> <span class="num">15</span>);
+  <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#9CA3AF'</span>;
+  <span class="var">ctx</span>.font <span class="op">=</span> <span class="str">'20px monospace'</span>;
+  <span class="var">ctx</span>.<span class="fn">fillText</span>(<span class="str">'Toutes les pièces récupérées !'</span>, <span class="var">canvas</span>.width <span class="op">/</span> <span class="num">2</span>, <span class="var">canvas</span>.height <span class="op">/</span> <span class="num">2</span> <span class="op">+</span> <span class="num">25</span>);
+  <span class="var">ctx</span>.textAlign <span class="op">=</span> <span class="str">'left'</span>;
+}</div>
+        <button class="mark-done-btn" onclick="markDone('step6')">✓ Fait</button>
+    </div>
+</div>
+
+<!-- ════ STEP 7 ════ -->
+<div class="step-card" id="step7">
+    <div class="step-header" onclick="toggleStep('step7')">
+        <div class="step-num"><span class="step-num-text">7</span></div>
+        <div class="step-title">Game Loop — Assembler et lancer le jeu</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">La game loop réunit tout : effacer, mettre à jour, dessiner, répéter. C'est la dernière pièce du puzzle — une fois lancée, le jeu tourne indéfiniment à ~60fps.</p>
+        <div class="section-mini">script.js — à la fin du fichier</div>
+        <div class="js-block"><span class="kw">function</span> <span class="fn">draw</span>() {
+  <span class="cm">// 1. Fond</span>
+  <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#0F172A'</span>;
+  <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">canvas</span>.width, <span class="var">canvas</span>.height);
+
+  <span class="cm">// 2. Plateformes</span>
+  <span class="var">plateformes</span>.<span class="fn">forEach</span>(<span class="kw">function</span>(<span class="var">p</span>) {
+    <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#374151'</span>;
+    <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="var">p</span>.x, <span class="var">p</span>.y, <span class="var">p</span>.w, <span class="var">p</span>.h);
+    <span class="var">ctx</span>.fillStyle <span class="op">=</span> <span class="str">'#4B5563'</span>;
+    <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="var">p</span>.x, <span class="var">p</span>.y, <span class="var">p</span>.w, <span class="num">4</span>);
+  });
+
+  <span class="cm">// 3. Pièces + victoire</span>
+  <span class="fn">drawPieces</span>();
+  <span class="kw">if</span> (<span class="var">piecesRecuperees</span> <span class="op">&gt;=</span> <span class="var">NB_PIECES</span>) { <span class="cm">/* ... écran victoire */</span> }
+
+  <span class="cm">// 4. Joueur</span>
+  <span class="fn">drawJoueur</span>();
+}
+
+<span class="cm">// La boucle de jeu</span>
+<span class="kw">function</span> <span class="fn">loop</span>() {
+  <span class="fn">update</span>();
+  <span class="fn">draw</span>();
+  requestAnimationFrame(<span class="fn">loop</span>);
+}
+
+<span class="cm">// Démarrer !</span>
+<span class="fn">loop</span>();</div>
+        <div class="tip tip-green"><span class="tip-i">🏆</span><div>Ton jeu est terminé ! Lance <code>index.html</code> dans le navigateur, utilise les flèches ← → pour te déplacer et ↑ ou Espace pour sauter. Ramasse toutes les pièces pour déclencher la victoire.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step7')">✓ Projet terminé !</button>
+    </div>
+</div>
+
+<!-- POUR ALLER PLUS LOIN -->
+<div class="ideas-section">
+    <div class="ideas-header">💡 Pour aller plus loin</div>
+    <p class="ideas-intro">Ton jeu fonctionne ? Voici des idées pour l'enrichir. Utilise l'IA pour t'aider — les prompts sont prêts à copier.</p>
+
+    <div class="idea-card">
+        <div class="idea-icon">✨</div>
+        <div>
+            <div class="idea-title">Particules quand on ramasse une pièce</div>
+            <div class="idea-desc">À chaque collecte, faire exploser de petites particules dorées qui s'envolent puis disparaissent progressivement.</div>
+            <div class="vibe-box" style="margin-top:0.7rem;">
+                <div class="vibe-label">🤖 Prompt IA suggéré</div>
+                <div class="vibe-prompt">Dans mon platformer Canvas JS, quand une pièce est ramassée
+(p.ramassee = true), ajoute un effet de particules dorées.
+J'ai un tableau pieces[] et une game loop avec update() et draw().
+Montre-moi un tableau particles[], comment les générer à la
+position de la pièce, les faire monter/disparaître chaque frame
+et les dessiner dans draw().</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="idea-card">
+        <div class="idea-icon">👾</div>
+        <div>
+            <div class="idea-title">Ennemi qui patrouille</div>
+            <div class="idea-desc">Un bloc rouge qui fait des allers-retours sur une plateforme. Si le joueur le touche, retour au départ (ou perte d'une vie).</div>
+            <div class="vibe-box" style="margin-top:0.7rem;">
+                <div class="vibe-label">🤖 Prompt IA suggéré</div>
+                <div class="vibe-prompt">Dans mon platformer, ajoute un ennemi qui patrouille sur
+une plateforme (x entre 290 et 420, y=195, w=32, h=32).
+Il doit faire des allers-retours en changeant de direction
+quand il atteint les bords. Si le joueur le touche (collision
+AABB), réinitialise sa position à x=40, y=280.
+Montre-moi l'objet ennemi, sa mise à jour dans update() et
+son dessin dans draw().</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="idea-card">
+        <div class="idea-icon">🌌</div>
+        <div>
+            <div class="idea-title">Arrière-plan avec étoiles</div>
+            <div class="idea-desc">Remplacer le fond noir uni par un ciel étoilé généré aléatoirement au démarrage, ou un dégradé bleu nuit.</div>
+            <div class="vibe-box" style="margin-top:0.7rem;">
+                <div class="vibe-label">🤖 Prompt IA suggéré</div>
+                <div class="vibe-prompt">Dans mon draw() Canvas, remplace ctx.fillStyle = '#0F172A'
+par un arrière-plan étoilé : génère 80 étoiles aléatoires
+(x, y, taille) au démarrage dans un tableau stars[], puis
+dessine-les en blanc/gris dans draw() avant les plateformes.
+Canvas width=600, height=380.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="idea-card">
+        <div class="idea-icon">🔁</div>
+        <div>
+            <div class="idea-title">Bouton Recommencer</div>
+            <div class="idea-desc">Sur l'écran de victoire, afficher un bouton "Rejouer" qui réinitialise le joueur, les pièces et le compteur.</div>
+            <div class="vibe-box" style="margin-top:0.7rem;">
+                <div class="vibe-label">🤖 Prompt IA suggéré</div>
+                <div class="vibe-prompt">Dans mon platformer, quand piecesRecuperees >= NB_PIECES,
+j'affiche l'écran de victoire sur le canvas. Ajoute un
+bouton HTML (id="btn-rejouer") positionné par-dessus le
+canvas en CSS absolu, qui appelle une fonction reset() :
+réinitialise joueur.x, joueur.y, joueur.vy, piecesRecuperees=0,
+et remet pieces[i].ramassee = false pour toutes les pièces.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="idea-card idea-card-free">
+        <div class="idea-icon">🚀</div>
+        <div>
+            <div class="idea-title">Ton idée à toi</div>
+            <div class="idea-desc">Un chronomètre ? Plusieurs niveaux avec des pièces différentes ? Un double saut ? Un son au ramassage de pièce (avec l'API Web Audio) ? Une image de fond ? Un score sauvegardé avec <code>localStorage</code> ? Le jeu t'appartient maintenant.</div>
+        </div>
+    </div>
+</div>
+
+<div class="cta-wrap" style="margin-top:1.5rem;">
+    <p>🏆 Ton platformer est en ligne — HTML, CSS et JS séparés, game loop, physique et collectibles !</p>
+    <a class="cta-btn" href="../../sommaire.html#step3">↩ Retour au sommaire</a>
+</div>
+
+<div class="footer-note">
+    HTML → CSS → Variables → Plateformes → Physique → Pièces → Game Loop 🕹️<br>
+    <span style="font-size:0.82rem;">Projet — Platformer 2D Canvas</span>
+</div>
+
+<!-- ═══════════════════ DÉMO LIVE ═══════════════════ -->
+<script>
+(function() {
+    var canvas = document.getElementById('demo-canvas');
+    var ctx = canvas.getContext('2d');
+
+    var G = 0.5, FJUMP = -12, NB = 5;
+    var pj = { x:40, y:240, vx:0, vy:0, w:28, h:28, sol:false };
+    var pr = 0;
+    var keys = {};
+
+    document.addEventListener('keydown', function(e) {
+        keys[e.key] = true;
+        if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
+    });
+    document.addEventListener('keyup', function(e) { keys[e.key] = false; });
+
+    var plats = [
+        {x:0,   y:278, w:560, h:22},
+        {x:75,  y:222, w:115, h:12},
+        {x:255, y:172, w:115, h:12},
+        {x:395, y:228, w:120, h:12},
+        {x:150, y:138, w:90,  h:12},
+        {x:358, y:124, w:100, h:12},
+    ];
+
+    var posPc = [{x:118,y:200},{x:298,y:150},{x:430,y:206},{x:180,y:116},{x:388,y:102}];
+    var coins = [];
+    for (var i=0;i<NB;i++) coins.push({x:posPc[i].x,y:posPc[i].y,w:18,h:18,gone:false});
+
+    function aabb(a,b){ return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y; }
+
+    function upd() {
+        if (keys['ArrowLeft'])       pj.vx = -4;
+        else if (keys['ArrowRight']) pj.vx = 4;
+        else                         pj.vx = 0;
+        if ((keys['ArrowUp']||keys[' '])&&pj.sol){pj.vy=FJUMP;pj.sol=false;}
+        pj.vy += G;
+        pj.x  += pj.vx;
+        pj.y  += pj.vy;
+        pj.sol = false;
+        if (pj.x<0) pj.x=0;
+        if (pj.x+pj.w>canvas.width) pj.x=canvas.width-pj.w;
+        plats.forEach(function(p){
+            if (pj.x+pj.w>p.x&&pj.x<p.x+p.w&&pj.y+pj.h>=p.y&&pj.y+pj.h<=p.y+18&&pj.vy>=0){
+                pj.y=p.y-pj.h; pj.vy=0; pj.sol=true;
+            }
+        });
+        coins.forEach(function(c){
+            if(!c.gone&&aabb(pj,c)){ c.gone=true; pr++; document.getElementById('demo-hud').textContent='Pièces : '+pr+' / '+NB; }
+        });
+    }
+
+    function drw() {
+        ctx.fillStyle='#0F172A'; ctx.fillRect(0,0,canvas.width,canvas.height);
+        // Étoiles fixes
+        ctx.fillStyle='rgba(255,255,255,0.4)';
+        [[20,20],[80,50],[200,15],[350,35],[470,10],[510,55],[130,70],[300,60]].forEach(function(s){
+            ctx.beginPath(); ctx.arc(s[0],s[1],1.2,0,Math.PI*2); ctx.fill();
+        });
+        // Plateformes
+        plats.forEach(function(p){
+            ctx.fillStyle='#374151'; ctx.fillRect(p.x,p.y,p.w,p.h);
+            ctx.fillStyle='#4B5563'; ctx.fillRect(p.x,p.y,p.w,4);
+        });
+        // Pièces
+        coins.forEach(function(c){
+            if(!c.gone){
+                ctx.fillStyle='#FBBF24';
+                ctx.beginPath(); ctx.arc(c.x+9,c.y+9,9,0,Math.PI*2); ctx.fill();
+                ctx.fillStyle='#F59E0B';
+                ctx.beginPath(); ctx.arc(c.x+9,c.y+9,6,0,Math.PI*2); ctx.fill();
+            }
+        });
+        // Joueur
+        ctx.fillStyle='#EAB308'; ctx.fillRect(pj.x,pj.y,pj.w,pj.h);
+        ctx.fillStyle='#1C1C1C';
+        ctx.fillRect(pj.x+6,pj.y+8,5,5); ctx.fillRect(pj.x+17,pj.y+8,5,5);
+        // Victoire
+        if (pr>=NB){
+            ctx.fillStyle='rgba(0,0,0,0.72)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle='#FBBF24'; ctx.font='bold 40px monospace'; ctx.textAlign='center';
+            ctx.fillText('🏆 VICTOIRE !',canvas.width/2,canvas.height/2-10);
+            ctx.fillStyle='#9CA3AF'; ctx.font='16px monospace';
+            ctx.fillText('Toutes les pièces !',canvas.width/2,canvas.height/2+22);
+            ctx.textAlign='left';
+        }
+    }
+
+    function loop(){ upd(); drw(); requestAnimationFrame(loop); }
+    loop();
+})();
+
+/* ═══ ÉTAPES ═══ */
+var totalSteps = 7, doneSteps = 0;
+function toggleStep(id){ document.getElementById(id).classList.toggle('open'); }
+function markDone(id){
+    var card = document.getElementById(id);
+    if (card.classList.contains('done')) return;
+    card.classList.add('done'); card.classList.remove('open');
+    doneSteps++;
+    var pct = Math.round(doneSteps/totalSteps*100);
+    document.getElementById('prog-fill').style.width = pct+'%';
+    document.getElementById('prog-count').textContent = doneSteps+' / '+totalSteps+' étapes';
+    var steps=['step1','step2','step3','step4','step5','step6','step7'];
+    var idx=steps.indexOf(id);
+    if(idx<steps.length-1){
+        var next=document.getElementById(steps[idx+1]);
+        next.classList.add('open');
+        next.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+}
+</script>
+</body>
+</html>

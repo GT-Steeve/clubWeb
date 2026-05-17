@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours — Game Design : Architecture d'un jeu complet</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 740px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #9D174D; text-decoration: none; margin-bottom: 1.5rem; background: #FFF1F2; border: 0.5px solid #FECDD3; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #FFE4E6; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p  { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .tag-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .tag { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .t-rose   { background: #FFE4E6; color: #9D174D; }
+        .t-purple { background: #F3E8FF; color: #6B21A8; }
+        .t-amber  { background: #FEF3C7; color: #92400E; }
+        .t-teal   { background: #CCFBF1; color: #134E4A; }
+
+        /* Sections */
+        .section-num { display: inline-flex; align-items: center; gap: 10px; margin: 2.5rem 0 1.2rem; }
+        .snum-badge { width: 36px; height: 36px; border-radius: 12px; background: #FFE4E6; color: #9D174D; font-size: 0.95rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .snum-title { font-size: 1.2rem; font-weight: 800; }
+        .snum-sub   { font-size: 0.88rem; color: #9D174D; font-weight: 700; margin-top: 1px; }
+
+        p { font-size: 0.97rem; color: #2C2C2A; line-height: 1.8; margin-bottom: 1rem; }
+        strong { color: #2C2C2A; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #FFE4E6; padding: 1px 5px; border-radius: 4px; color: #9D174D; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .concept { background: #FFF1F2; border-left: 3px solid #F43F5E; border-radius: 0 10px 10px 0; padding: 0.9rem 1.1rem; margin: 1rem 0; font-size: 0.93rem; line-height: 1.75; }
+        .concept strong { color: #9D174D; }
+        .tip { background: #FFFBEB; border-left: 3px solid #F59E0B; border-radius: 0 10px 10px 0; padding: 0.9rem 1.1rem; margin: 1rem 0; font-size: 0.9rem; line-height: 1.75; }
+        .tip strong { color: #92400E; }
+
+        /* Code */
+        .code-block { background: #1A0810; border-radius: 14px; padding: 1.2rem 1.4rem; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.85; color: #FFD6E0; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; white-space: pre-wrap; }
+        .cmt  { color: #7C4060; }
+        .kw   { color: #FB7185; }
+        .str  { color: #86EFAC; }
+        .num  { color: #FCD34D; }
+        .fn   { color: #93C5FD; }
+        .cls  { color: #F9A8D4; }
+
+        /* State machine schema */
+        .fsm-wrap { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 1.2rem 0; }
+        .fsm-state { border-radius: 14px; border: 2px solid; padding: 0.8rem 1.2rem; text-align: center; font-weight: 800; font-size: 0.9rem; min-width: 110px; }
+        .fsm-arrow { display: flex; align-items: center; font-size: 1.2rem; color: #9D174D; font-weight: 800; }
+        .fsm-active { border-color: #F43F5E; background: #FFF1F2; color: #9D174D; }
+        .fsm-normal { border-color: #D3D1C7; background: #f5f4f0; color: #5F5E5A; }
+
+        /* Canvas demos */
+        .demo-wrap { background: #1A0810; border-radius: 16px; padding: 1.2rem; margin: 1rem 0; text-align: center; }
+        .demo-wrap canvas { border-radius: 10px; max-width: 100%; display: block; margin: 0 auto; }
+        .demo-label { font-size: 0.8rem; color: #7C4060; margin-top: 0.6rem; font-family: 'Fira Code', monospace; }
+        .demo-controls { display: flex; gap: 8px; justify-content: center; margin-top: 0.8rem; flex-wrap: wrap; }
+        .demo-btn { background: #2D0010; border: 0.5px solid #F43F5E; color: #FB7185; border-radius: 8px; padding: 6px 14px; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .demo-btn:hover { background: #4D0020; }
+        .demo-btn.active-btn { background: #F43F5E; color: #fff; }
+
+        /* Score table */
+        .score-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 1rem 0; }
+        .score-table th { background: #FFE4E6; color: #9D174D; font-weight: 800; padding: 8px 12px; text-align: left; }
+        .score-table td { padding: 8px 12px; border-top: 0.5px solid #D3D1C7; }
+        .score-table tr:hover td { background: #FFF1F2; }
+        .rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; }
+        .r1 { background: #FEF3C7; color: #92400E; }
+        .r2 { background: #F1EFE8; color: #5F5E5A; }
+        .r3 { background: #FFF1F2; color: #9D174D; }
+
+        /* CTA */
+        .cta-section { background: #085041; border-radius: 20px; padding: 2.5rem 2rem; text-align: center; margin-top: 2.5rem; }
+        .cta-section h2 { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; }
+        .cta-section p  { color: #9FE1CB; font-size: 0.97rem; margin-bottom: 1.4rem; }
+        .cta-btn { display: inline-block; background: #F43F5E; color: #fff; font-weight: 800; font-size: 1rem; border-radius: 12px; padding: 14px 32px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #E11D48; }
+        .divider { height: 0.5px; background: #D3D1C7; margin: 2rem 0; }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="../../sommaire.html#step3">← Sommaire</a>
+
+<div class="hero">
+    <h1>🎯 Game Design<br>Architecture d'un jeu complet</h1>
+    <p>États du jeu, écran titre, menus, niveaux, tableau de scores</p>
+    <div class="tag-row">
+        <span class="tag t-rose">Machine à états</span>
+        <span class="tag t-purple">Menus interactifs</span>
+        <span class="tag t-amber">Niveaux</span>
+        <span class="tag t-teal">localStorage</span>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 1 — Machine à états ═══ -->
+<div class="section-num">
+    <div class="snum-badge">1</div>
+    <div><div class="snum-title">La machine à états</div><div class="snum-sub">Gérer les écrans du jeu avec gameState</div></div>
+</div>
+
+<p>Un jeu complet n'est pas qu'un canvas avec un personnage — c'est une série d'<strong>écrans</strong> que le joueur traverse : titre, menu, jeu, pause, fin… Chaque écran est un <strong>état</strong>.</p>
+
+<div class="concept">
+    <strong>Principe :</strong> Une variable <code>gameState</code> stocke l'état actuel. La boucle principale regarde cet état et affiche le bon écran. Pour changer d'écran, il suffit de changer la variable.
+</div>
+
+<div class="fsm-wrap">
+    <div class="fsm-state fsm-active">🎬 TITRE</div>
+    <div class="fsm-arrow">→</div>
+    <div class="fsm-state fsm-normal">📋 MENU</div>
+    <div class="fsm-arrow">→</div>
+    <div class="fsm-state fsm-normal">🎮 JEU</div>
+    <div class="fsm-arrow">→</div>
+    <div class="fsm-state fsm-normal">🏆 FIN</div>
+</div>
+
+<div class="code-block"><pre><span class="cmt">// Toutes les valeurs possibles de gameState</span>
+<span class="kw">const</span> ETATS = {
+  TITRE:    <span class="str">'titre'</span>,
+  MENU:     <span class="str">'menu'</span>,
+  NIVEAUX:  <span class="str">'niveaux'</span>,
+  JEU:      <span class="str">'jeu'</span>,
+  PAUSE:    <span class="str">'pause'</span>,
+  VICTOIRE: <span class="str">'victoire'</span>,
+  GAME_OVER:<span class="str">'gameover'</span>,
+  SCORES:   <span class="str">'scores'</span>
+};
+
+<span class="kw">let</span> gameState = ETATS.TITRE;
+
+<span class="cmt">// La boucle principale délègue à l'écran actif</span>
+<span class="kw">function</span> <span class="fn">loop</span>() {
+  ctx.clearRect(<span class="num">0</span>, <span class="num">0</span>, W, H);
+  <span class="kw">switch</span> (gameState) {
+    <span class="kw">case</span> ETATS.TITRE:    drawTitre();    <span class="kw">break</span>;
+    <span class="kw">case</span> ETATS.MENU:     drawMenu();     <span class="kw">break</span>;
+    <span class="kw">case</span> ETATS.NIVEAUX:  drawNiveaux();  <span class="kw">break</span>;
+    <span class="kw">case</span> ETATS.JEU:      updateJeu(); drawJeu(); <span class="kw">break</span>;
+    <span class="kw">case</span> ETATS.PAUSE:    drawPause();    <span class="kw">break</span>;
+    <span class="kw">case</span> ETATS.VICTOIRE: drawVictoire(); <span class="kw">break</span>;
+    <span class="kw">case</span> ETATS.GAME_OVER:drawGameOver(); <span class="kw">break</span>;
+    <span class="kw">case</span> ETATS.SCORES:   drawScores();   <span class="kw">break</span>;
+  }
+  requestAnimationFrame(loop);
+}
+
+<span class="cmt">// Changer d'état — aussi simple que ça !</span>
+<span class="kw">function</span> <span class="fn">allerAuMenu</span>() { gameState = ETATS.MENU; }</pre></div>
+
+<!-- Demo 1 — State switcher -->
+<div class="demo-wrap">
+    <canvas id="demo1" width="560" height="200"></canvas>
+    <div class="demo-label">Démo interactive — clique sur les boutons pour changer d'état</div>
+    <div class="demo-controls">
+        <button class="demo-btn active-btn" onclick="setDemo1State('titre')">Titre</button>
+        <button class="demo-btn" onclick="setDemo1State('menu')">Menu</button>
+        <button class="demo-btn" onclick="setDemo1State('jeu')">Jeu</button>
+        <button class="demo-btn" onclick="setDemo1State('victoire')">Victoire</button>
+        <button class="demo-btn" onclick="setDemo1State('gameover')">Game Over</button>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 2 — Écran titre & menu ═══ -->
+<div class="section-num">
+    <div class="snum-badge">2</div>
+    <div><div class="snum-title">Écran titre & Menu principal</div><div class="snum-sub">Dessiner des boutons cliquables sur le canvas</div></div>
+</div>
+
+<p>L'écran titre accueille le joueur. Le menu propose les options. Les deux sont dessinés sur le canvas — on détecte les clics avec <code>addEventListener('click')</code>.</p>
+
+<div class="code-block"><pre><span class="cmt">// Structure d'un bouton canvas</span>
+<span class="kw">const</span> boutons = [
+  { label: <span class="str">'▶ Jouer'</span>,     action: () => { gameState = ETATS.NIVEAUX; } },
+  { label: <span class="str">'🏆 Scores'</span>,   action: () => { gameState = ETATS.SCORES;  } },
+  { label: <span class="str">'⚙ Options'</span>,  action: () => { gameState = ETATS.OPTIONS; } }
+];
+
+<span class="kw">function</span> <span class="fn">drawMenu</span>() {
+  <span class="cmt">// Fond dégradé</span>
+  <span class="kw">const</span> grad = ctx.createLinearGradient(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, H);
+  grad.addColorStop(<span class="num">0</span>, <span class="str">'#1A0810'</span>);
+  grad.addColorStop(<span class="num">1</span>, <span class="str">'#3D0020'</span>);
+  ctx.fillStyle = grad;
+  ctx.fillRect(<span class="num">0</span>, <span class="num">0</span>, W, H);
+
+  boutons.forEach(<span class="kw">function</span>(btn, i) {
+    <span class="kw">const</span> bx = W/<span class="num">2</span> - <span class="num">120</span>, by = <span class="num">80</span> + i * <span class="num">60</span>;
+    <span class="kw">const</span> bw = <span class="num">240</span>, bh = <span class="num">46</span>;
+
+    <span class="cmt">// Rectangle arrondi</span>
+    ctx.fillStyle = btn.hovered ? <span class="str">'#F43F5E'</span> : <span class="str">'#2D0010'</span>;
+    ctx.strokeStyle = <span class="str">'#F43F5E'</span>;
+    ctx.lineWidth = <span class="num">1.5</span>;
+    roundRect(ctx, bx, by, bw, bh, <span class="num">12</span>);
+    ctx.fill(); ctx.stroke();
+
+    <span class="cmt">// Texte</span>
+    ctx.fillStyle = btn.hovered ? <span class="str">'#fff'</span> : <span class="str">'#FB7185'</span>;
+    ctx.font = <span class="str">'700 18px Nunito'</span>;
+    ctx.textAlign = <span class="str">'center'</span>;
+    ctx.fillText(btn.label, bx + bw/<span class="num">2</span>, by + bh/<span class="num">2</span> + <span class="num">6</span>);
+    btn.rect = { x: bx, y: by, w: bw, h: bh };
+  });
+}
+
+<span class="cmt">// Détecter le clic sur les boutons</span>
+canvas.addEventListener(<span class="str">'click'</span>, <span class="kw">function</span>(e) {
+  <span class="kw">const</span> r = canvas.getBoundingClientRect();
+  <span class="kw">const</span> mx = e.clientX - r.left, my = e.clientY - r.top;
+  boutons.forEach(<span class="kw">function</span>(btn) {
+    <span class="kw">if</span> (btn.rect &amp;&amp; mx >= btn.rect.x &amp;&amp; mx &lt;= btn.rect.x+btn.rect.w
+       &amp;&amp; my >= btn.rect.y &amp;&amp; my &lt;= btn.rect.y+btn.rect.h) {
+      btn.action();
+    }
+  });
+});</pre></div>
+
+<div class="tip"><strong>💡 Effet hover :</strong> Écoute <code>mousemove</code> sur le canvas pour détecter si la souris survole un bouton, et mets <code>btn.hovered = true/false</code>. Le prochain rendu affiche la version surlignée.</div>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 3 — Sélecteur de niveaux ═══ -->
+<div class="section-num">
+    <div class="snum-badge">3</div>
+    <div><div class="snum-title">Sélecteur de niveaux</div><div class="snum-sub">Cartes de niveaux, verrouillage et progression</div></div>
+</div>
+
+<p>Le sélecteur affiche les niveaux disponibles sous forme de cartes. Les niveaux non encore débloqués apparaissent grisés avec un cadenas.</p>
+
+<div class="code-block"><pre><span class="cmt">// Données des niveaux</span>
+<span class="kw">const</span> NIVEAUX = [
+  { id:<span class="num">1</span>, nom:<span class="str">'La forêt'</span>,    couleur:<span class="str">'#16A34A'</span>, requis:<span class="num">0</span>  },
+  { id:<span class="num">2</span>, nom:<span class="str">'Les grottes'</span>, couleur:<span class="str">'#0284C7'</span>, requis:<span class="num">1</span>  },
+  { id:<span class="num">3</span>, nom:<span class="str">'Le volcan'</span>,  couleur:<span class="str">'#DC2626'</span>, requis:<span class="num">2</span>  },
+  { id:<span class="num">4</span>, nom:<span class="str">'???'</span>,        couleur:<span class="str">'#6D28D9'</span>, requis:<span class="num">3</span>  }
+];
+
+<span class="kw">let</span> niveauxDebloqués = <span class="num">1</span>;  <span class="cmt">// chargé depuis localStorage</span>
+
+<span class="kw">function</span> <span class="fn">drawNiveaux</span>() {
+  NIVEAUX.forEach(<span class="kw">function</span>(niv, i) {
+    <span class="kw">const</span> col = i % <span class="num">2</span>, row = Math.floor(i / <span class="num">2</span>);
+    <span class="kw">const</span> cx = <span class="num">60</span> + col * <span class="num">240</span>, cy = <span class="num">80</span> + row * <span class="num">130</span>;
+    <span class="kw">const</span> debloque = niveauxDebloqués >= niv.requis + <span class="num">1</span>;
+
+    <span class="cmt">// Carte du niveau</span>
+    ctx.fillStyle = debloque ? niv.couleur : <span class="str">'#444'</span>;
+    roundRect(ctx, cx, cy, <span class="num">200</span>, <span class="num">100</span>, <span class="num">14</span>); ctx.fill();
+
+    <span class="cmt">// Nom ou cadenas</span>
+    ctx.fillStyle = <span class="str">'#fff'</span>;
+    ctx.font = <span class="str">'800 16px Nunito'</span>; ctx.textAlign = <span class="str">'center'</span>;
+    ctx.fillText(debloque ? niv.nom : <span class="str">'🔒'</span>, cx+<span class="num">100</span>, cy+<span class="num">50</span>);
+    <span class="kw">if</span> (debloque) {
+      ctx.font = <span class="str">'600 12px Nunito'</span>;
+      ctx.fillText(<span class="str">'Niveau '</span> + niv.id, cx+<span class="num">100</span>, cy+<span class="num">70</span>);
+    }
+  });
+}
+
+<span class="cmt">// Au clic : lancer le niveau sélectionné</span>
+<span class="kw">function</span> <span class="fn">lancerNiveau</span>(n) {
+  niveauActuel = n;
+  gameState = ETATS.JEU;
+  chargerNiveau(n);
+}</pre></div>
+
+<!-- Demo 2 — Level select -->
+<div class="demo-wrap">
+    <canvas id="demo2" width="560" height="260"></canvas>
+    <div class="demo-label">Démo — Sélecteur de niveaux (clique sur un niveau débloqué)</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 4 — Tableau de scores ═══ -->
+<div class="section-num">
+    <div class="snum-badge">4</div>
+    <div><div class="snum-title">Tableau de scores</div><div class="snum-sub">localStorage pour la persistance des données</div></div>
+</div>
+
+<p><code>localStorage</code> permet de sauvegarder des données dans le navigateur — elles persistent même après avoir fermé l'onglet.</p>
+
+<div class="concept">
+    <strong>localStorage</strong> ne stocke que des chaînes de caractères. Pour stocker un tableau ou un objet, utilise <code>JSON.stringify()</code> pour sauvegarder et <code>JSON.parse()</code> pour recharger.
+</div>
+
+<div class="code-block"><pre><span class="cmt">// Charger les scores (max 10 entrées)</span>
+<span class="kw">function</span> <span class="fn">chargerScores</span>() {
+  <span class="kw">const</span> raw = localStorage.getItem(<span class="str">'monJeu_scores'</span>);
+  <span class="kw">return</span> raw ? JSON.parse(raw) : [];
+}
+
+<span class="cmt">// Sauvegarder un nouveau score</span>
+<span class="kw">function</span> <span class="fn">sauvegarderScore</span>(nom, points, niveau) {
+  <span class="kw">const</span> scores = chargerScores();
+  scores.push({ nom, points, niveau, date: <span class="kw">new</span> Date().toLocaleDateString() });
+  scores.sort((a, b) => b.points - a.points);  <span class="cmt">// meilleurs en premier</span>
+  <span class="kw">const</span> top10 = scores.slice(<span class="num">0</span>, <span class="num">10</span>);           <span class="cmt">// garder seulement le top 10</span>
+  localStorage.setItem(<span class="str">'monJeu_scores'</span>, JSON.stringify(top10));
+}
+
+<span class="cmt">// Effacer tous les scores</span>
+<span class="kw">function</span> <span class="fn">effacerScores</span>() {
+  localStorage.removeItem(<span class="str">'monJeu_scores'</span>);
+}
+
+<span class="cmt">// Sauvegarder la progression (niveaux débloqués)</span>
+<span class="kw">function</span> <span class="fn">sauvegarderProgression</span>() {
+  localStorage.setItem(<span class="str">'monJeu_niveaux'</span>, niveauxDebloqués.toString());
+}
+<span class="kw">function</span> <span class="fn">chargerProgression</span>() {
+  niveauxDebloqués = parseInt(localStorage.getItem(<span class="str">'monJeu_niveaux'</span>) || <span class="str">'1'</span>);
+}</pre></div>
+
+<p>Exemple de tableau de scores affiché :</p>
+
+<div class="card">
+    <table class="score-table" id="scoreTableDemo">
+        <thead><tr><th>#</th><th>Joueur</th><th>Score</th><th>Niveau</th><th>Date</th></tr></thead>
+        <tbody id="scoreTableBody"></tbody>
+    </table>
+    <div style="margin-top:0.8rem;display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="demo-btn" onclick="addDemoScore()">+ Ajouter un score</button>
+        <button class="demo-btn" onclick="clearDemoScores()">Effacer</button>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 5 — Structure d'un niveau ═══ -->
+<div class="section-num">
+    <div class="snum-badge">5</div>
+    <div><div class="snum-title">Structure d'un niveau</div><div class="snum-sub">Données, chargement et transitions</div></div>
+</div>
+
+<p>Chaque niveau est un <strong>objet de données</strong> : plateformes, ennemis, position de départ, objectif, temps imparti. On charge ces données quand on lance le niveau.</p>
+
+<div class="code-block"><pre><span class="cmt">// Définition d'un niveau</span>
+<span class="kw">const</span> NIVEAU_DATA = [
+  {
+    id: <span class="num">1</span>,
+    fond: <span class="str">'#0D2B1A'</span>,
+    tempsMax: <span class="num">60</span>,         <span class="cmt">// secondes</span>
+    nbPieces: <span class="num">8</span>,
+    posDepart: { x: <span class="num">60</span>, y: <span class="num">300</span> },
+    plateformes: [
+      { x:<span class="num">0</span>,   y:<span class="num">340</span>, w:<span class="num">600</span>, h:<span class="num">20</span> },   <span class="cmt">// sol</span>
+      { x:<span class="num">100</span>, y:<span class="num">260</span>, w:<span class="num">120</span>, h:<span class="num">14</span> },
+      { x:<span class="num">300</span>, y:<span class="num">200</span>, w:<span class="num">100</span>, h:<span class="num">14</span> }
+    ],
+    ennemis: [
+      { x:<span class="num">250</span>, y:<span class="num">320</span>, patrol: [<span class="num">200</span>, <span class="num">350</span>] }
+    ]
+  },
+  {
+    id: <span class="num">2</span>, tempsMax: <span class="num">45</span>, nbPieces: <span class="num">12</span>,
+    <span class="cmt">// ...</span>
+  }
+];
+
+<span class="kw">let</span> niveau = null;
+
+<span class="kw">function</span> <span class="fn">chargerNiveau</span>(n) {
+  niveau = JSON.parse(JSON.stringify(NIVEAU_DATA[n-<span class="num">1</span>]));  <span class="cmt">// copie profonde</span>
+  joueur.x = niveau.posDepart.x;
+  joueur.y = niveau.posDepart.y;
+  pieces = genererPieces(niveau);
+  timer = niveau.tempsMax * <span class="num">60</span>;  <span class="cmt">// en frames</span>
+}
+
+<span class="cmt">// Fin de niveau</span>
+<span class="kw">function</span> <span class="fn">niveauTerminé</span>() {
+  <span class="kw">const</span> score = calcScore(timer, niveau.nbPieces);
+  sauvegarderScore(nomJoueur, score, niveau.id);
+  niveauxDebloqués = Math.max(niveauxDebloqués, niveau.id + <span class="num">1</span>);
+  sauvegarderProgression();
+  gameState = ETATS.VICTOIRE;
+}</pre></div>
+
+<div class="tip"><strong>💡 Copie profonde :</strong> <code>JSON.parse(JSON.stringify(data))</code> copie l'objet entièrement. Indispensable pour ne pas modifier les données originales quand le joueur relance un niveau.</div>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 6 — Timer & Game Over ═══ -->
+<div class="section-num">
+    <div class="snum-badge">6</div>
+    <div><div class="snum-title">Timer, Game Over & Victoire</div><div class="snum-sub">Boucle de fin et transitions</div></div>
+</div>
+
+<p>Un temps imparti rend le jeu plus tendu. On décrémente un compteur à chaque frame, et on déclenche le Game Over quand il tombe à zéro.</p>
+
+<div class="code-block"><pre><span class="kw">let</span> timer = <span class="num">0</span>;          <span class="cmt">// en frames (60fps → 60 frames/sec)</span>
+<span class="kw">let</span> nomJoueur = <span class="str">''</span>;
+
+<span class="kw">function</span> <span class="fn">updateJeu</span>() {
+  <span class="cmt">// Décompte</span>
+  timer--;
+  <span class="kw">if</span> (timer &lt;= <span class="num">0</span>) {
+    gameState = ETATS.GAME_OVER;
+    <span class="kw">return</span>;
+  }
+
+  <span class="cmt">// Victoire : toutes les pièces ramassées</span>
+  <span class="kw">if</span> (pieces.every(p => p.ramassee)) {
+    niveauTerminé();
+    <span class="kw">return</span>;
+  }
+
+  <span class="cmt">// Mort du joueur</span>
+  <span class="kw">if</span> (joueur.y > H + <span class="num">100</span>) {
+    gameState = ETATS.GAME_OVER;
+    <span class="kw">return</span>;
+  }
+
+  updateJoueur();
+  updateEnnemis();
+}
+
+<span class="kw">function</span> <span class="fn">drawHUD</span>() {
+  <span class="kw">const</span> secondes = Math.ceil(timer / <span class="num">60</span>);
+  ctx.fillStyle = secondes <= <span class="num">10</span> ? <span class="str">'#F43F5E'</span> : <span class="str">'#fff'</span>;
+  ctx.font = <span class="str">'800 16px Nunito'</span>;
+  ctx.textAlign = <span class="str">'right'</span>;
+  ctx.fillText(<span class="str">'⏱ '</span> + secondes + <span class="str">'s'</span>, W - <span class="num">16</span>, <span class="num">30</span>);
+
+  ctx.fillStyle = <span class="str">'#FCD34D'</span>;
+  ctx.textAlign = <span class="str">'left'</span>;
+  ctx.fillText(<span class="str">'🪙 '</span> + piecesRamassées + <span class="str">'/'</span> + niveau.nbPieces, <span class="num">16</span>, <span class="num">30</span>);
+}
+
+<span class="kw">function</span> <span class="fn">calcScore</span>(timerRestant, nbPieces) {
+  <span class="kw">return</span> Math.round(nbPieces * <span class="num">1000</span> + (timerRestant / <span class="num">60</span>) * <span class="num">100</span>);
+}</pre></div>
+
+<!-- Demo 3 — Full state machine mini game -->
+<div class="demo-wrap">
+    <canvas id="demo3" width="560" height="260"></canvas>
+    <div class="demo-label">Démo — Mini-jeu complet avec machine à états (clique pour jouer)</div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+    <h2>Teste tes connaissances !</h2>
+    <p>Machine à états, menus, niveaux, localStorage… à toi de jouer !</p>
+    <a class="cta-btn" href="exercices-game-design.html">Exercices Game Design →</a>
+</div>
+
+<script>
+/* ═══ HELPER ═══ */
+function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+    ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    ctx.lineTo(x+r, y+h); ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+    ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y);
+    ctx.closePath();
+}
+
+/* ═══ DEMO 1 — State switcher ═══ */
+(function() {
+    var c = document.getElementById('demo1');
+    var ctx = c.getContext('2d');
+    var W = 560, H = 200;
+    var state = 'titre';
+    var t = 0;
+
+    window.setDemo1State = function(s) {
+        state = s;
+        document.querySelectorAll('#demo1 + .demo-label + .demo-controls .demo-btn').forEach(function(b) {
+            b.classList.remove('active-btn');
+        });
+    };
+
+    function draw() {
+        t++;
+        ctx.clearRect(0,0,W,H);
+        var bg;
+        if (state === 'titre')    bg = ['#1A0810','#3D0020'];
+        if (state === 'menu')     bg = ['#0A1A30','#1A3A60'];
+        if (state === 'jeu')      bg = ['#0D2B1A','#1A4A2A'];
+        if (state === 'victoire') bg = ['#1A2A00','#2A4A00'];
+        if (state === 'gameover') bg = ['#2A0000','#4A0000'];
+        var gr = ctx.createLinearGradient(0,0,0,H);
+        gr.addColorStop(0, bg[0]); gr.addColorStop(1, bg[1]);
+        ctx.fillStyle = gr; ctx.fillRect(0,0,W,H);
+
+        ctx.textAlign = 'center';
+        if (state === 'titre') {
+            var pulse = 1 + 0.03 * Math.sin(t * 0.05);
+            ctx.save(); ctx.translate(W/2, H/2); ctx.scale(pulse, pulse);
+            ctx.fillStyle = '#F43F5E'; ctx.font = '800 38px Nunito';
+            ctx.fillText('🎯 MON JEU', 0, -10);
+            ctx.fillStyle = '#FB7185'; ctx.font = '600 15px Nunito';
+            ctx.fillText('Appuie sur Entrée pour jouer', 0, 24);
+            ctx.restore();
+        } else if (state === 'menu') {
+            ctx.fillStyle = '#93C5FD'; ctx.font = '800 22px Nunito'; ctx.fillText('MENU PRINCIPAL', W/2, 40);
+            var items = ['▶ Jouer','🏆 Scores','⚙ Options'];
+            items.forEach(function(it, i) {
+                roundRect(ctx, W/2-100, 60+i*50, 200, 38, 10);
+                ctx.fillStyle = '#1A2A50'; ctx.fill();
+                ctx.strokeStyle = '#3B82F6'; ctx.lineWidth = 1.5; ctx.stroke();
+                ctx.fillStyle = '#93C5FD'; ctx.font = '700 15px Nunito'; ctx.fillText(it, W/2, 84+i*50);
+            });
+        } else if (state === 'jeu') {
+            ctx.fillStyle = '#4ADE80'; ctx.font = '800 18px Nunito'; ctx.fillText('🎮 EN JEU', W/2, 30);
+            ctx.fillStyle = '#86EFAC'; ctx.font = '700 13px Nunito'; ctx.fillText('🪙 3/8   ⏱ 42s', W/2, 55);
+            // Simple platformer visual
+            ctx.fillStyle = '#2D5A3D'; ctx.fillRect(0, 160, W, 40);
+            ctx.fillStyle = '#16A34A'; ctx.fillRect(0, 155, W, 8);
+            ctx.fillStyle = '#2D5A3D'; ctx.fillRect(100, 120, 120, 12);
+            ctx.fillStyle = '#16A34A'; ctx.fillRect(100, 116, 120, 6);
+            var bx = 80 + Math.sin(t*0.04)*40;
+            ctx.fillStyle = '#F43F5E'; roundRect(ctx, bx, 130, 28, 28, 6); ctx.fill();
+            ctx.fillStyle = '#fff'; ctx.font = '700 11px Nunito'; ctx.fillText('😊', bx+14, 152);
+        } else if (state === 'victoire') {
+            var stars = ['⭐','⭐','⭐'];
+            ctx.fillStyle = '#86EFAC'; ctx.font = '800 28px Nunito'; ctx.fillText('🎉 VICTOIRE !', W/2, 60);
+            ctx.fillStyle = '#FCD34D'; ctx.font = '700 36px Nunito'; ctx.fillText(stars.join(' '), W/2, 110);
+            ctx.fillStyle = '#4ADE80'; ctx.font = '700 16px Nunito'; ctx.fillText('Score : 8 500 pts', W/2, 145);
+            roundRect(ctx, W/2-90, 160, 180, 38, 10);
+            ctx.fillStyle = '#16A34A'; ctx.fill();
+            ctx.fillStyle = '#fff'; ctx.font = '700 15px Nunito'; ctx.fillText('Niveau suivant →', W/2, 183);
+        } else if (state === 'gameover') {
+            ctx.fillStyle = '#FCA5A5'; ctx.font = '800 30px Nunito'; ctx.fillText('💀 GAME OVER', W/2, 70);
+            ctx.fillStyle = '#F87171'; ctx.font = '700 15px Nunito'; ctx.fillText('Temps écoulé…', W/2, 105);
+            roundRect(ctx, W/2-80, 130, 160, 38, 10);
+            ctx.fillStyle = '#7F1D1D'; ctx.fill();
+            ctx.strokeStyle = '#F43F5E'; ctx.lineWidth = 1.5; ctx.stroke();
+            ctx.fillStyle = '#FCA5A5'; ctx.font = '700 15px Nunito'; ctx.fillText('🔄 Réessayer', W/2, 153);
+        }
+        requestAnimationFrame(draw);
+    }
+    draw();
+})();
+
+/* ═══ DEMO 2 — Level select ═══ */
+(function() {
+    var c = document.getElementById('demo2');
+    var ctx = c.getContext('2d');
+    var W = 560, H = 260;
+    var niveaux = [
+        { id:1, nom:'La forêt',   couleur:'#16A34A', requis:0 },
+        { id:2, nom:'Les grottes',couleur:'#0284C7', requis:1 },
+        { id:3, nom:'Le volcan',  couleur:'#DC2626', requis:2 },
+        { id:4, nom:'???',        couleur:'#6D28D9', requis:3 }
+    ];
+    var debloque = 2;
+    var selected = null;
+    var hovering = -1;
+    var rects = [];
+
+    function getRect(i) {
+        var col = i % 2, row = Math.floor(i/2);
+        return { x: 60 + col*240, y: 60 + row*120, w: 200, h: 90 };
+    }
+
+    function draw() {
+        ctx.clearRect(0,0,W,H);
+        var gr = ctx.createLinearGradient(0,0,0,H);
+        gr.addColorStop(0,'#1A0810'); gr.addColorStop(1,'#2D0020');
+        ctx.fillStyle = gr; ctx.fillRect(0,0,W,H);
+
+        ctx.fillStyle = '#F9A8D4'; ctx.font = '800 18px Nunito'; ctx.textAlign = 'center';
+        ctx.fillText('Choisir un niveau', W/2, 35);
+
+        rects = [];
+        niveaux.forEach(function(niv, i) {
+            var r = getRect(i); rects.push(r);
+            var ok = debloque >= niv.requis + 1;
+            var hover = hovering === i;
+            ctx.save();
+            roundRect(ctx, r.x, r.y, r.w, r.h, 14);
+            ctx.fillStyle = ok ? (hover ? niv.couleur : niv.couleur + 'CC') : '#333';
+            ctx.fill();
+            if (hover && ok) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); }
+            ctx.fillStyle = '#fff';
+            ctx.font = '800 17px Nunito'; ctx.textAlign = 'center';
+            ctx.fillText(ok ? niv.nom : '🔒', r.x + r.w/2, r.y + r.h/2 + 2);
+            ctx.font = '600 13px Nunito';
+            ctx.fillText('Niveau ' + niv.id, r.x + r.w/2, r.y + r.h/2 + 22);
+            if (selected === i && ok) {
+                ctx.strokeStyle = '#FCD34D'; ctx.lineWidth = 3;
+                roundRect(ctx, r.x, r.y, r.w, r.h, 14); ctx.stroke();
+            }
+            ctx.restore();
+        });
+
+        if (selected !== null && debloque >= niveaux[selected].requis + 1) {
+            roundRect(ctx, W/2-100, 240, 200, 14, 6);
+            ctx.fillStyle = '#F43F5E'; ctx.fill();
+            ctx.fillStyle = '#fff'; ctx.font = '700 11px Nunito'; ctx.textAlign = 'center';
+            ctx.fillText('▶ Lancer "' + niveaux[selected].nom + '"', W/2, 250);
+        }
+    }
+
+    c.addEventListener('mousemove', function(e) {
+        var r = c.getBoundingClientRect();
+        var mx = (e.clientX - r.left) * (W/r.width);
+        var my = (e.clientY - r.top) * (H/r.height);
+        hovering = -1;
+        rects.forEach(function(rect, i) {
+            if (mx>=rect.x && mx<=rect.x+rect.w && my>=rect.y && my<=rect.y+rect.h) hovering = i;
+        });
+        draw();
+    });
+    c.addEventListener('click', function(e) {
+        var r = c.getBoundingClientRect();
+        var mx = (e.clientX - r.left) * (W/r.width);
+        var my = (e.clientY - r.top) * (H/r.height);
+        rects.forEach(function(rect, i) {
+            if (mx>=rect.x && mx<=rect.x+rect.w && my>=rect.y && my<=rect.y+rect.h) {
+                if (debloque >= niveaux[i].requis + 1) selected = i;
+            }
+        });
+        draw();
+    });
+    draw();
+})();
+
+/* ═══ SCORE TABLE DEMO ═══ */
+var demoScores = [
+    { nom: 'AlphaPlayer', points: 12500, niveau: 3, date: '17/05/2026' },
+    { nom: 'Mia_Code',    points:  9800, niveau: 2, date: '16/05/2026' },
+    { nom: 'StarDev42',   points:  7300, niveau: 2, date: '15/05/2026' }
+];
+var fakeNames = ['SpeedRunner','NightHawk','PixelKing','ByteWitch','CodeNinja'];
+var fakePts   = [8900,6200,5100,4400,3300];
+
+function renderScoreTable() {
+    var body = document.getElementById('scoreTableBody');
+    body.innerHTML = '';
+    demoScores.slice(0,10).forEach(function(s, i) {
+        var badge = i===0?'r1':i===1?'r2':i===2?'r3':'';
+        body.innerHTML += '<tr><td><span class="rank-badge ' + badge + '">' + (i+1) + '</span></td>' +
+            '<td><strong>' + s.nom + '</strong></td>' +
+            '<td style="color:#F43F5E;font-weight:800;">' + s.points.toLocaleString() + '</td>' +
+            '<td>Niveau ' + s.niveau + '</td>' +
+            '<td style="color:#888780;">' + s.date + '</td></tr>';
+    });
+}
+window.addDemoScore = function() {
+    var idx = Math.floor(Math.random() * fakeNames.length);
+    demoScores.push({ nom: fakeNames[idx], points: fakePts[idx] + Math.floor(Math.random()*500), niveau: Math.ceil(Math.random()*3), date: '17/05/2026' });
+    demoScores.sort(function(a,b){return b.points-a.points;});
+    demoScores = demoScores.slice(0,10);
+    renderScoreTable();
+};
+window.clearDemoScores = function() { demoScores = []; renderScoreTable(); };
+renderScoreTable();
+
+/* ═══ DEMO 3 — Mini State Machine Game ═══ */
+(function() {
+    var c = document.getElementById('demo3');
+    var ctx = c.getContext('2d');
+    var W = 560, H = 260;
+    var ETATS = { TITRE:'titre', JEU:'jeu', VICTOIRE:'victoire', GAMEOVER:'gameover' };
+    var gs = ETATS.TITRE;
+    var joueur, pieces, timer, t = 0;
+    var SOL = 210, FW = 30, FH = 30;
+    var touches = {};
+
+    document.addEventListener('keydown', function(e) { touches[e.code]=true; if(e.code==='Space')e.preventDefault(); });
+    document.addEventListener('keyup',   function(e) { touches[e.code]=false; });
+
+    function initJeu() {
+        joueur = { x:60, y:SOL, vx:0, vy:0 };
+        pieces = [];
+        for(var i=0;i<5;i++) pieces.push({ x: 80+i*90, y: 180-Math.floor(i%3)*60, r:false });
+        timer = 30 * 60;
+    }
+
+    function update() {
+        if (gs !== ETATS.JEU) return;
+        t++;
+        timer--;
+        if (timer <= 0) { gs = ETATS.GAMEOVER; return; }
+        joueur.vx = 0;
+        if (touches['ArrowLeft'])  joueur.vx = -3;
+        if (touches['ArrowRight']) joueur.vx =  3;
+        joueur.x = Math.max(0, Math.min(W-FW, joueur.x + joueur.vx));
+        joueur.vy += 0.5;
+        joueur.y  += joueur.vy;
+        if (joueur.y >= SOL) { joueur.y = SOL; joueur.vy = 0; }
+        if ((touches['Space']||touches['ArrowUp']) && joueur.y >= SOL) joueur.vy = -11;
+        pieces.forEach(function(p) {
+            if (!p.r && Math.abs(joueur.x+FW/2 - p.x) < 22 && Math.abs(joueur.y+FH/2 - p.y) < 22) p.r = true;
+        });
+        if (pieces.every(function(p){return p.r;})) gs = ETATS.VICTOIRE;
+    }
+
+    function draw() {
+        ctx.clearRect(0,0,W,H);
+        if (gs === ETATS.TITRE) {
+            var gr=ctx.createLinearGradient(0,0,0,H); gr.addColorStop(0,'#1A0810'); gr.addColorStop(1,'#3D0020');
+            ctx.fillStyle=gr; ctx.fillRect(0,0,W,H);
+            ctx.fillStyle='#F43F5E'; ctx.font='800 32px Nunito'; ctx.textAlign='center';
+            ctx.fillText('🎯 MINI JEU', W/2, 100);
+            ctx.fillStyle='#FB7185'; ctx.font='600 14px Nunito';
+            ctx.fillText('Clique ici ou appuie sur Espace pour commencer', W/2, 135);
+            ctx.fillStyle='#7C4060'; ctx.font='600 12px Nunito';
+            ctx.fillText('← → pour bouger · Espace pour sauter · Ramasse les 🪙', W/2, 160);
+        } else if (gs === ETATS.JEU) {
+            ctx.fillStyle='#0D2B1A'; ctx.fillRect(0,0,W,H);
+            ctx.fillStyle='#1A4A2A'; ctx.fillRect(0, SOL+FH, W, H-(SOL+FH));
+            ctx.fillStyle='#2D5A3D'; ctx.fillRect(0, SOL+FH, W, 8);
+            // Platforms
+            ctx.fillStyle='#2D5A3D'; ctx.fillRect(80,170,100,12); ctx.fillStyle='#16A34A'; ctx.fillRect(80,166,100,6);
+            ctx.fillStyle='#2D5A3D'; ctx.fillRect(270,140,100,12); ctx.fillStyle='#16A34A'; ctx.fillRect(270,136,100,6);
+            ctx.fillStyle='#2D5A3D'; ctx.fillRect(440,170,100,12); ctx.fillStyle='#16A34A'; ctx.fillRect(440,166,100,6);
+            // Pieces
+            pieces.forEach(function(p) {
+                if (p.r) return;
+                ctx.fillStyle='#FCD34D';
+                ctx.beginPath(); ctx.arc(p.x, p.y, 10, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle='#92400E'; ctx.font='700 9px Nunito'; ctx.textAlign='center';
+                ctx.fillText('🪙', p.x, p.y+4);
+            });
+            // Player
+            ctx.fillStyle='#F43F5E';
+            roundRect(ctx, joueur.x, joueur.y, FW, FH, 7); ctx.fill();
+            ctx.fillStyle='#fff'; ctx.font='700 14px Nunito'; ctx.textAlign='center';
+            ctx.fillText('😊', joueur.x+FW/2, joueur.y+FH/2+5);
+            // HUD
+            var sec = Math.ceil(timer/60);
+            ctx.fillStyle=sec<=10?'#F43F5E':'#fff'; ctx.font='800 14px Nunito'; ctx.textAlign='right';
+            ctx.fillText('⏱ '+sec+'s', W-10, 22);
+            var done=pieces.filter(function(p){return p.r;}).length;
+            ctx.fillStyle='#FCD34D'; ctx.textAlign='left';
+            ctx.fillText('🪙 '+done+'/'+pieces.length, 10, 22);
+        } else if (gs === ETATS.VICTOIRE) {
+            ctx.fillStyle='#0D2B0D'; ctx.fillRect(0,0,W,H);
+            ctx.fillStyle='#4ADE80'; ctx.font='800 30px Nunito'; ctx.textAlign='center';
+            ctx.fillText('🎉 VICTOIRE !', W/2, 80);
+            var pts = Math.round(5*1000 + (timer/60)*100);
+            ctx.fillStyle='#86EFAC'; ctx.font='700 18px Nunito';
+            ctx.fillText('Score : ' + pts + ' pts', W/2, 120);
+            ctx.fillStyle='#FCD34D'; ctx.font='700 28px Nunito';
+            ctx.fillText('⭐⭐⭐', W/2, 160);
+            roundRect(ctx, W/2-90, 180, 180, 38, 10);
+            ctx.fillStyle='#16A34A'; ctx.fill();
+            ctx.fillStyle='#fff'; ctx.font='700 14px Nunito'; ctx.fillText('🔄 Rejouer', W/2, 203);
+        } else if (gs === ETATS.GAMEOVER) {
+            ctx.fillStyle='#2A0000'; ctx.fillRect(0,0,W,H);
+            ctx.fillStyle='#FCA5A5'; ctx.font='800 30px Nunito'; ctx.textAlign='center';
+            ctx.fillText('💀 GAME OVER', W/2, 90);
+            ctx.fillStyle='#F87171'; ctx.font='700 14px Nunito';
+            ctx.fillText('Temps écoulé !', W/2, 125);
+            roundRect(ctx, W/2-80, 150, 160, 38, 10);
+            ctx.fillStyle='#7F1D1D'; ctx.fill();
+            ctx.strokeStyle='#F43F5E'; ctx.lineWidth=1.5; ctx.stroke();
+            ctx.fillStyle='#FCA5A5'; ctx.font='700 14px Nunito'; ctx.fillText('🔄 Réessayer', W/2, 173);
+        }
+        requestAnimationFrame(draw);
+    }
+
+    c.addEventListener('click', function(e) {
+        var r = c.getBoundingClientRect();
+        var mx = (e.clientX-r.left)*(W/r.width);
+        var my = (e.clientY-r.top)*(H/r.height);
+        if (gs === ETATS.TITRE) { initJeu(); gs = ETATS.JEU; }
+        else if (gs === ETATS.VICTOIRE || gs === ETATS.GAMEOVER) {
+            if (mx>=W/2-90 && mx<=W/2+90 && my>=180 && my<=218) { initJeu(); gs = ETATS.JEU; }
+        }
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.code==='Space' && gs===ETATS.TITRE) { initJeu(); gs=ETATS.JEU; }
+    });
+
+    draw();
+})();
+</script>
+</body>
+</html>

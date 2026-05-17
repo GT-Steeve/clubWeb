@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — JavaScript</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-yellow { background: #FEF9C3; color: #854D0E; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-yellow { background: #FEF08A; color: #854D0E; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #FEF9C3; padding: 1px 5px; border-radius: 4px; color: #854D0E; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; white-space: nowrap; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #EAB308; border-radius: 10px; transition: width 0.4s; width: 0%; }
+        .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .chip-ok { background: #FEF9C3; color: #854D0E; }
+        .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .action-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 10px; padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .action-btn:hover { background: #D3D1C7; }
+        .action-btn.primary { background: #2C2C2A; color: #EAB308; border-color: #2C2C2A; }
+        .action-btn.primary:hover { background: #444441; }
+        .action-btn.reveal { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+        .action-btn.reveal:hover { background: #CECBF6; }
+
+        .score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-top: 1rem; display: none; text-align: center; }
+        .score-panel.show { display: block; }
+        .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .score-big span { color: #EAB308; }
+        .score-sub { font-size: 0.9rem; color: #888780; }
+
+        /* QCM */
+        .qcm-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 7px; }
+        .opt { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; transition: background 0.12s; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none; }
+        .opt:hover { background: #D3D1C7; }
+        .opt.selected { background: #FEFCE8; border-color: #FEF08A; color: #854D0E; }
+        .opt.correct  { background: #FEFCE8; border-color: #EAB308; color: #854D0E; cursor: default; font-weight: 700; }
+        .opt.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .opt-dot { width: 18px; height: 18px; min-width: 18px; border-radius: 50%; border: 2px solid #B4B2A9; margin-top: 1px; display: flex; align-items: center; justify-content: center; }
+        .opt.selected .opt-dot { border-color: #EAB308; background: #EAB308; }
+        .opt.correct  .opt-dot { border-color: #CA8A04; background: #CA8A04; }
+        .opt.wrong    .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+        .opt-dot-inner { width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
+        .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+        .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .q-feedback.show { display: block; }
+        .q-feedback.ok { color: #854D0E; }
+        .q-feedback.ko { color: #A32D2D; }
+
+        /* V/F */
+        .vf-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .vf-statement { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .vf-btns { display: flex; gap: 10px; }
+        .vf-btn { flex: 1; padding: 8px 0; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.12s; }
+        .vf-btn.vrai:hover { background: #FEFCE8; border-color: #EAB308; color: #854D0E; }
+        .vf-btn.faux:hover { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-btn.correct-ans { background: #FEFCE8; border-color: #EAB308; color: #854D0E; cursor: default; font-weight: 800; }
+        .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+
+        /* MATCH */
+        .match-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .match-col-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .match-col { display: flex; flex-direction: column; gap: 7px; }
+        .match-item { padding: 9px 13px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.12s; line-height: 1.4; font-family: 'Fira Code', monospace; }
+        .match-item.desc-item { font-family: 'Nunito', sans-serif; font-size: 0.88rem; }
+        .match-item:hover:not(.matched):not(.disabled) { background: #D3D1C7; }
+        .match-item.selected { background: #FEFCE8; border-color: #EAB308; color: #854D0E; border-width: 2px; }
+        .match-item.matched  { background: #FEFCE8; border-color: #EAB308; color: #854D0E; pointer-events: none; font-weight: 700; }
+        .match-item.wrong-flash { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .match-result { font-size: 0.88rem; font-weight: 700; color: #854D0E; margin-top: 0.8rem; display: none; }
+        .match-result.show { display: block; }
+
+        /* CODE FILL */
+        .fill-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .fill-block { background: #1A1A1A; border-left: 3px solid #EAB308; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 2.3; margin-top: 0.8rem; overflow-x: auto; color: #D4D4D4; white-space: pre; }
+        .fill-input { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #2C2C2A; border: 1.5px solid #EAB308; border-radius: 5px; padding: 1px 7px; color: #FEF08A; font-weight: 700; outline: none; min-width: 80px; }
+        .fill-input.ok { border-color: #86EFAC; color: #86EFAC; background: #1A2A1A; }
+        .fill-input.ko { border-color: #F09595; color: #F09595; background: #2A1A1A; }
+
+        .answers-reveal { background: #FAEEDA; border: 0.5px solid #FAC775; border-radius: 10px; padding: 0.9rem 1.1rem; margin-top: 0.8rem; display: none; font-size: 0.88rem; line-height: 1.8; color: #633806; }
+        .answers-reveal.show { display: block; }
+        .answers-reveal strong { display: block; margin-bottom: 6px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .answer-line { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
+        .answer-key { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: #888780; min-width: 80px; }
+        .answer-val { font-family: 'Fira Code', monospace; font-size: 0.84rem; font-weight: 700; color: #633806; }
+
+        /* SCENARIO */
+        .scenario-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .scenario-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 8px; }
+        .scenario-box { border-radius: 10px; border: 2px dashed #FEF08A; background: #FEFCE8; padding: 0.9rem 1.1rem; margin-bottom: 0.9rem; font-size: 0.92rem; font-weight: 600; color: #854D0E; line-height: 1.6; }
+        .scenario-choice { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; margin-bottom: 7px; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; transition: all 0.12s; user-select: none; }
+        .scenario-choice:hover { background: #D3D1C7; }
+        .scenario-choice.correct { background: #FEFCE8; border-color: #EAB308; color: #854D0E; cursor: default; font-weight: 700; }
+        .scenario-choice.wrong   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .scenario-choice.disabled { pointer-events: none; }
+        .scenario-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .scenario-feedback.show { display: block; }
+        .scenario-feedback.ok { color: #854D0E; }
+        .scenario-feedback.ko { color: #A32D2D; }
+
+        /* SYNTAX IN DARK BLOCKS */
+        .kw  { color: #C084FC; font-weight: 700; }
+        .fn  { color: #60A5FA; }
+        .str { color: #86EFAC; }
+        .num { color: #FB923C; }
+        .cm  { color: #6B7280; font-style: italic; }
+        .op  { color: #F472B6; }
+        .var { color: #FCD34D; }
+        .dom { color: #67E8F9; }
+
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #EAB308; color: #1C1C1C; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #CA8A04; color: #fff; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) { .match-wrap { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="cours-javascript.html">← Retour au cours JavaScript</a>
+
+<div class="hero">
+    <h1>⚡ Exercices — JavaScript</h1>
+    <p>Variables, fonctions, DOM, événements — mets les bases de JS à l'épreuve.</p>
+    <div class="badge-row">
+        <span class="badge b-yellow">QCM</span>
+        <span class="badge b-blue">Vrai / Faux</span>
+        <span class="badge b-purple">Associer</span>
+        <span class="badge b-amber">Compléter le code</span>
+        <span class="badge b-coral">Scénarios</span>
+    </div>
+</div>
+
+<!-- ═══ QCM ═══ -->
+<div class="section-label"><span class="section-label-text">🧠 QCM — JavaScript de A à Z</span></div>
+<div id="qcm-container"></div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+<div class="score-row" id="score-qcm"></div>
+<div class="btn-row">
+    <button class="action-btn primary" onclick="checkQCM()">Valider le QCM</button>
+    <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+</div>
+<div class="score-panel" id="qcm-panel">
+    <div class="score-big"><span id="qcm-val">0</span> / 8</div>
+    <div class="score-sub">bonnes réponses</div>
+</div>
+
+<!-- ═══ ASSOCIER ═══ -->
+<div class="section-label"><span class="section-label-text">🔗 Associe la méthode JS à son rôle</span></div>
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">🔗</div>Méthode JavaScript → Ce qu'elle fait</div>
+    <p class="desc">Clique sur une méthode à gauche, puis sur sa définition à droite.</p>
+    <div class="match-wrap">
+        <div>
+            <div class="match-col-label">Méthode / Mot-clé</div>
+            <div class="match-col" id="match-left"></div>
+        </div>
+        <div>
+            <div class="match-col-label">Rôle</div>
+            <div class="match-col" id="match-right"></div>
+        </div>
+    </div>
+    <div class="match-result" id="match-result">🎉 Parfait ! Toutes les associations sont correctes.</div>
+</div>
+
+<!-- ═══ CODE FILL ═══ -->
+<div class="section-label"><span class="section-label-text">⌨️ Complète le code JavaScript</span></div>
+
+<div class="fill-card">
+    <div class="stitle"><div class="pill p-yellow">⌨️</div>Exercice 1 — Variables & types</div>
+    <p class="desc">Complète les mots-clés manquants.</p>
+    <div class="fill-block"><span class="cm">// Variable qui ne change pas</span>
+<span class="kw"><input class="fill-input" id="f0" placeholder="?" style="width:55px;"></span> <span class="var">nomDuJeu</span> <span class="op">=</span> <span class="str">"Super Clicker"</span>;
+
+<span class="cm">// Variable qui peut changer</span>
+<span class="kw"><input class="fill-input" id="f1" placeholder="?" style="width:40px;"></span> <span class="var">score</span> <span class="op">=</span> <span class="num">0</span>;
+
+<span class="cm">// Ajouter 10 au score (raccourci)</span>
+<span class="var">score</span> <input class="fill-input" id="f2" placeholder="?" style="width:35px;"> <span class="num">10</span>;
+
+<span class="cm">// Afficher dans la console</span>
+<span class="fn">console</span>.<input class="fill-input" id="f3" placeholder="?" style="width:50px;">(<span class="str">"Score : "</span>, <span class="var">score</span>);</div>
+    <div class="answers-reveal" id="fill-ans1">
+        <strong>Réponses</strong>
+        <div class="answer-line"><span class="answer-key">f0</span><span class="answer-val">const</span></div>
+        <div class="answer-line"><span class="answer-key">f1</span><span class="answer-val">let</span></div>
+        <div class="answer-line"><span class="answer-key">f2</span><span class="answer-val">+=</span></div>
+        <div class="answer-line"><span class="answer-key">f3</span><span class="answer-val">log</span></div>
+    </div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkFill(['f0','f1','f2','f3'],['const','let','+=','log'],'fill-ans1')">Vérifier</button>
+        <button class="action-btn reveal" onclick="revealFill(['f0','f1','f2','f3'],['const','let','+=','log'],'fill-ans1')">👁 Voir les réponses</button>
+        <button class="action-btn" onclick="resetFill(['f0','f1','f2','f3'],'fill-ans1')">Recommencer</button>
+    </div>
+</div>
+
+<div class="fill-card">
+    <div class="stitle"><div class="pill p-purple">⌨️</div>Exercice 2 — DOM & événements</div>
+    <p class="desc">Complète ce script qui écoute un clic et met à jour un compteur.</p>
+    <div class="fill-block"><span class="kw">let</span> <span class="var">score</span> <span class="op">=</span> <span class="num">0</span>;
+
+<span class="cm">// Sélectionner l'élément par son id</span>
+<span class="kw">const</span> <span class="var">affichage</span> <span class="op">=</span> <span class="dom">document.</span><input class="fill-input" id="f4" placeholder="?" style="width:120px;">(<span class="str">'score-texte'</span>);
+<span class="kw">const</span> <span class="var">bouton</span>    <span class="op">=</span> <span class="dom">document.</span><input class="fill-input" id="f5" placeholder="?" style="width:120px;">(<span class="str">'btn-click'</span>);
+
+<span class="cm">// Écouter le clic</span>
+<span class="var">bouton</span>.<input class="fill-input" id="f6" placeholder="?" style="width:145px;">(<span class="str">'click'</span>, <span class="kw">function</span>() {
+  <span class="var">score</span> <span class="op">+=</span> <span class="num">1</span>;
+  <span class="var">affichage</span>.<input class="fill-input" id="f7" placeholder="?" style="width:105px;"> <span class="op">=</span> <span class="str">"Score : "</span> <span class="op">+</span> <span class="var">score</span>;
+});</div>
+    <div class="answers-reveal" id="fill-ans2">
+        <strong>Réponses</strong>
+        <div class="answer-line"><span class="answer-key">f4</span><span class="answer-val">getElementById</span></div>
+        <div class="answer-line"><span class="answer-key">f5</span><span class="answer-val">getElementById</span></div>
+        <div class="answer-line"><span class="answer-key">f6</span><span class="answer-val">addEventListener</span></div>
+        <div class="answer-line"><span class="answer-key">f7</span><span class="answer-val">textContent</span></div>
+    </div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkFill(['f4','f5','f6','f7'],['getElementById','getElementById','addEventListener','textContent'],'fill-ans2')">Vérifier</button>
+        <button class="action-btn reveal" onclick="revealFill(['f4','f5','f6','f7'],['getElementById','getElementById','addEventListener','textContent'],'fill-ans2')">👁 Voir les réponses</button>
+        <button class="action-btn" onclick="resetFill(['f4','f5','f6','f7'],'fill-ans2')">Recommencer</button>
+    </div>
+</div>
+
+<div class="fill-card">
+    <div class="stitle"><div class="pill p-teal">⌨️</div>Exercice 3 — Condition & affichage</div>
+    <p class="desc">Complète cette condition qui déverrouille un nouveau bouton quand le score atteint 10.</p>
+    <div class="fill-block"><span class="kw">function</span> <span class="fn">verifierPalier</span>() {
+  <span class="kw">if</span> (<span class="var">score</span> <input class="fill-input" id="f8" placeholder="?" style="width:30px;"> <span class="num">10</span>) {
+    <span class="cm">// Rendre le bouton visible</span>
+    <span class="kw">const</span> <span class="var">btn</span> <span class="op">=</span> <span class="dom">document.getElementById</span>(<span class="str">'btn-dix'</span>);
+    <span class="var">btn</span>.style.<input class="fill-input" id="f9" placeholder="?" style="width:60px;"> <span class="op">=</span> <span class="str">'block'</span>;
+  }
+}</div>
+    <div class="answers-reveal" id="fill-ans3">
+        <strong>Réponses</strong>
+        <div class="answer-line"><span class="answer-key">f8</span><span class="answer-val">>=</span></div>
+        <div class="answer-line"><span class="answer-key">f9</span><span class="answer-val">display</span></div>
+    </div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkFill(['f8','f9'],['>=','display'],'fill-ans3')">Vérifier</button>
+        <button class="action-btn reveal" onclick="revealFill(['f8','f9'],['>=','display'],'fill-ans3')">👁 Voir les réponses</button>
+        <button class="action-btn" onclick="resetFill(['f8','f9'],'fill-ans3')">Recommencer</button>
+    </div>
+</div>
+
+<!-- ═══ SCÉNARIOS ═══ -->
+<div class="section-label"><span class="section-label-text">🎭 Scénarios JavaScript</span></div>
+
+<div class="scenario-card">
+    <div class="scenario-label">Scénario 1</div>
+    <div class="scenario-box">🖥️ Tu écris <code>&lt;script src="script.js"&gt;&lt;/script&gt;</code> dans le <code>&lt;head&gt;</code> de ta page sans l'attribut <code>defer</code>. Ton script essaie de sélectionner un bouton avec <code>getElementById</code>. Que se passe-t-il ?</div>
+    <div class="scenario-choice" onclick="pickScenario(this,false)"><span>Le script fonctionne normalement — l'ordre n'a pas d'importance</span></div>
+    <div class="scenario-choice" onclick="pickScenario(this,true)"><span>Le script s'exécute avant que le HTML soit chargé — <code>getElementById</code> retourne null et le bouton n'est pas trouvé</span></div>
+    <div class="scenario-choice" onclick="pickScenario(this,false)"><span>Le navigateur attend automatiquement que le HTML soit prêt</span></div>
+    <div class="scenario-feedback ok">✓ Sans <code>defer</code>, le script s'exécute immédiatement en lisant le fichier — le HTML n'est pas encore parsé. Place toujours <code>&lt;script&gt;</code> avant <code>&lt;/body&gt;</code> ou ajoute <code>defer</code> dans le <code>&lt;head&gt;</code>.</div>
+</div>
+
+<div class="scenario-card">
+    <div class="scenario-label">Scénario 2</div>
+    <div class="scenario-box">🖥️ Tu veux comparer si le score est égal à 100. Tu écris <code>if (score == 100)</code>. Ton collègue te dit d'utiliser <code>===</code> à la place. Pourquoi ?</div>
+    <div class="scenario-choice" onclick="pickScenario(this,false)"><span><code>===</code> est plus rapide à exécuter</span></div>
+    <div class="scenario-choice" onclick="pickScenario(this,true)"><span><code>===</code> compare aussi le type — <code>"100" == 100</code> retourne true avec <code>==</code>, mais false avec <code>===</code></span></div>
+    <div class="scenario-choice" onclick="pickScenario(this,false)"><span>C'est juste une convention — les deux font exactement la même chose</span></div>
+    <div class="scenario-feedback ok">✓ <code>==</code> convertit les types avant de comparer (coercion). <code>"100" == 100</code> vaut <code>true</code> ce qui peut causer des bugs. <code>===</code> vérifie le type ET la valeur — toujours préférer <code>===</code>.</div>
+</div>
+
+<div class="scenario-card">
+    <div class="scenario-label">Scénario 3</div>
+    <div class="scenario-box">🖥️ Tu veux cacher un bouton HTML depuis JavaScript. Quelle est la bonne façon de faire ?</div>
+    <div class="scenario-choice" onclick="pickScenario(this,false)"><span><code>bouton.delete()</code></span></div>
+    <div class="scenario-choice" onclick="pickScenario(this,false)"><span><code>bouton.visible = false</code></span></div>
+    <div class="scenario-choice" onclick="pickScenario(this,true)"><span><code>bouton.style.display = 'none'</code></span></div>
+    <div class="scenario-feedback ok">✓ On modifie le style CSS via JS avec <code>element.style.display = 'none'</code>. Pour le rendre visible à nouveau : <code>'block'</code>. On peut aussi utiliser <code>classList.add('hidden')</code> avec une classe CSS.</div>
+</div>
+
+<!-- ═══ V/F ═══ -->
+<div class="section-label"><span class="section-label-text">✅ Vrai / Faux</span></div>
+<div id="vf-container"></div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-vf"></div></div>
+<div class="score-row" id="score-vf"></div>
+<div class="btn-row">
+    <button class="action-btn primary" onclick="checkVF()">Valider</button>
+    <button class="action-btn" onclick="resetVF()">Recommencer</button>
+</div>
+<div class="score-panel" id="vf-panel">
+    <div class="score-big"><span id="vf-val">0</span> / 7</div>
+    <div class="score-sub">bonnes réponses</div>
+</div>
+
+<div class="cta-wrap" style="background:#085041;">
+    <p>Exercices terminés ✓ &nbsp; Lance-toi dans la création de ton premier jeu JavaScript !</p>
+    <a class="cta-btn" href="projet-javascript.html">🎮 Démarrer le projet →</a>
+</div>
+
+<div class="footer-note">
+    var → const/let → DOM → addEventListener ⚡<br>
+    <span style="font-size:0.82rem;">Exercices — JavaScript</span>
+</div>
+
+<script>
+/* ═══════ QCM ═══════ */
+var qcmData = [
+    {q:"Quelle est la différence entre <code>const</code> et <code>let</code> en JavaScript ?",
+     opts:["<code>const</code> est plus lent que <code>let</code>","<code>const</code> déclare une valeur qui ne peut pas être réassignée, <code>let</code> peut changer","<code>let</code> est réservé aux nombres, <code>const</code> aux textes","Il n'y a aucune différence — les deux sont équivalents"],
+     correct:1,expl:"✓ <code>const</code> : valeur fixe (impossible à réassigner). <code>let</code> : valeur modifiable. Utilise <code>const</code> par défaut, <code>let</code> seulement si la valeur doit changer."},
+    {q:"Comment sélectionner l'élément HTML avec l'id <code>score</code> en JavaScript ?",
+     opts:["<code>document.getElement('score')</code>","<code>document.getElementById('score')</code>","<code>document.select('#score')</code>","<code>document.find('score')</code>"],
+     correct:1,expl:"✓ <code>document.getElementById('score')</code> est la méthode standard pour cibler un élément par son <code>id</code>. <code>querySelector('#score')</code> fonctionne aussi."},
+    {q:"Que fait <code>element.textContent = 'Score : 5'</code> ?",
+     opts:["Crée un nouvel élément dans la page","Remplace le texte visible de l'élément par 'Score : 5'","Ajoute 'Score : 5' après le texte existant","Affiche une alerte avec 'Score : 5'"],
+     correct:1,expl:"✓ <code>textContent</code> remplace (ou lit) le contenu texte d'un élément HTML. Pas de HTML interprété, contrairement à <code>innerHTML</code>."},
+    {q:"Où doit être placée la balise <code>&lt;script src='script.js'&gt;</code> pour que le HTML soit chargé avant l'exécution ?",
+     opts:["Dans <code>&lt;head&gt;</code> sans attribut","Au début du <code>&lt;body&gt;</code>","Juste avant <code>&lt;/body&gt;</code> — ou dans <code>&lt;head&gt;</code> avec <code>defer</code>","N'importe où — l'ordre n'a aucune importance"],
+     correct:2,expl:"✓ Juste avant <code>&lt;/body&gt;</code> garantit que le HTML est chargé avant que JS s'exécute. Avec <code>defer</code> dans le <code>&lt;head&gt;</code>, le script attend aussi que le DOM soit prêt."},
+    {q:"Que retourne <code>document.getElementById('inexistant')</code> si l'id n'existe pas ?",
+     opts:["Une erreur qui bloque tout le script","Une chaîne vide <code>''</code>","<code>null</code>","<code>undefined</code>"],
+     correct:2,expl:"✓ <code>getElementById</code> retourne <code>null</code> si aucun élément ne correspond. Accéder à une propriété sur <code>null</code> (comme <code>null.textContent</code>) provoque une erreur."},
+    {q:"Comment écrire correctement un écouteur d'événement de clic sur un bouton ?",
+     opts:["<code>bouton.onClick = function() {}</code>","<code>bouton.addEventListener('click', function() {})</code>","<code>bouton.listen('click', function() {})</code>","<code>bouton.on('click', function() {})</code>"],
+     correct:1,expl:"✓ <code>addEventListener('click', callback)</code> est la méthode standard. L'attribut HTML <code>onclick='...'</code> fonctionne aussi pour les débutants, mais <code>addEventListener</code> est plus flexible et recommandé."},
+    {q:"Quel opérateur de comparaison vérifie à la fois la valeur ET le type en JS ?",
+     opts:["<code>==</code>","<code>=</code>","<code>===</code>","<code>!=</code>"],
+     correct:2,expl:"✓ <code>===</code> (triple égal) compare valeur ET type. <code>==</code> convertit les types avant de comparer, ce qui peut causer des bugs. Toujours préférer <code>===</code>."},
+    {q:"Que fait <code>score += 10</code> ?",
+     opts:["Déclare une variable score avec la valeur 10","Ajoute 10 au score actuel — équivalent à <code>score = score + 10</code>","Multiplie le score par 10","Vérifie si score vaut 10"],
+     correct:1,expl:"✓ <code>+=</code> est un opérateur d'assignation composé : <code>score += 10</code> est exactement équivalent à <code>score = score + 10</code>. Il existe aussi <code>-=</code>, <code>*=</code>, <code>/=</code>."}
+];
+var qcmAns = {};
+function renderQCM(){
+    var c=document.getElementById('qcm-container');c.innerHTML='';
+    qcmData.forEach(function(q,qi){
+        var opts=q.opts.map(function(o,oi){return '<div class="opt" id="qo-'+qi+'-'+oi+'" onclick="selQ('+qi+','+oi+')">'+'<div class="opt-dot"><div class="opt-dot-inner"></div></div><span>'+o+'</span></div>';}).join('');
+        var card=document.createElement('div');card.className='qcm-card';
+        card.innerHTML='<div class="q-num">Question '+(qi+1)+' / '+qcmData.length+'</div><div class="q-text">'+q.q+'</div><div class="options">'+opts+'</div><div class="q-feedback" id="qf-'+qi+'"></div>';
+        c.appendChild(card);
+    });
+}
+function selQ(qi,oi){if(document.getElementById('qo-'+qi+'-0').style.pointerEvents==='none')return;qcmAns[qi]=oi;qcmData[qi].opts.forEach(function(_,i){document.getElementById('qo-'+qi+'-'+i).classList.toggle('selected',i===oi);});}
+function checkQCM(){
+    var score=0;
+    qcmData.forEach(function(q,qi){
+        var ch=qcmAns[qi],fb=document.getElementById('qf-'+qi);
+        q.opts.forEach(function(_,i){var el=document.getElementById('qo-'+qi+'-'+i);el.style.pointerEvents='none';el.classList.remove('selected');});
+        if(ch!==undefined){if(ch===q.correct){document.getElementById('qo-'+qi+'-'+ch).classList.add('correct');score++;fb.className='q-feedback show ok';fb.innerHTML=q.expl;}else{document.getElementById('qo-'+qi+'-'+ch).classList.add('wrong');document.getElementById('qo-'+qi+'-'+q.correct).classList.add('correct');fb.className='q-feedback show ko';fb.innerHTML='✗ '+q.expl.replace('✓ ','');}}
+        else{document.getElementById('qo-'+qi+'-'+q.correct).classList.add('correct');fb.className='q-feedback show ko';fb.innerHTML='— '+q.expl.replace('✓ ','');}
+    });
+    document.getElementById('prog-qcm').style.width=Math.round(score/qcmData.length*100)+'%';
+    document.getElementById('score-qcm').innerHTML='<span class="chip chip-ok">'+score+'/'+qcmData.length+'</span>'+(qcmData.length-score>0?'<span class="chip chip-ko">'+(qcmData.length-score)+' erreur(s)</span>':'');
+    document.getElementById('qcm-val').textContent=score;document.getElementById('qcm-panel').classList.add('show');
+    document.getElementById('qcm-panel').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetQCM(){qcmAns={};document.getElementById('qcm-panel').classList.remove('show');document.getElementById('prog-qcm').style.width='0%';document.getElementById('score-qcm').innerHTML='';renderQCM();}
+
+/* ═══════ ASSOCIER ═══════ */
+var matchLeft  = ['getElementById()','addEventListener()','textContent','classList.add()','querySelector()','style.display'];
+var matchRight = ['Sélectionne par id','Écoute un événement','Modifie le texte visible','Ajoute une classe CSS','Sélectionne par sélecteur CSS','Modifie le CSS inline'];
+var matchCorrect=[0,1,2,3,4,5];
+var mSel=null,mAns={},mDone={},mCount=0;
+function renderMatch(){
+    mSel=null;mAns={};mDone={};mCount=0;
+    var L=document.getElementById('match-left');L.innerHTML='';
+    var R=document.getElementById('match-right');R.innerHTML='';
+    function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+    shuffle(matchLeft.map(function(_,i){return i;})).forEach(function(li){
+        var el=document.createElement('div');el.className='match-item';el.dataset.li=li;el.textContent=matchLeft[li];
+        el.onclick=function(){
+            if(mDone[li])return;
+            document.querySelectorAll('#match-left .match-item').forEach(function(e){if(!mDone[parseInt(e.dataset.li)])e.classList.remove('selected');});
+            mSel=li;el.classList.add('selected');
+        };
+        L.appendChild(el);
+    });
+    shuffle([0,1,2,3,4,5]).forEach(function(ri){
+        var el=document.createElement('div');el.className='match-item desc-item';el.dataset.ri=ri;el.textContent=matchRight[ri];
+        el.onclick=function(){
+            if(mSel===null||mDone[mSel])return;
+            var li=mSel;mAns[li]=ri;mDone[li]=true;
+            document.querySelectorAll('#match-left .match-item').forEach(function(e){if(parseInt(e.dataset.li)===li){e.classList.remove('selected');e.classList.add(matchCorrect[li]===ri?'matched':'wrong-flash');if(matchCorrect[li]!==ri)setTimeout(function(){e.classList.remove('wrong-flash');delete mDone[li];delete mAns[li];},600);}});
+            if(matchCorrect[li]===ri){el.classList.add('matched');mCount++;if(mCount===6)document.getElementById('match-result').classList.add('show');}
+            mSel=null;
+        };
+        R.appendChild(el);
+    });
+    document.getElementById('match-result').classList.remove('show');
+}
+renderMatch();
+
+/* ═══════ CODE FILL ═══════ */
+function checkFill(ids,answers,revealId){
+    var ok=0;
+    ids.forEach(function(id,i){var el=document.getElementById(id);el.classList.remove('ok','ko');if(el.value.trim()===answers[i]){el.classList.add('ok');ok++;}else{el.classList.add('ko');}});
+}
+function revealFill(ids,answers,revealId){
+    ids.forEach(function(id,i){var el=document.getElementById(id);el.value=answers[i];el.classList.remove('ok','ko');el.style.borderColor='#EAB308';el.style.color='#FEF08A';});
+    document.getElementById(revealId).classList.toggle('show');
+}
+function resetFill(ids,revealId){
+    ids.forEach(function(id){var el=document.getElementById(id);el.value='';el.classList.remove('ok','ko');el.style.borderColor='';el.style.color='';});
+    document.getElementById(revealId).classList.remove('show');
+}
+
+/* ═══════ SCÉNARIOS ═══════ */
+function pickScenario(el,isCorrect){
+    var card=el.closest('.scenario-card');
+    if(card.querySelector('.correct'))return;
+    card.querySelectorAll('.scenario-choice').forEach(function(c){c.classList.add('disabled');});
+    if(isCorrect){el.classList.add('correct');}
+    else{el.classList.add('wrong');card.querySelectorAll('.scenario-choice').forEach(function(c){if(c.getAttribute('onclick').includes('true'))c.classList.add('correct');});}
+    var fb=card.querySelector('.scenario-feedback');fb.classList.add('show',isCorrect?'ok':'ko');
+}
+
+/* ═══════ V/F ═══════ */
+var vfData=[
+    {s:"En JavaScript, <code>var</code> est le mot-clé moderne recommandé pour déclarer une variable.",ans:false,expl:"Faux. <code>var</code> est l'ancien mot-clé — il cause des bugs liés à la portée. Utiliser <code>const</code> ou <code>let</code> en JS moderne."},
+    {s:"<code>document.getElementById('btn')</code> retourne null si aucun élément n'a cet id.",ans:true,expl:"Vrai. Si l'id n'existe pas, la méthode retourne <code>null</code>. Tenter d'accéder à une propriété sur <code>null</code> provoque une erreur."},
+    {s:"On peut utiliser le même template HTML pour plusieurs pages avec les fonctions JavaScript.",ans:false,expl:"Faux. JavaScript seul ne gère pas des fichiers HTML séparés. On peut réutiliser du code JS dans plusieurs pages en liant le même fichier <code>script.js</code>."},
+    {s:"<code>addEventListener('click', fn)</code> permet d'exécuter une fonction à chaque fois que l'utilisateur clique.",ans:true,expl:"Vrai. C'est la méthode standard pour écouter des événements. La fonction <code>fn</code> est appelée à chaque clic sur l'élément."},
+    {s:"<code>score++</code> et <code>score += 1</code> font exactement la même chose.",ans:true,expl:"Vrai. Les deux incrémentent <code>score</code> de 1. <code>score++</code> est une syntaxe raccourcie. <code>score--</code> décrémente de 1."},
+    {s:"Un Array JavaScript ne peut contenir que des nombres.",ans:false,expl:"Faux. Un Array peut contenir n'importe quel type : strings, numbers, booleans, objets, même d'autres arrays. Exemple : <code>['Alice', 42, true, {score: 0}]</code>."},
+    {s:"<code>console.log()</code> affiche des informations dans la console du navigateur (F12).",ans:true,expl:"Vrai. C'est l'outil de débogage de base. Tous les navigateurs modernes ont une console accessible via F12 → onglet Console."}
+];
+var vfAns={};
+function renderVF(){
+    var c=document.getElementById('vf-container');c.innerHTML='';
+    vfData.forEach(function(q,qi){
+        var card=document.createElement('div');card.className='vf-card';
+        card.innerHTML='<div class="q-num">Affirmation '+(qi+1)+' / '+vfData.length+'</div><div class="vf-statement">'+q.s+'</div><div class="vf-btns"><button class="vf-btn vrai" id="vv-'+qi+'" onclick="ansVF('+qi+',true)">✓ Vrai</button><button class="vf-btn faux" id="vf2-'+qi+'" onclick="ansVF('+qi+',false)">✗ Faux</button></div><div class="q-feedback" id="vfb-'+qi+'"></div>';
+        c.appendChild(card);
+    });
+}
+function ansVF(qi,val){if(document.getElementById('vv-'+qi).disabled)return;vfAns[qi]=val;var v=document.getElementById('vv-'+qi),f=document.getElementById('vf2-'+qi);v.className='vf-btn vrai';f.className='vf-btn faux';if(val){v.style.background='#FEFCE8';v.style.borderColor='#EAB308';v.style.color='#854D0E';}else{f.style.background='#FEFCE8';f.style.borderColor='#EAB308';f.style.color='#854D0E';}}
+function checkVF(){
+    var score=0;
+    vfData.forEach(function(q,qi){
+        var v=document.getElementById('vv-'+qi),f=document.getElementById('vf2-'+qi),fb=document.getElementById('vfb-'+qi);
+        v.disabled=true;f.disabled=true;[v,f].forEach(function(b){b.style.background='';b.style.borderColor='';b.style.color='';});
+        var ch=vfAns[qi];
+        if(ch!==undefined){if(ch===q.ans){score++;(ch?v:f).classList.add('correct-ans');fb.className='q-feedback show ok';fb.innerHTML='✓ '+q.expl;}else{(ch?v:f).classList.add('wrong-ans');(q.ans?v:f).classList.add('correct-ans');fb.className='q-feedback show ko';fb.innerHTML='✗ '+q.expl;}}
+        else{(q.ans?v:f).classList.add('correct-ans');fb.className='q-feedback show ko';fb.innerHTML='— '+q.expl;}
+    });
+    document.getElementById('prog-vf').style.width=Math.round(score/vfData.length*100)+'%';
+    document.getElementById('score-vf').innerHTML='<span class="chip chip-ok">'+score+'/'+vfData.length+'</span>'+(vfData.length-score>0?'<span class="chip chip-ko">'+(vfData.length-score)+' erreur(s)</span>':'');
+    document.getElementById('vf-val').textContent=score;document.getElementById('vf-panel').classList.add('show');
+    document.getElementById('vf-panel').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetVF(){vfAns={};document.getElementById('vf-panel').classList.remove('show');document.getElementById('prog-vf').style.width='0%';document.getElementById('score-vf').innerHTML='';renderVF();}
+
+renderQCM();renderVF();
+</script>
+</body>
+</html>

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Canvas & Jeu vidéo</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #9A3412; text-decoration: none; margin-bottom: 1.5rem; background: #FFF7ED; border: 0.5px solid #FED7AA; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #FFEDD5; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-orange { background: #FFF7ED; color: #9A3412; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-orange { background: #FED7AA; color: #9A3412; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-purple { background: #CECBF6; color: #3C3489; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #FFF7ED; padding: 1px 5px; border-radius: 4px; color: #9A3412; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; white-space: nowrap; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #F97316; border-radius: 10px; transition: width 0.4s; width: 0%; }
+        .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .chip-ok { background: #EAF3DE; color: #166534; }
+        .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .action-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 10px; padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .action-btn:hover { background: #D3D1C7; }
+        .action-btn.primary { background: #1A0700; color: #F97316; border-color: #1A0700; }
+        .action-btn.primary:hover { background: #2D1200; }
+        .action-btn.reveal { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+        .action-btn.reveal:hover { background: #CECBF6; }
+
+        .score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-top: 1rem; display: none; text-align: center; }
+        .score-panel.show { display: block; }
+        .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .score-big span { color: #F97316; }
+        .score-sub { font-size: 0.9rem; color: #888780; }
+
+        /* QCM */
+        .qcm-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 7px; }
+        .opt { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; transition: background 0.12s; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none; }
+        .opt:hover { background: #D3D1C7; }
+        .opt.selected { background: #FFF7ED; border-color: #FED7AA; color: #9A3412; }
+        .opt.correct  { background: #EAF3DE; border-color: #22C55E; color: #166534; cursor: default; font-weight: 700; }
+        .opt.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .opt-dot { width: 18px; height: 18px; min-width: 18px; border-radius: 50%; border: 2px solid #B4B2A9; margin-top: 1px; display: flex; align-items: center; justify-content: center; }
+        .opt.selected .opt-dot { border-color: #F97316; background: #F97316; }
+        .opt.correct  .opt-dot { border-color: #16A34A; background: #16A34A; }
+        .opt.wrong    .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+        .opt-dot-inner { width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
+        .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+        .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .q-feedback.show { display: block; }
+        .q-feedback.ok { color: #166534; }
+        .q-feedback.ko { color: #A32D2D; }
+
+        /* V/F */
+        .vf-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .vf-statement { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .vf-btns { display: flex; gap: 10px; }
+        .vf-btn { flex: 1; padding: 8px 0; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.12s; }
+        .vf-btn.vrai:hover { background: #FFF7ED; border-color: #F97316; color: #9A3412; }
+        .vf-btn.faux:hover { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-btn.correct-ans { background: #EAF3DE; border-color: #22C55E; color: #166534; cursor: default; font-weight: 800; }
+        .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+
+        /* MATCH */
+        .match-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0.8rem; }
+        .match-col-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .match-col { display: flex; flex-direction: column; gap: 7px; }
+        .match-item { padding: 9px 13px; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.12s; line-height: 1.4; font-family: 'Fira Code', monospace; }
+        .match-item.desc-item { font-family: 'Nunito', sans-serif; font-size: 0.88rem; }
+        .match-item:hover:not(.matched):not(.disabled) { background: #D3D1C7; }
+        .match-item.selected { background: #FFF7ED; border-color: #F97316; color: #9A3412; border-width: 2px; }
+        .match-item.matched  { background: #EAF3DE; border-color: #22C55E; color: #166534; pointer-events: none; font-weight: 700; }
+        .match-item.wrong-flash { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .match-result { font-size: 0.88rem; font-weight: 700; color: #166534; margin-top: 0.8rem; display: none; }
+        .match-result.show { display: block; }
+
+        /* CODE FILL */
+        .fill-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .fill-block { background: #1A1A1A; border-left: 3px solid #F97316; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 2.3; margin-top: 0.8rem; overflow-x: auto; color: #D4D4D4; white-space: pre; }
+        .fill-input { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #1A0700; border: 1.5px solid #F97316; border-radius: 5px; padding: 1px 7px; color: #FED7AA; font-weight: 700; outline: none; min-width: 80px; }
+        .fill-input.ok { border-color: #86EFAC; color: #86EFAC; background: #1A2A1A; }
+        .fill-input.ko { border-color: #F09595; color: #F09595; background: #2A1A1A; }
+
+        .answers-reveal { background: #FFF7ED; border: 0.5px solid #FED7AA; border-radius: 10px; padding: 0.9rem 1.1rem; margin-top: 0.8rem; display: none; font-size: 0.88rem; line-height: 1.8; color: #9A3412; }
+        .answers-reveal.show { display: block; }
+        .answers-reveal strong { display: block; margin-bottom: 6px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .answer-line { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
+        .answer-key { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: #888780; min-width: 80px; }
+        .answer-val { font-family: 'Fira Code', monospace; font-size: 0.84rem; font-weight: 700; color: #9A3412; }
+
+        /* SCENARIO */
+        .scenario-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .scenario-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 8px; }
+        .scenario-box { border-radius: 10px; border: 2px dashed #FED7AA; background: #FFF7ED; padding: 0.9rem 1.1rem; margin-bottom: 0.9rem; font-size: 0.92rem; font-weight: 600; color: #9A3412; line-height: 1.6; }
+        .scenario-choice { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; margin-bottom: 7px; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; transition: all 0.12s; user-select: none; }
+        .scenario-choice:hover { background: #D3D1C7; }
+        .scenario-choice.correct  { background: #EAF3DE; border-color: #22C55E; color: #166534; cursor: default; font-weight: 700; }
+        .scenario-choice.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .scenario-choice.disabled { pointer-events: none; }
+        .scenario-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .scenario-feedback.show { display: block; }
+        .scenario-feedback.ok { color: #166534; }
+        .scenario-feedback.ko { color: #A32D2D; }
+
+        .kw  { color: #C084FC; font-weight: 700; }
+        .fn  { color: #60A5FA; }
+        .str { color: #86EFAC; }
+        .num { color: #FB923C; }
+        .cm  { color: #6B7280; font-style: italic; }
+        .op  { color: #F472B6; }
+        .var { color: #FCD34D; }
+        .dom { color: #67E8F9; }
+
+        .cta-wrap { text-align: center; background: #085041; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #F97316; color: #fff; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #EA580C; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        @media (max-width: 500px) { .match-wrap { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="cours-canvas.html">← Retour au cours Canvas</a>
+
+<div class="hero">
+    <h1>🎮 Exercices — Canvas & Jeu vidéo</h1>
+    <p>Game loop, collisions, gravité, coordonnées — teste tes notions d'algorithmique.</p>
+    <div class="badge-row">
+        <span class="badge b-orange">QCM</span>
+        <span class="badge b-blue">Vrai / Faux</span>
+        <span class="badge b-purple">Associer</span>
+        <span class="badge b-amber">Compléter le code</span>
+        <span class="badge b-coral">Scénarios</span>
+    </div>
+</div>
+
+<!-- ═══ QCM ═══ -->
+<div class="section-label"><span class="section-label-text">🧠 QCM — Canvas & algorithmique jeu vidéo</span></div>
+<div id="qcm-container"></div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+<div class="score-row" id="score-qcm"></div>
+<div class="btn-row">
+    <button class="action-btn primary" onclick="checkQCM()">Valider le QCM</button>
+    <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+</div>
+<div class="score-panel" id="qcm-panel">
+    <div class="score-big"><span id="qcm-val">0</span> / 8</div>
+    <div class="score-sub">bonnes réponses</div>
+</div>
+
+<!-- ═══ ASSOCIER ═══ -->
+<div class="section-label"><span class="section-label-text">🔗 Associe la méthode Canvas à son rôle</span></div>
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">🔗</div>Méthode / Concept → Ce qu'il fait</div>
+    <p class="desc">Clique sur un élément à gauche, puis sur sa définition à droite.</p>
+    <div class="match-wrap">
+        <div>
+            <div class="match-col-label">Méthode / Instruction</div>
+            <div class="match-col" id="match-left"></div>
+        </div>
+        <div>
+            <div class="match-col-label">Rôle</div>
+            <div class="match-col" id="match-right"></div>
+        </div>
+    </div>
+    <div class="match-result" id="match-result">🎉 Parfait ! Toutes les associations sont correctes.</div>
+</div>
+
+<!-- ═══ CODE FILL ═══ -->
+<div class="section-label"><span class="section-label-text">⌨️ Complète le code — Canvas & Game Loop</span></div>
+
+<div class="fill-card">
+    <div class="stitle"><div class="pill p-orange">⌨️</div>Exercice 1 — Initialisation du canvas</div>
+    <p class="desc">Complète les méthodes manquantes pour préparer le canvas et dessiner un rectangle.</p>
+    <div class="fill-block"><span class="cm">// Récupérer le canvas et son contexte</span>
+<span class="kw">const</span> <span class="var">canvas</span> <span class="op">=</span> <span class="dom">document</span>.<span class="fn"><input class="fill-input" id="f0" placeholder="?" style="width:130px;"></span>(<span class="str">'jeu'</span>);
+<span class="kw">const</span> <span class="var">ctx</span>    <span class="op">=</span> <span class="var">canvas</span>.<span class="fn"><input class="fill-input" id="f1" placeholder="?" style="width:105px;"></span>(<span class="str">'2d'</span>);
+
+<span class="cm">// Choisir la couleur de remplissage</span>
+<span class="var">ctx</span>.<input class="fill-input" id="f2" placeholder="?" style="width:90px;"> <span class="op">=</span> <span class="str">'#EAB308'</span>;
+
+<span class="cm">// Dessiner un rectangle x=50, y=50, largeur=100, hauteur=80</span>
+<span class="var">ctx</span>.<span class="fn"><input class="fill-input" id="f3" placeholder="?" style="width:80px;"></span>(<span class="num">50</span>, <span class="num">50</span>, <span class="num">100</span>, <span class="num">80</span>);</div>
+    <div class="answers-reveal" id="fill-ans1">
+        <strong>Réponses</strong>
+        <div class="answer-line"><span class="answer-key">f0</span><span class="answer-val">getElementById</span></div>
+        <div class="answer-line"><span class="answer-key">f1</span><span class="answer-val">getContext</span></div>
+        <div class="answer-line"><span class="answer-key">f2</span><span class="answer-val">fillStyle</span></div>
+        <div class="answer-line"><span class="answer-key">f3</span><span class="answer-val">fillRect</span></div>
+    </div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkFill(['f0','f1','f2','f3'],['getElementById','getContext','fillStyle','fillRect'],'fill-ans1')">Vérifier</button>
+        <button class="action-btn reveal" onclick="revealFill(['f0','f1','f2','f3'],['getElementById','getContext','fillStyle','fillRect'],'fill-ans1')">👁 Voir les réponses</button>
+        <button class="action-btn" onclick="resetFill(['f0','f1','f2','f3'],'fill-ans1')">Recommencer</button>
+    </div>
+</div>
+
+<div class="fill-card">
+    <div class="stitle"><div class="pill p-purple">⌨️</div>Exercice 2 — La Game Loop</div>
+    <p class="desc">Complète la boucle de jeu : effacement, mise à jour et rappel automatique.</p>
+    <div class="fill-block"><span class="kw">function</span> <span class="fn">gameLoop</span>() {
+  <span class="cm">// 1. Effacer le canvas AVANT de redessiner</span>
+  <span class="var">ctx</span>.<span class="fn"><input class="fill-input" id="f4" placeholder="?" style="width:90px;"></span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">canvas</span>.width, <span class="var">canvas</span>.height);
+
+  <span class="cm">// 2. Mettre à jour la physique</span>
+  <span class="fn">mettreAJour</span>();
+
+  <span class="cm">// 3. Dessiner tous les objets</span>
+  <span class="fn">dessiner</span>();
+
+  <span class="cm">// 4. Programmer la prochaine frame (~60fps)</span>
+  <input class="fill-input" id="f5" placeholder="?" style="width:190px;">(<span class="fn">gameLoop</span>);
+}
+
+<span class="cm">// Lancer la boucle</span>
+<input class="fill-input" id="f6" placeholder="?" style="width:190px;">(<span class="fn">gameLoop</span>);</div>
+    <div class="answers-reveal" id="fill-ans2">
+        <strong>Réponses</strong>
+        <div class="answer-line"><span class="answer-key">f4</span><span class="answer-val">clearRect</span></div>
+        <div class="answer-line"><span class="answer-key">f5</span><span class="answer-val">requestAnimationFrame</span></div>
+        <div class="answer-line"><span class="answer-key">f6</span><span class="answer-val">requestAnimationFrame</span></div>
+    </div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkFill(['f4','f5','f6'],['clearRect','requestAnimationFrame','requestAnimationFrame'],'fill-ans2')">Vérifier</button>
+        <button class="action-btn reveal" onclick="revealFill(['f4','f5','f6'],['clearRect','requestAnimationFrame','requestAnimationFrame'],'fill-ans2')">👁 Voir les réponses</button>
+        <button class="action-btn" onclick="resetFill(['f4','f5','f6'],'fill-ans2')">Recommencer</button>
+    </div>
+</div>
+
+<div class="fill-card">
+    <div class="stitle"><div class="pill p-teal">⌨️</div>Exercice 3 — Gravité & Collision AABB</div>
+    <p class="desc">Complète la physique de gravité et la fonction de collision entre deux rectangles.</p>
+    <div class="fill-block"><span class="cm">// Appliquer la gravité à chaque frame</span>
+<span class="var">joueur</span>.vy <span class="op">+=</span> <input class="fill-input" id="f7" placeholder="?" style="width:65px;">;
+<span class="var">joueur</span>.y  <span class="op">+=</span> <span class="var">joueur</span>.<input class="fill-input" id="f8" placeholder="?" style="width:30px;">;
+
+<span class="cm">// Collision AABB : 2 rectangles a et b se touchent si :</span>
+<span class="kw">function</span> <span class="fn">collision</span>(<span class="var">a</span>, <span class="var">b</span>) {
+  <span class="kw">return</span> (
+    <span class="var">a</span>.x <span class="op">&lt;</span> <span class="var">b</span>.x <span class="op">+</span> <span class="var">b</span>.<input class="fill-input" id="f9" placeholder="?" style="width:60px;">
+    <span class="op">&amp;&amp;</span> <span class="var">a</span>.x <span class="op">+</span> <span class="var">a</span>.w <input class="fill-input" id="f10" placeholder="?" style="width:20px;"> <span class="var">b</span>.x
+    <span class="op">&amp;&amp;</span> <span class="var">a</span>.y <span class="op">&lt;</span> <span class="var">b</span>.y <span class="op">+</span> <span class="var">b</span>.h
+    <span class="op">&amp;&amp;</span> <span class="var">a</span>.y <span class="op">+</span> <span class="var">a</span>.h <span class="op">&gt;</span> <span class="var">b</span>.y
+  );
+}</div>
+    <div class="answers-reveal" id="fill-ans3">
+        <strong>Réponses</strong>
+        <div class="answer-line"><span class="answer-key">f7</span><span class="answer-val">GRAVITE</span></div>
+        <div class="answer-line"><span class="answer-key">f8</span><span class="answer-val">vy</span></div>
+        <div class="answer-line"><span class="answer-key">f9</span><span class="answer-val">w</span></div>
+        <div class="answer-line"><span class="answer-key">f10</span><span class="answer-val">&gt;</span></div>
+    </div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkFill(['f7','f8','f9','f10'],['GRAVITE','vy','w','>'],'fill-ans3')">Vérifier</button>
+        <button class="action-btn reveal" onclick="revealFill(['f7','f8','f9','f10'],['GRAVITE','vy','w','>'],'fill-ans3')">👁 Voir les réponses</button>
+        <button class="action-btn" onclick="resetFill(['f7','f8','f9','f10'],'fill-ans3')">Recommencer</button>
+    </div>
+</div>
+
+<!-- ═══ SCÉNARIOS ═══ -->
+<div class="section-label"><span class="section-label-text">🎭 Scénarios — Débogage de jeu</span></div>
+
+<div class="scenario-card">
+    <div class="scenario-label">Scénario 1</div>
+    <div class="scenario-box">🎮 Ton joueur se déplace, mais il laisse une traînée orange derrière lui. L'écran ressemble à une peinture abstraite. Quelle est la cause ?</div>
+    <div class="scenario-choice" onclick="pickScenario(this,false)"><span>Le joueur se déplace trop vite — il faut réduire sa vitesse</span></div>
+    <div class="scenario-choice" onclick="pickScenario(this,true)"><span><code>ctx.clearRect()</code> n'est pas appelé à chaque frame — les anciens dessins s'accumulent sur le canvas</span></div>
+    <div class="scenario-choice" onclick="pickScenario(this,false)"><span>Il faut utiliser <code>ctx.fillStyle = 'transparent'</code> avant chaque dessin</span></div>
+    <div class="scenario-feedback ok">✓ Sans <code>clearRect(0, 0, canvas.width, canvas.height)</code> au début de chaque frame, les dessins précédents ne sont pas effacés. Le canvas s'accumule et laisse une traînée.</div>
+</div>
+
+<div class="scenario-card">
+    <div class="scenario-label">Scénario 2</div>
+    <div class="scenario-box">🎮 Ton joueur peut sauter autant de fois qu'il veut en maintenant la touche espace, même en l'air. Il monte à l'infini. Comment corriger ça ?</div>
+    <div class="scenario-choice" onclick="pickScenario(this,false)"><span>Réduire la valeur de <code>FORCE_SAUT</code></span></div>
+    <div class="scenario-choice" onclick="pickScenario(this,false)"><span>Supprimer l'événement <code>keydown</code> après le premier saut</span></div>
+    <div class="scenario-choice" onclick="pickScenario(this,true)"><span>Vérifier <code>joueur.auSol === true</code> avant d'appliquer <code>FORCE_SAUT</code> — le saut n'est autorisé que depuis le sol</span></div>
+    <div class="scenario-feedback ok">✓ Il faut conditionner le saut : <code>if (touches[' '] && joueur.auSol)</code>. La variable <code>auSol</code> passe à <code>false</code> au saut et revient à <code>true</code> lors de l'atterrissage sur une plateforme.</div>
+</div>
+
+<div class="scenario-card">
+    <div class="scenario-label">Scénario 3</div>
+    <div class="scenario-box">🎮 Ton joueur bouge avec les flèches, mais le mouvement est saccadé : il y a un délai au démarrage, puis ça accélère. C'est irritant à jouer. Quelle est l'erreur ?</div>
+    <div class="scenario-choice" onclick="pickScenario(this,true)"><span>Le joueur est déplacé directement dans l'événement <code>keydown</code> — il faut mémoriser les touches dans un objet et les lire dans la game loop</span></div>
+    <div class="scenario-choice" onclick="pickScenario(this,false)"><span>Le canvas est trop grand — ça ralentit les performances</span></div>
+    <div class="scenario-choice" onclick="pickScenario(this,false)"><span>Il faut utiliser <code>setInterval</code> à la place de <code>requestAnimationFrame</code></span></div>
+    <div class="scenario-feedback ok">✓ <code>keydown</code> a un délai de répétition système (OS). La bonne approche : <code>touches[e.key] = true</code> dans <code>keydown</code>, <code>false</code> dans <code>keyup</code>, et lire <code>touches</code> dans la game loop à chaque frame.</div>
+</div>
+
+<!-- ═══ V/F ═══ -->
+<div class="section-label"><span class="section-label-text">✅ Vrai / Faux</span></div>
+<div id="vf-container"></div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-vf"></div></div>
+<div class="score-row" id="score-vf"></div>
+<div class="btn-row">
+    <button class="action-btn primary" onclick="checkVF()">Valider</button>
+    <button class="action-btn" onclick="resetVF()">Recommencer</button>
+</div>
+<div class="score-panel" id="vf-panel">
+    <div class="score-big"><span id="vf-val">0</span> / 7</div>
+    <div class="score-sub">bonnes réponses</div>
+</div>
+
+<div class="cta-wrap">
+    <p>Exercices terminés ✓ &nbsp; Passe au projet pour coder ton premier platformer 2D !</p>
+    <a class="cta-btn" href="projet-canvas.html">🕹️ Démarrer le projet →</a>
+</div>
+
+<div class="footer-note">
+    Canvas → Game Loop → AABB → Gravité → Clavier 🎮<br>
+    <span style="font-size:0.82rem;">Exercices — Canvas & Jeu vidéo</span>
+</div>
+
+<script>
+/* ═══════ QCM ═══════ */
+var qcmData = [
+    {q:"Que retourne <code>canvas.getContext('2d')</code> ?",
+     opts:["La largeur et la hauteur du canvas","Le contexte de dessin 2D (objet <code>ctx</code>) pour dessiner sur le canvas","Un objet HTML représentant la balise canvas","<code>null</code> si le canvas n'est pas encore chargé"],
+     correct:1,expl:"✓ <code>getContext('2d')</code> retourne le contexte de rendu 2D, appelé <code>ctx</code> par convention. C'est via cet objet qu'on accède à toutes les méthodes de dessin : <code>fillRect</code>, <code>arc</code>, <code>fillText</code>…"},
+    {q:"Où se trouve le point (x=0, y=0) dans un canvas HTML ?",
+     opts:["En bas à gauche","Au centre du canvas","En haut à gauche","En haut à droite"],
+     correct:2,expl:"✓ Le canvas utilise un repère avec (0, 0) en haut à gauche. x augmente vers la droite, y augmente vers le bas — l'inverse du repère mathématique habituel !"},
+    {q:"Pourquoi appelle-t-on <code>ctx.clearRect()</code> à chaque frame dans la game loop ?",
+     opts:["Pour libérer la mémoire GPU à chaque frame","Pour réinitialiser les variables JavaScript","Pour effacer les anciens dessins, sinon les objets laissent une traînée sur le canvas","C'est une optimisation optionnelle"],
+     correct:2,expl:"✓ Le canvas accumule les dessins. Sans <code>clearRect</code>, chaque frame s'ajoute sur la précédente et le joueur laisse une traînée. On doit effacer entièrement puis tout redessiner à chaque frame."},
+    {q:"Combien de conditions sont nécessaires pour détecter une collision AABB entre deux rectangles ?",
+     opts:["2 conditions","3 conditions","4 conditions","8 conditions"],
+     correct:2,expl:"✓ AABB nécessite 4 comparaisons : A.gauche < B.droite, A.droite > B.gauche, A.haut < B.bas, A.bas > B.haut. Toutes les 4 doivent être vraies simultanément pour qu'il y ait collision."},
+    {q:"Comment simule-t-on la gravité dans un jeu de plateforme ?",
+     opts:["En déplaçant le joueur vers le bas d'un coup au moment du saut","En définissant <code>joueur.y = SOL</code> à chaque frame","En ajoutant une valeur positive à <code>vy</code> à chaque frame (<code>joueur.vy += GRAVITE</code>)","En utilisant <code>Math.sin()</code> pour simuler une trajectoire parabolique"],
+     correct:2,expl:"✓ La gravité est une accélération : <code>joueur.vy += GRAVITE</code> chaque frame. Cela accélère progressivement la chute. Puis <code>joueur.y += joueur.vy</code> applique le déplacement."},
+    {q:"Pourquoi mémorise-t-on les touches enfoncées dans un objet <code>touches</code> plutôt que de déplacer directement dans l'événement <code>keydown</code> ?",
+     opts:["Pour économiser de la mémoire","Pour un mouvement fluide — keydown a un délai de répétition OS avant de se répéter, causant des mouvements saccadés","Les deux approches donnent exactement le même résultat","Parce que <code>keydown</code> ne fonctionne pas à l'intérieur d'un canvas"],
+     correct:1,expl:"✓ <code>keydown</code> se déclenche une fois, attend le délai de répétition OS, puis se répète. En lisant l'objet <code>touches</code> dans la game loop à chaque frame, le mouvement est parfaitement fluide."},
+    {q:"Que fait <code>requestAnimationFrame(gameLoop)</code> ?",
+     opts:["Il exécute <code>gameLoop</code> toutes les 1000ms (1 seconde)","Il programme l'appel de <code>gameLoop</code> juste avant le prochain affichage écran (~60fps)","Il crée une boucle <code>while(true)</code> bloquante","Il synchronise le jeu avec un serveur distant"],
+     correct:1,expl:"✓ <code>requestAnimationFrame</code> est la méthode standard pour les animations. Elle synchronise les mises à jour avec le taux de rafraîchissement de l'écran (~60fps) et suspend automatiquement si l'onglet est caché."},
+    {q:"À quoi sert le deltaTime (<code>dt</code>) dans une game loop ?",
+     opts:["À mesurer la durée totale depuis le début du jeu","À compter le nombre de frames affichées","À rendre le mouvement identique quel que soit le FPS de l'appareil","À détecter les collisions entre objets"],
+     correct:2,expl:"✓ Sans deltaTime, un objet qui bouge 4px/frame ira 2× plus vite sur un écran 120Hz que sur un 60Hz. Avec deltaTime (temps écoulé en secondes), on exprime la vitesse en px/seconde — identique sur tous les appareils."}
+];
+
+var qcmAnswers = {};
+function generateQCM() {
+    var html = '';
+    qcmData.forEach(function(q, i) {
+        html += '<div class="qcm-card" id="qcard'+i+'">';
+        html += '<div class="q-num">Question '+(i+1)+' / '+qcmData.length+'</div>';
+        html += '<div class="q-text">'+q.q+'</div><div class="options">';
+        q.opts.forEach(function(o, j) {
+            html += '<div class="opt" onclick="selectOpt('+i+','+j+')" id="opt'+i+'_'+j+'">';
+            html += '<div class="opt-dot"><div class="opt-dot-inner"></div></div><span>'+o+'</span></div>';
+        });
+        html += '</div><div class="q-feedback" id="qfb'+i+'"></div></div>';
+    });
+    document.getElementById('qcm-container').innerHTML = html;
+}
+function selectOpt(q, o) {
+    if (qcmAnswers[q] !== undefined) return;
+    qcmAnswers[q] = o;
+    for (var j = 0; j < qcmData[q].opts.length; j++) {
+        document.getElementById('opt'+q+'_'+j).classList.remove('selected');
+    }
+    document.getElementById('opt'+q+'_'+o).classList.add('selected');
+}
+function checkQCM() {
+    var ok = 0;
+    var html = '';
+    qcmData.forEach(function(q, i) {
+        var ans = qcmAnswers[i];
+        var correct = (ans === q.correct);
+        if (correct) ok++;
+        for (var j = 0; j < q.opts.length; j++) {
+            var el = document.getElementById('opt'+i+'_'+j);
+            el.classList.remove('selected');
+            if (j === q.correct) el.classList.add('correct');
+            else if (j === ans) el.classList.add('wrong');
+        }
+        var fb = document.getElementById('qfb'+i);
+        fb.className = 'q-feedback show ' + (correct ? 'ok' : 'ko');
+        fb.innerHTML = correct ? q.expl : '✗ ' + q.expl;
+        html += '<span class="chip '+(correct?'chip-ok':'chip-ko')+'">Q'+(i+1)+' '+(correct?'✓':'✗')+'</span>';
+    });
+    document.getElementById('score-qcm').innerHTML = html;
+    document.getElementById('prog-qcm').style.width = Math.round(ok/qcmData.length*100)+'%';
+    document.getElementById('qcm-val').textContent = ok;
+    document.getElementById('qcm-panel').classList.add('show');
+}
+function resetQCM() {
+    qcmAnswers = {};
+    document.getElementById('score-qcm').innerHTML = '';
+    document.getElementById('prog-qcm').style.width = '0%';
+    document.getElementById('qcm-panel').classList.remove('show');
+    generateQCM();
+}
+generateQCM();
+
+/* ═══════ MATCH ═══════ */
+var matchPairs = [
+    {left:'fillRect(x, y, w, h)',        right:'Dessine un rectangle rempli'},
+    {left:'clearRect(0, 0, w, h)',        right:'Efface une zone du canvas'},
+    {left:'arc(x, y, r, 0, 2π)',          right:'Dessine un cercle'},
+    {left:'requestAnimationFrame(fn)',    right:'Exécute fn avant chaque affichage (~60fps)'},
+    {left:'array.filter(...)',            right:'Retourne un nouveau tableau filtré'},
+    {left:'touches[e.key] = true',        right:'Mémorise qu\'une touche est enfoncée'},
+];
+var matchSelected = null;
+var matchDone = 0;
+function generateMatch() {
+    var lefts = matchPairs.map(function(p,i){return {text:p.left,idx:i};});
+    var rights = matchPairs.map(function(p,i){return {text:p.right,idx:i};});
+    rights.sort(function(){return Math.random()-0.5;});
+    var lHtml = '', rHtml = '';
+    lefts.forEach(function(item) {
+        lHtml += '<div class="match-item" id="ml'+item.idx+'" onclick="matchClick(\'l\','+item.idx+')">'+item.text+'</div>';
+    });
+    rights.forEach(function(item) {
+        rHtml += '<div class="match-item desc-item" id="mr'+item.idx+'" onclick="matchClick(\'r\','+item.idx+')">'+item.text+'</div>';
+    });
+    document.getElementById('match-left').innerHTML  = lHtml;
+    document.getElementById('match-right').innerHTML = rHtml;
+}
+function matchClick(side, idx) {
+    if (!matchSelected) {
+        matchSelected = {side:side, idx:idx};
+        document.getElementById((side==='l'?'ml':'mr')+idx).classList.add('selected');
+    } else {
+        if (matchSelected.side === side) {
+            document.getElementById((matchSelected.side==='l'?'ml':'mr')+matchSelected.idx).classList.remove('selected');
+            matchSelected = {side:side, idx:idx};
+            document.getElementById((side==='l'?'ml':'mr')+idx).classList.add('selected');
+            return;
+        }
+        var lIdx = matchSelected.side==='l' ? matchSelected.idx : idx;
+        var rIdx = matchSelected.side==='r' ? matchSelected.idx : idx;
+        var correct = (lIdx === rIdx);
+        var lEl = document.getElementById('ml'+lIdx);
+        var rEl = document.getElementById('mr'+rIdx);
+        if (correct) {
+            lEl.classList.remove('selected'); lEl.classList.add('matched');
+            rEl.classList.remove('selected'); rEl.classList.add('matched');
+            matchDone++;
+            if (matchDone === matchPairs.length) document.getElementById('match-result').classList.add('show');
+        } else {
+            lEl.classList.remove('selected'); lEl.classList.add('wrong-flash');
+            rEl.classList.remove('selected'); rEl.classList.add('wrong-flash');
+            setTimeout(function(){lEl.classList.remove('wrong-flash'); rEl.classList.remove('wrong-flash');}, 600);
+        }
+        matchSelected = null;
+    }
+}
+generateMatch();
+
+/* ═══════ FILL ═══════ */
+function checkFill(ids, answers, revealId) {
+    ids.forEach(function(id, i) {
+        var el = document.getElementById(id);
+        var val = el.value.trim();
+        el.classList.remove('ok','ko');
+        el.classList.add(val === answers[i] ? 'ok' : 'ko');
+    });
+}
+function revealFill(ids, answers, revealId) {
+    ids.forEach(function(id, i) {
+        var el = document.getElementById(id);
+        el.value = answers[i];
+        el.classList.remove('ok','ko'); el.classList.add('ok');
+    });
+    document.getElementById(revealId).classList.add('show');
+}
+function resetFill(ids, revealId) {
+    ids.forEach(function(id) {
+        var el = document.getElementById(id);
+        el.value = ''; el.classList.remove('ok','ko');
+    });
+    document.getElementById(revealId).classList.remove('show');
+}
+
+/* ═══════ SCÉNARIOS ═══════ */
+function pickScenario(el, correct) {
+    var card = el.parentElement;
+    var choices = card.querySelectorAll('.scenario-choice');
+    choices.forEach(function(c){ c.classList.add('disabled'); });
+    el.classList.add(correct ? 'correct' : 'wrong');
+    var fb = card.querySelector('.scenario-feedback');
+    fb.classList.add('show', correct ? 'ok' : 'ko');
+}
+
+/* ═══════ V/F ═══════ */
+var vfData = [
+    {s:"Le point (0, 0) du canvas HTML est situé en bas à gauche.",ans:false,expl:"Faux — (0, 0) est en haut à gauche. L'axe Y s'inverse : y augmente vers le bas."},
+    {s:"<code>ctx.clearRect()</code> doit être appelé à chaque frame pour éviter les traînées visuelles.",ans:true,expl:"Vrai — sans clearRect à chaque frame, les dessins s'accumulent sur le canvas."},
+    {s:"La collision AABB fonctionne avec des objets de forme circulaire.",ans:false,expl:"Faux — AABB (Axis-Aligned Bounding Box) ne fonctionne qu'avec des rectangles alignés aux axes. Pour les cercles, on utilise la distance entre centres."},
+    {s:"<code>requestAnimationFrame</code> appelle ta fonction environ 60 fois par seconde.",ans:true,expl:"Vrai — elle se synchronise avec le taux de rafraîchissement de l'écran, généralement 60Hz. Elle est plus efficace que <code>setInterval</code>."},
+    {s:"Pour faire sauter un personnage vers le haut, on assigne une valeur négative à <code>vy</code>.",ans:true,expl:"Vrai — dans le repère canvas, y augmente vers le bas. Une <code>vy</code> négative déplace donc vers le haut, ce qui crée l'effet de saut."},
+    {s:"<code>array.filter()</code> modifie le tableau d'origine en place.",ans:false,expl:"Faux — <code>filter()</code> retourne un nouveau tableau sans modifier l'original. Il faut réassigner : <code>ennemis = ennemis.filter(...)</code>."},
+    {s:"Le deltaTime permet d'obtenir un mouvement identique à 30fps et 60fps.",ans:true,expl:"Vrai — sans deltaTime, un objet irait 2× plus vite sur écran 60Hz que 30Hz. Le deltaTime normalise la vitesse en px/seconde quelle que soit la cadence."},
+];
+var vfAnswers = {};
+function generateVF() {
+    var html = '';
+    vfData.forEach(function(item, i) {
+        html += '<div class="vf-card" id="vfcard'+i+'">';
+        html += '<div class="vf-statement">'+(i+1)+'. '+item.s+'</div>';
+        html += '<div class="vf-btns">';
+        html += '<button class="vf-btn vrai" onclick="selectVF('+i+',true)">✓ Vrai</button>';
+        html += '<button class="vf-btn faux" onclick="selectVF('+i+',false)">✗ Faux</button>';
+        html += '</div></div>';
+    });
+    document.getElementById('vf-container').innerHTML = html;
+}
+function selectVF(i, val) {
+    if (vfAnswers[i] !== undefined) return;
+    vfAnswers[i] = val;
+    var card = document.getElementById('vfcard'+i);
+    var btns = card.querySelectorAll('.vf-btn');
+    [btns[0], btns[1]].forEach(function(b) {
+        b.style.background = ''; b.style.borderColor = ''; b.style.color = ''; b.style.fontWeight = '';
+    });
+    var sel = val === true ? btns[0] : btns[1];
+    sel.style.background  = val === true ? '#FFF7ED' : '#FCEBEB';
+    sel.style.borderColor = val === true ? '#F97316' : '#F09595';
+    sel.style.color       = val === true ? '#9A3412' : '#791F1F';
+    sel.style.fontWeight  = '800';
+}
+function checkVF() {
+    var ok = 0; var html = '';
+    vfData.forEach(function(item, i) {
+        var ans = vfAnswers[i];
+        var correct = (ans === item.ans);
+        if (correct) ok++;
+        var card = document.getElementById('vfcard'+i);
+        var btns = card.querySelectorAll('.vf-btn');
+        [btns[0], btns[1]].forEach(function(b) {
+            b.style.background = ''; b.style.borderColor = ''; b.style.color = ''; b.style.fontWeight = '';
+        });
+        if (item.ans===true)  { btns[0].classList.add('correct-ans'); if(ans===false) btns[1].classList.add('wrong-ans'); }
+        else                  { btns[1].classList.add('correct-ans'); if(ans===true)  btns[0].classList.add('wrong-ans'); }
+        var expl = document.createElement('div');
+        expl.style.cssText = 'font-size:0.84rem;font-weight:700;margin-top:0.5rem;color:'+(correct?'#166534':'#A32D2D');
+        expl.textContent = (correct?'✓ ':'✗ ') + item.expl;
+        card.appendChild(expl);
+        html += '<span class="chip '+(correct?'chip-ok':'chip-ko')+'">'+(i+1)+' '+(correct?'✓':'✗')+'</span>';
+    });
+    document.getElementById('score-vf').innerHTML = html;
+    document.getElementById('prog-vf').style.width = Math.round(ok/vfData.length*100)+'%';
+    document.getElementById('vf-val').textContent = ok;
+    document.getElementById('vf-panel').classList.add('show');
+}
+function resetVF() {
+    vfAnswers = {};
+    document.getElementById('score-vf').innerHTML = '';
+    document.getElementById('prog-vf').style.width = '0%';
+    document.getElementById('vf-panel').classList.remove('show');
+    generateVF();
+}
+generateVF();
+</script>
+</body>
+</html>

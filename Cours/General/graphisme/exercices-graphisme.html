@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Graphisme & Sprites</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #6B21A8; text-decoration: none; margin-bottom: 1.5rem; background: #FAF5FF; border: 0.5px solid #E9D5FF; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #F3E8FF; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-purple { background: #F3E8FF; color: #6B21A8; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-purple { background: #E9D5FF; color: #6B21A8; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #FAF5FF; padding: 1px 5px; border-radius: 4px; color: #6B21A8; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; white-space: nowrap; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #A855F7; border-radius: 10px; transition: width 0.4s; width: 0%; }
+        .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .chip-ok { background: #EAF3DE; color: #166534; }
+        .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .action-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 10px; padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .action-btn:hover { background: #D3D1C7; }
+        .action-btn.primary { background: #2D0040; color: #A855F7; border-color: #2D0040; }
+        .action-btn.primary:hover { background: #3D0060; }
+        .action-btn.reveal { background: #F3E8FF; color: #6B21A8; border-color: #E9D5FF; }
+        .action-btn.reveal:hover { background: #E9D5FF; }
+
+        .score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-top: 1rem; display: none; text-align: center; }
+        .score-panel.show { display: block; }
+        .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .score-big span { color: #A855F7; }
+        .score-sub { font-size: 0.9rem; color: #888780; }
+
+        /* QCM */
+        .qcm-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 7px; }
+        .opt { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; transition: background 0.12s; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none; }
+        .opt:hover { background: #D3D1C7; }
+        .opt.selected { background: #FAF5FF; border-color: #E9D5FF; color: #6B21A8; }
+        .opt.correct  { background: #EAF3DE; border-color: #22C55E; color: #166534; cursor: default; font-weight: 700; }
+        .opt.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .opt-dot { width: 18px; height: 18px; min-width: 18px; border-radius: 50%; border: 2px solid #B4B2A9; margin-top: 1px; display: flex; align-items: center; justify-content: center; }
+        .opt.selected .opt-dot { border-color: #A855F7; background: #A855F7; }
+        .opt.correct  .opt-dot { border-color: #16A34A; background: #16A34A; }
+        .opt.wrong    .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+        .opt-dot-inner { width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
+        .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+        .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .q-feedback.show { display: block; }
+        .q-feedback.ok { color: #166534; }
+        .q-feedback.ko { color: #791F1F; }
+
+        /* V/F */
+        .vf-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.2rem 1.5rem; margin-bottom: 0.8rem; }
+        .vf-statement { font-size: 0.95rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.8rem; line-height: 1.5; }
+        .vf-btns { display: flex; gap: 8px; }
+        .vf-btn { flex: 1; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; padding: 9px; font-family: 'Nunito', sans-serif; font-size: 0.92rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .vf-btn:hover { background: #D3D1C7; }
+        .vf-btn.correct-ans { background: #EAF3DE; border-color: #22C55E; color: #166534; }
+        .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-feedback { font-size: 0.85rem; font-weight: 700; margin-top: 0.5rem; display: none; line-height: 1.5; }
+        .vf-feedback.show { display: block; }
+        .vf-feedback.ok { color: #166534; }
+        .vf-feedback.ko { color: #791F1F; }
+
+        /* Matching */
+        .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 0.8rem; }
+        .match-col-label { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 4px; }
+        .match-item { border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; padding: 8px 12px; font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: background 0.12s; user-select: none; }
+        .match-item:hover { background: #D3D1C7; }
+        .match-item.active { background: #FAF5FF; border-color: #A855F7; color: #6B21A8; }
+        .match-item.matched { background: #EAF3DE; border-color: #22C55E; color: #166534; cursor: default; }
+        .match-item.wrong-match { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+
+        /* Code fill */
+        .code-block { background: #18101F; border-radius: 12px; padding: 1rem 1.2rem; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.8; color: #E5D8FF; margin-bottom: 0.9rem; overflow-x: auto; }
+        .blank { display: inline-block; min-width: 80px; border-bottom: 2px solid #A855F7; background: #2D0040; color: #E5D8FF; font-family: 'Fira Code', monospace; font-size: 0.83rem; padding: 0 6px; border-radius: 4px 4px 0 0; text-align: center; cursor: pointer; transition: background 0.12s; }
+        .blank:hover { background: #3D0060; }
+        .blank.filled-ok { border-color: #22C55E; background: #14281A; color: #86EFAC; }
+        .blank.filled-ko { border-color: #E24B4A; background: #2C1010; color: #FCA5A5; }
+        .bank { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0.8rem; }
+        .token { background: #F3E8FF; border: 0.5px solid #E9D5FF; color: #6B21A8; border-radius: 8px; padding: 5px 12px; font-family: 'Fira Code', monospace; font-size: 0.83rem; font-weight: 700; cursor: pointer; user-select: none; transition: background 0.12s; }
+        .token:hover { background: #E9D5FF; }
+        .token.used { opacity: 0.35; pointer-events: none; }
+
+        /* Scenarios */
+        .scenario-box { background: #18101F; border-radius: 12px; padding: 1rem 1.2rem; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.8; color: #E5D8FF; margin-bottom: 0.8rem; overflow-x: auto; }
+        .scenario-choices { display: flex; flex-direction: column; gap: 7px; margin-bottom: 0.6rem; }
+        .scenario-choice { border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; padding: 9px 13px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .scenario-choice:hover { background: #D3D1C7; }
+        .scenario-choice.correct { background: #EAF3DE; border-color: #22C55E; color: #166534; }
+        .scenario-choice.wrong   { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .scenario-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.4rem; display: none; line-height: 1.5; }
+        .scenario-feedback.show { display: block; }
+        .scenario-feedback.ok { color: #166534; }
+        .scenario-feedback.ko { color: #791F1F; }
+
+        .cta-section { background: #085041; border-radius: 20px; padding: 2.5rem 2rem; text-align: center; margin-top: 2rem; }
+        .cta-section h2 { font-size: 1.6rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; }
+        .cta-section p { color: #9FE1CB; font-size: 0.97rem; margin-bottom: 1.4rem; }
+        .cta-btn { display: inline-block; background: #A855F7; color: #fff; font-weight: 800; font-size: 1rem; border-radius: 12px; padding: 14px 32px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #9333EA; }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="cours-graphisme.html">← Retour au cours</a>
+
+<div class="hero">
+    <h1>🎨 Exercices<br>Graphisme & Sprites</h1>
+    <p>Spritesheet, animation, états, parallaxe et son</p>
+    <div class="badge-row">
+        <span class="badge b-purple">8 QCM</span>
+        <span class="badge b-blue">6 Associations</span>
+        <span class="badge b-amber">3 Code à compléter</span>
+        <span class="badge b-coral">3 Scénarios</span>
+        <span class="badge b-purple">7 Vrai/Faux</span>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="score-row" id="scoreRow"></div>
+</div>
+
+<!-- ═══════════════ QCM ═══════════════ -->
+<div class="section-label"><span class="section-label-text">QCM — Choix unique</span></div>
+
+<div id="qcm-zone"></div>
+
+<!-- ═══════════════ ASSOCIATIONS ═══════════════ -->
+<div class="section-label"><span class="section-label-text">Associations — Relier terme et définition</span></div>
+
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">🔗</div>Relier chaque terme à sa description</div>
+    <p class="desc">Clique sur un terme à gauche, puis sur la définition correspondante à droite.</p>
+    <div class="match-grid">
+        <div>
+            <div class="match-col-label">Terme</div>
+            <div id="left-items"></div>
+        </div>
+        <div>
+            <div class="match-col-label">Définition</div>
+            <div id="right-items"></div>
+        </div>
+    </div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkMatch()">Vérifier</button>
+        <button class="action-btn" onclick="resetMatch()">Réinitialiser</button>
+    </div>
+    <div id="match-feedback" class="desc" style="margin-top:0.6rem;display:none;"></div>
+</div>
+
+<!-- ═══════════════ CODE À COMPLÉTER ═══════════════ -->
+<div class="section-label"><span class="section-label-text">Code à compléter</span></div>
+
+<div id="code-zone"></div>
+
+<!-- ═══════════════ SCÉNARIOS ═══════════════ -->
+<div class="section-label"><span class="section-label-text">Scénarios — Trouver le bug</span></div>
+
+<div id="scenario-zone"></div>
+
+<!-- ═══════════════ VRAI / FAUX ═══════════════ -->
+<div class="section-label"><span class="section-label-text">Vrai / Faux</span></div>
+
+<div id="vf-zone"></div>
+
+<div class="btn-row" style="margin-top:0.5rem;">
+    <button class="action-btn primary" onclick="checkAll()">Corriger tout</button>
+    <button class="action-btn" onclick="resetAll()">Recommencer</button>
+</div>
+
+<div class="score-panel" id="scorePanel">
+    <div class="score-big" id="scoreBig">—</div>
+    <div class="score-sub" id="scoreSub"></div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section" style="margin-top:2.5rem;">
+    <h2>Prêt à animer ton personnage ?</h2>
+    <p>Spritesheet, parallaxe, son… tu maîtrises les bases. Place au projet !</p>
+    <a class="cta-btn" href="projet-graphisme.html">Projet Graphisme →</a>
+</div>
+
+<script>
+/* ═══ DATA ═══ */
+var QCM = [
+    {
+        q: "Combien de paramètres la version sprite de <code>drawImage()</code> accepte-t-elle ?",
+        opts: ["3 paramètres", "5 paramètres", "9 paramètres", "12 paramètres"],
+        ans: 2,
+        fb: "✅ drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh) — 9 paramètres : source (4) + destination (4) + image."
+    },
+    {
+        q: "À quoi sert la variable <code>FRAME_DELAY</code> dans une animation de sprite ?",
+        opts: ["Elle indique le nombre total de frames", "Elle règle le délai entre deux changements de frame", "Elle stocke l'image du personnage", "Elle définit la largeur d'une frame"],
+        ans: 1,
+        fb: "✅ FRAME_DELAY est un compteur : on incrémente animTimer à chaque frame de rendu, et on change de frame seulement quand animTimer >= FRAME_DELAY."
+    },
+    {
+        q: "Dans une spritesheet, comment choisit-on la colonne à afficher ?",
+        opts: ["On utilise currentFrame directement comme x", "On multiplie currentFrame par la largeur d'une frame (FW)", "On divise currentFrame par le nombre de lignes", "On utilise row * FH"],
+        ans: 1,
+        fb: "✅ sx = currentFrame * FW — currentFrame est l'index de colonne, on le multiplie par la largeur FW pour obtenir la position x dans la spritesheet."
+    },
+    {
+        q: "Quel paramètre de <code>drawImage</code> correspond à la ligne du personnage dans la spritesheet ?",
+        opts: ["sx", "sy", "dx", "sw"],
+        ans: 1,
+        fb: "✅ sy = row * FH — la ligne (état du personnage) multipliée par la hauteur FH donne la coordonnée y dans la spritesheet."
+    },
+    {
+        q: "Comment retourner horizontalement un sprite pour simuler un déplacement vers la gauche ?",
+        opts: ["ctx.rotate(-1, 1)", "ctx.flip('horizontal')", "ctx.scale(-1, 1) puis translatex", "ctx.mirror(joueur.x)"],
+        ans: 2,
+        fb: "✅ ctx.save(); ctx.scale(-1, 1); ctx.translate(-joueur.x * 2 - FW, 0); ctx.drawImage(...); ctx.restore();"
+    },
+    {
+        q: "Dans un décor en parallaxe, une couche avec <code>vitesse: 0.2</code> bouge :",
+        opts: ["Deux fois plus vite que le joueur", "Cinq fois plus lentement que le joueur", "À la même vitesse que le joueur", "Elle ne bouge pas"],
+        ans: 1,
+        fb: "✅ vitesse 0.2 signifie que le décalage de la couche = offset * 0.2 → elle se déplace 5 fois plus lentement, donnant l'impression de profondeur."
+    },
+    {
+        q: "Pour jouer un son <em>sans couper</em> le son précédent (SFX), on utilise :",
+        opts: ["son.play() deux fois", "son.cloneNode(true).play()", "son.restart()", "new Audio(son.src)"],
+        ans: 1,
+        fb: "✅ cloneNode(true) crée une copie de l'élément Audio — chaque clone joue indépendamment, permettant plusieurs superpositions du même son."
+    },
+    {
+        q: "Pourquoi le navigateur peut-il bloquer <code>musique.play()</code> au chargement ?",
+        opts: ["Le fichier audio est trop lourd", "La politique autoplay interdit la lecture sans interaction utilisateur", "Le format MP3 n'est pas supporté", "requestAnimationFrame bloque le son"],
+        ans: 1,
+        fb: "✅ Les navigateurs modernes bloquent la lecture automatique sans geste utilisateur (clic, touche...). Il faut déclencher play() dans un écouteur d'événement."
+    }
+];
+
+var MATCH_PAIRS = [
+    { left: "drawImage 9 params", right: "Découpe la spritesheet à la source et dessine à la destination" },
+    { left: "animTimer", right: "Compteur incrémenté à chaque frame de rendu" },
+    { left: "ETATS", right: "Objet associant un nom d'état à une ligne de la spritesheet" },
+    { left: "couches[]", right: "Tableau de décors triés par profondeur pour la parallaxe" },
+    { left: "new Audio()", right: "Crée un lecteur audio HTML sans balise dans le DOM" },
+    { left: "cloneNode(true)", right: "Copie un élément audio pour le jouer en superposition" }
+];
+
+var CODE_EXOS = [
+    {
+        title: "Afficher un sprite depuis une spritesheet",
+        desc: "Complète le code pour dessiner la 3e frame (index 2) de la ligne 1 (marche) depuis une spritesheet de frames 64×64.",
+        before: "const FW = 64, FH = 64;\nconst row = 1;         // ligne marche\nconst frame = 2;       // 3e frame\nctx.drawImage(\n  sprite,\n  frame * ",
+        blanks: ["FW", "row", "FH", "FW", "FH"],
+        labels: ["frame * ___ (sx)", "___ * FH (sy)", "hauteur source (sh)", "largeur dest (dw)", "hauteur dest (dh)"],
+        after: [", // sx\n  ", " * ", ", FW, ", ", // sy, sw\n  joueur.x, joueur.y, ", ", ", " // dx dy dw dh\n);"],
+        tokens: ["FW", "FH", "row", "currentFrame", "NB_FRAMES"]
+    },
+    {
+        title: "Système d'animation frame par frame",
+        desc: "Complète la fonction d'animation : incrémente le timer, change de frame quand le délai est atteint, et boucle.",
+        before: "const FRAME_DELAY = 8;\nconst NB_FRAMES = 4;\nlet currentFrame = 0;\nlet animTimer = 0;\n\nfunction updateAnim() {\n  ",
+        blanks: ["animTimer", "FRAME_DELAY", "animTimer", "currentFrame", "NB_FRAMES"],
+        labels: ["incrémenter le timer", "seuil à atteindre", "remettre à zéro", "passer à la frame suivante", "boucler"],
+        after: ["++;\n  if (", " >= ", ") {\n    ", " = 0;\n    ", " = (", " + 1) % ", ";\n  }\n}", ],
+        tokens: ["animTimer", "FRAME_DELAY", "NB_FRAMES", "currentFrame", "animSpeed"]
+    },
+    {
+        title: "Scrolling parallaxe",
+        desc: "Complète la fonction qui décale chaque couche proportionnellement à sa vitesse.",
+        before: "function updateCouches(dx) {\n  couches.forEach(function(c) {\n    c.offset -= dx * ",
+        blanks: ["c.vitesse", "c.offset", "c.largeur"],
+        labels: ["proportion du décalage", "remettre à zéro", "largeur de la tuile"],
+        after: [";\n    if (", " <= -", ") ", " += ", ";\n  });\n}"],
+        tokens: ["c.vitesse", "c.offset", "c.largeur", "dx", "c.x"]
+    }
+];
+
+var SCENARIOS = [
+    {
+        title: "Le mauvais sprite s'affiche",
+        code: "// L'ennemi doit marcher (row=1), mais on voit toujours son idle (row=0)\nctx.drawImage(sprite,\n  currentFrame * FW, 0, FW, FH,\n  ennemi.x, ennemi.y, FW, FH\n);",
+        choices: [
+            "Il faut remplacer 0 par row * FH pour choisir la bonne ligne",
+            "Il faut augmenter FRAME_DELAY",
+            "Il faut appeler clearRect avant drawImage"
+        ],
+        ans: 0,
+        fb: "✅ Le second paramètre de drawImage (sy) doit être row * FH, pas 0. row=0 force toujours la première ligne (idle)."
+    },
+    {
+        title: "L'animation est trop rapide",
+        code: "function updateAnim() {\n  // animTimer jamais utilisé\n  currentFrame = (currentFrame + 1) % NB_FRAMES;\n}",
+        choices: [
+            "Il faut augmenter NB_FRAMES",
+            "Il manque le système animTimer / FRAME_DELAY pour limiter la vitesse",
+            "Il faut utiliser setInterval à la place"
+        ],
+        ans: 1,
+        fb: "✅ Sans animTimer, la frame change à chaque rendu (60 fps). Il faut incrémenter animTimer et ne changer de frame que quand animTimer >= FRAME_DELAY."
+    },
+    {
+        title: "La musique ne se lance pas",
+        code: "// Au chargement de la page :\nconst musique = new Audio('theme.mp3');\nmusique.loop = true;\nmusique.play(); // bloqué par le navigateur",
+        choices: [
+            "Il faut appeler play() dans un setTimeout",
+            "Il faut déclencher play() lors d'une interaction utilisateur (clic, touche)",
+            "Il faut utiliser requestAnimationFrame pour démarrer la musique"
+        ],
+        ans: 1,
+        fb: "✅ La politique autoplay bloque play() sans geste. La solution : ajouter un écouteur sur le premier clic/touche qui appelle musique.play(), puis supprimer l'écouteur."
+    }
+];
+
+var VF = [
+    { stmt: "Une spritesheet est une image unique contenant toutes les frames d'un personnage.", ans: true,  fb: "✅ Exact ! On découpe cette image avec les 9 paramètres de drawImage." },
+    { stmt: "Les paramètres sx et sy de drawImage désignent la position de destination sur le canvas.", ans: false, fb: "❌ sx/sy sont les coordonnées SOURCE dans la spritesheet. dx/dy sont la destination sur le canvas." },
+    { stmt: "FRAME_DELAY = 1 donne l'animation la plus rapide possible (1 frame par rendu).", ans: true,  fb: "✅ Délai de 1 signifie qu'on change de frame à chaque boucle de rendu, soit environ 60 fois par seconde." },
+    { stmt: "ctx.scale(-1, 1) retourne le canvas horizontalement pour dessiner un miroir.", ans: true,  fb: "✅ On scale(-1,1) puis on translate pour recentrer, puis on drawImage, puis ctx.restore()." },
+    { stmt: "Dans un décor parallaxe, la couche la plus rapide (vitesse proche de 1) représente le fond éloigné.", ans: false, fb: "❌ C'est l'inverse : le fond éloigné se déplace lentement (vitesse faible, ex: 0.1). Les éléments proches (vitesse 1) bougent vite." },
+    { stmt: "cloneNode() est nécessaire pour qu'un effet sonore puisse se superposer à lui-même.", ans: true,  fb: "✅ Sans clone, replayer un son le remet à zéro. cloneNode() crée une copie indépendante." },
+    { stmt: "Le navigateur autorise toujours musique.play() sans interaction préalable de l'utilisateur.", ans: false, fb: "❌ La politique autoplay bloque la lecture automatique. Il faut un geste utilisateur (clic, touche) avant d'appeler play()." }
+];
+
+/* ═══ STATE ═══ */
+var qcmAnswers = {};
+var vfAnswers  = {};
+var matchLeft  = null;
+var matchDone  = {};
+var codeState  = [];
+var totalQ = QCM.length + VF.length + SCENARIOS.length + CODE_EXOS.length + MATCH_PAIRS.length;
+var correct = 0;
+
+/* ═══ BUILD QCM ═══ */
+(function buildQCM() {
+    var zone = document.getElementById('qcm-zone');
+    QCM.forEach(function(q, i) {
+        var div = document.createElement('div');
+        div.className = 'qcm-card';
+        div.id = 'qcard' + i;
+        var optsHTML = q.opts.map(function(o, j) {
+            return '<div class="opt" onclick="selectQCM(' + i + ',' + j + ')" id="opt' + i + '_' + j + '">' +
+                '<div class="opt-dot"><div class="opt-dot-inner"></div></div>' +
+                '<span>' + o + '</span></div>';
+        }).join('');
+        div.innerHTML = '<div class="q-num">Question ' + (i+1) + ' / ' + QCM.length + '</div>' +
+            '<div class="q-text">' + q.q + '</div>' +
+            '<div class="options">' + optsHTML + '</div>' +
+            '<div class="q-feedback" id="qfb' + i + '"></div>';
+        zone.appendChild(div);
+    });
+})();
+
+function selectQCM(qi, oi) {
+    if (qcmAnswers[qi] !== undefined) return;
+    qcmAnswers[qi] = oi;
+    var q = QCM[qi];
+    for (var j = 0; j < q.opts.length; j++) {
+        var el = document.getElementById('opt' + qi + '_' + j);
+        el.classList.remove('selected');
+        if (j === oi) el.classList.add('selected');
+    }
+    var ok = oi === q.ans;
+    var fbEl = document.getElementById('qfb' + qi);
+    // show correct
+    document.getElementById('opt' + qi + '_' + q.ans).className = 'opt correct';
+    if (!ok) document.getElementById('opt' + qi + '_' + oi).className = 'opt wrong';
+    fbEl.textContent = ok ? q.fb : '❌ ' + q.fb.replace('✅ ', '');
+    fbEl.className = 'q-feedback show ' + (ok ? 'ok' : 'ko');
+    updateProgress();
+}
+
+/* ═══ BUILD MATCH ═══ */
+(function buildMatch() {
+    var lefts  = MATCH_PAIRS.map(function(p) { return p.left; });
+    var rights = MATCH_PAIRS.map(function(p) { return p.right; });
+    rights = shuffle(rights.slice());
+    var lZone = document.getElementById('left-items');
+    var rZone = document.getElementById('right-items');
+    lefts.forEach(function(t, i) {
+        var d = document.createElement('div');
+        d.className = 'match-item'; d.id = 'ml' + i; d.dataset.idx = i;
+        d.textContent = t;
+        d.onclick = function() { clickLeft(i); };
+        lZone.appendChild(d);
+    });
+    rights.forEach(function(t, i) {
+        var d = document.createElement('div');
+        d.className = 'match-item'; d.id = 'mr' + i; d.dataset.val = t;
+        d.textContent = t;
+        d.onclick = function() { clickRight(t, d); };
+        rZone.appendChild(d);
+    });
+})();
+
+function clickLeft(i) {
+    if (matchDone['l'+i]) return;
+    document.querySelectorAll('#left-items .match-item').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('ml'+i).classList.add('active');
+    matchLeft = i;
+}
+function clickRight(val, el) {
+    if (matchLeft === null) return;
+    if (el.classList.contains('matched')) return;
+    var pair = MATCH_PAIRS[matchLeft];
+    var ok = pair.right === val;
+    if (ok) {
+        el.classList.add('matched');
+        document.getElementById('ml'+matchLeft).classList.add('matched');
+        matchDone['l'+matchLeft] = true;
+    } else {
+        el.classList.add('wrong-match');
+        setTimeout(function() { el.classList.remove('wrong-match'); }, 600);
+    }
+    document.querySelectorAll('#left-items .match-item').forEach(function(e) { e.classList.remove('active'); });
+    matchLeft = null;
+}
+function checkMatch() {
+    var done = Object.keys(matchDone).length;
+    var fb = document.getElementById('match-feedback');
+    fb.style.display = 'block';
+    if (done === MATCH_PAIRS.length) {
+        fb.textContent = '✅ Parfait ! Toutes les associations sont correctes.';
+        fb.style.color = '#166534';
+    } else {
+        fb.textContent = done + ' / ' + MATCH_PAIRS.length + ' associations correctes. Continue !';
+        fb.style.color = '#791F1F';
+    }
+    updateProgress();
+}
+function resetMatch() {
+    matchLeft = null; matchDone = {};
+    document.querySelectorAll('.match-item').forEach(function(el) {
+        el.className = 'match-item';
+    });
+    document.getElementById('match-feedback').style.display = 'none';
+}
+
+/* ═══ BUILD CODE FILL ═══ */
+(function buildCode() {
+    var zone = document.getElementById('code-zone');
+    codeState = CODE_EXOS.map(function(ex) { return ex.blanks.map(function() { return null; }); });
+
+    CODE_EXOS.forEach(function(ex, ei) {
+        var div = document.createElement('div');
+        div.className = 'card';
+
+        var bankHTML = ex.tokens.map(function(t) {
+            return '<span class="token" id="tok' + ei + '_' + t + '" onclick="placeToken(' + ei + ',\'' + t + '\')">' + t + '</span>';
+        }).join('');
+
+        // Build code display
+        var codeHTML = ex.before;
+        ex.blanks.forEach(function(_, bi) {
+            codeHTML += '<span class="blank" id="bl' + ei + '_' + bi + '" onclick="clearBlank(' + ei + ',' + bi + ')">___</span>';
+            if (ex.after[bi]) codeHTML += ex.after[bi];
+        });
+
+        div.innerHTML = '<div class="stitle"><div class="pill p-purple">💻</div>' + ex.title + '</div>' +
+            '<p class="desc">' + ex.desc + '</p>' +
+            '<div class="bank" id="bank' + ei + '">' + bankHTML + '</div>' +
+            '<div class="code-block"><pre style="white-space:pre-wrap;margin:0;">' + codeHTML + '</pre></div>' +
+            '<div class="btn-row">' +
+            '<button class="action-btn primary" onclick="checkCode(' + ei + ')">Vérifier</button>' +
+            '<button class="action-btn" onclick="resetCode(' + ei + ')">Réinitialiser</button>' +
+            '</div>' +
+            '<div id="codefb' + ei + '" class="desc" style="margin-top:0.6rem;display:none;"></div>';
+        zone.appendChild(div);
+    });
+})();
+
+var codeActive = CODE_EXOS.map(function() { return null; }); // which blank is active
+
+function placeToken(ei, tok) {
+    // find first empty blank
+    var blanks = codeState[ei];
+    for (var bi = 0; bi < blanks.length; bi++) {
+        if (blanks[bi] === null) {
+            blanks[bi] = tok;
+            document.getElementById('bl' + ei + '_' + bi).textContent = tok;
+            document.getElementById('tok' + ei + '_' + tok).classList.add('used');
+            return;
+        }
+    }
+}
+function clearBlank(ei, bi) {
+    var tok = codeState[ei][bi];
+    if (!tok) return;
+    codeState[ei][bi] = null;
+    document.getElementById('bl' + ei + '_' + bi).textContent = '___';
+    var tokEl = document.getElementById('tok' + ei + '_' + tok);
+    if (tokEl) tokEl.classList.remove('used');
+}
+function checkCode(ei) {
+    var ex = CODE_EXOS[ei];
+    var ok = true;
+    ex.blanks.forEach(function(ans, bi) {
+        var val = codeState[ei][bi];
+        var el = document.getElementById('bl' + ei + '_' + bi);
+        if (val === ans) { el.className = 'blank filled-ok'; }
+        else { el.className = 'blank filled-ko'; ok = false; }
+    });
+    var fb = document.getElementById('codefb' + ei);
+    fb.style.display = 'block';
+    fb.textContent = ok ? '✅ Parfait !' : '❌ Certaines réponses sont incorrectes. Regarde les cases rouges.';
+    fb.style.color = ok ? '#166534' : '#791F1F';
+    updateProgress();
+}
+function resetCode(ei) {
+    codeState[ei] = CODE_EXOS[ei].blanks.map(function() { return null; });
+    CODE_EXOS[ei].blanks.forEach(function(_, bi) {
+        var el = document.getElementById('bl' + ei + '_' + bi);
+        el.textContent = '___'; el.className = 'blank';
+    });
+    CODE_EXOS[ei].tokens.forEach(function(t) {
+        var el = document.getElementById('tok' + ei + '_' + t);
+        if (el) el.classList.remove('used');
+    });
+    document.getElementById('codefb' + ei).style.display = 'none';
+}
+
+/* ═══ BUILD SCENARIOS ═══ */
+(function buildScenarios() {
+    var zone = document.getElementById('scenario-zone');
+    SCENARIOS.forEach(function(sc, si) {
+        var div = document.createElement('div');
+        div.className = 'card';
+        div.id = 'scard' + si;
+        var choicesHTML = sc.choices.map(function(c, ci) {
+            return '<div class="scenario-choice" onclick="pickScenario(' + si + ',' + ci + ')" id="sc' + si + '_' + ci + '">' + c + '</div>';
+        }).join('');
+        div.innerHTML = '<div class="stitle"><div class="pill p-coral">🐛</div>' + sc.title + '</div>' +
+            '<div class="scenario-box"><pre style="white-space:pre-wrap;margin:0;">' + sc.code + '</pre></div>' +
+            '<div class="scenario-choices">' + choicesHTML + '</div>' +
+            '<div class="scenario-feedback" id="sfb' + si + '"></div>';
+        zone.appendChild(div);
+    });
+})();
+
+var scenarioDone = {};
+function pickScenario(si, ci) {
+    if (scenarioDone[si]) return;
+    scenarioDone[si] = true;
+    var sc = SCENARIOS[si];
+    var ok = ci === sc.ans;
+    document.getElementById('sc' + si + '_' + sc.ans).className = 'scenario-choice correct';
+    if (!ok) document.getElementById('sc' + si + '_' + ci).className = 'scenario-choice wrong';
+    var fb = document.getElementById('sfb' + si);
+    fb.textContent = ok ? sc.fb : '❌ ' + sc.fb.replace('✅ ', '');
+    fb.className = 'scenario-feedback show ' + (ok ? 'ok' : 'ko');
+    updateProgress();
+}
+
+/* ═══ BUILD V/F ═══ */
+(function buildVF() {
+    var zone = document.getElementById('vf-zone');
+    VF.forEach(function(item, i) {
+        var div = document.createElement('div');
+        div.className = 'vf-card';
+        div.id = 'vfcard' + i;
+        div.innerHTML = '<div class="vf-statement">' + (i+1) + '. ' + item.stmt + '</div>' +
+            '<div class="vf-btns">' +
+            '<button class="vf-btn" id="vfv' + i + '" onclick="selectVF(' + i + ',true)">✓ Vrai</button>' +
+            '<button class="vf-btn" id="vff' + i + '" onclick="selectVF(' + i + ',false)">✗ Faux</button>' +
+            '</div>' +
+            '<div class="vf-feedback" id="vffb' + i + '"></div>';
+        zone.appendChild(div);
+    });
+})();
+
+function selectVF(i, val) {
+    if (vfAnswers[i] !== undefined) return;
+    vfAnswers[i] = val;
+    var vBtn = document.getElementById('vfv' + i);
+    var fBtn = document.getElementById('vff' + i);
+    [vBtn, fBtn].forEach(function(b) {
+        b.style.background = ''; b.style.borderColor = ''; b.style.color = ''; b.style.fontWeight = '';
+    });
+    var sel = val === true ? vBtn : fBtn;
+    sel.style.background  = val === true ? '#FAF5FF' : '#FCEBEB';
+    sel.style.borderColor = val === true ? '#A855F7' : '#F09595';
+    sel.style.color       = val === true ? '#6B21A8' : '#791F1F';
+    sel.style.fontWeight  = '800';
+}
+
+function checkAll() {
+    correct = 0;
+    // QCM
+    QCM.forEach(function(q, i) {
+        if (qcmAnswers[i] === q.ans) correct++;
+    });
+    // VF
+    VF.forEach(function(item, i) {
+        if (vfAnswers[i] === undefined) return;
+        var vBtn = document.getElementById('vfv' + i);
+        var fBtn = document.getElementById('vff' + i);
+        [vBtn, fBtn].forEach(function(b) {
+            b.style.background = ''; b.style.borderColor = ''; b.style.color = ''; b.style.fontWeight = '';
+        });
+        var ok = vfAnswers[i] === item.ans;
+        if (ok) correct++;
+        var correctBtn = item.ans === true ? vBtn : fBtn;
+        var wrongBtn   = item.ans === true ? fBtn  : vBtn;
+        correctBtn.classList.add('correct-ans');
+        if (!ok && vfAnswers[i] !== undefined) wrongBtn.classList.add('wrong-ans');
+        var fb = document.getElementById('vffb' + i);
+        fb.textContent = ok ? item.fb : '❌ ' + item.fb.replace('✅ ', '');
+        fb.className = 'vf-feedback show ' + (ok ? 'ok' : 'ko');
+    });
+    // Scenarios
+    SCENARIOS.forEach(function(sc, si) {
+        if (scenarioDone[si] && document.getElementById('sc' + si + '_' + sc.ans).classList.contains('correct')) correct++;
+    });
+    // Show panel
+    var total = QCM.length + VF.filter(function(_,i){return vfAnswers[i]!==undefined;}).length + Object.keys(scenarioDone).length;
+    var panel = document.getElementById('scorePanel');
+    panel.classList.add('show');
+    document.getElementById('scoreBig').innerHTML = correct + '<span>/' + total + '</span>';
+    document.getElementById('scoreSub').textContent = correct >= total * 0.8 ? '🎉 Excellent travail !' : 'Continue à t\'entraîner !';
+    updateProgress();
+}
+
+function resetAll() {
+    qcmAnswers = {}; vfAnswers = {}; matchLeft = null; matchDone = {}; scenarioDone = {};
+    document.querySelectorAll('.opt').forEach(function(el) { el.className = 'opt'; });
+    document.querySelectorAll('.q-feedback').forEach(function(el) { el.className = 'q-feedback'; el.textContent = ''; });
+    document.querySelectorAll('.vf-btn').forEach(function(b) {
+        b.className = 'vf-btn'; b.style.background=''; b.style.borderColor=''; b.style.color=''; b.style.fontWeight='';
+    });
+    document.querySelectorAll('.vf-feedback').forEach(function(el) { el.className = 'vf-feedback'; el.textContent = ''; });
+    document.querySelectorAll('.scenario-choice').forEach(function(el) { el.className = 'scenario-choice'; });
+    document.querySelectorAll('.scenario-feedback').forEach(function(el) { el.className = 'scenario-feedback'; el.textContent = ''; });
+    resetMatch();
+    CODE_EXOS.forEach(function(_, ei) { resetCode(ei); });
+    document.getElementById('scorePanel').classList.remove('show');
+    updateProgress();
+}
+
+function updateProgress() {
+    var answered = Object.keys(qcmAnswers).length + Object.keys(vfAnswers).length + Object.keys(scenarioDone).length;
+    var pct = Math.round(answered / (QCM.length + VF.length + SCENARIOS.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    var row = document.getElementById('scoreRow');
+    row.innerHTML = '<span class="chip chip-ok">✓ ' + answered + ' répondu(s)</span>' +
+        '<span class="chip chip-ko">○ ' + (QCM.length + VF.length + SCENARIOS.length - answered) + ' restant(s)</span>';
+}
+
+function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i+1));
+        var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+}
+</script>
+</body>
+</html>

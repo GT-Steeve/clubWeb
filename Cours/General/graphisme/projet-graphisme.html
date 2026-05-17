@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet — Personnage animé</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 740px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #6B21A8; text-decoration: none; margin-bottom: 1.5rem; background: #FAF5FF; border: 0.5px solid #E9D5FF; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #F3E8FF; }
+        .hero { text-align: center; padding: 2rem 1rem 1.5rem; }
+        .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; }
+
+        /* Progress bar */
+        .prog-bar-wrap { margin: 1.5rem 0; }
+        .prog-steps { display: flex; gap: 6px; margin-bottom: 8px; }
+        .prog-step { flex: 1; height: 6px; border-radius: 10px; background: #D3D1C7; transition: background 0.3s; }
+        .prog-step.done { background: #A855F7; }
+        .prog-step.active { background: #C084FC; }
+        .prog-label { font-size: 0.83rem; color: #888780; font-weight: 700; text-align: center; }
+
+        /* Steps */
+        .step-card { border-radius: 20px; border: 0.5px solid #E9D5FF; background: #fff; padding: 1.8rem; margin-bottom: 1.5rem; display: none; }
+        .step-card.active { display: block; }
+        .step-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1rem; }
+        .step-num { width: 44px; height: 44px; border-radius: 14px; background: #F3E8FF; color: #6B21A8; font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .step-title { font-size: 1.15rem; font-weight: 800; line-height: 1.3; }
+        .step-sub { font-size: 0.88rem; color: #6B21A8; font-weight: 700; margin-top: 2px; }
+        .step-desc { font-size: 0.95rem; color: #5F5E5A; line-height: 1.75; margin-bottom: 1.2rem; }
+        .step-desc strong { color: #2C2C2A; }
+
+        /* Code blocks */
+        .code-block { background: #18101F; border-radius: 14px; padding: 1.2rem 1.4rem; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.85; color: #E5D8FF; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; white-space: pre-wrap; }
+        .cmt { color: #7C5FA0; }
+        .kw  { color: #C084FC; }
+        .str { color: #86EFAC; }
+        .num { color: #FCD34D; }
+        .fn  { color: #93C5FD; }
+
+        /* Concept cards */
+        .concept { background: #FAF5FF; border-left: 3px solid #A855F7; border-radius: 0 10px 10px 0; padding: 0.9rem 1.1rem; margin: 1rem 0; font-size: 0.9rem; line-height: 1.7; }
+        .concept strong { color: #6B21A8; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #F3E8FF; padding: 1px 5px; border-radius: 4px; color: #6B21A8; }
+
+        /* Demo canvas */
+        .demo-wrap { background: #18101F; border-radius: 16px; padding: 1.2rem; margin: 1rem 0; text-align: center; }
+        .demo-wrap canvas { border-radius: 10px; max-width: 100%; display: block; margin: 0 auto; }
+        .demo-label { font-size: 0.8rem; color: #7C5FA0; margin-top: 0.6rem; font-family: 'Fira Code', monospace; }
+        .demo-controls { display: flex; gap: 8px; justify-content: center; margin-top: 0.8rem; flex-wrap: wrap; }
+        .demo-btn { background: #2D0040; border: 0.5px solid #A855F7; color: #C084FC; border-radius: 8px; padding: 6px 14px; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .demo-btn:hover { background: #3D0060; }
+        .demo-btn.active-btn { background: #A855F7; color: #fff; }
+
+        /* Step nav */
+        .step-nav { display: flex; gap: 10px; margin-top: 1.4rem; flex-wrap: wrap; }
+        .nav-btn { border-radius: 12px; padding: 10px 24px; font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: background 0.12s; }
+        .nav-btn.prev { background: #F1EFE8; color: #2C2C2A; border: 0.5px solid #B4B2A9; }
+        .nav-btn.prev:hover { background: #D3D1C7; }
+        .nav-btn.next { background: #A855F7; color: #fff; }
+        .nav-btn.next:hover { background: #9333EA; }
+
+        /* Tip boxes */
+        .tip { background: #FFFBEB; border-left: 3px solid #F59E0B; border-radius: 0 10px 10px 0; padding: 0.9rem 1.1rem; margin: 1rem 0; font-size: 0.9rem; line-height: 1.7; }
+        .tip strong { color: #92400E; }
+
+        /* Ideas section */
+        .ideas-section { background: #2D0040; border-radius: 20px; padding: 2rem; margin-top: 2rem; }
+        .ideas-section h2 { font-size: 1.3rem; font-weight: 800; color: #E9D5FF; margin-bottom: 0.3rem; }
+        .ideas-section p { font-size: 0.9rem; color: #A78BCC; margin-bottom: 1.2rem; }
+        .idea-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media(max-width:480px) { .idea-grid { grid-template-columns: 1fr; } }
+        .idea-card { background: #3D0060; border-radius: 14px; padding: 1.1rem; border: 0.5px solid #6D28D9; }
+        .idea-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+        .idea-title { font-size: 0.95rem; font-weight: 800; color: #E9D5FF; margin-bottom: 0.3rem; }
+        .idea-desc { font-size: 0.83rem; color: #A78BCC; line-height: 1.6; }
+        .idea-prompt { font-size: 0.78rem; color: #7C5FA0; margin-top: 0.5rem; font-style: italic; }
+
+        .cta-section { background: #085041; border-radius: 20px; padding: 2.5rem 2rem; text-align: center; margin-top: 2rem; }
+        .cta-section h2 { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; }
+        .cta-section p { color: #9FE1CB; font-size: 0.97rem; margin-bottom: 1.4rem; }
+        .cta-btn { display: inline-block; background: #A855F7; color: #fff; font-weight: 800; font-size: 1rem; border-radius: 12px; padding: 14px 32px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #9333EA; }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="exercices-graphisme.html">← Retour aux exercices</a>
+
+<div class="hero">
+    <h1>🎨 Projet<br>Personnage animé</h1>
+    <p>Construis un personnage qui marche, court et saute — avec décor en parallaxe et son</p>
+</div>
+
+<!-- Progress bar -->
+<div class="prog-bar-wrap">
+    <div class="prog-steps" id="progSteps"></div>
+    <div class="prog-label" id="progLabel">Étape 1 / 6</div>
+</div>
+
+<!-- Live demo -->
+<div class="demo-wrap" style="margin-bottom:1.5rem;">
+    <canvas id="demoCanvas" width="560" height="220"></canvas>
+    <div class="demo-label">Démo — Résultat final de ce projet (clavier : ← → Z/Espace pour sauter, Shift pour courir)</div>
+    <div class="demo-controls">
+        <button class="demo-btn" id="demoToggle" onclick="toggleDemo()">⏸ Pause</button>
+    </div>
+</div>
+
+<!-- Steps -->
+<div id="steps-container"></div>
+
+<!-- Ideas section (hidden initially, shown after last step) -->
+<div class="ideas-section" id="ideasSection" style="display:none;">
+    <h2>🚀 Pour aller plus loin</h2>
+    <p>Ton personnage est animé — continue d'explorer !</p>
+    <div class="idea-grid">
+        <div class="idea-card">
+            <div class="idea-icon">💥</div>
+            <div class="idea-title">Particules au saut</div>
+            <div class="idea-desc">Quand le joueur saute, génère des particules qui tombent et s'estompent.</div>
+            <div class="idea-prompt">Prompt IA : "Ajoute un système de particules canvas qui se déclenchent au saut d'un personnage en JS"</div>
+        </div>
+        <div class="idea-card">
+            <div class="idea-icon">👾</div>
+            <div class="idea-title">Ennemi à patrouille</div>
+            <div class="idea-desc">Crée un ennemi qui fait des allers-retours sur une plateforme et inverse sa direction aux bords.</div>
+            <div class="idea-prompt">Prompt IA : "Crée un ennemi animé avec spritesheet qui patrouille entre deux bornes en canvas JS"</div>
+        </div>
+        <div class="idea-card">
+            <div class="idea-icon">⭐</div>
+            <div class="idea-title">Fond étoilé animé</div>
+            <div class="idea-desc">Remplace la couche de fond par des étoiles qui scintillent aléatoirement.</div>
+            <div class="idea-prompt">Prompt IA : "Génère un fond étoilé canvas avec scintillement aléatoire pour un jeu en JS"</div>
+        </div>
+        <div class="idea-card">
+            <div class="idea-icon">🎵</div>
+            <div class="idea-title">Musique dynamique</div>
+            <div class="idea-desc">Change la musique selon l'état : calme à l'idle, intense en course, son de saut distinct.</div>
+            <div class="idea-prompt">Prompt IA : "Gère plusieurs pistes audio HTML5 qui changent selon l'état d'un personnage de jeu"</div>
+        </div>
+    </div>
+</div>
+
+<div class="cta-section" id="ctaSection" style="margin-top:2rem;">
+    <h2>Prêt pour le Game Design ?</h2>
+    <p>Écran titre, menu, gameplay, fin de niveau… construis un jeu complet !</p>
+    <a class="cta-btn" href="../../sommaire.html#step3">Voir le sommaire →</a>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   DEMO CANVAS — personnage simulé (sans PNG)
+   ═══════════════════════════════════════ */
+var demoCanvas = document.getElementById('demoCanvas');
+var demoCtx = demoCanvas.getContext('2d');
+var demoRunning = true;
+var demoRAF;
+
+// Parallax layers
+var layers = [
+    { color:'#1A0D2A', stars: generateStars(40) },
+    { color:'#2D1545', y: 100, peaks: generatePeaks(6, 220) },
+    { color:'#3D1F5E', y: 140, peaks: generatePeaks(8, 220) },
+    { color:'#1A3320', y: 180 }
+];
+function generateStars(n) {
+    var arr = [];
+    for (var i = 0; i < n; i++) arr.push({ x: Math.random()*560, y: Math.random()*120, r: Math.random()*1.5+0.5, t: Math.random()*100 });
+    return arr;
+}
+function generatePeaks(n, W) {
+    var pts = [{ x:0, y: Math.random()*40 + 60 }];
+    for (var i = 1; i < n; i++) pts.push({ x: W/n * i, y: Math.random()*50 + 50 });
+    pts.push({ x: W, y: Math.random()*40 + 60 });
+    return pts;
+}
+
+var demoOffsets = [0, 0, 0, 0];
+var demoDX = 2;
+
+// Character
+var FW = 40, FH = 40;
+var ETATS = { IDLE:0, MARCHE:1, COURSE:2, SAUT:3 };
+var joueur = { x: 80, y: 160, vx: 0, vy: 0, dir: 1, etat: ETATS.IDLE, frame: 0, timer: 0 };
+var GRAVITE = 0.5, FORCE_SAUT = -11;
+var SOL_Y = 160;
+var touche = { left: false, right: false, shift: false };
+var COLORS = ['#A855F7','#C084FC','#E9D5FF','#7C3AED'];
+
+// Eyes positions per frame
+var eyeOffsets = [2, 1, 0, 1];
+
+document.addEventListener('keydown', function(e) {
+    if (e.key==='ArrowLeft') touche.left=true;
+    if (e.key==='ArrowRight') touche.right=true;
+    if (e.key==='Shift') touche.shift=true;
+    if (e.key==='z'||e.key==='Z'||e.key===' ') { if (joueur.y >= SOL_Y) joueur.vy = FORCE_SAUT; }
+    e.preventDefault();
+});
+document.addEventListener('keyup', function(e) {
+    if (e.key==='ArrowLeft') touche.left=false;
+    if (e.key==='ArrowRight') touche.right=false;
+    if (e.key==='Shift') touche.shift=false;
+});
+
+function demoUpdate() {
+    var speed = touche.shift ? 4 : 2;
+    joueur.vx = 0;
+    if (touche.left)  { joueur.vx = -speed; joueur.dir = -1; }
+    if (touche.right) { joueur.vx =  speed; joueur.dir =  1; }
+    joueur.x = Math.max(10, Math.min(demoCanvas.width - FW - 10, joueur.x + joueur.vx));
+    joueur.vy += GRAVITE;
+    joueur.y += joueur.vy;
+    if (joueur.y >= SOL_Y) { joueur.y = SOL_Y; joueur.vy = 0; }
+    // State
+    if (joueur.y < SOL_Y) joueur.etat = ETATS.SAUT;
+    else if (joueur.vx !== 0 && touche.shift) joueur.etat = ETATS.COURSE;
+    else if (joueur.vx !== 0) joueur.etat = ETATS.MARCHE;
+    else joueur.etat = ETATS.IDLE;
+    // Animate
+    var delay = joueur.etat === ETATS.COURSE ? 4 : 8;
+    joueur.timer++;
+    if (joueur.timer >= delay) { joueur.timer = 0; joueur.frame = (joueur.frame+1) % 4; }
+    // Parallax
+    if (joueur.vx !== 0) {
+        demoOffsets[1] -= joueur.vx * 0.15;
+        demoOffsets[2] -= joueur.vx * 0.35;
+        demoOffsets[3] -= joueur.vx * 0.7;
+    }
+}
+
+function demoDraw() {
+    var c = demoCtx, W = 560, H = 220;
+    c.fillStyle = '#0E0718'; c.fillRect(0,0,W,H);
+    // Stars
+    layers[0].stars.forEach(function(s) {
+        s.t++;
+        var alpha = 0.5 + 0.5 * Math.sin(s.t * 0.05);
+        c.fillStyle = 'rgba(255,255,255,' + alpha + ')';
+        c.beginPath(); c.arc(s.x, s.y, s.r, 0, Math.PI*2); c.fill();
+    });
+    // Mountain layers
+    function drawMountain(color, perc, offsetIdx) {
+        var off = ((demoOffsets[offsetIdx] % 560) + 560) % 560;
+        c.fillStyle = color;
+        c.beginPath(); c.moveTo(0 - off, H);
+        // simple mountain shape
+        var steps = 8;
+        for (var i = 0; i <= steps; i++) {
+            var px = (i / steps) * 560 - off;
+            var py = H * perc + Math.sin(i * 0.9 + offsetIdx) * 25;
+            c.lineTo(px, py);
+        }
+        c.lineTo(W, H); c.closePath(); c.fill();
+        // repeat for seamless
+        c.beginPath(); c.moveTo(560 - off, H);
+        for (var i = 0; i <= steps; i++) {
+            var px = 560 + (i / steps) * 560 - off;
+            var py = H * perc + Math.sin(i * 0.9 + offsetIdx) * 25;
+            c.lineTo(px, py);
+        }
+        c.lineTo(W + 560, H); c.closePath(); c.fill();
+    }
+    drawMountain('#2D1545', 0.52, 1);
+    drawMountain('#3D1F5E', 0.62, 2);
+    // Ground
+    c.fillStyle = '#1A3320'; c.fillRect(0, SOL_Y + FH, W, H - (SOL_Y + FH));
+    c.fillStyle = '#2D5A3D'; c.fillRect(0, SOL_Y + FH, W, 6);
+
+    // Character (colored blocks simulating sprite)
+    c.save();
+    if (joueur.dir === -1) {
+        c.translate(joueur.x * 2 + FW, 0);
+        c.scale(-1, 1);
+    }
+    var bodyColor = COLORS[joueur.etat];
+    // Body
+    c.fillStyle = bodyColor;
+    c.beginPath(); c.roundRect(joueur.x, joueur.y, FW, FH, 8); c.fill();
+    // Frame indicator (simulating animation)
+    var frameW = FW / 4;
+    c.fillStyle = 'rgba(255,255,255,0.2)';
+    c.fillRect(joueur.x + joueur.frame * frameW, joueur.y, frameW, FH);
+    // Eyes
+    var eyeY = joueur.y + 10 + eyeOffsets[joueur.frame];
+    c.fillStyle = '#fff';
+    c.beginPath(); c.arc(joueur.x + 12, eyeY, 4, 0, Math.PI*2); c.fill();
+    c.beginPath(); c.arc(joueur.x + 28, eyeY, 4, 0, Math.PI*2); c.fill();
+    c.fillStyle = '#1A0D2A';
+    c.beginPath(); c.arc(joueur.x + 13, eyeY, 2, 0, Math.PI*2); c.fill();
+    c.beginPath(); c.arc(joueur.x + 29, eyeY, 2, 0, Math.PI*2); c.fill();
+    // State badge
+    var labels = ['IDLE','MARCHE','COURSE','SAUT'];
+    c.fillStyle = 'rgba(0,0,0,0.6)'; c.font = '700 9px Nunito'; c.textAlign = 'center';
+    c.fillText(labels[joueur.etat], joueur.x + FW/2, joueur.y - 4);
+    c.restore();
+}
+
+function demoLoop() {
+    if (!demoRunning) return;
+    demoUpdate();
+    demoDraw();
+    demoRAF = requestAnimationFrame(demoLoop);
+}
+
+function toggleDemo() {
+    demoRunning = !demoRunning;
+    document.getElementById('demoToggle').textContent = demoRunning ? '⏸ Pause' : '▶ Reprendre';
+    if (demoRunning) demoLoop();
+}
+
+// Start
+demoLoop();
+
+/* ═══════════════════════════════════════
+   STEPS
+   ═══════════════════════════════════════ */
+var STEPS = [
+    {
+        num: 1, title: "HTML & CSS de base", sub: "Le canvas et la structure de la page",
+        content: `
+<p class="step-desc">On commence par créer la page HTML avec un <strong>canvas</strong> pour le jeu, et un peu de CSS pour le fond sombre.</p>
+<div class="concept"><strong>Pourquoi un fond sombre ?</strong> Les jeux de plateforme ont souvent un décor nocturne ou fantastique. Le canvas sera notre "fenêtre" vers le monde du jeu.</div>
+<div class="code-block"><pre><span class="cmt">&lt;!-- index.html --&gt;</span>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="fr"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Mon personnage animé&lt;/title&gt;
+  &lt;style&gt;
+    body {
+      background: #0E0718;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    #jeu {
+      border-radius: 12px;
+      border: 2px solid #A855F7;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;canvas id="jeu" width="600" height="300"&gt;&lt;/canvas&gt;
+  &lt;script src="jeu.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></div>
+<p class="step-desc">Dans <strong>jeu.js</strong>, on récupère le contexte 2D pour pouvoir dessiner :</p>
+<div class="code-block"><pre><span class="cmt">// jeu.js</span>
+<span class="kw">const</span> canvas = document.getElementById(<span class="str">'jeu'</span>);
+<span class="kw">const</span> ctx = canvas.getContext(<span class="str">'2d'</span>);
+<span class="kw">const</span> W = canvas.width;
+<span class="kw">const</span> H = canvas.height;</pre></div>
+<p class="step-desc">Teste que ça s'affiche : ajoute <code>ctx.fillStyle = '#A855F7'; ctx.fillRect(0,0,100,100);</code> pour voir un carré violet.</p>`
+    },
+    {
+        num: 2, title: "Charger et découper la spritesheet", sub: "drawImage avec 9 paramètres",
+        content: `
+<p class="step-desc">Une spritesheet est une grande image qui contient toutes les animations de ton personnage. On la découpe avec <strong>drawImage()</strong>.</p>
+<div class="concept"><strong>Les 9 paramètres :</strong><br>
+<code>ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh)</code><br><br>
+• <strong>sx, sy</strong> : position de découpe dans la spritesheet<br>
+• <strong>sw, sh</strong> : taille du morceau à découper<br>
+• <strong>dx, dy</strong> : position de destination sur le canvas<br>
+• <strong>dw, dh</strong> : taille à dessiner</div>
+<div class="code-block"><pre><span class="cmt">// Charger le sprite</span>
+<span class="kw">const</span> sprite = <span class="kw">new</span> Image();
+sprite.src = <span class="str">'personnage.png'</span>;
+
+<span class="cmt">// Dimensions d'une frame</span>
+<span class="kw">const</span> FW = <span class="num">64</span>;  <span class="cmt">// largeur frame</span>
+<span class="kw">const</span> FH = <span class="num">64</span>;  <span class="cmt">// hauteur frame</span>
+
+<span class="cmt">// Lignes par état (selon ta spritesheet)</span>
+<span class="kw">const</span> LIGNES = {
+  idle:   <span class="num">0</span>,
+  marche: <span class="num">1</span>,
+  course: <span class="num">2</span>,
+  saut:   <span class="num">3</span>
+};
+
+<span class="cmt">// Dessiner la frame 2 de l'animation marche</span>
+<span class="kw">const</span> row = LIGNES.marche;
+<span class="kw">const</span> frame = <span class="num">2</span>;
+ctx.drawImage(
+  sprite,
+  frame * FW, row * FH, FW, FH,  <span class="cmt">// source</span>
+  joueur.x, joueur.y, FW, FH      <span class="cmt">// destination</span>
+);</pre></div>
+<div class="tip"><strong>💡 Sans spritesheet ?</strong> Tu peux tester avec des rectangles colorés comme dans la démo ci-dessus, puis remplacer par ton image quand elle est prête. Il existe des spritesheets libres de droits sur <em>OpenGameArt.org</em>.</div>`
+    },
+    {
+        num: 3, title: "Système d'animation", sub: "currentFrame, animTimer, FRAME_DELAY",
+        content: `
+<p class="step-desc">On change de frame régulièrement pour créer l'illusion du mouvement. Le truc : ne pas changer à chaque rendu (trop rapide), mais utiliser un compteur.</p>
+<div class="code-block"><pre><span class="cmt">// Variables d'animation</span>
+<span class="kw">let</span> currentFrame = <span class="num">0</span>;
+<span class="kw">let</span> animTimer    = <span class="num">0</span>;
+<span class="kw">const</span> FRAME_DELAY = <span class="num">8</span>;   <span class="cmt">// 8 rendus entre chaque frame</span>
+<span class="kw">const</span> NB_FRAMES   = <span class="num">4</span>;   <span class="cmt">// à ajuster selon ta spritesheet</span>
+
+<span class="kw">function</span> <span class="fn">updateAnim</span>() {
+  animTimer++;
+  <span class="kw">if</span> (animTimer &gt;= FRAME_DELAY) {
+    animTimer = <span class="num">0</span>;
+    currentFrame = (currentFrame + <span class="num">1</span>) % NB_FRAMES;
+  }
+}
+
+<span class="cmt">// Dans la boucle principale :</span>
+<span class="kw">function</span> <span class="fn">loop</span>() {
+  updateAnim();
+  draw();
+  requestAnimationFrame(loop);
+}</pre></div>
+<div class="concept"><strong>Vitesse adaptative :</strong> Change FRAME_DELAY selon l'état.<br>
+• Idle : <code>12</code> (lent, respiration)<br>
+• Marche : <code>8</code> (normal)<br>
+• Course : <code>4</code> (rapide)<br>
+• Saut : <code>10</code> (une seule frame suffit souvent)</div>
+<p class="step-desc">Pour choisir la bonne ligne selon l'état du personnage :</p>
+<div class="code-block"><pre><span class="cmt">// Objet d'états</span>
+<span class="kw">const</span> ETATS = { IDLE:<span class="num">0</span>, MARCHE:<span class="num">1</span>, COURSE:<span class="num">2</span>, SAUT:<span class="num">3</span> };
+<span class="kw">let</span> etat = ETATS.IDLE;
+
+<span class="cmt">// Dans update() :</span>
+<span class="kw">if</span> (joueur.y &lt; SOL_Y)         etat = ETATS.SAUT;
+<span class="kw">else if</span> (joueur.vx !== <span class="num">0</span> &amp;&amp; shift) etat = ETATS.COURSE;
+<span class="kw">else if</span> (joueur.vx !== <span class="num">0</span>)   etat = ETATS.MARCHE;
+<span class="kw">else</span>                          etat = ETATS.IDLE;
+
+<span class="cmt">// Dans draw() :</span>
+ctx.drawImage(sprite,
+  currentFrame * FW, etat * FH, FW, FH,
+  joueur.x, joueur.y, FW, FH
+);</pre></div>`
+    },
+    {
+        num: 4, title: "Décor en parallaxe", sub: "Plusieurs couches à vitesses différentes",
+        content: `
+<p class="step-desc">La parallaxe donne une impression de profondeur : les éléments proches bougent vite, les éléments lointains bougent lentement.</p>
+<div class="code-block"><pre><span class="cmt">// Tableau de couches (triées de la plus lointaine à la plus proche)</span>
+<span class="kw">const</span> couches = [
+  { image: imgCiel,       vitesse: <span class="num">0</span>,    offset: <span class="num">0</span> },
+  { image: imgMontagnes,  vitesse: <span class="num">0.15</span>, offset: <span class="num">0</span> },
+  { image: imgArbres,     vitesse: <span class="num">0.4</span>,  offset: <span class="num">0</span> },
+  { image: imgSol,        vitesse: <span class="num">1</span>,    offset: <span class="num">0</span> }
+];
+
+<span class="cmt">// Mettre à jour les offsets selon le déplacement du joueur</span>
+<span class="kw">function</span> <span class="fn">updateCouches</span>(dx) {
+  couches.forEach(<span class="kw">function</span>(c) {
+    c.offset -= dx * c.vitesse;
+    <span class="cmt">// Boucle infinie</span>
+    <span class="kw">if</span> (c.offset &lt;= -W) c.offset += W;
+    <span class="kw">if</span> (c.offset &gt;= W)  c.offset -= W;
+  });
+}
+
+<span class="cmt">// Dessiner chaque couche (double dessin pour seamless)</span>
+<span class="kw">function</span> <span class="fn">drawCouches</span>() {
+  couches.forEach(<span class="kw">function</span>(c) {
+    ctx.drawImage(c.image, c.offset, <span class="num">0</span>, W, H);
+    ctx.drawImage(c.image, c.offset + W, <span class="num">0</span>, W, H);
+    ctx.drawImage(c.image, c.offset - W, <span class="num">0</span>, W, H);
+  });
+}</pre></div>
+<div class="tip"><strong>💡 Images en tuile :</strong> Pour que le défilement soit fluide, les images de chaque couche doivent être "tileable" (le bord droit raccorde avec le bord gauche). Si tu n'as pas d'images, utilise des formes canvas dessinées à la main comme dans la démo.</div>
+<p class="step-desc">Pour retourner le personnage quand il va à gauche :</p>
+<div class="code-block"><pre><span class="kw">function</span> <span class="fn">drawJoueur</span>() {
+  ctx.save();
+  <span class="kw">if</span> (joueur.dir === -<span class="num">1</span>) {  <span class="cmt">// Va à gauche</span>
+    ctx.translate(joueur.x * <span class="num">2</span> + FW, <span class="num">0</span>);
+    ctx.scale(-<span class="num">1</span>, <span class="num">1</span>);
+  }
+  ctx.drawImage(sprite,
+    currentFrame * FW, etat * FH, FW, FH,
+    joueur.x, joueur.y, FW, FH
+  );
+  ctx.restore();
+}</pre></div>`
+    },
+    {
+        num: 5, title: "Physique & Clavier", sub: "Gravité, saut, déplacement, états",
+        content: `
+<p class="step-desc">On ajoute la physique : gravité constante, saut avec force initiale, et détection du sol.</p>
+<div class="code-block"><pre><span class="cmt">// Constantes physiques</span>
+<span class="kw">const</span> GRAVITE    = <span class="num">0.5</span>;
+<span class="kw">const</span> FORCE_SAUT = -<span class="num">12</span>;
+<span class="kw">const</span> SOL_Y      = <span class="num">200</span>;  <span class="cmt">// y du sol</span>
+
+<span class="cmt">// Joueur</span>
+<span class="kw">let</span> joueur = {
+  x: <span class="num">80</span>, y: SOL_Y,
+  vx: <span class="num">0</span>, vy: <span class="num">0</span>,
+  dir: <span class="num">1</span>   <span class="cmt">// 1=droite, -1=gauche</span>
+};
+
+<span class="cmt">// Clavier</span>
+<span class="kw">const</span> touches = {};
+document.addEventListener(<span class="str">'keydown'</span>, <span class="kw">function</span>(e) { touches[e.key] = <span class="kw">true</span>; });
+document.addEventListener(<span class="str">'keyup'</span>,   <span class="kw">function</span>(e) { touches[e.key] = <span class="kw">false</span>; });
+
+<span class="kw">function</span> <span class="fn">update</span>() {
+  <span class="kw">const</span> speed = touches[<span class="str">'Shift'</span>] ? <span class="num">5</span> : <span class="num">3</span>;
+
+  <span class="cmt">// Déplacement horizontal</span>
+  joueur.vx = <span class="num">0</span>;
+  <span class="kw">if</span> (touches[<span class="str">'ArrowLeft'</span>])  { joueur.vx = -speed; joueur.dir = -<span class="num">1</span>; }
+  <span class="kw">if</span> (touches[<span class="str">'ArrowRight'</span>]) { joueur.vx =  speed; joueur.dir =  <span class="num">1</span>; }
+  joueur.x = Math.max(<span class="num">0</span>, Math.min(W - FW, joueur.x + joueur.vx));
+
+  <span class="cmt">// Gravité & saut</span>
+  joueur.vy += GRAVITE;
+  joueur.y  += joueur.vy;
+  <span class="kw">if</span> (joueur.y >= SOL_Y) {
+    joueur.y  = SOL_Y;
+    joueur.vy = <span class="num">0</span>;
+  }
+
+  <span class="cmt">// Saut (Z ou Espace, seulement au sol)</span>
+  <span class="kw">if</span> ((touches[<span class="str">'z'</span>] || touches[<span class="str">' '</span>]) &amp;&amp; joueur.y >= SOL_Y) {
+    joueur.vy = FORCE_SAUT;
+  }
+
+  <span class="cmt">// Décor parallaxe</span>
+  updateCouches(joueur.vx);
+  <span class="cmt">// État</span>
+  <span class="kw">if</span> (joueur.y &lt; SOL_Y) etat = ETATS.SAUT;
+  <span class="kw">else if</span> (joueur.vx !== <span class="num">0</span> &amp;&amp; touches[<span class="str">'Shift'</span>]) etat = ETATS.COURSE;
+  <span class="kw">else if</span> (joueur.vx !== <span class="num">0</span>) etat = ETATS.MARCHE;
+  <span class="kw">else</span>                       etat = ETATS.IDLE;
+}</pre></div>
+<div class="concept"><strong>Pour ajouter des plateformes :</strong> vérifie la collision AABB entre le joueur et chaque plateforme, et si le joueur "atterrit" dessus (vy > 0), ajuste son y.</div>`
+    },
+    {
+        num: 6, title: "Son, musique & finitions", sub: "HTMLAudioElement et boucle de jeu complète",
+        content: `
+<p class="step-desc">La dernière étape : ajouter la musique de fond, les sons d'effets, et assembler la boucle principale complète.</p>
+<div class="code-block"><pre><span class="cmt">// Musique de fond</span>
+<span class="kw">const</span> musique = <span class="kw">new</span> Audio(<span class="str">'musique.mp3'</span>);
+musique.loop   = <span class="kw">true</span>;
+musique.volume = <span class="num">0.4</span>;
+
+<span class="cmt">// Sons d'effets</span>
+<span class="kw">const</span> sonSaut  = <span class="kw">new</span> Audio(<span class="str">'saut.wav'</span>);
+<span class="kw">const</span> sonSol   = <span class="kw">new</span> Audio(<span class="str">'atterri.wav'</span>);
+
+<span class="cmt">// Jouer un SFX en superposition (cloneNode !)</span>
+<span class="kw">function</span> <span class="fn">playSFX</span>(son) {
+  son.cloneNode(<span class="kw">true</span>).play();
+}
+
+<span class="cmt">// Démarrer la musique au 1er clic (politique autoplay)</span>
+document.addEventListener(<span class="str">'click'</span>, <span class="kw">function</span> startMus() {
+  musique.play();
+  document.removeEventListener(<span class="str">'click'</span>, startMus);
+}, { once: <span class="kw">true</span> });
+
+<span class="cmt">// Dans update(), jouer le son de saut :</span>
+<span class="kw">if</span> ((touches[<span class="str">'z'</span>] || touches[<span class="str">' '</span>]) &amp;&amp; joueur.y >= SOL_Y) {
+  joueur.vy = FORCE_SAUT;
+  playSFX(sonSaut);
+}</pre></div>
+<p class="step-desc">La boucle de jeu complète :</p>
+<div class="code-block"><pre><span class="kw">function</span> <span class="fn">draw</span>() {
+  ctx.clearRect(<span class="num">0</span>, <span class="num">0</span>, W, H);
+  drawCouches();   <span class="cmt">// décor parallaxe</span>
+  updateAnim();    <span class="cmt">// animation sprite</span>
+  drawJoueur();    <span class="cmt">// personnage</span>
+}
+
+<span class="kw">function</span> <span class="fn">loop</span>() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+<span class="cmt">// Démarrer quand le sprite est chargé</span>
+sprite.onload = <span class="kw">function</span>() {
+  loop();
+};</pre></div>
+<div class="concept"><strong>Résumé de l'architecture :</strong><br>
+<code>loop()</code> → <code>update()</code> (physique + états + parallaxe) → <code>draw()</code> (couches + updateAnim + joueur)<br>
+Chaque partie est séparée et indépendante — facile à modifier !</div>
+<p class="step-desc" style="margin-top:1rem;"><strong>🎉 Félicitations !</strong> Tu as un personnage animé avec spritesheet, décor en parallaxe, physique et son. Explore les idées ci-dessous pour aller encore plus loin !</p>`
+    }
+];
+
+var currentStep = 0;
+
+function buildSteps() {
+    var container = document.getElementById('steps-container');
+    var progSteps = document.getElementById('progSteps');
+    STEPS.forEach(function(s, i) {
+        // Progress dot
+        var dot = document.createElement('div');
+        dot.className = 'prog-step' + (i === 0 ? ' active' : '');
+        dot.id = 'pdot' + i;
+        progSteps.appendChild(dot);
+
+        // Step card
+        var card = document.createElement('div');
+        card.className = 'step-card' + (i === 0 ? ' active' : '');
+        card.id = 'step' + i;
+        card.innerHTML = '<div class="step-header">' +
+            '<div class="step-num">' + s.num + '</div>' +
+            '<div><div class="step-title">' + s.title + '</div><div class="step-sub">' + s.sub + '</div></div>' +
+            '</div>' + s.content +
+            '<div class="step-nav">' +
+            (i > 0 ? '<button class="nav-btn prev" onclick="goStep(' + (i-1) + ')">← Précédent</button>' : '') +
+            (i < STEPS.length - 1
+                ? '<button class="nav-btn next" onclick="goStep(' + (i+1) + ')">Étape suivante →</button>'
+                : '<button class="nav-btn next" onclick="finish()">Terminer 🎉</button>') +
+            '</div>';
+        container.appendChild(card);
+    });
+}
+
+function goStep(n) {
+    document.getElementById('step' + currentStep).classList.remove('active');
+    document.getElementById('pdot' + currentStep).classList.remove('active');
+    document.getElementById('pdot' + currentStep).classList.add('done');
+    currentStep = n;
+    document.getElementById('step' + currentStep).classList.add('active');
+    document.getElementById('pdot' + currentStep).classList.remove('done');
+    document.getElementById('pdot' + currentStep).classList.add('active');
+    document.getElementById('progLabel').textContent = 'Étape ' + (currentStep+1) + ' / ' + STEPS.length;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function finish() {
+    document.getElementById('step' + currentStep).classList.remove('active');
+    document.getElementById('pdot' + currentStep).classList.add('done');
+    document.getElementById('pdot' + currentStep).classList.remove('active');
+    document.getElementById('progLabel').textContent = '✅ Projet terminé !';
+    document.getElementById('ideasSection').style.display = 'block';
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+
+buildSteps();
+</script>
+</body>
+</html>

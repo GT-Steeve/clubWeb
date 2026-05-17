@@ -48,18 +48,12 @@ v1.19.0 = rework architecture + ajout projet aux section Introduction et Organis
 v1.19.1 = correctif UI sommaire.html + ajout projet aux section Vibe Coding et Web Statique
 v1.19.2 = rework architecture tous les cours "Général" + ajout projet à la section culture dévellopement web
 v1.19.3 = ajout projet cours deploiement + section web dynamique
+v1.20.0 = rework section jeux web
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
 
 ** Next step ** 
-- Revoir les cours Jeux Web URGENT !!
-    prévoir exercice pour javascript jeux et canvas
-- Revoir l'exercice 3 question 1 uniquement !
-- Faire une éval, Transformer où modifier une fichier html, css
-- Exercice Sur une même structure html, prévoir plusieur css et les switch
-- exercice de navigation, creer un dossier 1, 2 et 3 à trois endroit différent, téléchargement, bureau et documents, y créer des fichier html, css, js
-- réparé un fichier css nommé bug.css par reparé.css 
 
 ** Mind Set **
 Savoir que tu as besoin (ce que tu veux)

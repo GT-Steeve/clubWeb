@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices — Game Design</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #9D174D; text-decoration: none; margin-bottom: 1.5rem; background: #FFF1F2; border: 0.5px solid #FECDD3; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #FFE4E6; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-rose   { background: #FFE4E6; color: #9D174D; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-purple { background: #F3E8FF; color: #6B21A8; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .p-rose   { background: #FECDD3; color: #9D174D; }
+        .p-blue   { background: #B5D4F4; color: #0C447C; }
+        .p-coral  { background: #F5C4B3; color: #712B13; }
+        .p-amber  { background: #FAC775; color: #633806; }
+        .p-teal   { background: #9FE1CB; color: #085041; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #FFE4E6; padding: 1px 5px; border-radius: 4px; color: #9D174D; }
+
+        .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+        .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; white-space: nowrap; }
+        .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+        .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #F43F5E; border-radius: 10px; transition: width 0.4s; width: 0%; }
+        .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .chip-ok { background: #EAF3DE; color: #166534; }
+        .chip-ko { background: #FCEBEB; color: #791F1F; }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .action-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 10px; padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .action-btn:hover { background: #D3D1C7; }
+        .action-btn.primary { background: #1A0010; color: #F43F5E; border-color: #1A0010; }
+        .action-btn.primary:hover { background: #2D0020; }
+        .action-btn.reveal { background: #FFE4E6; color: #9D174D; border-color: #FECDD3; }
+        .action-btn.reveal:hover { background: #FECDD3; }
+
+        .score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-top: 1rem; display: none; text-align: center; }
+        .score-panel.show { display: block; }
+        .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+        .score-big span { color: #F43F5E; }
+        .score-sub { font-size: 0.9rem; color: #888780; }
+
+        /* QCM */
+        .qcm-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+        .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+        .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 7px; }
+        .opt { display: flex; align-items: flex-start; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; transition: background 0.12s; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none; }
+        .opt:hover { background: #D3D1C7; }
+        .opt.selected { background: #FFF1F2; border-color: #FECDD3; color: #9D174D; }
+        .opt.correct  { background: #EAF3DE; border-color: #22C55E; color: #166534; cursor: default; font-weight: 700; }
+        .opt.wrong    { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+        .opt-dot { width: 18px; height: 18px; min-width: 18px; border-radius: 50%; border: 2px solid #B4B2A9; margin-top: 1px; display: flex; align-items: center; justify-content: center; }
+        .opt.selected .opt-dot { border-color: #F43F5E; background: #F43F5E; }
+        .opt.correct  .opt-dot { border-color: #16A34A; background: #16A34A; }
+        .opt.wrong    .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+        .opt-dot-inner { width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
+        .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+        .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+        .q-feedback.show { display: block; }
+        .q-feedback.ok { color: #166534; }
+        .q-feedback.ko { color: #791F1F; }
+
+        /* V/F */
+        .vf-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.2rem 1.5rem; margin-bottom: 0.8rem; }
+        .vf-statement { font-size: 0.95rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.8rem; line-height: 1.5; }
+        .vf-btns { display: flex; gap: 8px; }
+        .vf-btn { flex: 1; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; padding: 9px; font-family: 'Nunito', sans-serif; font-size: 0.92rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .vf-btn:hover { background: #D3D1C7; }
+        .vf-btn.correct-ans { background: #EAF3DE; border-color: #22C55E; color: #166534; }
+        .vf-btn.wrong-ans   { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .vf-feedback { font-size: 0.85rem; font-weight: 700; margin-top: 0.5rem; display: none; line-height: 1.5; }
+        .vf-feedback.show { display: block; }
+        .vf-feedback.ok { color: #166534; }
+        .vf-feedback.ko { color: #791F1F; }
+
+        /* Matching */
+        .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 0.8rem; }
+        .match-col-label { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 4px; }
+        .match-item { border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; padding: 8px 12px; font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: background 0.12s; user-select: none; }
+        .match-item:hover { background: #D3D1C7; }
+        .match-item.active { background: #FFF1F2; border-color: #F43F5E; color: #9D174D; }
+        .match-item.matched { background: #EAF3DE; border-color: #22C55E; color: #166534; cursor: default; }
+        .match-item.wrong-match { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+
+        /* Code fill */
+        .code-block { background: #1A0810; border-radius: 12px; padding: 1rem 1.2rem; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.8; color: #FFD6E0; margin-bottom: 0.9rem; overflow-x: auto; }
+        .blank { display: inline-block; min-width: 80px; border-bottom: 2px solid #F43F5E; background: #2D0010; color: #FFD6E0; font-family: 'Fira Code', monospace; font-size: 0.83rem; padding: 0 6px; border-radius: 4px 4px 0 0; text-align: center; cursor: pointer; transition: background 0.12s; }
+        .blank:hover { background: #4D0020; }
+        .blank.filled-ok { border-color: #22C55E; background: #14281A; color: #86EFAC; }
+        .blank.filled-ko { border-color: #E24B4A; background: #2C1010; color: #FCA5A5; }
+        .bank { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0.8rem; }
+        .token { background: #FFE4E6; border: 0.5px solid #FECDD3; color: #9D174D; border-radius: 8px; padding: 5px 12px; font-family: 'Fira Code', monospace; font-size: 0.83rem; font-weight: 700; cursor: pointer; user-select: none; transition: background 0.12s; }
+        .token:hover { background: #FECDD3; }
+        .token.used { opacity: 0.35; pointer-events: none; }
+
+        /* Scenarios */
+        .scenario-box { background: #1A0810; border-radius: 12px; padding: 1rem 1.2rem; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.8; color: #FFD6E0; margin-bottom: 0.8rem; overflow-x: auto; }
+        .scenario-choices { display: flex; flex-direction: column; gap: 7px; margin-bottom: 0.6rem; }
+        .scenario-choice { border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; padding: 9px 13px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+        .scenario-choice:hover { background: #D3D1C7; }
+        .scenario-choice.correct { background: #EAF3DE; border-color: #22C55E; color: #166534; }
+        .scenario-choice.wrong   { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+        .scenario-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.4rem; display: none; line-height: 1.5; }
+        .scenario-feedback.show { display: block; }
+        .scenario-feedback.ok { color: #166534; }
+        .scenario-feedback.ko { color: #791F1F; }
+
+        .cta-section { background: #085041; border-radius: 20px; padding: 2.5rem 2rem; text-align: center; margin-top: 2rem; }
+        .cta-section h2 { font-size: 1.6rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; }
+        .cta-section p { color: #9FE1CB; font-size: 0.97rem; margin-bottom: 1.4rem; }
+        .cta-btn { display: inline-block; background: #F43F5E; color: #fff; font-weight: 800; font-size: 1rem; border-radius: 12px; padding: 14px 32px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #E11D48; }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="cours-game-design.html">← Retour au cours</a>
+
+<div class="hero">
+    <h1>🎯 Exercices<br>Game Design</h1>
+    <p>Machine à états, menus, niveaux, scores, localStorage</p>
+    <div class="badge-row">
+        <span class="badge b-rose">8 QCM</span>
+        <span class="badge b-blue">6 Associations</span>
+        <span class="badge b-amber">3 Code à compléter</span>
+        <span class="badge b-purple">3 Scénarios</span>
+        <span class="badge b-rose">7 Vrai/Faux</span>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="score-row" id="scoreRow"></div>
+</div>
+
+<!-- QCM -->
+<div class="section-label"><span class="section-label-text">QCM — Choix unique</span></div>
+<div id="qcm-zone"></div>
+
+<!-- MATCH -->
+<div class="section-label"><span class="section-label-text">Associations — Relier terme et définition</span></div>
+<div class="card">
+    <div class="stitle"><div class="pill p-blue">🔗</div>Relier chaque terme à sa description</div>
+    <p class="desc">Clique sur un terme à gauche, puis sur la définition correspondante à droite.</p>
+    <div class="match-grid">
+        <div><div class="match-col-label">Terme</div><div id="left-items"></div></div>
+        <div><div class="match-col-label">Définition</div><div id="right-items"></div></div>
+    </div>
+    <div class="btn-row">
+        <button class="action-btn primary" onclick="checkMatch()">Vérifier</button>
+        <button class="action-btn" onclick="resetMatch()">Réinitialiser</button>
+    </div>
+    <div id="match-feedback" class="desc" style="margin-top:0.6rem;display:none;"></div>
+</div>
+
+<!-- CODE -->
+<div class="section-label"><span class="section-label-text">Code à compléter</span></div>
+<div id="code-zone"></div>
+
+<!-- SCENARIOS -->
+<div class="section-label"><span class="section-label-text">Scénarios — Trouver le bug</span></div>
+<div id="scenario-zone"></div>
+
+<!-- V/F -->
+<div class="section-label"><span class="section-label-text">Vrai / Faux</span></div>
+<div id="vf-zone"></div>
+
+<div class="btn-row" style="margin-top:0.5rem;">
+    <button class="action-btn primary" onclick="checkAll()">Corriger tout</button>
+    <button class="action-btn" onclick="resetAll()">Recommencer</button>
+</div>
+
+<div class="score-panel" id="scorePanel">
+    <div class="score-big" id="scoreBig">—</div>
+    <div class="score-sub" id="scoreSub"></div>
+</div>
+
+<div class="cta-section" style="margin-top:2.5rem;">
+    <h2>Prêt pour le jeu complet ?</h2>
+    <p>Machine à états, menus, niveaux… construis tout de A à Z !</p>
+    <a class="cta-btn" href="projet-game-design.html">Projet Game Design →</a>
+</div>
+
+<script>
+var QCM = [
+    {
+        q: "Quelle variable représente l'écran actif dans une machine à états de jeu ?",
+        opts: ["screenIndex", "gameState", "currentScreen", "activeMode"],
+        ans: 1,
+        fb: "✅ gameState est la convention standard. On lui assigne une valeur ('titre', 'menu', 'jeu'…) et la boucle switch(gameState) affiche le bon écran."
+    },
+    {
+        q: "Dans la boucle principale, où place-t-on le switch(gameState) ?",
+        opts: ["Dans addEventListener", "Dans requestAnimationFrame callback, après clearRect", "Dans window.onload", "Dans le constructeur de la classe Game"],
+        ans: 1,
+        fb: "✅ On efface le canvas avec clearRect, puis switch(gameState) délègue le dessin à la bonne fonction (drawMenu, drawJeu…), puis requestAnimationFrame relance la boucle."
+    },
+    {
+        q: "Pour détecter un clic sur un bouton dessiné sur le canvas, on utilise :",
+        opts: ["element.onclick sur le canvas", "canvas.addEventListener('click', fn)", "button.addEventListener car il faut un vrai bouton", "ctx.onClick"],
+        ans: 1,
+        fb: "✅ On écoute 'click' sur l'élément canvas, on calcule la position du clic avec getBoundingClientRect(), puis on vérifie si elle est dans le rectangle du bouton."
+    },
+    {
+        q: "localStorage peut stocker directement :",
+        opts: ["Des tableaux JavaScript", "Des objets JavaScript", "Des chaînes de caractères uniquement", "Des images en base64"],
+        ans: 2,
+        fb: "✅ localStorage stocke uniquement des strings. Pour objets/tableaux, utilise JSON.stringify() pour sauvegarder et JSON.parse() pour recharger."
+    },
+    {
+        q: "Pourquoi utiliser JSON.parse(JSON.stringify(data)) pour copier un niveau ?",
+        opts: ["Pour compresser les données", "Pour faire une copie profonde indépendante de l'original", "Pour convertir les nombres en strings", "Pour trier les propriétés alphabétiquement"],
+        ans: 1,
+        fb: "✅ Sans copie profonde, modifier l'objet niveau pendant le jeu modifierait aussi NIVEAU_DATA, corrompant les relances. JSON.parse(JSON.stringify()) crée un clone totalement indépendant."
+    },
+    {
+        q: "Le timer du jeu est souvent exprimé en frames plutôt qu'en secondes car :",
+        opts: ["Les secondes sont moins précises", "On décrémente à chaque frame de rendu, évitant d'utiliser Date.now()", "requestAnimationFrame fonctionne en frames", "Les entiers sont plus rapides que les flottants"],
+        ans: 1,
+        fb: "✅ Décrémenter timer à chaque appel de loop() est simple et ne nécessite pas de gérer le temps réel. 60 frames/sec → timer = duréeEnSecondes * 60."
+    },
+    {
+        q: "Quel code affiche le timer en secondes dans le HUD si timer est en frames (60fps) ?",
+        opts: ["Math.floor(timer)", "Math.ceil(timer / 60)", "timer * 60", "parseInt(timer)"],
+        ans: 1,
+        fb: "✅ Math.ceil(timer / 60) convertit les frames en secondes et arrondit vers le haut, évitant d'afficher 0 quand il reste encore quelques frames."
+    },
+    {
+        q: "Pour sauvegarder la progression (niveaux débloqués) entre sessions, on utilise :",
+        opts: ["Une variable globale", "sessionStorage", "localStorage", "Un cookie"],
+        ans: 2,
+        fb: "✅ localStorage persiste après fermeture de l'onglet/navigateur. sessionStorage est effacé à la fermeture de l'onglet. Les cookies sont pour le réseau."
+    }
+];
+
+var MATCH_PAIRS = [
+    { left: "gameState",          right: "Variable qui indique l'écran actif du jeu" },
+    { left: "switch(gameState)",  right: "Redirige le rendu vers la bonne fonction d'écran" },
+    { left: "JSON.stringify()",   right: "Convertit un objet JS en chaîne pour localStorage" },
+    { left: "JSON.parse()",       right: "Reconstruit un objet depuis une chaîne stockée" },
+    { left: "getBoundingClientRect()", right: "Récupère la position du canvas dans la page" },
+    { left: "niveauxDebloqués",   right: "Nombre de niveaux accessibles, sauvegardé dans localStorage" }
+];
+
+var CODE_EXOS = [
+    {
+        title: "Changer d'état de jeu",
+        desc: "Complète la boucle principale pour qu'elle affiche le bon écran selon gameState.",
+        before: "function loop() {\n  ctx.clearRect(0, 0, W, H);\n  ",
+        blanks: ["switch", "gameState", "case", "drawTitre", "break", "drawJeu"],
+        labels: ["mot-clé de sélection", "variable d'état", "mot-clé de branche", "fonction titre", "sortir du case", "fonction jeu"],
+        after: ["(", ") {\n    ", " 'titre': ", "(); ", ";\n    case 'jeu': update(); ", "();\n  }\n  requestAnimationFrame(loop);\n}"],
+        tokens: ["switch", "gameState", "case", "drawTitre", "break", "drawJeu", "if", "etat"]
+    },
+    {
+        title: "Sauvegarder et charger un score",
+        desc: "Complète les fonctions de sauvegarde et chargement des scores dans localStorage.",
+        before: "function sauvegarderScore(nom, pts) {\n  const scores = chargerScores();\n  scores.push({ nom, pts });\n  scores.sort((a,b) => b.pts - a.pts);\n  localStorage.",
+        blanks: ["setItem", "JSON.stringify", "getItem", "JSON.parse"],
+        labels: ["écrire dans LS", "convertir en string", "lire depuis LS", "convertir en objet"],
+        after: ["('scores', ", "(scores.slice(0,10)));\n}\nfunction chargerScores() {\n  const raw = localStorage.", "('scores');\n  return raw ? ", "(raw) : [];\n}"],
+        tokens: ["setItem", "getItem", "JSON.stringify", "JSON.parse", "removeItem", "JSON.encode"]
+    },
+    {
+        title: "Détecter un clic sur un bouton canvas",
+        desc: "Complète la détection de clic sur un bouton dessiné sur le canvas.",
+        before: "canvas.addEventListener('click', function(e) {\n  const r = canvas.",
+        blanks: ["getBoundingClientRect", "clientX", "left", "clientY", "top"],
+        labels: ["position du canvas", "coord X du clic", "bord gauche", "coord Y du clic", "bord haut"],
+        after: ["();\n  const mx = e.", " - r.", ";\n  const my = e.", " - r.", ";\n  if (mx >= btn.x && mx <= btn.x+btn.w\n   && my >= btn.y && my <= btn.y+btn.h) {\n    btn.action();\n  }\n});"],
+        tokens: ["getBoundingClientRect", "clientX", "clientY", "left", "top", "offsetX", "offsetY"]
+    }
+];
+
+var SCENARIOS = [
+    {
+        title: "Le clic passe à travers le bouton",
+        code: "// Le bouton est dessiné mais le clic ne fonctionne pas\ncanvas.addEventListener('click', function(e) {\n  var mx = e.offsetX;\n  var my = e.offsetY;\n  // mx et my sont incorrects quand le canvas est redimensionné par CSS\n  if (mx >= btn.x && mx <= btn.x+btn.w &&\n      my >= btn.y && my <= btn.y+btn.h) {\n    btn.action();\n  }\n});",
+        choices: [
+            "Il faut utiliser getBoundingClientRect() et calculer le ratio canvas/CSS pour corriger les coordonnées",
+            "Il faut utiliser addEventListener('mousedown') plutôt que 'click'",
+            "Il faut redessiner le bouton à chaque clic"
+        ],
+        ans: 0,
+        fb: "✅ offsetX/offsetY donnent les coordonnées CSS, pas les coordonnées canvas. Utilise getBoundingClientRect() + (e.clientX - r.left) * (canvas.width / r.width) pour corriger."
+    },
+    {
+        title: "Les scores sont perdus à chaque rechargement",
+        code: "function sauvegarderScore(nom, pts) {\n  const scores = chargerScores();\n  scores.push({ nom, pts });\n  scores.sort((a,b) => b.pts - a.pts);\n  // On oublie d'écrire dans localStorage !\n  const top10 = scores.slice(0, 10);\n}",
+        choices: [
+            "Il faut appeler requestAnimationFrame après la sauvegarde",
+            "Il manque localStorage.setItem() pour écrire les scores dans le navigateur",
+            "Il faut utiliser sessionStorage à la place"
+        ],
+        ans: 1,
+        fb: "✅ Sans localStorage.setItem('scores', JSON.stringify(top10)), les scores ne sont qu'en mémoire JS et sont perdus au rechargement. Il faut écrire dans localStorage !"
+    },
+    {
+        title: "Le niveau se corrompt quand on relance",
+        code: "// NIVEAU_DATA[0] est l'objet de définition original\nfunction chargerNiveau(n) {\n  niveau = NIVEAU_DATA[n-1]; // référence directe !\n  joueur.x = niveau.posDepart.x;\n  // Plus tard, on modifie niveau.ennemis[0].x\n  // → NIVEAU_DATA est aussi modifié !\n}",
+        choices: [
+            "Il faut copier avec Object.assign()",
+            "Il faut utiliser JSON.parse(JSON.stringify(NIVEAU_DATA[n-1])) pour une copie profonde",
+            "Il faut déclarer NIVEAU_DATA avec const"
+        ],
+        ans: 1,
+        fb: "✅ niveau = NIVEAU_DATA[n-1] copie seulement la référence. Toute modification (ennemis, pièces ramassées…) altère NIVEAU_DATA. JSON.parse(JSON.stringify()) fait une copie profonde indépendante."
+    }
+];
+
+var VF = [
+    { stmt: "gameState = 'menu' suffit à changer l'écran affiché dans la boucle principale.", ans: true, fb: "✅ Oui ! La boucle loop() lit gameState à chaque frame. Changer la variable change immédiatement l'écran au prochain rendu." },
+    { stmt: "localStorage.setItem() accepte directement un tableau JavaScript.", ans: false, fb: "❌ localStorage ne stocke que des strings. Il faut JSON.stringify(tableau) pour stocker, et JSON.parse() pour recharger." },
+    { stmt: "Un bouton canvas est techniquement un élément HTML <button> invisible.", ans: false, fb: "❌ Un bouton canvas est juste un rectangle dessiné avec fillRect/roundRect. On simule le comportement bouton avec addEventListener('click') et une vérification de coordonnées." },
+    { stmt: "JSON.parse(JSON.stringify(obj)) crée une copie profonde indépendante de l'original.", ans: true, fb: "✅ Cette technique sérialise puis désérialise l'objet, créant un clone sans références partagées. Attention : ne fonctionne pas avec les fonctions ou les dates." },
+    { stmt: "timer = 60 * 60 correspond à 60 secondes à 60 fps.", ans: true, fb: "✅ Exact. timer se décrémente de 1 à chaque frame. À 60 fps, 3600 frames = 60 secondes." },
+    { stmt: "getBoundingClientRect() retourne la taille et la position CSS du canvas dans la page.", ans: true, fb: "✅ Cette méthode donne left, top, width, height du canvas tel qu'il est rendu dans le DOM — indispensable pour corriger les coordonnées de clic." },
+    { stmt: "On peut avoir plusieurs gameState actifs en même temps pour superposer des écrans.", ans: false, fb: "❌ gameState est une variable simple — une seule valeur à la fois. Pour superposer (ex: pause sur le jeu), on ajoute un booléen séparé : isPaused = true, et on dessine la pause par-dessus." }
+];
+
+/* ═══ STATE ═══ */
+var qcmAnswers = {}, vfAnswers = {}, matchLeft = null, matchDone = {};
+var codeState = [], scenarioDone = {};
+
+/* BUILD QCM */
+(function() {
+    var zone = document.getElementById('qcm-zone');
+    QCM.forEach(function(q, i) {
+        var div = document.createElement('div'); div.className = 'qcm-card'; div.id = 'qcard'+i;
+        div.innerHTML = '<div class="q-num">Question '+(i+1)+' / '+QCM.length+'</div>' +
+            '<div class="q-text">'+q.q+'</div><div class="options">'+
+            q.opts.map(function(o,j){
+                return '<div class="opt" onclick="selectQCM('+i+','+j+')" id="opt'+i+'_'+j+'">' +
+                    '<div class="opt-dot"><div class="opt-dot-inner"></div></div><span>'+o+'</span></div>';
+            }).join('')+'</div><div class="q-feedback" id="qfb'+i+'"></div>';
+        zone.appendChild(div);
+    });
+})();
+function selectQCM(qi, oi) {
+    if (qcmAnswers[qi] !== undefined) return;
+    qcmAnswers[qi] = oi;
+    var q = QCM[qi];
+    for (var j=0;j<q.opts.length;j++) { var el=document.getElementById('opt'+qi+'_'+j); el.classList.remove('selected'); if(j===oi)el.classList.add('selected'); }
+    document.getElementById('opt'+qi+'_'+q.ans).className='opt correct';
+    if (oi !== q.ans) document.getElementById('opt'+qi+'_'+oi).className='opt wrong';
+    var fb=document.getElementById('qfb'+qi);
+    fb.textContent = oi===q.ans ? q.fb : '❌ '+q.fb.replace('✅ ','');
+    fb.className='q-feedback show '+(oi===q.ans?'ok':'ko');
+    updateProgress();
+}
+
+/* BUILD MATCH */
+(function() {
+    var lefts=MATCH_PAIRS.map(function(p){return p.left;}), rights=shuffle(MATCH_PAIRS.map(function(p){return p.right;}));
+    var lZ=document.getElementById('left-items'), rZ=document.getElementById('right-items');
+    lefts.forEach(function(t,i){var d=document.createElement('div');d.className='match-item';d.id='ml'+i;d.textContent=t;d.onclick=function(){clickLeft(i);};lZ.appendChild(d);});
+    rights.forEach(function(t,i){var d=document.createElement('div');d.className='match-item';d.id='mr'+i;d.dataset.val=t;d.textContent=t;d.onclick=function(){clickRight(t,d);};rZ.appendChild(d);});
+})();
+function clickLeft(i){if(matchDone['l'+i])return;document.querySelectorAll('#left-items .match-item').forEach(function(el){el.classList.remove('active');});document.getElementById('ml'+i).classList.add('active');matchLeft=i;}
+function clickRight(val,el){if(matchLeft===null||el.classList.contains('matched'))return;var ok=MATCH_PAIRS[matchLeft].right===val;if(ok){el.classList.add('matched');document.getElementById('ml'+matchLeft).classList.add('matched');matchDone['l'+matchLeft]=true;}else{el.classList.add('wrong-match');setTimeout(function(){el.classList.remove('wrong-match');},600);}document.querySelectorAll('#left-items .match-item').forEach(function(e){e.classList.remove('active');});matchLeft=null;}
+function checkMatch(){var done=Object.keys(matchDone).length;var fb=document.getElementById('match-feedback');fb.style.display='block';fb.textContent=done===MATCH_PAIRS.length?'✅ Parfait ! Toutes les associations sont correctes.':done+' / '+MATCH_PAIRS.length+' associations correctes.';fb.style.color=done===MATCH_PAIRS.length?'#166534':'#791F1F';updateProgress();}
+function resetMatch(){matchLeft=null;matchDone={};document.querySelectorAll('.match-item').forEach(function(el){el.className='match-item';});document.getElementById('match-feedback').style.display='none';}
+
+/* BUILD CODE */
+(function(){
+    var zone=document.getElementById('code-zone');
+    codeState=CODE_EXOS.map(function(ex){return ex.blanks.map(function(){return null;});});
+    CODE_EXOS.forEach(function(ex,ei){
+        var div=document.createElement('div');div.className='card';
+        var bankHTML=ex.tokens.map(function(t){return '<span class="token" id="tok'+ei+'_'+t+'" onclick="placeToken('+ei+',\''+t+'\')">'+t+'</span>';}).join('');
+        var codeHTML=ex.before;
+        ex.blanks.forEach(function(_,bi){codeHTML+='<span class="blank" id="bl'+ei+'_'+bi+'" onclick="clearBlank('+ei+','+bi+')">___</span>';if(ex.after[bi])codeHTML+=ex.after[bi];});
+        div.innerHTML='<div class="stitle"><div class="pill p-rose">💻</div>'+ex.title+'</div>'+
+            '<p class="desc">'+ex.desc+'</p>'+
+            '<div class="bank" id="bank'+ei+'">'+bankHTML+'</div>'+
+            '<div class="code-block"><pre style="white-space:pre-wrap;margin:0;">'+codeHTML+'</pre></div>'+
+            '<div class="btn-row"><button class="action-btn primary" onclick="checkCode('+ei+')">Vérifier</button><button class="action-btn" onclick="resetCode('+ei+')">Réinitialiser</button></div>'+
+            '<div id="codefb'+ei+'" class="desc" style="margin-top:0.6rem;display:none;"></div>';
+        zone.appendChild(div);
+    });
+})();
+function placeToken(ei,tok){var bl=codeState[ei];for(var bi=0;bi<bl.length;bi++){if(bl[bi]===null){bl[bi]=tok;document.getElementById('bl'+ei+'_'+bi).textContent=tok;document.getElementById('tok'+ei+'_'+tok).classList.add('used');return;}}}
+function clearBlank(ei,bi){var tok=codeState[ei][bi];if(!tok)return;codeState[ei][bi]=null;document.getElementById('bl'+ei+'_'+bi).textContent='___';var el=document.getElementById('tok'+ei+'_'+tok);if(el)el.classList.remove('used');}
+function checkCode(ei){var ex=CODE_EXOS[ei];var ok=true;ex.blanks.forEach(function(ans,bi){var val=codeState[ei][bi];var el=document.getElementById('bl'+ei+'_'+bi);if(val===ans)el.className='blank filled-ok';else{el.className='blank filled-ko';ok=false;}});var fb=document.getElementById('codefb'+ei);fb.style.display='block';fb.textContent=ok?'✅ Parfait !':'❌ Certaines cases sont incorrectes.';fb.style.color=ok?'#166534':'#791F1F';updateProgress();}
+function resetCode(ei){codeState[ei]=CODE_EXOS[ei].blanks.map(function(){return null;});CODE_EXOS[ei].blanks.forEach(function(_,bi){var el=document.getElementById('bl'+ei+'_'+bi);el.textContent='___';el.className='blank';});CODE_EXOS[ei].tokens.forEach(function(t){var el=document.getElementById('tok'+ei+'_'+t);if(el)el.classList.remove('used');});document.getElementById('codefb'+ei).style.display='none';}
+
+/* BUILD SCENARIOS */
+(function(){
+    var zone=document.getElementById('scenario-zone');
+    SCENARIOS.forEach(function(sc,si){
+        var div=document.createElement('div');div.className='card';div.id='scard'+si;
+        div.innerHTML='<div class="stitle"><div class="pill p-coral">🐛</div>'+sc.title+'</div>'+
+            '<div class="scenario-box"><pre style="white-space:pre-wrap;margin:0;">'+sc.code+'</pre></div>'+
+            '<div class="scenario-choices">'+sc.choices.map(function(c,ci){'return <div class="scenario-choice" onclick="pickScenario('+si+','+ci+')" id="sc'+si+'_'+ci+'">'+c+'</div>';}).join('')+'</div>'+
+            '<div class="scenario-feedback" id="sfb'+si+'"></div>';
+        // rebuild choices properly
+        var choicesEl = div.querySelector('.scenario-choices');
+        choicesEl.innerHTML = '';
+        sc.choices.forEach(function(c,ci){
+            var d=document.createElement('div'); d.className='scenario-choice'; d.id='sc'+si+'_'+ci;
+            d.textContent=c; d.onclick=function(){pickScenario(si,ci);}; choicesEl.appendChild(d);
+        });
+        zone.appendChild(div);
+    });
+})();
+function pickScenario(si,ci){if(scenarioDone[si])return;scenarioDone[si]=true;var sc=SCENARIOS[si];document.getElementById('sc'+si+'_'+sc.ans).className='scenario-choice correct';if(ci!==sc.ans)document.getElementById('sc'+si+'_'+ci).className='scenario-choice wrong';var fb=document.getElementById('sfb'+si);fb.textContent=ci===sc.ans?sc.fb:'❌ '+sc.fb.replace('✅ ','');fb.className='scenario-feedback show '+(ci===sc.ans?'ok':'ko');updateProgress();}
+
+/* BUILD V/F */
+(function(){
+    var zone=document.getElementById('vf-zone');
+    VF.forEach(function(item,i){
+        var div=document.createElement('div');div.className='vf-card';div.id='vfcard'+i;
+        div.innerHTML='<div class="vf-statement">'+(i+1)+'. '+item.stmt+'</div>'+
+            '<div class="vf-btns">'+
+            '<button class="vf-btn" id="vfv'+i+'" onclick="selectVF('+i+',true)">✓ Vrai</button>'+
+            '<button class="vf-btn" id="vff'+i+'" onclick="selectVF('+i+',false)">✗ Faux</button>'+
+            '</div><div class="vf-feedback" id="vffb'+i+'"></div>';
+        zone.appendChild(div);
+    });
+})();
+function selectVF(i,val){
+    if(vfAnswers[i]!==undefined)return;
+    vfAnswers[i]=val;
+    var vBtn=document.getElementById('vfv'+i), fBtn=document.getElementById('vff'+i);
+    [vBtn,fBtn].forEach(function(b){b.style.background='';b.style.borderColor='';b.style.color='';b.style.fontWeight='';});
+    var sel=val?vBtn:fBtn;
+    sel.style.background=val?'#FFF1F2':'#FCEBEB';
+    sel.style.borderColor=val?'#F43F5E':'#F09595';
+    sel.style.color=val?'#9D174D':'#791F1F';
+    sel.style.fontWeight='800';
+}
+function checkAll(){
+    var correct=0;
+    QCM.forEach(function(q,i){if(qcmAnswers[i]===q.ans)correct++;});
+    VF.forEach(function(item,i){
+        if(vfAnswers[i]===undefined)return;
+        var vBtn=document.getElementById('vfv'+i),fBtn=document.getElementById('vff'+i);
+        [vBtn,fBtn].forEach(function(b){b.style.background='';b.style.borderColor='';b.style.color='';b.style.fontWeight='';});
+        var ok=vfAnswers[i]===item.ans; if(ok)correct++;
+        var cBtn=item.ans?vBtn:fBtn, wBtn=item.ans?fBtn:vBtn;
+        cBtn.classList.add('correct-ans');
+        if(!ok)wBtn.classList.add('wrong-ans');
+        var fb=document.getElementById('vffb'+i);
+        fb.textContent=ok?item.fb:'❌ '+item.fb.replace('✅ ','');
+        fb.className='vf-feedback show '+(ok?'ok':'ko');
+    });
+    SCENARIOS.forEach(function(sc,si){if(scenarioDone[si]&&document.getElementById('sc'+si+'_'+sc.ans).classList.contains('correct'))correct++;});
+    var total=QCM.length+VF.filter(function(_,i){return vfAnswers[i]!==undefined;}).length+Object.keys(scenarioDone).length;
+    var panel=document.getElementById('scorePanel'); panel.classList.add('show');
+    document.getElementById('scoreBig').innerHTML=correct+'<span>/'+total+'</span>';
+    document.getElementById('scoreSub').textContent=correct>=total*0.8?'🎉 Excellent !':'Continue à t\'entraîner !';
+    updateProgress();
+}
+function resetAll(){
+    qcmAnswers={};vfAnswers={};matchLeft=null;matchDone={};scenarioDone={};
+    document.querySelectorAll('.opt').forEach(function(el){el.className='opt';});
+    document.querySelectorAll('.q-feedback').forEach(function(el){el.className='q-feedback';el.textContent='';});
+    document.querySelectorAll('.vf-btn').forEach(function(b){b.className='vf-btn';b.style.background='';b.style.borderColor='';b.style.color='';b.style.fontWeight='';});
+    document.querySelectorAll('.vf-feedback').forEach(function(el){el.className='vf-feedback';el.textContent='';});
+    document.querySelectorAll('.scenario-choice').forEach(function(el){el.className='scenario-choice';});
+    document.querySelectorAll('.scenario-feedback').forEach(function(el){el.className='scenario-feedback';el.textContent='';});
+    resetMatch(); CODE_EXOS.forEach(function(_,ei){resetCode(ei);});
+    document.getElementById('scorePanel').classList.remove('show');
+    updateProgress();
+}
+function updateProgress(){
+    var answered=Object.keys(qcmAnswers).length+Object.keys(vfAnswers).length+Object.keys(scenarioDone).length;
+    var total=QCM.length+VF.length+SCENARIOS.length;
+    document.getElementById('progressFill').style.width=Math.round(answered/total*100)+'%';
+    document.getElementById('scoreRow').innerHTML='<span class="chip chip-ok">✓ '+answered+' répondu(s)</span><span class="chip chip-ko">○ '+(total-answered)+' restant(s)</span>';
+}
+function shuffle(arr){for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
+</script>
+</body>
+</html>

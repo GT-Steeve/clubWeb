@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet — Clicker Game JavaScript</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #B5D4F4; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.1rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-yellow { background: #FEF9C3; color: #854D0E; }
+        .b-blue   { background: #E6F1FB; color: #0C447C; }
+        .b-purple { background: #EEEDFE; color: #3C3489; }
+        .b-amber  { background: #FAEEDA; color: #633806; }
+        .b-coral  { background: #FAECE7; color: #712B13; }
+
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+        .progress-label { font-size: 0.82rem; font-weight: 700; color: #888780; }
+        .progress-count { font-size: 0.82rem; font-weight: 700; color: #EAB308; }
+        .progress-wrap { height: 8px; background: #D3D1C7; border-radius: 10px; margin-bottom: 1.8rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: #EAB308; border-radius: 10px; transition: width 0.5s ease; width: 0%; }
+
+        .step-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1rem; overflow: hidden; transition: border-color 0.2s; }
+        .step-card.done { border-color: #EAB308; }
+        .step-header { display: flex; align-items: center; gap: 12px; padding: 1.1rem 1.4rem; cursor: pointer; user-select: none; }
+        .step-num { width: 34px; height: 34px; min-width: 34px; border-radius: 10px; background: #F1EFE8; border: 0.5px solid #D3D1C7; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; color: #888780; transition: all 0.2s; }
+        .step-card.done .step-num { background: #FEFCE8; border-color: #EAB308; color: #854D0E; }
+        .step-card.done .step-num::after { content: '✓'; }
+        .step-card.done .step-num-text { display: none; }
+        .step-title { font-size: 1rem; font-weight: 800; flex: 1; }
+        .step-chevron { color: #B4B2A9; font-size: 1rem; transition: transform 0.2s; }
+        .step-card.open .step-chevron { transform: rotate(180deg); }
+        .step-body { display: none; padding: 0 1.4rem 1.4rem; }
+        .step-card.open .step-body { display: block; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #FEF9C3; padding: 1px 5px; border-radius: 4px; color: #854D0E; }
+
+        .js-block {
+            background: #1A1A1A; border-left: 3px solid #EAB308; border-radius: 10px;
+            padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem;
+            line-height: 1.9; white-space: pre; overflow-x: auto; color: #D4D4D4;
+            margin: 0.8rem 0;
+        }
+        .html-block {
+            background: #1A1A1A; border-left: 3px solid #85B7EB; border-radius: 10px;
+            padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem;
+            line-height: 1.9; white-space: pre; overflow-x: auto; color: #D4D4D4;
+            margin: 0.8rem 0;
+        }
+        .css-block {
+            background: #1A1A1A; border-left: 3px solid #C084FC; border-radius: 10px;
+            padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem;
+            line-height: 1.9; white-space: pre; overflow-x: auto; color: #D4D4D4;
+            margin: 0.8rem 0;
+        }
+        /* Syntax */
+        .kw  { color: #C084FC; font-weight: 700; }
+        .fn  { color: #60A5FA; }
+        .str { color: #86EFAC; }
+        .num { color: #FB923C; }
+        .cm  { color: #6B7280; font-style: italic; }
+        .op  { color: #F472B6; }
+        .var { color: #FCD34D; }
+        .dom { color: #67E8F9; }
+        .tag { color: #85B7EB; }
+        .atr { color: #FAC775; }
+        .val { color: #86EFAC; }
+        .prop { color: #C084FC; }
+        .csval { color: #86EFAC; }
+
+        .section-mini { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin: 1rem 0 0.4rem; }
+
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #FEFCE8; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #854D0E; line-height: 1.5; }
+        .tip-blue   { background: #E6F1FB; color: #0C447C; }
+        .tip-purple { background: #EEEDFE; color: #3C3489; }
+        .tip-coral  { background: #FAECE7; color: #712B13; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .mark-done-btn { display: inline-flex; align-items: center; gap: 7px; margin-top: 1.2rem; background: #2C2C2A; color: #EAB308; border: none; border-radius: 10px; padding: 9px 22px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: background 0.15s; }
+        .mark-done-btn:hover { background: #444441; }
+        .step-card.done .mark-done-btn { background: #FEFCE8; color: #854D0E; cursor: default; border: 0.5px solid #EAB308; }
+
+        /* VIBE CODING BOX */
+        .vibe-box { border-radius: 12px; border: 2px dashed #C084FC; background: #F5F3FF; padding: 1rem 1.2rem; margin: 0.9rem 0; }
+        .vibe-label { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #6D28D9; margin-bottom: 8px; }
+        .vibe-prompt { background: #1A1A1A; border-radius: 8px; padding: 0.75rem 1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; color: #C084FC; line-height: 1.7; white-space: pre-wrap; margin-top: 0.5rem; }
+
+        /* GAME PREVIEW */
+        .game-preview { background: #1C1C1E; border-radius: 16px; padding: 2rem 1.5rem; text-align: center; margin: 1rem 0; border: 0.5px solid #3A3A3C; }
+        .game-score { font-size: 2.5rem; font-weight: 800; color: #EAB308; font-family: 'Fira Code', monospace; margin-bottom: 1.2rem; }
+        .game-btn { background: #EAB308; color: #1C1C1C; border: none; border-radius: 12px; padding: 14px 32px; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800; cursor: pointer; transition: all 0.12s; margin: 6px; }
+        .game-btn:hover { background: #CA8A04; transform: scale(1.03); }
+        .game-btn:active { transform: scale(0.97); }
+        .game-btn.btn-ten { background: #3B82F6; color: #fff; }
+        .game-btn.btn-ten:hover { background: #2563EB; }
+        .game-btn.btn-x2 { background: #8B5CF6; color: #fff; }
+        .game-btn.btn-x2:hover { background: #7C3AED; }
+        .game-preview-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #6B7280; margin-bottom: 1rem; }
+
+        /* FILE TREE */
+        .file-tree { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 2; margin: 0.8rem 0; color: #2C2C2A; }
+        .ft-new  { color: #3B6D11; font-weight: 700; }
+        .ft-mod  { color: #E8760A; font-weight: 700; }
+        .ft-gray { color: #888780; }
+
+        .chain-box { border-radius: 12px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.88rem; color: #5F5E5A; line-height: 1.7; }
+        .chain-box strong { color: #2C2C2A; }
+
+        .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #EAB308; color: #1C1C1C; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #CA8A04; color: #fff; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+        /* POUR ALLER PLUS LOIN */
+        .ideas-section { margin-top: 2rem; }
+        .ideas-header { font-size: 1.3rem; font-weight: 800; color: #2C2C2A; margin-bottom: 0.5rem; }
+        .ideas-intro { font-size: 0.92rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 1.2rem; }
+        .idea-card { display: flex; gap: 1rem; background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.1rem 1.2rem; margin-bottom: 0.8rem; }
+        .idea-icon { font-size: 1.8rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+        .idea-title { font-size: 0.97rem; font-weight: 800; color: #2C2C2A; margin-bottom: 0.3rem; }
+        .idea-desc { font-size: 0.88rem; color: #5F5E5A; line-height: 1.65; }
+        .idea-card-free { background: #FEFCE8; border-color: #EAB308; }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="exercices-javascript.html">← Retour aux exercices</a>
+
+<div class="hero">
+    <h1>🎮 Projet — Clicker Game</h1>
+    <p>Crée ton premier jeu JavaScript : un clicker avec des paliers de déblocage.</p>
+    <div class="badge-row">
+        <span class="badge b-yellow">index.html</span>
+        <span class="badge b-purple">script.js</span>
+        <span class="badge b-blue">style.css</span>
+        <span class="badge b-amber">Paliers</span>
+        <span class="badge b-coral">Vibe coding</span>
+    </div>
+</div>
+
+<div class="chain-box">
+    <strong>Objectif :</strong> Créer un jeu clicker en 3 fichiers séparés (HTML, CSS, JS).<br>
+    <strong>Mécaniques :</strong> +1 par clic · à 10 points un bouton +10 apparaît · à 100 points, utilise l'IA pour générer le bouton ×2.
+</div>
+
+<!-- DÉMO LIVE -->
+<div class="game-preview">
+    <div class="game-preview-label">🎮 Aperçu — voici ce que tu vas créer</div>
+    <div class="game-score" id="demo-score">Score : 0</div>
+    <div>
+        <button class="game-btn" onclick="demoClick1()">👆 +1 point</button>
+        <button class="game-btn btn-ten" id="demo-btn10" style="display:none;" onclick="demoClick10()">⚡ +10 points</button>
+        <button class="game-btn btn-x2" id="demo-btnx2" style="display:none;" onclick="demoClickX2()">✨ ×2</button>
+    </div>
+</div>
+
+<div class="progress-header">
+    <span class="progress-label">Progression</span>
+    <span class="progress-count" id="prog-count">0 / 6 étapes</span>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-fill"></div></div>
+
+<!-- ÉTAPE 1 -->
+<div class="step-card open" id="step1">
+    <div class="step-header" onclick="toggleStep('step1')">
+        <div class="step-num"><span class="step-num-text">1</span></div>
+        <div class="step-title">Créer la structure HTML</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Crée un dossier <code>clicker-game/</code> puis le fichier <code>index.html</code>. La structure HTML doit avoir un affichage du score, le bouton principal, et deux boutons <strong>cachés</strong> pour les paliers.</p>
+        <div class="section-mini">📁 Structure de fichiers à créer</div>
+        <div class="file-tree">clicker-game/
+├── <span class="ft-new">index.html</span>   ← à créer maintenant
+├── <span class="ft-gray">style.css</span>    ← étape 6
+└── <span class="ft-gray">script.js</span>    ← étape 2</div>
+        <div class="section-mini">index.html</div>
+        <div class="html-block"><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="atr">lang</span>=<span class="val">"fr"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="atr">charset</span>=<span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Mon Clicker Game<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;link</span> <span class="atr">rel</span>=<span class="val">"stylesheet"</span> <span class="atr">href</span>=<span class="val">"style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+  <span class="tag">&lt;div</span> <span class="atr">id</span>=<span class="val">"jeu"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;h1</span> <span class="atr">id</span>=<span class="val">"score-affiche"</span><span class="tag">&gt;</span>Score : 0<span class="tag">&lt;/h1&gt;</span>
+
+    <span class="cm">&lt;!-- Bouton principal : toujours visible --&gt;</span>
+    <span class="tag">&lt;button</span> <span class="atr">id</span>=<span class="val">"btn-un"</span><span class="tag">&gt;</span>👆 +1 point<span class="tag">&lt;/button&gt;</span>
+
+    <span class="cm">&lt;!-- Palier 1 : caché par défaut, débloqué à 10 points --&gt;</span>
+    <span class="tag">&lt;button</span> <span class="atr">id</span>=<span class="val">"btn-dix"</span> <span class="atr">style</span>=<span class="val">"display:none;"</span><span class="tag">&gt;</span>⚡ +10 points<span class="tag">&lt;/button&gt;</span>
+
+    <span class="cm">&lt;!-- Palier 2 : caché par défaut, débloqué à 100 points --&gt;</span>
+    <span class="tag">&lt;button</span> <span class="atr">id</span>=<span class="val">"btn-x2"</span> <span class="atr">style</span>=<span class="val">"display:none;"</span><span class="tag">&gt;</span>✨ ×2<span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="cm">&lt;!-- Le script se charge à la fin du body --&gt;</span>
+  <span class="tag">&lt;script</span> <span class="atr">src</span>=<span class="val">"script.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></div>
+        <div class="tip"><span class="tip-i">💡</span> <div>Les deux boutons de paliers ont <code>style="display:none;"</code> directement dans le HTML — ils sont invisibles au démarrage. C'est JavaScript qui les affichera au bon moment.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step1')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 2 -->
+<div class="step-card" id="step2">
+    <div class="step-header" onclick="toggleStep('step2')">
+        <div class="step-num"><span class="step-num-text">2</span></div>
+        <div class="step-title">Créer script.js — les variables</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Crée le fichier <code>script.js</code>. Commence par déclarer les variables et sélectionner les éléments HTML. Ces éléments seront utilisés dans tout le reste du script.</p>
+        <div class="section-mini">script.js — début du fichier</div>
+        <div class="js-block"><span class="cm">// ═══ VARIABLES DU JEU ═══</span>
+<span class="kw">let</span> <span class="var">score</span> <span class="op">=</span> <span class="num">0</span>;  <span class="cm">// le score démarre à zéro</span>
+
+<span class="cm">// ═══ SÉLECTION DES ÉLÉMENTS HTML ═══</span>
+<span class="kw">const</span> <span class="var">affichage</span> <span class="op">=</span> <span class="dom">document.getElementById</span>(<span class="str">'score-affiche'</span>);
+<span class="kw">const</span> <span class="var">btnUn</span>      <span class="op">=</span> <span class="dom">document.getElementById</span>(<span class="str">'btn-un'</span>);
+<span class="kw">const</span> <span class="var">btnDix</span>     <span class="op">=</span> <span class="dom">document.getElementById</span>(<span class="str">'btn-dix'</span>);
+<span class="kw">const</span> <span class="var">btnX2</span>      <span class="op">=</span> <span class="dom">document.getElementById</span>(<span class="str">'btn-x2'</span>);</div>
+        <div class="tip tip-blue"><span class="tip-i">🔗</span> <div>On sélectionne tous les éléments une seule fois en haut du fichier et on les stocke dans des <code>const</code>. C'est plus efficace que de les chercher à chaque clic.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step2')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 3 -->
+<div class="step-card" id="step3">
+    <div class="step-header" onclick="toggleStep('step3')">
+        <div class="step-num"><span class="step-num-text">3</span></div>
+        <div class="step-title">Le bouton +1 — événement & affichage</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Ajoute un écouteur d'événement sur le bouton principal. À chaque clic, on incrémente le score et on met à jour le texte affiché.</p>
+        <div class="section-mini">script.js — ajouter après les variables</div>
+        <div class="js-block"><span class="cm">// ═══ BOUTON +1 ═══</span>
+<span class="var">btnUn</span>.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+  <span class="var">score</span> <span class="op">+=</span> <span class="num">1</span>;
+  <span class="var">affichage</span>.textContent <span class="op">=</span> <span class="str">"Score : "</span> <span class="op">+</span> <span class="var">score</span>;
+  <span class="fn">verifierPaliers</span>();  <span class="cm">// on vérifie les paliers à chaque clic</span>
+});</div>
+        <div class="section-mini" style="margin-top:1rem;">La fonction verifierPaliers — à ajouter</div>
+        <div class="js-block"><span class="cm">// ═══ VÉRIFIER LES PALIERS ═══</span>
+<span class="kw">function</span> <span class="fn">verifierPaliers</span>() {
+
+  <span class="cm">// Palier 1 : débloquer +10 à 10 points</span>
+  <span class="kw">if</span> (<span class="var">score</span> <span class="op">>=</span> <span class="num">10</span>) {
+    <span class="var">btnDix</span>.style.display <span class="op">=</span> <span class="str">'inline-block'</span>;
+  }
+
+  <span class="cm">// Palier 2 : débloquer ×2 à 100 points (à compléter étape 5)</span>
+  <span class="kw">if</span> (<span class="var">score</span> <span class="op">>=</span> <span class="num">100</span>) {
+    <span class="var">btnX2</span>.style.display <span class="op">=</span> <span class="str">'inline-block'</span>;
+  }
+
+}</div>
+        <div class="tip"><span class="tip-i">💡</span> <div>On regroupe toute la logique de déblocage dans une seule fonction <code>verifierPaliers()</code>. Elle sera appelée après <em>chaque</em> clic — sur tous les boutons. C'est plus propre que de dupliquer le code.</div></div>
+        <div class="tip tip-purple"><span class="tip-i">🧪</span> <div>Ouvre <code>index.html</code> dans ton navigateur (double-clic ou Live Server). Clique 10 fois — le bouton +10 doit apparaître. Ouvre F12 → Console pour voir d'éventuelles erreurs.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step3')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 4 -->
+<div class="step-card" id="step4">
+    <div class="step-header" onclick="toggleStep('step4')">
+        <div class="step-num"><span class="step-num-text">4</span></div>
+        <div class="step-title">Le bouton +10 — même logique</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Le bouton +10 fonctionne exactement comme le +1 — mais il ajoute 10 au score. On appelle aussi <code>verifierPaliers()</code> pour détecter le palier suivant.</p>
+        <div class="section-mini">script.js — ajouter après le bouton +1</div>
+        <div class="js-block"><span class="cm">// ═══ BOUTON +10 ═══</span>
+<span class="var">btnDix</span>.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+  <span class="var">score</span> <span class="op">+=</span> <span class="num">10</span>;
+  <span class="var">affichage</span>.textContent <span class="op">=</span> <span class="str">"Score : "</span> <span class="op">+</span> <span class="var">score</span>;
+  <span class="fn">verifierPaliers</span>();
+});</div>
+        <div class="tip tip-blue"><span class="tip-i">🔍</span> <div>Remarque comme le code est <strong>presque identique</strong> au bouton +1 — seul le <code>10</code> change. C'est l'occasion de voir qu'on pourrait créer une fonction générique <code>ajouterPoints(n)</code>. Mais pour l'instant, la duplication est parfaitement acceptable.</div></div>
+        <div class="tip"><span class="tip-i">🧪</span> <div>Teste : clique sur +1 jusqu'à 10 → le bouton +10 apparaît → clique sur +10 jusqu'à 100 → le bouton ×2 doit apparaître (même s'il ne fait encore rien).</div></div>
+        <button class="mark-done-btn" onclick="markDone('step4')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 5 -->
+<div class="step-card" id="step5">
+    <div class="step-header" onclick="toggleStep('step5')">
+        <div class="step-num"><span class="step-num-text">5</span></div>
+        <div class="step-title">Le bouton ×2 — avec l'aide de l'IA</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Le bouton ×2 multiplie le score actuel par 2 puis le remet à jour. Utilise l'IA pour générer ce code — mais <strong>lis et comprends</strong> ce qu'elle produit avant de le coller.</p>
+
+        <div class="vibe-box">
+            <div class="vibe-label">🤖 Prompt à envoyer à l'IA</div>
+            <div class="vibe-prompt">J'ai un jeu clicker JavaScript. Le score est stocké dans une variable `let score`.
+L'affichage est un élément HTML avec l'id "score-affiche".
+Le bouton ×2 a l'id "btn-x2" et est déjà sélectionné dans une const `btnX2`.
+
+Écris le code JavaScript pour que ce bouton :
+1. Multiplie le score par 2 quand on clique
+2. Mette à jour l'affichage avec "Score : " + score
+3. Appelle la fonction verifierPaliers() après
+
+Juste le bloc addEventListener, pas de HTML.</div>
+        </div>
+
+        <div class="section-mini" style="margin-top:1rem;">Résultat attendu de l'IA — à intégrer dans script.js</div>
+        <div class="js-block"><span class="cm">// ═══ BOUTON ×2 ═══</span>
+<span class="var">btnX2</span>.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+  <span class="var">score</span> <span class="op">=</span> <span class="var">score</span> <span class="op">*</span> <span class="num">2</span>;
+  <span class="var">affichage</span>.textContent <span class="op">=</span> <span class="str">"Score : "</span> <span class="op">+</span> <span class="var">score</span>;
+  <span class="fn">verifierPaliers</span>();
+});</div>
+        <div class="tip tip-purple"><span class="tip-i">🔬</span> <div><strong>Avant de coller le code de l'IA, vérifie :</strong> les noms de variables correspondent aux tiens (<code>score</code>, <code>affichage</code>, <code>btnX2</code>) ? La logique est correcte ? L'IA peut se tromper — relis toujours.</div></div>
+        <div class="tip tip-coral"><span class="tip-i">⚠️</span> <div>Si l'IA génère du code différent (avec une fonction fléchée, ou d'autres variables), assure-toi que ça correspond à ta structure. Ajuste si nécessaire.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step5')">✓ Étape terminée</button>
+    </div>
+</div>
+
+<!-- ÉTAPE 6 -->
+<div class="step-card" id="step6">
+    <div class="step-header" onclick="toggleStep('step6')">
+        <div class="step-num"><span class="step-num-text">6</span></div>
+        <div class="step-title">Ajouter style.css</div>
+        <span class="step-chevron">▾</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Crée le fichier <code>style.css</code>. Chaque bouton a une couleur différente pour indiquer son niveau de puissance.</p>
+
+        <div class="vibe-box">
+            <div class="vibe-label">🤖 Prompt IA pour le CSS</div>
+            <div class="vibe-prompt">J'ai un jeu clicker HTML avec :
+- Un div#jeu qui contient tout
+- Un h1#score-affiche (affichage du score)
+- Un button#btn-un (bouton +1, toujours visible)
+- Un button#btn-dix (bouton +10, débloqué)
+- Un button#btn-x2 (bouton ×2, débloqué)
+
+Crée un style.css simple pour un jeu avec fond sombre (#1a1a2e),
+le score en grand et en jaune, les boutons arrondis avec des couleurs différentes :
+jaune pour +1, bleu pour +10, violet pour ×2.</div>
+        </div>
+
+        <div class="section-mini" style="margin-top:1rem;">style.css — exemple de base (à personnaliser)</div>
+        <div class="css-block"><span class="prop">body</span> {
+  <span class="prop">background</span>: <span class="csval">#1a1a2e</span>;
+  <span class="prop">display</span>: <span class="csval">flex</span>;
+  <span class="prop">justify-content</span>: <span class="csval">center</span>;
+  <span class="prop">align-items</span>: <span class="csval">center</span>;
+  <span class="prop">min-height</span>: <span class="csval">100vh</span>;
+  <span class="prop">font-family</span>: <span class="csval">'Arial', sans-serif</span>;
+}
+
+<span class="prop">#jeu</span> {
+  <span class="prop">text-align</span>: <span class="csval">center</span>;
+}
+
+<span class="prop">#score-affiche</span> {
+  <span class="prop">color</span>: <span class="csval">#EAB308</span>;
+  <span class="prop">font-size</span>: <span class="csval">3rem</span>;
+  <span class="prop">margin-bottom</span>: <span class="csval">2rem</span>;
+}
+
+<span class="prop">button</span> {
+  <span class="prop">border</span>: <span class="csval">none</span>;
+  <span class="prop">border-radius</span>: <span class="csval">12px</span>;
+  <span class="prop">padding</span>: <span class="csval">14px 28px</span>;
+  <span class="prop">font-size</span>: <span class="csval">1rem</span>;
+  <span class="prop">font-weight</span>: <span class="csval">700</span>;
+  <span class="prop">cursor</span>: <span class="csval">pointer</span>;
+  <span class="prop">margin</span>: <span class="csval">8px</span>;
+  <span class="prop">transition</span>: <span class="csval">transform 0.1s</span>;
+}
+<span class="prop">button:active</span> { <span class="prop">transform</span>: <span class="csval">scale(0.95)</span>; }
+
+<span class="prop">#btn-un</span>  { <span class="prop">background</span>: <span class="csval">#EAB308</span>; <span class="prop">color</span>: <span class="csval">#1C1C1C</span>; }
+<span class="prop">#btn-dix</span> { <span class="prop">background</span>: <span class="csval">#3B82F6</span>; <span class="prop">color</span>: <span class="csval">#ffffff</span>; }
+<span class="prop">#btn-x2</span>  { <span class="prop">background</span>: <span class="csval">#8B5CF6</span>; <span class="prop">color</span>: <span class="csval">#ffffff</span>; }</div>
+        <div class="tip"><span class="tip-i">🎨</span> <div>Personnalise librement — change les couleurs, ajoute une animation <code>:hover</code>, un compteur de clics, un affichage du "palier actuel"… Le jeu de base est prêt, enrichis-le !</div></div>
+        <button class="mark-done-btn" onclick="markDone('step6')">✓ Projet terminé !</button>
+    </div>
+</div>
+
+<!-- Pour aller plus loin -->
+<div class="ideas-section">
+    <div class="ideas-header">💡 Pour aller plus loin</div>
+    <p class="ideas-intro">Ton jeu fonctionne ? C'est maintenant que ça devient intéressant. Voici des idées pour l'enrichir — dans l'ordre que tu veux, à ton rythme. Pour chacune, un prompt IA est prêt à copier-coller.</p>
+
+    <div class="idea-card">
+        <div class="idea-icon">🎆</div>
+        <div>
+            <div class="idea-title">Feu d'artifice au million de points</div>
+            <div class="idea-desc">Déclenche une pluie de confettis quand le joueur dépasse 1 000 000 points. Un moment de célébration bien mérité !</div>
+            <div class="vibe-box" style="margin-top:0.7rem;">
+                <div class="vibe-label">🤖 Prompt IA suggéré</div>
+                <div class="vibe-prompt">Dans mon clicker game JS, j'ai une variable score et une
+fonction verifierPaliers(). Ajoute un effet de confettis qui
+se déclenche une seule fois quand score dépasse 1 000 000.
+Utilise la librairie canvas-confetti (CDN). Montre-moi où
+l'intégrer dans mon code existant.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="idea-card">
+        <div class="idea-icon">🎯</div>
+        <div>
+            <div class="idea-title">Objectif personnalisé</div>
+            <div class="idea-desc">Ajoute un champ de saisie pour que le joueur fixe lui-même son objectif. Affiche une barre de progression vers cet objectif et un message de victoire quand il l'atteint.</div>
+            <div class="vibe-box" style="margin-top:0.7rem;">
+                <div class="vibe-label">🤖 Prompt IA suggéré</div>
+                <div class="vibe-prompt">Dans mon clicker game, ajoute un champ HTML (input number)
+pour que le joueur entre son objectif de score. Affiche une
+barre de progression qui se remplit au fur et à mesure.
+Quand l'objectif est atteint, affiche un message de victoire
+et désactive tous les boutons.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="idea-card">
+        <div class="idea-icon">➕</div>
+        <div>
+            <div class="idea-title">Ajouter ou supprimer des boutons</div>
+            <div class="idea-desc">Ajoute un bouton +1 000 qui se débloque à 500 points. Ou fais disparaître le +1 une fois le +10 débloqué pour forcer le joueur à progresser. C'est toi qui choisis les règles.</div>
+            <div class="vibe-box" style="margin-top:0.7rem;">
+                <div class="vibe-label">🤖 Prompt IA suggéré</div>
+                <div class="vibe-prompt">Dans mon verifierPaliers(), ajoute :
+- Un bouton +1 000 (id="btn-mille") qui apparaît à 500 points
+- Le bouton +1 disparaît (style.display='none') quand score
+  atteint 50 pour obliger le joueur à utiliser le +10
+Montre-moi le HTML du bouton et les changements dans
+verifierPaliers().</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="idea-card">
+        <div class="idea-icon">🐢</div>
+        <div>
+            <div class="idea-title">Ralentir les gains</div>
+            <div class="idea-desc">Ajoute un délai entre les clics (cooldown), ou fais que chaque bouton coûte des points pour être utilisé. Ça crée un vrai équilibre de jeu et force le joueur à réfléchir à sa stratégie.</div>
+            <div class="vibe-box" style="margin-top:0.7rem;">
+                <div class="vibe-label">🤖 Prompt IA suggéré</div>
+                <div class="vibe-prompt">Dans mon clicker game, ajoute un cooldown de 0.5 secondes
+sur le bouton +1 : après chaque clic, le bouton devient
+désactivé (disabled) pendant 500ms puis se réactive.
+Montre-moi comment faire avec setTimeout et button.disabled.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="idea-card idea-card-free">
+        <div class="idea-icon">🚀</div>
+        <div>
+            <div class="idea-title">Ton idée à toi</div>
+            <div class="idea-desc">Un système de sauvegarde avec <code>localStorage</code> pour garder le score entre les sessions ? Un compteur de clics total ? Une musique qui s'accélère ? Des achievements ? Un bouton reset ? Un skin différent selon le palier ? Il n'y a pas de limite — c'est ton jeu.</div>
+        </div>
+    </div>
+</div>
+
+<div class="cta-wrap" style="margin-top:1rem;background:#085041;border:none;">
+    <p>🎉 Ton clicker game est opérationnel — HTML, CSS et JS séparés !</p>
+    <a class="cta-btn" href="../../sommaire.html#step3">↩ Retour au sommaire</a>
+</div>
+
+<div class="footer-note">
+    HTML structure → JS variables → addEventListener → paliers → IA → CSS 🎮<br>
+    <span style="font-size:0.82rem;">Projet — Clicker Game JavaScript</span>
+</div>
+
+<script>
+/* DÉMO LIVE */
+var demoScore = 0;
+function updateDemo() { document.getElementById('demo-score').textContent = 'Score : ' + demoScore; if(demoScore>=10)document.getElementById('demo-btn10').style.display='inline-block'; if(demoScore>=100)document.getElementById('demo-btnx2').style.display='inline-block'; }
+function demoClick1() { demoScore += 1; updateDemo(); }
+function demoClick10() { demoScore += 10; updateDemo(); }
+function demoClickX2() { demoScore *= 2; updateDemo(); }
+
+/* ÉTAPES */
+var totalSteps = 6;
+var doneSteps = 0;
+function toggleStep(id) { document.getElementById(id).classList.toggle('open'); }
+function markDone(id) {
+    var card = document.getElementById(id);
+    if (card.classList.contains('done')) return;
+    card.classList.add('done'); card.classList.remove('open');
+    doneSteps++;
+    var pct = Math.round(doneSteps / totalSteps * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-count').textContent = doneSteps + ' / ' + totalSteps + ' étapes';
+    var steps = ['step1','step2','step3','step4','step5','step6'];
+    var idx = steps.indexOf(id);
+    if (idx < steps.length - 1) {
+        var next = document.getElementById(steps[idx + 1]);
+        next.classList.add('open');
+        next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+</script>
+</body>
+</html>
