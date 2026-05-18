@@ -49,11 +49,14 @@ v1.19.1 = correctif UI sommaire.html + ajout projet aux section Vibe Coding et W
 v1.19.2 = rework architecture tous les cours "Général" + ajout projet à la section culture dévellopement web
 v1.19.3 = ajout projet cours deploiement + section web dynamique
 v1.20.0 = rework section jeux web
+v1.20.1 = ajout projet game design
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
 
 ** Next step ** 
+Checker les bug sur les exercice graphisme et gameplay, 
+prévoir jeu shoot, simulation de doom2, rpg
 
 ** Mind Set **
 Savoir que tu as besoin (ce que tu veux)

@@ -437,28 +437,23 @@ function pickScenario(si,ci){if(scenarioDone[si])return;scenarioDone[si]=true;va
 function selectVF(i,val){
     if(vfAnswers[i]!==undefined)return;
     vfAnswers[i]=val;
+    var item=VF[i];
     var vBtn=document.getElementById('vfv'+i), fBtn=document.getElementById('vff'+i);
-    [vBtn,fBtn].forEach(function(b){b.style.background='';b.style.borderColor='';b.style.color='';b.style.fontWeight='';});
-    var sel=val?vBtn:fBtn;
-    sel.style.background=val?'#FFF1F2':'#FCEBEB';
-    sel.style.borderColor=val?'#F43F5E':'#F09595';
-    sel.style.color=val?'#9D174D':'#791F1F';
-    sel.style.fontWeight='800';
+    var ok=val===item.ans;
+    var correctBtn=item.ans?vBtn:fBtn, wrongBtn=item.ans?fBtn:vBtn;
+    correctBtn.classList.add('correct-ans');
+    if(!ok) wrongBtn.classList.add('wrong-ans');
+    var fb=document.getElementById('vffb'+i);
+    fb.textContent=ok?item.fb:'❌ '+item.fb.replace('✅ ','');
+    fb.className='vf-feedback show '+(ok?'ok':'ko');
+    updateProgress();
 }
 function checkAll(){
     var correct=0;
     QCM.forEach(function(q,i){if(qcmAnswers[i]===q.ans)correct++;});
     VF.forEach(function(item,i){
         if(vfAnswers[i]===undefined)return;
-        var vBtn=document.getElementById('vfv'+i),fBtn=document.getElementById('vff'+i);
-        [vBtn,fBtn].forEach(function(b){b.style.background='';b.style.borderColor='';b.style.color='';b.style.fontWeight='';});
-        var ok=vfAnswers[i]===item.ans; if(ok)correct++;
-        var cBtn=item.ans?vBtn:fBtn, wBtn=item.ans?fBtn:vBtn;
-        cBtn.classList.add('correct-ans');
-        if(!ok)wBtn.classList.add('wrong-ans');
-        var fb=document.getElementById('vffb'+i);
-        fb.textContent=ok?item.fb:'❌ '+item.fb.replace('✅ ','');
-        fb.className='vf-feedback show '+(ok?'ok':'ko');
+        if(vfAnswers[i]===item.ans)correct++;
     });
     SCENARIOS.forEach(function(sc,si){if(scenarioDone[si]&&document.getElementById('sc'+si+'_'+sc.ans).classList.contains('correct'))correct++;});
     var total=QCM.length+VF.filter(function(_,i){return vfAnswers[i]!==undefined;}).length+Object.keys(scenarioDone).length;
