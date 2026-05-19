@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Ma fiche de décision Langage & Moteur</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #92400E; text-decoration: none; margin-bottom: 1.5rem; background: #FEF3C7; border: 0.5px solid #FDE68A; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #FDE68A; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-amber  { background: #FEF3C7; color: #92400E; }
+    .b-orange { background: #FFEDD5; color: #9A3412; }
+    .b-green  { background: #DCFCE7; color: #166534; }
+    .b-blue   { background: #DBEAFE; color: #1E40AF; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-amber  { background: #FEF3C7; color: #92400E; }
+    .p-orange { background: #FFEDD5; color: #9A3412; }
+    .p-blue   { background: #DBEAFE; color: #1E40AF; }
+    .p-green  { background: #DCFCE7; color: #166534; }
+    .p-teal   { background: #CCFBF1; color: #134E4A; }
+    .p-purple { background: #F3E8FF; color: #6B21A8; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+    code { font-family: 'Fira Code', monospace; background: #FEF3C7; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #92400E; }
+
+    .themes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.7rem; }
+    .theme-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.85rem; line-height: 1.5; border: 0.5px solid; }
+    .theme-title { font-weight: 800; margin-bottom: 4px; font-size: 0.88rem; }
+
+    .format-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.6rem; }
+    .format-tag { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; border: 0.5px solid; }
+    .ft-html { background: #FEF3C7; border-color: #FDE68A; color: #92400E; }
+    .ft-pdf  { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; }
+    .ft-word { background: #DCFCE7; border-color: #BBF7D0; color: #166534; }
+    .ft-md   { background: #F3E8FF; border-color: #E9D5FF; color: #6B21A8; }
+    .ft-fig  { background: #E0E7FF; border-color: #C7D2FE; color: #4338CA; }
+
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-must  { background: #FFFBEB; border-left: 3px solid #D97706; }
+    .req-bonus { background: #DCFCE7; border-left: 3px solid #22C55E; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box { width: 20px; height: 20px; min-width: 20px; border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; color: transparent; transition: all 0.12s; }
+    .check-box.checked { background: #D97706; border-color: #D97706; color: white; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #FEF3C7; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #92400E; line-height: 1.5; }
+    .tip-blue  { background: #DBEAFE; color: #1E40AF; }
+    .tip-green { background: #DCFCE7; color: #166534; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    /* ── EXEMPLE DE FICHE ── */
+    .example-box { background: #FFFBEB; border: 0.5px solid #FDE68A; border-radius: 12px; padding: 1.2rem 1.4rem; margin: 0.8rem 0; }
+    .example-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #B45309; margin-bottom: 10px; }
+    .example-question { color: #92400E; font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+    .example-answer { color: #78350F; font-size: 0.85rem; line-height: 1.6; }
+    .example-why { color: #92400E; font-size: 0.82rem; background: #FEF3C7; border-radius: 6px; padding: 5px 10px; margin-top: 6px; }
+
+    .cta-wrap { text-align: center; background: #FEF3C7; border: 0.5px solid #FDE68A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+    .cta-wrap p { color: #92400E; font-size: 0.95rem; margin-bottom: 1.1rem; }
+    .cta-btn { display: inline-block; background: #D97706; color: #fff; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #B45309; }
+    .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; }
+
+    @media (max-width: 520px) { .themes-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<a class="nav-prev" href="exercices-langage-moteur-jeu.html">← Retour aux exercices</a>
+
+<div class="hero">
+  <h1>⚖️ Projet — Ma fiche<br>Langage &amp; Moteur</h1>
+  <p>Crée ta fiche de décision personnelle : comprendre les niveaux d'abstraction et savoir quoi utiliser selon le contexte.</p>
+  <div class="badge-row">
+    <span class="badge b-amber">Fiche de décision</span>
+    <span class="badge b-orange">Pyramide</span>
+    <span class="badge b-green">Comparatif</span>
+    <span class="badge b-blue">Mon choix</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+  <p class="desc">Tu vas créer <strong>ta fiche de décision personnelle</strong> sur les langages et moteurs du jeu vidéo. L'objectif n'est pas de tout lister — c'est de <em>comprendre</em> assez pour pouvoir répondre à la question :</p>
+  <p class="desc" style="text-align:center;font-size:1.05rem;font-weight:800;color:#92400E;">"Pour MON projet, je choisis quoi et pourquoi ?"</p>
+  <div class="tip"><span class="tip-i">💡</span><span>Ce n'est pas un résumé du cours. C'est un outil que tu gardes pour toi — une carte qui te guide quand tu démarres un nouveau projet de jeu. Personnalise-la avec tes propres repères.</span></div>
+</div>
+
+<div class="card">
+  <div class="stitle"><div class="pill p-orange">📚</div>Ce que ta fiche doit contenir</div>
+  <p class="desc">Tu dois aborder ces 6 points :</p>
+  <div class="themes-grid">
+    <div class="theme-card" style="background:#FEF3C7;border-color:#FDE68A;">
+      <div class="theme-title" style="color:#92400E;">🧱 Les langages</div>
+      <div style="font-size:0.8rem;color:#B45309;">C++, C#, GDScript, Lua, JavaScript — à quoi sert chacun, avec quel outil.</div>
+    </div>
+    <div class="theme-card" style="background:#FFFBEB;border-color:#FDE68A;">
+      <div class="theme-title" style="color:#92400E;">🏗️ La pyramide</div>
+      <div style="font-size:0.8rem;color:#B45309;">Les 5 niveaux d'abstraction, de OpenGL jusqu'aux moteurs AAA. Où tu te situes.</div>
+    </div>
+    <div class="theme-card" style="background:#F1EFE8;border-color:#D3D1C7;">
+      <div class="theme-title" style="color:#2C2C2A;">🔩 Natif sans moteur</div>
+      <div style="font-size:0.8rem;color:#5F5E5A;">Avantages (performance, compréhension) et inconvénients (tout à coder).</div>
+    </div>
+    <div class="theme-card" style="background:#F3E8FF;border-color:#E9D5FF;">
+      <div class="theme-title" style="color:#6B21A8;">⚙️ Avec un moteur</div>
+      <div style="font-size:0.8rem;color:#7E22CE;">Avantages (rapidité, export) et inconvénients (boîte noire, dépendance).</div>
+    </div>
+    <div class="theme-card" style="background:#DBEAFE;border-color:#BFDBFE;">
+      <div class="theme-title" style="color:#1E40AF;">📊 Mon comparatif</div>
+      <div style="font-size:0.8rem;color:#2563EB;">Tableau ou schéma : langage natif vs moteur sur les critères qui comptent pour toi.</div>
+    </div>
+    <div class="theme-card" style="background:#DCFCE7;border-color:#BBF7D0;">
+      <div class="theme-title" style="color:#166534;">💭 Ma décision</div>
+      <div style="font-size:0.8rem;color:#15803D;">Pour un projet web → JS + canvas ou Phaser. Pour mobile → Solar2D. Pour un vrai jeu → Godot. Explique ton raisonnement.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="stitle"><div class="pill p-amber">💡</div>Exemple de question à traiter dans ta fiche</div>
+  <div class="example-box">
+    <div class="example-label">Extrait d'une fiche bien rédigée</div>
+    <div class="example-question">Q : J'ai une idée de jeu de plateforme simple. Qu'est-ce que je choisis ?</div>
+    <div class="example-answer">
+      Option 1 → <strong style="color:#B45309;">Canvas HTML5 (JavaScript)</strong> : je maîtrise déjà le langage, je comprends tout ce que je code, je peux le partager en ligne avec un lien. Idéal si je veux approfondir les bases ou faire quelque chose de léger.<br><br>
+      Option 2 → <strong style="color:#166534;">Godot</strong> : je génère en quelques heures un prototype avec physique, sprites et collisions. Je sacrifie la compréhension profonde mais je gagne beaucoup de temps. Idéal si l'objectif est de finir et de publier.
+    </div>
+    <div class="example-why">📌 Ma décision : je commence par le canvas (déjà acquis) puis je testerai Godot pour mon prochain projet.</div>
+  </div>
+  <div class="tip tip-green"><span class="tip-i">✅</span><div>C'est ce niveau de raisonnement qu'on attend dans ta fiche — pas une liste de définitions copiées, mais <strong>ton raisonnement</strong> appliqué à un contexte réel.</div></div>
+</div>
+
+<div class="card">
+  <div class="stitle"><div class="pill p-purple">📄</div>Format de ta fiche</div>
+  <p class="desc">Ta fiche peut prendre la forme que tu veux — l'essentiel est qu'elle soit <strong>claire et consultable rapidement</strong>.</p>
+  <div class="rl">Formats acceptés</div>
+  <div class="format-row">
+    <span class="format-tag ft-html">🌐 Page HTML</span>
+    <span class="format-tag ft-pdf">📕 PDF</span>
+    <span class="format-tag ft-word">📘 Word / .docx</span>
+    <span class="format-tag ft-md">📝 Markdown .md</span>
+    <span class="format-tag ft-fig">🎨 Figma / schéma</span>
+  </div>
+  <div class="tip" style="margin-top:0.9rem;"><span class="tip-i">💡</span><span>Un schéma visuel (pyramide dessinée, arbre de décision) est tout aussi valide qu'un texte. Si tu préfères illustrer plutôt qu'écrire, c'est bienvenu.</span></div>
+</div>
+
+<div class="card">
+  <div class="stitle"><div class="pill p-green">✅</div>Critères de réussite</div>
+  <div class="req-list">
+    <div class="req-item req-must"><span class="req-icon">📌</span><div><strong>La pyramide d'abstraction est représentée</strong> — même de façon simplifiée, avec les 5 niveaux.</div></div>
+    <div class="req-item req-must"><span class="req-icon">📌</span><div><strong>Au moins 4 langages sont identifiés</strong> avec leur contexte principal (C++ → AAA, JS → web, etc.).</div></div>
+    <div class="req-item req-must"><span class="req-icon">📌</span><div><strong>Les avantages et inconvénients</strong> des deux approches (natif / moteur) sont présents.</div></div>
+    <div class="req-item req-must"><span class="req-icon">📌</span><div><strong>Une décision personnelle est argumentée</strong> — pour quel type de projet tu utiliserais quoi.</div></div>
+    <div class="req-item req-bonus"><span class="req-icon">⭐</span><div><strong>Bonus</strong> — tu mentionnes un outil non vu en cours (Love2D, LibGDX, MonoGame, RPG Maker…) et le situes dans la pyramide.</div></div>
+    <div class="req-item req-bonus"><span class="req-icon">⭐</span><div><strong>Bonus</strong> — ta fiche contient un arbre de décision visuel : "Si mon objectif est X → j'utilise Y".</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="stitle"><div class="pill p-blue">☑️</div>Checklist avant de rendre</div>
+  <div class="checklist">
+    <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span>J'ai représenté la pyramide d'abstraction (de OpenGL à Unreal).</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span>J'ai situé le canvas HTML5 dans cette pyramide.</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span>J'ai identifié au moins 4 langages avec leur contexte.</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span>J'ai listé les avantages et inconvénients du natif et du moteur.</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span>J'ai pris une décision personnelle et argumenté mon choix.</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span>Ma fiche est lisible par quelqu'un qui n'a pas suivi le cours.</span></div>
+  </div>
+</div>
+
+<div class="cta-wrap">
+  <p>Fiche terminée ? Continue avec les moteurs de jeu dans la même section.</p>
+  <a class="cta-btn" href="../../sommaire.html">← Retour au sommaire</a>
+</div>
+
+<div class="footer-note">Langage natif &amp; Moteur de jeu — Projet &nbsp;|&nbsp; Club Web</div>
+
+<script>
+function toggle(el){
+  el.classList.toggle('checked');
+  el.textContent = el.classList.contains('checked') ? '✓' : '';
+}
+</script>
+
+</body>
+</html>

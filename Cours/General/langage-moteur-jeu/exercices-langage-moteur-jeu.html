@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices — Langage natif & Moteur de jeu</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #92400E; text-decoration: none; margin-bottom: 1.5rem; background: #FEF3C7; border: 0.5px solid #FDE68A; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #FDE68A; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.1rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-amber  { background: #FEF3C7; color: #92400E; }
+    .b-orange { background: #FFEDD5; color: #9A3412; }
+    .b-green  { background: #DCFCE7; color: #166534; }
+
+    .progress-header { display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.82rem; font-weight: 700; color: #888780; }
+    .progress-count { color: #D97706; }
+    .progress-wrap { height: 8px; background: #D3D1C7; border-radius: 10px; margin-bottom: 2rem; overflow: hidden; }
+    .progress-fill { height: 100%; background: #D97706; border-radius: 10px; transition: width 0.4s ease; width: 0%; }
+
+    .section-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; margin: 2rem 0 0.8rem; display: flex; align-items: center; gap: 8px; }
+    .section-label::before, .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+    .qcm-card { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; transition: border-color 0.2s; }
+    .qcm-card.answered { border-color: #D97706; }
+    .qcm-question { font-size: 0.97rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.5; }
+    .qcm-options { display: flex; flex-direction: column; gap: 6px; }
+    .qcm-btn { background: #F7F6F2; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 9px 14px; font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 600; text-align: left; cursor: pointer; transition: all 0.15s; }
+    .qcm-btn:hover:not(:disabled) { background: #FEF3C7; border-color: #FDE68A; }
+    .qcm-btn.correct-ans { background: #DCFCE7; border-color: #86EFAC; color: #166534; font-weight: 800; }
+    .qcm-btn.wrong-ans   { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; text-decoration: line-through; }
+    .qcm-feedback { font-size: 0.83rem; margin-top: 0.6rem; padding: 6px 10px; border-radius: 7px; display: none; line-height: 1.5; }
+    .qcm-feedback.show { display: block; }
+    .qcm-feedback.ok { background: #DCFCE7; color: #166534; }
+    .qcm-feedback.ko { background: #FEE2E2; color: #991B1B; }
+
+    .vf-card { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; }
+    .vf-statement { font-size: 0.97rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.5; }
+    .vf-btns { display: flex; gap: 8px; }
+    .vf-btn { flex: 1; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 9px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; background: #F7F6F2; transition: all 0.15s; }
+    .vf-btn:hover:not(:disabled) { background: #FEF3C7; border-color: #FDE68A; }
+    .vf-btn.correct-ans { background: #DCFCE7; border-color: #86EFAC; color: #166534; }
+    .vf-btn.wrong-ans   { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; }
+    .vf-feedback { font-size: 0.83rem; margin-top: 0.6rem; padding: 6px 10px; border-radius: 7px; display: none; line-height: 1.5; }
+    .vf-feedback.show { display: block; }
+    .vf-feedback.ok { background: #DCFCE7; color: #166534; }
+    .vf-feedback.ko { background: #FEE2E2; color: #991B1B; }
+
+    .assoc-card { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; }
+    .assoc-term { background: #FEF3C7; border: 0.5px solid #FDE68A; border-radius: 8px; padding: 8px 12px; font-size: 0.88rem; font-weight: 700; color: #92400E; }
+    .assoc-def-btn { background: #F7F6F2; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 8px 12px; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 600; text-align: left; cursor: pointer; transition: all 0.15s; }
+    .assoc-def-btn:hover:not(:disabled) { background: #FEF3C7; border-color: #FDE68A; }
+    .assoc-def-btn.correct-ans { background: #DCFCE7; border-color: #86EFAC; color: #166534; font-weight: 800; }
+    .assoc-def-btn.wrong-ans   { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; }
+    .assoc-feedback { font-size: 0.83rem; margin-top: 0.6rem; padding: 6px 10px; border-radius: 7px; display: none; line-height: 1.5; }
+    .assoc-feedback.show { display: block; }
+    .assoc-feedback.ok { background: #DCFCE7; color: #166534; }
+    .assoc-feedback.ko { background: #FEE2E2; color: #991B1B; }
+
+    .check-all-btn { display: block; width: 100%; background: #D97706; color: #fff; border: none; border-radius: 10px; padding: 12px; font-family: 'Nunito', sans-serif; font-size: 0.97rem; font-weight: 800; cursor: pointer; margin-top: 1.5rem; transition: background 0.15s; }
+    .check-all-btn:hover { background: #B45309; }
+    .score-box { display: none; margin-top: 1rem; background: #FEF3C7; border-radius: 12px; padding: 1rem 1.2rem; text-align: center; }
+    .score-box.show { display: block; }
+    .score-num { font-size: 1.8rem; font-weight: 800; color: #92400E; }
+    .score-label { font-size: 0.88rem; color: #D97706; margin-top: 0.2rem; }
+
+    .cta-wrap { text-align: center; background: #FEF3C7; border: 0.5px solid #FDE68A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+    .cta-wrap p { color: #92400E; font-size: 0.95rem; margin-bottom: 1.1rem; }
+    .cta-btn { display: inline-block; background: #D97706; color: #fff; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #B45309; }
+    .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; }
+  </style>
+</head>
+<body>
+
+<a class="nav-prev" href="cours-langage-moteur-jeu.html">← Retour au cours</a>
+
+<div class="hero">
+  <h1>⚖️ Exercices<br>Langage natif &amp; Moteur</h1>
+  <p>Teste ta compréhension des niveaux d'abstraction et des langages du jeu vidéo.</p>
+  <div class="badge-row">
+    <span class="badge b-amber">Langages</span>
+    <span class="badge b-orange">Abstraction</span>
+    <span class="badge b-green">Comparatif</span>
+  </div>
+</div>
+
+<div class="progress-header">
+  <span>Progression</span>
+  <span class="progress-count" id="prog-count">0 / 18</span>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-fill"></div></div>
+
+<!-- ── QCM ── -->
+<div class="section-label">QCM — Choix multiple</div>
+
+<div class="qcm-card" id="q0">
+  <div class="qcm-question">1. Quel langage est utilisé pour coder Unreal Engine et les jeux AAA les plus performants ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(0,0)">A. C#</button>
+    <button class="qcm-btn" onclick="selectQCM(0,1)">B. JavaScript</button>
+    <button class="qcm-btn" onclick="selectQCM(0,2)">C. C++</button>
+    <button class="qcm-btn" onclick="selectQCM(0,3)">D. GDScript</button>
+  </div>
+  <div class="qcm-feedback" id="qfb0"></div>
+</div>
+
+<div class="qcm-card" id="q1">
+  <div class="qcm-question">2. Dans la pyramide d'abstraction, où se situe le canvas HTML5 ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(1,0)">A. Au niveau le plus bas (OpenGL direct)</button>
+    <button class="qcm-btn" onclick="selectQCM(1,1)">B. Au milieu — entre le hardware et les frameworks</button>
+    <button class="qcm-btn" onclick="selectQCM(1,2)">C. Au même niveau qu'Unity</button>
+    <button class="qcm-btn" onclick="selectQCM(1,3)">D. Au sommet, comme Unreal Engine</button>
+  </div>
+  <div class="qcm-feedback" id="qfb1"></div>
+</div>
+
+<div class="qcm-card" id="q2">
+  <div class="qcm-question">3. Quel est le principal avantage de coder un jeu en langage natif sans moteur ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(2,0)">A. La vitesse de développement</button>
+    <button class="qcm-btn" onclick="selectQCM(2,1)">B. L'accès à un éditeur visuel</button>
+    <button class="qcm-btn" onclick="selectQCM(2,2)">C. La compréhension profonde et la performance maximale</button>
+    <button class="qcm-btn" onclick="selectQCM(2,3)">D. L'export multi-plateforme automatique</button>
+  </div>
+  <div class="qcm-feedback" id="qfb2"></div>
+</div>
+
+<div class="qcm-card" id="q3">
+  <div class="qcm-question">4. Quelle bibliothèque se situe dans la "couche mince" au-dessus du hardware (sans être un moteur complet) ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(3,0)">A. Unity</button>
+    <button class="qcm-btn" onclick="selectQCM(3,1)">B. SDL</button>
+    <button class="qcm-btn" onclick="selectQCM(3,2)">C. Phaser.js</button>
+    <button class="qcm-btn" onclick="selectQCM(3,3)">D. Godot</button>
+  </div>
+  <div class="qcm-feedback" id="qfb3"></div>
+</div>
+
+<div class="qcm-card" id="q4">
+  <div class="qcm-question">5. Si tu veux créer rapidement un prototype et te concentrer sur le gameplay plutôt que la plomberie technique, que choisir ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(4,0)">A. Coder en C++ pur sans bibliothèque</button>
+    <button class="qcm-btn" onclick="selectQCM(4,1)">B. OpenGL directement</button>
+    <button class="qcm-btn" onclick="selectQCM(4,2)">C. Un moteur comme Godot ou Unity</button>
+    <button class="qcm-btn" onclick="selectQCM(4,3)">D. Assembler (langage machine)</button>
+  </div>
+  <div class="qcm-feedback" id="qfb4"></div>
+</div>
+
+<div class="qcm-card" id="q5">
+  <div class="qcm-question">6. Quel langage du jeu vidéo tu connaissais déjà avant ce cours (appris avec le canvas) ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(5,0)">A. C++</button>
+    <button class="qcm-btn" onclick="selectQCM(5,1)">B. Lua</button>
+    <button class="qcm-btn" onclick="selectQCM(5,2)">C. JavaScript</button>
+    <button class="qcm-btn" onclick="selectQCM(5,3)">D. GDScript</button>
+  </div>
+  <div class="qcm-feedback" id="qfb5"></div>
+</div>
+
+<!-- ── V/F ── -->
+<div class="section-label">Vrai ou Faux</div>
+
+<div class="vf-card" id="vf0">
+  <div class="vf-statement">7. Coder en langage natif sans moteur est toujours plus lent qu'utiliser un moteur complet.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv0" onclick="selectVF(0,true)">Vrai</button>
+    <button class="vf-btn" id="vff0" onclick="selectVF(0,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb0"></div>
+</div>
+
+<div class="vf-card" id="vf1">
+  <div class="vf-statement">8. Le canvas HTML5 se situe dans la pyramide d'abstraction entre "couche mince" (SDL) et "frameworks 2D" (Phaser).</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv1" onclick="selectVF(1,true)">Vrai</button>
+    <button class="vf-btn" id="vff1" onclick="selectVF(1,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb1"></div>
+</div>
+
+<div class="vf-card" id="vf2">
+  <div class="vf-statement">9. Les grands studios AAA (id Software, Naughty Dog) utilisent Unity parce que c'est plus rapide.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv2" onclick="selectVF(2,true)">Vrai</button>
+    <button class="vf-btn" id="vff2" onclick="selectVF(2,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb2"></div>
+</div>
+
+<div class="vf-card" id="vf3">
+  <div class="vf-statement">10. La physique qu'on codait manuellement (vy += GRAVITE) est fournie gratuitement par des moteurs comme Godot ou Unity.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv3" onclick="selectVF(3,true)">Vrai</button>
+    <button class="vf-btn" id="vff3" onclick="selectVF(3,3)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb3"></div>
+</div>
+
+<div class="vf-card" id="vf4">
+  <div class="vf-statement">11. Utiliser un moteur de jeu empêche de comprendre ce qui se passe réellement sous le capot.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv4" onclick="selectVF(4,true)">Vrai</button>
+    <button class="vf-btn" id="vff4" onclick="selectVF(4,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb4"></div>
+</div>
+
+<div class="vf-card" id="vf5">
+  <div class="vf-statement">12. Lua est utilisé aussi bien dans Solar2D que dans Roblox.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv5" onclick="selectVF(5,true)">Vrai</button>
+    <button class="vf-btn" id="vff5" onclick="selectVF(5,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb5"></div>
+</div>
+
+<!-- ── ASSOCIATIONS ── -->
+<div class="section-label">Associations — Langage → Contexte</div>
+
+<div class="assoc-card" id="ac0">
+  <div style="font-size:0.97rem;font-weight:700;margin-bottom:0.9rem;">13–18. Associe chaque langage à son contexte principal dans le jeu vidéo.</div>
+  <div style="display:flex;flex-direction:column;gap:10px;margin-top:0.5rem;">
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">C++</div>
+      <button class="assoc-def-btn" id="ad0" onclick="selectAssoc(0)">Performance maximale, moteurs AAA (Unreal), jeux like Doom</button>
+    </div>
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">C#</div>
+      <button class="assoc-def-btn" id="ad1" onclick="selectAssoc(1)">Langage de script de Unity, typage fort, productivité</button>
+    </div>
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">GDScript</div>
+      <button class="assoc-def-btn" id="ad2" onclick="selectAssoc(2)">Propre à Godot, syntaxe Python, intégré à l'éditeur</button>
+    </div>
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">Lua</div>
+      <button class="assoc-def-btn" id="ad3" onclick="selectAssoc(3)">Léger et embarquable, Solar2D, Roblox, IA de jeux</button>
+    </div>
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">JavaScript</div>
+      <button class="assoc-def-btn" id="ad4" onclick="selectAssoc(4)">Jeux web, canvas HTML5, Phaser.js — tu le connais !</button>
+    </div>
+    <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">SDL / SFML</div>
+      <button class="assoc-def-btn" id="ad5" onclick="selectAssoc(5)">Couche mince au-dessus du hardware, fenêtre + inputs en C++</button>
+    </div>
+  </div>
+  <div class="assoc-feedback" id="afb0"></div>
+</div>
+
+<button class="check-all-btn" onclick="checkAll()">Corriger tout</button>
+
+<div class="score-box" id="score-box">
+  <div class="score-num" id="score-num">—</div>
+  <div class="score-label" id="score-label"></div>
+</div>
+
+<div class="cta-wrap">
+  <p>Exercices terminés ? Place au projet !</p>
+  <a class="cta-btn" href="projet-langage-moteur-jeu.html">Voir le projet →</a>
+</div>
+
+<div class="footer-note">Langage natif &amp; Moteur de jeu — Exercices &nbsp;|&nbsp; Club Web</div>
+
+<script>
+var TOTAL = 18;
+var answered = 0;
+
+var QCM = [
+  { ans: 2, fb: '✅ C++ est le langage du bas niveau. Unreal Engine, id Software (Doom, Quake) et la plupart des moteurs maison AAA sont écrits en C++.' },
+  { ans: 1, fb: '✅ Le canvas se situe au milieu de la pyramide : au-dessus de SDL (couche mince) mais en dessous de Phaser (framework 2D).' },
+  { ans: 2, fb: '✅ Coder sans moteur donne une performance maximale et une compréhension profonde — au prix d\'une vitesse de développement très réduite.' },
+  { ans: 1, fb: '✅ SDL est une "couche mince" : elle gère la fenêtre, le clavier et le son, mais ne fournit aucune physique ni scène. C\'est entre le hardware brut et un moteur.' },
+  { ans: 2, fb: '✅ Pour un prototype rapide, un moteur complet (Godot ou Unity) est le meilleur choix — éditeur visuel, physique intégrée, pas de plomberie à coder.' },
+  { ans: 2, fb: '✅ JavaScript est le langage du canvas HTML5 — celui que tu as appris dans ce parcours. Tu es déjà un développeur de jeux vidéo !' }
+];
+
+var VF = [
+  { ans: false, fb: '❌ Faux — du point de vue de la performance à l\'exécution, le langage natif est plus rapide. C\'est la vitesse de développement qui est plus lente.' },
+  { ans: true,  fb: '✅ Le canvas se situe exactement entre les couches minces (SDL/SFML) et les frameworks 2D dédiés (Phaser.js, Love2D).' },
+  { ans: false, fb: '❌ Faux — les grands studios AAA maintiennent leurs propres moteurs en C++. Ils choisissent le contrôle total sur la performance, pas la rapidité de développement.' },
+  { ans: true,  fb: '✅ La physique (gravité, collision) que tu codais manuellement est fournie automatiquement par tous les moteurs modernes.' },
+  { ans: false, fb: '❌ Faux — utiliser un moteur ne t\'empêche pas de comprendre. Mais le risque est de copier-coller sans chercher à comprendre. Le canvas brut t\'a donné cette compréhension.' },
+  { ans: true,  fb: '✅ Lua est le langage de Solar2D (ex-Corona SDK) et de Roblox (via Luau, un dialecte proche). Connaître l\'un facilite l\'apprentissage de l\'autre.' }
+];
+
+var qcmAnswers = {}, vfAnswers = {}, assocDone = false, assocAnswers = {};
+
+function updateProgress(){
+  document.getElementById('prog-count').textContent = answered + ' / ' + TOTAL;
+  document.getElementById('prog-fill').style.width  = (answered / TOTAL * 100) + '%';
+}
+
+function selectQCM(i, val){
+  if(qcmAnswers[i] !== undefined) return;
+  qcmAnswers[i] = val; answered++;
+  var btns = document.querySelectorAll('#q' + i + ' .qcm-btn');
+  var ok   = val === QCM[i].ans;
+  btns[QCM[i].ans].classList.add('correct-ans');
+  if(!ok) btns[val].classList.add('wrong-ans');
+  btns.forEach(function(b){ b.disabled = true; });
+  var fb = document.getElementById('qfb' + i);
+  fb.textContent = ok ? QCM[i].fb : '❌ ' + QCM[i].fb.replace('✅ ','');
+  fb.className   = 'qcm-feedback show ' + (ok ? 'ok' : 'ko');
+  document.getElementById('q' + i).classList.add('answered');
+  updateProgress();
+}
+
+function selectVF(i, val){
+  if(vfAnswers[i] !== undefined) return;
+  vfAnswers[i] = val; answered++;
+  var item = VF[i];
+  var vBtn = document.getElementById('vfv' + i), fBtn = document.getElementById('vff' + i);
+  var ok   = val === item.ans;
+  var correctBtn = item.ans ? vBtn : fBtn, wrongBtn = item.ans ? fBtn : vBtn;
+  correctBtn.classList.add('correct-ans');
+  if(!ok) wrongBtn.classList.add('wrong-ans');
+  vBtn.disabled = fBtn.disabled = true;
+  var fb = document.getElementById('vffb' + i);
+  fb.textContent = ok ? item.fb : '❌ ' + item.fb.replace('✅ ','');
+  fb.className   = 'vf-feedback show ' + (ok ? 'ok' : 'ko');
+  updateProgress();
+}
+
+function selectAssoc(i){
+  if(assocDone) return;
+  document.getElementById('ad' + i).classList.add('correct-ans');
+  document.getElementById('ad' + i).disabled = true;
+  assocAnswers[i] = i;
+  if(Object.keys(assocAnswers).length === 6){
+    assocDone = true; answered += 6;
+    var fb = document.getElementById('afb0');
+    fb.textContent = '✅ Toutes les associations sont correctes !';
+    fb.className = 'assoc-feedback show ok';
+    updateProgress();
+  }
+}
+
+function checkAll(){
+  var correct = 0, total = 0;
+  Object.keys(qcmAnswers).forEach(function(i){ total++; if(qcmAnswers[i]===QCM[i].ans) correct++; });
+  Object.keys(vfAnswers).forEach(function(i){ total++; if(vfAnswers[i]===VF[i].ans) correct++; });
+  if(assocDone){ total += 6; correct += 6; }
+  document.getElementById('score-num').textContent   = correct + ' / ' + total;
+  document.getElementById('score-label').textContent =
+    correct === total ? '🏆 Score parfait !' :
+    correct >= total * 0.8 ? '🎉 Très bien maîtrisé !' :
+    correct >= total * 0.6 ? '👍 Pas mal, relis les parties manquantes.' :
+    '📖 Reprends le cours avant de continuer.';
+  document.getElementById('score-box').classList.add('show');
+}
+</script>
+
+</body>
+</html>

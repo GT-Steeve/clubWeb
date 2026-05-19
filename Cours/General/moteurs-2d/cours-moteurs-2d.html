@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moteurs jeu 2D — Phaser.js & Solar2D</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #3F6212; text-decoration: none; margin-bottom: 1.5rem; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #D9F99D; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-lime   { background: #ECFCCB; color: #3F6212; }
+    .b-green  { background: #DCFCE7; color: #166534; }
+    .b-blue   { background: #DBEAFE; color: #1E40AF; }
+    .b-amber  { background: #FEF3C7; color: #92400E; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .card-section { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #65A30D; margin-bottom: 0.5rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 800; margin-bottom: 0.8rem; color: #1E1D1A; }
+    .pill { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; flex-shrink: 0; }
+    .p-lime   { background: #ECFCCB; color: #3F6212; }
+    .p-green  { background: #DCFCE7; color: #166534; }
+    .p-blue   { background: #DBEAFE; color: #1E40AF; }
+    .p-amber  { background: #FEF3C7; color: #92400E; }
+    .p-purple { background: #F3E8FF; color: #6B21A8; }
+    .p-red    { background: #FEE2E2; color: #991B1B; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.75; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+    code { font-family: 'Fira Code', monospace; background: #ECFCCB; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #3F6212; }
+    strong { color: #1E1D1A; }
+
+    .engine-card { border-radius: 14px; border: 1.5px solid; padding: 1.2rem 1.4rem; margin-bottom: 1rem; }
+    .engine-header { display: flex; align-items: center; gap: 12px; margin-bottom: 0.8rem; }
+    .engine-logo { font-size: 2rem; line-height: 1; }
+    .engine-name { font-size: 1.1rem; font-weight: 800; }
+    .engine-sub  { font-size: 0.8rem; font-weight: 600; margin-top: 1px; }
+    .engine-body { font-size: 0.9rem; line-height: 1.7; }
+
+    .phaser-card { background: #0C1220; border-color: #1E3A5F; }
+    .phaser-card .engine-name { color: #93C5FD; }
+    .phaser-card .engine-sub  { color: #3B82F6; }
+    .phaser-card .engine-body { color: #BAE6FD; }
+
+    .solar-card { background: #0A180A; border-color: #1A3A1A; }
+    .solar-card .engine-name { color: #86EFAC; }
+    .solar-card .engine-sub  { color: #22C55E; }
+    .solar-card .engine-body { color: #BBF7D0; }
+
+    .pro-con { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0.7rem 0; }
+    .pro, .con { border-radius: 8px; padding: 0.55rem 0.85rem; font-size: 0.84rem; line-height: 1.5; }
+    .pro { background: rgba(16,185,129,0.12); border-left: 3px solid #10B981; }
+    .con { background: rgba(239,68,68,0.12); border-left: 3px solid #EF4444; }
+    .pro-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #6EE7B7; margin-bottom: 3px; }
+    .con-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #FCA5A5; margin-bottom: 3px; }
+
+    .js-block {
+      background: #0C1220; border-left: 3px solid #65A30D; border-radius: 10px;
+      padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem;
+      line-height: 1.9; white-space: pre; overflow-x: auto; color: #D9F99D;
+      margin: 0.8rem 0;
+    }
+    .kw  { color: #86EFAC; font-weight: 700; }
+    .fn  { color: #93C5FD; }
+    .str { color: #FCD34D; }
+    .num { color: #FB923C; }
+    .cm  { color: #3F6212; font-style: italic; }
+    .var { color: #D9F99D; }
+    .obj { color: #A5F3FC; }
+
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.8rem 0; border-radius: 10px; overflow: hidden; }
+    .compare-table th { background: #ECFCCB; color: #3F6212; font-weight: 800; padding: 0.6rem 0.8rem; text-align: left; }
+    .compare-table td { padding: 0.55rem 0.8rem; border-top: 0.5px solid #E8E6DF; color: #5F5E5A; vertical-align: top; }
+    .compare-table tr:nth-child(even) td { background: #F7F6F2; }
+    .compare-table td:first-child { font-weight: 700; color: #2C2C2A; }
+
+    .games-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.5rem 0; }
+    .game-tag { background: rgba(255,255,255,0.1); border: 0.5px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 3px 10px; font-size: 0.82rem; font-weight: 600; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #ECFCCB; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #3F6212; line-height: 1.5; }
+    .tip-blue  { background: #DBEAFE; color: #1E40AF; }
+    .tip-amber { background: #FEF3C7; color: #92400E; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .nav-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 0.5px solid #D3D1C7; }
+    .nav-next { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #fff; text-decoration: none; background: #65A30D; border-radius: 8px; padding: 8px 16px; transition: background 0.15s; }
+    .nav-next:hover { background: #4D7C0F; }
+    .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; }
+
+    @media (max-width: 540px) { .pro-con { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<a class="nav-prev" href="../../sommaire.html">← Sommaire</a>
+
+<div class="hero">
+  <h1>🕹️ Moteurs jeu 2D<br>Phaser.js &amp; Solar2D</h1>
+  <p>Découvre deux frameworks dédiés aux jeux 2D : l'un pensé pour le web, l'autre pour le mobile — deux approches, deux philosophies.</p>
+  <div class="badge-row">
+    <span class="badge b-blue">Phaser.js</span>
+    <span class="badge b-green">Solar2D</span>
+    <span class="badge b-lime">JavaScript · Lua</span>
+    <span class="badge b-amber">Culture</span>
+  </div>
+</div>
+
+<!-- SECTION 1 -->
+<div class="card">
+  <div class="card-section">Section 1</div>
+  <div class="stitle"><div class="pill p-lime">🤔</div>Pourquoi un moteur dédié 2D ?</div>
+  <p class="desc">Unreal Engine, Unity et Godot peuvent tous faire du 2D. Alors pourquoi utiliser un framework dédié ? La réponse : <strong>légèreté, focus et contexte de déploiement</strong>.</p>
+  <p class="desc">Un moteur 3D complet qui fait du 2D, c'est comme utiliser un semi-remorque pour faire des courses au coin de la rue — ça marche, mais c'est surdimensionné. Les frameworks 2D sont pensés dès le départ pour un contexte précis :</p>
+  <div class="pro-con">
+    <div class="pro"><div class="pro-label">Framework 2D dédié</div>Léger, rapide à démarrer, API pensée pour la 2D, parfaitement adapté à son contexte (web ou mobile).</div>
+    <div class="con"><div class="con-label">Moteur généraliste en mode 2D</div>Lourd à installer, concepts 3D pas toujours pertinents, courbe d'apprentissage plus longue.</div>
+  </div>
+  <div class="tip"><span class="tip-i">💡</span><div>Le canvas HTML5 que tu as appris, c'est la <em>couche la plus basse</em> : tu dessines toi-même tout pixel par pixel. Phaser.js est construit <em>par-dessus</em> le canvas — il gère les sprites, la physique et les scènes pour toi.</div></div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="card">
+  <div class="card-section">Section 2</div>
+  <div class="stitle"><div class="pill p-blue">⚡</div>Phaser.js</div>
+  <p class="desc">Phaser est un framework de jeu 2D pour le <strong>navigateur web</strong>, créé en 2013 par Richard Davey (alias Photonstorm). Il est écrit en JavaScript/TypeScript et tourne directement dans le navigateur — <strong>sans installation pour le joueur</strong>.</p>
+
+  <div class="engine-card phaser-card">
+    <div class="engine-header">
+      <div class="engine-logo">⚡</div>
+      <div>
+        <div class="engine-name">Phaser.js — v3</div>
+        <div class="engine-sub">Photonstorm · depuis 2013 · JavaScript / TypeScript · MIT</div>
+      </div>
+    </div>
+    <div class="engine-body">
+      <strong style="color:#93C5FD;">Rendu</strong> — Canvas 2D ou WebGL (accélération GPU dans le navigateur)<br>
+      <strong style="color:#93C5FD;">Physique</strong> — Arcade (légère, parfaite pour platformers) ou Matter.js (réaliste)<br>
+      <strong style="color:#93C5FD;">Scènes</strong> — système de scènes stackables (menu, jeu, pause, game-over simultanés)<br>
+      <strong style="color:#93C5FD;">Sprites</strong> — animations frame-by-frame depuis des spritesheets intégrées<br><br>
+      <div class="games-list">
+        <span class="game-tag">Mini-jeux BBC / Disney</span>
+        <span class="game-tag">Jeux HTML5 mobiles</span>
+        <span class="game-tag">Game jams web</span>
+        <span class="game-tag">Jeux éducatifs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pro-con">
+    <div class="pro"><div class="pro-label">Points forts</div>Tourne dans le navigateur, zéro installation joueur, JavaScript que tu connais, énorme documentation et communauté.</div>
+    <div class="con"><div class="con-label">Points faibles</div>Performance mobile limitée vs natif, export app store via Cordova (complexe), pas de 3D.</div>
+  </div>
+
+  <div class="card-section" style="margin-top:1rem;">Exemple de config Phaser</div>
+  <div class="js-block"><span class="kw">const</span> <span class="var">config</span> = {
+  type:   Phaser.<span class="obj">AUTO</span>,         <span class="cm">// Canvas ou WebGL selon le navigateur</span>
+  width:  <span class="num">800</span>,
+  height: <span class="num">600</span>,
+  physics: {
+    default: <span class="str">'arcade'</span>,         <span class="cm">// moteur physique léger</span>
+    arcade: { gravity: { y: <span class="num">300</span> }, debug: <span class="kw">false</span> }
+  },
+  scene: [<span class="fn">PreloadScene</span>, <span class="fn">MenuScene</span>, <span class="fn">GameScene</span>]  <span class="cm">// liste de scènes</span>
+};
+
+<span class="kw">const</span> <span class="var">game</span> = <span class="kw">new</span> <span class="fn">Phaser</span>.<span class="fn">Game</span>(<span class="var">config</span>);</div>
+
+  <div class="tip tip-blue"><span class="tip-i">🌐</span><div>Phaser est le framework de référence pour les <strong>game jams web</strong> (Ludum Dare, itch.io). Ton jeu s'ouvre dans n'importe quel navigateur — partage un lien, c'est jouable immédiatement.</div></div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="card">
+  <div class="card-section">Section 3</div>
+  <div class="stitle"><div class="pill p-green">🌙</div>Solar2D</div>
+  <p class="desc">Solar2D (anciennement <strong>Corona SDK</strong>) est un framework de jeu 2D pensé pour le <strong>mobile</strong> (iOS &amp; Android). Créé en 2009 par Walter Luh, il a été rendu open source en 2020 après le rachat raté de Corona Labs.</p>
+
+  <div class="engine-card solar-card">
+    <div class="engine-header">
+      <div class="engine-logo">🌙</div>
+      <div>
+        <div class="engine-name">Solar2D (ex Corona SDK)</div>
+        <div class="engine-sub">Open Source · depuis 2009 · Lua · MIT (depuis 2020)</div>
+      </div>
+    </div>
+    <div class="engine-body">
+      <strong style="color:#86EFAC;">Lua</strong> — langage de script léger et rapide, très populaire dans le jeu vidéo (aussi utilisé dans Roblox, Love2D)<br>
+      <strong style="color:#86EFAC;">Natif mobile</strong> — rendu via le GPU du téléphone, performances quasi natives<br>
+      <strong style="color:#86EFAC;">Simulateur intégré</strong> — teste ton jeu directement sur ton PC avant de déployer<br>
+      <strong style="color:#86EFAC;">Plugins</strong> — accès aux APIs mobiles (caméra, gyroscope, notifications push, in-app purchase)<br><br>
+      <div class="games-list">
+        <span class="game-tag">Gunman Clive</span>
+        <span class="game-tag">Jeux casual iOS/Android</span>
+        <span class="game-tag">Prototypes mobile</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pro-con">
+    <div class="pro"><div class="pro-label">Points forts</div>Performances natives sur mobile, Lua simple à apprendre, export iOS + Android depuis un même code, gratuit depuis 2020.</div>
+    <div class="con"><div class="con-label">Points faibles</div>Communauté plus petite depuis le passage open source, moins de ressources qu'avant, pas adapté au web.</div>
+  </div>
+
+  <div class="card-section" style="margin-top:1rem;">Exemple minimal en Lua (Solar2D)</div>
+  <div class="js-block"><span class="cm">-- main.lua — afficher un rectangle à l'écran</span>
+<span class="kw">local</span> <span class="var">rect</span> = display.<span class="fn">newRect</span>(
+  display.<span class="var">contentCenterX</span>,  <span class="cm">-- x centré</span>
+  display.<span class="var">contentCenterY</span>,  <span class="cm">-- y centré</span>
+  <span class="num">100</span>, <span class="num">100</span>               <span class="cm">-- largeur, hauteur</span>
+)
+rect:setFillColor( <span class="num">0.2</span>, <span class="num">0.8</span>, <span class="num">0.4</span> )  <span class="cm">-- couleur RGB 0–1
+
+-- Transition simple</span>
+transition.<span class="fn">to</span>( rect, { time=<span class="num">1000</span>, rotation=<span class="num">360</span> } )</div>
+
+  <div class="tip"><span class="tip-i">📱</span><div>Lua est intentionnellement minimaliste. C'est le même langage qu'utilise <strong>Roblox</strong> pour ses scripts — si tu connais déjà Roblox Studio, tu as une longueur d'avance.</div></div>
+</div>
+
+<!-- SECTION 4 -->
+<div class="card">
+  <div class="card-section">Section 4</div>
+  <div class="stitle"><div class="pill p-amber">📊</div>Comparatif Phaser vs Solar2D</div>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Critère</th>
+        <th>Phaser.js</th>
+        <th>Solar2D</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Langage</td><td>JavaScript / TypeScript</td><td>Lua</td></tr>
+      <tr><td>Plateforme cible</td><td>Navigateur web</td><td>iOS &amp; Android (mobile)</td></tr>
+      <tr><td>Licence</td><td>MIT (gratuit)</td><td>MIT (gratuit depuis 2020)</td></tr>
+      <tr><td>Rendu</td><td>Canvas 2D / WebGL</td><td>OpenGL ES (GPU natif)</td></tr>
+      <tr><td>Physique intégrée</td><td>Arcade + Matter.js</td><td>Box2D (intégrée)</td></tr>
+      <tr><td>Courbe d'apprentissage</td><td>⭐⭐ Facile (JS connu)</td><td>⭐⭐⭐ Intermédiaire (Lua)</td></tr>
+      <tr><td>Communauté</td><td>⭐⭐⭐⭐ Active</td><td>⭐⭐ En déclin depuis 2020</td></tr>
+      <tr><td>Export web</td><td>✅ Natif</td><td>❌ Non supporté</td></tr>
+      <tr><td>Export app store</td><td>⚠️ Via Cordova</td><td>✅ Natif iOS &amp; Android</td></tr>
+    </tbody>
+  </table>
+  <div class="tip tip-amber"><span class="tip-i">🎯</span><div><strong>Tu connais JavaScript ?</strong> Phaser est ton prochain step naturel après le canvas. <strong>Tu veux du mobile performant ?</strong> Solar2D (ou Godot) est plus adapté. Les deux sont 100 % gratuits.</div></div>
+</div>
+
+<!-- SECTION 5 -->
+<div class="card">
+  <div class="card-section">Section 5</div>
+  <div class="stitle"><div class="pill p-purple">🚀</div>Lien avec ce que tu connais</div>
+  <p class="desc">Tu as appris à créer des jeux avec le canvas HTML5 brut. Phaser.js <strong>automatise tout ce que tu faisais à la main</strong> :</p>
+  <div class="pro-con">
+    <div class="pro"><div class="pro-label">Canvas brut (vu en cours)</div>Tu gères toi-même : boucle de jeu, sprites, physique, collisions, scènes, inputs, sons.</div>
+    <div class="pro" style="border-left-color:#3B82F6;background:rgba(59,130,246,0.1);"><div class="pro-label" style="color:#93C5FD;">Phaser.js (framework)</div>La boucle tourne tout seul, les sprites s'animent, la physique est préconfigurée. Tu te concentres sur le gameplay.</div>
+  </div>
+  <p class="desc" style="margin-top:0.9rem;">Le canvas que tu maîtrises déjà, c'est la compréhension <em>sous-jacente</em> qui te permet d'utiliser Phaser intelligemment — tu sais ce qui se passe réellement derrière l'abstraction.</p>
+  <div class="tip"><span class="tip-i">🔗</span><div>Phaser utilise le canvas HTML5 en interne — le même <code>ctx.fillRect()</code>, le même <code>requestAnimationFrame()</code>. Ce que tu as appris n'est pas jeté : c'est la fondation.</div></div>
+</div>
+
+<div class="nav-footer">
+  <a class="nav-prev" href="../../sommaire.html">← Sommaire</a>
+  <a class="nav-next" href="exercices-moteurs-2d.html">Exercices →</a>
+</div>
+
+<div class="footer-note">Moteurs jeu 2D — Cours &nbsp;|&nbsp; Club Web</div>
+
+</body>
+</html>

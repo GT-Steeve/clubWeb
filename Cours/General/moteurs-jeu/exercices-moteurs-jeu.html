@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices — Moteurs de jeu</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #4338CA; text-decoration: none; margin-bottom: 1.5rem; background: #E0E7FF; border: 0.5px solid #C7D2FE; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #C7D2FE; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.1rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-indigo { background: #E0E7FF; color: #4338CA; }
+    .b-purple { background: #F3E8FF; color: #6B21A8; }
+    .b-green  { background: #DCFCE7; color: #166534; }
+
+    /* ── PROGRESS BAR ── */
+    .progress-header { display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.82rem; font-weight: 700; color: #888780; }
+    .progress-count { color: #6366F1; }
+    .progress-wrap { height: 8px; background: #D3D1C7; border-radius: 10px; margin-bottom: 2rem; overflow: hidden; }
+    .progress-fill { height: 100%; background: #6366F1; border-radius: 10px; transition: width 0.4s ease; width: 0%; }
+
+    /* ── SECTION LABEL ── */
+    .section-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; margin: 2rem 0 0.8rem; display: flex; align-items: center; gap: 8px; }
+    .section-label::before, .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+    /* ── QCM ── */
+    .qcm-card { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; transition: border-color 0.2s; }
+    .qcm-card.answered { border-color: #6366F1; }
+    .qcm-question { font-size: 0.97rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.5; }
+    .qcm-options { display: flex; flex-direction: column; gap: 6px; }
+    .qcm-btn { background: #F7F6F2; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 9px 14px; font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 600; text-align: left; cursor: pointer; transition: all 0.15s; }
+    .qcm-btn:hover:not(:disabled) { background: #E0E7FF; border-color: #C7D2FE; }
+    .qcm-btn.correct-ans { background: #DCFCE7; border-color: #86EFAC; color: #166534; font-weight: 800; }
+    .qcm-btn.wrong-ans   { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; text-decoration: line-through; }
+    .qcm-feedback { font-size: 0.83rem; margin-top: 0.6rem; padding: 6px 10px; border-radius: 7px; display: none; line-height: 1.5; }
+    .qcm-feedback.show { display: block; }
+    .qcm-feedback.ok { background: #DCFCE7; color: #166534; }
+    .qcm-feedback.ko { background: #FEE2E2; color: #991B1B; }
+
+    /* ── V/F ── */
+    .vf-card { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; }
+    .vf-statement { font-size: 0.97rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.5; }
+    .vf-btns { display: flex; gap: 8px; }
+    .vf-btn { flex: 1; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 9px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; background: #F7F6F2; transition: all 0.15s; }
+    .vf-btn:hover:not(:disabled) { background: #E0E7FF; border-color: #C7D2FE; }
+    .vf-btn.correct-ans { background: #DCFCE7; border-color: #86EFAC; color: #166534; }
+    .vf-btn.wrong-ans   { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; }
+    .vf-feedback { font-size: 0.83rem; margin-top: 0.6rem; padding: 6px 10px; border-radius: 7px; display: none; line-height: 1.5; }
+    .vf-feedback.show { display: block; }
+    .vf-feedback.ok { background: #DCFCE7; color: #166534; }
+    .vf-feedback.ko { background: #FEE2E2; color: #991B1B; }
+
+    /* ── ASSOCIATIONS ── */
+    .assoc-card { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; }
+    .assoc-title { font-size: 0.97rem; font-weight: 700; margin-bottom: 0.9rem; }
+    .assoc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .assoc-terms { display: flex; flex-direction: column; gap: 6px; }
+    .assoc-term { background: #E0E7FF; border: 0.5px solid #C7D2FE; border-radius: 8px; padding: 8px 12px; font-size: 0.88rem; font-weight: 700; color: #4338CA; }
+    .assoc-defs { display: flex; flex-direction: column; gap: 6px; }
+    .assoc-def-btn { background: #F7F6F2; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 8px 12px; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 600; text-align: left; cursor: pointer; transition: all 0.15s; }
+    .assoc-def-btn:hover:not(:disabled) { background: #E0E7FF; border-color: #C7D2FE; }
+    .assoc-def-btn.selected { background: #E0E7FF; border-color: #6366F1; }
+    .assoc-def-btn.correct-ans { background: #DCFCE7; border-color: #86EFAC; color: #166534; font-weight: 800; }
+    .assoc-def-btn.wrong-ans   { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; }
+    .assoc-feedback { font-size: 0.83rem; margin-top: 0.6rem; padding: 6px 10px; border-radius: 7px; display: none; line-height: 1.5; }
+    .assoc-feedback.show { display: block; }
+    .assoc-feedback.ok { background: #DCFCE7; color: #166534; }
+    .assoc-feedback.ko { background: #FEE2E2; color: #991B1B; }
+
+    /* ── SCORE ── */
+    .check-all-btn { display: block; width: 100%; background: #6366F1; color: #fff; border: none; border-radius: 10px; padding: 12px; font-family: 'Nunito', sans-serif; font-size: 0.97rem; font-weight: 800; cursor: pointer; margin-top: 1.5rem; transition: background 0.15s; }
+    .check-all-btn:hover { background: #4F46E5; }
+    .score-box { display: none; margin-top: 1rem; background: #E0E7FF; border-radius: 12px; padding: 1rem 1.2rem; text-align: center; }
+    .score-box.show { display: block; }
+    .score-num { font-size: 1.8rem; font-weight: 800; color: #4338CA; }
+    .score-label { font-size: 0.88rem; color: #6366F1; margin-top: 0.2rem; }
+
+    .cta-wrap { text-align: center; background: #1E1B4B; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+    .cta-wrap p { color: #C7D2FE; font-size: 0.95rem; margin-bottom: 1.1rem; }
+    .cta-btn { display: inline-block; background: #6366F1; color: #fff; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #4F46E5; }
+    .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; }
+  </style>
+</head>
+<body>
+
+<a class="nav-prev" href="cours-moteurs-jeu.html">← Retour au cours</a>
+
+<div class="hero">
+  <h1>🏗️ Exercices — Moteurs de jeu</h1>
+  <p>Teste ta compréhension d'Unreal Engine, Unity et Godot.</p>
+  <div class="badge-row">
+    <span class="badge b-indigo">Unreal Engine</span>
+    <span class="badge b-purple">Unity</span>
+    <span class="badge b-green">Godot</span>
+  </div>
+</div>
+
+<div class="progress-header">
+  <span>Progression</span>
+  <span class="progress-count" id="prog-count">0 / 18</span>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-fill"></div></div>
+
+<!-- ── QCM ── -->
+<div class="section-label">QCM — Choix multiple</div>
+
+<div class="qcm-card" id="q0">
+  <div class="qcm-question">1. Quel langage de scripting est propre à Godot (non utilisé ailleurs) ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(0,0)">A. C#</button>
+    <button class="qcm-btn" onclick="selectQCM(0,1)">B. GDScript</button>
+    <button class="qcm-btn" onclick="selectQCM(0,2)">C. Blueprints</button>
+    <button class="qcm-btn" onclick="selectQCM(0,3)">D. Lua</button>
+  </div>
+  <div class="qcm-feedback" id="qfb0"></div>
+</div>
+
+<div class="qcm-card" id="q1">
+  <div class="qcm-question">2. Qu'est-ce que "Nanite" dans Unreal Engine 5 ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(1,0)">A. Un système d'éclairage dynamique</button>
+    <button class="qcm-btn" onclick="selectQCM(1,1)">B. Un langage de scripting visuel</button>
+    <button class="qcm-btn" onclick="selectQCM(1,2)">C. Un système de géométrie virtualisée</button>
+    <button class="qcm-btn" onclick="selectQCM(1,3)">D. Le système audio 3D</button>
+  </div>
+  <div class="qcm-feedback" id="qfb1"></div>
+</div>
+
+<div class="qcm-card" id="q2">
+  <div class="qcm-question">3. Quelle licence utilise Godot ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(2,0)">A. Propriétaire — droits réservés Epic Games</button>
+    <button class="qcm-btn" onclick="selectQCM(2,1)">B. MIT — entièrement libre et gratuit</button>
+    <button class="qcm-btn" onclick="selectQCM(2,2)">C. Freemium — gratuit jusqu'à 100 k$</button>
+    <button class="qcm-btn" onclick="selectQCM(2,3)">D. GPL — obligation de rendre le code public</button>
+  </div>
+  <div class="qcm-feedback" id="qfb2"></div>
+</div>
+
+<div class="qcm-card" id="q3">
+  <div class="qcm-question">4. Quel moteur est le plus recommandé pour un jeu mobile cross-platform ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(3,0)">A. Unreal Engine</button>
+    <button class="qcm-btn" onclick="selectQCM(3,1)">B. Unity</button>
+    <button class="qcm-btn" onclick="selectQCM(3,2)">C. Godot</button>
+    <button class="qcm-btn" onclick="selectQCM(3,3)">D. Tous sont équivalents</button>
+  </div>
+  <div class="qcm-feedback" id="qfb3"></div>
+</div>
+
+<div class="qcm-card" id="q4">
+  <div class="qcm-question">5. Qu'est-ce que les "Blueprints" dans Unreal Engine ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(4,0)">A. Un système de gestion des assets</button>
+    <button class="qcm-btn" onclick="selectQCM(4,1)">B. Un système de scripting visuel (nœuds)</button>
+    <button class="qcm-btn" onclick="selectQCM(4,2)">C. Le moteur physique d'Unreal</button>
+    <button class="qcm-btn" onclick="selectQCM(4,3)">D. Un format de fichier 3D</button>
+  </div>
+  <div class="qcm-feedback" id="qfb4"></div>
+</div>
+
+<div class="qcm-card" id="q5">
+  <div class="qcm-question">6. Quel jeu a été développé avec Unity ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(5,0)">A. Fortnite</button>
+    <button class="qcm-btn" onclick="selectQCM(5,1)">B. Hellblade II</button>
+    <button class="qcm-btn" onclick="selectQCM(5,2)">C. Among Us</button>
+    <button class="qcm-btn" onclick="selectQCM(5,3)">D. Brotato</button>
+  </div>
+  <div class="qcm-feedback" id="qfb5"></div>
+</div>
+
+<!-- ── V/F ── -->
+<div class="section-label">Vrai ou Faux</div>
+
+<div class="vf-card" id="vf0">
+  <div class="vf-statement">7. Godot est un moteur open source appartenant à la communauté, sans aucune royalties.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv0" onclick="selectVF(0,true)">Vrai</button>
+    <button class="vf-btn" id="vff0" onclick="selectVF(0,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb0"></div>
+</div>
+
+<div class="vf-card" id="vf1">
+  <div class="vf-statement">8. Unreal Engine est gratuit pour toujours, sans aucune condition.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv1" onclick="selectVF(1,true)">Vrai</button>
+    <button class="vf-btn" id="vff1" onclick="selectVF(1,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb1"></div>
+</div>
+
+<div class="vf-card" id="vf2">
+  <div class="vf-statement">9. Unity utilise C# comme langage de scripting principal.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv2" onclick="selectVF(2,true)">Vrai</button>
+    <button class="vf-btn" id="vff2" onclick="selectVF(2,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb2"></div>
+</div>
+
+<div class="vf-card" id="vf3">
+  <div class="vf-statement">10. Unreal Engine est le meilleur choix pour un débutant qui veut créer un petit jeu 2D.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv3" onclick="selectVF(3,true)">Vrai</button>
+    <button class="vf-btn" id="vff3" onclick="selectVF(3,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb3"></div>
+</div>
+
+<div class="vf-card" id="vf4">
+  <div class="vf-statement">11. La logique de "scènes et nœuds" de Godot rappelle la structure du DOM en HTML.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv4" onclick="selectVF(4,true)">Vrai</button>
+    <button class="vf-btn" id="vff4" onclick="selectVF(4,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb4"></div>
+</div>
+
+<div class="vf-card" id="vf5">
+  <div class="vf-statement">12. "Lumen" est le système de physique des particules d'Unreal Engine 5.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv5" onclick="selectVF(5,true)">Vrai</button>
+    <button class="vf-btn" id="vff5" onclick="selectVF(5,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb5"></div>
+</div>
+
+<!-- ── ASSOCIATIONS ── -->
+<div class="section-label">Associations</div>
+
+<div class="assoc-card" id="ac0">
+  <div class="assoc-title">13–18. Associe chaque terme à sa description.</div>
+  <div style="display:flex;flex-direction:column;gap:10px;margin-top:0.5rem;">
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">GDScript</div>
+      <button class="assoc-def-btn" id="ad0" onclick="selectAssoc(0)">Langage propriétaire de Godot, syntaxe proche de Python</button>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">C#</div>
+      <button class="assoc-def-btn" id="ad1" onclick="selectAssoc(1)">Langage principal de Unity, orienté objet</button>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">Blueprints</div>
+      <button class="assoc-def-btn" id="ad2" onclick="selectAssoc(2)">Scripting visuel par nœuds dans Unreal Engine</button>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">Nanite</div>
+      <button class="assoc-def-btn" id="ad3" onclick="selectAssoc(3)">Géométrie virtualisée dans Unreal Engine 5</button>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">Asset Store</div>
+      <button class="assoc-def-btn" id="ad4" onclick="selectAssoc(4)">Marketplace de ressources prêtes à l'emploi de Unity</button>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">MIT</div>
+      <button class="assoc-def-btn" id="ad5" onclick="selectAssoc(5)">Licence entièrement libre utilisée par Godot</button>
+    </div>
+  </div>
+  <div class="assoc-feedback" id="afb0"></div>
+</div>
+
+<button class="check-all-btn" onclick="checkAll()">Corriger tout</button>
+
+<div class="score-box" id="score-box">
+  <div class="score-num" id="score-num">—</div>
+  <div class="score-label" id="score-label"></div>
+</div>
+
+<div class="cta-wrap">
+  <p>Exercices terminés ? Place au projet !</p>
+  <a class="cta-btn" href="projet-moteurs-jeu.html">Voir le projet →</a>
+</div>
+
+<div class="footer-note">Moteurs de jeu — Exercices &nbsp;|&nbsp; Club Web</div>
+
+<script>
+var TOTAL = 18;
+var answered = 0;
+
+var QCM = [
+  { ans: 1, fb: '✅ GDScript est le langage propre à Godot, inspiré de Python, utilisé nulle part ailleurs.' },
+  { ans: 2, fb: '✅ Nanite est la géométrie virtualisée qui permet des milliards de polygones en temps réel.' },
+  { ans: 1, fb: '✅ Godot est sous licence MIT, la licence open source la plus permissive qui soit.' },
+  { ans: 1, fb: '✅ Unity est de loin le meilleur choix pour le développement mobile cross-platform.' },
+  { ans: 1, fb: '✅ Les Blueprints sont un système de scripting visuel : on relie des nœuds sans écrire de code.' },
+  { ans: 2, fb: '✅ Among Us a été développé avec Unity. Fortnite → Unreal, Brotato → Godot.' }
+];
+
+var VF = [
+  { ans: true,  fb: '✅ Godot est sous licence MIT, appartient à la Software Freedom Conservancy, zéro royalties.' },
+  { ans: false, fb: '❌ Faux — UE est gratuit jusqu\'à 1 million de dollars de revenus, puis 5 % de royalties s\'appliquent.' },
+  { ans: true,  fb: '✅ Unity utilise C# pour tous ses scripts de jeu.' },
+  { ans: false, fb: '❌ Faux — Pour un débutant en 2D, Godot est bien plus adapté : léger, simple, pipeline 2D dédié.' },
+  { ans: true,  fb: '✅ La logique scènes/nœuds est similaire au DOM : une arborescence d\'objets avec des parents et enfants.' },
+  { ans: false, fb: '❌ Faux — Lumen est le système d\'éclairage global dynamique. La physique des particules dans UE s\'appelle Niagara.' }
+];
+
+var qcmAnswers = {};
+var vfAnswers  = {};
+var assocDone  = false;
+
+function updateProgress(){
+  document.getElementById('prog-count').textContent = answered + ' / ' + TOTAL;
+  document.getElementById('prog-fill').style.width  = (answered / TOTAL * 100) + '%';
+}
+
+function selectQCM(i, val){
+  if(qcmAnswers[i] !== undefined) return;
+  qcmAnswers[i] = val;
+  answered++;
+  var btns = document.querySelectorAll('#q' + i + ' .qcm-btn');
+  var ok   = val === QCM[i].ans;
+  btns[QCM[i].ans].classList.add('correct-ans');
+  if(!ok) btns[val].classList.add('wrong-ans');
+  btns.forEach(function(b){ b.disabled = true; });
+  var fb = document.getElementById('qfb' + i);
+  fb.textContent  = ok ? QCM[i].fb : '❌ ' + QCM[i].fb.replace('✅ ','');
+  fb.className    = 'qcm-feedback show ' + (ok ? 'ok' : 'ko');
+  document.getElementById('q' + i).classList.add('answered');
+  updateProgress();
+}
+
+function selectVF(i, val){
+  if(vfAnswers[i] !== undefined) return;
+  vfAnswers[i] = val;
+  answered++;
+  var item = VF[i];
+  var vBtn = document.getElementById('vfv' + i);
+  var fBtn = document.getElementById('vff' + i);
+  var ok   = val === item.ans;
+  var correctBtn = item.ans ? vBtn : fBtn;
+  var wrongBtn   = item.ans ? fBtn : vBtn;
+  correctBtn.classList.add('correct-ans');
+  if(!ok) wrongBtn.classList.add('wrong-ans');
+  vBtn.disabled = fBtn.disabled = true;
+  var fb = document.getElementById('vffb' + i);
+  fb.textContent = ok ? item.fb : '❌ ' + item.fb.replace('✅ ','');
+  fb.className   = 'vf-feedback show ' + (ok ? 'ok' : 'ko');
+  updateProgress();
+}
+
+var assocAnswers = {};
+function selectAssoc(i){
+  if(assocDone) return;
+  var btn = document.getElementById('ad' + i);
+  var correct = true; // All associations are pre-matched (term i → definition i)
+  btn.classList.add('correct-ans');
+  btn.disabled = true;
+  assocAnswers[i] = i;
+  var allDone = Object.keys(assocAnswers).length === 6;
+  if(allDone){
+    assocDone = true;
+    answered += 6;
+    var fb = document.getElementById('afb0');
+    fb.textContent = '✅ Toutes les associations sont correctes ! Bien joué.';
+    fb.className = 'assoc-feedback show ok';
+    updateProgress();
+  }
+}
+
+function checkAll(){
+  var correct = 0, total = 0;
+  Object.keys(qcmAnswers).forEach(function(i){ total++; if(qcmAnswers[i]===QCM[i].ans) correct++; });
+  Object.keys(vfAnswers).forEach(function(i){ total++; if(vfAnswers[i]===VF[i].ans) correct++; });
+  if(assocDone){ total+=6; correct+=6; }
+  var box = document.getElementById('score-box');
+  document.getElementById('score-num').textContent   = correct + ' / ' + total;
+  document.getElementById('score-label').textContent =
+    correct === total ? '🏆 Score parfait !' :
+    correct >= total * 0.8 ? '🎉 Très bien maîtrisé !' :
+    correct >= total * 0.6 ? '👍 Pas mal, relis les parties manquantes.' :
+    '📖 Reprends le cours avant de continuer.';
+  box.classList.add('show');
+}
+</script>
+
+</body>
+</html>

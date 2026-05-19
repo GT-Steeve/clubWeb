@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices — Moteurs jeu 2D</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #3F6212; text-decoration: none; margin-bottom: 1.5rem; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #D9F99D; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.1rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-lime  { background: #ECFCCB; color: #3F6212; }
+    .b-blue  { background: #DBEAFE; color: #1E40AF; }
+    .b-green { background: #DCFCE7; color: #166534; }
+
+    .progress-header { display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.82rem; font-weight: 700; color: #888780; }
+    .progress-count { color: #65A30D; }
+    .progress-wrap { height: 8px; background: #D3D1C7; border-radius: 10px; margin-bottom: 2rem; overflow: hidden; }
+    .progress-fill { height: 100%; background: #65A30D; border-radius: 10px; transition: width 0.4s ease; width: 0%; }
+
+    .section-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; margin: 2rem 0 0.8rem; display: flex; align-items: center; gap: 8px; }
+    .section-label::before, .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+    .qcm-card { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; transition: border-color 0.2s; }
+    .qcm-card.answered { border-color: #65A30D; }
+    .qcm-question { font-size: 0.97rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.5; }
+    .qcm-options { display: flex; flex-direction: column; gap: 6px; }
+    .qcm-btn { background: #F7F6F2; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 9px 14px; font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 600; text-align: left; cursor: pointer; transition: all 0.15s; }
+    .qcm-btn:hover:not(:disabled) { background: #ECFCCB; border-color: #BEF264; }
+    .qcm-btn.correct-ans { background: #DCFCE7; border-color: #86EFAC; color: #166534; font-weight: 800; }
+    .qcm-btn.wrong-ans   { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; text-decoration: line-through; }
+    .qcm-feedback { font-size: 0.83rem; margin-top: 0.6rem; padding: 6px 10px; border-radius: 7px; display: none; line-height: 1.5; }
+    .qcm-feedback.show { display: block; }
+    .qcm-feedback.ok { background: #DCFCE7; color: #166534; }
+    .qcm-feedback.ko { background: #FEE2E2; color: #991B1B; }
+
+    .vf-card { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; }
+    .vf-statement { font-size: 0.97rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.5; }
+    .vf-btns { display: flex; gap: 8px; }
+    .vf-btn { flex: 1; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 9px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; background: #F7F6F2; transition: all 0.15s; }
+    .vf-btn:hover:not(:disabled) { background: #ECFCCB; border-color: #BEF264; }
+    .vf-btn.correct-ans { background: #DCFCE7; border-color: #86EFAC; color: #166534; }
+    .vf-btn.wrong-ans   { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; }
+    .vf-feedback { font-size: 0.83rem; margin-top: 0.6rem; padding: 6px 10px; border-radius: 7px; display: none; line-height: 1.5; }
+    .vf-feedback.show { display: block; }
+    .vf-feedback.ok { background: #DCFCE7; color: #166534; }
+    .vf-feedback.ko { background: #FEE2E2; color: #991B1B; }
+
+    .assoc-card { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; }
+    .assoc-title { font-size: 0.97rem; font-weight: 700; margin-bottom: 0.9rem; }
+    .assoc-term { background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 8px; padding: 8px 12px; font-size: 0.88rem; font-weight: 700; color: #3F6212; }
+    .assoc-def-btn { background: #F7F6F2; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 8px 12px; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 600; text-align: left; cursor: pointer; transition: all 0.15s; }
+    .assoc-def-btn:hover:not(:disabled) { background: #ECFCCB; border-color: #BEF264; }
+    .assoc-def-btn.correct-ans { background: #DCFCE7; border-color: #86EFAC; color: #166534; font-weight: 800; }
+    .assoc-def-btn.wrong-ans   { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; }
+    .assoc-feedback { font-size: 0.83rem; margin-top: 0.6rem; padding: 6px 10px; border-radius: 7px; display: none; line-height: 1.5; }
+    .assoc-feedback.show { display: block; }
+    .assoc-feedback.ok { background: #DCFCE7; color: #166534; }
+    .assoc-feedback.ko { background: #FEE2E2; color: #991B1B; }
+
+    .check-all-btn { display: block; width: 100%; background: #65A30D; color: #fff; border: none; border-radius: 10px; padding: 12px; font-family: 'Nunito', sans-serif; font-size: 0.97rem; font-weight: 800; cursor: pointer; margin-top: 1.5rem; transition: background 0.15s; }
+    .check-all-btn:hover { background: #4D7C0F; }
+    .score-box { display: none; margin-top: 1rem; background: #ECFCCB; border-radius: 12px; padding: 1rem 1.2rem; text-align: center; }
+    .score-box.show { display: block; }
+    .score-num { font-size: 1.8rem; font-weight: 800; color: #3F6212; }
+    .score-label { font-size: 0.88rem; color: #65A30D; margin-top: 0.2rem; }
+
+    .cta-wrap { text-align: center; background: #14260A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+    .cta-wrap p { color: #D9F99D; font-size: 0.95rem; margin-bottom: 1.1rem; }
+    .cta-btn { display: inline-block; background: #65A30D; color: #fff; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #4D7C0F; }
+    .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; }
+  </style>
+</head>
+<body>
+
+<a class="nav-prev" href="cours-moteurs-2d.html">← Retour au cours</a>
+
+<div class="hero">
+  <h1>🕹️ Exercices — Moteurs 2D</h1>
+  <p>Teste ta compréhension de Phaser.js et Solar2D.</p>
+  <div class="badge-row">
+    <span class="badge b-blue">Phaser.js</span>
+    <span class="badge b-green">Solar2D</span>
+    <span class="badge b-lime">JavaScript · Lua</span>
+  </div>
+</div>
+
+<div class="progress-header">
+  <span>Progression</span>
+  <span class="progress-count" id="prog-count">0 / 18</span>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-fill"></div></div>
+
+<!-- ── QCM ── -->
+<div class="section-label">QCM — Choix multiple</div>
+
+<div class="qcm-card" id="q0">
+  <div class="qcm-question">1. Quel langage utilise Phaser.js ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(0,0)">A. Lua</button>
+    <button class="qcm-btn" onclick="selectQCM(0,1)">B. Python</button>
+    <button class="qcm-btn" onclick="selectQCM(0,2)">C. JavaScript / TypeScript</button>
+    <button class="qcm-btn" onclick="selectQCM(0,3)">D. C#</button>
+  </div>
+  <div class="qcm-feedback" id="qfb0"></div>
+</div>
+
+<div class="qcm-card" id="q1">
+  <div class="qcm-question">2. Sur quelle plateforme Phaser.js déploie-t-il nativement ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(1,0)">A. iOS uniquement</button>
+    <button class="qcm-btn" onclick="selectQCM(1,1)">B. Le navigateur web</button>
+    <button class="qcm-btn" onclick="selectQCM(1,2)">C. Android uniquement</button>
+    <button class="qcm-btn" onclick="selectQCM(1,3)">D. PC Windows</button>
+  </div>
+  <div class="qcm-feedback" id="qfb1"></div>
+</div>
+
+<div class="qcm-card" id="q2">
+  <div class="qcm-question">3. Quel moteur physique léger est intégré dans Phaser pour les platformers ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(2,0)">A. Box2D</button>
+    <button class="qcm-btn" onclick="selectQCM(2,1)">B. PhysX</button>
+    <button class="qcm-btn" onclick="selectQCM(2,2)">C. Arcade Physics</button>
+    <button class="qcm-btn" onclick="selectQCM(2,3)">D. Bullet Physics</button>
+  </div>
+  <div class="qcm-feedback" id="qfb2"></div>
+</div>
+
+<div class="qcm-card" id="q3">
+  <div class="qcm-question">4. Quel était le nom original de Solar2D avant 2020 ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(3,0)">A. Cocos2D</button>
+    <button class="qcm-btn" onclick="selectQCM(3,1)">B. Corona SDK</button>
+    <button class="qcm-btn" onclick="selectQCM(3,2)">C. GameMaker</button>
+    <button class="qcm-btn" onclick="selectQCM(3,3)">D. MonoGame</button>
+  </div>
+  <div class="qcm-feedback" id="qfb3"></div>
+</div>
+
+<div class="qcm-card" id="q4">
+  <div class="qcm-question">5. Solar2D utilise quel langage de script ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(4,0)">A. JavaScript</button>
+    <button class="qcm-btn" onclick="selectQCM(4,1)">B. GDScript</button>
+    <button class="qcm-btn" onclick="selectQCM(4,2)">C. Lua</button>
+    <button class="qcm-btn" onclick="selectQCM(4,3)">D. Python</button>
+  </div>
+  <div class="qcm-feedback" id="qfb4"></div>
+</div>
+
+<div class="qcm-card" id="q5">
+  <div class="qcm-question">6. Qu'est-ce que le système de "Scènes" dans Phaser ?</div>
+  <div class="qcm-options">
+    <button class="qcm-btn" onclick="selectQCM(5,0)">A. Un format de fichier 3D</button>
+    <button class="qcm-btn" onclick="selectQCM(5,1)">B. Des états du jeu stackables (menu, jeu, pause simultanés)</button>
+    <button class="qcm-btn" onclick="selectQCM(5,2)">C. Le moteur de rendu WebGL</button>
+    <button class="qcm-btn" onclick="selectQCM(5,3)">D. La gestion des contrôles clavier</button>
+  </div>
+  <div class="qcm-feedback" id="qfb5"></div>
+</div>
+
+<!-- ── V/F ── -->
+<div class="section-label">Vrai ou Faux</div>
+
+<div class="vf-card" id="vf0">
+  <div class="vf-statement">7. Phaser.js est construit par-dessus le canvas HTML5 que tu connais déjà.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv0" onclick="selectVF(0,true)">Vrai</button>
+    <button class="vf-btn" id="vff0" onclick="selectVF(0,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb0"></div>
+</div>
+
+<div class="vf-card" id="vf1">
+  <div class="vf-statement">8. Solar2D a toujours été un logiciel gratuit, depuis sa création en 2009.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv1" onclick="selectVF(1,true)">Vrai</button>
+    <button class="vf-btn" id="vff1" onclick="selectVF(1,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb1"></div>
+</div>
+
+<div class="vf-card" id="vf2">
+  <div class="vf-statement">9. Un jeu Phaser.js s'ouvre dans le navigateur sans installation pour le joueur.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv2" onclick="selectVF(2,true)">Vrai</button>
+    <button class="vf-btn" id="vff2" onclick="selectVF(2,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb2"></div>
+</div>
+
+<div class="vf-card" id="vf3">
+  <div class="vf-statement">10. Solar2D est le meilleur choix pour créer un jeu qui tourne dans le navigateur web.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv3" onclick="selectVF(3,true)">Vrai</button>
+    <button class="vf-btn" id="vff3" onclick="selectVF(3,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb3"></div>
+</div>
+
+<div class="vf-card" id="vf4">
+  <div class="vf-statement">11. Lua est aussi utilisé dans Roblox pour programmer les scripts de jeu.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv4" onclick="selectVF(4,true)">Vrai</button>
+    <button class="vf-btn" id="vff4" onclick="selectVF(4,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb4"></div>
+</div>
+
+<div class="vf-card" id="vf5">
+  <div class="vf-statement">12. Phaser.js utilise 3D par défaut et ne supporte pas le canvas 2D.</div>
+  <div class="vf-btns">
+    <button class="vf-btn" id="vfv5" onclick="selectVF(5,true)">Vrai</button>
+    <button class="vf-btn" id="vff5" onclick="selectVF(5,false)">Faux</button>
+  </div>
+  <div class="vf-feedback" id="vffb5"></div>
+</div>
+
+<!-- ── ASSOCIATIONS ── -->
+<div class="section-label">Associations</div>
+
+<div class="assoc-card" id="ac0">
+  <div class="assoc-title">13–18. Associe chaque terme à sa description.</div>
+  <div style="display:flex;flex-direction:column;gap:10px;margin-top:0.5rem;">
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">Arcade Physics</div>
+      <button class="assoc-def-btn" id="ad0" onclick="selectAssoc(0)">Moteur physique léger de Phaser, idéal pour les platformers</button>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">Matter.js</div>
+      <button class="assoc-def-btn" id="ad1" onclick="selectAssoc(1)">Moteur physique réaliste disponible dans Phaser</button>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">WebGL</div>
+      <button class="assoc-def-btn" id="ad2" onclick="selectAssoc(2)">API graphique GPU utilisée par Phaser pour le rendu accéléré</button>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">display.newRect</div>
+      <button class="assoc-def-btn" id="ad3" onclick="selectAssoc(3)">Fonction Solar2D pour afficher un rectangle à l'écran</button>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">Phaser.Game</div>
+      <button class="assoc-def-btn" id="ad4" onclick="selectAssoc(4)">Constructeur principal qui démarre un jeu Phaser</button>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;align-items:center;">
+      <div class="assoc-term">transition.to</div>
+      <button class="assoc-def-btn" id="ad5" onclick="selectAssoc(5)">Fonction Solar2D pour animer un objet (position, rotation…)</button>
+    </div>
+  </div>
+  <div class="assoc-feedback" id="afb0"></div>
+</div>
+
+<button class="check-all-btn" onclick="checkAll()">Corriger tout</button>
+
+<div class="score-box" id="score-box">
+  <div class="score-num" id="score-num">—</div>
+  <div class="score-label" id="score-label"></div>
+</div>
+
+<div class="cta-wrap">
+  <p>Exercices terminés ? Place au projet !</p>
+  <a class="cta-btn" href="projet-moteurs-2d.html">Voir le projet →</a>
+</div>
+
+<div class="footer-note">Moteurs jeu 2D — Exercices &nbsp;|&nbsp; Club Web</div>
+
+<script>
+var TOTAL = 18;
+var answered = 0;
+
+var QCM = [
+  { ans: 2, fb: '✅ Phaser.js utilise JavaScript (ou TypeScript), le même langage que tu connais du web.' },
+  { ans: 1, fb: '✅ Phaser cible nativement le navigateur web — partage un lien, le jeu tourne immédiatement.' },
+  { ans: 2, fb: '✅ Arcade Physics est le moteur intégré léger de Phaser, parfait pour les jeux de plateforme simples.' },
+  { ans: 1, fb: '✅ Solar2D était appelé "Corona SDK" jusqu\'en 2020, quand il est devenu open source.' },
+  { ans: 2, fb: '✅ Solar2D utilise Lua, un langage léger et rapide, aussi utilisé dans Roblox et de nombreux jeux.' },
+  { ans: 1, fb: '✅ Les Scènes dans Phaser sont des états stackables — menu, jeu et pause peuvent coexister en mémoire.' }
+];
+
+var VF = [
+  { ans: true,  fb: '✅ Phaser utilise le canvas HTML5 (et WebGL) en interne — la même API que tu as apprise.' },
+  { ans: false, fb: '❌ Faux — Solar2D (Corona SDK) était payant à ses débuts. Il est devenu gratuit et open source en 2020.' },
+  { ans: true,  fb: '✅ Un jeu Phaser tourne dans le navigateur. Aucune installation requise : un lien suffit pour jouer.' },
+  { ans: false, fb: '❌ Faux — Solar2D cible le mobile (iOS/Android). Pour le navigateur, c\'est Phaser.js qu\'il faut utiliser.' },
+  { ans: true,  fb: '✅ Lua est le langage de script de Roblox (via Luau, un dérivé). Connaître l\'un aide à comprendre l\'autre.' },
+  { ans: false, fb: '❌ Faux — Phaser est un framework 2D. Il supporte Canvas 2D et WebGL (2D accéléré GPU), pas la 3D.' }
+];
+
+var qcmAnswers = {};
+var vfAnswers  = {};
+var assocDone  = false;
+var assocAnswers = {};
+
+function updateProgress(){
+  document.getElementById('prog-count').textContent = answered + ' / ' + TOTAL;
+  document.getElementById('prog-fill').style.width  = (answered / TOTAL * 100) + '%';
+}
+
+function selectQCM(i, val){
+  if(qcmAnswers[i] !== undefined) return;
+  qcmAnswers[i] = val;
+  answered++;
+  var btns = document.querySelectorAll('#q' + i + ' .qcm-btn');
+  var ok   = val === QCM[i].ans;
+  btns[QCM[i].ans].classList.add('correct-ans');
+  if(!ok) btns[val].classList.add('wrong-ans');
+  btns.forEach(function(b){ b.disabled = true; });
+  var fb = document.getElementById('qfb' + i);
+  fb.textContent = ok ? QCM[i].fb : '❌ ' + QCM[i].fb.replace('✅ ','');
+  fb.className   = 'qcm-feedback show ' + (ok ? 'ok' : 'ko');
+  document.getElementById('q' + i).classList.add('answered');
+  updateProgress();
+}
+
+function selectVF(i, val){
+  if(vfAnswers[i] !== undefined) return;
+  vfAnswers[i] = val;
+  answered++;
+  var item = VF[i];
+  var vBtn = document.getElementById('vfv' + i);
+  var fBtn = document.getElementById('vff' + i);
+  var ok   = val === item.ans;
+  var correctBtn = item.ans ? vBtn : fBtn;
+  var wrongBtn   = item.ans ? fBtn : vBtn;
+  correctBtn.classList.add('correct-ans');
+  if(!ok) wrongBtn.classList.add('wrong-ans');
+  vBtn.disabled = fBtn.disabled = true;
+  var fb = document.getElementById('vffb' + i);
+  fb.textContent = ok ? item.fb : '❌ ' + item.fb.replace('✅ ','');
+  fb.className   = 'vf-feedback show ' + (ok ? 'ok' : 'ko');
+  updateProgress();
+}
+
+function selectAssoc(i){
+  if(assocDone) return;
+  var btn = document.getElementById('ad' + i);
+  btn.classList.add('correct-ans');
+  btn.disabled = true;
+  assocAnswers[i] = i;
+  if(Object.keys(assocAnswers).length === 6){
+    assocDone = true;
+    answered += 6;
+    var fb = document.getElementById('afb0');
+    fb.textContent = '✅ Toutes les associations sont correctes !';
+    fb.className = 'assoc-feedback show ok';
+    updateProgress();
+  }
+}
+
+function checkAll(){
+  var correct = 0, total = 0;
+  Object.keys(qcmAnswers).forEach(function(i){ total++; if(qcmAnswers[i]===QCM[i].ans) correct++; });
+  Object.keys(vfAnswers).forEach(function(i){ total++; if(vfAnswers[i]===VF[i].ans) correct++; });
+  if(assocDone){ total+=6; correct+=6; }
+  var box = document.getElementById('score-box');
+  document.getElementById('score-num').textContent   = correct + ' / ' + total;
+  document.getElementById('score-label').textContent =
+    correct === total ? '🏆 Score parfait !' :
+    correct >= total * 0.8 ? '🎉 Très bien maîtrisé !' :
+    correct >= total * 0.6 ? '👍 Pas mal, relis les parties manquantes.' :
+    '📖 Reprends le cours avant de continuer.';
+  box.classList.add('show');
+}
+</script>
+
+</body>
+</html>

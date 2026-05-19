@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Langage natif & Moteur de jeu — Comprendre et comparer</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #92400E; text-decoration: none; margin-bottom: 1.5rem; background: #FEF3C7; border: 0.5px solid #FDE68A; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #FDE68A; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-amber  { background: #FEF3C7; color: #92400E; }
+    .b-orange { background: #FFEDD5; color: #9A3412; }
+    .b-blue   { background: #DBEAFE; color: #1E40AF; }
+    .b-green  { background: #DCFCE7; color: #166534; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .card-section { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #D97706; margin-bottom: 0.5rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 800; margin-bottom: 0.8rem; color: #1E1D1A; }
+    .pill { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; flex-shrink: 0; }
+    .p-amber  { background: #FEF3C7; color: #92400E; }
+    .p-orange { background: #FFEDD5; color: #9A3412; }
+    .p-blue   { background: #DBEAFE; color: #1E40AF; }
+    .p-green  { background: #DCFCE7; color: #166534; }
+    .p-purple { background: #F3E8FF; color: #6B21A8; }
+    .p-red    { background: #FEE2E2; color: #991B1B; }
+    .p-teal   { background: #CCFBF1; color: #134E4A; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.75; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+    code { font-family: 'Fira Code', monospace; background: #FEF3C7; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #92400E; }
+    strong { color: #1E1D1A; }
+
+    /* ── PYRAMID ── */
+    .pyramid { display: flex; flex-direction: column; gap: 5px; margin: 1rem 0; }
+    .pyramid-row { border-radius: 10px; padding: 0.7rem 1.1rem; display: flex; align-items: center; gap: 10px; font-size: 0.88rem; font-weight: 700; }
+    .py-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; min-width: 90px; text-align: right; flex-shrink: 0; }
+    .py-content { flex: 1; }
+    .py-sub { font-size: 0.78rem; font-weight: 400; opacity: 0.8; margin-top: 1px; }
+
+    /* ── LANG GRID ── */
+    .lang-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 0.8rem 0; }
+    .lang-cell { border-radius: 10px; padding: 0.8rem; text-align: center; border: 0.5px solid; }
+    .lang-name { font-size: 0.95rem; font-weight: 800; margin-bottom: 4px; }
+    .lang-sub  { font-size: 0.75rem; line-height: 1.4; opacity: 0.85; }
+
+    /* ── PRO/CON ── */
+    .pro-con { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0.7rem 0; }
+    .pro, .con { border-radius: 8px; padding: 0.55rem 0.85rem; font-size: 0.85rem; line-height: 1.5; }
+    .pro { background: rgba(16,185,129,0.1); border-left: 3px solid #10B981; }
+    .con { background: rgba(239,68,68,0.1); border-left: 3px solid #EF4444; }
+    .pro-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #059669; margin-bottom: 3px; }
+    .con-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #DC2626; margin-bottom: 3px; }
+
+    /* ── COMPARE TABLE ── */
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.8rem 0; border-radius: 10px; overflow: hidden; }
+    .compare-table th { background: #FEF3C7; color: #92400E; font-weight: 800; padding: 0.6rem 0.8rem; text-align: left; }
+    .compare-table td { padding: 0.55rem 0.8rem; border-top: 0.5px solid #E8E6DF; color: #5F5E5A; vertical-align: top; }
+    .compare-table tr:nth-child(even) td { background: #FFFBEB; }
+    .compare-table td:first-child { font-weight: 700; color: #2C2C2A; }
+
+    /* ── DECISION ── */
+    .decision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0.8rem 0; }
+    .decision-cell { border-radius: 10px; padding: 0.85rem 1rem; border: 0.5px solid; }
+    .decision-if { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .decision-then { font-size: 0.9rem; font-weight: 800; margin-bottom: 2px; }
+    .decision-why  { font-size: 0.8rem; opacity: 0.8; line-height: 1.4; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #FEF3C7; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #92400E; line-height: 1.5; }
+    .tip-blue  { background: #DBEAFE; color: #1E40AF; }
+    .tip-green { background: #DCFCE7; color: #166534; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .nav-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 0.5px solid #D3D1C7; }
+    .nav-next { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #fff; text-decoration: none; background: #D97706; border-radius: 8px; padding: 8px 16px; transition: background 0.15s; }
+    .nav-next:hover { background: #B45309; }
+    .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; }
+
+    @media (max-width: 540px) {
+      .lang-grid { grid-template-columns: 1fr 1fr; }
+      .pro-con { grid-template-columns: 1fr; }
+      .decision-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<a class="nav-prev" href="../../sommaire.html">← Sommaire</a>
+
+<div class="hero">
+  <h1>⚖️ Langage natif<br>&amp; Moteur de jeu</h1>
+  <p>Du canvas brut aux moteurs AAA : comprends les niveaux d'abstraction du développement de jeux vidéo et apprends à choisir le bon outil selon le contexte.</p>
+  <div class="badge-row">
+    <span class="badge b-orange">C++ · C# · Lua · JS</span>
+    <span class="badge b-blue">Unity · Godot · Unreal</span>
+    <span class="badge b-green">Canvas brut</span>
+    <span class="badge b-amber">Culture</span>
+  </div>
+</div>
+
+<!-- SECTION 1 -->
+<div class="card">
+  <div class="card-section">Section 1</div>
+  <div class="stitle"><div class="pill p-amber">🧱</div>Les langages natifs du jeu vidéo</div>
+  <p class="desc">Un <strong>langage natif</strong> en jeu vidéo, c'est le langage dans lequel le jeu (ou le moteur) est <em>directement</em> écrit — sans couche d'abstraction supplémentaire. Chaque moteur et contexte a ses préférences.</p>
+  <div class="lang-grid">
+    <div class="lang-cell" style="background:#FEF3C7;border-color:#FDE68A;color:#92400E;">
+      <div class="lang-name" style="color:#B45309;">C++</div>
+      <div class="lang-sub">Performance maximale. Unreal Engine, id Software (Doom), moteurs maison AAA.</div>
+    </div>
+    <div class="lang-cell" style="background:#DBEAFE;border-color:#BFDBFE;color:#1E40AF;">
+      <div class="lang-name" style="color:#2563EB;">C#</div>
+      <div class="lang-sub">Compromis moderne. Unity. Syntaxe propre, garbage collector, typage fort.</div>
+    </div>
+    <div class="lang-cell" style="background:#DCFCE7;border-color:#BBF7D0;color:#166534;">
+      <div class="lang-name" style="color:#15803D;">GDScript</div>
+      <div class="lang-sub">Propre à Godot. Syntaxe Python-like, intégré dans l'éditeur, simple à déboguer.</div>
+    </div>
+    <div class="lang-cell" style="background:#ECFCCB;border-color:#BEF264;color:#3F6212;">
+      <div class="lang-name" style="color:#4D7C0F;">Lua</div>
+      <div class="lang-sub">Léger et embarquable. Solar2D, Roblox, Love2D, IA de jeux AAA.</div>
+    </div>
+    <div class="lang-cell" style="background:#E0E7FF;border-color:#C7D2FE;color:#4338CA;">
+      <div class="lang-name" style="color:#4F46E5;">JavaScript</div>
+      <div class="lang-sub">Le web. Phaser.js, canvas HTML5, jeux navigateur. Tu le connais déjà !</div>
+    </div>
+    <div class="lang-cell" style="background:#F7F6F2;border-color:#D3D1C7;color:#5F5E5A;">
+      <div class="lang-name" style="color:#2C2C2A;">Java / Kotlin</div>
+      <div class="lang-sub">Android natif. Minecraft (version Java). LibGDX.</div>
+    </div>
+  </div>
+  <div class="tip tip-blue"><span class="tip-i">💡</span><div>Tu connais déjà <strong>JavaScript</strong> — le langage du canvas que tu as appris. Tu n'es pas un débutant : tu es déjà dans la liste des langages natifs du jeu vidéo.</div></div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="card">
+  <div class="card-section">Section 2</div>
+  <div class="stitle"><div class="pill p-orange">🏗️</div>La pyramide d'abstraction</div>
+  <p class="desc">Le développement de jeux vidéo s'organise en <strong>niveaux d'abstraction</strong> : plus on monte, plus c'est rapide à utiliser — mais moins on contrôle ce qui se passe en dessous.</p>
+  <div class="pyramid">
+    <div class="pyramid-row" style="background:#FEF3C7;color:#92400E;">
+      <span class="py-label" style="color:#B45309;">Bas niveau</span>
+      <div class="py-content">
+        <div>OpenGL · DirectX · Vulkan · Metal</div>
+        <div class="py-sub">Tu parles directement au GPU. Chaque triangle, chaque shader : tu codes tout. C++ obligatoire.</div>
+      </div>
+    </div>
+    <div class="pyramid-row" style="background:#FFEDD5;color:#9A3412;">
+      <span class="py-label" style="color:#C2410C;">Couche mince</span>
+      <div class="py-content">
+        <div>SDL · SFML · raylib</div>
+        <div class="py-sub">Fenêtre, clavier, son : une fine couche au-dessus du hardware. Tu codes encore la logique complète.</div>
+      </div>
+    </div>
+    <div class="pyramid-row" style="background:#DCFCE7;color:#166534;">
+      <span class="py-label" style="color:#15803D;">Canvas / Web</span>
+      <div class="py-content">
+        <div>HTML5 Canvas · WebGL · p5.js</div>
+        <div class="py-sub">Ce que tu as appris. Le navigateur gère la fenêtre ; toi tu gères la boucle, les dessins, la physique.</div>
+      </div>
+    </div>
+    <div class="pyramid-row" style="background:#DBEAFE;color:#1E40AF;">
+      <span class="py-label" style="color:#2563EB;">Frameworks 2D</span>
+      <div class="py-content">
+        <div>Phaser.js · Solar2D · Love2D · Pygame</div>
+        <div class="py-sub">Sprites, physique, scènes, sons : pris en charge. Tu te concentres sur le gameplay.</div>
+      </div>
+    </div>
+    <div class="pyramid-row" style="background:#F3E8FF;color:#6B21A8;">
+      <span class="py-label" style="color:#7E22CE;">Moteurs complets</span>
+      <div class="py-content">
+        <div>Unity · Godot · Cocos Creator</div>
+        <div class="py-sub">Éditeur visuel, pipeline complet, export multi-plateforme, asset store. Tu configures plus que tu codes.</div>
+      </div>
+    </div>
+    <div class="pyramid-row" style="background:#E0E7FF;color:#4338CA;">
+      <span class="py-label" style="color:#4F46E5;">Moteurs AAA</span>
+      <div class="py-content">
+        <div>Unreal Engine 5 · Frostbite · REDengine</div>
+        <div class="py-sub">Lumen, Nanite, pipeline cinématique. Équipes de dizaines d'ingénieurs dédiés.</div>
+      </div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-i">🎯</span><div>Tu as commencé au niveau <strong>Canvas / Web</strong>. C'est le meilleur point d'entrée : assez bas pour comprendre la boucle de jeu, assez haut pour créer des choses rapidement.</div></div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="card">
+  <div class="card-section">Section 3</div>
+  <div class="stitle"><div class="pill p-red">🔩</div>Coder sans moteur — le langage natif pur</div>
+  <p class="desc">Écrire un jeu en langage natif sans moteur (en C++, Java ou même JavaScript brut), c'est tout gérer soi-même. C'est ce que tu as fait avec le canvas. Voici les avantages et les inconvénients réels de cette approche.</p>
+  <div class="pro-con">
+    <div class="pro">
+      <div class="pro-label">✅ Avantages</div>
+      <strong>Performance</strong> — pas d'overhead, le code fait exactement ce que tu veux<br>
+      <strong>Compréhension</strong> — tu sais ce qui se passe à chaque frame<br>
+      <strong>Portabilité</strong> — aucune dépendance à un moteur tiers<br>
+      <strong>Apprentissage</strong> — les meilleurs devs de moteurs sont passés par là
+    </div>
+    <div class="con">
+      <div class="con-label">❌ Inconvénients</div>
+      <strong>Tout à coder</strong> — physique, audio, animation, UI : zéro fourni<br>
+      <strong>Lenteur</strong> — mois pour atteindre ce qu'un moteur donne en quelques heures<br>
+      <strong>Maintenance</strong> — chaque bug que le moteur gère, tu le gères toi<br>
+      <strong>Réinventer la roue</strong> — les collisions AABB, tu les as codées ; Godot les donne gratuitement
+    </div>
+  </div>
+  <div class="tip tip-green"><span class="tip-i">🔬</span><div>Les studios AAA (id Software, Naughty Dog, Rockstar) maintiennent leurs <em>propres moteurs</em> en C++ — parce qu'aucun moteur existant ne répond exactement à leurs besoins spécifiques. Mais ils ont des équipes dédiées de 20+ ingénieurs graphiques.</div></div>
+</div>
+
+<!-- SECTION 4 -->
+<div class="card">
+  <div class="card-section">Section 4</div>
+  <div class="stitle"><div class="pill p-purple">⚙️</div>Utiliser un moteur — l'abstraction à l'œuvre</div>
+  <p class="desc">Un moteur de jeu est un <strong>programme qui résout les problèmes communs</strong> à tous les jeux (rendu, physique, audio, inputs) pour que tu n'aies à les résoudre qu'une seule fois. Ce que tu as codé à la main dans le canvas, un moteur le donne gratuitement.</p>
+  <div class="compare-table" style="margin-top:0.8rem;">
+    <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+      <thead>
+        <tr style="background:#FEF3C7;">
+          <th style="padding:0.5rem 0.8rem;text-align:left;color:#92400E;font-weight:800;">Ce que tu as codé (canvas brut)</th>
+          <th style="padding:0.5rem 0.8rem;text-align:left;color:#92400E;font-weight:800;">Ce qu'un moteur donne gratuitement</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:0.45rem 0.8rem;border-top:0.5px solid #E8E6DF;"><code>requestAnimationFrame(loop)</code></td><td style="padding:0.45rem 0.8rem;border-top:0.5px solid #E8E6DF;color:#5F5E5A;">Boucle de jeu intégrée, delta time, fps cap</td></tr>
+        <tr style="background:#FFFBEB;"><td style="padding:0.45rem 0.8rem;border-top:0.5px solid #E8E6DF;"><code>vy += GRAVITE; y += vy</code></td><td style="padding:0.45rem 0.8rem;border-top:0.5px solid #E8E6DF;color:#5F5E5A;">Moteur physique (Arcade, Box2D, Rapier…)</td></tr>
+        <tr><td style="padding:0.45rem 0.8rem;border-top:0.5px solid #E8E6DF;">AABB collision à la main</td><td style="padding:0.45rem 0.8rem;border-top:0.5px solid #E8E6DF;color:#5F5E5A;">Détection de collision automatique avec layers</td></tr>
+        <tr style="background:#FFFBEB;"><td style="padding:0.45rem 0.8rem;border-top:0.5px solid #E8E6DF;">Sprites : <code>ctx.drawImage()</code> manuel</td><td style="padding:0.45rem 0.8rem;border-top:0.5px solid #E8E6DF;color:#5F5E5A;">Animations frame-by-frame depuis spritesheet</td></tr>
+        <tr><td style="padding:0.45rem 0.8rem;border-top:0.5px solid #E8E6DF;"><code>localStorage</code> à la main</td><td style="padding:0.45rem 0.8rem;border-top:0.5px solid #E8E6DF;color:#5F5E5A;">Système de sauvegarde intégré, serialisation</td></tr>
+        <tr style="background:#FFFBEB;"><td style="padding:0.45rem 0.8rem;border-top:0.5px solid #E8E6DF;"><code>new AudioContext()</code></td><td style="padding:0.45rem 0.8rem;border-top:0.5px solid #E8E6DF;color:#5F5E5A;">Audio spatial 3D, mixeur, bus d'effets</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pro-con">
+    <div class="pro">
+      <div class="pro-label">✅ Avantages d'un moteur</div>
+      <strong>Rapidité</strong> — prototype en heures, pas en semaines<br>
+      <strong>Éditeur visuel</strong> — place des objets, régle des collisions sans coder<br>
+      <strong>Communauté</strong> — des millions de ressources, tutoriels, plugins<br>
+      <strong>Export</strong> — iOS, Android, PC, console depuis un seul projet
+    </div>
+    <div class="con">
+      <div class="con-label">❌ Inconvénients</div>
+      <strong>Boîte noire</strong> — tu ne sais pas toujours ce qui se passe dessous<br>
+      <strong>Taille</strong> — un projet Unity peut peser plusieurs Go<br>
+      <strong>Dépendance</strong> — si le moteur change de licence (Unity 2023…), tu es coincé<br>
+      <strong>Sur-ingénierie</strong> — un moteur AAA pour un Pong, c'est un canon pour tuer une mouche
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5 -->
+<div class="card">
+  <div class="card-section">Section 5</div>
+  <div class="stitle"><div class="pill p-teal">📊</div>Comparatif : langage natif vs moteur</div>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Critère</th>
+        <th>Langage natif (ex : canvas JS)</th>
+        <th>Moteur (ex : Godot / Unity)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Vitesse de démarrage</td><td>⭐⭐ Lente (tout à coder)</td><td>⭐⭐⭐⭐⭐ Très rapide</td></tr>
+      <tr><td>Performance</td><td>⭐⭐⭐⭐⭐ Maximale</td><td>⭐⭐⭐⭐ Très bonne</td></tr>
+      <tr><td>Compréhension profonde</td><td>⭐⭐⭐⭐⭐ Excellente</td><td>⭐⭐ Partielle</td></tr>
+      <tr><td>Richesse des outils</td><td>⭐ Zéro fourni</td><td>⭐⭐⭐⭐⭐ Tout inclus</td></tr>
+      <tr><td>Courbe d'apprentissage</td><td>⭐⭐⭐ Progressive</td><td>⭐⭐ Abrupte (éditeur)</td></tr>
+      <tr><td>Export multi-plateforme</td><td>⭐ Manuel et complexe</td><td>⭐⭐⭐⭐⭐ Natif</td></tr>
+      <tr><td>Taille du projet</td><td>⭐⭐⭐⭐⭐ Très léger</td><td>⭐⭐ Lourd</td></tr>
+      <tr><td>Idéal pour apprendre</td><td>✅ OUI — comprend les bases</td><td>⚠️ Risque de copier sans comprendre</td></tr>
+    </tbody>
+  </table>
+  <div class="tip"><span class="tip-i">💡</span><div>La plupart des développeurs professionnels ont appris les deux : d'abord les bases en langage natif (comprendre la boucle, la physique, les collisions), puis les moteurs (pour être productifs en studio).</div></div>
+</div>
+
+<!-- SECTION 6 -->
+<div class="card">
+  <div class="card-section">Section 6</div>
+  <div class="stitle"><div class="pill p-amber">🧭</div>Comment choisir ?</div>
+  <p class="desc">La vraie question n'est pas "lequel est le meilleur" — c'est <strong>"lequel est le plus adapté à mon objectif maintenant"</strong>.</p>
+  <div class="decision-grid">
+    <div class="decision-cell" style="background:#FEF3C7;border-color:#FDE68A;">
+      <div class="decision-if" style="color:#B45309;">Si ton objectif est...</div>
+      <div class="decision-then" style="color:#92400E;">Comprendre comment ça marche</div>
+      <div class="decision-why" style="color:#78350F;">→ Commence par le langage natif (canvas, C++ simple). Tu vois chaque rouage.</div>
+    </div>
+    <div class="decision-cell" style="background:#DBEAFE;border-color:#BFDBFE;">
+      <div class="decision-if" style="color:#2563EB;">Si ton objectif est...</div>
+      <div class="decision-then" style="color:#1E40AF;">Créer vite un prototype</div>
+      <div class="decision-why" style="color:#1E3A8A;">→ Utilise Godot ou Unity. Tu te concentres sur l'idée, pas la plomberie.</div>
+    </div>
+    <div class="decision-cell" style="background:#DCFCE7;border-color:#BBF7D0;">
+      <div class="decision-if" style="color:#15803D;">Si ton objectif est...</div>
+      <div class="decision-then" style="color:#166534;">Travailler dans l'industrie</div>
+      <div class="decision-why" style="color:#14532D;">→ Apprends C# (Unity) ou C++ (Unreal). Ce sont les standards des studios.</div>
+    </div>
+    <div class="decision-cell" style="background:#F3E8FF;border-color:#E9D5FF;">
+      <div class="decision-if" style="color:#7E22CE;">Si ton objectif est...</div>
+      <div class="decision-then" style="color:#6B21A8;">Publier un jeu web</div>
+      <div class="decision-why" style="color:#581C87;">→ Canvas brut ou Phaser.js. Tu connais déjà le langage, c'est ton terrain naturel.</div>
+    </div>
+  </div>
+  <div class="tip tip-green"><span class="tip-i">🏆</span><div>Le meilleur développeur de jeux n'est pas celui qui connaît le plus de moteurs — c'est celui qui <strong>comprend ce qui se passe dessous</strong>. Le canvas brut que tu as appris t'a donné cette compréhension. C'est un vrai avantage.</div></div>
+</div>
+
+<div class="nav-footer">
+  <a class="nav-prev" href="../../sommaire.html">← Sommaire</a>
+  <a class="nav-next" href="exercices-langage-moteur-jeu.html">Exercices →</a>
+</div>
+
+<div class="footer-note">Langage natif &amp; Moteur de jeu — Cours &nbsp;|&nbsp; Club Web</div>
+
+</body>
+</html>

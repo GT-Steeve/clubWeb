@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Ma note Moteurs 2D</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #3F6212; text-decoration: none; margin-bottom: 1.5rem; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #D9F99D; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-lime   { background: #ECFCCB; color: #3F6212; }
+    .b-blue   { background: #DBEAFE; color: #1E40AF; }
+    .b-green  { background: #DCFCE7; color: #166534; }
+    .b-amber  { background: #FEF3C7; color: #92400E; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-lime   { background: #ECFCCB; color: #3F6212; }
+    .p-green  { background: #DCFCE7; color: #166534; }
+    .p-blue   { background: #DBEAFE; color: #1E40AF; }
+    .p-amber  { background: #FEF3C7; color: #92400E; }
+    .p-teal   { background: #CCFBF1; color: #134E4A; }
+    .p-purple { background: #F3E8FF; color: #6B21A8; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+    code { font-family: 'Fira Code', monospace; background: #ECFCCB; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #3F6212; }
+
+    .themes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.7rem; }
+    .theme-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.85rem; line-height: 1.5; border: 0.5px solid; }
+    .theme-title { font-weight: 800; margin-bottom: 4px; font-size: 0.88rem; }
+
+    .format-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.6rem; }
+    .format-tag { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; border: 0.5px solid; }
+    .ft-html { background: #ECFCCB; border-color: #BEF264; color: #3F6212; }
+    .ft-pdf  { background: #FEE2E2; border-color: #FCA5A5; color: #991B1B; }
+    .ft-word { background: #DCFCE7; border-color: #BBF7D0; color: #166534; }
+    .ft-md   { background: #F3E8FF; border-color: #E9D5FF; color: #6B21A8; }
+
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-must  { background: #ECFCCB; border-left: 3px solid #65A30D; }
+    .req-bonus { background: #FEF3C7; border-left: 3px solid #F59E0B; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box { width: 20px; height: 20px; min-width: 20px; border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; color: transparent; transition: all 0.12s; }
+    .check-box.checked { background: #65A30D; border-color: #65A30D; color: white; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #ECFCCB; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #3F6212; line-height: 1.5; }
+    .tip-blue  { background: #DBEAFE; color: #1E40AF; }
+    .tip-amber { background: #FEF3C7; color: #92400E; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    .bonus-card { background: #ECFCCB; border: 1px dashed #65A30D; border-radius: 12px; padding: 1rem 1.2rem; margin-top: 0.8rem; }
+    .bonus-label { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #3F6212; margin-bottom: 6px; }
+    .bonus-desc { font-size: 0.88rem; color: #3F6212; line-height: 1.6; }
+
+    .cta-wrap { text-align: center; background: #14260A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+    .cta-wrap p { color: #D9F99D; font-size: 0.95rem; margin-bottom: 1.1rem; }
+    .cta-btn { display: inline-block; background: #65A30D; color: #fff; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #4D7C0F; }
+    .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; }
+
+    @media (max-width: 520px) { .themes-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<a class="nav-prev" href="exercices-moteurs-2d.html">← Retour aux exercices</a>
+
+<div class="hero">
+  <h1>🕹️ Projet — Ma note<br>Moteurs jeu 2D</h1>
+  <p>Crée ta note personnelle sur Phaser.js et Solar2D — garde une trace de ce que tu as compris.</p>
+  <div class="badge-row">
+    <span class="badge b-lime">Note numérique</span>
+    <span class="badge b-blue">Phaser.js</span>
+    <span class="badge b-green">Solar2D</span>
+    <span class="badge b-amber">Mon avis</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="stitle"><div class="pill p-teal">🎯</div>Objectif du projet</div>
+  <p class="desc">Tu vas créer <strong>ta note personnelle</strong> sur les frameworks de jeux 2D. Ce n'est pas un résumé scolaire — c'est un document qui te sert à toi, rédigé dans tes propres mots.</p>
+  <p class="desc">Tu connais déjà le canvas brut. Maintenant tu as une vue d'ensemble sur ce qui existe au-dessus. Cette note, c'est ta carte mentale de l'écosystème des jeux 2D.</p>
+  <div class="tip"><span class="tip-i">💡</span><span>Fais le lien avec ce que tu connais. "Phaser c'est comme le canvas mais en plus facile pour…" ou "Solar2D c'est pour le mobile, donc si je voulais publier sur l'App Store…" Ces connexions, c'est ce qui rend une note utile.</span></div>
+</div>
+
+<div class="card">
+  <div class="stitle"><div class="pill p-blue">📚</div>Thèmes à couvrir</div>
+  <p class="desc">Ta note doit aborder ces 6 points clés :</p>
+  <div class="themes-grid">
+    <div class="theme-card" style="background:#0C1220;border-color:#1E3A5F;">
+      <div class="theme-title" style="color:#93C5FD;">⚡ Phaser.js</div>
+      <div style="font-size:0.8rem;color:#BAE6FD;">Son langage, sa plateforme cible, ses forces vs le canvas brut.</div>
+    </div>
+    <div class="theme-card" style="background:#0A180A;border-color:#1A3A1A;">
+      <div class="theme-title" style="color:#86EFAC;">🌙 Solar2D</div>
+      <div style="font-size:0.8rem;color:#BBF7D0;">Lua, mobile, pourquoi il est passé open source en 2020.</div>
+    </div>
+    <div class="theme-card" style="background:#ECFCCB;border-color:#BEF264;">
+      <div class="theme-title" style="color:#3F6212;">🔗 Lien avec le canvas</div>
+      <div style="font-size:0.8rem;color:#4D7C0F;">En quoi Phaser est construit par-dessus ce que tu connais déjà.</div>
+    </div>
+    <div class="theme-card" style="background:#DBEAFE;border-color:#BFDBFE;">
+      <div class="theme-title" style="color:#1E40AF;">🌐 Web vs Mobile</div>
+      <div style="font-size:0.8rem;color:#2563EB;">Pourquoi le choix du framework dépend de la plateforme cible.</div>
+    </div>
+    <div class="theme-card" style="background:#FEF3C7;border-color:#FDE68A;">
+      <div class="theme-title" style="color:#92400E;">📊 Mon comparatif</div>
+      <div style="font-size:0.8rem;color:#B45309;">Un tableau ou une liste : Phaser vs Solar2D sur les critères clés.</div>
+    </div>
+    <div class="theme-card" style="background:#F3E8FF;border-color:#E9D5FF;">
+      <div class="theme-title" style="color:#6B21A8;">💭 Mon avis</div>
+      <div style="font-size:0.8rem;color:#7E22CE;">Lequel tu essaierais en premier, et dans quel contexte.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="stitle"><div class="pill p-purple">📄</div>Format de ta note</div>
+  <p class="desc">Ta note peut prendre la forme qui te convient — l'essentiel est qu'elle soit <strong>numérique et consultable facilement</strong>.</p>
+  <div class="rl">Formats acceptés</div>
+  <div class="format-row">
+    <span class="format-tag ft-html">🌐 Page HTML</span>
+    <span class="format-tag ft-pdf">📕 PDF</span>
+    <span class="format-tag ft-word">📘 Word / .docx</span>
+    <span class="format-tag ft-md">📝 Markdown .md</span>
+  </div>
+  <div class="bonus-card" style="margin-top:0.9rem;">
+    <div class="bonus-label">⭐ Bonus — Page Phaser interactive</div>
+    <div class="bonus-desc">Si tu choisis le format HTML, essaie d'intégrer un mini-jeu Phaser.js dans ta note — une scène avec un rectangle qui rebondit. Ce serait la preuve que tu as compris, pas juste recopié.</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="stitle"><div class="pill p-green">✅</div>Critères de réussite</div>
+  <div class="req-list">
+    <div class="req-item req-must"><span class="req-icon">📌</span><div><strong>Phaser.js est présenté</strong> — langage, plateforme, au moins une force et une limite.</div></div>
+    <div class="req-item req-must"><span class="req-icon">📌</span><div><strong>Solar2D est présenté</strong> — Lua, contexte mobile, passage open source.</div></div>
+    <div class="req-item req-must"><span class="req-icon">📌</span><div><strong>Le lien avec le canvas est expliqué</strong> — comment Phaser se situe par rapport à ce que tu connais.</div></div>
+    <div class="req-item req-must"><span class="req-icon">📌</span><div><strong>Un comparatif est présent</strong> — tableau ou liste avec au moins 3 critères comparés.</div></div>
+    <div class="req-item req-must"><span class="req-icon">📌</span><div><strong>Ton avis est présent</strong> — lequel tu utiliserais et pourquoi.</div></div>
+    <div class="req-item req-bonus"><span class="req-icon">⭐</span><div><strong>Bonus</strong> — tu mentionnes un autre framework 2D non vu en cours (Love2D, Cocos2D, libGDX, Pygame…).</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="stitle"><div class="pill p-amber">☑️</div>Checklist avant de rendre</div>
+  <div class="checklist">
+    <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span>J'ai expliqué ce qu'est Phaser.js et quel langage il utilise.</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span>J'ai expliqué ce qu'est Solar2D et pour quelle plateforme.</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span>J'ai fait le lien entre Phaser et le canvas HTML5.</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span>Mon comparatif montre clairement les différences entre les deux.</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span>J'ai donné mon avis personnel et argumenté mon choix.</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggle(this)"></div><span>Ma note est lisible par quelqu'un qui n'a pas suivi le cours.</span></div>
+  </div>
+</div>
+
+<div class="cta-wrap">
+  <p>Note terminée ? Retourne au sommaire pour continuer ta progression.</p>
+  <a class="cta-btn" href="../../sommaire.html">← Retour au sommaire</a>
+</div>
+
+<div class="footer-note">Moteurs jeu 2D — Projet &nbsp;|&nbsp; Club Web</div>
+
+<script>
+function toggle(el){
+  el.classList.toggle('checked');
+  el.textContent = el.classList.contains('checked') ? '✓' : '';
+}
+</script>
+
+</body>
+</html>
