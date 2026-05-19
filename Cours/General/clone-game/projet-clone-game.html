@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet — Clone ton jeu 2D</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #5B21B6; text-decoration: none; margin-bottom: 1.5rem; background: #EDE9FD; border: 0.5px solid #C4B5FD; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #DDD6FE; }
+
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.1rem; font-weight: 800; line-height: 1.2; }
+        .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .b-purple { background: #EDE9FD; color: #5B21B6; }
+        .b-indigo { background: #E0E7FF; color: #3730A3; }
+        .b-green  { background: #EAF3DE; color: #3B6D11; }
+        .b-amber  { background: #FEF3C7; color: #92400E; }
+
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+        .progress-label { font-size: 0.82rem; font-weight: 700; color: #888780; }
+        .progress-count { font-size: 0.82rem; font-weight: 700; color: #7C3AED; }
+        .progress-wrap { height: 8px; background: #D3D1C7; border-radius: 10px; margin-bottom: 1.8rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: #7C3AED; border-radius: 10px; transition: width 0.5s ease; width: 0%; }
+
+        .step-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; margin-bottom: 1rem; overflow: hidden; transition: border-color 0.2s; }
+        .step-card.done { border-color: #7C3AED; }
+        .step-header { display: flex; align-items: center; gap: 12px; padding: 1.1rem 1.4rem; cursor: pointer; user-select: none; }
+        .step-num { width: 34px; height: 34px; min-width: 34px; border-radius: 10px; background: #F1EFE8; border: 0.5px solid #D3D1C7; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; color: #888780; transition: all 0.2s; }
+        .step-card.done .step-num { background: #EDE9FD; border-color: #7C3AED; color: #5B21B6; }
+        .step-card.done .step-num::after { content: '✓'; }
+        .step-card.done .step-num-text { display: none; }
+        .step-title { font-size: 1rem; font-weight: 800; flex: 1; }
+        .step-chevron { color: #B4B2A9; font-size: 1rem; transition: transform 0.2s; }
+        .step-card.open .step-chevron { transform: rotate(180deg); }
+        .step-body { display: none; padding: 0 1.4rem 1.4rem; }
+        .step-card.open .step-body { display: block; }
+
+        .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #EDE9FD; padding: 1px 5px; border-radius: 4px; color: #5B21B6; }
+
+        .js-block {
+            background: #120820; border-left: 3px solid #7C3AED; border-radius: 10px;
+            padding: 0.9rem 1.1rem; font-family: 'Fira Code', monospace; font-size: 0.82rem;
+            line-height: 1.9; white-space: pre; overflow-x: auto; color: #DDD6FE;
+            margin: 0.8rem 0;
+        }
+        .kw  { color: #A78BFA; font-weight: 700; }
+        .fn  { color: #93C5FD; }
+        .str { color: #86EFAC; }
+        .num { color: #FCD34D; }
+        .cm  { color: #4C2D7E; font-style: italic; }
+        .var { color: #FCD34D; }
+        .hl  { color: #C084FC; font-weight: 700; }
+
+        .section-mini { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin: 1rem 0 0.4rem; }
+
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: #EDE9FD; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #5B21B6; line-height: 1.5; }
+        .tip-amber { background: #FFFBEB; color: #92400E; }
+        .tip-green { background: #EAF3DE; color: #166534; }
+        .tip-red   { background: #FEF2F2; color: #991B1B; }
+        .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+        .mark-done-btn { display: inline-flex; align-items: center; gap: 7px; margin-top: 1.2rem; background: #0D001A; color: #A78BFA; border: none; border-radius: 10px; padding: 9px 22px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: background 0.15s; }
+        .mark-done-btn:hover { background: #1A003A; }
+        .step-card.done .mark-done-btn { background: #EDE9FD; color: #5B21B6; cursor: default; border: 0.5px solid #7C3AED; }
+
+        .game-preview-wrap { background: #120820; border-radius: 16px; padding: 1rem; margin: 1rem 0; border: 0.5px solid #2D0F5E; text-align: center; }
+        .game-preview-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #4C2D7E; margin-bottom: 8px; }
+        #proj-demo { border-radius: 10px; display: block; margin: 0 auto; max-width: 100%; }
+        .game-controls-hint { font-size: 0.78rem; color: #4C2D7E; margin-top: 6px; font-family: 'Fira Code', monospace; }
+
+        .chain-box { border-radius: 12px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.88rem; color: #5F5E5A; line-height: 1.7; }
+        .chain-box strong { color: #2C2C2A; }
+
+        .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin: 0.9rem 0; }
+        .plan-cell { background: #EDE9FD; border-radius: 10px; padding: 0.7rem 0.9rem; font-size: 0.85rem; line-height: 1.5; }
+        .plan-cell strong { display: block; color: #5B21B6; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+
+        .ideas-section { margin-top: 2rem; }
+        .ideas-header { font-size: 1.3rem; font-weight: 800; color: #2C2C2A; margin-bottom: 0.5rem; }
+        .ideas-intro { font-size: 0.92rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 1.2rem; }
+        .idea-card { display: flex; gap: 1rem; background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.1rem 1.2rem; margin-bottom: 0.8rem; }
+        .idea-icon { font-size: 1.8rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+        .idea-title { font-size: 0.97rem; font-weight: 800; color: #2C2C2A; margin-bottom: 0.3rem; }
+        .idea-desc { font-size: 0.88rem; color: #5F5E5A; line-height: 1.65; }
+        .idea-card-free { background: #EDE9FD; border-color: #7C3AED; }
+
+        .cta-wrap { text-align: center; background: #1A0D35; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+        .cta-wrap p { color: #C4B5FD; font-size: 0.95rem; margin-bottom: 1.1rem; }
+        .cta-btn { display: inline-block; background: #7C3AED; color: #fff; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #6D28D9; }
+        .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="exercices-clone-game.html">← Retour aux exercices</a>
+
+<div class="hero">
+    <h1>🦕 Projet — Clone ton jeu 2D<br>préféré</h1>
+    <p>Applique la méthodologie du cours pour reproduire un jeu de ton choix, couche par couche, jusqu'à y ajouter ta propre variante.</p>
+    <div class="badge-row">
+        <span class="badge b-purple">Analyse</span>
+        <span class="badge b-indigo">Physique</span>
+        <span class="badge b-green">Collision</span>
+        <span class="badge b-amber">Ta variante</span>
+    </div>
+</div>
+
+<!-- DEMO LIVE -->
+<div class="game-preview-wrap">
+    <div class="game-preview-label">🎮 Exemple de clone — Dino Run</div>
+    <canvas id="proj-demo" width="560" height="260"></canvas>
+    <div class="game-controls-hint">Espace ou clic pour sauter &nbsp;|&nbsp; Double saut disponible</div>
+</div>
+
+<!-- CHAIN BOX -->
+<div class="chain-box">
+    <strong>Ce projet fait suite au cours Clone ton jeu 2D.</strong> Tu as vu la méthodologie complète avec Flappy Bird. Maintenant c'est ton tour : choisis le jeu qui te motive, identifie sa mécanique centrale, et construis-le couche par couche. Le Dino Run ci-dessus est un exemple parmi des dizaines de jeux possibles.<br><br>
+    <strong>Pas d'idée ?</strong> Pong, Breakout, Space Invaders, Snake, Pac-Man, Asteroids — tous se construisent avec la même méthode.
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-header">
+    <span class="progress-label">Progression</span>
+    <span class="progress-count" id="prog-count">0 / 6 étapes</span>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="prog-fill"></div></div>
+
+<!-- ════ STEP 1 ════ -->
+<div class="step-card open" id="step1">
+    <div class="step-header" onclick="toggleStep('step1')">
+        <div class="step-num"><span class="step-num-text">1</span></div>
+        <div class="step-title">Analyser ton jeu — avant d'écrire une ligne</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">La première étape ne touche pas le clavier : <strong>observe ton jeu pendant 5 minutes</strong>. Note tout ce que tu vois. Ensuite, identifie la mécanique centrale — le truc <em>sans lequel le jeu n'existe pas</em>.</p>
+        <div class="section-mini">Questions à te poser</div>
+        <div class="plan-grid">
+            <div class="plan-cell"><strong>Qu'est-ce qui bouge ?</strong>Le joueur ? Les ennemis ? Le décor ?</div>
+            <div class="plan-cell"><strong>Quelle est la physique ?</strong>Gravité, vitesse constante, rebond ?</div>
+            <div class="plan-cell"><strong>Comment perd-on ?</strong>Collision ? Temps écoulé ? Chute ?</div>
+            <div class="plan-cell"><strong>Comment gagne-t-on du score ?</strong>Temps survécu, ennemis éliminés, pièces ?</div>
+        </div>
+        <div class="section-mini">Exemple — Dino Run analysé</div>
+        <div class="js-block"><span class="cm">// Mécanique centrale : saut par-dessus des obstacles défilants
+//
+// Entités :
+//   • dino    — joueur fixe en x, soumis à la gravité, peut sauter
+//   • cactus  — obstacles qui défilent de droite à gauche
+//   • sol     — ligne fixe, dino rebondit dessus
+//
+// Perd si : dino touche un cactus
+// Score   : temps survécu (frames / 60 = secondes)
+// Difficulté : vitesse augmente toutes les 5 secondes</span></div>
+        <div class="tip"><span class="tip-i">📋</span><div>Écris cette analyse dans un commentaire en haut de ton <code>script.js</code>. Ça te servira de boussole quand tu seras bloqué : "est-ce que ce que j'ajoute est dans l'analyse ?"</div></div>
+        <button class="mark-done-btn" onclick="markDone('step1')">✓ Fait</button>
+    </div>
+</div>
+
+<!-- ════ STEP 2 ════ -->
+<div class="step-card" id="step2">
+    <div class="step-header" onclick="toggleStep('step2')">
+        <div class="step-num"><span class="step-num-text">2</span></div>
+        <div class="step-title">Le personnage & la physique</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Commence par faire <strong>bouger le personnage seul</strong>, sans obstacle ni score. La physique doit être satisfaisante avant de passer à la suite — c'est la fondation de tout.</p>
+        <div class="section-mini">Structure de base — à adapter selon ton jeu</div>
+        <div class="js-block"><span class="kw">const</span> <span class="var">GRAVITE</span>     = <span class="num">0.5</span>;   <span class="cm">// accélération vers le bas</span>
+<span class="kw">const</span> <span class="var">FORCE_SAUT</span>  = -<span class="num">11</span>;  <span class="cm">// vitesse initiale vers le haut</span>
+<span class="kw">const</span> <span class="var">SOL</span>        = <span class="num">220</span>;   <span class="cm">// y du sol (adapter à la hauteur du canvas)</span>
+
+<span class="kw">let</span> <span class="var">joueur</span> = {
+  x: <span class="num">80</span>, y: <span class="var">SOL</span> - <span class="num">50</span>,  <span class="cm">// position</span>
+  vx: <span class="num">0</span>, vy: <span class="num">0</span>,          <span class="cm">// vitesse</span>
+  w: <span class="num">40</span>, h: <span class="num">50</span>,          <span class="cm">// taille de la hitbox</span>
+  sol: <span class="kw">false</span>             <span class="cm">// est-il au sol ?</span>
+};
+
+<span class="kw">function</span> <span class="fn">update</span>() {
+  <span class="cm">// 1. Appliquer la gravité</span>
+  <span class="var">joueur</span>.vy += <span class="var">GRAVITE</span>;
+  <span class="var">joueur</span>.y  += <span class="var">joueur</span>.vy;
+
+  <span class="cm">// 2. Empêcher de passer sous le sol</span>
+  <span class="kw">if</span> (<span class="var">joueur</span>.y >= <span class="var">SOL</span> - <span class="var">joueur</span>.h) {
+    <span class="var">joueur</span>.y   = <span class="var">SOL</span> - <span class="var">joueur</span>.h;
+    <span class="var">joueur</span>.vy  = <span class="num">0</span>;
+    <span class="var">joueur</span>.sol = <span class="kw">true</span>;
+  }
+}
+
+<span class="kw">function</span> <span class="fn">sauter</span>() {
+  <span class="kw">if</span> (<span class="var">joueur</span>.sol) {            <span class="cm">// saut simple</span>
+    <span class="var">joueur</span>.vy  = <span class="var">FORCE_SAUT</span>;
+    <span class="var">joueur</span>.sol = <span class="kw">false</span>;
+  }
+}
+
+document.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, <span class="kw">function</span>(e) {
+  <span class="kw">if</span> (e.code === <span class="str">'Space'</span> || e.code === <span class="str">'ArrowUp'</span>) <span class="fn">sauter</span>();
+});</div>
+        <div class="tip tip-amber"><span class="tip-i">🎮</span><div>Pour un jeu <em>sans gravité</em> (Snake, Pong), remplace la gravité par une vitesse constante : <code>joueur.x += joueur.vx; joueur.y += joueur.vy;</code>. Le principe reste le même — position + vitesse chaque frame.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step2')">✓ Fait</button>
+    </div>
+</div>
+
+<!-- ════ STEP 3 ════ -->
+<div class="step-card" id="step3">
+    <div class="step-header" onclick="toggleStep('step3')">
+        <div class="step-num"><span class="step-num-text">3</span></div>
+        <div class="step-title">Les obstacles défilants</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Les obstacles naissent hors de l'écran à droite, se déplacent vers la gauche, et sont supprimés quand ils sortent à gauche. Un <strong>compteur de frames</strong> contrôle l'intervalle entre les apparitions.</p>
+        <div class="section-mini">Génération & défilement</div>
+        <div class="js-block"><span class="kw">const</span> <span class="var">BASE_SPEED</span>  = <span class="num">3</span>;   <span class="cm">// pixels par frame</span>
+<span class="kw">const</span> <span class="var">INTERVALLE</span> = <span class="num">90</span>;  <span class="cm">// frames entre deux obstacles</span>
+
+<span class="kw">let</span> <span class="var">obstacles</span>  = [];
+<span class="kw">let</span> <span class="var">vitesse</span>    = <span class="var">BASE_SPEED</span>;
+<span class="kw">let</span> <span class="var">frameCount</span> = <span class="num">0</span>;
+
+<span class="kw">function</span> <span class="fn">spawnObstacle</span>() {
+  <span class="kw">const</span> <span class="var">h</span> = <span class="num">30</span> + Math.<span class="fn">random</span>() * <span class="num">40</span>; <span class="cm">// hauteur aléatoire 30–70</span>
+  <span class="var">obstacles</span>.<span class="fn">push</span>({ x: canvas.width, w: <span class="num">24</span>, h: <span class="var">h</span>, y: <span class="var">SOL</span> - <span class="var">h</span> });
+}
+
+<span class="kw">function</span> <span class="fn">updateObstacles</span>() {
+  <span class="var">frameCount</span>++;
+  <span class="kw">if</span> (<span class="var">frameCount</span> % <span class="var">INTERVALLE</span> === <span class="num">0</span>) <span class="fn">spawnObstacle</span>();
+
+  <span class="cm">// Déplacer chaque obstacle vers la gauche</span>
+  <span class="var">obstacles</span>.<span class="fn">forEach</span>(<span class="kw">function</span>(o) { o.x -= <span class="var">vitesse</span>; });
+
+  <span class="cm">// Supprimer ceux qui sont sortis de l'écran</span>
+  <span class="var">obstacles</span> = <span class="var">obstacles</span>.<span class="fn">filter</span>(<span class="kw">function</span>(o) {
+    <span class="kw">return</span> o.x + o.w > <span class="num">0</span>;
+  });
+}</div>
+        <div class="tip"><span class="tip-i">💡</span><div><code>filter()</code> crée un nouveau tableau avec seulement les éléments qui passent le test. C'est plus propre qu'une boucle avec <code>splice()</code> — et ça évite les bugs d'index décalé lors de suppressions dans un forEach.</div></div>
+        <div class="tip tip-green"><span class="tip-i">🔀</span><div>Pour un jeu où c'est le joueur qui se déplace (comme un platformer), c'est l'inverse : le joueur bouge, et la caméra suit. Simuler ça : déplacer toutes les entités <em>à l'opposé</em> de la direction du joueur.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step3')">✓ Fait</button>
+    </div>
+</div>
+
+<!-- ════ STEP 4 ════ -->
+<div class="step-card" id="step4">
+    <div class="step-header" onclick="toggleStep('step4')">
+        <div class="step-num"><span class="step-num-text">4</span></div>
+        <div class="step-title">La détection de collision</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">On compare les rectangles du joueur et des obstacles. Pour un meilleur ressenti, on <strong>réduit légèrement la hitbox</strong> — le joueur frôle les obstacles sans mourir injustement.</p>
+        <div class="section-mini">Collision AABB avec boîte réduite</div>
+        <div class="js-block"><span class="kw">function</span> <span class="fn">checkCollisions</span>() {
+  <span class="kw">const</span> <span class="var">marge</span> = <span class="num">8</span>; <span class="cm">// pixels retirés sur chaque côté</span>
+
+  <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i < <span class="var">obstacles</span>.length; i++) {
+    <span class="kw">const</span> <span class="var">o</span> = <span class="var">obstacles</span>[i];
+
+    <span class="cm">// Hitbox réduite du joueur</span>
+    <span class="kw">const</span> <span class="var">jx</span> = <span class="var">joueur</span>.x + <span class="var">marge</span>;
+    <span class="kw">const</span> <span class="var">jy</span> = <span class="var">joueur</span>.y + <span class="var">marge</span>;
+    <span class="kw">const</span> <span class="var">jw</span> = <span class="var">joueur</span>.w - <span class="var">marge</span> * <span class="num">2</span>;
+    <span class="kw">const</span> <span class="var">jh</span> = <span class="var">joueur</span>.h - <span class="var">marge</span> * <span class="num">2</span>;
+
+    <span class="cm">// Test AABB : les deux rectangles se chevauchent-ils ?</span>
+    <span class="kw">const</span> <span class="var">collision</span> =
+      <span class="var">jx</span> + <span class="var">jw</span> > <span class="var">o</span>.x     &&   <span class="cm">// droite J > gauche O</span>
+      <span class="var">jx</span>      < <span class="var">o</span>.x + <span class="var">o</span>.w &&   <span class="cm">// gauche J < droite O</span>
+      <span class="var">jy</span> + <span class="var">jh</span> > <span class="var">o</span>.y     &&   <span class="cm">// bas J > haut O</span>
+      <span class="var">jy</span>      < <span class="var">o</span>.y + <span class="var">o</span>.h;    <span class="cm">// haut J < bas O</span>
+
+    <span class="kw">if</span> (<span class="var">collision</span>) {
+      <span class="var">gameState</span> = GS.OVER; <span class="cm">// → game over</span>
+      <span class="kw">break</span>;
+    }
+  }
+}</div>
+        <div class="tip tip-red"><span class="tip-i">⚠️</span><div>Les 4 conditions doivent toutes être vraies en même temps. Si tu en oublies une (par ex. la vérification de l'axe Y), des collisions fantômes apparaissent — le joueur meurt sans raison visible.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step4')">✓ Fait</button>
+    </div>
+</div>
+
+<!-- ════ STEP 5 ════ -->
+<div class="step-card" id="step5">
+    <div class="step-header" onclick="toggleStep('step5')">
+        <div class="step-num"><span class="step-num-text">5</span></div>
+        <div class="step-title">Score, difficulté progressive & meilleur score</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Le score augmente chaque frame. La vitesse augmente par paliers. Le meilleur score est sauvegardé dans <code>localStorage</code> pour persister entre les parties.</p>
+        <div class="section-mini">Score + difficulté progressive</div>
+        <div class="js-block"><span class="kw">let</span> <span class="var">score</span> = <span class="num">0</span>;
+<span class="kw">let</span> <span class="var">best</span>  = <span class="fn">parseInt</span>(localStorage.<span class="fn">getItem</span>(<span class="str">'monClone_best'</span>) || <span class="str">'0'</span>);
+
+<span class="kw">function</span> <span class="fn">updateScore</span>() {
+  <span class="var">score</span>++;
+
+  <span class="cm">// Augmenter la vitesse toutes les 300 frames (~5 s à 60 fps)</span>
+  <span class="kw">if</span> (<span class="var">score</span> % <span class="num">300</span> === <span class="num">0</span>) <span class="var">vitesse</span> += <span class="num">0.3</span>;
+}
+
+<span class="kw">function</span> <span class="fn">gameOver</span>() {
+  <span class="cm">// Sauvegarder le meilleur score si battu</span>
+  <span class="kw">if</span> (<span class="var">score</span> > <span class="var">best</span>) {
+    <span class="var">best</span> = <span class="var">score</span>;
+    localStorage.<span class="fn">setItem</span>(<span class="str">'monClone_best'</span>, <span class="var">best</span>);
+  }
+  <span class="var">gameState</span> = GS.OVER;
+}
+
+<span class="kw">function</span> <span class="fn">drawHUD</span>() {
+  ctx.fillStyle = <span class="str">'#fff'</span>;
+  ctx.font      = <span class="str">'700 14px Nunito'</span>;
+  ctx.textAlign = <span class="str">'left'</span>;
+  ctx.<span class="fn">fillText</span>(<span class="str">'Score : '</span> + Math.<span class="fn">floor</span>(<span class="var">score</span> / <span class="num">60</span>), <span class="num">16</span>, <span class="num">28</span>);
+  ctx.textAlign = <span class="str">'right'</span>;
+  ctx.<span class="fn">fillText</span>(<span class="str">'Meilleur : '</span> + Math.<span class="fn">floor</span>(<span class="var">best</span> / <span class="num">60</span>), canvas.width - <span class="num">16</span>, <span class="num">28</span>);
+}</div>
+        <div class="tip"><span class="tip-i">💾</span><div>Remplace <code>'monClone_best'</code> par un nom unique à ton jeu. Si plusieurs jeux utilisent la même clé, ils partagent le meilleur score — ce qui n'est pas ce qu'on veut.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step5')">✓ Fait</button>
+    </div>
+</div>
+
+<!-- ════ STEP 6 ════ -->
+<div class="step-card" id="step6">
+    <div class="step-header" onclick="toggleStep('step6')">
+        <div class="step-num"><span class="step-num-text">6</span></div>
+        <div class="step-title">Machine à états & ta variante</div>
+        <span class="step-chevron">▼</span>
+    </div>
+    <div class="step-body">
+        <p class="desc">Une machine à états simplifie la gestion des écrans : titre, jeu, game over. C'est le <strong>dernier vernis</strong> une fois la mécanique centrale validée. Ensuite : ajoute <strong>une seule variante originale</strong>.</p>
+        <div class="section-mini">Machine à états minimale</div>
+        <div class="js-block"><span class="kw">const</span> <span class="var">GS</span> = { TITRE: <span class="num">0</span>, JEU: <span class="num">1</span>, OVER: <span class="num">2</span> };
+<span class="kw">let</span> <span class="var">gameState</span> = <span class="var">GS</span>.TITRE;
+
+<span class="kw">function</span> <span class="fn">loop</span>() {
+  ctx.<span class="fn">clearRect</span>(<span class="num">0</span>, <span class="num">0</span>, canvas.width, canvas.height);
+
+  <span class="kw">switch</span> (<span class="var">gameState</span>) {
+    <span class="kw">case</span> <span class="var">GS</span>.TITRE: <span class="fn">drawTitre</span>();                          <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="var">GS</span>.JEU:   <span class="fn">updateJeu</span>(); <span class="fn">drawJeu</span>(); <span class="fn">drawHUD</span>(); <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="var">GS</span>.OVER:  <span class="fn">drawOver</span>();                          <span class="kw">break</span>;
+  }
+  <span class="fn">requestAnimationFrame</span>(loop);
+}
+loop();</div>
+        <div class="section-mini">Idées de variantes — choisis-en une</div>
+        <div class="plan-grid">
+            <div class="plan-cell"><strong>Double saut</strong>Autoriser un deuxième saut en l'air avec un compteur <code>sauts</code></div>
+            <div class="plan-cell"><strong>Mode nuit</strong>La couleur de fond change à partir de 30 s, les obstacles aussi</div>
+            <div class="plan-cell"><strong>Power-up</strong>Un item qui apparaît aléatoirement et donne l'invincibilité 3 s</div>
+            <div class="plan-cell"><strong>Obstacles volants</strong>Un 2e type d'obstacle qui vole à mi-hauteur et nécessite de s'accroupir</div>
+        </div>
+        <div class="tip"><span class="tip-i">🚀</span><div>Une seule variante bien finie vaut mieux que trois à moitié. Choisis celle qui te motive le plus, implémente-la, teste-la, puis décide si tu veux en ajouter une deuxième.</div></div>
+        <button class="mark-done-btn" onclick="markDone('step6')">✓ Fait</button>
+    </div>
+</div>
+
+<!-- IDEAS -->
+<div class="ideas-section">
+    <div class="ideas-header">Pour aller plus loin</div>
+    <div class="ideas-intro">Ton clone fonctionne et ta variante est en place ? Voici quelques idées supplémentaires pour approfondir.</div>
+
+    <div class="idea-card">
+        <div class="idea-icon">🎵</div>
+        <div>
+            <div class="idea-title">Sons & vibrations</div>
+            <div class="idea-desc">Utilise l'<code>AudioContext</code> pour générer des bips synthétiques au saut, à la collision et au score palier. Pas besoin de fichier audio — tu crées les sons directement en JavaScript avec des oscillateurs.</div>
+        </div>
+    </div>
+
+    <div class="idea-card">
+        <div class="idea-icon">📱</div>
+        <div>
+            <div class="idea-title">Contrôles tactiles</div>
+            <div class="idea-desc">Ajoute un listener <code>touchstart</code> pour que le jeu fonctionne sur smartphone. Pense aussi à redimensionner le canvas en fonction de la largeur de l'écran avec <code>window.innerWidth</code>.</div>
+        </div>
+    </div>
+
+    <div class="idea-card">
+        <div class="idea-icon">🏆</div>
+        <div>
+            <div class="idea-title">Tableau des 5 meilleurs scores</div>
+            <div class="idea-desc">Au lieu de sauvegarder un seul best score, stocke un tableau de 5 scores avec un nom et une date. Affiche-le sur un écran dédié entre les parties — comme dans les vrais jeux d'arcade.</div>
+        </div>
+    </div>
+
+    <div class="idea-card idea-card-free">
+        <div class="idea-icon">🎯</div>
+        <div>
+            <div class="idea-title">Clone un deuxième jeu</div>
+            <div class="idea-desc">Une fois que la méthode est acquise, le prochain clone va beaucoup plus vite. Essaie un jeu aux mécaniques différentes : Pong (deux joueurs), Asteroids (rotation + inertie), ou Snake (grille + queue).</div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+    <p>Tu as maîtrisé la méthodologie clone — idée, couche par couche, variante. Retourne au sommaire pour continuer ta progression.</p>
+    <a class="cta-btn" href="../../sommaire.html">← Retour au sommaire</a>
+</div>
+
+<div class="footer-note">Clone ton jeu 2D — Projet &nbsp;|&nbsp; Club Web</div>
+
+<script>
+/* ─── DÉMO LIVE — Dino Run avec double saut ─── */
+(function(){
+    var canvas = document.getElementById('proj-demo');
+    var ctx    = canvas.getContext('2d');
+    var W = canvas.width, H = canvas.height;
+
+    var GRAVITE    = 0.48;
+    var FORCE_SAUT = -10.5;
+    var SOL        = 210;
+    var BASE_SPEED = 2.8;
+    var INTERVALLE = 88;
+
+    var GS = { TITRE:0, JEU:1, OVER:2 };
+    var gs = GS.TITRE;
+
+    var dino = { x:80, y:0, vy:0, w:36, h:46, sol:false, sauts:0 };
+    var obstacles = [];
+    var frameCount = 0, score = 0, vitesse = BASE_SPEED;
+    var best = parseInt(localStorage.getItem('dino_clone_best')||'0');
+
+    // Étoiles de fond
+    var stars = [];
+    for(var s=0;s<40;s++) stars.push({ x:Math.random()*W, y:Math.random()*(SOL-40), r:Math.random()*1.5+0.5, a:Math.random() });
+
+    function resetGame(){
+        dino.y   = SOL - dino.h;
+        dino.vy  = 0;
+        dino.sol = true;
+        dino.sauts = 0;
+        obstacles  = [];
+        frameCount = 0;
+        vitesse    = BASE_SPEED;
+        score      = 0;
+    }
+
+    function jump(){
+        if(gs === GS.TITRE){ gs = GS.JEU; resetGame(); return; }
+        if(gs === GS.OVER) { gs = GS.JEU; resetGame(); return; }
+        if(gs === GS.JEU && dino.sauts < 2){
+            dino.vy  = FORCE_SAUT;
+            dino.sol = false;
+            dino.sauts++;
+        }
+    }
+
+    canvas.addEventListener('click', jump);
+    canvas.addEventListener('touchstart', function(e){ e.preventDefault(); jump(); }, { passive:false });
+    document.addEventListener('keydown', function(e){
+        if(e.code==='Space'||e.code==='ArrowUp'){ e.preventDefault(); jump(); }
+    });
+
+    function spawnObstacle(){
+        var h = 28 + Math.random()*38;
+        obstacles.push({ x:W+10, w:22, h:h, y:SOL-h });
+    }
+
+    function update(){
+        dino.vy += GRAVITE;
+        dino.y  += dino.vy;
+        if(dino.y >= SOL - dino.h){
+            dino.y     = SOL - dino.h;
+            dino.vy    = 0;
+            dino.sol   = true;
+            dino.sauts = 0;
+        } else {
+            dino.sol = false;
+        }
+
+        frameCount++;
+        if(frameCount % INTERVALLE === 0) spawnObstacle();
+
+        obstacles.forEach(function(o){ o.x -= vitesse; });
+        obstacles = obstacles.filter(function(o){ return o.x + o.w > -10; });
+
+        score++;
+        if(score % 300 === 0) vitesse += 0.25;
+
+        // Collision
+        var mg = 7;
+        for(var i=0;i<obstacles.length;i++){
+            var o = obstacles[i];
+            if(dino.x+mg+dino.w-mg*2 > o.x && dino.x+mg < o.x+o.w &&
+               dino.y+mg < o.y+o.h && dino.y+dino.h-mg > o.y){
+                if(score > best){ best = score; localStorage.setItem('dino_clone_best', best); }
+                gs = GS.OVER;
+                break;
+            }
+        }
+    }
+
+    function roundRect(x,y,w,h,r){
+        ctx.beginPath();
+        ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
+        ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+        ctx.lineTo(x+w,y+h-r);
+        ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+        ctx.lineTo(x+r,y+h);
+        ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+        ctx.lineTo(x,y+r);
+        ctx.quadraticCurveTo(x,y,x+r,y);
+        ctx.closePath();
+    }
+
+    function draw(){
+        // Fond
+        var grd = ctx.createLinearGradient(0,0,0,H);
+        grd.addColorStop(0,'#120820');
+        grd.addColorStop(1,'#1E0D35');
+        ctx.fillStyle = grd;
+        ctx.fillRect(0,0,W,H);
+
+        // Étoiles
+        for(var s=0;s<stars.length;s++){
+            var st = stars[s];
+            var flicker = gs===GS.JEU ? 0.6+Math.sin(score*0.05+st.a*10)*0.4 : 1;
+            ctx.globalAlpha = flicker * 0.6;
+            ctx.fillStyle = '#C4B5FD';
+            ctx.beginPath();
+            ctx.arc(st.x, st.y, st.r, 0, Math.PI*2);
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+
+        // Sol
+        ctx.fillStyle = '#2E1065';
+        ctx.fillRect(0, SOL, W, H-SOL);
+        ctx.fillStyle = '#7C3AED';
+        ctx.fillRect(0, SOL, W, 3);
+
+        // Nuages de fond
+        ctx.fillStyle = 'rgba(109,40,217,0.2)';
+        ctx.beginPath(); ctx.ellipse(120, 60, 55, 22, 0, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(400, 45, 45, 18, 0, 0, Math.PI*2); ctx.fill();
+
+        // Obstacles (cacti stylisés)
+        for(var i=0;i<obstacles.length;i++){
+            var o = obstacles[i];
+            ctx.fillStyle = '#6D28D9';
+            roundRect(o.x, o.y, o.w, o.h, 4); ctx.fill();
+            // bras du cactus
+            ctx.fillStyle = '#5B21B6';
+            var armY = o.y + o.h*0.32;
+            ctx.fillRect(o.x-10, armY, 10, 11);
+            ctx.fillRect(o.x+o.w, armY, 10, 11);
+            ctx.fillRect(o.x-10, armY, 3, o.h*0.4);
+            ctx.fillRect(o.x+o.w+7, armY, 3, o.h*0.4);
+        }
+
+        // Dino
+        var runCycle = gs===GS.JEU&&dino.sol ? Math.floor(score/6)%2 : 0;
+        // Corps
+        ctx.fillStyle = '#A78BFA';
+        roundRect(dino.x, dino.y, dino.w, dino.h, 6); ctx.fill();
+        // Ventre
+        ctx.fillStyle = '#C4B5FD';
+        roundRect(dino.x+6, dino.y+dino.h*0.4, dino.w-12, dino.h*0.4, 4); ctx.fill();
+        // Oeil
+        ctx.fillStyle = '#120820';
+        ctx.beginPath(); ctx.arc(dino.x+dino.w-8, dino.y+10, 4, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#EDE9FD';
+        ctx.beginPath(); ctx.arc(dino.x+dino.w-7, dino.y+9, 1.8, 0, Math.PI*2); ctx.fill();
+        // Jambes
+        ctx.fillStyle = '#8B5CF6';
+        var leg1h = 12 + runCycle*8, leg2h = 12 - runCycle*4;
+        ctx.fillRect(dino.x+6,  dino.y+dino.h-12, 9, leg1h);
+        ctx.fillRect(dino.x+dino.w-15, dino.y+dino.h-12, 9, leg2h);
+        // Bras
+        ctx.fillRect(dino.x+dino.w-4, dino.y+12, 10, 6);
+
+        // HUD
+        ctx.fillStyle = '#C4B5FD';
+        ctx.font = '700 13px Nunito, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('Score : ' + Math.floor(score/6), 14, 26);
+        ctx.textAlign = 'right';
+        ctx.fillText('Meilleur : ' + Math.floor(best/6), W-14, 26);
+
+        // Double saut indicator
+        if(gs===GS.JEU){
+            ctx.fillStyle = dino.sauts===0?'#7C3AED':dino.sauts===1?'#A78BFA':'#4C1D95';
+            for(var j=0;j<2;j++){
+                roundRect(W/2-18+j*20, H-22, 14, 10, 3);
+                ctx.fill();
+            }
+        }
+
+        // Écran titre
+        if(gs===GS.TITRE){
+            ctx.fillStyle = 'rgba(18,8,32,0.72)';
+            ctx.fillRect(0,0,W,H);
+            ctx.fillStyle = '#EDE9FD';
+            ctx.font = '800 32px Nunito, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('🦕 DINO RUN', W/2, 96);
+            ctx.fillStyle = '#A78BFA';
+            ctx.font = '600 15px Nunito, sans-serif';
+            ctx.fillText('Double saut disponible !', W/2, 130);
+            ctx.fillStyle = '#7C3AED';
+            roundRect(W/2-90, 152, 180, 40, 10); ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = '700 16px Nunito, sans-serif';
+            ctx.fillText('▶ Jouer', W/2, 177);
+        }
+
+        // Game Over
+        if(gs===GS.OVER){
+            ctx.fillStyle = 'rgba(18,8,32,0.82)';
+            ctx.fillRect(0,0,W,H);
+            ctx.fillStyle = '#F87171';
+            ctx.font = '800 28px Nunito, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('GAME OVER', W/2, 96);
+            ctx.fillStyle = '#EDE9FD';
+            ctx.font = '600 15px Nunito, sans-serif';
+            ctx.fillText('Score : ' + Math.floor(score/6) + 's', W/2, 130);
+            if(score >= best && score > 0){
+                ctx.fillStyle = '#FCD34D';
+                ctx.fillText('🏆 Nouveau record !', W/2, 154);
+            }
+            ctx.fillStyle = '#7C3AED';
+            roundRect(W/2-90, 170, 180, 40, 10); ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = '700 15px Nunito, sans-serif';
+            ctx.fillText('↺ Recommencer', W/2, 195);
+        }
+    }
+
+    function loop(){
+        if(gs===GS.JEU) update();
+        draw();
+        requestAnimationFrame(loop);
+    }
+    loop();
+})();
+</script>
+
+<script>
+/* ─── Progression des étapes ─── */
+var TOTAL_STEPS = 6;
+var done = {};
+
+function toggleStep(id){
+    var card = document.getElementById(id);
+    card.classList.toggle('open');
+}
+
+function markDone(id){
+    if(done[id]) return;
+    done[id] = true;
+    var card = document.getElementById(id);
+    card.classList.add('done');
+    card.classList.remove('open');
+    var btn = card.querySelector('.mark-done-btn');
+    btn.textContent = '✓ Terminé';
+    updateProgress();
+}
+
+function updateProgress(){
+    var count = Object.keys(done).length;
+    document.getElementById('prog-count').textContent = count + ' / ' + TOTAL_STEPS + ' étapes';
+    document.getElementById('prog-fill').style.width = (count / TOTAL_STEPS * 100) + '%';
+}
+</script>
+
+</body>
+</html>

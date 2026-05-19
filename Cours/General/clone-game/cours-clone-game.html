@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours — Clone ton jeu 2D préféré</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 740px; margin: 0 auto; }
+        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #5B21B6; text-decoration: none; margin-bottom: 1.5rem; background: #EDE9FD; border: 0.5px solid #C4B5FD; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover { background: #DDD6FE; }
+        .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+        .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+        .hero p  { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+        .tag-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .tag { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+        .t-purple { background: #EDE9FD; color: #5B21B6; }
+        .t-amber  { background: #FEF3C7; color: #92400E; }
+        .t-teal   { background: #CCFBF1; color: #134E4A; }
+        .t-rose   { background: #FFE4E6; color: #9D174D; }
+
+        .section-num { display: inline-flex; align-items: center; gap: 10px; margin: 2.5rem 0 1.2rem; }
+        .snum-badge { width: 36px; height: 36px; border-radius: 12px; background: #EDE9FD; color: #5B21B6; font-size: 0.95rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .snum-title { font-size: 1.2rem; font-weight: 800; }
+        .snum-sub   { font-size: 0.88rem; color: #7C3AED; font-weight: 700; margin-top: 1px; }
+
+        p { font-size: 0.97rem; color: #2C2C2A; line-height: 1.8; margin-bottom: 1rem; }
+        strong { color: #2C2C2A; }
+        code { font-family: 'Fira Code', monospace; font-size: 0.82rem; background: #EDE9FD; padding: 1px 5px; border-radius: 4px; color: #5B21B6; }
+
+        .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+        .concept { background: #F5F3FF; border-left: 3px solid #7C3AED; border-radius: 0 10px 10px 0; padding: 0.9rem 1.1rem; margin: 1rem 0; font-size: 0.93rem; line-height: 1.75; }
+        .concept strong { color: #5B21B6; }
+        .tip { background: #FFFBEB; border-left: 3px solid #F59E0B; border-radius: 0 10px 10px 0; padding: 0.9rem 1.1rem; margin: 1rem 0; font-size: 0.9rem; line-height: 1.75; }
+        .tip strong { color: #92400E; }
+        .warn { background: #FFF1F2; border-left: 3px solid #F43F5E; border-radius: 0 10px 10px 0; padding: 0.9rem 1.1rem; margin: 1rem 0; font-size: 0.9rem; line-height: 1.75; }
+        .warn strong { color: #9D174D; }
+
+        .code-block { background: #120820; border-radius: 14px; padding: 1.2rem 1.4rem; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.85; color: #E9D8FD; margin: 1rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; white-space: pre-wrap; }
+        .cmt  { color: #6B4E8A; }
+        .kw   { color: #C084FC; }
+        .str  { color: #86EFAC; }
+        .num  { color: #FCD34D; }
+        .fn   { color: #93C5FD; }
+
+        /* Decompose diagram */
+        .decomp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1.2rem 0; }
+        .decomp-card { border-radius: 12px; border: 0.5px solid #C4B5FD; background: #F5F3FF; padding: 0.8rem 1rem; }
+        .decomp-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #7C3AED; margin-bottom: 4px; }
+        .decomp-val { font-size: 0.9rem; font-weight: 700; color: #2C2C2A; line-height: 1.5; }
+
+        /* Demo canvas */
+        .demo-wrap { background: #120820; border-radius: 16px; padding: 1.2rem; margin: 1rem 0; text-align: center; }
+        .demo-wrap canvas { border-radius: 10px; max-width: 100%; display: block; margin: 0 auto; }
+        .demo-label { font-size: 0.8rem; color: #6B4E8A; margin-top: 0.6rem; font-family: 'Fira Code', monospace; }
+
+        /* Step arrows */
+        .step-flow { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; margin: 1.2rem 0; }
+        .step-pill { background: #EDE9FD; border: 0.5px solid #C4B5FD; border-radius: 20px; padding: 5px 14px; font-size: 0.82rem; font-weight: 700; color: #5B21B6; }
+        .step-arrow { color: #C4B5FD; font-weight: 800; }
+        .step-pill.active { background: #7C3AED; color: #fff; border-color: #7C3AED; }
+
+        /* Progress diagram */
+        .progress-layers { display: flex; flex-direction: column; gap: 8px; margin: 1.2rem 0; }
+        .layer { border-radius: 10px; padding: 8px 14px; font-size: 0.88rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .layer-num { width: 24px; height: 24px; border-radius: 8px; background: #7C3AED; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; flex-shrink: 0; }
+        .l1 { background: #F5F3FF; color: #5B21B6; border: 0.5px solid #C4B5FD; }
+        .l2 { background: #EDE9FD; color: #5B21B6; border: 0.5px solid #C4B5FD; }
+        .l3 { background: #DDD6FE; color: #4C1D95; border: 0.5px solid #A78BFA; }
+        .l4 { background: #C4B5FD; color: #3B0764; border: 0.5px solid #7C3AED; }
+        .l5 { background: #7C3AED; color: #fff; border: 0.5px solid #5B21B6; }
+        .l6 { background: #5B21B6; color: #EDE9FD; border: 0.5px solid #4C1D95; }
+
+        .divider { height: 0.5px; background: #D3D1C7; margin: 2rem 0; }
+        .cta-section { background: #085041; border-radius: 20px; padding: 2.5rem 2rem; text-align: center; margin-top: 2.5rem; }
+        .cta-section h2 { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; }
+        .cta-section p  { color: #9FE1CB; font-size: 0.97rem; margin-bottom: 1.4rem; }
+        .cta-btn { display: inline-block; background: #7C3AED; color: #fff; font-weight: 800; font-size: 1rem; border-radius: 12px; padding: 14px 32px; text-decoration: none; transition: background 0.15s; }
+        .cta-btn:hover { background: #6D28D9; }
+    </style>
+</head>
+<body>
+
+<a class="nav-prev" href="../../sommaire.html#step3">← Sommaire</a>
+
+<div class="hero">
+    <h1>🐦 Clone ton jeu 2D préféré</h1>
+    <p>Tout part d'une idée. Brique par brique, tu reproduis la mécanique centrale, tu ajoutes les obstacles, le score — et tu ajoutes ta touche.</p>
+    <div class="tag-row">
+        <span class="tag t-purple">Méthodologie</span>
+        <span class="tag t-amber">Analyse</span>
+        <span class="tag t-teal">Canvas</span>
+        <span class="tag t-rose">Flappy Bird</span>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ INTRO ═══ -->
+<div class="section-num">
+    <div class="snum-badge">🎮</div>
+    <div><div class="snum-title">La méthode : couche par couche</div><div class="snum-sub">Ne jamais tout coder d'un coup</div></div>
+</div>
+
+<p>Reproduire un jeu qu'on aime, c'est l'un des meilleurs exercices pour progresser. Mais le piège est de vouloir tout faire en même temps. Un bon clone se construit en <strong>couches progressives</strong> :</p>
+
+<div class="progress-layers">
+    <div class="layer l1"><div class="layer-num">1</div>La mécanique centrale — ce qui rend le jeu unique</div>
+    <div class="layer l2"><div class="layer-num">2</div>Les obstacles ou adversaires — ce qui menace le joueur</div>
+    <div class="layer l3"><div class="layer-num">3</div>La détection de collision — quand ça touche, que se passe-t-il ?</div>
+    <div class="layer l4"><div class="layer-num">4</div>Le score et la progression — récompense et difficulté croissante</div>
+    <div class="layer l5"><div class="layer-num">5</div>La machine à états — titre, jeu, game over</div>
+    <div class="layer l6"><div class="layer-num">6</div>Ta variante — ce qui fait que c'est TON jeu</div>
+</div>
+
+<div class="concept">
+    <strong>Règle d'or :</strong> à chaque étape, le jeu doit être <em>jouable</em>. Une mécanique qui marche > un jeu entier qui ne compile pas.
+</div>
+
+<p>Dans ce cours on va cloner <strong>Flappy Bird</strong> — un classique minimaliste où chaque concept est bien isolé. Mais la méthode s'applique à n'importe quel jeu : Snake, Breakout, Space Invaders…</p>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 1 ═══ -->
+<div class="section-num">
+    <div class="snum-badge">1</div>
+    <div><div class="snum-title">Analyser avant de coder</div><div class="snum-sub">Décomposer le jeu en problèmes simples</div></div>
+</div>
+
+<p>Avant d'ouvrir l'éditeur, passe 5 minutes à <strong>observer le jeu</strong> comme un développeur. Pose-toi ces questions :</p>
+
+<div class="decomp-grid">
+    <div class="decomp-card">
+        <div class="decomp-label">🕹️ Core loop</div>
+        <div class="decomp-val">Qu'est-ce que le joueur fait toutes les secondes ? Cliquer pour faire voler l'oiseau.</div>
+    </div>
+    <div class="decomp-card">
+        <div class="decomp-label">🌍 Physique</div>
+        <div class="decomp-val">Quelles forces s'appliquent ? Gravité constante vers le bas, impulsion vers le haut au clic.</div>
+    </div>
+    <div class="decomp-card">
+        <div class="decomp-label">🚧 Obstacles</div>
+        <div class="decomp-val">Comment apparaissent-ils ? Tuyaux générés aléatoirement, défilant de droite à gauche.</div>
+    </div>
+    <div class="decomp-card">
+        <div class="decomp-label">🏆 Score</div>
+        <div class="decomp-val">Qu'est-ce qui est compté ? Un point par paire de tuyaux passée. Vitesse augmente.</div>
+    </div>
+    <div class="decomp-card">
+        <div class="decomp-label">📺 États</div>
+        <div class="decomp-val">Quels écrans ? Titre (attente) → Jeu → Game Over (score + relance).</div>
+    </div>
+    <div class="decomp-card">
+        <div class="decomp-label">💥 Collision</div>
+        <div class="decomp-val">Quand est-ce perdu ? Toucher un tuyau, le sol ou le plafond.</div>
+    </div>
+</div>
+
+<div class="tip"><strong>💡 Méthode :</strong> Dessine le jeu sur papier. Repère les objets (oiseau, tuyau, sol), leurs propriétés (position, vitesse) et ce qui change à chaque frame. Ce schéma deviendra ta feuille de route.</div>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 2 ═══ -->
+<div class="section-num">
+    <div class="snum-badge">2</div>
+    <div><div class="snum-title">Le noyau — Gravité et saut</div><div class="snum-sub">Coder d'abord ce qui rend le jeu unique</div></div>
+</div>
+
+<p>Le cœur de Flappy Bird tient en <strong>trois lignes</strong> : une position verticale, une vitesse verticale, et une gravité. Commence uniquement par ça — sans tuyaux, sans score.</p>
+
+<div class="code-block"><pre><span class="cmt">// Les 3 variables du noyau</span>
+<span class="kw">let</span> y  = canvas.height / 2; <span class="cmt">// position verticale de l'oiseau</span>
+<span class="kw">let</span> vy = 0;                  <span class="cmt">// vitesse verticale</span>
+<span class="kw">const</span> GRAVITE    = <span class="num">0.4</span>;     <span class="cmt">// accélération vers le bas (px/frame²)</span>
+<span class="kw">const</span> FORCE_SAUT = -<span class="num">8</span>;      <span class="cmt">// impulsion vers le haut (négatif = haut)</span>
+
+<span class="kw">function</span> <span class="fn">update</span>() {
+  vy += GRAVITE; <span class="cmt">// la gravité accélère la chute</span>
+  y  += vy;      <span class="cmt">// la vitesse déplace l'oiseau</span>
+}
+
+<span class="cmt">// Au clic : impulsion vers le haut</span>
+canvas.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () => { vy = FORCE_SAUT; });
+document.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, (e) => {
+  <span class="kw">if</span> (e.code === <span class="str">'Space'</span>) { e.<span class="fn">preventDefault</span>(); vy = FORCE_SAUT; }
+});</pre></div>
+
+<p>Teste ça. L'oiseau doit tomber et remonter au clic. <strong>Si c'est bon, tu as le noyau.</strong> Tout le reste est de l'ajout.</p>
+
+<!-- Demo 1 — Bird physics only -->
+<div class="demo-wrap">
+    <canvas id="demo1" width="560" height="180"></canvas>
+    <div class="demo-label">Démo — Cliquer ou Espace pour faire voler l'oiseau (juste la physique, pas encore de tuyaux)</div>
+</div>
+
+<div class="concept">
+    <strong>Physique en deux lignes :</strong> <code>vy += GRAVITE</code> simule l'attraction gravitationnelle — la vitesse augmente chaque frame. <code>y += vy</code> applique cette vitesse à la position. Le saut réinitialise simplement <code>vy</code> à une valeur négative (vers le haut).
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 3 ═══ -->
+<div class="section-num">
+    <div class="snum-badge">3</div>
+    <div><div class="snum-title">Les obstacles — Tuyaux défilants</div><div class="snum-sub">Générer et faire scroller des objets</div></div>
+</div>
+
+<p>Faire défiler le monde de droite à gauche crée l'illusion de mouvement. Chaque tuyau est un objet avec une position <code>x</code> et une hauteur de gap aléatoire. On en génère un tous les N frames.</p>
+
+<div class="code-block"><pre><span class="kw">let</span> tuyaux = [];          <span class="cmt">// tableau des tuyaux actifs</span>
+<span class="kw">let</span> frame  = <span class="num">0</span>;           <span class="cmt">// compteur de frames</span>
+<span class="kw">let</span> vitesse = <span class="num">3</span>;          <span class="cmt">// vitesse de défilement (px/frame)</span>
+
+<span class="kw">const</span> INTERVALLE = <span class="num">90</span>;   <span class="cmt">// frames entre deux tuyaux</span>
+<span class="kw">const</span> ECART      = <span class="num">130</span>;  <span class="cmt">// espace vertical entre tuyau haut et bas</span>
+<span class="kw">const</span> LARG       = <span class="num">60</span>;   <span class="cmt">// largeur d'un tuyau</span>
+
+<span class="kw">function</span> <span class="fn">update</span>() {
+  frame++;
+
+  <span class="cmt">// ① Générer un nouveau tuyau toutes les INTERVALLE frames</span>
+  <span class="kw">if</span> (frame % INTERVALLE === <span class="num">0</span>) {
+    <span class="kw">const</span> gapY = <span class="num">55</span> + Math.<span class="fn">random</span>() * (<span class="num">140</span>); <span class="cmt">// hauteur aléatoire du gap</span>
+    tuyaux.<span class="fn">push</span>({ x: canvas.width, gapY: gapY, passé: <span class="kw">false</span> });
+  }
+
+  <span class="cmt">// ② Faire défiler tous les tuyaux vers la gauche</span>
+  tuyaux.<span class="fn">forEach</span>(t => t.x -= vitesse);
+
+  <span class="cmt">// ③ Supprimer les tuyaux sortis de l'écran</span>
+  tuyaux = tuyaux.<span class="fn">filter</span>(t => t.x > -LARG - <span class="num">10</span>);
+}
+
+<span class="kw">function</span> <span class="fn">drawTuyaux</span>() {
+  tuyaux.<span class="fn">forEach</span>(<span class="kw">function</span>(t) {
+    <span class="cmt">// Tuyau du haut : de 0 jusqu'au gap</span>
+    ctx.fillStyle = <span class="str">'#16A34A'</span>;
+    ctx.<span class="fn">fillRect</span>(t.x, <span class="num">0</span>, LARG, t.gapY);
+    <span class="cmt">// Tuyau du bas : depuis gap + ECART jusqu'au sol</span>
+    ctx.<span class="fn">fillRect</span>(t.x, t.gapY + ECART, LARG, canvas.height - (t.gapY + ECART));
+    <span class="cmt">// Chapeau (légèrement plus large)</span>
+    ctx.fillStyle = <span class="str">'#22C55E'</span>;
+    ctx.<span class="fn">fillRect</span>(t.x - <span class="num">6</span>, t.gapY - <span class="num">22</span>, LARG + <span class="num">12</span>, <span class="num">22</span>);
+    ctx.<span class="fn">fillRect</span>(t.x - <span class="num">6</span>, t.gapY + ECART, LARG + <span class="num">12</span>, <span class="num">22</span>);
+  });
+}</pre></div>
+
+<div class="tip"><strong>💡 Scrolling sans camera :</strong> Plutôt que de "bouger la caméra", on fait simplement reculer <em>tout le monde</em>. L'oiseau reste à x fixe (ex: 100), et les tuyaux avancent vers lui. Même effet, code beaucoup plus simple.</div>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 4 ═══ -->
+<div class="section-num">
+    <div class="snum-badge">4</div>
+    <div><div class="snum-title">Détection de collision</div><div class="snum-sub">L'oiseau touche-t-il un tuyau ?</div></div>
+</div>
+
+<p>La collision entre un oiseau et un tuyau se détecte avec la technique AABB : deux rectangles se chevauchent si leurs bords se croisent sur les deux axes.</p>
+
+<div class="code-block"><pre><span class="kw">function</span> <span class="fn">collision</span>(oiseau, tuyau) {
+  <span class="cmt">// Rectangle approximatif de l'oiseau (légèrement réduit = plus juste)</span>
+  <span class="kw">const</span> ox = oiseau.x - <span class="num">11</span>, oy = oiseau.y - <span class="num">10</span>;
+  <span class="kw">const</span> ow = <span class="num">22</span>,          oh = <span class="num">20</span>;
+
+  <span class="cmt">// Pas de chevauchement horizontal ? → pas de collision</span>
+  <span class="kw">if</span> (ox + ow <= tuyau.x || ox >= tuyau.x + LARG) <span class="kw">return false</span>;
+
+  <span class="cmt">// L'oiseau est dans l'écart ? → pas de collision</span>
+  <span class="kw">if</span> (oy >= tuyau.gapY && oy + oh <= tuyau.gapY + ECART) <span class="kw">return false</span>;
+
+  <span class="kw">return true</span>; <span class="cmt">// touche le tuyau du haut ou du bas</span>
+}
+
+<span class="cmt">// Dans update() :</span>
+tuyaux.<span class="fn">forEach</span>(<span class="kw">function</span>(t) {
+  <span class="kw">if</span> (<span class="fn">collision</span>(oiseau, t)) {
+    gameState = ETATS.GAMEOVER; <span class="cmt">// → game over !</span>
+  }
+});
+
+<span class="cmt">// Sol et plafond</span>
+<span class="kw">if</span> (oiseau.y + <span class="num">10</span> >= SOL) { gameState = ETATS.GAMEOVER; }
+<span class="kw">if</span> (oiseau.y - <span class="num">10</span> <= <span class="num">0</span>)  { oiseau.y = <span class="num">10</span>; oiseau.vy = <span class="num">0</span>; }</pre></div>
+
+<div class="warn"><strong>⚠️ Hitbox généreuse :</strong> Le rectangle de collision légèrement plus petit que le sprite donne l'impression au joueur que les collisions sont "justes". Une hitbox trop exacte paraît injuste. Réduis la de 20-30% — c'est standard dans tous les jeux.</div>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 5 ═══ -->
+<div class="section-num">
+    <div class="snum-badge">5</div>
+    <div><div class="snum-title">Score et progression</div><div class="snum-sub">Compter les tuyaux passés, accélérer le jeu</div></div>
+</div>
+
+<p>Un point est marqué quand l'oiseau dépasse le bord droit d'un tuyau. La difficulté augmente en accélérant le défilement toutes les 5 réussites. Le meilleur score est sauvegardé dans <code>localStorage</code>.</p>
+
+<div class="code-block"><pre><span class="kw">let</span> score    = <span class="num">0</span>;
+<span class="kw">let</span> meilleur = parseInt(localStorage.<span class="fn">getItem</span>(<span class="str">'flappy_best'</span>) || <span class="str">'0'</span>);
+
+<span class="cmt">// Dans update(), après avoir déplacé les tuyaux :</span>
+tuyaux.<span class="fn">forEach</span>(<span class="kw">function</span>(t) {
+  <span class="cmt">// L'oiseau a-t-il dépassé ce tuyau pour la première fois ?</span>
+  <span class="kw">if</span> (!t.passé && t.x + LARG < oiseau.x) {
+    t.passé = <span class="kw">true</span>;
+    score++;
+
+    <span class="cmt">// Accélérer tous les 5 tuyaux</span>
+    <span class="kw">if</span> (score % <span class="num">5</span> === <span class="num">0</span>) vitesse += <span class="num">0.3</span>;
+  }
+});
+
+<span class="cmt">// Sauvegarder le meilleur score au game over</span>
+<span class="kw">function</span> <span class="fn">onGameOver</span>() {
+  <span class="kw">if</span> (score > meilleur) {
+    meilleur = score;
+    localStorage.<span class="fn">setItem</span>(<span class="str">'flappy_best'</span>, meilleur);
+  }
+  gameState = ETATS.GAMEOVER;
+}</pre></div>
+
+<div class="tip"><strong>💡 Difficulté progressive :</strong> Augmenter la vitesse palier par palier (et non de façon linéaire) donne des "niveaux" naturels sans avoir à en coder. À partir de 10-15 tuyaux, on peut aussi réduire <code>ECART</code> pour diminuer l'espace libre.</div>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 6 ═══ -->
+<div class="section-num">
+    <div class="snum-badge">6</div>
+    <div><div class="snum-title">Machine à états complète</div><div class="snum-sub">Titre, jeu, game over — le même pattern que dans Game Design</div></div>
+</div>
+
+<p>On applique exactement le même pattern que dans le cours Game Design : <code>gameState</code> détermine ce que la boucle affiche. Pour Flappy Bird, 3 états suffisent.</p>
+
+<div class="step-flow">
+    <div class="step-pill active">TITRE</div>
+    <div class="step-arrow">→ clic</div>
+    <div class="step-pill">JEU</div>
+    <div class="step-arrow">→ collision</div>
+    <div class="step-pill">GAMEOVER</div>
+    <div class="step-arrow">→ clic</div>
+    <div class="step-pill">TITRE</div>
+</div>
+
+<div class="code-block"><pre><span class="kw">const</span> ETATS = { TITRE: <span class="str">'titre'</span>, JEU: <span class="str">'jeu'</span>, OVER: <span class="str">'over'</span> };
+<span class="kw">let</span> gameState = ETATS.TITRE;
+
+<span class="kw">function</span> <span class="fn">loop</span>() {
+  ctx.<span class="fn">clearRect</span>(<span class="num">0</span>, <span class="num">0</span>, W, H);
+  <span class="kw">switch</span> (gameState) {
+    <span class="kw">case</span> ETATS.TITRE: <span class="fn">drawTitre</span>();            <span class="kw">break</span>;
+    <span class="kw">case</span> ETATS.JEU:   <span class="fn">update</span>(); <span class="fn">drawJeu</span>();  <span class="kw">break</span>;
+    <span class="kw">case</span> ETATS.OVER:  <span class="fn">drawGameOver</span>();        <span class="kw">break</span>;
+  }
+  <span class="fn">requestAnimationFrame</span>(loop);
+}
+
+<span class="cmt">// Un seul listener gère tout selon l'état</span>
+canvas.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+  <span class="kw">if</span> (gameState === ETATS.TITRE) { <span class="fn">reinit</span>(); gameState = ETATS.JEU; }
+  <span class="kw">else if</span> (gameState === ETATS.JEU)  { oiseau.vy = FORCE_SAUT; }
+  <span class="kw">else if</span> (gameState === ETATS.OVER)  { gameState = ETATS.TITRE; }
+});
+
+<span class="kw">function</span> <span class="fn">reinit</span>() {
+  oiseau.y = H / <span class="num">2</span>; oiseau.vy = <span class="num">0</span>;
+  tuyaux = []; score = <span class="num">0</span>; frame = <span class="num">0</span>; vitesse = <span class="num">3</span>;
+}</pre></div>
+
+<div class="divider"></div>
+
+<!-- ═══ SECTION 7 ═══ -->
+<div class="section-num">
+    <div class="snum-badge">7</div>
+    <div><div class="snum-title">Ajouter ta variante</div><div class="snum-sub">C'est là que le clone devient TON jeu</div></div>
+</div>
+
+<p>Un clone fidèle est un excellent exercice. Mais le vrai plaisir, c'est d'y ajouter <strong>ta touche</strong>. Une variante peut être thématique, mécanique ou les deux :</p>
+
+<div class="card">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+            <div style="font-size:0.78rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#7C3AED;margin-bottom:8px;">🎨 Variantes thématiques</div>
+            <ul style="font-size:0.9rem;line-height:2;padding-left:1rem;color:#5F5E5A;">
+                <li>Vaisseau dans l'espace → météorites</li>
+                <li>Dauphin sous-marin → récifs</li>
+                <li>Voiture entre des camions</li>
+                <li>Grenouille entre des lianes</li>
+            </ul>
+        </div>
+        <div>
+            <div style="font-size:0.78rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#7C3AED;margin-bottom:8px;">⚙️ Variantes mécaniques</div>
+            <ul style="font-size:0.9rem;line-height:2;padding-left:1rem;color:#5F5E5A;">
+                <li>Double saut</li>
+                <li>Gravité inversée (toggle)</li>
+                <li>Bouclier temporaire</li>
+                <li>Obstacles qui accélèrent brusquement</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="code-block"><pre><span class="cmt">// Exemple : double saut</span>
+<span class="kw">let</span> sauts = <span class="num">0</span>; <span class="cmt">// compteur de sauts depuis le dernier atterrissage</span>
+
+canvas.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+  <span class="kw">if</span> (gameState === ETATS.JEU && sauts < <span class="num">2</span>) {
+    oiseau.vy = FORCE_SAUT;
+    sauts++;
+  }
+});
+<span class="cmt">// Réinitialiser quand on passe entre deux tuyaux (simuler "sol")</span>
+<span class="cmt">// ou ajouter une vraie platforme que l'oiseau peut toucher</span>
+
+<span class="cmt">// Exemple : gravité inversée au bouton G</span>
+<span class="kw">let</span> gravité = <span class="num">0.4</span>;
+document.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, (e) => {
+  <span class="kw">if</span> (e.code === <span class="str">'KeyG'</span>) gravité = -gravité; <span class="cmt">// inverser !</span>
+});</pre></div>
+
+<div class="concept">
+    <strong>Le principe :</strong> Une variante mécanique ne demande souvent que <em>quelques lignes</em>. Tu as déjà toute l'infrastructure — physics, scrolling, collisions, états. Ajouter une feature, c'est souvent juste changer une variable ou ajouter une condition.
+</div>
+
+<!-- Demo final — Full game -->
+<div class="divider"></div>
+
+<div class="section-num">
+    <div class="snum-badge">🕹️</div>
+    <div><div class="snum-title">Le résultat — Flappy Bird complet</div><div class="snum-sub">Toutes les couches assemblées</div></div>
+</div>
+
+<p>Voici ce qu'on obtient en combinant toutes les couches : physique, obstacles défilants, collisions, score, localStorage et machine à états.</p>
+
+<div class="demo-wrap">
+    <canvas id="demo-final" width="560" height="290"></canvas>
+    <div class="demo-label">Clic ou Espace pour voler — le meilleur score est sauvegardé</div>
+</div>
+
+<div class="cta-section">
+    <h2>Teste tes connaissances !</h2>
+    <p>Gravité, scrolling, collision, score, états… à toi de jouer !</p>
+    <a class="cta-btn" href="exercices-clone-game.html">Exercices Clone Game →</a>
+</div>
+
+<script>
+/* ═══ HELPER ═══ */
+function rr(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+    ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+    ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+    ctx.closePath();
+}
+
+/* ═══ DEMO 1 — Physique seulement ═══ */
+(function() {
+    var c = document.getElementById('demo1');
+    var ctx = c.getContext('2d');
+    var W = 560, H = 180, GROUND = 148;
+    var y = H/2 - 20, vy = 0;
+    var GRAVITE = 0.38, FORCE = -8;
+    var jumped = false;
+
+    function flap() { vy = FORCE; jumped = true; }
+    c.addEventListener('click', flap);
+    document.addEventListener('keydown', function(e) { if (e.code === 'Space') { e.preventDefault(); flap(); } });
+
+    function drawBird(bx, by, angle) {
+        ctx.save(); ctx.translate(bx, by); ctx.rotate(angle);
+        ctx.fillStyle = '#FCD34D';
+        ctx.beginPath(); ctx.ellipse(0, 0, 13, 11, 0, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#F59E0B';
+        ctx.beginPath(); ctx.ellipse(-3, 4, 8, 5, 0.3, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#1C1C1C';
+        ctx.beginPath(); ctx.arc(6, -4, 4, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.arc(7.5, -5, 1.5, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#F97316';
+        ctx.beginPath(); ctx.moveTo(10,-2); ctx.lineTo(17,1); ctx.lineTo(10,4); ctx.closePath(); ctx.fill();
+        ctx.restore();
+    }
+
+    var t = 0;
+    function loop() {
+        t++;
+        vy += GRAVITE; y += vy;
+        if (y + 11 >= GROUND) { y = GROUND - 11; vy *= -0.3; }
+        if (y - 11 <= 0) { y = 11; vy = 0; }
+
+        ctx.clearRect(0, 0, W, H);
+        // Sky
+        var sky = ctx.createLinearGradient(0, 0, 0, GROUND);
+        sky.addColorStop(0, '#87CEEB'); sky.addColorStop(1, '#D4F0FF');
+        ctx.fillStyle = sky; ctx.fillRect(0, 0, W, GROUND);
+        // Ground
+        ctx.fillStyle = '#4A7C3F'; ctx.fillRect(0, GROUND, W, H - GROUND);
+        ctx.fillStyle = '#5C9E4F'; ctx.fillRect(0, GROUND, W, 7);
+
+        // Arrow indicators
+        ctx.fillStyle = 'rgba(124,58,237,0.8)'; ctx.font = '700 13px Nunito'; ctx.textAlign = 'left';
+        ctx.fillText('⬇ gravité (' + GRAVITE + ')', 12, 20);
+        if (vy < -1) { ctx.fillStyle = 'rgba(22,163,74,0.9)'; ctx.fillText('⬆ saut !', 12, 38); }
+
+        var angle = Math.max(-0.5, Math.min(0.7, vy * 0.07));
+        drawBird(110, y, angle);
+
+        if (!jumped) {
+            ctx.fillStyle = 'rgba(92,55,176,0.9)'; ctx.font = '600 14px Nunito'; ctx.textAlign = 'center';
+            ctx.fillText('Cliquer ou Espace pour voler', W/2, 30);
+        }
+        requestAnimationFrame(loop);
+    }
+    loop();
+})();
+
+/* ═══ DEMO FINAL — Flappy Bird complet ═══ */
+(function() {
+    var c = document.getElementById('demo-final');
+    var ctx = c.getContext('2d');
+    var W = 560, H = 290;
+    var GRAVITE = 0.38, FORCE_SAUT = -7.8, BASE_SPEED = 2.6;
+    var ECART = 132, LARG = 60, INTERVALLE = 90, SOL = 242;
+    var GS = { TITRE: 0, JEU: 1, OVER: 2 };
+    var gs = GS.TITRE;
+    var bird, tuyaux, score, vitesse, frame, t;
+    var meilleur = parseInt(localStorage.getItem('flappy_clone_best') || '0');
+    t = 0;
+
+    function reinit() {
+        bird = { x: 105, y: H/2 - 10, vy: 0 };
+        tuyaux = []; score = 0; vitesse = BASE_SPEED; frame = 0;
+    }
+
+    function flap() {
+        if (gs === GS.TITRE) { reinit(); gs = GS.JEU; }
+        else if (gs === GS.JEU) { bird.vy = FORCE_SAUT; }
+        else if (gs === GS.OVER) { gs = GS.TITRE; }
+    }
+    c.addEventListener('click', flap);
+    document.addEventListener('keydown', function(e) { if (e.code === 'Space') { e.preventDefault(); flap(); } });
+
+    // Clouds
+    var clouds = [[70,48],[195,32],[360,56],[488,36]];
+
+    function drawScene() {
+        var sky = ctx.createLinearGradient(0,0,0,SOL);
+        sky.addColorStop(0,'#87CEEB'); sky.addColorStop(1,'#D4F0FF');
+        ctx.fillStyle = sky; ctx.fillRect(0,0,W,SOL);
+        ctx.fillStyle='rgba(255,255,255,0.85)';
+        clouds.forEach(function(cl) {
+            ctx.beginPath(); ctx.ellipse(cl[0],cl[1],48,19,0,0,Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(cl[0]+18,cl[1]-7,32,15,0,0,Math.PI*2); ctx.fill();
+        });
+        ctx.fillStyle='#4A7C3F'; ctx.fillRect(0,SOL,W,H-SOL);
+        ctx.fillStyle='#5C9E4F'; ctx.fillRect(0,SOL,W,7);
+    }
+
+    function drawBird(bx, by, angle) {
+        ctx.save(); ctx.translate(bx, by); ctx.rotate(angle);
+        ctx.fillStyle='#FCD34D'; ctx.beginPath(); ctx.ellipse(0,0,13,11,0,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#F59E0B'; ctx.beginPath(); ctx.ellipse(-3,4,8,5,0.3,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#1C1C1C'; ctx.beginPath(); ctx.arc(6,-4,4,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(7.5,-5,1.5,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#F97316'; ctx.beginPath(); ctx.moveTo(10,-2); ctx.lineTo(17,1); ctx.lineTo(10,4); ctx.closePath(); ctx.fill();
+        ctx.restore();
+    }
+
+    function drawTuyaux() {
+        tuyaux.forEach(function(t) {
+            ctx.fillStyle='#16A34A'; ctx.fillRect(t.x,0,LARG,t.gapY);
+            ctx.fillStyle='#22C55E'; ctx.fillRect(t.x-6,t.gapY-22,LARG+12,22);
+            ctx.fillStyle='#16A34A'; ctx.fillRect(t.x,t.gapY+ECART,LARG,SOL-(t.gapY+ECART));
+            ctx.fillStyle='#22C55E'; ctx.fillRect(t.x-6,t.gapY+ECART,LARG+12,22);
+            ctx.fillStyle='rgba(0,0,0,0.08)'; ctx.fillRect(t.x+LARG-6,0,6,t.gapY);
+            ctx.fillStyle='rgba(0,0,0,0.08)'; ctx.fillRect(t.x+LARG-6,t.gapY+ECART,6,SOL-(t.gapY+ECART));
+        });
+    }
+
+    function update() {
+        if (gs !== GS.JEU) { t++; return; }
+        t++; frame++;
+        bird.vy += GRAVITE; bird.y += bird.vy;
+        if (bird.y + 11 >= SOL) { meilleur = Math.max(meilleur, score); localStorage.setItem('flappy_clone_best', meilleur); gs = GS.OVER; return; }
+        if (bird.y - 11 <= 0) { bird.y = 11; bird.vy = 0; }
+        if (frame % INTERVALLE === 0) {
+            var gapY = 52 + Math.random() * (SOL - 52 - ECART - 20);
+            tuyaux.push({ x: W + 10, gapY: gapY, passé: false });
+        }
+        for (var i = tuyaux.length - 1; i >= 0; i--) {
+            tuyaux[i].x -= vitesse;
+            if (tuyaux[i].x + LARG < -10) { tuyaux.splice(i, 1); continue; }
+            if (!tuyaux[i].passé && tuyaux[i].x + LARG < bird.x) {
+                tuyaux[i].passé = true; score++;
+                if (score % 5 === 0) vitesse += 0.25;
+            }
+            var ox = bird.x-11, oy = bird.y-10;
+            if (ox+22 > tuyaux[i].x && ox < tuyaux[i].x+LARG) {
+                if (oy < tuyaux[i].gapY || oy+20 > tuyaux[i].gapY+ECART) {
+                    meilleur = Math.max(meilleur, score);
+                    localStorage.setItem('flappy_clone_best', meilleur);
+                    gs = GS.OVER; return;
+                }
+            }
+        }
+    }
+
+    function draw() {
+        ctx.clearRect(0,0,W,H);
+        if (gs === GS.TITRE) {
+            drawScene();
+            drawBird(105, H/2-10+Math.sin(t*0.05)*12, 0);
+            ctx.fillStyle='rgba(0,0,0,0.38)'; ctx.fillRect(0,0,W,H);
+            ctx.fillStyle='#FCD34D'; ctx.font='800 34px Nunito'; ctx.textAlign='center';
+            ctx.fillText('🐦 FLAPPY CLONE', W/2, 98);
+            ctx.fillStyle='#fff'; ctx.font='600 14px Nunito';
+            ctx.fillText('Cliquer ou Espace pour voler', W/2, 130);
+            if (meilleur > 0) {
+                ctx.fillStyle='#FCD34D'; ctx.font='700 13px Nunito';
+                ctx.fillText('Meilleur : ' + meilleur + ' tuyaux', W/2, 158);
+            }
+        } else if (gs === GS.JEU) {
+            drawScene(); drawTuyaux();
+            drawBird(bird.x, bird.y, Math.max(-0.5, Math.min(0.7, bird.vy*0.07)));
+            ctx.fillStyle='#fff'; ctx.font='800 30px Nunito'; ctx.textAlign='center';
+            ctx.shadowColor='rgba(0,0,0,0.4)'; ctx.shadowBlur=5;
+            ctx.fillText(score, W/2, 46); ctx.shadowBlur=0;
+        } else {
+            drawScene(); drawTuyaux();
+            drawBird(bird.x, bird.y, 0.8);
+            ctx.fillStyle='rgba(0,0,0,0.55)'; ctx.fillRect(0,0,W,H);
+            ctx.fillStyle='#FEE2E2'; ctx.font='800 30px Nunito'; ctx.textAlign='center';
+            ctx.fillText('💥 GAME OVER', W/2, 92);
+            ctx.fillStyle='#fff'; ctx.font='700 22px Nunito';
+            ctx.fillText('Score : ' + score, W/2, 132);
+            ctx.fillStyle='#FCD34D'; ctx.font='700 16px Nunito';
+            ctx.fillText('Meilleur : ' + meilleur, W/2, 162);
+            ctx.fillStyle='#D1D5DB'; ctx.font='600 13px Nunito';
+            ctx.fillText('Cliquer pour recommencer', W/2, 196);
+        }
+    }
+
+    function loop() { update(); draw(); requestAnimationFrame(loop); }
+    loop();
+})();
+</script>
+</body>
+</html>
