@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices — Mes créations</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; }
+    .nav-prev, .nav-next { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #3F6212; text-decoration: none; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover, .nav-next:hover { background: #BEF264; }
+
+    .hero { text-align: center; padding: 2rem 1rem 1.5rem; }
+    .hero h1 { font-size: 1.8rem; font-weight: 800; }
+    .hero p { font-size: 0.95rem; color: #5F5E5A; margin-top: 0.4rem; }
+
+    .progress-bar { background: #E8E6DF; border-radius: 999px; height: 8px; margin: 1rem 0 0.4rem; }
+    .progress-fill { background: #65A30D; height: 8px; border-radius: 999px; transition: width 0.3s ease; }
+    .progress-label { font-size: 0.78rem; font-weight: 700; color: #5F5E5A; text-align: right; margin-bottom: 1.2rem; }
+
+    .section-title { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; margin: 1.5rem 0 0.8rem; padding-top: 1rem; border-top: 0.5px solid #E8E6DF; }
+    .section-title:first-of-type { border-top: none; margin-top: 0; }
+
+    .q-card { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 0.9rem; }
+    .q-num { font-size: 0.68rem; font-weight: 800; color: #65A30D; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+    .q-text { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.8rem; line-height: 1.4; }
+
+    .options { display: flex; flex-direction: column; gap: 7px; }
+    .opt { display: flex; align-items: center; gap: 10px; padding: 0.55rem 0.9rem; border-radius: 9px; border: 1.5px solid #E8E6DF; background: #FAFAF8; cursor: pointer; font-size: 0.88rem; font-weight: 600; transition: border-color 0.15s, background 0.15s; user-select: none; }
+    .opt:hover { border-color: #BEF264; background: #F7FEE7; }
+    .opt.correct   { border-color: #22C55E; background: #DCFCE7; color: #166534; }
+    .opt.incorrect { border-color: #F43F5E; background: #FFE4E6; color: #9F1239; }
+    .opt-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #D3D1C7; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+
+    .vf-row { display: flex; gap: 10px; margin-top: 0.4rem; }
+    .vf-btn { flex: 1; padding: 0.6rem; border-radius: 9px; border: 1.5px solid #E8E6DF; background: #FAFAF8; cursor: pointer; font-size: 0.9rem; font-weight: 800; text-align: center; transition: all 0.15s; }
+    .vf-btn:hover { border-color: #BEF264; background: #F7FEE7; }
+    .vf-btn.correct   { border-color: #22C55E; background: #DCFCE7; color: #166534; }
+    .vf-btn.incorrect { border-color: #F43F5E; background: #FFE4E6; color: #9F1239; }
+
+    .feedback { font-size: 0.82rem; margin-top: 0.6rem; padding: 0.5rem 0.8rem; border-radius: 8px; display: none; line-height: 1.4; }
+    .feedback.show { display: block; }
+    .feedback.ok  { background: #DCFCE7; color: #166534; }
+    .feedback.nok { background: #FFE4E6; color: #9F1239; }
+
+    .assoc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 0.6rem; }
+    .assoc-col-title { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #888780; margin-bottom: 4px; }
+    .assoc-item { background: #F7F6F2; border: 1.5px solid #E8E6DF; border-radius: 8px; padding: 0.45rem 0.75rem; font-size: 0.85rem; font-weight: 700; }
+    .assoc-answer { background: #ECFCCB; border-color: #BEF264; color: #3F6212; }
+
+    .score-box { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.5rem; text-align: center; margin-top: 1rem; display: none; }
+    .score-box.show { display: block; }
+    .score-num { font-size: 1.8rem; font-weight: 800; color: #3F6212; }
+    .score-label { font-size: 0.88rem; color: #65A30D; margin-top: 0.2rem; }
+
+    .cta-wrap { text-align: center; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+    .cta-wrap p { color: #3F6212; font-size: 0.95rem; margin-bottom: 1.1rem; }
+    .cta-btn { display: inline-block; background: #65A30D; color: #fff; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #3F6212; }
+    .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; }
+  </style>
+  <script>
+    let score = 0;
+    let answered = 0;
+    const total = 18;
+
+    function choose(qId, optEl, isCorrect, feedback) {
+      const card = optEl.closest('.q-card');
+      if (card.dataset.answered) return;
+      card.dataset.answered = '1';
+      card.querySelectorAll('.opt').forEach(o => o.style.pointerEvents = 'none');
+      optEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+      if (!isCorrect) card.querySelector('[data-correct]').classList.add('correct');
+      const fb = card.querySelector('.feedback');
+      fb.textContent = feedback;
+      fb.classList.add('show', isCorrect ? 'ok' : 'nok');
+      if (isCorrect) score++;
+      answered++;
+      updateProgress();
+    }
+
+    function selectVF(btn, isCorrect, feedback) {
+      const card = btn.closest('.q-card');
+      if (card.dataset.answered) return;
+      card.dataset.answered = '1';
+      card.querySelectorAll('.vf-btn').forEach(b => b.style.pointerEvents = 'none');
+      btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+      if (!isCorrect) {
+        card.querySelectorAll('.vf-btn').forEach(b => { if (b !== btn) b.classList.add('correct'); });
+      }
+      const fb = card.querySelector('.feedback');
+      fb.textContent = feedback;
+      fb.classList.add('show', isCorrect ? 'ok' : 'nok');
+      if (isCorrect) score++;
+      answered++;
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const pct = Math.round((answered / total) * 100);
+      document.getElementById('prog-fill').style.width = pct + '%';
+      document.getElementById('prog-label').textContent = answered + ' / ' + total + ' répondus';
+      if (answered === total) {
+        const box = document.getElementById('score-box');
+        box.classList.add('show');
+        document.getElementById('score-num').textContent = score + ' / ' + total;
+        const pct2 = Math.round((score / total) * 100);
+        document.getElementById('score-label').textContent = pct2 >= 80 ? '🎉 Excellent !' : pct2 >= 60 ? '👍 Bien joué !' : '📖 Relis le cours';
+      }
+    }
+  </script>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a class="nav-prev" href="cours-mes-creations.html">← Cours</a>
+  <a class="nav-next" href="projet-mes-creations.html">Projet →</a>
+</div>
+
+<div class="hero">
+  <h1>🛠️ Exercices — Mes créations</h1>
+  <p>18 questions sur la planification, l'itération et l'organisation de projets personnels.</p>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+<div class="progress-label" id="prog-label">0 / 18 répondus</div>
+
+<!-- QCM -->
+<div class="section-title">🔵 QCM — Une seule bonne réponse</div>
+
+<div class="q-card">
+  <div class="q-num">Question 1</div>
+  <div class="q-text">Qu'est-ce qu'un MVP (Minimum Viable Product) ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(1,this,false,'Un MVP n\'est pas forcément parfait — c\'est la version fonctionnelle minimale.')">La version parfaite et complète du produit</div>
+    <div class="opt" data-correct onclick="choose(1,this,true,'Exact ! Le MVP c\'est la version la plus simple qui fonctionne vraiment et peut être montrée.')">La version minimale qui fonctionne et peut être montrée</div>
+    <div class="opt" onclick="choose(1,this,false,'Un brouillon non fonctionnel n\'est pas un MVP.')">Un brouillon non fonctionnel pour tester des idées</div>
+    <div class="opt" onclick="choose(1,this,false,'Le nom complet du projet n\'a rien à voir avec le MVP.')">Le nom complet du projet dès le départ</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 2</div>
+  <div class="q-text">Parmi ces projets, lequel est à la portée d'un développeur maîtrisant HTML, CSS, JS et Canvas ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(2,this,false,'Un moteur 3D temps réel nécessite des compétences bien au-delà du canvas 2D.')">Un moteur de rendu 3D temps réel</div>
+    <div class="opt" onclick="choose(2,this,false,'Un réseau social complet avec base de données et serveur dépasse le cadre du canvas JS.')">Un réseau social complet avec base de données</div>
+    <div class="opt" data-correct onclick="choose(2,this,true,'Oui ! Un quiz interactif avec score est parfaitement réalisable avec HTML/CSS/JS.')">Un quiz interactif avec score et chronomètre</div>
+    <div class="opt" onclick="choose(2,this,false,'Un OS nécessite des langages système comme C ou Rust, pas du JS.')">Un système d\'exploitation personnalisé</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 3</div>
+  <div class="q-text">Pourquoi est-il conseillé de ne pas commencer plusieurs projets en même temps ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(3,this,false,'Les navigateurs n\'ont pas de limite sur le nombre de fichiers ouverts.')">Les navigateurs ont une limite de fichiers</div>
+    <div class="opt" data-correct onclick="choose(3,this,true,'Exact. La dispersion empêche de finir quoi que ce soit. Un projet terminé imparfait vaut mieux que dix projets abandonnés.')">On disperse son énergie et on finit rarement quelque chose</div>
+    <div class="opt" onclick="choose(3,this,false,'Git gère très bien plusieurs projets en parallèle.')">Git ne peut pas gérer plusieurs projets</div>
+    <div class="opt" onclick="choose(3,this,false,'La loi française n\'impose aucune restriction sur ce point.')">La loi interdit la création de plusieurs projets simultanés</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 4</div>
+  <div class="q-text">Quel est l'objectif principal d'une version 1 (v1) d'un projet ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(4,this,false,'La v1 n\'est pas censée être parfaite — c\'est précisément le but de la v2.')">Être parfaite et sans aucun bug</div>
+    <div class="opt" onclick="choose(4,this,false,'La v1 n\'est pas dédiée à la monétisation.')">Générer des revenus immédiatement</div>
+    <div class="opt" onclick="choose(4,this,false,'La performance est une préoccupation des versions avancées, pas de la v1.')">Avoir les meilleures performances possibles</div>
+    <div class="opt" data-correct onclick="choose(4,this,true,'Oui ! La v1 doit exister et fonctionner sur le cas principal. Tout le reste vient après.')">Exister et fonctionner sur le cas principal</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 5</div>
+  <div class="q-text">Quelle est la meilleure façon de trouver des bugs invisibles dans son propre projet ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(5,this,false,'Relire son propre code est utile mais insuffisant — on passe à côté de ce qu\'on ne voit plus.')">Relire son code encore et encore</div>
+    <div class="opt" data-correct onclick="choose(5,this,true,'Exact ! Un regard extérieur révèle des angles morts qu\'on ne peut plus voir après des heures sur le même projet.')">Montrer son projet à quelqu\'un d\'autre</div>
+    <div class="opt" onclick="choose(5,this,false,'Supprimer des fonctionnalités réduit le projet, ça ne corrige pas les bugs.')">Supprimer des fonctionnalités</div>
+    <div class="opt" onclick="choose(5,this,false,'Attendre ne corrige pas les bugs — ils resteront là.')">Attendre quelques semaines avant de tester</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 6</div>
+  <div class="q-text">Quelle habitude d'organisation est recommandée pour les projets qui durent plusieurs jours ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(6,this,false,'Coder uniquement le week-end crée des longues périodes sans activité qui nuisent à la progression.')">Coder uniquement le week-end en longues sessions</div>
+    <div class="opt" onclick="choose(6,this,false,'Utiliser Git après avoir fini est trop tardif — on perd l\'historique de progression.')">Utiliser Git uniquement quand le projet est terminé</div>
+    <div class="opt" data-correct onclick="choose(6,this,true,'Oui ! 30 minutes régulières valent mieux que des sessions épisodiques. La régularité est la clé.')">Bloquer du temps fixe chaque jour, même court</div>
+    <div class="opt" onclick="choose(6,this,false,'Changer de projet en cas de blocage crée une accumulation de projets inachevés.')">Changer de projet dès qu\'on est bloqué</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<!-- VRAI / FAUX -->
+<div class="section-title">🟡 Vrai / Faux</div>
+
+<div class="q-card">
+  <div class="q-num">Question 7</div>
+  <div class="q-text">Il faut attendre d'avoir une idée parfaite avant de commencer à coder.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Une idée imparfaite qui existe vaut mieux qu\'une idée parfaite qui reste dans ta tête. On améliore en itérant.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,true,'Correct. On commence avec une idée suffisante et on améliore en v2, v3...')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 8</div>
+  <div class="q-text">Décomposer un projet en petites tâches concrètes aide à avancer sans être bloqué.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,true,'Correct ! Des tâches concrètes (afficher une question, vérifier la réponse...) sont actionnables immédiatement.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. La décomposition en tâches est une des meilleures pratiques de planification.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 9</div>
+  <div class="q-text">Un timer Pomodoro ou un convertisseur d'unités sont des projets trop simples pour un portfolio.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Un projet fonctionnel et bien réalisé, même simple, démontre des compétences réelles.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,true,'Correct. Un outil utile et bien exécuté est un vrai projet, peu importe sa complexité apparente.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 10</div>
+  <div class="q-text">Rédiger des patch-notes pour ses projets personnels est une bonne habitude professionnelle.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,true,'Vrai ! Les patch-notes documentent ta progression et montrent ta rigueur à quiconque consulte ton dépôt.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Les patch-notes sont une excellente habitude même pour des projets personnels.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 11</div>
+  <div class="q-text">Il est préférable de terminer un projet imparfait plutôt que d'en commencer un nouveau.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,true,'Vrai. Finir quelque chose, même imparfait, développe la discipline et produit un résultat montrable.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Commencer un nouveau projet sans finir l\'ancien est le principal ennemi de la progression.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 12</div>
+  <div class="q-text">On doit tout inventer de zéro dans ses projets — réutiliser du code des cours serait de la triche.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Réutiliser et adapter du code qu\'on comprend est une pratique professionnelle normale.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,true,'Exact. Identifier les briques connues et les recycler est conseillé — c\'est ce que font les pros.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<!-- ASSOCIATIONS -->
+<div class="section-title">🟢 Associations — Type de projet → Exemple</div>
+
+<div class="q-card">
+  <div class="q-num">Question 13</div>
+  <div class="q-text">Associe chaque type de projet à son exemple :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Type</div>
+      <div class="assoc-item">Outil utile</div>
+      <div class="assoc-item" style="margin-top:6px">Jeu simple</div>
+      <div class="assoc-item" style="margin-top:6px">Énigme</div>
+      <div class="assoc-item" style="margin-top:6px">Site vitrine</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Exemple</div>
+      <div class="assoc-item assoc-answer">Casse-briques en canvas</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Timer Pomodoro</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Page pour un club</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Quiz de logique chronométré</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Associations : Outil utile → Timer Pomodoro · Jeu simple → Casse-briques · Énigme → Quiz de logique · Site vitrine → Page pour un club.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 14</div>
+  <div class="q-text">Associe chaque étape de planification à sa description :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Étape</div>
+      <div class="assoc-item">Capturer l'idée</div>
+      <div class="assoc-item" style="margin-top:6px">Décrire en une phrase</div>
+      <div class="assoc-item" style="margin-top:6px">Évaluer la faisabilité</div>
+      <div class="assoc-item" style="margin-top:6px">Choisir une seule idée</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Action</div>
+      <div class="assoc-item assoc-answer">Se concentrer pour finir</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Vérifier ce qu'on sait faire</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Note rapide, peu importe le support</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Résumer l'idée clairement</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Capturer → Note rapide · Décrire → Résumer clairement · Évaluer → Vérifier ce qu'on sait faire · Choisir → Se concentrer pour finir.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 15</div>
+  <div class="q-text">Associe chaque version à son objectif :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Version</div>
+      <div class="assoc-item">v1</div>
+      <div class="assoc-item" style="margin-top:6px">v2</div>
+      <div class="assoc-item" style="margin-top:6px">v3+</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Objectif</div>
+      <div class="assoc-item assoc-answer">Nouvelles fonctionnalités & polish</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Exister et fonctionner</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Corrections & améliorations</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ v1 → Exister et fonctionner · v2 → Corrections & améliorations · v3+ → Nouvelles fonctionnalités & polish.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 16</div>
+  <div class="q-text">Associe chaque habitude à son bénéfice :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Habitude</div>
+      <div class="assoc-item">Git dès le début</div>
+      <div class="assoc-item" style="margin-top:6px">Patch-notes</div>
+      <div class="assoc-item" style="margin-top:6px">30 min/jour</div>
+      <div class="assoc-item" style="margin-top:6px">Montrer à quelqu'un</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Bénéfice</div>
+      <div class="assoc-item assoc-answer">Découvrir les angles morts</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Régularité et progression</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Revenir en arrière si besoin</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Tracer sa progression</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Git → Revenir en arrière · Patch-notes → Tracer sa progression · 30 min/jour → Régularité · Montrer → Découvrir les angles morts.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 17</div>
+  <div class="q-text">Associe chaque bénéfice de créer à sa description :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Bénéfice</div>
+      <div class="assoc-item">Consolider</div>
+      <div class="assoc-item" style="margin-top:6px">Se différencier</div>
+      <div class="assoc-item" style="margin-top:6px">Résoudre</div>
+      <div class="assoc-item" style="margin-top:6px">S'amuser</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Description</div>
+      <div class="assoc-item assoc-answer">Jeu ou énigme pour des amis</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Comprendre vraiment en créant</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Portfolio visible par un recruteur</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Outil qui manquait dans ta vie</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Consolider → Comprendre en créant · Se différencier → Portfolio · Résoudre → Outil qui manquait · S'amuser → Jeu pour des amis.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 18</div>
+  <div class="q-text">Associe chaque erreur à sa conséquence :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Erreur</div>
+      <div class="assoc-item">Viser trop grand dès le départ</div>
+      <div class="assoc-item" style="margin-top:6px">Ne jamais montrer son travail</div>
+      <div class="assoc-item" style="margin-top:6px">Coder sans Git</div>
+      <div class="assoc-item" style="margin-top:6px">Plusieurs projets en même temps</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Conséquence</div>
+      <div class="assoc-item assoc-answer">Aucun projet terminé</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Impossible de revenir en arrière</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Projet jamais fini</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Aucun retour pour s'améliorer</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Viser trop grand → Projet jamais fini · Ne jamais montrer → Aucun retour · Sans Git → Impossible de revenir · Plusieurs projets → Aucun terminé.</div>
+</div>
+
+<div class="score-box" id="score-box">
+  <div class="score-num" id="score-num">—</div>
+  <div class="score-label" id="score-label"></div>
+</div>
+
+<div class="cta-wrap">
+  <p>Exercices terminés ? Place au projet !</p>
+  <a class="cta-btn" href="projet-mes-creations.html">Voir le projet →</a>
+</div>
+
+<div class="footer-note">Cours de développement web — Bonne création ! 🛠️</div>
+
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Ma fiche de voie professionnelle</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; flex-wrap: wrap; }
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #3F6212; text-decoration: none; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #BEF264; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-lime   { background: #ECFCCB; color: #3F6212; }
+    .b-green  { background: #DCFCE7; color: #166534; }
+    .b-indigo { background: #E0E7FF; color: #4338CA; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .p-lime   { background: #ECFCCB; color: #3F6212; }
+    .p-green  { background: #DCFCE7; color: #166534; }
+    .p-blue   { background: #DBEAFE; color: #1E40AF; }
+    .p-amber  { background: #FEF3C7; color: #92400E; }
+    .p-indigo { background: #E0E7FF; color: #4338CA; }
+    .p-purple { background: #F3E8FF; color: #6B21A8; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #ECFCCB; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #3F6212; line-height: 1.5; }
+    .tip-blue   { background: #DBEAFE; color: #1E40AF; }
+    .tip-amber  { background: #FEF3C7; color: #92400E; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    .note-block { background: #1A2E1A; border-radius: 12px; padding: 1.2rem 1.4rem; margin-top: 0.8rem; }
+    .note-title { color: #BEF264; font-weight: 800; font-size: 0.95rem; margin-bottom: 0.8rem; }
+    .note-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 0.5rem; font-size: 0.87rem; color: #C8C8C8; line-height: 1.6; }
+    .note-dot { color: #86EFAC; font-weight: 800; flex-shrink: 0; }
+
+    .themes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+    .theme-card { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .theme-title { font-weight: 800; margin-bottom: 4px; font-size: 0.9rem; }
+
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #65A30D; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FDE68A; }
+
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #65A30D; border-color: #65A30D; color: white; }
+
+    .timeline { display: flex; flex-direction: column; gap: 0; margin-top: 0.8rem; }
+    .timeline-item { display: flex; gap: 14px; align-items: flex-start; padding-bottom: 16px; position: relative; }
+    .timeline-item:not(:last-child)::before { content: ''; position: absolute; left: 13px; top: 28px; bottom: 0; width: 2px; background: #D3D1C7; }
+    .timeline-dot { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ECFCCB; border: 2px solid #BEF264; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 800; color: #3F6212; flex-shrink: 0; }
+    .timeline-content { font-size: 0.9rem; line-height: 1.6; padding-top: 3px; }
+    .timeline-label { font-weight: 800; color: #2C2C2A; }
+    .timeline-detail { font-size: 0.83rem; color: #5F5E5A; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+
+    @media (max-width: 520px) { .themes-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 1.7rem; } }
+  </style>
+  <script>
+    function toggle(el) {
+      el.classList.toggle('checked');
+      el.textContent = el.classList.contains('checked') ? '✓' : '';
+    }
+  </script>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a class="nav-prev" href="exercices-voie-pro.html">← Exercices</a>
+</div>
+
+<div class="hero">
+  <h1>🎓 Projet — Ma fiche de voie professionnelle</h1>
+  <p>Crée ton support numérique personnel pour clarifier ta direction et préparer ton avenir.</p>
+  <div class="badge-row">
+    <span class="badge b-lime">Réflexion</span>
+    <span class="badge b-green">Orientation</span>
+    <span class="badge b-indigo">Note numérique</span>
+  </div>
+</div>
+
+<!-- OBJECTIF -->
+<div class="card">
+  <div class="stitle"><div class="pill p-lime">🎯</div>Objectif du projet</div>
+  <p class="desc">Ce projet n'est pas un devoir avec une bonne réponse — c'est un <strong>outil de réflexion personnelle</strong>. Tu vas créer une page HTML qui te sert de boussole professionnelle : où tu en es, ce qui t'attire, et comment y aller.</p>
+  <p class="desc">Format : une page web personnelle à conserver, enrichir et relire au fil du temps. Comme un cahier d'orientation numérique.</p>
+  <div class="tip">
+    <span class="tip-i">💡</span>
+    <span>Ce n'est pas une copie du cours — c'est <strong>ta propre réflexion</strong>. Sois honnête avec toi-même. Une fiche personnelle vaut mieux qu'une réponse attendue.</span>
+  </div>
+</div>
+
+<!-- THÈMES À COUVRIR -->
+<div class="card">
+  <div class="stitle"><div class="pill p-green">📚</div>Thèmes à traiter dans ta fiche</div>
+  <p class="desc">Ta fiche doit couvrir ces 5 aspects, avec tes propres mots :</p>
+
+  <div class="themes-grid">
+    <div class="theme-card" style="background:#ECFCCB;border:0.5px solid #BEF264;">
+      <div class="theme-title" style="color:#3F6212;">💪 Mes points forts</div>
+      <div style="font-size:0.83rem;color:#65A30D;">Ce que je fais bien ou ce qui me vient naturellement.</div>
+    </div>
+    <div class="theme-card" style="background:#DCFCE7;border:0.5px solid #86EFAC;">
+      <div class="theme-title" style="color:#166534;">🎯 Les métiers qui m'attirent</div>
+      <div style="font-size:0.83rem;color:#22C55E;">Frontend, game dev, UX, data… et pourquoi.</div>
+    </div>
+    <div class="theme-card" style="background:#DBEAFE;border:0.5px solid #93C5FD;">
+      <div class="theme-title" style="color:#1E40AF;">🎓 La formation que j'envisage</div>
+      <div style="font-size:0.83rem;color:#3B82F6;">BTS, BUT, bootcamp, alternance… mes priorités.</div>
+    </div>
+    <div class="theme-card" style="background:#FEF3C7;border:0.5px solid #FDE68A;">
+      <div class="theme-title" style="color:#92400E;">🗺️ Mon plan d'action</div>
+      <div style="font-size:0.83rem;color:#B45309;">Ce que je fais à court et moyen terme.</div>
+    </div>
+    <div class="theme-card" style="background:#F3E8FF;border:0.5px solid #D8B4FE;" style="grid-column: span 2;">
+      <div class="theme-title" style="color:#6B21A8;">❓ Mes questions ouvertes</div>
+      <div style="font-size:0.83rem;color:#9333EA;">Ce que je ne sais pas encore et ce que je veux approfondir.</div>
+    </div>
+  </div>
+
+  <div class="note-block">
+    <div class="note-title">Pour chaque thème, ta fiche doit contenir :</div>
+    <div class="note-item"><span class="note-dot">→</span><span>Ta réponse personnelle en 2-4 phrases (pas de copier-coller du cours)</span></div>
+    <div class="note-item"><span class="note-dot">→</span><span>Un exemple concret ou une référence à ce qui t'a influencé</span></div>
+    <div class="note-item"><span class="note-dot">→</span><span>Ce que tu veux faire pour avancer sur ce point</span></div>
+  </div>
+</div>
+
+<!-- PLAN D'ACTION -->
+<div class="card">
+  <div class="stitle"><div class="pill p-blue">🗓️</div>Construire ton plan d'action</div>
+  <p class="desc">La partie la plus importante : transformer ta réflexion en actions concrètes. Utilise cette structure temporelle :</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot">1M</div>
+      <div class="timeline-content">
+        <div class="timeline-label">Dans 1 mois</div>
+        <div class="timeline-detail">Terminer un projet personnel (ou en démarrer un). Explorer une formation concrète. Créer un compte GitHub si ce n'est pas fait.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot">6M</div>
+      <div class="timeline-content">
+        <div class="timeline-label">Dans 6 mois</div>
+        <div class="timeline-detail">Avoir un portfolio en ligne avec 2-3 projets. Avoir exploré les portes ouvertes des formations envisagées. Avoir un premier retour sur son code de quelqu'un.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot">1A</div>
+      <div class="timeline-content">
+        <div class="timeline-label">Dans 1 an</div>
+        <div class="timeline-detail">Formation choisie ou candidature déposée. Portfolio à jour. Premières compétences solides en HTML/CSS/JS documentées.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-amber">
+    <span class="tip-i">⚠️</span>
+    <span>Sois réaliste : note des actions que tu peux vraiment faire, pas des objectifs idéaux. "Découvrir 2 formations" est plus utile que "Devenir fullstack senior".</span>
+  </div>
+</div>
+
+<!-- CAHIER DES CHARGES -->
+<div class="card">
+  <div class="stitle"><div class="pill p-lime">📋</div>Cahier des charges — Exigences de la fiche</div>
+
+  <div class="req-list">
+    <div class="req-item req-must">
+      <span class="req-icon">✅</span>
+      <span>La fiche est une <strong>page HTML fonctionnelle</strong> — pas un document Word ou un fichier texte.</span>
+    </div>
+    <div class="req-item req-must">
+      <span class="req-icon">✅</span>
+      <span>Les <strong>5 thèmes</strong> sont abordés avec au moins 2 phrases personnelles chacun.</span>
+    </div>
+    <div class="req-item req-must">
+      <span class="req-icon">✅</span>
+      <span>Ton <strong>plan d'action</strong> contient des actions concrètes à 1 mois, 6 mois, 1 an.</span>
+    </div>
+    <div class="req-item req-must">
+      <span class="req-icon">✅</span>
+      <span>Le contenu est <strong>dans tes propres mots</strong> — pas une copie du cours.</span>
+    </div>
+    <div class="req-item req-must">
+      <span class="req-icon">✅</span>
+      <span>La page s'<strong>ouvre correctement dans le navigateur</strong> sans erreur.</span>
+    </div>
+    <div class="req-item req-bonus">
+      <span class="req-icon">🌟</span>
+      <span>Ajouter une section "Ce que je ne veux PAS faire" — éliminer des options est aussi une décision d'orientation.</span>
+    </div>
+    <div class="req-item req-bonus">
+      <span class="req-icon">🌟</span>
+      <span>Ajouter des liens vers les formations envisagées (sites officiels des écoles, Parcoursup…).</span>
+    </div>
+    <div class="req-item req-bonus">
+      <span class="req-icon">🌟</span>
+      <span>Structurer la fiche avec une table des matières cliquable (<code style="font-family:'Fira Code',monospace;background:#FEFBF5;border-radius:4px;padding:1px 6px;font-size:0.87em;">&lt;a href="#section"&gt;</code>).</span>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="card">
+  <div class="stitle"><div class="pill p-purple">☑️</div>Checklist de validation</div>
+  <div class="checklist">
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>J'ai identifié mes points forts (au moins 2 exemples concrets)</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>J'ai listé les métiers qui m'attirent et expliqué pourquoi</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>J'ai mentionné au moins 2 formations envisagées avec leurs avantages</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>Mon plan d'action couvre 3 horizons temporels (1 mois, 6 mois, 1 an)</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>J'ai noté mes questions ouvertes (ce que je ne sais pas encore)</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>Le contenu est dans mes propres mots (pas de copier-coller)</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>La page HTML s'ouvre sans erreur dans le navigateur</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>J'ai relu ma fiche et je me reconnais dedans</span>
+    </div>
+  </div>
+
+  <div class="tip" style="margin-top:1rem;">
+    <span class="tip-i">🔄</span>
+    <span>Cette fiche n'est pas figée. Reviens la modifier dans 6 mois — tu seras surpris de voir comment tes priorités auront évolué.</span>
+  </div>
+</div>
+
+<div class="footer-note">Cours de développement web — Ton avenir commence maintenant. 🎓</div>
+
+</body>
+</html>

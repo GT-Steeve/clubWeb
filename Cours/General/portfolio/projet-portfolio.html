@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projet — Mon portfolio en ligne</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; flex-wrap: wrap; }
+    .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #3F6212; text-decoration: none; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover { background: #BEF264; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-lime   { background: #ECFCCB; color: #3F6212; }
+    .b-blue   { background: #DBEAFE; color: #1E40AF; }
+    .b-indigo { background: #E0E7FF; color: #4338CA; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .p-lime   { background: #ECFCCB; color: #3F6212; }
+    .p-green  { background: #DCFCE7; color: #166534; }
+    .p-blue   { background: #DBEAFE; color: #1E40AF; }
+    .p-amber  { background: #FEF3C7; color: #92400E; }
+    .p-indigo { background: #E0E7FF; color: #4338CA; }
+    .p-purple { background: #F3E8FF; color: #6B21A8; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #ECFCCB; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #3F6212; line-height: 1.5; }
+    .tip-blue   { background: #DBEAFE; color: #1E40AF; }
+    .tip-amber  { background: #FEF3C7; color: #92400E; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    .wireframe { background: #F7F6F2; border: 1.5px dashed #B4B2A9; border-radius: 12px; padding: 1.2rem; margin-top: 0.8rem; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.8; color: #5F5E5A; }
+    .wf-section { color: #3F6212; font-weight: 700; }
+
+    .steps-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0.6rem; }
+    .step-row { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2C2C2A; color: #BEF264; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content { font-size: 0.92rem; line-height: 1.6; }
+
+    .req-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.6rem; }
+    .req-item { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; }
+    .req-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+    .req-must  { background: #F0FBF7; border-left: 3px solid #65A30D; }
+    .req-bonus { background: #FEFBF5; border-left: 3px solid #FDE68A; }
+
+    .checklist { display: flex; flex-direction: column; gap: 6px; margin-top: 0.6rem; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.5; padding: 5px 2px; }
+    .check-box {
+      width: 20px; height: 20px; min-width: 20px;
+      border: 2px solid #B4B2A9; border-radius: 5px; margin-top: 1px;
+      flex-shrink: 0; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: transparent;
+      transition: all 0.12s;
+    }
+    .check-box.checked { background: #65A30D; border-color: #65A30D; color: white; }
+
+    code { font-family: 'Fira Code', monospace; background: #F1EFE8; border-radius: 4px; padding: 1px 6px; font-size: 0.87em; color: #3F6212; }
+
+    .footer-note { text-align: center; padding: 2rem 1rem 2.5rem; color: #888780; font-size: 0.9rem; }
+
+    @media (max-width: 520px) { .hero h1 { font-size: 1.7rem; } }
+  </style>
+  <script>
+    function toggle(el) {
+      el.classList.toggle('checked');
+      el.textContent = el.classList.contains('checked') ? '✓' : '';
+    }
+  </script>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a class="nav-prev" href="exercices-portfolio.html">← Exercices</a>
+</div>
+
+<div class="hero">
+  <h1>🌐 Projet — Mon portfolio en ligne</h1>
+  <p>Planifie, code et héberge un portfolio qui présente tes créations au monde.</p>
+  <div class="badge-row">
+    <span class="badge b-lime">HTML/CSS</span>
+    <span class="badge b-blue">GitHub Pages</span>
+    <span class="badge b-indigo">Portfolio</span>
+  </div>
+</div>
+
+<!-- OBJECTIF -->
+<div class="card">
+  <div class="stitle"><div class="pill p-lime">🎯</div>Objectif du projet</div>
+  <p class="desc">Un portfolio est ta <strong>vitrine professionnelle en ligne</strong>. Ce projet consiste à en créer un qui te représente vraiment : tes projets, tes compétences, ton contact.</p>
+  <p class="desc">Il n'a pas besoin d'être parfait — il a besoin d'<strong>exister et d'être accessible</strong>. Tu l'amélioreras au fur et à mesure que tes projets s'étofferont.</p>
+  <div class="tip">
+    <span class="tip-i">💡</span>
+    <span>Un portfolio avec 2 projets réels et un design propre est plus efficace qu'un portfolio vide avec un design spectaculaire.</span>
+  </div>
+</div>
+
+<!-- ÉTAPE 1 : CONTENU -->
+<div class="card">
+  <div class="stitle"><div class="pill p-green">📝</div>Étape 1 — Définir le contenu</div>
+  <p class="desc">Avant de coder, réponds à ces 3 questions pour savoir quoi mettre dans ton portfolio :</p>
+
+  <div class="steps-list">
+    <div class="step-row">
+      <div class="step-num">?</div>
+      <div class="step-content"><strong>Qui suis-je ?</strong> — Ton prénom, ta formation actuelle (lycée, BTS, BUT…), ton profil en une phrase.</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">?</div>
+      <div class="step-content"><strong>Qu'est-ce que je veux montrer ?</strong> — Liste tes 2 à 4 meilleurs projets. Choisit ceux qui fonctionnent vraiment.</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">?</div>
+      <div class="step-content"><strong>Comment me contacter ?</strong> — Email, GitHub, ou formulaire de contact simple.</div>
+    </div>
+  </div>
+
+  <div class="tip tip-amber">
+    <span class="tip-i">⚠️</span>
+    <span>Ne liste pas les projets inachevés ou qui ne fonctionnent pas. Mieux vaut 2 projets solides que 6 projets dont 4 sont cassés.</span>
+  </div>
+</div>
+
+<!-- ÉTAPE 2 : WIREFRAME -->
+<div class="card">
+  <div class="stitle"><div class="pill p-blue">🖼️</div>Étape 2 — Structurer avec un wireframe</div>
+  <p class="desc">Avant de coder, dessine (ou visualise) la structure de ta page. Voici un exemple de structure simple et efficace :</p>
+
+  <div class="wireframe">
+    <span class="wf-section">[ HEADER ]</span>
+    Prénom · Titre (ex: "Développeur web junior")
+    Liens : GitHub · Email
+
+    <span class="wf-section">[ SECTION : À propos ]</span>
+    2-3 phrases sur qui tu es · Compétences (HTML, CSS, JS…)
+
+    <span class="wf-section">[ SECTION : Mes projets ]</span>
+    Carte projet 1 → titre · description · lien démo / code
+    Carte projet 2 → …
+    Carte projet 3 → …
+
+    <span class="wf-section">[ SECTION : Contact ]</span>
+    Email cliquable · Lien GitHub
+
+    <span class="wf-section">[ FOOTER ]</span>
+    "Fait avec HTML/CSS · © Ton prénom 2025"
+  </div>
+
+  <div class="tip tip-blue">
+    <span class="tip-i">💡</span>
+    <span>Ce wireframe est un point de départ, pas une obligation. Adapte-le à ce qui te représente — ajoute une section compétences, une photo, etc.</span>
+  </div>
+</div>
+
+<!-- ÉTAPE 3 : CODER -->
+<div class="card">
+  <div class="stitle"><div class="pill p-indigo">💻</div>Étape 3 — Coder le portfolio</div>
+  <p class="desc">Lance-toi avec une structure HTML simple et construis section par section.</p>
+
+  <div class="steps-list">
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-content">Crée <code>index.html</code> et <code>style.css</code> dans un nouveau dossier. Initialise Git.</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-content">Code le header en premier : ton nom, ton titre, tes liens. Commit quand c'est fait.</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-content">Ajoute les sections une par une : À propos → Projets → Contact. Un commit par section.</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">4</div>
+      <div class="step-content">Teste sur mobile en réduisant la fenêtre du navigateur. Ajuste avec <code>flex-wrap</code> ou media queries si besoin.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ÉTAPE 4 : HÉBERGER -->
+<div class="card">
+  <div class="stitle"><div class="pill p-amber">🌍</div>Étape 4 — Héberger sur GitHub Pages</div>
+  <p class="desc">GitHub Pages est la solution recommandée pour débuter : gratuite, fiable, et ton code est déjà là.</p>
+
+  <div class="steps-list">
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-content">Crée un dépôt GitHub nommé <code>portfolio</code> (ou <code>ton-prenom.github.io</code> pour un URL personnalisé).</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-content">Push ton code : <code>git remote add origin [url]</code> puis <code>git push -u origin main</code>.</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-content">Dans les Settings du dépôt → Pages → sélectionne la branche <code>main</code> comme source.</div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">4</div>
+      <div class="step-content">Attends 1-2 minutes et visite l'URL générée. Partage-la !</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <span class="tip-i">🔗</span>
+    <span>L'URL sera du type <code style="background:#D1FAE5;color:#065F46;">https://ton-pseudo.github.io/portfolio/</code> — copie-la et ajoute-la sur ton profil GitHub et LinkedIn.</span>
+  </div>
+</div>
+
+<!-- CAHIER DES CHARGES -->
+<div class="card">
+  <div class="stitle"><div class="pill p-lime">✅</div>Exigences du portfolio v1</div>
+
+  <div class="req-list">
+    <div class="req-item req-must">
+      <span class="req-icon">✅</span>
+      <span>Ton <strong>prénom et ton profil</strong> apparaissent clairement dès le header.</span>
+    </div>
+    <div class="req-item req-must">
+      <span class="req-icon">✅</span>
+      <span>Au moins <strong>2 projets présentés</strong> avec titre, description et lien (démo ou code).</span>
+    </div>
+    <div class="req-item req-must">
+      <span class="req-icon">✅</span>
+      <span>Un moyen de <strong>te contacter</strong> (email ou lien GitHub visible).</span>
+    </div>
+    <div class="req-item req-must">
+      <span class="req-icon">✅</span>
+      <span>Le site est <strong>lisible sur mobile</strong> (fenêtre réduite à 360px).</span>
+    </div>
+    <div class="req-item req-must">
+      <span class="req-icon">✅</span>
+      <span>Le portfolio est <strong>hébergé en ligne</strong> et accessible via une URL partageable.</span>
+    </div>
+    <div class="req-item req-must">
+      <span class="req-icon">✅</span>
+      <span>Aucun lien cassé ni image manquante sur la page.</span>
+    </div>
+    <div class="req-item req-bonus">
+      <span class="req-icon">🌟</span>
+      <span>Un domaine personnalisé (ex : <code>tonprenom.dev</code>) lié à GitHub Pages.</span>
+    </div>
+    <div class="req-item req-bonus">
+      <span class="req-icon">🌟</span>
+      <span>Une capture d'écran de chaque projet dans les cartes projets.</span>
+    </div>
+    <div class="req-item req-bonus">
+      <span class="req-icon">🌟</span>
+      <span>Une animation CSS subtile (hover sur les cartes, transition de couleur…).</span>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="card">
+  <div class="stitle"><div class="pill p-purple">☑️</div>Checklist de validation</div>
+  <div class="checklist">
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>J'ai défini le contenu (qui je suis, quels projets, comment me contacter)</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>J'ai esquissé la structure (wireframe mental ou papier)</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>Le header contient mon prénom et mon profil</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>Au moins 2 projets sont présentés avec un lien fonctionnel</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>Mon contact est visible (email ou GitHub)</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>J'ai testé l'affichage sur mobile</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>J'ai vérifié tous les liens (aucun cassé)</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>Le portfolio est en ligne sur GitHub Pages</span>
+    </div>
+    <div class="check-item">
+      <div class="check-box" onclick="toggle(this)"></div>
+      <span>J'ai partagé l'URL avec au moins une personne</span>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">Cours de développement web — Ton portfolio, c'est ta carte de visite ! 🌐</div>
+
+</body>
+</html>

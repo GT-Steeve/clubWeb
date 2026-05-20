@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices — Ma voie professionnelle</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; }
+    .nav-prev, .nav-next { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #3F6212; text-decoration: none; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover, .nav-next:hover { background: #BEF264; }
+
+    .hero { text-align: center; padding: 2rem 1rem 1.5rem; }
+    .hero h1 { font-size: 1.8rem; font-weight: 800; }
+    .hero p { font-size: 0.95rem; color: #5F5E5A; margin-top: 0.4rem; }
+
+    .progress-bar { background: #E8E6DF; border-radius: 999px; height: 8px; margin: 1rem 0 0.4rem; }
+    .progress-fill { background: #65A30D; height: 8px; border-radius: 999px; transition: width 0.3s ease; }
+    .progress-label { font-size: 0.78rem; font-weight: 700; color: #5F5E5A; text-align: right; margin-bottom: 1.2rem; }
+
+    .section-title { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; margin: 1.5rem 0 0.8rem; padding-top: 1rem; border-top: 0.5px solid #E8E6DF; }
+    .section-title:first-of-type { border-top: none; margin-top: 0; }
+
+    .q-card { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 0.9rem; }
+    .q-num { font-size: 0.68rem; font-weight: 800; color: #65A30D; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+    .q-text { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.8rem; line-height: 1.4; }
+
+    .options { display: flex; flex-direction: column; gap: 7px; }
+    .opt { display: flex; align-items: center; gap: 10px; padding: 0.55rem 0.9rem; border-radius: 9px; border: 1.5px solid #E8E6DF; background: #FAFAF8; cursor: pointer; font-size: 0.88rem; font-weight: 600; transition: border-color 0.15s, background 0.15s; user-select: none; }
+    .opt:hover { border-color: #BEF264; background: #F7FEE7; }
+    .opt.correct   { border-color: #22C55E; background: #DCFCE7; color: #166534; }
+    .opt.incorrect { border-color: #F43F5E; background: #FFE4E6; color: #9F1239; }
+    .opt-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #D3D1C7; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+
+    .vf-row { display: flex; gap: 10px; margin-top: 0.4rem; }
+    .vf-btn { flex: 1; padding: 0.6rem; border-radius: 9px; border: 1.5px solid #E8E6DF; background: #FAFAF8; cursor: pointer; font-size: 0.9rem; font-weight: 800; text-align: center; transition: all 0.15s; }
+    .vf-btn:hover { border-color: #BEF264; background: #F7FEE7; }
+    .vf-btn.correct   { border-color: #22C55E; background: #DCFCE7; color: #166534; }
+    .vf-btn.incorrect { border-color: #F43F5E; background: #FFE4E6; color: #9F1239; }
+
+    .feedback { font-size: 0.82rem; margin-top: 0.6rem; padding: 0.5rem 0.8rem; border-radius: 8px; display: none; line-height: 1.4; }
+    .feedback.show { display: block; }
+    .feedback.ok  { background: #DCFCE7; color: #166534; }
+    .feedback.nok { background: #FFE4E6; color: #9F1239; }
+
+    .assoc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 0.6rem; }
+    .assoc-col-title { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #888780; margin-bottom: 4px; }
+    .assoc-item { background: #F7F6F2; border: 1.5px solid #E8E6DF; border-radius: 8px; padding: 0.45rem 0.75rem; font-size: 0.85rem; font-weight: 700; }
+    .assoc-answer { background: #ECFCCB; border-color: #BEF264; color: #3F6212; }
+
+    .score-box { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.5rem; text-align: center; margin-top: 1rem; display: none; }
+    .score-box.show { display: block; }
+    .score-num { font-size: 1.8rem; font-weight: 800; color: #3F6212; }
+    .score-label { font-size: 0.88rem; color: #65A30D; margin-top: 0.2rem; }
+
+    .cta-wrap { text-align: center; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+    .cta-wrap p { color: #3F6212; font-size: 0.95rem; margin-bottom: 1.1rem; }
+    .cta-btn { display: inline-block; background: #65A30D; color: #fff; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #3F6212; }
+    .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; }
+  </style>
+  <script>
+    let score = 0;
+    let answered = 0;
+    const total = 18;
+
+    function choose(qId, optEl, isCorrect, feedback) {
+      const card = optEl.closest('.q-card');
+      if (card.dataset.answered) return;
+      card.dataset.answered = '1';
+      card.querySelectorAll('.opt').forEach(o => o.style.pointerEvents = 'none');
+      optEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+      if (!isCorrect) card.querySelector('[data-correct]').classList.add('correct');
+      const fb = card.querySelector('.feedback');
+      fb.textContent = feedback;
+      fb.classList.add('show', isCorrect ? 'ok' : 'nok');
+      if (isCorrect) score++;
+      answered++;
+      updateProgress();
+    }
+
+    function selectVF(btn, isCorrect, feedback) {
+      const card = btn.closest('.q-card');
+      if (card.dataset.answered) return;
+      card.dataset.answered = '1';
+      card.querySelectorAll('.vf-btn').forEach(b => b.style.pointerEvents = 'none');
+      btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+      if (!isCorrect) {
+        card.querySelectorAll('.vf-btn').forEach(b => { if (b !== btn) b.classList.add('correct'); });
+      }
+      const fb = card.querySelector('.feedback');
+      fb.textContent = feedback;
+      fb.classList.add('show', isCorrect ? 'ok' : 'nok');
+      if (isCorrect) score++;
+      answered++;
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const pct = Math.round((answered / total) * 100);
+      document.getElementById('prog-fill').style.width = pct + '%';
+      document.getElementById('prog-label').textContent = answered + ' / ' + total + ' répondus';
+      if (answered === total) {
+        const box = document.getElementById('score-box');
+        box.classList.add('show');
+        document.getElementById('score-num').textContent = score + ' / ' + total;
+        const pct2 = Math.round((score / total) * 100);
+        document.getElementById('score-label').textContent = pct2 >= 80 ? '🎉 Excellent !' : pct2 >= 60 ? '👍 Bien joué !' : '📖 Relis le cours';
+      }
+    }
+  </script>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a class="nav-prev" href="cours-voie-pro.html">← Cours</a>
+  <a class="nav-next" href="projet-voie-pro.html">Projet →</a>
+</div>
+
+<div class="hero">
+  <h1>🎓 Exercices — Ma voie professionnelle</h1>
+  <p>18 questions sur les métiers du numérique, les formations, l'alternance et le marché du travail.</p>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+<div class="progress-label" id="prog-label">0 / 18 répondus</div>
+
+<!-- QCM -->
+<div class="section-title">🔵 QCM — Une seule bonne réponse</div>
+
+<div class="q-card">
+  <div class="q-num">Question 1</div>
+  <div class="q-text">Sur quoi travaille principalement un développeur frontend ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(1,this,false,'Le backend gère les serveurs et les bases de données — pas le frontend.')">Les serveurs et les bases de données</div>
+    <div class="opt" data-correct onclick="choose(1,this,true,'Exact ! Le frontend, c\'est tout ce que l\'utilisateur voit et avec lequel il interagit : HTML, CSS, JavaScript.')">L'interface visible et l'expérience utilisateur</div>
+    <div class="opt" onclick="choose(1,this,false,'Les réseaux et infrastructures relèvent du DevOps/administrateur système, pas du frontend.')">Les réseaux et l'infrastructure</div>
+    <div class="opt" onclick="choose(1,this,false,'L\'UX design est proche mais c\'est un métier distinct, centré sur la conception et non le code.')">La conception graphique des applications</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 2</div>
+  <div class="q-text">Qu'est-ce que le BTS SIO ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(2,this,false,'Le BTS SIO dure 2 ans, pas 3 — le BUT (ex-IUT) dure 3 ans.')">Un diplôme universitaire de 3 ans spécialisé en informatique</div>
+    <div class="opt" onclick="choose(2,this,false,'Le BTS SIO n\'est pas une certification professionnelle rapide — c\'est un diplôme national de 2 ans.')">Une certification professionnelle de 6 mois</div>
+    <div class="opt" data-correct onclick="choose(2,this,true,'Oui ! BTS SIO = Brevet de Technicien Supérieur Services Informatiques aux Organisations. 2 ans post-bac, très apprécié des employeurs.')">Un diplôme de 2 ans post-bac en informatique et réseaux</div>
+    <div class="opt" onclick="choose(2,this,false,'Le BTS SIO est un diplôme d\'État, pas une formation privée payante.')">Une formation privée payante sans diplôme d'État</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 3</div>
+  <div class="q-text">Quel est le principal avantage d'une formation en alternance ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(3,this,false,'L\'alternance est souvent gratuite pour l\'étudiant et prise en charge par l\'entreprise — elle n\'est pas nécessairement plus chère.')">Elle coûte moins cher qu'une école classique</div>
+    <div class="opt" onclick="choose(3,this,false,'L\'alternance dure généralement autant que la formation initiale équivalente.')">Elle permet de finir ses études plus vite</div>
+    <div class="opt" data-correct onclick="choose(3,this,true,'Exact. L\'alternance permet d\'être rémunéré tout en étudiant ET d\'acquérir une vraie expérience professionnelle — un combo imbattable.')">On est rémunéré et on acquiert de l'expérience en entreprise</div>
+    <div class="opt" onclick="choose(3,this,false,'L\'alternance ne garantit pas un emploi — elle améliore les chances, mais sans garantie.')">Elle garantit un emploi dans l'entreprise à la fin</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 4</div>
+  <div class="q-text">Quelle est la durée typique d'un bootcamp de développement web ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(4,this,false,'3 ans, c\'est la durée d\'un BUT ou d\'une Licence, pas d\'un bootcamp.')">3 ans</div>
+    <div class="opt" onclick="choose(4,this,false,'5 ans, c\'est la durée d\'un Master (Bac+5), pas d\'un bootcamp.')">5 ans</div>
+    <div class="opt" data-correct onclick="choose(4,this,true,'Oui ! Les bootcamps durent généralement 3 à 6 mois, avec une formation intensive à temps plein.')">3 à 6 mois</div>
+    <div class="opt" onclick="choose(4,this,false,'1 semaine est beaucoup trop court pour former un développeur, même en bootcamp.')">1 semaine</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 5</div>
+  <div class="q-text">Quel métier est principalement axé sur l'ergonomie et la facilité d'utilisation d'une interface ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(5,this,false,'Le développeur backend travaille côté serveur — il n\'est pas spécialisé dans l\'expérience utilisateur.')">Développeur backend</div>
+    <div class="opt" onclick="choose(5,this,false,'Le DevOps s\'occupe du déploiement, des serveurs et de l\'automatisation — pas de l\'interface.')">DevOps</div>
+    <div class="opt" onclick="choose(5,this,false,'Le data analyst travaille sur l\'analyse de données, pas sur l\'ergonomie des interfaces.')">Data analyst</div>
+    <div class="opt" data-correct onclick="choose(5,this,true,'Exact ! L\'UX designer (User Experience) se concentre sur la facilité d\'utilisation, les parcours utilisateur et l\'ergonomie.')">UX designer</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 6</div>
+  <div class="q-text">Quelle formation permet d'aller jusqu'à Bac+5 en informatique via l'université publique ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(6,this,false,'Le BTS dure 2 ans (Bac+2) — il n\'atteint pas Bac+5.')">BTS SIO</div>
+    <div class="opt" onclick="choose(6,this,false,'Le bootcamp n\'est pas un diplôme d\'État et ne mène pas à Bac+5.')">Bootcamp intensif</div>
+    <div class="opt" onclick="choose(6,this,false,'Le BUT dure 3 ans (Bac+3) — il faudrait ensuite un Master pour atteindre Bac+5.')">BUT Informatique uniquement</div>
+    <div class="opt" data-correct onclick="choose(6,this,true,'Correct. Le parcours Licence (Bac+3) puis Master (Bac+5) à l\'université est la voie longue publique qui mène à Bac+5.')">Licence puis Master à l'université</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<!-- VRAI / FAUX -->
+<div class="section-title">🟡 Vrai / Faux</div>
+
+<div class="q-card">
+  <div class="q-num">Question 7</div>
+  <div class="q-text">Un développeur fullstack maîtrise à la fois le frontend et le backend.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,true,'Vrai ! C\'est exactement la définition du fullstack — il peut travailler sur toute la pile technique, du HTML visible à la base de données.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Le fullstack est précisément le profil qui combine les deux compétences.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 8</div>
+  <div class="q-text">Un BTS SIO peut mener à une Licence Pro ou un BUT par la voie de la validation des acquis.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,true,'Vrai. Le BTS est un excellent tremplin — beaucoup d\'étudiants enchaînent avec une Licence Pro ou intègrent une école en 3e année.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Le BTS ouvre la porte à des poursuites d\'études en Licence Pro, BUT ou école d\'ingénieurs.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 9</div>
+  <div class="q-text">Un bootcamp suffit toujours à remplacer un diplôme universitaire pour tous les postes en informatique.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Les bootcamps sont efficaces pour certains postes, mais beaucoup d\'employeurs et de concours de la fonction publique exigent un diplôme d\'État.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,true,'Correct. Le bootcamp est une bonne alternative pour une reconversion rapide, mais certains postes ou concours exigent un diplôme national.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 10</div>
+  <div class="q-text">Le secteur du numérique propose beaucoup d'offres en télétravail comparé à d'autres secteurs.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,true,'Vrai ! L\'informatique est l\'un des secteurs les plus favorables au télétravail — beaucoup d\'entreprises proposent du full remote ou hybride.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Le numérique est bien l\'un des secteurs les plus ouverts au télétravail.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 11</div>
+  <div class="q-text">Le BUT informatique dure 2 ans comme le BTS.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Le BUT (ex-DUT) dure 3 ans — c\'est une refonte récente qui a allongé la formation de 2 à 3 ans pour atteindre Bac+3.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,true,'Correct. Le BUT dure 3 ans (Bac+3) depuis la réforme, contrairement au BTS qui dure 2 ans (Bac+2).')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 12</div>
+  <div class="q-text">Travailler en freelance en développement signifie gérer soi-même ses clients, sa facturation et sa comptabilité.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,true,'Vrai. Le freelance offre une grande liberté mais implique de gérer l\'administratif, la prospection clients, les devis et la facturation.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Le freelance doit gérer toute la partie commerciale et administrative lui-même — c\'est l\'inconvénient de la liberté.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<!-- ASSOCIATIONS -->
+<div class="section-title">🟢 Associations</div>
+
+<div class="q-card">
+  <div class="q-num">Question 13</div>
+  <div class="q-text">Associe chaque métier à sa description :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Métier</div>
+      <div class="assoc-item">Frontend</div>
+      <div class="assoc-item" style="margin-top:6px">Backend</div>
+      <div class="assoc-item" style="margin-top:6px">DevOps</div>
+      <div class="assoc-item" style="margin-top:6px">Game dev</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Description</div>
+      <div class="assoc-item assoc-answer">Déploiement, serveurs, CI/CD</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Jeux, moteurs, gameplay</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Interface, HTML/CSS/JS</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">API, base de données, logique</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Frontend → Interface HTML/CSS/JS · Backend → API & base de données · DevOps → Déploiement & serveurs · Game dev → Jeux & moteurs.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 14</div>
+  <div class="q-text">Associe chaque formation à sa durée :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Formation</div>
+      <div class="assoc-item">Bac Pro</div>
+      <div class="assoc-item" style="margin-top:6px">BTS SIO</div>
+      <div class="assoc-item" style="margin-top:6px">BUT</div>
+      <div class="assoc-item" style="margin-top:6px">Master</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Durée</div>
+      <div class="assoc-item assoc-answer">2 ans post-bac</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Bac+5 (2 ans après Licence)</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">3 ans au lycée</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">3 ans post-bac</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Bac Pro → 3 ans au lycée · BTS SIO → 2 ans post-bac · BUT → 3 ans post-bac · Master → Bac+5 (2 ans après Licence).</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 15</div>
+  <div class="q-text">Associe chaque avantage à son type de contrat :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Avantage</div>
+      <div class="assoc-item">Liberté totale</div>
+      <div class="assoc-item" style="margin-top:6px">Études + salaire</div>
+      <div class="assoc-item" style="margin-top:6px">Stabilité long terme</div>
+      <div class="assoc-item" style="margin-top:6px">Mission courte définie</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Contrat</div>
+      <div class="assoc-item assoc-answer">Alternance</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">CDD</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Freelance</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">CDI</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Liberté totale → Freelance · Études + salaire → Alternance · Stabilité → CDI · Mission courte → CDD.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 16</div>
+  <div class="q-text">Associe chaque situation personnelle à la voie recommandée :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Situation</div>
+      <div class="assoc-item">Reconversion rapide</div>
+      <div class="assoc-item" style="margin-top:6px">Aime la théorie & recherche</div>
+      <div class="assoc-item" style="margin-top:6px">Veut travailler vite + diplôme</div>
+      <div class="assoc-item" style="margin-top:6px">Veut créer des jeux vidéo</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Voie conseillée</div>
+      <div class="assoc-item assoc-answer">École spécialisée jeux / BUT MMI</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Bootcamp intensif</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Master / Grande école</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">BTS ou BUT en alternance</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Reconversion → Bootcamp · Théorie & recherche → Master/Grande école · Diplôme + travail → BTS/BUT alternance · Jeux vidéo → École spécialisée/BUT MMI.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 17</div>
+  <div class="q-text">Associe chaque compétence à son domaine métier :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Compétence</div>
+      <div class="assoc-item">SQL & Python</div>
+      <div class="assoc-item" style="margin-top:6px">Unity & C#</div>
+      <div class="assoc-item" style="margin-top:6px">Figma & wireframes</div>
+      <div class="assoc-item" style="margin-top:6px">Django & API REST</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Domaine</div>
+      <div class="assoc-item assoc-answer">UX / UI design</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Développement backend</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Data / analyse</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Game development</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ SQL & Python → Data/analyse · Unity & C# → Game development · Figma & wireframes → UX/UI design · Django & API → Backend.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 18</div>
+  <div class="q-text">Associe chaque idée reçue à la réalité :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Idée reçue</div>
+      <div class="assoc-item">Il faut être mathématicien</div>
+      <div class="assoc-item" style="margin-top:6px">Il faut un Bac+5 pour coder</div>
+      <div class="assoc-item" style="margin-top:6px">Les devs ne communiquent pas</div>
+      <div class="assoc-item" style="margin-top:6px">Le code, c'est solitaire</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Réalité</div>
+      <div class="assoc-item assoc-answer">Le travail en équipe (code review, standups) est central</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">La logique et la persévérance suffisent</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Les devs rédigent, présentent et collaborent constamment</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Un BTS ou bootcamp suffit pour décrocher un premier poste</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Maths → Logique suffit · Bac+5 obligatoire → BTS/bootcamp suffisent · Pas de communication → Les devs communiquent beaucoup · Solitaire → Le travail en équipe est central.</div>
+</div>
+
+<div class="score-box" id="score-box">
+  <div class="score-num" id="score-num">—</div>
+  <div class="score-label" id="score-label"></div>
+</div>
+
+<div class="cta-wrap">
+  <p>Exercices terminés ? Place au projet !</p>
+  <a class="cta-btn" href="projet-voie-pro.html">Voir le projet →</a>
+</div>
+
+<div class="footer-note">Cours de développement web — Bon courage pour ton avenir ! 🎓</div>
+
+</body>
+</html>

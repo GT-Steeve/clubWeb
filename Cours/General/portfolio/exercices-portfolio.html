@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices — Mon portfolio</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; }
+    .nav-prev, .nav-next { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #3F6212; text-decoration: none; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover, .nav-next:hover { background: #BEF264; }
+    .hero { text-align: center; padding: 2rem 1rem 1.5rem; }
+    .hero h1 { font-size: 1.8rem; font-weight: 800; }
+    .hero p { font-size: 0.95rem; color: #5F5E5A; margin-top: 0.4rem; }
+    .progress-bar { background: #E8E6DF; border-radius: 999px; height: 8px; margin: 1rem 0 0.4rem; }
+    .progress-fill { background: #65A30D; height: 8px; border-radius: 999px; transition: width 0.3s ease; }
+    .progress-label { font-size: 0.78rem; font-weight: 700; color: #5F5E5A; text-align: right; margin-bottom: 1.2rem; }
+    .section-title { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; margin: 1.5rem 0 0.8rem; padding-top: 1rem; border-top: 0.5px solid #E8E6DF; }
+    .section-title:first-of-type { border-top: none; margin-top: 0; }
+    .q-card { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 0.9rem; }
+    .q-num { font-size: 0.68rem; font-weight: 800; color: #65A30D; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+    .q-text { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.8rem; line-height: 1.4; }
+    .options { display: flex; flex-direction: column; gap: 7px; }
+    .opt { display: flex; align-items: center; gap: 10px; padding: 0.55rem 0.9rem; border-radius: 9px; border: 1.5px solid #E8E6DF; background: #FAFAF8; cursor: pointer; font-size: 0.88rem; font-weight: 600; transition: border-color 0.15s, background 0.15s; }
+    .opt:hover { border-color: #BEF264; background: #F7FEE7; }
+    .opt.correct   { border-color: #22C55E; background: #DCFCE7; color: #166534; }
+    .opt.incorrect { border-color: #F43F5E; background: #FFE4E6; color: #9F1239; }
+    .vf-row { display: flex; gap: 10px; margin-top: 0.4rem; }
+    .vf-btn { flex: 1; padding: 0.6rem; border-radius: 9px; border: 1.5px solid #E8E6DF; background: #FAFAF8; cursor: pointer; font-size: 0.9rem; font-weight: 800; text-align: center; transition: all 0.15s; }
+    .vf-btn:hover { border-color: #BEF264; background: #F7FEE7; }
+    .vf-btn.correct   { border-color: #22C55E; background: #DCFCE7; color: #166534; }
+    .vf-btn.incorrect { border-color: #F43F5E; background: #FFE4E6; color: #9F1239; }
+    .feedback { font-size: 0.82rem; margin-top: 0.6rem; padding: 0.5rem 0.8rem; border-radius: 8px; display: none; line-height: 1.4; }
+    .feedback.show { display: block; }
+    .feedback.ok  { background: #DCFCE7; color: #166534; }
+    .feedback.nok { background: #FFE4E6; color: #9F1239; }
+    .assoc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 0.6rem; }
+    .assoc-col-title { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #888780; margin-bottom: 4px; }
+    .assoc-item { background: #F7F6F2; border: 1.5px solid #E8E6DF; border-radius: 8px; padding: 0.45rem 0.75rem; font-size: 0.85rem; font-weight: 700; }
+    .assoc-answer { background: #ECFCCB; border-color: #BEF264; color: #3F6212; }
+    .score-box { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.5rem; text-align: center; margin-top: 1rem; display: none; }
+    .score-box.show { display: block; }
+    .score-num { font-size: 1.8rem; font-weight: 800; color: #3F6212; }
+    .score-label { font-size: 0.88rem; color: #65A30D; margin-top: 0.2rem; }
+    .cta-wrap { text-align: center; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+    .cta-wrap p { color: #3F6212; font-size: 0.95rem; margin-bottom: 1.1rem; }
+    .cta-btn { display: inline-block; background: #65A30D; color: #fff; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #3F6212; }
+    .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; }
+  </style>
+  <script>
+    let score = 0, answered = 0;
+    const total = 18;
+    function choose(qId, optEl, isCorrect, feedback) {
+      const card = optEl.closest('.q-card');
+      if (card.dataset.answered) return;
+      card.dataset.answered = '1';
+      card.querySelectorAll('.opt').forEach(o => o.style.pointerEvents = 'none');
+      optEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+      if (!isCorrect) card.querySelector('[data-correct]').classList.add('correct');
+      const fb = card.querySelector('.feedback');
+      fb.textContent = feedback; fb.classList.add('show', isCorrect ? 'ok' : 'nok');
+      if (isCorrect) score++;
+      answered++; updateProgress();
+    }
+    function selectVF(btn, isCorrect, feedback) {
+      const card = btn.closest('.q-card');
+      if (card.dataset.answered) return;
+      card.dataset.answered = '1';
+      card.querySelectorAll('.vf-btn').forEach(b => b.style.pointerEvents = 'none');
+      btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+      if (!isCorrect) card.querySelectorAll('.vf-btn').forEach(b => { if (b !== btn) b.classList.add('correct'); });
+      const fb = card.querySelector('.feedback');
+      fb.textContent = feedback; fb.classList.add('show', isCorrect ? 'ok' : 'nok');
+      if (isCorrect) score++;
+      answered++; updateProgress();
+    }
+    function updateProgress() {
+      const pct = Math.round((answered / total) * 100);
+      document.getElementById('prog-fill').style.width = pct + '%';
+      document.getElementById('prog-label').textContent = answered + ' / ' + total + ' répondus';
+      if (answered === total) {
+        const box = document.getElementById('score-box');
+        box.classList.add('show');
+        document.getElementById('score-num').textContent = score + ' / ' + total;
+        const p = Math.round((score / total) * 100);
+        document.getElementById('score-label').textContent = p >= 80 ? '🎉 Excellent !' : p >= 60 ? '👍 Bien joué !' : '📖 Relis le cours';
+      }
+    }
+  </script>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a class="nav-prev" href="cours-portfolio.html">← Cours</a>
+  <a class="nav-next" href="projet-portfolio.html">Projet →</a>
+</div>
+
+<div class="hero">
+  <h1>🌐 Exercices — Mon portfolio</h1>
+  <p>18 questions sur la création, le contenu et l'hébergement d'un portfolio web.</p>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+<div class="progress-label" id="prog-label">0 / 18 répondus</div>
+
+<div class="section-title">🔵 QCM — Une seule bonne réponse</div>
+
+<div class="q-card">
+  <div class="q-num">Question 1</div>
+  <div class="q-text">Quelle est la différence principale entre un CV et un portfolio ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(1,this,false,'Un portfolio n\'est pas forcément plus long qu\'un CV — il est différent dans sa nature.')">Un portfolio est simplement un CV plus long</div>
+    <div class="opt" data-correct onclick="choose(1,this,true,'Exact ! Un CV dit ce que tu sais faire, un portfolio le prouve avec des exemples concrets.')">Un CV déclare des compétences, un portfolio les prouve</div>
+    <div class="opt" onclick="choose(1,this,false,'Un portfolio ne contient pas que des diplômes.')">Un portfolio contient uniquement les diplômes</div>
+    <div class="opt" onclick="choose(1,this,false,'Le portfolio n\'est pas réservé aux artistes — il est très utilisé dans le développement web.')">Un portfolio est réservé aux artistes et graphistes</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 2</div>
+  <div class="q-text">Quelle solution d'hébergement est recommandée pour commencer avec un portfolio HTML/CSS ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(2,this,false,'Un serveur dédié est coûteux et complexe — trop pour démarrer.')">Un serveur dédié loué à la semaine</div>
+    <div class="opt" onclick="choose(2,this,false,'Le stockage local ne rend pas le site accessible en ligne.')">Le stockage local sur son ordinateur</div>
+    <div class="opt" data-correct onclick="choose(2,this,true,'Exact ! GitHub Pages est gratuit, intégré à Git et parfait pour héberger un portfolio statique.')">GitHub Pages — gratuit et intégré à Git</div>
+    <div class="opt" onclick="choose(2,this,false,'WordPress est un CMS qui nécessite un hébergement payant et est plus complexe à configurer.')">WordPress avec hébergement payant</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 3</div>
+  <div class="q-text">Parmi ces éléments, lequel ne doit PAS figurer dans un portfolio de développeur ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(3,this,false,'Les projets sont l\'élément central d\'un portfolio de développeur.')">La liste de tes projets avec descriptions</div>
+    <div class="opt" onclick="choose(3,this,false,'Une section contact est indispensable pour être joignable.')">Tes coordonnées et lien GitHub</div>
+    <div class="opt" onclick="choose(3,this,false,'Une brève présentation personnelle est attendue dans tout portfolio.')">Une brève présentation de qui tu es</div>
+    <div class="opt" data-correct onclick="choose(3,this,true,'Correct. Lister des compétences non maîtrisées peut mener à des situations embarrassantes en entretien.')">Des compétences que tu ne maîtrises pas encore</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 4</div>
+  <div class="q-text">Pourquoi faut-il tester son portfolio sur mobile ?</div>
+  <div class="options">
+    <div class="opt" data-correct onclick="choose(4,this,true,'Oui ! La majorité des recruteurs et visiteurs consultent les portfolios depuis leur téléphone.')">La majorité des visiteurs utilisent un téléphone</div>
+    <div class="opt" onclick="choose(4,this,false,'Les moteurs de recherche n\'indexent pas les sites en fonction de leur version mobile uniquement.')">Les moteurs de recherche n\'indexent que la version mobile</div>
+    <div class="opt" onclick="choose(4,this,false,'HTML/CSS fonctionne sur toutes les plateformes — le problème est le responsive, pas la compatibilité.')">HTML/CSS ne fonctionne pas sur ordinateur</div>
+    <div class="opt" onclick="choose(4,this,false,'GitHub Pages n\'a pas de restriction liée au responsive.')">GitHub Pages n\'héberge que les sites mobiles</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 5</div>
+  <div class="q-text">À quelle fréquence faut-il vérifier les liens dans son portfolio ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(5,this,false,'Une fois au lancement ne suffit pas — les liens peuvent devenir cassés avec le temps.')">Une seule fois au lancement</div>
+    <div class="opt" data-correct onclick="choose(5,this,true,'Oui ! Un lien cassé vers une démo est pire que pas de lien. Vérifier régulièrement est essentiel.')">Environ une fois par mois</div>
+    <div class="opt" onclick="choose(5,this,false,'Vérifier chaque heure est excessif et inutile.')">Toutes les heures</div>
+    <div class="opt" onclick="choose(5,this,false,'Une fois par an est insuffisant pour détecter rapidement les liens cassés.')">Une fois par an</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 6</div>
+  <div class="q-text">Quelle est la structure recommandée pour un premier portfolio ?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(6,this,false,'Un framework complexe comme React est inutile pour un premier portfolio statique.')">Un projet React multi-pages avec base de données</div>
+    <div class="opt" onclick="choose(6,this,false,'Un portfolio entièrement en images n\'est pas accessible et est difficile à maintenir.')">Un portfolio entièrement composé d\'images</div>
+    <div class="opt" data-correct onclick="choose(6,this,true,'Parfait. Une page unique avec des sections bien nommées est simple à créer, maintenir et naviguer.')">Une page HTML unique avec sections (About, Projets, Contact)</div>
+    <div class="opt" onclick="choose(6,this,false,'Un portfolio sans mise en forme ne laisse pas une bonne impression.')">Un fichier texte .txt sans mise en forme</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="section-title">🟡 Vrai / Faux</div>
+
+<div class="q-card">
+  <div class="q-num">Question 7</div>
+  <div class="q-text">Il faut attendre d'avoir beaucoup de projets avant de créer son portfolio.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Même avec un seul projet, un portfolio montre que tu te prends au sérieux. L\'absence de portfolio est un signal négatif.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,true,'Correct. Mieux vaut un portfolio avec peu de projets qu\'aucun portfolio du tout.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 8</div>
+  <div class="q-text">Un portfolio doit répondre aux trois questions : Qui es-tu ? Qu'as-tu fait ? Comment te contacter ?</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,true,'Vrai ! Ces trois questions résument parfaitement ce qu\'un visiteur cherche dans un portfolio.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Ces trois questions sont exactement le cadre d\'un bon portfolio.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 9</div>
+  <div class="q-text">Garder des projets de mauvaise qualité dans son portfolio montre de l'humilité.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Les projets faibles nuisent à l\'image globale. Au fil du temps, il faut retirer les moins bons.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,true,'Correct. Retirer les projets les plus faibles au fur et à mesure est recommandé — la qualité prime.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 10</div>
+  <div class="q-text">Netlify permet de déployer un site par simple glisser-déposer d'un dossier.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,true,'Vrai ! Netlify propose un déploiement par drag & drop très simple pour les sites statiques.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Netlify supporte bien le drag & drop pour les sites statiques.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 11</div>
+  <div class="q-text">Un portfolio ne sert à rien si on n'envisage pas une carrière de freelance.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. Un portfolio est utile pour les recruteurs en entreprise, les collaborations, et pour documenter sa propre progression.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,true,'Correct. Un portfolio est utile dans tous les contextes : recrutement, collaboration, freelance, et pour soi-même.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 12</div>
+  <div class="q-text">Choisir 2 couleurs et 1 ou 2 polices suffit pour un design cohérent de portfolio.</div>
+  <div class="vf-row">
+    <div class="vf-btn" onclick="selectVF(this,true,'Vrai ! La simplicité est une vertu en design. Trop de couleurs et polices crée du chaos visuel.')">Vrai</div>
+    <div class="vf-btn" onclick="selectVF(this,false,'Faux. En design, moins c\'est souvent plus. 2 couleurs et 1-2 polices créent une identité cohérente.')">Faux</div>
+  </div>
+  <div class="feedback"></div>
+</div>
+
+<div class="section-title">🟢 Associations</div>
+
+<div class="q-card">
+  <div class="q-num">Question 13</div>
+  <div class="q-text">Associe chaque section du portfolio à son contenu :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Section</div>
+      <div class="assoc-item">Présentation</div>
+      <div class="assoc-item" style="margin-top:6px">Projets</div>
+      <div class="assoc-item" style="margin-top:6px">Compétences</div>
+      <div class="assoc-item" style="margin-top:6px">Contact</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Contenu</div>
+      <div class="assoc-item assoc-answer">Email, GitHub, LinkedIn</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">HTML, CSS, JS — ce qu'on maîtrise vraiment</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Qui on est et ce qui nous motive</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Captures, descriptions, technologies, démos</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Présentation → Qui on est · Projets → Captures & démos · Compétences → Stack maîtrisée · Contact → Email & GitHub.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 14</div>
+  <div class="q-text">Associe chaque solution d'hébergement à sa caractéristique principale :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Solution</div>
+      <div class="assoc-item">GitHub Pages</div>
+      <div class="assoc-item" style="margin-top:6px">Netlify</div>
+      <div class="assoc-item" style="margin-top:6px">Vercel</div>
+      <div class="assoc-item" style="margin-top:6px">Domaine perso</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Caractéristique</div>
+      <div class="assoc-item assoc-answer">Optimisé pour les frameworks JS</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Gratuit, intégré à Git</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Professionnel et mémorable</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Drag & drop, formulaires intégrés</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ GitHub Pages → Gratuit & Git · Netlify → Drag & drop · Vercel → Frameworks JS · Domaine → Professionnel.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 15</div>
+  <div class="q-text">Associe chaque public à la raison d'avoir un portfolio :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Public</div>
+      <div class="assoc-item">Recruteur</div>
+      <div class="assoc-item" style="margin-top:6px">Collaborateur</div>
+      <div class="assoc-item" style="margin-top:6px">Client freelance</div>
+      <div class="assoc-item" style="margin-top:6px">Soi-même</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Raison</div>
+      <div class="assoc-item assoc-answer">Voir sa propre progression</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Voir des exemples avant de commander</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Voir le niveau réel sans test technique</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Proposer des projets communs</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Recruteur → Niveau réel · Collaborateur → Projets communs · Client → Exemples de travaux · Soi-même → Voir sa progression.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 16</div>
+  <div class="q-text">Associe chaque bonne pratique à son objectif :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Pratique</div>
+      <div class="assoc-item">Démo live</div>
+      <div class="assoc-item" style="margin-top:6px">Responsive</div>
+      <div class="assoc-item" style="margin-top:6px">Retirer les projets faibles</div>
+      <div class="assoc-item" style="margin-top:6px">Design sobre</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Objectif</div>
+      <div class="assoc-item assoc-answer">Lisibilité et impression générale</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Preuve concrète et immédiate</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Accessible sur mobile</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Montrer uniquement le meilleur</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Démo live → Preuve concrète · Responsive → Accessible mobile · Retirer les faibles → Montrer le meilleur · Design sobre → Bonne impression.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 17</div>
+  <div class="q-text">Associe chaque type de développeur au type de portfolio adapté :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Profil</div>
+      <div class="assoc-item">Développeur web</div>
+      <div class="assoc-item" style="margin-top:6px">Game developer</div>
+      <div class="assoc-item" style="margin-top:6px">UX Designer</div>
+      <div class="assoc-item" style="margin-top:6px">Étudiant débutant</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Contenu clé</div>
+      <div class="assoc-item assoc-answer">Maquettes Figma & parcours utilisateur</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Projets scolaires & créations perso</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">GitHub, démos live, stack technique</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Démos jouables & liens itch.io</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Dev web → GitHub & démos · Game dev → Démos jouables · UX → Maquettes Figma · Étudiant → Projets scolaires & perso.</div>
+</div>
+
+<div class="q-card">
+  <div class="q-num">Question 18</div>
+  <div class="q-text">Associe chaque erreur à sa conséquence sur le portfolio :</div>
+  <div class="assoc-grid">
+    <div>
+      <div class="assoc-col-title">Erreur</div>
+      <div class="assoc-item">Lien cassé vers une démo</div>
+      <div class="assoc-item" style="margin-top:6px">Compétences inventées</div>
+      <div class="assoc-item" style="margin-top:6px">Pas de version mobile</div>
+      <div class="assoc-item" style="margin-top:6px">Aucune coordonnée</div>
+    </div>
+    <div>
+      <div class="assoc-col-title">Conséquence</div>
+      <div class="assoc-item assoc-answer">Le visiteur ne peut pas te contacter</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Site inutilisable sur mobile</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Situation embarrassante en entretien</div>
+      <div class="assoc-item assoc-answer" style="margin-top:6px">Pire impression que pas de démo</div>
+    </div>
+  </div>
+  <div class="feedback show ok">✅ Lien cassé → Pire impression · Compétences inventées → Entretien embarrassant · Pas de mobile → Site inutilisable · Pas de coordonnées → Injoignable.</div>
+</div>
+
+<div class="score-box" id="score-box">
+  <div class="score-num" id="score-num">—</div>
+  <div class="score-label" id="score-label"></div>
+</div>
+
+<div class="cta-wrap">
+  <p>Exercices terminés ? Place au projet !</p>
+  <a class="cta-btn" href="projet-portfolio.html">Voir le projet →</a>
+</div>
+
+<div class="footer-note">Cours de développement web — Bonne création ! 🌐</div>
+</body>
+</html>

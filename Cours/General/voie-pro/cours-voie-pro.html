@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cours — Ma voie professionnelle</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; flex-wrap: wrap; }
+    .nav-prev, .nav-next { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #3F6212; text-decoration: none; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover, .nav-next:hover { background: #BEF264; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1rem; color: #5F5E5A; margin-top: 0.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-lime   { background: #ECFCCB; color: #3F6212; }
+    .b-green  { background: #DCFCE7; color: #166534; }
+    .b-blue   { background: #DBEAFE; color: #1E40AF; }
+    .b-indigo { background: #E0E7FF; color: #4338CA; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .card-section { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 0.55rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .p-lime   { background: #ECFCCB; color: #3F6212; }
+    .p-green  { background: #DCFCE7; color: #166534; }
+    .p-blue   { background: #DBEAFE; color: #1E40AF; }
+    .p-indigo { background: #E0E7FF; color: #4338CA; }
+    .p-amber  { background: #FEF3C7; color: #92400E; }
+    .p-purple { background: #F3E8FF; color: #6B21A8; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #ECFCCB; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #3F6212; line-height: 1.5; }
+    .tip-blue   { background: #DBEAFE; color: #1E40AF; }
+    .tip-amber  { background: #FEF3C7; color: #92400E; }
+    .tip-purple { background: #F3E8FF; color: #6B21A8; }
+    .tip-i { font-size: 16px; flex-shrink: 0; }
+
+    .metier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+    .metier-cell { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; border: 0.5px solid; }
+    .metier-title { font-weight: 800; margin-bottom: 4px; font-size: 0.9rem; }
+    .metier-sub { font-size: 0.8rem; opacity: 0.85; }
+
+    .formation-list { display: flex; flex-direction: column; gap: 10px; margin-top: 0.8rem; }
+    .formation-item { display: flex; gap: 12px; align-items: flex-start; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.5; background: #F7F6F2; }
+    .formation-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .formation-name { font-weight: 800; color: #2C2C2A; margin-bottom: 2px; }
+    .formation-detail { font-size: 0.82rem; color: #5F5E5A; }
+
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.8rem; border-radius: 10px; overflow: hidden; border: 0.5px solid #E8E6DF; }
+    .compare-table th { background: #ECFCCB; color: #3F6212; font-weight: 800; padding: 0.55rem 0.9rem; text-align: left; }
+    .compare-table td { padding: 0.45rem 0.9rem; border-top: 0.5px solid #E8E6DF; vertical-align: top; line-height: 1.5; }
+    .compare-table tr:nth-child(even) td { background: #FAFAF8; }
+
+    .decision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.8rem; }
+    .decision-cell { border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.5; border: 0.5px solid; }
+    .decision-if { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .decision-then { font-weight: 800; font-size: 0.92rem; margin-bottom: 4px; }
+    .decision-why { font-size: 0.82rem; }
+
+    .nav-footer { display: flex; justify-content: space-between; margin-top: 2rem; padding-top: 1rem; border-top: 0.5px solid #D3D1C7; }
+    .nav-footer a { font-size: 0.88rem; font-weight: 700; color: #3F6212; text-decoration: none; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 8px; padding: 8px 16px; transition: background 0.15s; }
+    .nav-footer a:hover { background: #BEF264; }
+
+    @media (max-width: 520px) { .metier-grid, .decision-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a class="nav-prev" href="../../sommaire.html">← Sommaire</a>
+  <a class="nav-next" href="exercices-voie-pro.html">Exercices →</a>
+</div>
+
+<div class="hero">
+  <h1>🎓 Ma voie professionnelle</h1>
+  <p>Le numérique offre des dizaines de métiers différents. Ce cours t'aide à comprendre les formations, les parcours et les réalités du marché pour que tu puisses choisir ta direction.</p>
+  <div class="badge-row">
+    <span class="badge b-lime">Métiers</span>
+    <span class="badge b-green">Formations</span>
+    <span class="badge b-blue">Marché</span>
+    <span class="badge b-indigo">Parcours</span>
+  </div>
+</div>
+
+<!-- SECTION 1 -->
+<div class="card">
+  <div class="card-section">Section 1</div>
+  <div class="stitle"><div class="pill p-lime">💼</div>Les métiers du numérique</div>
+  <p class="desc">Le développement web et le numérique ne se résument pas à "coder". Voici les principaux métiers, ce qu'ils font et ce qu'ils demandent.</p>
+  <div class="metier-grid">
+    <div class="metier-cell" style="background:#ECFCCB;border-color:#BEF264;">
+      <div class="metier-title" style="color:#3F6212;">🖥️ Développeur Frontend</div>
+      <div class="metier-sub" style="color:#4D7C0F;">HTML, CSS, JS, frameworks (React, Vue). Crée ce que l'utilisateur voit et utilise.</div>
+    </div>
+    <div class="metier-cell" style="background:#DBEAFE;border-color:#BFDBFE;">
+      <div class="metier-title" style="color:#1E40AF;">⚙️ Développeur Backend</div>
+      <div class="metier-sub" style="color:#2563EB;">Python/Django, Node.js, PHP, bases de données. Gère la logique serveur et les données.</div>
+    </div>
+    <div class="metier-cell" style="background:#E0E7FF;border-color:#C7D2FE;">
+      <div class="metier-title" style="color:#4338CA;">🔀 Développeur Fullstack</div>
+      <div class="metier-sub" style="color:#4F46E5;">Maîtrise frontend ET backend. Peut gérer un projet complet seul. Très demandé en startup.</div>
+    </div>
+    <div class="metier-cell" style="background:#FEF3C7;border-color:#FDE68A;">
+      <div class="metier-title" style="color:#92400E;">🎮 Game Developer</div>
+      <div class="metier-sub" style="color:#B45309;">C#/Unity, C++/Unreal, GDScript/Godot. Crée des jeux vidéo. Passionné ou rien.</div>
+    </div>
+    <div class="metier-cell" style="background:#F3E8FF;border-color:#E9D5FF;">
+      <div class="metier-title" style="color:#6B21A8;">🎨 UX/UI Designer</div>
+      <div class="metier-sub" style="color:#7E22CE;">Figma, Adobe XD. Conçoit l'expérience utilisateur. Pont entre design et technique.</div>
+    </div>
+    <div class="metier-cell" style="background:#DCFCE7;border-color:#BBF7D0;">
+      <div class="metier-title" style="color:#166534;">📊 Data / DevOps</div>
+      <div class="metier-sub" style="color:#15803D;">Python/SQL pour la data. Docker/CI pour DevOps. Spécialités avancées, très bien payées.</div>
+    </div>
+  </div>
+  <div class="tip tip-amber"><span class="tip-i">💡</span><div>Il n'y a pas de "meilleur" métier — il y a celui qui correspond à ce qui te motive. Le plus important : choisir une direction et s'y investir.</div></div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="card">
+  <div class="card-section">Section 2</div>
+  <div class="stitle"><div class="pill p-green">🏫</div>Les formations diplômantes</div>
+  <p class="desc">En France, plusieurs parcours mènent aux métiers du numérique. Ils ne se valent pas tous pour tous les objectifs — voici les principaux.</p>
+  <div class="formation-list">
+    <div class="formation-item">
+      <div class="formation-icon">📗</div>
+      <div>
+        <div class="formation-name">Bac Professionnel SN (Systèmes Numériques)</div>
+        <div class="formation-detail">3 ans après la 3e. Orientation technique, alternance possible. Débouché : BTS ou emploi.</div>
+      </div>
+    </div>
+    <div class="formation-item">
+      <div class="formation-icon">📘</div>
+      <div>
+        <div class="formation-name">BTS SIO (Services Informatiques aux Organisations)</div>
+        <div class="formation-detail">2 ans après le bac. Option SLAM (dev) ou SISR (réseaux). Alternance très répandue. Reconnu par les entreprises.</div>
+      </div>
+    </div>
+    <div class="formation-item">
+      <div class="formation-icon">📙</div>
+      <div>
+        <div class="formation-name">BUT Informatique (ex-IUT)</div>
+        <div class="formation-detail">3 ans après le bac. Polyvalent, bon équilibre théorie/pratique. Passerelle vers la Licence Pro ou Master.</div>
+      </div>
+    </div>
+    <div class="formation-item">
+      <div class="formation-icon">📕</div>
+      <div>
+        <div class="formation-name">Licence &amp; Master Informatique (Université)</div>
+        <div class="formation-detail">3+2 ans. Plus théorique. Donne accès à la recherche et aux postes de haut niveau (architecte, lead dev, R&amp;D).</div>
+      </div>
+    </div>
+    <div class="formation-item">
+      <div class="formation-icon">🏆</div>
+      <div>
+        <div class="formation-name">École d'ingénieur / Grande école</div>
+        <div class="formation-detail">5 ans après le bac (ou prépa). Epitech, 42, INSA, Polytechnique... Sélectif, mais ouvre les portes des grands groupes et de l'international.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="card">
+  <div class="card-section">Section 3</div>
+  <div class="stitle"><div class="pill p-blue">⚡</div>Les formations courtes &amp; bootcamps</div>
+  <p class="desc">Les formations intensives permettent de changer de voie rapidement ou de compléter un parcours classique. Elles ne remplacent pas un diplôme, mais peuvent ouvrir des portes.</p>
+  <table class="compare-table">
+    <thead>
+      <tr><th>Formation</th><th>Durée</th><th>Ce qu'elle apporte</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Bootcamp web (ex: Wild Code School, Le Wagon)</strong></td><td>3–6 mois</td><td>Formation intensive, projets concrets, réseau. Pas de diplôme reconnu par l'État.</td></tr>
+      <tr><td><strong>OpenClassrooms (OC)</strong></td><td>Variable</td><td>Parcours certifiants en ligne, à son rythme. Certifications reconnues par des entreprises partenaires.</td></tr>
+      <tr><td><strong>École 42</strong></td><td>3–5 ans</td><td>Gratuit, sans diplôme classique, pédagogie par projets. Très reconnu dans le milieu tech.</td></tr>
+      <tr><td><strong>Auto-formation (YouTube, docs, projets)</strong></td><td>Continu</td><td>Flexible, gratuit, mais demande discipline et portfolio solide pour compenser l'absence de diplôme.</td></tr>
+    </tbody>
+  </table>
+  <div class="tip tip-purple"><span class="tip-i">💡</span><div>Un bootcamp sans portfolio ne vaut rien. Un portfolio solide sans diplôme peut suffire pour certains postes. La combinaison des deux est la plus forte.</div></div>
+</div>
+
+<!-- SECTION 4 -->
+<div class="card">
+  <div class="card-section">Section 4</div>
+  <div class="stitle"><div class="pill p-amber">📈</div>Le marché du travail numérique</div>
+  <p class="desc">Le secteur du numérique est l'un des rares à proposer plus d'offres que de candidats qualifiés. Quelques réalités utiles à connaître.</p>
+  <table class="compare-table">
+    <thead>
+      <tr><th>Critère</th><th>Réalité</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Salaires</strong></td><td>Développeur junior : 28 000–38 000 €/an. Senior : 45 000–70 000 €/an. Varie selon la ville, le secteur et la stack.</td></tr>
+      <tr><td><strong>Télétravail</strong></td><td>Très répandu. Beaucoup de postes sont full remote ou hybrides. Permet de travailler depuis n'importe où.</td></tr>
+      <tr><td><strong>Recrutement</strong></td><td>LinkedIn, Welcome to the Jungle, Indeed. Les entreprises regardent GitHub et le portfolio avant le CV.</td></tr>
+      <tr><td><strong>Freelance</strong></td><td>Possible dès 2–3 ans d'expérience. Revenus variables mais souvent plus élevés qu'en salariat.</td></tr>
+      <tr><td><strong>Régions</strong></td><td>Paris concentre les offres, mais Lyon, Bordeaux, Nantes, Toulouse ont des écosystèmes tech solides.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 5 -->
+<div class="card">
+  <div class="card-section">Section 5</div>
+  <div class="stitle"><div class="pill p-indigo">🛤️</div>L'alternance — la voie la plus efficace</div>
+  <p class="desc">L'<strong>alternance</strong> (apprentissage ou contrat pro) permet de se former en école tout en travaillant en entreprise. C'est souvent la voie la plus rapide vers l'emploi.</p>
+  <div class="formation-list">
+    <div class="formation-item">
+      <div class="formation-icon">💶</div>
+      <div>
+        <div class="formation-name">Formation payée par l'entreprise</div>
+        <div class="formation-detail">L'école est financée par l'entreprise et l'État. Tu touches un salaire (entre 600 € et 1 600 €/mois selon l'âge et l'employeur).</div>
+      </div>
+    </div>
+    <div class="formation-item">
+      <div class="formation-icon">📋</div>
+      <div>
+        <div class="formation-name">Expérience professionnelle dès le départ</div>
+        <div class="formation-detail">Tu sors diplômé ET avec 1–3 ans d'expérience. C'est un avantage majeur face aux étudiants en formation classique.</div>
+      </div>
+    </div>
+    <div class="formation-item">
+      <div class="formation-icon">🤝</div>
+      <div>
+        <div class="formation-name">Réseau professionnel immédiat</div>
+        <div class="formation-detail">Les collègues de ton alternance sont ton premier réseau. Beaucoup d'alternants sont embauchés directement à la fin de leur contrat.</div>
+      </div>
+    </div>
+  </div>
+  <div class="tip tip-blue"><span class="tip-i">🎯</span><div>Si tu vises une formation post-bac, privilégie une école qui propose l'alternance. C'est presque toujours la meilleure option pour le secteur informatique.</div></div>
+</div>
+
+<!-- SECTION 6 -->
+<div class="card">
+  <div class="card-section">Section 6</div>
+  <div class="stitle"><div class="pill p-purple">🧭</div>Comment choisir sa voie ?</div>
+  <p class="desc">Il n'y a pas de réponse universelle — mais des questions utiles pour t'orienter vers ce qui te correspond vraiment.</p>
+  <div class="decision-grid">
+    <div class="decision-cell" style="background:#ECFCCB;border-color:#BEF264;">
+      <div class="decision-if" style="color:#4D7C0F;">Si tu aimes...</div>
+      <div class="decision-then" style="color:#3F6212;">Créer des interfaces visuelles</div>
+      <div class="decision-why" style="color:#4D7C0F;">→ Frontend / UX-UI. BTS SIO SLAM ou BUT Informatique avec spécialité web.</div>
+    </div>
+    <div class="decision-cell" style="background:#DBEAFE;border-color:#BFDBFE;">
+      <div class="decision-if" style="color:#2563EB;">Si tu aimes...</div>
+      <div class="decision-then" style="color:#1E40AF;">La logique, les algorithmes, les données</div>
+      <div class="decision-why" style="color:#2563EB;">→ Backend / Data. Licence ou Master informatique, ou BUT.</div>
+    </div>
+    <div class="decision-cell" style="background:#FEF3C7;border-color:#FDE68A;">
+      <div class="decision-if" style="color:#B45309;">Si tu aimes...</div>
+      <div class="decision-then" style="color:#92400E;">Les jeux vidéo par-dessus tout</div>
+      <div class="decision-why" style="color:#B45309;">→ Game dev. Écoles spécialisées (Isart, Supinfogame), ou Licence + portfolio solide.</div>
+    </div>
+    <div class="decision-cell" style="background:#F3E8FF;border-color:#E9D5FF;">
+      <div class="decision-if" style="color:#7E22CE;">Si tu veux...</div>
+      <div class="decision-then" style="color:#6B21A8;">Entreprendre, être indépendant</div>
+      <div class="decision-why" style="color:#7E22CE;">→ Fullstack + portfolio + réseaux sociaux. Bootcamp ou auto-formation + alternance.</div>
+    </div>
+  </div>
+  <div class="tip"><span class="tip-i">🏆</span><div>Quelle que soit la voie, <strong>tes projets personnels et ton portfolio</strong> comptent autant que ton diplôme. Commence à construire maintenant.</div></div>
+</div>
+
+<div class="nav-footer">
+  <a href="../../sommaire.html">← Sommaire</a>
+  <a href="exercices-voie-pro.html">Exercices →</a>
+</div>
+
+</body>
+</html>
