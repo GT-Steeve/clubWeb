@@ -40,7 +40,12 @@
     .assoc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 0.6rem; }
     .assoc-col-title { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #888780; margin-bottom: 4px; }
     .assoc-item { background: #F7F6F2; border: 1.5px solid #E8E6DF; border-radius: 8px; padding: 0.45rem 0.75rem; font-size: 0.85rem; font-weight: 700; }
-    .assoc-answer { background: #ECFCCB; border-color: #BEF264; color: #3F6212; }
+    .assoc-item[data-left]:not(.matched), .assoc-item[data-right]:not(.matched) { cursor: pointer; }
+    .assoc-item[data-left]:not(.matched):hover, .assoc-item[data-right]:not(.matched):hover { border-color: #BEF264; background: #F7FEE7; }
+    .assoc-item.selected { border-color: #65A30D !important; background: #ECFCCB !important; color: #3F6212 !important; }
+    .assoc-item.matched  { border-color: #22C55E !important; background: #DCFCE7 !important; color: #166534 !important; pointer-events: none; }
+    .assoc-item.wrong    { border-color: #F43F5E !important; background: #FFE4E6 !important; color: #9F1239 !important; }
+    .assoc-hint { font-size: 0.78rem; color: #888780; margin-top: 0.5rem; font-style: italic; }
     .score-box { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.5rem; text-align: center; margin-top: 1rem; display: none; }
     .score-box.show { display: block; }
     .score-num { font-size: 1.8rem; font-weight: 800; color: #3F6212; }
@@ -78,6 +83,43 @@
       if (isCorrect) score++;
       answered++; updateProgress();
     }
+    let assocSelected = null;
+
+    function assocPickLeft(el) {
+      const card = el.closest('.q-card');
+      if (card.dataset.answered) return;
+      if (el.classList.contains('matched')) return;
+      card.querySelectorAll('[data-left].selected').forEach(i => i.classList.remove('selected'));
+      el.classList.add('selected');
+      assocSelected = el;
+    }
+
+    function assocPickRight(el) {
+      const card = el.closest('.q-card');
+      if (card.dataset.answered) return;
+      if (!assocSelected || assocSelected.closest('.q-card') !== card) return;
+      if (el.classList.contains('matched')) return;
+      if (assocSelected.dataset.left === el.dataset.right) {
+        assocSelected.classList.remove('selected');
+        assocSelected.classList.add('matched');
+        el.classList.add('matched');
+        assocSelected = null;
+        if (Array.from(card.querySelectorAll('[data-left]')).every(i => i.classList.contains('matched'))) {
+          card.dataset.answered = '1';
+          card.querySelector('.feedback').classList.add('show', 'ok');
+          score++;
+          answered++;
+          updateProgress();
+        }
+      } else {
+        const prev = assocSelected;
+        prev.classList.add('wrong');
+        el.classList.add('wrong');
+        assocSelected = null;
+        setTimeout(() => { prev.classList.remove('selected', 'wrong'); el.classList.remove('wrong'); }, 700);
+      }
+    }
+
     function updateProgress() {
       const pct = Math.round((answered / total) * 100);
       document.getElementById('prog-fill').style.width = pct + '%';
@@ -248,111 +290,116 @@
 <div class="q-card">
   <div class="q-num">Question 13</div>
   <div class="q-text">Associe chaque section du portfolio à son contenu :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Section</div>
-      <div class="assoc-item">Présentation</div>
-      <div class="assoc-item" style="margin-top:6px">Projets</div>
-      <div class="assoc-item" style="margin-top:6px">Compétences</div>
-      <div class="assoc-item" style="margin-top:6px">Contact</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Présentation</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Projets</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">Compétences</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Contact</div>
     </div>
     <div>
       <div class="assoc-col-title">Contenu</div>
-      <div class="assoc-item assoc-answer">Email, GitHub, LinkedIn</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">HTML, CSS, JS — ce qu'on maîtrise vraiment</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Qui on est et ce qui nous motive</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Captures, descriptions, technologies, démos</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)">Email, GitHub, LinkedIn</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)" style="margin-top:6px">HTML, CSS, JS — ce qu'on maîtrise vraiment</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Qui on est et ce qui nous motive</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Captures, descriptions, technologies, démos</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Présentation → Qui on est · Projets → Captures & démos · Compétences → Stack maîtrisée · Contact → Email & GitHub.</div>
+  <div class="feedback ok">✅ Présentation → Qui on est · Projets → Captures & démos · Compétences → Stack maîtrisée · Contact → Email & GitHub.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 14</div>
   <div class="q-text">Associe chaque solution d'hébergement à sa caractéristique principale :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Solution</div>
-      <div class="assoc-item">GitHub Pages</div>
-      <div class="assoc-item" style="margin-top:6px">Netlify</div>
-      <div class="assoc-item" style="margin-top:6px">Vercel</div>
-      <div class="assoc-item" style="margin-top:6px">Domaine perso</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">GitHub Pages</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Netlify</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">Vercel</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Domaine perso</div>
     </div>
     <div>
       <div class="assoc-col-title">Caractéristique</div>
-      <div class="assoc-item assoc-answer">Optimisé pour les frameworks JS</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Gratuit, intégré à Git</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Professionnel et mémorable</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Drag & drop, formulaires intégrés</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)">Optimisé pour les frameworks JS</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Gratuit, intégré à Git</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)" style="margin-top:6px">Professionnel et mémorable</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Drag & drop, formulaires intégrés</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ GitHub Pages → Gratuit & Git · Netlify → Drag & drop · Vercel → Frameworks JS · Domaine → Professionnel.</div>
+  <div class="feedback ok">✅ GitHub Pages → Gratuit & Git · Netlify → Drag & drop · Vercel → Frameworks JS · Domaine → Professionnel.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 15</div>
   <div class="q-text">Associe chaque public à la raison d'avoir un portfolio :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Public</div>
-      <div class="assoc-item">Recruteur</div>
-      <div class="assoc-item" style="margin-top:6px">Collaborateur</div>
-      <div class="assoc-item" style="margin-top:6px">Client freelance</div>
-      <div class="assoc-item" style="margin-top:6px">Soi-même</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Recruteur</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Collaborateur</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">Client freelance</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Soi-même</div>
     </div>
     <div>
       <div class="assoc-col-title">Raison</div>
-      <div class="assoc-item assoc-answer">Voir sa propre progression</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Voir des exemples avant de commander</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Voir le niveau réel sans test technique</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Proposer des projets communs</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)">Voir sa propre progression</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)" style="margin-top:6px">Voir des exemples avant de commander</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Voir le niveau réel sans test technique</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Proposer des projets communs</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Recruteur → Niveau réel · Collaborateur → Projets communs · Client → Exemples de travaux · Soi-même → Voir sa progression.</div>
+  <div class="feedback ok">✅ Recruteur → Niveau réel · Collaborateur → Projets communs · Client → Exemples de travaux · Soi-même → Voir sa progression.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 16</div>
   <div class="q-text">Associe chaque bonne pratique à son objectif :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Pratique</div>
-      <div class="assoc-item">Démo live</div>
-      <div class="assoc-item" style="margin-top:6px">Responsive</div>
-      <div class="assoc-item" style="margin-top:6px">Retirer les projets faibles</div>
-      <div class="assoc-item" style="margin-top:6px">Design sobre</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Démo live</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Responsive</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">Retirer les projets faibles</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Design sobre</div>
     </div>
     <div>
       <div class="assoc-col-title">Objectif</div>
-      <div class="assoc-item assoc-answer">Lisibilité et impression générale</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Preuve concrète et immédiate</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Accessible sur mobile</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Montrer uniquement le meilleur</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)">Lisibilité et impression générale</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Preuve concrète et immédiate</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Accessible sur mobile</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)" style="margin-top:6px">Montrer uniquement le meilleur</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Démo live → Preuve concrète · Responsive → Accessible mobile · Retirer les faibles → Montrer le meilleur · Design sobre → Bonne impression.</div>
+  <div class="feedback ok">✅ Démo live → Preuve concrète · Responsive → Accessible mobile · Retirer les faibles → Montrer le meilleur · Design sobre → Bonne impression.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 17</div>
   <div class="q-text">Associe chaque type de développeur au type de portfolio adapté :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Profil</div>
-      <div class="assoc-item">Développeur web</div>
-      <div class="assoc-item" style="margin-top:6px">Game developer</div>
-      <div class="assoc-item" style="margin-top:6px">UX Designer</div>
-      <div class="assoc-item" style="margin-top:6px">Étudiant débutant</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Développeur web</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Game developer</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">UX Designer</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Étudiant débutant</div>
     </div>
     <div>
       <div class="assoc-col-title">Contenu clé</div>
-      <div class="assoc-item assoc-answer">Maquettes Figma & parcours utilisateur</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Projets scolaires & créations perso</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">GitHub, démos live, stack technique</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Démos jouables & liens itch.io</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)">Maquettes Figma & parcours utilisateur</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)" style="margin-top:6px">Projets scolaires & créations perso</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">GitHub, démos live, stack technique</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Démos jouables & liens itch.io</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Dev web → GitHub & démos · Game dev → Démos jouables · UX → Maquettes Figma · Étudiant → Projets scolaires & perso.</div>
+  <div class="feedback ok">✅ Dev web → GitHub & démos · Game dev → Démos jouables · UX → Maquettes Figma · Étudiant → Projets scolaires & perso.</div>
 </div>
 
 <div class="q-card">

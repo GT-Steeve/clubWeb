@@ -50,7 +50,12 @@
     .assoc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 0.6rem; }
     .assoc-col-title { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #888780; margin-bottom: 4px; }
     .assoc-item { background: #F7F6F2; border: 1.5px solid #E8E6DF; border-radius: 8px; padding: 0.45rem 0.75rem; font-size: 0.85rem; font-weight: 700; }
-    .assoc-answer { background: #ECFCCB; border-color: #BEF264; color: #3F6212; }
+    .assoc-item[data-left]:not(.matched), .assoc-item[data-right]:not(.matched) { cursor: pointer; }
+    .assoc-item[data-left]:not(.matched):hover, .assoc-item[data-right]:not(.matched):hover { border-color: #BEF264; background: #F7FEE7; }
+    .assoc-item.selected { border-color: #65A30D !important; background: #ECFCCB !important; color: #3F6212 !important; }
+    .assoc-item.matched  { border-color: #22C55E !important; background: #DCFCE7 !important; color: #166534 !important; pointer-events: none; }
+    .assoc-item.wrong    { border-color: #F43F5E !important; background: #FFE4E6 !important; color: #9F1239 !important; }
+    .assoc-hint { font-size: 0.78rem; color: #888780; margin-top: 0.5rem; font-style: italic; }
 
     .score-box { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.5rem; text-align: center; margin-top: 1rem; display: none; }
     .score-box.show { display: block; }
@@ -98,6 +103,43 @@
       if (isCorrect) score++;
       answered++;
       updateProgress();
+    }
+
+    let assocSelected = null;
+
+    function assocPickLeft(el) {
+      const card = el.closest('.q-card');
+      if (card.dataset.answered) return;
+      if (el.classList.contains('matched')) return;
+      card.querySelectorAll('[data-left].selected').forEach(i => i.classList.remove('selected'));
+      el.classList.add('selected');
+      assocSelected = el;
+    }
+
+    function assocPickRight(el) {
+      const card = el.closest('.q-card');
+      if (card.dataset.answered) return;
+      if (!assocSelected || assocSelected.closest('.q-card') !== card) return;
+      if (el.classList.contains('matched')) return;
+      if (assocSelected.dataset.left === el.dataset.right) {
+        assocSelected.classList.remove('selected');
+        assocSelected.classList.add('matched');
+        el.classList.add('matched');
+        assocSelected = null;
+        if (Array.from(card.querySelectorAll('[data-left]')).every(i => i.classList.contains('matched'))) {
+          card.dataset.answered = '1';
+          card.querySelector('.feedback').classList.add('show', 'ok');
+          score++;
+          answered++;
+          updateProgress();
+        }
+      } else {
+        const prev = assocSelected;
+        prev.classList.add('wrong');
+        el.classList.add('wrong');
+        assocSelected = null;
+        setTimeout(() => { prev.classList.remove('selected', 'wrong'); el.classList.remove('wrong'); }, 700);
+      }
     }
 
     function updateProgress() {
@@ -273,131 +315,137 @@
 <div class="q-card">
   <div class="q-num">Question 13</div>
   <div class="q-text">Associe chaque type de projet à son exemple :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Type</div>
-      <div class="assoc-item">Outil utile</div>
-      <div class="assoc-item" style="margin-top:6px">Jeu simple</div>
-      <div class="assoc-item" style="margin-top:6px">Énigme</div>
-      <div class="assoc-item" style="margin-top:6px">Site vitrine</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Outil utile</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Jeu simple</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">Énigme</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Site vitrine</div>
     </div>
     <div>
       <div class="assoc-col-title">Exemple</div>
-      <div class="assoc-item assoc-answer">Casse-briques en canvas</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Timer Pomodoro</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Page pour un club</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Quiz de logique chronométré</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)">Casse-briques en canvas</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Timer Pomodoro</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)" style="margin-top:6px">Page pour un club</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)" style="margin-top:6px">Quiz de logique chronométré</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Associations : Outil utile → Timer Pomodoro · Jeu simple → Casse-briques · Énigme → Quiz de logique · Site vitrine → Page pour un club.</div>
+  <div class="feedback ok">✅ Outil utile → Timer Pomodoro · Jeu simple → Casse-briques · Énigme → Quiz de logique · Site vitrine → Page pour un club.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 14</div>
   <div class="q-text">Associe chaque étape de planification à sa description :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Étape</div>
-      <div class="assoc-item">Capturer l'idée</div>
-      <div class="assoc-item" style="margin-top:6px">Décrire en une phrase</div>
-      <div class="assoc-item" style="margin-top:6px">Évaluer la faisabilité</div>
-      <div class="assoc-item" style="margin-top:6px">Choisir une seule idée</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Capturer l'idée</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Décrire en une phrase</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">Évaluer la faisabilité</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Choisir une seule idée</div>
     </div>
     <div>
       <div class="assoc-col-title">Action</div>
-      <div class="assoc-item assoc-answer">Se concentrer pour finir</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Vérifier ce qu'on sait faire</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Note rapide, peu importe le support</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Résumer l'idée clairement</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)">Se concentrer pour finir</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Note rapide, peu importe le support</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)" style="margin-top:6px">Vérifier ce qu'on sait faire</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Résumer l'idée clairement</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Capturer → Note rapide · Décrire → Résumer clairement · Évaluer → Vérifier ce qu'on sait faire · Choisir → Se concentrer pour finir.</div>
+  <div class="feedback ok">✅ Capturer → Note rapide · Décrire → Résumer clairement · Évaluer → Vérifier ce qu'on sait faire · Choisir → Se concentrer pour finir.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 15</div>
   <div class="q-text">Associe chaque version à son objectif :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Version</div>
-      <div class="assoc-item">v1</div>
-      <div class="assoc-item" style="margin-top:6px">v2</div>
-      <div class="assoc-item" style="margin-top:6px">v3+</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">v1</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">v2</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">v3+</div>
     </div>
     <div>
       <div class="assoc-col-title">Objectif</div>
-      <div class="assoc-item assoc-answer">Nouvelles fonctionnalités & polish</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Exister et fonctionner</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Corrections & améliorations</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)">Nouvelles fonctionnalités & polish</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Exister et fonctionner</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Corrections & améliorations</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ v1 → Exister et fonctionner · v2 → Corrections & améliorations · v3+ → Nouvelles fonctionnalités & polish.</div>
+  <div class="feedback ok">✅ v1 → Exister et fonctionner · v2 → Corrections & améliorations · v3+ → Nouvelles fonctionnalités & polish.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 16</div>
   <div class="q-text">Associe chaque habitude à son bénéfice :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Habitude</div>
-      <div class="assoc-item">Git dès le début</div>
-      <div class="assoc-item" style="margin-top:6px">Patch-notes</div>
-      <div class="assoc-item" style="margin-top:6px">30 min/jour</div>
-      <div class="assoc-item" style="margin-top:6px">Montrer à quelqu'un</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Git dès le début</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Patch-notes</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">30 min/jour</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Montrer à quelqu'un</div>
     </div>
     <div>
       <div class="assoc-col-title">Bénéfice</div>
-      <div class="assoc-item assoc-answer">Découvrir les angles morts</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Régularité et progression</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Revenir en arrière si besoin</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Tracer sa progression</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)">Découvrir les angles morts</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)" style="margin-top:6px">Régularité et progression</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Revenir en arrière si besoin</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Tracer sa progression</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Git → Revenir en arrière · Patch-notes → Tracer sa progression · 30 min/jour → Régularité · Montrer → Découvrir les angles morts.</div>
+  <div class="feedback ok">✅ Git → Revenir en arrière · Patch-notes → Tracer sa progression · 30 min/jour → Régularité · Montrer → Découvrir les angles morts.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 17</div>
   <div class="q-text">Associe chaque bénéfice de créer à sa description :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Bénéfice</div>
-      <div class="assoc-item">Consolider</div>
-      <div class="assoc-item" style="margin-top:6px">Se différencier</div>
-      <div class="assoc-item" style="margin-top:6px">Résoudre</div>
-      <div class="assoc-item" style="margin-top:6px">S'amuser</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Consolider</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Se différencier</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">Résoudre</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">S'amuser</div>
     </div>
     <div>
       <div class="assoc-col-title">Description</div>
-      <div class="assoc-item assoc-answer">Jeu ou énigme pour des amis</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Comprendre vraiment en créant</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Portfolio visible par un recruteur</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Outil qui manquait dans ta vie</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)">Jeu ou énigme pour des amis</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Comprendre vraiment en créant</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)" style="margin-top:6px">Outil qui manquait dans ta vie</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Portfolio visible par un recruteur</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Consolider → Comprendre en créant · Se différencier → Portfolio · Résoudre → Outil qui manquait · S'amuser → Jeu pour des amis.</div>
+  <div class="feedback ok">✅ Consolider → Comprendre en créant · Se différencier → Portfolio · Résoudre → Outil qui manquait · S'amuser → Jeu pour des amis.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 18</div>
   <div class="q-text">Associe chaque erreur à sa conséquence :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Erreur</div>
-      <div class="assoc-item">Viser trop grand dès le départ</div>
-      <div class="assoc-item" style="margin-top:6px">Ne jamais montrer son travail</div>
-      <div class="assoc-item" style="margin-top:6px">Coder sans Git</div>
-      <div class="assoc-item" style="margin-top:6px">Plusieurs projets en même temps</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Viser trop grand dès le départ</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Ne jamais montrer son travail</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">Coder sans Git</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Plusieurs projets en même temps</div>
     </div>
     <div>
       <div class="assoc-col-title">Conséquence</div>
-      <div class="assoc-item assoc-answer">Aucun projet terminé</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Impossible de revenir en arrière</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Projet jamais fini</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Aucun retour pour s'améliorer</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)">Aucun projet terminé</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)" style="margin-top:6px">Impossible de revenir en arrière</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Projet jamais fini</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Aucun retour pour s'améliorer</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Viser trop grand → Projet jamais fini · Ne jamais montrer → Aucun retour · Sans Git → Impossible de revenir · Plusieurs projets → Aucun terminé.</div>
+  <div class="feedback ok">✅ Viser trop grand → Projet jamais fini · Ne jamais montrer → Aucun retour · Sans Git → Impossible de revenir · Plusieurs projets → Aucun terminé.</div>
 </div>
 
 <div class="score-box" id="score-box">
