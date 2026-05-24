@@ -51,6 +51,12 @@
     .assoc-col-title { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #888780; margin-bottom: 4px; }
     .assoc-item { background: #F7F6F2; border: 1.5px solid #E8E6DF; border-radius: 8px; padding: 0.45rem 0.75rem; font-size: 0.85rem; font-weight: 700; }
     .assoc-answer { background: #ECFCCB; border-color: #BEF264; color: #3F6212; }
+    .assoc-item[data-left]:not(.matched), .assoc-item[data-right]:not(.matched) { cursor: pointer; }
+    .assoc-item[data-left]:not(.matched):hover, .assoc-item[data-right]:not(.matched):hover { border-color: #BEF264; background: #F7FEE7; }
+    .assoc-item.selected { border-color: #65A30D !important; background: #ECFCCB !important; color: #3F6212 !important; }
+    .assoc-item.matched  { border-color: #22C55E !important; background: #DCFCE7 !important; color: #166534 !important; pointer-events: none; }
+    .assoc-item.wrong    { border-color: #F43F5E !important; background: #FFE4E6 !important; color: #9F1239 !important; }
+    .assoc-hint { font-size: 0.78rem; color: #888780; margin-top: 0.5rem; font-style: italic; }
 
     .score-box { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 14px; padding: 1.5rem; text-align: center; margin-top: 1rem; display: none; }
     .score-box.show { display: block; }
@@ -98,6 +104,43 @@
       if (isCorrect) score++;
       answered++;
       updateProgress();
+    }
+
+    let assocSelected = null;
+
+    function assocPickLeft(el) {
+      const card = el.closest('.q-card');
+      if (card.dataset.answered) return;
+      if (el.classList.contains('matched')) return;
+      card.querySelectorAll('[data-left].selected').forEach(i => i.classList.remove('selected'));
+      el.classList.add('selected');
+      assocSelected = el;
+    }
+
+    function assocPickRight(el) {
+      const card = el.closest('.q-card');
+      if (card.dataset.answered) return;
+      if (!assocSelected || assocSelected.closest('.q-card') !== card) return;
+      if (el.classList.contains('matched')) return;
+      if (assocSelected.dataset.left === el.dataset.right) {
+        assocSelected.classList.remove('selected');
+        assocSelected.classList.add('matched');
+        el.classList.add('matched');
+        assocSelected = null;
+        if (Array.from(card.querySelectorAll('[data-left]')).every(i => i.classList.contains('matched'))) {
+          card.dataset.answered = '1';
+          card.querySelector('.feedback').classList.add('show', 'ok');
+          score++;
+          answered++;
+          updateProgress();
+        }
+      } else {
+        const prev = assocSelected;
+        prev.classList.add('wrong');
+        el.classList.add('wrong');
+        assocSelected = null;
+        setTimeout(() => { prev.classList.remove('selected', 'wrong'); el.classList.remove('wrong'); }, 700);
+      }
     }
 
     function updateProgress() {
@@ -273,133 +316,139 @@
 <div class="q-card">
   <div class="q-num">Question 13</div>
   <div class="q-text">Associe chaque métier à sa description :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Métier</div>
-      <div class="assoc-item">Frontend</div>
-      <div class="assoc-item" style="margin-top:6px">Backend</div>
-      <div class="assoc-item" style="margin-top:6px">DevOps</div>
-      <div class="assoc-item" style="margin-top:6px">Game dev</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Frontend</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Backend</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">DevOps</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Game dev</div>
     </div>
     <div>
       <div class="assoc-col-title">Description</div>
-      <div class="assoc-item assoc-answer">Déploiement, serveurs, CI/CD</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Jeux, moteurs, gameplay</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Interface, HTML/CSS/JS</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">API, base de données, logique</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)">Déploiement, serveurs, CI/CD</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)" style="margin-top:6px">Jeux, moteurs, gameplay</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Interface, HTML/CSS/JS</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">API, base de données, logique</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Frontend → Interface HTML/CSS/JS · Backend → API & base de données · DevOps → Déploiement & serveurs · Game dev → Jeux & moteurs.</div>
+  <div class="feedback ok">✅ Frontend → Interface HTML/CSS/JS · Backend → API & base de données · DevOps → Déploiement & serveurs · Game dev → Jeux & moteurs.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 14</div>
   <div class="q-text">Associe chaque formation à sa durée :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Formation</div>
-      <div class="assoc-item">Bac Pro</div>
-      <div class="assoc-item" style="margin-top:6px">BTS SIO</div>
-      <div class="assoc-item" style="margin-top:6px">BUT</div>
-      <div class="assoc-item" style="margin-top:6px">Master</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Bac Pro</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">BTS SIO</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">BUT</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Master</div>
     </div>
     <div>
       <div class="assoc-col-title">Durée</div>
-      <div class="assoc-item assoc-answer">2 ans post-bac</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Bac+5 (2 ans après Licence)</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">3 ans au lycée</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">3 ans post-bac</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)">2 ans post-bac</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)" style="margin-top:6px">Bac+5 (2 ans après Licence)</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">3 ans au lycée</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)" style="margin-top:6px">3 ans post-bac</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Bac Pro → 3 ans au lycée · BTS SIO → 2 ans post-bac · BUT → 3 ans post-bac · Master → Bac+5 (2 ans après Licence).</div>
+  <div class="feedback ok">✅ Bac Pro → 3 ans au lycée · BTS SIO → 2 ans post-bac · BUT → 3 ans post-bac · Master → Bac+5 (2 ans après Licence).</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 15</div>
   <div class="q-text">Associe chaque avantage à son type de contrat :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Avantage</div>
-      <div class="assoc-item">Liberté totale</div>
-      <div class="assoc-item" style="margin-top:6px">Études + salaire</div>
-      <div class="assoc-item" style="margin-top:6px">Stabilité long terme</div>
-      <div class="assoc-item" style="margin-top:6px">Mission courte définie</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Liberté totale</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Études + salaire</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">Stabilité long terme</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Mission courte définie</div>
     </div>
     <div>
       <div class="assoc-col-title">Contrat</div>
-      <div class="assoc-item assoc-answer">Alternance</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">CDD</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Freelance</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">CDI</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)">Alternance</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)" style="margin-top:6px">CDD</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Freelance</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)" style="margin-top:6px">CDI</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Liberté totale → Freelance · Études + salaire → Alternance · Stabilité → CDI · Mission courte → CDD.</div>
+  <div class="feedback ok">✅ Liberté totale → Freelance · Études + salaire → Alternance · Stabilité → CDI · Mission courte → CDD.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 16</div>
   <div class="q-text">Associe chaque situation personnelle à la voie recommandée :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Situation</div>
-      <div class="assoc-item">Reconversion rapide</div>
-      <div class="assoc-item" style="margin-top:6px">Aime la théorie & recherche</div>
-      <div class="assoc-item" style="margin-top:6px">Veut travailler vite + diplôme</div>
-      <div class="assoc-item" style="margin-top:6px">Veut créer des jeux vidéo</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Reconversion rapide</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Aime la théorie & recherche</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">Veut travailler vite + diplôme</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Veut créer des jeux vidéo</div>
     </div>
     <div>
       <div class="assoc-col-title">Voie conseillée</div>
-      <div class="assoc-item assoc-answer">École spécialisée jeux / BUT MMI</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Bootcamp intensif</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Master / Grande école</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">BTS ou BUT en alternance</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)">École spécialisée jeux / BUT MMI</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Bootcamp intensif</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)" style="margin-top:6px">BTS ou BUT en alternance</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Master / Grande école</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Reconversion → Bootcamp · Théorie & recherche → Master/Grande école · Diplôme + travail → BTS/BUT alternance · Jeux vidéo → École spécialisée/BUT MMI.</div>
+  <div class="feedback ok">✅ Reconversion → Bootcamp · Théorie & recherche → Master/Grande école · Diplôme + travail → BTS/BUT alternance · Jeux vidéo → École spécialisée/BUT MMI.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 17</div>
   <div class="q-text">Associe chaque compétence à son domaine métier :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Compétence</div>
-      <div class="assoc-item">SQL & Python</div>
-      <div class="assoc-item" style="margin-top:6px">Unity & C#</div>
-      <div class="assoc-item" style="margin-top:6px">Figma & wireframes</div>
-      <div class="assoc-item" style="margin-top:6px">Django & API REST</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">SQL & Python</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Unity & C#</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">Figma & wireframes</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Django & API REST</div>
     </div>
     <div>
       <div class="assoc-col-title">Domaine</div>
-      <div class="assoc-item assoc-answer">UX / UI design</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Développement backend</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Data / analyse</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Game development</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)">UX / UI design</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)" style="margin-top:6px">Développement backend</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">Data / analyse</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Game development</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ SQL & Python → Data/analyse · Unity & C# → Game development · Figma & wireframes → UX/UI design · Django & API → Backend.</div>
+  <div class="feedback ok">✅ SQL & Python → Data/analyse · Unity & C# → Game development · Figma & wireframes → UX/UI design · Django & API → Backend.</div>
 </div>
 
 <div class="q-card">
   <div class="q-num">Question 18</div>
   <div class="q-text">Associe chaque idée reçue à la réalité :</div>
+  <p class="assoc-hint">Clique sur un élément à gauche, puis sur sa correspondance à droite.</p>
   <div class="assoc-grid">
     <div>
       <div class="assoc-col-title">Idée reçue</div>
-      <div class="assoc-item">Il faut être mathématicien</div>
-      <div class="assoc-item" style="margin-top:6px">Il faut un Bac+5 pour coder</div>
-      <div class="assoc-item" style="margin-top:6px">Les devs ne communiquent pas</div>
-      <div class="assoc-item" style="margin-top:6px">Le code, c'est solitaire</div>
+      <div class="assoc-item" data-left="a" onclick="assocPickLeft(this)">Il faut être mathématicien</div>
+      <div class="assoc-item" data-left="b" onclick="assocPickLeft(this)" style="margin-top:6px">Il faut un Bac+5 pour coder</div>
+      <div class="assoc-item" data-left="c" onclick="assocPickLeft(this)" style="margin-top:6px">Les devs ne communiquent pas</div>
+      <div class="assoc-item" data-left="d" onclick="assocPickLeft(this)" style="margin-top:6px">Le code, c'est solitaire</div>
     </div>
     <div>
       <div class="assoc-col-title">Réalité</div>
-      <div class="assoc-item assoc-answer">Le travail en équipe (code review, standups) est central</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">La logique et la persévérance suffisent</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Les devs rédigent, présentent et collaborent constamment</div>
-      <div class="assoc-item assoc-answer" style="margin-top:6px">Un BTS ou bootcamp suffit pour décrocher un premier poste</div>
+      <div class="assoc-item" data-right="d" onclick="assocPickRight(this)">Le travail en équipe (code review, standups) est central</div>
+      <div class="assoc-item" data-right="b" onclick="assocPickRight(this)" style="margin-top:6px">Un BTS ou bootcamp suffit pour décrocher un premier poste</div>
+      <div class="assoc-item" data-right="a" onclick="assocPickRight(this)" style="margin-top:6px">La logique et la persévérance suffisent</div>
+      <div class="assoc-item" data-right="c" onclick="assocPickRight(this)" style="margin-top:6px">Les devs rédigent, présentent et collaborent constamment</div>
     </div>
   </div>
-  <div class="feedback show ok">✅ Maths → Logique suffit · Bac+5 obligatoire → BTS/bootcamp suffisent · Pas de communication → Les devs communiquent beaucoup · Solitaire → Le travail en équipe est central.</div>
+  <div class="feedback ok">✅ Maths → Logique suffit · Bac+5 obligatoire → BTS/bootcamp suffisent · Pas de communication → Les devs communiquent beaucoup · Solitaire → Le travail en équipe est central.</div>
 </div>
 
 <div class="score-box" id="score-box">

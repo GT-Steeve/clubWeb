@@ -58,7 +58,8 @@
     .red     { background: #FECACA; color: #7F1D1D; }
     .pink    { background: #FBCFE8; color: #831843; }
     
-    .nav-prev {
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; flex-wrap: wrap; }
+    .nav-prev, .nav-next {
       display: inline-flex; align-items: center; gap: 6px;
       font-size: 0.88rem; font-weight: 700; color: #185FA5;
       text-decoration: none; margin-bottom: 1.5rem;
@@ -66,7 +67,7 @@
       border-radius: 8px; padding: 6px 14px;
       transition: background 0.15s;
     }
-    .nav-prev:hover { background: #B5D4F4; }
+    .nav-prev:hover, .nav-next:hover { background: #B5D4F4; }
 
     .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
 
@@ -256,7 +257,10 @@
   </style>
 </head>
 <body>
-  <a class="nav-prev" href="../../sommaire.html#step2">&larr; Retour au sommaire</a>
+  <div class="nav-bar">
+    <a class="nav-prev" href="../../sommaire.html#step2">← Sommaire</a>
+    <a class="nav-next" href="exercices-javascript-web.html">Exercices →</a>
+  </div>
 
   <!-- HERO -->
   <div class="hero">

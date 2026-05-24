@@ -66,7 +66,8 @@
 
     .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
     
-    .nav-prev {
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; flex-wrap: wrap; }
+    .nav-prev, .nav-next {
       display: inline-flex; align-items: center; gap: 6px;
       font-size: 0.88rem; font-weight: 700; color: #185FA5;
       text-decoration: none; margin-bottom: 1.5rem;
@@ -74,7 +75,7 @@
       border-radius: 8px; padding: 6px 14px;
       transition: background 0.15s;
     }
-    .nav-prev:hover { background: #B5D4F4; }
+    .nav-prev:hover, .nav-next:hover { background: #B5D4F4; }
 
     .code-block {
       background: #1D1D1B; border-radius: 10px;
@@ -208,7 +209,10 @@
 </head>
 <body>
 
-  <a class="nav-prev" href="../../sommaire.html">&larr; Retour au sommaire</a>
+  <div class="nav-bar">
+    <a class="nav-prev" href="../../sommaire.html#step5">← Sommaire</a>
+    <a class="nav-next" href="exercices-git.html">Exercices →</a>
+  </div>
 
   <!-- Hero -->
   <div class="hero">

@@ -26,7 +26,8 @@
             margin: 0 auto;
         }
 
-        .nav-prev {
+        .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; flex-wrap: wrap; }
+        .nav-prev, .nav-next {
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -42,7 +43,7 @@
             transition: background 0.15s;
         }
 
-        .nav-prev:hover {
+        .nav-prev:hover, .nav-next:hover {
             background: #B5D4F4;
         }
 
@@ -963,7 +964,10 @@
 
 <body>
 
-    <a class="nav-prev" href="cours-auto-entrainement.html">← Retour au cours</a>
+    <div class="nav-bar">
+      <a class="nav-prev" href="cours-auto-entrainement.html">← Cours</a>
+      <a class="nav-next" href="projet-auto-entrainement.html">Projet →</a>
+    </div>
 
     <!-- HERO -->
     <div class="hero">

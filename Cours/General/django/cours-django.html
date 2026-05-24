@@ -10,8 +10,9 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Nunito', sans-serif; background: #f5f4f0; color: #2C2C2A; padding: 1.5rem; max-width: 720px; margin: 0 auto; }
-        .nav-prev { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
-        .nav-prev:hover { background: #B5D4F4; }
+        .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; flex-wrap: wrap; }
+        .nav-prev, .nav-next { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+        .nav-prev:hover, .nav-next:hover { background: #B5D4F4; }
         .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
         .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
         .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
@@ -64,7 +65,10 @@
     </style>
 </head>
 <body>
-<a class="nav-prev" href="../../sommaire.html#step2Dynamique">← Retour au sommaire</a>
+<div class="nav-bar">
+  <a class="nav-prev" href="../../sommaire.html#step2Dynamique">← Sommaire</a>
+  <a class="nav-next" href="exercices-django.html">Exercices →</a>
+</div>
 
 <div class="hero">
     <h1>🐍 Django</h1>

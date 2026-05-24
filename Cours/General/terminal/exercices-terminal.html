@@ -570,10 +570,19 @@
         font-size: 1.6rem;
       }
     }
+  .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; flex-wrap: wrap; }
+  .nav-prev, .nav-next { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #3F6212; text-decoration: none; background: #ECFCCB; border: 0.5px solid #BEF264; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+  .nav-prev:hover, .nav-next:hover { background: #BEF264; }
   </style>
 </head>
 
 <body>
+
+<div class="nav-bar">
+  <a class="nav-prev" href="cours-terminal.html">← Cours</a>
+  <a class="nav-next" href="projet-terminal.html">Projet →</a>
+</div>
+
 
   <a class="back-link" href="cours-terminal.html">← Retour au cours Terminal CMD</a>
 

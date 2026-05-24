@@ -26,7 +26,8 @@
             margin: 0 auto;
         }
 
-        .nav-prev {
+        .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; flex-wrap: wrap; }
+        .nav-prev, .nav-next {
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -42,7 +43,7 @@
             transition: background 0.15s;
         }
 
-        .nav-prev:hover {
+        .nav-prev:hover, .nav-next:hover {
             background: #B5D4F4;
         }
 
@@ -764,7 +765,10 @@
 </head>
 
 <body>
-    <a class="nav-prev" href="../../sommaire.html">&larr; Retour au sommaire</a>
+    <div class="nav-bar">
+      <a class="nav-prev" href="../../sommaire.html#step1">← Sommaire</a>
+      <a class="nav-next" href="exercices-mind-set.html">Exercices →</a>
+    </div>
 
     <!-- HERO -->
     <div class="hero">
