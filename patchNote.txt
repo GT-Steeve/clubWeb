@@ -55,6 +55,7 @@ v1.22.1 = correctif exercice association du chapître profil
 v1.22.2 = amélioration navigation de l'ensemble des cours
 v1.22.0 = ajout section culture jeux vidéo
 v1.23.0 = ajout page d'acceuil photos intervenant extérieur
+v1.23.1 = ajout onglet par intervenant
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/

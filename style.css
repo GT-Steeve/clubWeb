@@ -614,6 +614,39 @@ section {
     margin: 0 auto;
 }
 
+.carousel-tabs {
+    display: flex;
+}
+
+.carousel-tab {
+    background: #1a1a1a;
+    color: #666;
+    border: 2px solid #333;
+    border-bottom: none;
+    padding: 0.45rem 1.1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.carousel-tab + .carousel-tab {
+    border-left: none;
+}
+
+.carousel-tab.active {
+    background: var(--jaune);
+    color: var(--noir);
+    border-color: var(--jaune);
+}
+
+.carousel-tab:hover:not(.active) {
+    background: #2a2a2a;
+    color: #ccc;
+}
+
 .carousel-viewport {
     border: 2px solid #333;
     overflow: hidden;
@@ -646,6 +679,45 @@ section {
     height: 100%;
     object-fit: cover;
     display: block;
+}
+
+.slide-coming-soon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    border: 2px dashed #333;
+}
+
+.coming-soon-msg {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.coming-soon-icon {
+    font-size: 2.5rem;
+    display: block;
+}
+
+.coming-soon-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--blanc);
+    letter-spacing: -0.5px;
+}
+
+.coming-soon-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--jaune);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1.5px solid var(--jaune);
+    padding: 0.3rem 0.8rem;
 }
 
 .slide-zoom-btn {

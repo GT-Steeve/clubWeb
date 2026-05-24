@@ -316,25 +316,31 @@
 
   <!-- INTERVENANT -->
   <section id="intervenant" class="intervenant-section">
-    <div class="section-tag">// 04 — équipe</div>
+    <div class="section-tag">// 04 — rencontre</div>
     <h2 class="section-title">Intervenants</h2>
-    <p class="section-sub">Découvrez les personnes qui animent et encadrent le club chaque semaine.</p>
+    <p class="section-sub">Découvrez les experts qui partage leur expérience professionnel et transmettent aux élèves une vision concrète des métiers dans le secteur du numérique.</p>
 
     <div class="carousel-wrapper">
+      <div class="carousel-tabs" id="carouselTabs">
+        <button class="carousel-tab active" data-group="cyber">Cyber-sécurité</button>
+        <button class="carousel-tab" data-group="IA">IA</button>
+        <!-- Ajouter ici les prochains onglets : <button class="carousel-tab" data-group="nom-groupe">Nom domaine</button> -->
+      </div>
       <div class="carousel-viewport">
         <div class="carousel-track" id="carouselTrack">
-          <div class="carousel-slide">
+          <!-- CYBER-SECURITE -->
+          <div class="carousel-slide" data-group="cyber">
             <div class="slide-img-wrap">
-              <img src="https://drive.google.com/thumbnail?id=1OddlcxAeRXpRC5v5G5YnoGSgZGR32plc&sz=w1000" alt="Intervenant 4">
+              <img src="https://drive.google.com/thumbnail?id=1OddlcxAeRXpRC5v5G5YnoGSgZGR32plc&sz=w1000" alt="Intervenant 1">
               <button class="slide-zoom-btn" onclick="openLightbox(this)" aria-label="Agrandir">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
               </button>
             </div>
             <div class="slide-caption">
-              <p>Décrivez ici l'intervenant ou le contexte de cette photo.</p>
+              <p>M.CHAMAYOU, chef de travaux spécialité cyber-sécurité du Lycée professionnel La Tournelle</p>
             </div>
           </div>
-          <div class="carousel-slide">
+          <div class="carousel-slide" data-group="cyber">
             <div class="slide-img-wrap">
               <img src="https://drive.google.com/thumbnail?id=1Vl_TThbvCkPy3C_wPR_ZTc6TNL4VXZrd&sz=w1000" alt="Intervenant 2">
               <button class="slide-zoom-btn" onclick="openLightbox(this)" aria-label="Agrandir">
@@ -342,10 +348,10 @@
               </button>
             </div>
             <div class="slide-caption">
-              <p>Décrivez ici l'intervenant ou le contexte de cette photo.</p>
+              <p>M.CHAMAYOU, chef de travaux spécialité cyber-sécurité du Lycée professionnel La Tournelle</p>
             </div>
           </div>
-          <div class="carousel-slide">
+          <div class="carousel-slide" data-group="cyber">
             <div class="slide-img-wrap">
               <img src="https://drive.google.com/thumbnail?id=171TOGWSJWVafEqUO3ls_Hkdq3I7n9uTF&sz=w1000" alt="Intervenant 3">
               <button class="slide-zoom-btn" onclick="openLightbox(this)" aria-label="Agrandir">
@@ -353,18 +359,32 @@
               </button>
             </div>
             <div class="slide-caption">
-              <p>Décrivez ici l'intervenant ou le contexte de cette photo.</p>
+              <p>M.CHAMAYOU, chef de travaux spécialité cyber-sécurité du Lycée professionnel La Tournelle</p>
             </div>
           </div>
-          <div class="carousel-slide">
+          <div class="carousel-slide" data-group="cyber">
             <div class="slide-img-wrap">
-              <img src="https://drive.google.com/thumbnail?id=1Q4Etf_RLzOlqTWcRCNnlrufS3z_yiezR&sz=w1200" alt="Image">
+              <img src="https://drive.google.com/thumbnail?id=1Q4Etf_RLzOlqTWcRCNnlrufS3z_yiezR&sz=w1200" alt="Intervenant 4">
               <button class="slide-zoom-btn" onclick="openLightbox(this)" aria-label="Agrandir">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
               </button>
             </div>
             <div class="slide-caption">
-              <p>Décrivez ici l'intervenant ou le contexte de cette photo.</p>
+              <p>M.CHAMAYOU, chef de travaux spécialité cyber-sécurité du Lycée professionnel La Tournelle</p>
+            </div>
+          </div>
+
+          <!-- IA  -->
+          <div class="carousel-slide" data-group="IA">
+            <div class="slide-img-wrap slide-coming-soon">
+              <div class="coming-soon-msg">
+                <span class="coming-soon-icon">⏳</span>
+                <p class="coming-soon-title">Prochain intervenant</p>
+                <p class="coming-soon-date">Courant juin 2026</p>
+              </div>
+            </div>
+            <div class="slide-caption">
+              <p></p>
             </div>
           </div>
         </div>
@@ -385,7 +405,7 @@
     <div class="cta-box">
       <p>
         <strong>1 séance par semaine.</strong><br>
-        Aucun prérequis. Juste de la curiosité et l'envie d'apprendre quelque chose de vrai.
+        Prérequis : curiosité et envie d'apprendre.
       </p>
       <a href="intro.html" class="btn-jaune-inv">Voir la méthodologie →</a>
       <p style="font-size:0.75rem; color:#666;">Places limitées. Engagement exigé.</p>
@@ -401,25 +421,54 @@
   <script>
     (function () {
       var current = 0;
+      var activeGroup = 'cyber';
       var track = document.getElementById('carouselTrack');
-      var slides = track ? track.querySelectorAll('.carousel-slide') : [];
+      var allSlides = track ? Array.from(track.querySelectorAll('.carousel-slide')) : [];
       var dotsContainer = document.getElementById('carouselDots');
 
-      slides.forEach(function (_, i) {
-        var dot = document.createElement('button');
-        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-        dot.setAttribute('aria-label', 'Diapo ' + (i + 1));
-        dot.addEventListener('click', function () { goTo(i); });
-        dotsContainer.appendChild(dot);
-      });
+      function visibleSlides() {
+        return allSlides.filter(function (s) { return s.dataset.group === activeGroup; });
+      }
+
+      function buildDots() {
+        dotsContainer.innerHTML = '';
+        visibleSlides().forEach(function (_, i) {
+          var dot = document.createElement('button');
+          dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+          dot.setAttribute('aria-label', 'Diapo ' + (i + 1));
+          dot.addEventListener('click', function () { goTo(i); });
+          dotsContainer.appendChild(dot);
+        });
+      }
 
       function goTo(n) {
+        var slides = visibleSlides();
         current = (n + slides.length) % slides.length;
         track.style.transform = 'translateX(-' + (current * 100) + '%)';
-        document.querySelectorAll('.carousel-dot').forEach(function (d, i) {
+        dotsContainer.querySelectorAll('.carousel-dot').forEach(function (d, i) {
           d.classList.toggle('active', i === current);
         });
       }
+
+      function switchGroup(group) {
+        activeGroup = group;
+        current = 0;
+        allSlides.forEach(function (s) {
+          s.style.display = s.dataset.group === group ? '' : 'none';
+        });
+        track.style.transform = 'translateX(0)';
+        buildDots();
+      }
+
+      document.querySelectorAll('.carousel-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          document.querySelectorAll('.carousel-tab').forEach(function (t) { t.classList.remove('active'); });
+          tab.classList.add('active');
+          switchGroup(tab.dataset.group);
+        });
+      });
+
+      switchGroup('cyber');
 
       window.carouselMove = function (dir) { goTo(current + dir); };
     })();
