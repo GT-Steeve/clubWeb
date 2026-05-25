@@ -15,9 +15,9 @@
 <body>
 
   <!-- NAV -->
-  <nav>
+  <nav id="mainNav">
     <div class="nav-logo">&lt;<span>Albert_Camus</span>.web&gt;</div>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinks">
       <li><a href="#themes">Thèmes</a></li>
       <li><a href="#regles">Règles</a></li>
       <li><a href="#progression">Progression</a></li>
@@ -25,6 +25,9 @@
       <li><a href="intro.html">Pédagogie</a></li>
       <li><a href="Cours/sommaire.html" target="_blank" rel="noopener noreferrer">Cours</a></li>
     </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- HERO -->
@@ -487,6 +490,22 @@
     };
 
     function onLbKey(e) { if (e.key === 'Escape') window.closeLightbox(); }
+
+    (function () {
+      var nav = document.getElementById('mainNav');
+      var toggle = document.getElementById('navToggle');
+      if (!toggle) return;
+      toggle.addEventListener('click', function () {
+        var open = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open);
+      });
+      document.querySelectorAll('.nav-links a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+    })();
   </script>
 
   <!-- LIGHTBOX -->
