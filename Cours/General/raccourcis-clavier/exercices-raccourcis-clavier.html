@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercices — Raccourcis clavier</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%8C%A8%EF%B8%8F%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: #F5F4EF; color: #2C2C2A; padding: 2rem 1rem 4rem; max-width: 720px; margin: 0 auto; line-height: 1.6; }
+
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; flex-wrap: wrap; }
+    .nav-prev, .nav-next { display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #185FA5; text-decoration: none; margin-bottom: 1.5rem; background: #E6F1FB; border: 0.5px solid #85B7EB; border-radius: 8px; padding: 6px 14px; transition: background 0.15s; }
+    .nav-prev:hover, .nav-next:hover { background: #B5D4F4; }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-amber { background: #FAEEDA; color: #633806; }
+    .b-blue  { background: #E6F1FB; color: #0C447C; }
+    .b-teal  { background: #E1F5EE; color: #085041; }
+    .b-purple{ background: #EEEDFE; color: #3C3489; }
+
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+    .p-gray   { background: #D3D1C7; color: #444441; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber { background: #FAEEDA; color: #633806; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+    .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; white-space: nowrap; }
+    .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+    /* KEY */
+    .key { display: inline-block; background: #2C2C2A; color: #FAC775; border-radius: 5px; padding: 2px 9px; font-family: 'Fira Code', monospace; font-size: 0.82em; font-weight: 700; border-bottom: 2px solid #111; line-height: 1.4; white-space: nowrap; }
+
+    /* FLASHCARDS */
+    .flashcard-container { perspective: 1000px; margin-bottom: 1.2rem; }
+    .flashcard { width: 100%; height: 190px; position: relative; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(.4,0,.2,1); cursor: pointer; }
+    .flashcard.flipped { transform: rotateY(180deg); }
+    .fc-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 16px; border: 0.5px solid #D3D1C7; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; text-align: center; }
+    .fc-front { background: #ffffff; }
+    .fc-back { background: #2C2C2A; color: #f5f4f0; transform: rotateY(180deg); }
+    .fc-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; margin-bottom: 0.8rem; }
+    .fc-back .fc-label { color: #888780; }
+    .fc-question { font-size: 1rem; font-weight: 700; line-height: 1.5; color: #2C2C2A; }
+    .fc-answer { font-size: 0.93rem; font-weight: 600; line-height: 1.6; color: #f5f4f0; }
+    .fc-hint { font-size: 0.78rem; color: #B4B2A9; margin-top: 0.5rem; }
+    .fc-back .fc-hint { color: #FAC775; }
+    .fc-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; gap: 10px; }
+    .fc-counter { font-size: 0.85rem; font-weight: 700; color: #888780; }
+    .fc-btn { background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 7px 18px; font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 700; color: #2C2C2A; cursor: pointer; transition: background 0.12s; }
+    .fc-btn:hover { background: #D3D1C7; }
+    .fc-btn:disabled { opacity: 0.3; cursor: default; }
+    .fc-btn.primary { background: #2C2C2A; color: #f5f4f0; border-color: #2C2C2A; }
+    .fc-btn.primary:hover { background: #444441; }
+
+    /* QCM */
+    .qcm-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+    .q-num { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #888780; margin-bottom: 6px; }
+    .q-text { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+    .options { display: flex; flex-direction: column; gap: 7px; }
+    .opt { display: flex; align-items: center; gap: 10px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; padding: 9px 13px; cursor: pointer; transition: background 0.12s, border-color 0.12s; font-size: 0.9rem; color: #2C2C2A; font-weight: 600; user-select: none; }
+    .opt:hover { background: #D3D1C7; }
+    .opt.selected { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+    .opt.correct { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+    .opt.wrong { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+    .opt-dot { width: 18px; height: 18px; min-width: 18px; border-radius: 50%; border: 2px solid #B4B2A9; display: flex; align-items: center; justify-content: center; transition: all 0.12s; flex-shrink: 0; }
+    .opt.selected .opt-dot { border-color: #FAC775; background: #FAC775; }
+    .opt.correct .opt-dot { border-color: #1D9E75; background: #1D9E75; }
+    .opt.wrong .opt-dot { border-color: #E24B4A; background: #E24B4A; }
+    .opt-dot-inner { width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
+    .opt.selected .opt-dot-inner, .opt.correct .opt-dot-inner, .opt.wrong .opt-dot-inner { display: block; }
+    .q-feedback { font-size: 0.86rem; font-weight: 700; margin-top: 0.6rem; display: none; line-height: 1.5; }
+    .q-feedback.show { display: block; }
+    .q-feedback.ok { color: #0F6E56; }
+    .q-feedback.ko { color: #A32D2D; }
+
+    /* ASSIGNER */
+    .assign-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 0.8rem; }
+    .assign-row { display: flex; align-items: center; gap: 10px; }
+    .assign-label { font-size: 0.92rem; font-weight: 700; flex: 1; padding: 8px 12px; background: #F1EFE8; border: 0.5px solid #B4B2A9; border-radius: 10px; font-family: 'Fira Code', monospace; }
+    .assign-select { font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 700; border: 0.5px solid #B4B2A9; border-radius: 10px; background: #fff; padding: 8px 10px; color: #2C2C2A; cursor: pointer; min-width: 150px; outline: none; }
+    .assign-select.ok { border-color: #5DCAA5; background: #E1F5EE; color: #085041; }
+    .assign-select.ko { border-color: #F09595; background: #FCEBEB; color: #791F1F; }
+
+    /* V/F */
+    .vf-card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
+    .vf-statement { font-size: 0.97rem; font-weight: 700; color: #2C2C2A; margin-bottom: 0.9rem; line-height: 1.5; }
+    .vf-btns { display: flex; gap: 10px; }
+    .vf-btn { flex: 1; padding: 8px 0; border-radius: 10px; border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.12s; }
+    .vf-btn.vrai:hover { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+    .vf-btn.faux:hover { background: #FCEBEB; border-color: #F09595; color: #791F1F; }
+    .vf-btn.selected { background: #FAEEDA; border-color: #FAC775; color: #633806; }
+    .vf-btn.correct-ans { background: #E1F5EE; border-color: #5DCAA5; color: #085041; cursor: default; }
+    .vf-btn.wrong-ans { background: #FCEBEB; border-color: #F09595; color: #791F1F; cursor: default; }
+
+    /* PROGRESS + SCORE */
+    .progress-wrap { height: 7px; background: #D3D1C7; border-radius: 10px; margin: 1.2rem 0 0; overflow: hidden; }
+    .progress-fill { height: 100%; background: #FAC775; border-radius: 10px; transition: width 0.4s; width: 0%; }
+    .score-row { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+    .chip { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+    .chip-ok { background: #E1F5EE; color: #085041; }
+    .chip-ko { background: #FCEBEB; color: #791F1F; }
+    .score-panel { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-top: 1rem; display: none; text-align: center; }
+    .score-panel.show { display: block; }
+    .score-big { font-size: 3rem; font-weight: 800; color: #2C2C2A; line-height: 1; margin-bottom: 4px; }
+    .score-big span { color: #FAC775; }
+    .score-sub { font-size: 0.9rem; color: #888780; }
+
+    /* BUTTONS */
+    .btn-row { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+    .action-btn { border: 0.5px solid #B4B2A9; background: #F1EFE8; color: #2C2C2A; border-radius: 10px; padding: 8px 20px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.12s; }
+    .action-btn:hover { background: #D3D1C7; }
+    .action-btn.primary { background: #2C2C2A; color: #FAC775; border-color: #2C2C2A; }
+    .action-btn.primary:hover { background: #444441; }
+
+    .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.8; }
+
+    /* CTA */
+    .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+    .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+    .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #EF9F27; }
+    .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+    @media (max-width: 500px) {
+      .assign-row { flex-direction: column; align-items: stretch; }
+      .hero h1 { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav-bar">
+    <a class="nav-prev" href="cours-raccourcis-clavier.html">&larr; Cours</a>
+    <a class="nav-next" href="projet-raccourcis-clavier.html">Projet &rarr;</a>
+  </div>
+
+  <div class="hero">
+    <h1>✏️ Exercices — Raccourcis clavier</h1>
+    <p>Teste ta mémoire des raccourcis essentiels.</p>
+    <div class="badge-row">
+      <span class="badge b-amber">Flashcards</span>
+      <span class="badge b-blue">QCM</span>
+      <span class="badge b-teal">Associer</span>
+      <span class="badge b-purple">Vrai / Faux</span>
+    </div>
+  </div>
+
+  <!-- FLASHCARDS -->
+  <div class="section-label"><span class="section-label-text">🃏 Flashcards — Raccourci → Action</span></div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">🃏</div>Flashcards — Quelle est l'action de ce raccourci ?</div>
+    <p class="desc">Regarde le raccourci, formule l'action dans ta tête, puis retourne la carte pour vérifier.</p>
+    <div class="flashcard-container">
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="fc-face fc-front">
+          <div class="fc-label">⌨️ Raccourci — Clique pour retourner</div>
+          <div class="fc-question" id="fc-question"></div>
+          <div class="fc-hint">Réfléchis d'abord 🧠</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-label">✅ Action</div>
+          <div class="fc-answer" id="fc-answer"></div>
+          <div class="fc-hint">Tu l'avais ?</div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-nav">
+      <button class="fc-btn" id="fc-prev" onclick="prevCard()">← Précédente</button>
+      <span class="fc-counter" id="fc-counter">1 / 10</span>
+      <button class="fc-btn primary" id="fc-next" onclick="nextCard()">Suivante →</button>
+    </div>
+  </div>
+
+  <!-- ASSOCIER -->
+  <div class="section-label"><span class="section-label-text">🗂️ Associe chaque raccourci à sa catégorie</span></div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🗂️</div>Catégorise chaque raccourci</div>
+    <p class="desc">Pour chaque raccourci, sélectionne à quelle catégorie il appartient.</p>
+    <div class="assign-grid" id="assign-container"></div>
+    <div class="btn-row">
+      <button class="action-btn primary" onclick="checkAssign()">Vérifier</button>
+      <button class="action-btn" onclick="resetAssign()">Recommencer</button>
+    </div>
+    <div class="result-box" id="assign-result" style="display:none;margin-top:0.8rem;"></div>
+  </div>
+
+  <!-- QCM -->
+  <div class="section-label"><span class="section-label-text">🧠 QCM</span></div>
+
+  <div id="qcm-container"></div>
+  <div class="progress-wrap"><div class="progress-fill" id="prog-qcm"></div></div>
+  <div class="score-row" id="score-qcm"></div>
+  <div class="btn-row">
+    <button class="action-btn primary" onclick="checkQCM()">Valider le QCM</button>
+    <button class="action-btn" onclick="resetQCM()">Recommencer</button>
+  </div>
+  <div class="score-panel" id="qcm-score-panel">
+    <div class="score-big"><span id="qcm-score-val">0</span> / 8</div>
+    <div class="score-sub">bonnes réponses au QCM</div>
+  </div>
+
+  <!-- V/F -->
+  <div class="section-label"><span class="section-label-text">✅ Vrai / Faux</span></div>
+
+  <div id="vf-container"></div>
+  <div class="progress-wrap"><div class="progress-fill" id="prog-vf"></div></div>
+  <div class="score-row" id="score-vf"></div>
+  <div class="btn-row">
+    <button class="action-btn primary" onclick="checkVF()">Valider le V/F</button>
+    <button class="action-btn" onclick="resetVF()">Recommencer</button>
+  </div>
+  <div class="score-panel" id="vf-score-panel">
+    <div class="score-big"><span id="vf-score-val">0</span> / 6</div>
+    <div class="score-sub">bonnes réponses au Vrai / Faux</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <p>Exercices terminés ✓ &nbsp; Refais-les jusqu'à avoir 100% !</p>
+    <a class="cta-btn" href="projet-raccourcis-clavier.html">Passer au projet &rarr;</a>
+  </div>
+
+  <div class="footer-note">
+    <span style="font-size:0.82rem;">Comprendre → Chercher → Coder → Tester → Recommencer 🚀</span><br>
+    L'état d'esprit du développeur
+  </div>
+
+  <script>
+    /* ===== FLASHCARDS ===== */
+    var flashcards = [
+      { q: 'Ctrl + C', a: 'Copier la sélection dans le presse-papier' },
+      { q: 'Ctrl + V', a: 'Coller le contenu du presse-papier' },
+      { q: 'Ctrl + Z', a: 'Annuler la dernière action (Undo)' },
+      { q: 'Ctrl + A', a: 'Sélectionner tout le contenu' },
+      { q: 'Shift + F5', a: 'Vider le cache du navigateur et actualiser la page complètement' },
+      { q: 'Ctrl + /', a: 'Commenter / décommenter une ligne dans VS Code' },
+      { q: 'Shift + Clic', a: 'Sélectionner tout le texte entre le curseur et l\'endroit cliqué' },
+      { q: 'Alt + Tab', a: 'Afficher toutes les fenêtres ouvertes et changer d\'application' },
+      { q: 'Ctrl + Shift + P', a: 'Ouvrir la palette de commandes dans VS Code' },
+      { q: 'Win + L', a: 'Verrouiller immédiatement la session Windows' }
+    ];
+    var currentCard = 0, cardFlipped = false;
+    function renderCard() {
+      document.getElementById('fc-question').textContent = flashcards[currentCard].q;
+      document.getElementById('fc-answer').textContent = flashcards[currentCard].a;
+      document.getElementById('fc-counter').textContent = (currentCard + 1) + ' / ' + flashcards.length;
+      document.getElementById('fc-prev').disabled = currentCard === 0;
+      document.getElementById('fc-next').textContent = currentCard === flashcards.length - 1 ? 'Recommencer' : 'Suivante →';
+      cardFlipped = false;
+      document.getElementById('flashcard').classList.remove('flipped');
+    }
+    function flipCard() { cardFlipped = !cardFlipped; document.getElementById('flashcard').classList.toggle('flipped', cardFlipped); }
+    function nextCard() { currentCard = currentCard < flashcards.length - 1 ? currentCard + 1 : 0; renderCard(); }
+    function prevCard() { if (currentCard > 0) { currentCard--; renderCard(); } }
+    renderCard();
+
+    /* ===== ASSIGNER ===== */
+    var assignData = [
+      { label: 'Ctrl + X', answer: 'Édition' },
+      { label: 'Shift + F5', answer: 'Navigateur' },
+      { label: 'Ctrl + /', answer: 'VS Code' },
+      { label: 'Win + E', answer: 'Windows' },
+      { label: 'Ctrl + T', answer: 'Navigateur' },
+      { label: 'Alt + ↑', answer: 'VS Code' },
+      { label: 'Ctrl + S', answer: 'Édition' },
+      { label: 'Alt + F4', answer: 'Windows' }
+    ];
+    var categories = ['Édition', 'Navigateur', 'VS Code', 'Windows'];
+    function buildAssign() {
+      var container = document.getElementById('assign-container');
+      container.innerHTML = '';
+      assignData.forEach(function(item, i) {
+        var row = document.createElement('div');
+        row.className = 'assign-row';
+        var lbl = document.createElement('div');
+        lbl.className = 'assign-label';
+        lbl.textContent = item.label;
+        var sel = document.createElement('select');
+        sel.className = 'assign-select';
+        sel.id = 'assign-' + i;
+        var opt0 = document.createElement('option');
+        opt0.value = ''; opt0.textContent = '-- Choisir --';
+        sel.appendChild(opt0);
+        categories.forEach(function(cat) {
+          var o = document.createElement('option');
+          o.value = cat; o.textContent = cat;
+          sel.appendChild(o);
+        });
+        row.appendChild(lbl); row.appendChild(sel);
+        container.appendChild(row);
+      });
+      document.getElementById('assign-result').style.display = 'none';
+    }
+    function checkAssign() {
+      var score = 0;
+      assignData.forEach(function(item, i) {
+        var sel = document.getElementById('assign-' + i);
+        sel.className = 'assign-select';
+        if (sel.value === item.answer) { score++; sel.classList.add('ok'); }
+        else if (sel.value !== '') { sel.classList.add('ko'); }
+      });
+      var res = document.getElementById('assign-result');
+      res.style.display = 'block';
+      res.innerHTML = '<strong>' + score + ' / ' + assignData.length + '</strong> — ' +
+        (score === assignData.length ? '🎉 Parfait !' : 'Revois les cases en rouge.');
+    }
+    function resetAssign() { buildAssign(); }
+    buildAssign();
+
+    /* ===== QCM ===== */
+    var qcmData = [
+      { q: 'Quel raccourci permet de rétablir une action annulée ?', opts: ['Ctrl+Z', 'Ctrl+Y', 'Ctrl+R', 'Ctrl+A'], answer: 1, fb: 'Ctrl+Y est le "Redo" — il refait ce que Ctrl+Z a annulé.' },
+      { q: 'Comment vider le cache du navigateur et forcer le rechargement ?', opts: ['F5', 'Ctrl+R', 'Shift+F5', 'Ctrl+F5 uniquement'], answer: 2, fb: 'Shift+F5 (ou Ctrl+Shift+R) force un rechargement complet sans cache.' },
+      { q: 'Quel raccourci VS Code permet de commenter une ligne de code ?', opts: ['Ctrl+K', 'Ctrl+/', 'Ctrl+C', 'Ctrl+Shift+C'], answer: 1, fb: 'Ctrl+/ bascule le commentaire sur la ligne sélectionnée dans VS Code.' },
+      { q: 'Quel raccourci permet de sélectionner une grande plage de texte précisément ?', opts: ['Ctrl+A', 'Double-clic', 'Shift+Clic', 'Ctrl+Shift+A'], answer: 2, fb: 'Place le curseur au début, puis Shift+Clic à la fin — tout est sélectionné.' },
+      { q: 'Comment ouvrir l\'explorateur de fichiers Windows rapidement ?', opts: ['Win+E', 'Ctrl+E', 'Alt+E', 'Win+F'], answer: 0, fb: 'Win+E ouvre directement l\'explorateur de fichiers Windows.' },
+      { q: 'Que fait Ctrl+D dans un navigateur web ?', opts: ['Fermer l\'onglet', 'Dupliquer l\'onglet', 'Ajouter aux favoris', 'Télécharger la page'], answer: 2, fb: 'Ctrl+D ajoute la page actuelle aux marque-pages (favoris).' },
+      { q: 'Quel raccourci ouvre la palette de commandes dans VS Code ?', opts: ['Ctrl+P', 'Ctrl+Shift+P', 'Ctrl+Alt+P', 'F1 uniquement'], answer: 1, fb: 'Ctrl+Shift+P ouvre la palette de commandes (F1 fonctionne aussi).' },
+      { q: 'Comment verrouiller sa session Windows instantanément ?', opts: ['Alt+F4', 'Ctrl+L', 'Win+L', 'Win+D'], answer: 2, fb: 'Win+L verrouille immédiatement la session — essentiel avant de quitter son poste.' }
+    ];
+    var qcmState = [];
+    function buildQCM() {
+      qcmState = qcmData.map(function() { return { selected: null, validated: false }; });
+      var container = document.getElementById('qcm-container');
+      container.innerHTML = '';
+      qcmData.forEach(function(q, qi) {
+        var card = document.createElement('div');
+        card.className = 'qcm-card';
+        card.innerHTML = '<div class="q-num">Question ' + (qi + 1) + '</div><div class="q-text">' + q.q + '</div>';
+        var opts = document.createElement('div');
+        opts.className = 'options';
+        q.opts.forEach(function(o, oi) {
+          var div = document.createElement('div');
+          div.className = 'opt';
+          div.innerHTML = '<div class="opt-dot"><div class="opt-dot-inner"></div></div>' + o;
+          div.onclick = function() { selectOpt(qi, oi); };
+          opts.appendChild(div);
+        });
+        card.appendChild(opts);
+        var fb = document.createElement('div');
+        fb.className = 'q-feedback';
+        fb.id = 'fb-' + qi;
+        card.appendChild(fb);
+        container.appendChild(card);
+      });
+      document.getElementById('prog-qcm').style.width = '0%';
+      document.getElementById('score-qcm').innerHTML = '';
+      document.getElementById('qcm-score-panel').classList.remove('show');
+    }
+    function selectOpt(qi, oi) {
+      if (qcmState[qi].validated) return;
+      qcmState[qi].selected = oi;
+      var cards = document.getElementById('qcm-container').querySelectorAll('.qcm-card');
+      var opts = cards[qi].querySelectorAll('.opt');
+      opts.forEach(function(o, i) { o.className = 'opt' + (i === oi ? ' selected' : ''); });
+    }
+    function checkQCM() {
+      var score = 0;
+      qcmData.forEach(function(q, qi) {
+        qcmState[qi].validated = true;
+        var cards = document.getElementById('qcm-container').querySelectorAll('.qcm-card');
+        var opts = cards[qi].querySelectorAll('.opt');
+        opts.forEach(function(o, oi) {
+          o.className = 'opt';
+          if (oi === q.answer) o.classList.add('correct');
+          else if (oi === qcmState[qi].selected) o.classList.add('wrong');
+        });
+        var ok = qcmState[qi].selected === q.answer;
+        if (ok) score++;
+        var fb = document.getElementById('fb-' + qi);
+        fb.className = 'q-feedback show ' + (ok ? 'ok' : 'ko');
+        fb.textContent = (ok ? '✓ ' : '✗ ') + q.fb;
+        var chip = document.createElement('div');
+        chip.className = 'chip ' + (ok ? 'chip-ok' : 'chip-ko');
+        chip.textContent = (ok ? '✓ Q' : '✗ Q') + (qi + 1);
+        document.getElementById('score-qcm').appendChild(chip);
+      });
+      document.getElementById('prog-qcm').style.width = (score / qcmData.length * 100) + '%';
+      var panel = document.getElementById('qcm-score-panel');
+      panel.classList.add('show');
+      document.getElementById('qcm-score-val').textContent = score;
+    }
+    function resetQCM() { buildQCM(); }
+    buildQCM();
+
+    /* ===== VRAI / FAUX ===== */
+    var vfData = [
+      { s: 'F5 et Shift+F5 ont exactement le même effet dans un navigateur.', answer: false, fb: 'F5 recharge depuis le cache. Shift+F5 (ou Ctrl+Shift+R) vide le cache et force un rechargement complet.' },
+      { s: 'Ctrl+Z peut être utilisé plusieurs fois de suite pour remonter dans le temps.', answer: true, fb: 'Oui — dans la plupart des logiciels, chaque appui sur Ctrl+Z annule l\'action précédente.' },
+      { s: 'Ctrl+N dans VS Code ouvre un nouveau fichier.', answer: true, fb: 'Exact — Ctrl+N crée un nouveau fichier non enregistré dans VS Code.' },
+      { s: 'Shift+Clic sélectionne uniquement le mot sur lequel on clique.', answer: false, fb: 'Shift+Clic sélectionne tout le texte entre la position actuelle du curseur et l\'endroit cliqué.' },
+      { s: 'Ctrl+/ fonctionne dans tous les éditeurs de texte sans exception.', answer: false, fb: 'Ctrl+/ est surtout connu dans VS Code. Dans d\'autres logiciels, le raccourci de commentaire peut être différent.' },
+      { s: 'Alt+Tab permet de naviguer entre les fenêtres ouvertes sous Windows.', answer: true, fb: 'Oui — maintenir Alt et appuyer sur Tab permet de cycler entre toutes les fenêtres ouvertes.' }
+    ];
+    var vfState = [];
+    function buildVF() {
+      vfState = vfData.map(function() { return { selected: null, validated: false }; });
+      var container = document.getElementById('vf-container');
+      container.innerHTML = '';
+      vfData.forEach(function(item, i) {
+        var card = document.createElement('div');
+        card.className = 'vf-card';
+        card.innerHTML = '<div class="vf-statement">' + item.s + '</div>';
+        var btns = document.createElement('div');
+        btns.className = 'vf-btns';
+        var bV = document.createElement('button');
+        bV.className = 'vf-btn vrai'; bV.textContent = '✓ Vrai';
+        bV.onclick = function() { selectVF(i, true); };
+        var bF = document.createElement('button');
+        bF.className = 'vf-btn faux'; bF.textContent = '✗ Faux';
+        bF.onclick = function() { selectVF(i, false); };
+        btns.appendChild(bV); btns.appendChild(bF);
+        card.appendChild(btns);
+        var fb = document.createElement('div');
+        fb.className = 'q-feedback'; fb.id = 'vf-fb-' + i;
+        card.appendChild(fb);
+        container.appendChild(card);
+      });
+      document.getElementById('prog-vf').style.width = '0%';
+      document.getElementById('score-vf').innerHTML = '';
+      document.getElementById('vf-score-panel').classList.remove('show');
+    }
+    function selectVF(i, val) {
+      if (vfState[i].validated) return;
+      vfState[i].selected = val;
+      var cards = document.getElementById('vf-container').querySelectorAll('.vf-card');
+      var btns = cards[i].querySelectorAll('.vf-btn');
+      btns[0].className = 'vf-btn vrai' + (val === true ? ' selected' : '');
+      btns[1].className = 'vf-btn faux' + (val === false ? ' selected' : '');
+    }
+    function checkVF() {
+      var score = 0;
+      vfData.forEach(function(item, i) {
+        vfState[i].validated = true;
+        var ok = vfState[i].selected === item.answer;
+        if (ok) score++;
+        var cards = document.getElementById('vf-container').querySelectorAll('.vf-card');
+        var btns = cards[i].querySelectorAll('.vf-btn');
+        btns[0].className = 'vf-btn ' + (item.answer === true ? 'correct-ans' : (vfState[i].selected === true ? 'wrong-ans' : 'vrai'));
+        btns[1].className = 'vf-btn ' + (item.answer === false ? 'correct-ans' : (vfState[i].selected === false ? 'wrong-ans' : 'faux'));
+        var fb = document.getElementById('vf-fb-' + i);
+        fb.className = 'q-feedback show ' + (ok ? 'ok' : 'ko');
+        fb.textContent = (ok ? '✓ ' : '✗ ') + item.fb;
+        var chip = document.createElement('div');
+        chip.className = 'chip ' + (ok ? 'chip-ok' : 'chip-ko');
+        chip.textContent = (ok ? '✓' : '✗') + ' #' + (i + 1);
+        document.getElementById('score-vf').appendChild(chip);
+      });
+      document.getElementById('prog-vf').style.width = (score / vfData.length * 100) + '%';
+      document.getElementById('vf-score-panel').classList.add('show');
+      document.getElementById('vf-score-val').textContent = score;
+    }
+    function resetVF() { buildVF(); }
+    buildVF();
+  </script>
+</body>
+</html>

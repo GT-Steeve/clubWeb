@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raccourcis clavier — Travaille plus vite</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%8C%A8%EF%B8%8F%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #F5F4EF;
+      color: #2C2C2A;
+      padding: 2rem 1rem 4rem;
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 8px; flex-wrap: wrap; }
+    .nav-prev, .nav-next {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.88rem; font-weight: 700; color: #185FA5;
+      text-decoration: none; margin-bottom: 1.5rem;
+      background: #E6F1FB; border: 0.5px solid #85B7EB;
+      border-radius: 8px; padding: 6px 14px; transition: background 0.15s;
+    }
+    .nav-prev:hover, .nav-next:hover { background: #B5D4F4; }
+
+    /* HERO */
+    .hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; }
+    .hero p { font-size: 1.05rem; color: #5F5E5A; margin-top: 0.5rem; }
+    .badge-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 1.2rem; }
+    .badge { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .b-amber { background: #FAEEDA; color: #633806; }
+    .b-blue  { background: #E6F1FB; color: #0C447C; }
+    .b-teal  { background: #E1F5EE; color: #085041; }
+    .b-purple{ background: #EEEDFE; color: #3C3489; }
+
+    /* CARD */
+    .card { border-radius: 16px; border: 0.5px solid #D3D1C7; background: #fff; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem; }
+    .stitle { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .pill { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .p-amber  { background: #FAC775; color: #633806; }
+    .p-teal   { background: #9FE1CB; color: #085041; }
+    .p-blue   { background: #B5D4F4; color: #0C447C; }
+    .p-purple { background: #CECBF6; color: #3C3489; }
+    .p-green  { background: #C0DD97; color: #3B6D11; }
+    .p-coral  { background: #F5C4B3; color: #712B13; }
+    .p-gray   { background: #D3D1C7; color: #444441; }
+
+    .desc { font-size: 0.94rem; color: #5F5E5A; line-height: 1.7; margin-bottom: 0.9rem; }
+    .desc:last-child { margin-bottom: 0; }
+
+    /* TIP */
+    .tip { display: flex; gap: 10px; align-items: flex-start; background: #E1F5EE; border-radius: 10px; padding: 0.75rem 1rem; margin-top: 0.9rem; font-size: 0.88rem; color: #085041; line-height: 1.5; }
+    .tip-amber  { background: #FAEEDA; color: #633806; }
+    .tip-blue   { background: #E6F1FB; color: #0C447C; }
+    .tip-purple { background: #EEEDFE; color: #3C3489; }
+    .tip-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* SECTION LABEL */
+    .section-label { display: flex; align-items: center; gap: 10px; margin: 2rem 0 1rem; }
+    .section-label-text { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; white-space: nowrap; }
+    .section-label::after { content: ''; flex: 1; height: 0.5px; background: #D3D1C7; }
+
+    /* KEYBOARD KEY */
+    .key {
+      display: inline-block;
+      background: #2C2C2A;
+      color: #FAC775;
+      border-radius: 5px;
+      padding: 2px 9px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82em;
+      font-weight: 700;
+      border-bottom: 2px solid #111;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .key-sep { color: #888780; font-weight: 700; margin: 0 4px; }
+
+    /* SHORTCUT TABLE */
+    .shortcut-list { display: flex; flex-direction: column; gap: 6px; margin-top: 0.8rem; }
+    .shortcut-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #F5F4EF;
+      border: 0.5px solid #D3D1C7;
+      border-radius: 10px;
+      padding: 0.65rem 1rem;
+    }
+    .shortcut-keys { flex-shrink: 0; min-width: 160px; }
+    .shortcut-action { font-size: 0.92rem; font-weight: 700; color: #2C2C2A; }
+    .shortcut-detail { font-size: 0.82rem; color: #5F5E5A; font-weight: 600; margin-top: 2px; }
+
+    /* RESULT BOX */
+    .result-box { border-radius: 10px; border: 0.5px dashed #B4B2A9; background: #F1EFE8; padding: 0.9rem 1.1rem; font-size: 0.94rem; margin-top: 0.8rem; line-height: 1.8; }
+    .rl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; margin-bottom: 6px; }
+
+    /* COMPARE TABLE */
+    .compare-row { display: flex; gap: 0; border-radius: 12px; overflow: hidden; border: 0.5px solid #D3D1C7; margin-bottom: 0.8rem; }
+    .compare-cell { flex: 1; padding: 0.9rem 1rem; font-size: 0.88rem; font-weight: 700; }
+    .compare-cell:first-child { border-right: 0.5px solid #D3D1C7; }
+    .compare-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #888780; margin-bottom: 5px; }
+    .cc-slow { background: #FCEBEB; color: #791F1F; }
+    .cc-fast { background: #E1F5EE; color: #085041; }
+
+    /* CTA */
+    .cta-wrap { text-align: center; background: #2C2C2A; border-radius: 16px; padding: 2rem 1.5rem; margin-top: 2rem; }
+    .cta-wrap p { color: #D3D1C7; font-size: 0.95rem; margin-bottom: 1.1rem; }
+    .cta-btn { display: inline-block; background: #FAC775; color: #412402; font-weight: 800; font-size: 0.97rem; padding: 10px 28px; border-radius: 10px; text-decoration: none; transition: background 0.15s; }
+    .cta-btn:hover { background: #EF9F27; }
+
+    .footer-note { text-align: center; padding: 2rem 0 1rem; font-size: 0.88rem; color: #888780; line-height: 1.8; }
+
+    @media (max-width: 520px) {
+      .hero h1 { font-size: 1.7rem; }
+      .shortcut-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .shortcut-keys { min-width: unset; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav-bar">
+    <a class="nav-prev" href="../../sommaire.html#step1">&larr; Sommaire</a>
+    <a class="nav-next" href="exercices-raccourcis-clavier.html">Exercices &rarr;</a>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>⌨️ Raccourcis clavier</h1>
+    <p>Travaille 3× plus vite — sans toucher la souris.</p>
+    <div class="badge-row">
+      <span class="badge b-amber">Édition</span>
+      <span class="badge b-teal">Sélection</span>
+      <span class="badge b-blue">Navigateur</span>
+      <span class="badge b-purple">VS Code</span>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="card">
+    <div class="stitle"><div class="pill p-gray">🎯</div>Pourquoi apprendre les raccourcis ?</div>
+    <p class="desc">Chaque fois que tu quittes le clavier pour attraper la souris, tu perds du temps. Ce geste semble anodin — mais répété des centaines de fois par jour, ça représente des heures perdues par semaine.</p>
+    <p class="desc">Les raccourcis clavier, c'est le premier réflexe d'un professionnel. Que tu codes, rédiges, navigues ou gères des fichiers : les mêmes raccourcis fonctionnent partout.</p>
+    <div class="compare-row">
+      <div class="compare-cell cc-slow">
+        <div class="compare-label">🐢 Sans raccourcis</div>
+        Sélectionner → clic droit → Copier → naviguer → clic droit → Coller
+      </div>
+      <div class="compare-cell cc-fast">
+        <div class="compare-label">⚡ Avec raccourcis</div>
+        <span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">C</span> puis <span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">V</span>
+      </div>
+    </div>
+    <div class="tip tip-amber">
+      <span class="tip-i">🔥</span>
+      <span>Tu n'as pas besoin de tous les mémoriser d'un coup. Commence par les raccourcis d'édition (Ctrl+C/V/Z/A), force-toi à les utiliser une semaine — ils deviendront automatiques.</span>
+    </div>
+  </div>
+
+  <!-- EDITION -->
+  <div class="section-label"><span class="section-label-text">✏️ Édition universelle</span></div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-amber">✏️</div>Ces raccourcis fonctionnent partout</div>
+    <p class="desc">Word, VS Code, navigateur, bloc-notes — ces raccourcis sont universels sur Windows.</p>
+    <div class="shortcut-list">
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">C</span></div>
+        <div><div class="shortcut-action">Copier</div><div class="shortcut-detail">Copie la sélection dans le presse-papier</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">V</span></div>
+        <div><div class="shortcut-action">Coller</div><div class="shortcut-detail">Colle le contenu du presse-papier</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">X</span></div>
+        <div><div class="shortcut-action">Couper</div><div class="shortcut-detail">Coupe la sélection (copie + supprime)</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">Z</span></div>
+        <div><div class="shortcut-action">Annuler</div><div class="shortcut-detail">Revient en arrière (Undo) — ton meilleur ami</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">Y</span></div>
+        <div><div class="shortcut-action">Rétablir</div><div class="shortcut-detail">Refait ce qui vient d'être annulé (Redo)</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">A</span></div>
+        <div><div class="shortcut-action">Sélectionner tout</div><div class="shortcut-detail">Sélectionne tout le contenu de la zone active</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">S</span></div>
+        <div><div class="shortcut-action">Sauvegarder</div><div class="shortcut-detail">Enregistre le fichier — à utiliser très souvent !</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">F</span></div>
+        <div><div class="shortcut-action">Rechercher un mot</div><div class="shortcut-detail">Ouvre la barre de recherche — fonctionne dans Word, le navigateur, VS Code, le bloc-notes…</div></div>
+      </div>
+    </div>
+    <div class="tip">
+      <span class="tip-i">💡</span>
+      <span>Ctrl+Z est illimité dans la plupart des logiciels. Si tu fais une erreur, appuie plusieurs fois dessus pour remonter dans le temps.</span>
+    </div>
+  </div>
+
+  <!-- SELECTION -->
+  <div class="section-label"><span class="section-label-text">🖱️ Sélection avancée</span></div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-teal">🖱️</div>Sélectionner sans la souris</div>
+    <p class="desc">Ces raccourcis te permettent de sélectionner de grandes quantités de texte rapidement, sans faire de cliqué-glissé imprécis.</p>
+    <div class="shortcut-list">
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Shift</span><span class="key-sep">+</span><span class="key">Clic</span></div>
+        <div><div class="shortcut-action">Sélectionner une plage</div><div class="shortcut-detail">Sélectionne tout entre le curseur et l'endroit cliqué</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">Shift</span><span class="key-sep">+</span><span class="key">→</span></div>
+        <div><div class="shortcut-action">Sélectionner mot par mot</div><div class="shortcut-detail">Étend la sélection d'un mot à la fois vers la droite</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Shift</span><span class="key-sep">+</span><span class="key">↓</span></div>
+        <div><div class="shortcut-action">Sélectionner ligne par ligne</div><div class="shortcut-detail">Étend la sélection vers le bas</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Home</span></div>
+        <div><div class="shortcut-action">Début de ligne</div><div class="shortcut-detail">Déplace le curseur au début de la ligne actuelle</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">End</span></div>
+        <div><div class="shortcut-action">Fin de ligne</div><div class="shortcut-detail">Déplace le curseur à la fin de la ligne actuelle</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">Home</span></div>
+        <div><div class="shortcut-action">Début du document</div><div class="shortcut-detail">Va tout en haut du fichier</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">End</span></div>
+        <div><div class="shortcut-action">Fin du document</div><div class="shortcut-detail">Va tout en bas du fichier</div></div>
+      </div>
+    </div>
+    <div class="tip tip-blue">
+      <span class="tip-i">📌</span>
+      <span><strong>Astuce combo :</strong> place ton curseur au début d'un texte, puis fais <span class="key">Shift</span> + Clic à la fin — tu sélectionnes tout sans glisser-déposer.</span>
+    </div>
+  </div>
+
+  <!-- NAVIGATEUR -->
+  <div class="section-label"><span class="section-label-text">🌐 Navigateur web</span></div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-blue">🌐</div>Raccourcis du navigateur (Chrome / Brave / Edge)</div>
+    <p class="desc">Ces raccourcis fonctionnent dans tous les navigateurs modernes basés sur Chromium.</p>
+    <div class="shortcut-list">
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">F5</span></div>
+        <div><div class="shortcut-action">Actualiser la page</div><div class="shortcut-detail">Recharge la page depuis le cache du navigateur</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Shift</span><span class="key-sep">+</span><span class="key">F5</span></div>
+        <div><div class="shortcut-action">Vider le cache et actualiser</div><div class="shortcut-detail">Force le rechargement complet — ignorant tout ce qui est en cache. Alias : <span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">Shift</span><span class="key-sep">+</span><span class="key">R</span></div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">T</span></div>
+        <div><div class="shortcut-action">Nouvel onglet</div><div class="shortcut-detail">Ouvre un nouvel onglet vide</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">W</span></div>
+        <div><div class="shortcut-action">Fermer l'onglet</div><div class="shortcut-detail">Ferme l'onglet actif</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">Tab</span></div>
+        <div><div class="shortcut-action">Onglet suivant</div><div class="shortcut-detail">Passe à l'onglet suivant (Ctrl+Shift+Tab pour revenir)</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">L</span></div>
+        <div><div class="shortcut-action">Barre d'adresse</div><div class="shortcut-detail">Sélectionne l'URL — prêt à taper une nouvelle adresse</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">D</span></div>
+        <div><div class="shortcut-action">Ajouter aux favoris</div><div class="shortcut-detail">Enregistre la page actuelle dans les marque-pages</div></div>
+      </div>
+    </div>
+    <div class="result-box">
+      <div class="rl">💡 Pourquoi Shift+F5 plutôt que F5 quand tu codes ?</div>
+      Quand tu modifies un fichier CSS ou JS et que tu actualises avec F5, le navigateur peut servir l'ancienne version depuis son cache. <strong>Shift+F5</strong> force le rechargement complet depuis le serveur — tu vois toujours tes dernières modifications.
+    </div>
+  </div>
+
+  <!-- VS CODE -->
+  <div class="section-label"><span class="section-label-text">💻 VS Code</span></div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-purple">💻</div>Raccourcis VS Code — Les essentiels</div>
+    <p class="desc">VS Code affiche les raccourcis directement dans ses menus — survole n'importe quelle option du menu pour voir le raccourci associé. C'est une excellente façon d'en apprendre de nouveaux naturellement.</p>
+    <div class="shortcut-list">
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">/</span></div>
+        <div><div class="shortcut-action">Commenter / décommenter</div><div class="shortcut-detail">Met ou enlève le commentaire sur la ligne sélectionnée</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">H</span></div>
+        <div><div class="shortcut-action">Rechercher et remplacer</div><div class="shortcut-detail">Complète Ctrl+F — cherche un mot ET le remplace par un autre dans tout le fichier d'un coup</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">Shift</span><span class="key-sep">+</span><span class="key">P</span></div>
+        <div><div class="shortcut-action">Palette de commandes</div><div class="shortcut-detail">Accès à toutes les fonctions de VS Code en tapant leur nom</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">P</span></div>
+        <div><div class="shortcut-action">Ouvrir un fichier rapidement</div><div class="shortcut-detail">Tape le nom du fichier pour l'ouvrir sans naviguer dans les dossiers</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">`</span></div>
+        <div><div class="shortcut-action">Terminal intégré</div><div class="shortcut-detail">Ouvre/ferme le terminal directement dans VS Code</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Alt</span><span class="key-sep">+</span><span class="key">↑</span> <span style="color:#888;font-size:.8em">/ ↓</span></div>
+        <div><div class="shortcut-action">Déplacer une ligne</div><div class="shortcut-detail">Monte ou descend la ligne sans copier/coller</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">D</span></div>
+        <div><div class="shortcut-action">Sélectionner la prochaine occurrence</div><div class="shortcut-detail">Sélectionne le mot sous le curseur, puis les suivants au fur et à mesure</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Ctrl</span><span class="key-sep">+</span><span class="key">N</span></div>
+        <div><div class="shortcut-action">Nouveau fichier</div><div class="shortcut-detail">Crée un nouveau fichier non enregistré dans VS Code</div></div>
+      </div>
+    </div>
+    <div class="tip tip-purple">
+      <span class="tip-i">🔍</span>
+      <span><strong>Astuce :</strong> dans VS Code, va dans le menu <em>Aide → Référence des raccourcis clavier</em> pour voir la liste complète imprimable de tous les raccourcis disponibles.</span>
+    </div>
+  </div>
+
+  <!-- WINDOWS -->
+  <div class="section-label"><span class="section-label-text">🪟 Windows</span></div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-green">🪟</div>Raccourcis système Windows</div>
+    <p class="desc">Ces raccourcis fonctionnent à n'importe quel moment, même hors d'une application.</p>
+    <div class="shortcut-list">
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Alt</span><span class="key-sep">+</span><span class="key">F4</span></div>
+        <div><div class="shortcut-action">Fermer l'application</div><div class="shortcut-detail">Ferme la fenêtre ou l'application active</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Alt</span><span class="key-sep">+</span><span class="key">Tab</span></div>
+        <div><div class="shortcut-action">Changer d'application</div><div class="shortcut-detail">Affiche toutes les fenêtres ouvertes — relâche pour sélectionner</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Win</span><span class="key-sep">+</span><span class="key">E</span></div>
+        <div><div class="shortcut-action">Explorateur de fichiers</div><div class="shortcut-detail">Ouvre l'explorateur de fichiers Windows</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Win</span><span class="key-sep">+</span><span class="key">D</span></div>
+        <div><div class="shortcut-action">Afficher le bureau</div><div class="shortcut-detail">Réduit toutes les fenêtres pour voir le bureau</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Win</span><span class="key-sep">+</span><span class="key">L</span></div>
+        <div><div class="shortcut-action">Verrouiller l'écran</div><div class="shortcut-detail">Verrouille immédiatement la session — pratique quand tu quittes ton poste</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Win</span><span class="key-sep">+</span><span class="key">V</span></div>
+        <div><div class="shortcut-action">Historique du presse-papier</div><div class="shortcut-detail">Affiche tout ce que tu as copié récemment (activer dans les paramètres)</div></div>
+      </div>
+      <div class="shortcut-row">
+        <div class="shortcut-keys"><span class="key">Print Screen</span></div>
+        <div><div class="shortcut-action">Capture d'écran</div><div class="shortcut-detail">Copie tout l'écran — utilise <span class="key">Win</span>+<span class="key">Shift</span>+<span class="key">S</span> pour une capture partielle</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SYNTHESE -->
+  <div class="section-label"><span class="section-label-text">📋 Synthèse — Les 10 à retenir absolument</span></div>
+
+  <div class="card">
+    <div class="stitle"><div class="pill p-coral">📋</div>Le top 10 indispensable</div>
+    <p class="desc">Si tu ne devais en retenir que 10 pour aujourd'hui :</p>
+    <div class="result-box">
+      <div class="rl">Priorité absolue</div>
+      <span class="key">Ctrl</span>+<span class="key">C</span> &nbsp; Copier<br>
+      <span class="key">Ctrl</span>+<span class="key">V</span> &nbsp; Coller<br>
+      <span class="key">Ctrl</span>+<span class="key">X</span> &nbsp; Couper<br>
+      <span class="key">Ctrl</span>+<span class="key">Z</span> &nbsp; Annuler<br>
+      <span class="key">Ctrl</span>+<span class="key">A</span> &nbsp; Tout sélectionner<br>
+      <span class="key">Ctrl</span>+<span class="key">S</span> &nbsp; Sauvegarder<br>
+      <span class="key">Shift</span>+<span class="key">F5</span> &nbsp; Vider le cache du navigateur<br>
+      <span class="key">Ctrl</span>+<span class="key">/</span> &nbsp; Commenter (VS Code)<br>
+      <span class="key">Alt</span>+<span class="key">Tab</span> &nbsp; Changer d'application<br>
+      <span class="key">Shift</span>+<span class="key">Clic</span> &nbsp; Sélectionner une grande plage
+    </div>
+    <div class="tip tip-amber">
+      <span class="tip-i">🎯</span>
+      <span>La mémorisation vient par la pratique, pas par la lecture. Force-toi à utiliser ces raccourcis pendant 1 semaine — tu ne pourras plus t'en passer.</span>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <p>Cours terminé ✓ &nbsp; À toi de mettre ça en pratique !</p>
+    <a class="cta-btn" href="exercices-raccourcis-clavier.html">Passer aux exercices &rarr;</a>
+  </div>
+
+  <div class="footer-note">
+    <span style="font-size:0.82rem;">Comprendre → Chercher → Coder → Tester → Recommencer 🚀</span><br>
+    L'état d'esprit du développeur
+  </div>
+
+</body>
+</html>
