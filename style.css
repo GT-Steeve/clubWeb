@@ -618,6 +618,7 @@ section {
 .carousel-wrapper {
     max-width: 760px;
     margin: 0 auto;
+    overflow: hidden;
 }
 
 .carousel-tabs {
@@ -656,6 +657,7 @@ section {
 .carousel-viewport {
     border: 2px solid #333;
     overflow: hidden;
+    transform: translateZ(0);
 }
 
 .carousel-track {
@@ -764,8 +766,8 @@ section {
 .lightbox {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.92);
-    z-index: 999;
+    background: #000;
+    z-index: 10000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -780,27 +782,28 @@ section {
 }
 
 .lightbox-img {
-    max-width: 90vw;
-    max-height: 88vh;
+    width: 100vw;
+    height: 100vh;
     object-fit: contain;
     display: block;
-    border: 2px solid #333;
 }
 
 .lightbox-close {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
     background: var(--jaune);
     color: var(--noir);
     border: none;
-    width: 44px;
-    height: 44px;
-    font-size: 1.1rem;
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
     font-weight: 700;
     cursor: pointer;
     font-family: 'Space Mono', monospace;
     transition: transform 0.15s, box-shadow 0.15s;
+    z-index: 10001;
+    line-height: 1;
 }
 
 .lightbox-close:hover {
@@ -1130,8 +1133,4 @@ nav.open .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45d
         padding: 0.4rem 0.75rem;
     }
 
-    .lightbox-img {
-        max-width: 96vw;
-        max-height: 80vh;
-    }
 }
