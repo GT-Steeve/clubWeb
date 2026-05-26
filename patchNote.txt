@@ -54,6 +54,7 @@ v1.21.0 = ajout cours reproduit ton jeu préfère
 v1.22.0 = ajout section culture jeux vidéo
 v1.22.1 = correctif exercice association du chapître profil
 v1.22.2 = amélioration navigation de l'ensemble des cours
+v1.22.3 = amélioration narratif club web
 v1.23.0 = ajout page d'acceuil photos intervenant extérieur
 v1.23.1 = ajout onglet par intervenant
 v1.24.0 = ajout responsive page d'acceuil du projet
