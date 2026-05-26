@@ -59,6 +59,7 @@ v1.23.0 = ajout page d'acceuil photos intervenant extérieur
 v1.23.1 = ajout onglet par intervenant
 v1.24.0 = ajout responsive page d'acceuil du projet
 v1.25.0 = ajout cours raccourcie clavier
+v1.25.1 = ajout utilisation réservé établissement scolaire
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
