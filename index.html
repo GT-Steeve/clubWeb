@@ -383,7 +383,7 @@
               <div class="coming-soon-msg">
                 <span class="coming-soon-icon">⏳</span>
                 <p class="coming-soon-title">Prochain intervenant</p>
-                <p class="coming-soon-date">Courant juin 2026</p>
+                <p class="coming-soon-date">Octobre 2026</p>
               </div>
             </div>
             <div class="slide-caption">
@@ -474,13 +474,36 @@
       switchGroup('cyber');
 
       window.carouselMove = function (dir) { goTo(current + dir); };
+      window.carouselGetVisible = visibleSlides;
+      window.carouselSyncTo = function (n) { goTo(n); };
     })();
 
+    var lbCurrent = 0;
+
+    function lbSlides() {
+      return (window.carouselGetVisible ? window.carouselGetVisible() : [])
+        .filter(function (s) { return s.querySelector('img'); });
+    }
+
     window.openLightbox = function (btn) {
-      var img = btn.closest('.slide-img-wrap').querySelector('img');
+      var slide = btn.closest('.carousel-slide');
+      var slides = lbSlides();
+      lbCurrent = slides.indexOf(slide);
+      if (lbCurrent === -1) lbCurrent = 0;
+      var img = slide.querySelector('img');
+      if (!img) return;
       document.getElementById('lightboxImg').src = img.src;
       document.getElementById('lightbox').classList.add('active');
       document.addEventListener('keydown', onLbKey);
+    };
+
+    window.lbMove = function (dir) {
+      var slides = lbSlides();
+      if (!slides.length) return;
+      lbCurrent = (lbCurrent + dir + slides.length) % slides.length;
+      var img = slides[lbCurrent].querySelector('img');
+      document.getElementById('lightboxImg').src = img.src;
+      if (window.carouselSyncTo) window.carouselSyncTo(lbCurrent);
     };
 
     window.closeLightbox = function (e) {
@@ -489,7 +512,11 @@
       document.removeEventListener('keydown', onLbKey);
     };
 
-    function onLbKey(e) { if (e.key === 'Escape') window.closeLightbox(); }
+    function onLbKey(e) {
+      if (e.key === 'Escape') window.closeLightbox();
+      if (e.key === 'ArrowLeft') window.lbMove(-1);
+      if (e.key === 'ArrowRight') window.lbMove(1);
+    }
 
     (function () {
       var nav = document.getElementById('mainNav');
@@ -511,7 +538,9 @@
   <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
     <button class="lightbox-close" onclick="closeLightbox()" aria-label="Fermer">✕</button>
+    <button class="lightbox-prev" onclick="lbMove(-1);event.stopPropagation();" aria-label="Précédent">←</button>
     <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <button class="lightbox-next" onclick="lbMove(1);event.stopPropagation();" aria-label="Suivant">→</button>
   </div>
 
 </body>

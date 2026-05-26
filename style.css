@@ -811,6 +811,37 @@ section {
     box-shadow: 4px 4px 0 #fff;
 }
 
+.lightbox-prev,
+.lightbox-next {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--jaune);
+    color: var(--noir);
+    border: none;
+    width: 48px;
+    height: 48px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    z-index: 10001;
+    line-height: 1;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.lightbox-prev { left: 1rem; }
+.lightbox-next { right: 1rem; }
+
+.lightbox-prev:hover {
+    transform: translateY(-50%) translate(-2px, -2px);
+    box-shadow: 4px 4px 0 #fff;
+}
+.lightbox-next:hover {
+    transform: translateY(-50%) translate(-2px, -2px);
+    box-shadow: 4px 4px 0 #fff;
+}
+
 .slide-caption {
     padding: 1.5rem 2rem;
     background: #111;
