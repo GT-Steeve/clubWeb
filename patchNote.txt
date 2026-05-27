@@ -62,6 +62,7 @@ v1.25.0 = ajout cours raccourcie clavier
 v1.25.1 = ajout utilisation réservé établissement scolaire
 v1.25.2 = correctif zoom photos intervenant
 v1.25.3 = amélioration zoom photos + update date intervenant
+v1.25.4 = Review code + correctif zoom photos responsive
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/

@@ -444,10 +444,15 @@
         });
       }
 
+      function slideWidth() {
+        var vp = track.parentElement;
+        return vp ? vp.clientWidth : 0;
+      }
+
       function goTo(n) {
         var slides = visibleSlides();
         current = (n + slides.length) % slides.length;
-        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        track.style.transform = 'translateX(-' + (current * slideWidth()) + 'px)';
         dotsContainer.querySelectorAll('.carousel-dot').forEach(function (d, i) {
           d.classList.toggle('active', i === current);
         });
@@ -472,6 +477,12 @@
       });
 
       switchGroup('cyber');
+
+      window.addEventListener('resize', function () {
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(-' + (current * slideWidth()) + 'px)';
+        requestAnimationFrame(function () { track.style.transition = ''; });
+      });
 
       window.carouselMove = function (dir) { goTo(current + dir); };
       window.carouselGetVisible = visibleSlides;
