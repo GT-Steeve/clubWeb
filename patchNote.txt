@@ -66,8 +66,8 @@ v1.25.4 = Review code + correctif zoom photos responsive
 v1.26.0 = ajout onglet Realisation + projet du 1er élève
 v1.27.0 = ajout notif web où jeux vidéo
 v1.27.1 = ajout parcour web et jeux vidéo
-v1.27.2 = amélioration position des asides parcours  
-v1.27.3 = rework badge parcours web et jeux vidéo
+v1.27.2 = amélioration position des asides parcours + rework badge parcours web et jeux vidéo
+v1.27.3 = ajout Game Vlog en BONUS jeux vidéo 
 
 
 Lien du projet
@@ -75,7 +75,8 @@ https://gt-steeve.github.io/clubWeb/
 
 ** Next step ** 
 Checker les bug sur les exercice graphisme et gameplay, 
-prévoir jeu shoot, simulation de doom2, rpg
+prévoir jeu shoot, rpg, MAP
+complément du cours révision dev web, le front et back préférer l'apparence où le fonctionnement 
 
 ** Mind Set **
 Savoir que tu as besoin (ce que tu veux)

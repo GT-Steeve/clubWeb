@@ -1389,6 +1389,57 @@
       </a>
     </div>
 
+    <div class="theme-amber">
+      <a class="course-card" href="https://www.youtube.com/watch?v=daavycrypQ8" target="_blank">
+        <div class="card-nums">
+          <div class="card-num-web"></div>
+          <div class="card-num-jv">BONUS</div>
+        </div>
+        <div class="card-icon">🎬</div>
+        <div class="card-title">Game Vlog <br> Simple mais fun</div>
+        <div class="card-desc">Une vidéo youtube qui montre les étapes de création d'un jeu vidéo</div>
+        <div class="card-tags">
+          <span class="tag tag-main">Vlog</span>
+          <span class="tag tag-level">Tous niveaux</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+    <div class="theme-amber">
+      <a class="course-card" href="https://www.youtube.com/watch?v=32kKQPDZRDI" target="_blank">
+        <div class="card-nums">
+          <div class="card-num-web"></div>
+          <div class="card-num-jv">BONUS</div>
+        </div>
+        <div class="card-icon">🎬</div>
+        <div class="card-title">Game Vlog <br> Auto-clicker</div>
+        <div class="card-desc">Comment donner envie de clicker encore et toujours plus</div>
+        <div class="card-tags">
+          <span class="tag tag-main">Vlog</span>
+          <span class="tag tag-level">Tous niveaux</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+    <div class="theme-amber">
+      <a class="course-card" href="https://www.youtube.com/watch?v=SQfTO0YHH4Y" target="_blank">
+        <div class="card-nums">
+          <div class="card-num-web"></div>
+          <div class="card-num-jv">BONUS</div>
+        </div>
+        <div class="card-icon">🎬</div>
+        <div class="card-title">Game Vlog <br> Jeu d'aventure</div>
+        <div class="card-desc">Création et problématique d'un jeu d'aventure avec des ennemis</div>
+        <div class="card-tags">
+          <span class="tag tag-main">Vlog</span>
+          <span class="tag tag-level">Tous niveaux</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
     <!-- ── CULTURE JEUX VIDEO ── -->
     <div id="step4JV" class="section-label sl-indigo">🎓 Culture jeux vidéo</div>
 
@@ -1603,10 +1654,10 @@
         var href    = card.getAttribute('href');
         var title   = titleEl ? titleEl.textContent.replace(/\s+/g, ' ').trim() : '';
 
-        if (webEl && webEl.textContent.trim())
-          webCourses.push({ num: parseInt(webEl.textContent, 10), title: title, href: href });
-        if (jvEl && jvEl.textContent.trim())
-          jvCourses.push({ num: parseInt(jvEl.textContent, 10), title: title, href: href });
+        var wn = webEl && webEl.textContent.trim() ? parseInt(webEl.textContent, 10) : NaN;
+        var jn = jvEl  && jvEl.textContent.trim()  ? parseInt(jvEl.textContent,  10) : NaN;
+        if (!isNaN(wn)) webCourses.push({ num: wn, title: title, href: href });
+        if (!isNaN(jn)) jvCourses.push({ num: jn, title: title, href: href });
       });
 
       webCourses.sort(function (a, b) { return a.num - b.num; });
