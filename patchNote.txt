@@ -65,7 +65,9 @@ v1.25.3 = amélioration zoom photos + update date intervenant
 v1.25.4 = Review code + correctif zoom photos responsive
 v1.26.0 = ajout onglet Realisation + projet du 1er élève
 v1.27.0 = ajout notif web où jeux vidéo
-v1.27.1 = ajout partcour web et jeux vidéo
+v1.27.1 = ajout parcour web et jeux vidéo
+v1.27.2 = amélioration position des asides parcours  
+v1.27.3 = rework badge parcours web et jeux vidéo
 
 
 Lien du projet

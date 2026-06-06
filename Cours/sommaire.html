@@ -48,6 +48,8 @@
       padding: 0;
     }
 
+    html { scroll-behavior: smooth; }
+
     body {
       font-family: 'Nunito', sans-serif;
       background: var(--bg);
@@ -171,6 +173,13 @@
       max-width: 1440px;
       margin: 0 auto;
       align-items: start;
+      min-height: 100vh;
+    }
+
+    .page-center {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     /* ── ASIDES ── */
@@ -180,79 +189,123 @@
       top: 0;
       height: 100vh;
       overflow-y: auto;
-      padding: 1.5rem 0.85rem 2rem;
+      display: flex;
+      flex-direction: column;
       scrollbar-width: thin;
+      background: var(--card-bg);
     }
 
-    .aside-web { border-right: 1px solid var(--border); }
-    .aside-jv  { border-left:  1px solid var(--border); }
+    .aside-web {
+      border-right: 1px solid var(--border);
+      box-shadow: inset -3px 0 0 #bae6fd;
+    }
+    .aside-jv {
+      border-left: 1px solid var(--border);
+      box-shadow: inset 3px 0 0 #fed7aa;
+    }
 
     .aside-web::-webkit-scrollbar,
     .aside-jv::-webkit-scrollbar { width: 3px; }
     .aside-web::-webkit-scrollbar-thumb { background: #7dd3fc; border-radius: 99px; }
     .aside-jv::-webkit-scrollbar-thumb  { background: #fdba74; border-radius: 99px; }
 
+    /* Header sticky DANS l'aside — reste visible même si la liste est longue */
     .aside-header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
-      gap: 0.45rem;
-      font-size: 0.7rem;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.68rem;
       font-weight: 900;
       letter-spacing: 0.07em;
       text-transform: uppercase;
-      padding: 0.55rem 0.75rem;
-      border-radius: 10px;
-      margin-bottom: 1rem;
+      padding: 0.9rem 1rem 0.8rem;
+      border-bottom: 1px solid;
     }
 
-    .aside-web .aside-header { background: #e0f2fe; color: #0369a1; }
-    .aside-jv  .aside-header { background: #ffedd5; color: #9a3412; }
+    .aside-web .aside-header {
+      background: rgba(224, 242, 254, 0.97);
+      color: #0369a1;
+      border-bottom-color: #bae6fd;
+    }
+    .aside-jv .aside-header {
+      background: rgba(255, 237, 213, 0.97);
+      color: #9a3412;
+      border-bottom-color: #fed7aa;
+    }
+
+    .aside-header-label { display: flex; align-items: center; gap: 0.4rem; }
+
+    .aside-count {
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 999px;
+      opacity: 0.8;
+    }
+
+    .aside-web .aside-count { background: #0369a1; color: #fff; }
+    .aside-jv  .aside-count { background: #9a3412; color: #fff; }
 
     .aside-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 1px;
+      gap: 0;
+      padding: 0.4rem 0.65rem 4rem;
     }
 
     .aside-list li a {
       display: flex;
       align-items: flex-start;
-      gap: 0.5rem;
-      padding: 0.38rem 0.55rem;
+      gap: 0.6rem;
+      padding: 0.5rem 0.55rem;
       border-radius: 8px;
       text-decoration: none;
       color: var(--ink-soft);
-      font-size: 0.71rem;
-      font-weight: 700;
-      line-height: 1.35;
-      transition: background 0.12s, color 0.12s;
+      font-size: 0.8rem;
+      font-weight: 600;
+      line-height: 1.4;
+      transition: background 0.12s, color 0.12s, padding-left 0.12s;
     }
 
-    .aside-web .aside-list li a:hover { background: #e0f2fe; color: #0369a1; }
-    .aside-jv  .aside-list li a:hover { background: #ffedd5; color: #9a3412; }
+    .aside-web .aside-list li a:hover {
+      background: #e0f2fe;
+      color: #0369a1;
+      padding-left: 0.75rem;
+    }
+    .aside-jv .aside-list li a:hover {
+      background: #ffedd5;
+      color: #9a3412;
+      padding-left: 0.75rem;
+    }
 
     .aside-num {
       flex-shrink: 0;
-      font-size: 0.6rem;
-      font-weight: 800;
-      border-radius: 5px;
-      padding: 1px 6px;
-      line-height: 1.6;
-      margin-top: 1px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 2px 7px;
+      line-height: 1.5;
+      margin-top: 2px;
     }
 
-    .aside-web .aside-num { background: #0369a1; color: #fff; }
-    .aside-jv  .aside-num { background: #9a3412; color: #fff; }
+    .aside-web .aside-num { background: #dbeafe; color: #1d4ed8; }
+    .aside-jv  .aside-num { background: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; }
 
     .aside-title { flex: 1; }
 
     /* ── GRID ── */
     .grid {
-      padding: 2.5rem 1.25rem 4rem;
+      padding: 2rem 1.5rem 5rem;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1.1rem;
+      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+      gap: 1.25rem;
     }
 
     /* ── CARD ── */
@@ -566,15 +619,27 @@
       letter-spacing: .1em;
       text-transform: uppercase;
       color: var(--ink-soft);
-      padding: .5rem 0 .1rem;
+      padding: .65rem 0 .3rem .85rem;
       border-top: 1px solid var(--border);
-      margin-top: .5rem;
+      border-left: 3px solid transparent;
+      margin-top: 1rem;
     }
 
     .section-label:first-child {
       border-top: none;
       margin-top: 0;
     }
+
+    .sl-teal   { border-left-color: var(--teal); }
+    .sl-rose   { border-left-color: var(--rose); }
+    .sl-purple { border-left-color: var(--purple); }
+    .sl-sky    { border-left-color: var(--sky); }
+    .sl-orange { border-left-color: var(--orange); }
+    .sl-green  { border-left-color: var(--green); }
+    .sl-amber  { border-left-color: var(--amber); }
+    .sl-indigo { border-left-color: var(--indigo); }
+    .sl-blue   { border-left-color: var(--blue); }
+    .sl-lime   { border-left-color: var(--lime); }
 
     /* ── FOOTER ── */
     footer {
@@ -591,14 +656,27 @@
 
     @media (max-width: 800px) {
       .page-layout { grid-template-columns: 1fr; }
-      .aside-web, .aside-jv {
-        display: none;
-      }
+      .aside-web, .aside-jv { display: none; }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- PAGE LAYOUT -->
+  <div class="page-layout">
+
+  <!-- ASIDE WEB -->
+  <aside class="aside-web">
+    <div class="aside-header">
+      <span class="aside-header-label">🌐 Parcours Web</span>
+      <span class="aside-count" id="webCount"></span>
+    </div>
+    <ol class="aside-list" id="webList"></ol>
+  </aside>
+
+  <!-- CENTRE : hero + grid -->
+  <div class="page-center">
 
   <!-- HERO -->
   <div class="hero">
@@ -612,46 +690,17 @@
     </div>
   </div>
 
-  <!-- PAGE LAYOUT -->
-  <div class="page-layout">
-
-  <!-- ASIDE WEB -->
-  <aside class="aside-web">
-    <div class="aside-header">🌐 Parcours Web</div>
-    <ol class="aside-list" id="webList"></ol>
-  </aside>
-
   <!-- GRID -->
   <div class="grid">
 
     <!-- ── INTRODUCTION ── -->
-    <div id="step1" class="section-label">🧭 Introduction</div>
-
-    <div class="theme-teal">
-      <a class="course-card" href="General/mind_set/cours-mind-set.html">
-        <div class="card-nums">
-          <div class="card-num-web">01</div>
-          <div class="card-num-jv">01</div>
-        </div>
-        <div class="card-icon">💡</div>
-        <div class="card-title">Comprendre le monde informatique</div>
-        <div class="card-desc">
-          Découvre comment fonctionne le développement web, les bases de l’informatique
-          et l’approche logique pour apprendre à créer, structurer et comprendre un projet.
-        </div>
-        <div class="card-tags">
-          <span class="tag tag-main">Introduction</span>
-          <span class="tag tag-level">Débutant</span>
-        </div>
-        <div class="card-arrow">Ouvrir le cours →</div>
-      </a>
-    </div>
+    <div id="step1" class="section-label sl-teal">🧭 Introduction</div>
 
     <div class="theme-teal">
       <a class="course-card" href="General/vscode/cours-vscode.html">
         <div class="card-nums">
-          <div class="card-num-web">02</div>
-          <div class="card-num-jv">02</div>
+          <div class="card-num-web">01</div>
+          <div class="card-num-jv">01</div>
         </div>
         <div class="card-icon">💻</div>
         <div class="card-title">IDE & VS Code, Ton environnement de travail</div>
@@ -668,13 +717,33 @@
     </div>
 
     <div class="theme-teal">
+      <a class="course-card" href="General/mind_set/cours-mind-set.html">
+        <div class="card-nums">
+          <div class="card-num-web">02</div>
+          <div class="card-num-jv">02</div>
+        </div>
+        <div class="card-icon">💡</div>
+        <div class="card-title">Comprendre le monde informatique</div>
+        <div class="card-desc">
+          Découvre comment fonctionne le développement web, les bases de l’informatique
+          et l’approche logique pour apprendre à créer, structurer et comprendre un projet.
+        </div>
+        <div class="card-tags">
+          <span class="tag tag-main">Introduction</span>
+          <span class="tag tag-level">Débutant</span>
+        </div>
+        <div class="card-arrow">Ouvrir le cours →</div>
+      </a>
+    </div>
+
+    <div class="theme-teal">
       <a class="course-card" href="General/raccourcis-clavier/cours-raccourcis-clavier.html">
         <div class="card-nums">
-          <div class="card-num-web">03</div>
-          <div class="card-num-jv">03</div>
+          <div class="card-num-web">05</div>
+          <div class="card-num-jv">05</div>
         </div>
         <div class="card-icon">⌨️</div>
-        <div class="card-title">Raccourcis clavier — Travaille plus vite</div>
+        <div class="card-title">Raccourcis clavier Travaille plus vite</div>
         <div class="card-desc">
           Maîtrise les raccourcis essentiels : copier, coller, couper, sélectionner, vider le cache
           du navigateur et bien d'autres pour travailler sans la souris.
@@ -688,13 +757,13 @@
     </div>
 
     <!-- ── ORGANISATION & NAVIGATION ── -->
-    <div id="step4" class="section-label">📁 Organisation &amp; Navigation</div>
+    <div id="step4" class="section-label sl-rose">📁 Organisation &amp; Navigation</div>
 
     <div class="theme-rose">
       <a class="course-card" href="General/Architecture/cours-architecture.html">
         <div class="card-nums">
-          <div class="card-num-web">03</div>
-          <div class="card-num-jv">03</div>
+          <div class="card-num-web">07</div>
+          <div class="card-num-jv">07</div>
         </div>
         <div class="card-icon">🗂️</div>
         <div class="card-title">Architecture de projet &amp; chemins de fichiers</div>
@@ -710,8 +779,8 @@
     <div class="theme-rose">
       <a class="course-card" href="General/terminal/cours-terminal.html">
         <div class="card-nums">
-          <div class="card-num-web">04</div>
-          <div class="card-num-jv">04</div>
+          <div class="card-num-web">09</div>
+          <div class="card-num-jv">09</div>
         </div>
         <div class="card-icon">🖥️</div>
         <div class="card-title">Le Terminal CMD <br> L'invite de commandes</div>
@@ -728,11 +797,11 @@
     <div class="theme-rose">
       <a class="course-card" href="General/auto_entrainement/cours-auto-entrainement.html">
         <div class="card-nums">
-          <div class="card-num-web">05</div>
-          <div class="card-num-jv">05</div>
+          <div class="card-num-web">12</div>
+          <div class="card-num-jv">11</div>
         </div>
         <div class="card-icon">🧠</div>
-        <div class="card-title">Auto-entraînement — Deviens meilleur chaque jour</div>
+        <div class="card-title">Auto-entraînement Deviens meilleur chaque jour</div>
         <div class="card-desc">
           Découvre comment progresser en autonomie grâce à des méthodes d’apprentissage efficaces,
           des exercices pratiques et des routines pour renforcer tes compétences jour après jour.
@@ -746,13 +815,13 @@
     </div>
 
     <!-- ── VIBE CODING ── -->
-    <div id="step1vibe" class="section-label">🤖 Vibe Coding</div>
+    <div id="step1vibe" class="section-label sl-purple">🤖 Vibe Coding</div>
 
     <div class="theme-purple">
       <a class="course-card" href="General/vibecoding-html/cours-vibecoding-html.html">
         <div class="card-nums">
-          <div class="card-num-web">06</div>
-          <div class="card-num-jv">06</div>
+          <div class="card-num-web">03</div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🎨</div>
         <div class="card-title">HTML / CSS / JS <br> Sites web par vibe coding</div>
@@ -769,13 +838,13 @@
     <div class="theme-purple">
       <a class="course-card" href="General/vibecoding-canvas/cours-vibecoding-canvas.html">
         <div class="card-nums">
-          <div class="card-num-web">07</div>
-          <div class="card-num-jv">07</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv">03</div>
         </div>
         <div class="card-icon">🕹️</div>
         <div class="card-title">Canvas & Jeu navigateur <br> Par vibe coding</div>
         <div class="card-desc">Construis un jeu 2D dans le navigateur avec l’IA : boucle de jeu, déplacements,
-          collisions et spawn d’ennemis — en guidant l’IA étape par étape et en comprenant chaque fonction générée.
+          collisions et spawn d’ennemis en guidant l’IA étape par étape et en comprenant chaque fonction générée.
         </div>
         <div class="card-tags">
           <span class="tag tag-main">Vibe Coding</span>
@@ -786,13 +855,13 @@
     </div>
 
     <!-- ── WEB STATIQUE ── -->
-    <div id="step2" class="section-label">🌐 Web statique</div>
+    <div id="step2" class="section-label sl-sky">🌐 Web statique</div>
 
     <div class="theme-sky">
       <a class="course-card" href="General/html/cours-html.html">
         <div class="card-nums">
-          <div class="card-num-web">08</div>
-          <div class="card-num-jv">08</div>
+          <div class="card-num-web">04</div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">&lt; / &gt;</div>
         <div class="card-title">Structure avec le HTML</div>
@@ -809,8 +878,8 @@
     <div class="theme-sky">
       <a class="course-card" href="General/css/cours-css.html">
         <div class="card-nums">
-          <div class="card-num-web">09</div>
-          <div class="card-num-jv">09</div>
+          <div class="card-num-web">06</div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🎨</div>
         <div class="card-title">Décoration avec CSS</div>
@@ -826,8 +895,8 @@
     <div class="theme-sky">
       <a class="course-card" href="General/html-avance/cours-html-avance.html">
         <div class="card-nums">
-          <div class="card-num-web">10</div>
-          <div class="card-num-jv">10</div>
+          <div class="card-num-web">08</div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">&lt; / &gt;</div>
         <div class="card-title">HTML avancé</div>
@@ -845,8 +914,8 @@
     <div class="theme-sky">
       <a class="course-card" href="General/javascript-web/cours-javascript-web.html">
         <div class="card-nums">
-          <div class="card-num-web">11</div>
-          <div class="card-num-jv">11</div>
+          <div class="card-num-web">10</div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">⚡</div>
         <div class="card-title">Interaction avec le JavaScript</div>
@@ -862,8 +931,8 @@
     <div class="theme-sky">
       <a class="course-card" href="General/templates/cours-templates.html">
         <div class="card-nums">
-          <div class="card-num-web">12</div>
-          <div class="card-num-jv">12</div>
+          <div class="card-num-web">11</div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🎨</div>
         <div class="card-title">Lire & utiliser des templates HTML/CSS</div>
@@ -882,7 +951,7 @@
       <a class="course-card" href="General/resume-global/cours-resume-global.html">
         <div class="card-nums">
           <div class="card-num-web">13</div>
-          <div class="card-num-jv">13</div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">📖</div>
         <div class="card-title">Révision basique Dev Web</div>
@@ -902,14 +971,14 @@
     </div>
 
     <!-- ── CULTURE WEB ── -->
-    <div id="step2Advence" class="section-label">💡 Culture développement Web</div>
+    <div id="step2Advence" class="section-label sl-orange">💡 Culture développement Web</div>
 
     <div class="theme-orange">
 
       <a class="course-card" href="General/web123/cours-web123.html">
         <div class="card-nums">
-          <div class="card-num-web">14</div>
-          <div class="card-num-jv">14</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🌐</div>
         <div class="card-title">Web 1, Web 2, Web 3 <br> L’évolution d’Internet</div>
@@ -930,8 +999,8 @@
 
       <a class="course-card" href="General/php/cours-php.html">
         <div class="card-nums">
-          <div class="card-num-web">15</div>
-          <div class="card-num-jv">15</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🐘</div>
         <div class="card-title">PHP <br> Language web dynamique</div>
@@ -953,8 +1022,8 @@
 
       <a class="course-card" href="General/python/cours-python.html">
         <div class="card-nums">
-          <div class="card-num-web">16</div>
-          <div class="card-num-jv">16</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🐍</div>
         <div class="card-title">Python & Django <br> Applications web</div>
@@ -977,8 +1046,8 @@
 
       <a class="course-card" href="General/bdd/cours-bdd.html">
         <div class="card-nums">
-          <div class="card-num-web">17</div>
-          <div class="card-num-jv">17</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🗄️</div>
         <div class="card-title">Bases de données <br> SQL & NoSQL</div>
@@ -1000,8 +1069,8 @@
 
       <a class="course-card" href="General/frameworks/cours-frameworks.html">
         <div class="card-nums">
-          <div class="card-num-web">18</div>
-          <div class="card-num-jv">18</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">⚙️</div>
 
@@ -1030,8 +1099,8 @@
 
       <a class="course-card" href="General/deploiement/cours-deploiement.html">
         <div class="card-nums">
-          <div class="card-num-web">19</div>
-          <div class="card-num-jv">19</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🚀</div>
 
@@ -1054,13 +1123,13 @@
     </div>
 
     <!-- ── DJANGO ── -->
-    <div id="step2Dynamique" class="section-label">🌐 Web dynamique</div>
+    <div id="step2Dynamique" class="section-label sl-green">🌐 Web dynamique</div>
 
     <div class="theme-green">
       <a class="course-card" href="General/django-start/cours-django-start.html">
         <div class="card-nums">
-          <div class="card-num-web">20</div>
-          <div class="card-num-jv">20</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🐍</div>
         <div class="card-title">Premiers pas avec Django</div>
@@ -1078,8 +1147,8 @@
     <div class="theme-green">
       <a class="course-card" href="General/django-structure/cours-django-structure.html">
         <div class="card-nums">
-          <div class="card-num-web">21</div>
-          <div class="card-num-jv">21</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">📁</div>
 
@@ -1105,8 +1174,8 @@
     <div class="theme-green">
       <a class="course-card" href="General/vibecoding-django/cours-vibecoding-django.html">
         <div class="card-nums">
-          <div class="card-num-web">22</div>
-          <div class="card-num-jv">22</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🐍</div>
         <div class="card-title">Python & Django <br>Vibe Coding</div>
@@ -1123,8 +1192,8 @@
     <div class="theme-green">
       <a class="course-card" href="General/django-templates/cours-django-templates.html">
         <div class="card-nums">
-          <div class="card-num-web">23</div>
-          <div class="card-num-jv">23</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">&lt; / &gt;</div>
 
@@ -1150,8 +1219,8 @@
     <div class="theme-green">
       <a class="course-card" href="General/django-crud/cours-django-crud.html">
         <div class="card-nums">
-          <div class="card-num-web">24</div>
-          <div class="card-num-jv">24</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">📝</div>
 
@@ -1177,8 +1246,8 @@
     <div class="theme-green">
       <a class="course-card" href="General/django-auth/cours-django-auth.html">
         <div class="card-nums">
-          <div class="card-num-web">25</div>
-          <div class="card-num-jv">25</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🔐</div>
 
@@ -1205,8 +1274,8 @@
 
       <a class="course-card" href="General/django/cours-django.html">
         <div class="card-nums">
-          <div class="card-num-web">26</div>
-          <div class="card-num-jv">26</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🐍</div>
 
@@ -1231,13 +1300,13 @@
     </div>
 
     <!-- ── JEUX VIDEO ── -->
-    <div id="step3" class="section-label">🎮 Jeux Web</div>
+    <div id="step3" class="section-label sl-amber">🎮 Jeux Web</div>
 
     <div class="theme-amber">
       <a class="course-card" href="General/javascript/cours-javascript.html">
         <div class="card-nums">
-          <div class="card-num-web">27</div>
-          <div class="card-num-jv">27</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv">04</div>
         </div>
         <div class="card-icon">⚡</div>
         <div class="card-title">JavaScript <br> Les bases &amp; intégration HTML</div>
@@ -1253,8 +1322,8 @@
     <div class="theme-amber">
       <a class="course-card" href="General/canvas/cours-canvas.html">
         <div class="card-nums">
-          <div class="card-num-web">28</div>
-          <div class="card-num-jv">28</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv">06</div>
         </div>
         <div class="card-icon">🕹️</div>
         <div class="card-title">Canvas &amp; Jeu vidéo <br> L'algo derrière les jeux</div>
@@ -1271,8 +1340,8 @@
     <div class="theme-amber">
       <a class="course-card" href="General/graphisme/cours-graphisme.html">
         <div class="card-nums">
-          <div class="card-num-web">29</div>
-          <div class="card-num-jv">29</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv">08</div>
         </div>
         <div class="card-icon">🎨</div>
         <div class="card-title">Graphisme &amp; Sprites <br> Animer un personnage</div>
@@ -1289,8 +1358,8 @@
     <div class="theme-amber">
       <a class="course-card" href="General/game-design/cours-game-design.html">
         <div class="card-nums">
-          <div class="card-num-web">30</div>
-          <div class="card-num-jv">30</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv">10</div>
         </div>
         <div class="card-icon">🎯</div>
         <div class="card-title">Game Design <br> Architecture d'un jeu complet</div>
@@ -1306,8 +1375,8 @@
     <div class="theme-amber">
       <a class="course-card" href="General/clone-game/cours-clone-game.html">
         <div class="card-nums">
-          <div class="card-num-web">31</div>
-          <div class="card-num-jv">31</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv">12</div>
         </div>
         <div class="card-icon">🐦</div>
         <div class="card-title">Recréer Flappy Bird <br> Inspire et Personnalise</div>
@@ -1321,13 +1390,13 @@
     </div>
 
     <!-- ── CULTURE JEUX VIDEO ── -->
-    <div id="step4JV" class="section-label">🎓 Culture jeux vidéo</div>
+    <div id="step4JV" class="section-label sl-indigo">🎓 Culture jeux vidéo</div>
 
     <div class="theme-indigo">
       <a class="course-card" href="General/langage-moteur-jeu/cours-langage-moteur-jeu.html">
         <div class="card-nums">
-          <div class="card-num-web">32</div>
-          <div class="card-num-jv">32</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">⚖️</div>
         <div class="card-title">Langage natif &amp; Moteur de jeu <br> Comprendre et comparer</div>
@@ -1344,8 +1413,8 @@
     <div class="theme-indigo">
       <a class="course-card" href="General/moteurs-jeu/cours-moteurs-jeu.html">
         <div class="card-nums">
-          <div class="card-num-web">33</div>
-          <div class="card-num-jv">33</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🏗️</div>
         <div class="card-title">Moteurs de jeu <br> Unreal, Unity &amp; Godot</div>
@@ -1361,12 +1430,12 @@
     <div class="theme-indigo">
       <a class="course-card" href="General/moteurs-2d/cours-moteurs-2d.html">
         <div class="card-nums">
-          <div class="card-num-web">34</div>
-          <div class="card-num-jv">34</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🕹️</div>
         <div class="card-title">Moteurs jeu 2D <br> Phaser.js &amp; Solar2D</div>
-        <div class="card-desc">Explore les frameworks dédiés aux jeux 2D : Phaser.js pour le web et Solar2D pour mobile — deux outils puissants, deux philosophies différentes.</div>
+        <div class="card-desc">Explore les frameworks dédiés aux jeux 2D : Phaser.js pour le web et Solar2D pour mobile deux outils puissants, deux philosophies différentes.</div>
         <div class="card-tags">
           <span class="tag tag-main">Phaser.js</span>
           <span class="tag tag-main">Solar2D</span>
@@ -1377,13 +1446,13 @@
     </div>
 
     <!-- ── SAUVEGARDE & SUIVI ── -->
-    <div id="step5" class="section-label">🔀 Sauvegarde &amp; Suivi</div>
+    <div id="step5" class="section-label sl-blue">🔀 Sauvegarde &amp; Suivi</div>
 
     <div class="theme-blue">
       <a class="course-card" href="General/git/cours-git.html">
         <div class="card-nums">
-          <div class="card-num-web">35</div>
-          <div class="card-num-jv">35</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🌿</div>
         <div class="card-title">Git &amp; GitHub <br> Sauvegarde ton code !</div>
@@ -1399,8 +1468,8 @@
     <div class="theme-blue">
       <a class="course-card" href="General/github-pages/cours-github-pages.html">
         <div class="card-nums">
-          <div class="card-num-web">36</div>
-          <div class="card-num-jv">36</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🚀</div>
         <div class="card-title">GitHub Pages <br> Héberge ton site gratuitement !</div>
@@ -1417,8 +1486,8 @@
     <div class="theme-blue">
       <a class="course-card" href="General/patchnote/cours-patchnote.html">
         <div class="card-nums">
-          <div class="card-num-web">37</div>
-          <div class="card-num-jv">37</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">📝</div>
         <div class="card-title">Patch-notes &amp; Versioning <br> Documenter ses commits</div>
@@ -1435,11 +1504,11 @@
     <div class="theme-blue">
       <a class="course-card" href="General/readme/cours-readme.html">
         <div class="card-nums">
-          <div class="card-num-web">38</div>
-          <div class="card-num-jv">38</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">📄</div>
-        <div class="card-title">Le README.md — La carte d'identité de ton projet</div>
+        <div class="card-title">Le README.md La carte d'identité de ton projet</div>
         <div class="card-desc">Présente ton projet en Markdown : badges, captures d'écran, installation et contribution.
         </div>
         <div class="card-tags">
@@ -1451,17 +1520,17 @@
     </div>
 
     <!-- ── TON PROFIL ── -->
-    <div id="step6" class="section-label">👤 Ton profil</div>
+    <div id="step6" class="section-label sl-lime">👤 Ton profil</div>
 
     <div class="theme-lime">
       <a class="course-card" href="General/mes-creations/cours-mes-creations.html">
         <div class="card-nums">
-          <div class="card-num-web">39</div>
-          <div class="card-num-jv">39</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🛠️</div>
         <div class="card-title">Mes créations <br> Mets tes connaissances à profit</div>
-        <div class="card-desc">Tu as appris — maintenant crée. Outils, jeux, énigmes : organise tes idées, planifie et réalise tes propres projets de A à Z.</div>
+        <div class="card-desc">Tu as appris maintenant crée. Outils, jeux, énigmes : organise tes idées, planifie et réalise tes propres projets de A à Z.</div>
         <div class="card-tags">
           <span class="tag tag-main">Créations</span>
           <span class="tag tag-level">Tous niveaux</span>
@@ -1473,8 +1542,8 @@
     <div class="theme-lime">
       <a class="course-card" href="General/portfolio/cours-portfolio.html">
         <div class="card-nums">
-          <div class="card-num-web">40</div>
-          <div class="card-num-jv">40</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🌐</div>
         <div class="card-title">Mon portfolio <br> Expose &amp; partage tes créations</div>
@@ -1490,8 +1559,8 @@
     <div class="theme-lime">
       <a class="course-card" href="General/voie-pro/cours-voie-pro.html">
         <div class="card-nums">
-          <div class="card-num-web">41</div>
-          <div class="card-num-jv">41</div>
+          <div class="card-num-web"></div>
+          <div class="card-num-jv"></div>
         </div>
         <div class="card-icon">🎓</div>
         <div class="card-title">Ma voie professionnelle <br> Études, diplômes &amp; avenir</div>
@@ -1505,10 +1574,14 @@
     </div>
 
   </div><!-- end .grid -->
+  </div><!-- end .page-center -->
 
   <!-- ASIDE JV -->
   <aside class="aside-jv">
-    <div class="aside-header">🎮 Parcours JV</div>
+    <div class="aside-header">
+      <span class="aside-header-label">🎮 Parcours JV</span>
+      <span class="aside-count" id="jvCount"></span>
+    </div>
     <ol class="aside-list" id="jvList"></ol>
   </aside>
 
@@ -1524,40 +1597,39 @@
       var webCourses = [], jvCourses = [];
 
       cards.forEach(function (card) {
-        var webEl  = card.querySelector('.card-num-web');
-        var jvEl   = card.querySelector('.card-num-jv');
+        var webEl   = card.querySelector('.card-num-web');
+        var jvEl    = card.querySelector('.card-num-jv');
         var titleEl = card.querySelector('.card-title');
-        var href   = card.getAttribute('href');
-        var title  = titleEl ? titleEl.textContent.replace(/\s+/g, ' ').trim() : '';
+        var href    = card.getAttribute('href');
+        var title   = titleEl ? titleEl.textContent.replace(/\s+/g, ' ').trim() : '';
 
-        if (webEl && webEl.textContent.trim()) {
+        if (webEl && webEl.textContent.trim())
           webCourses.push({ num: parseInt(webEl.textContent, 10), title: title, href: href });
-        }
-        if (jvEl && jvEl.textContent.trim()) {
+        if (jvEl && jvEl.textContent.trim())
           jvCourses.push({ num: parseInt(jvEl.textContent, 10), title: title, href: href });
-        }
       });
 
       webCourses.sort(function (a, b) { return a.num - b.num; });
-      jvCourses.sort(function (a, b) { return a.num - b.num; });
+      jvCourses.sort(function (a, b)  { return a.num - b.num; });
 
-      function buildList(listId, courses) {
-        var list = document.getElementById(listId);
+      function buildList(listId, countId, courses) {
+        var list    = document.getElementById(listId);
+        var countEl = document.getElementById(countId);
         if (!list) return;
+        if (countEl) countEl.textContent = courses.length;
         courses.forEach(function (c) {
           var li = document.createElement('li');
-          var num = String(c.num).padStart(2, '0');
           li.innerHTML =
             '<a href="' + c.href + '">' +
-              '<span class="aside-num">' + num + '</span>' +
+              '<span class="aside-num">' + String(c.num).padStart(2, '0') + '</span>' +
               '<span class="aside-title">' + c.title + '</span>' +
             '</a>';
           list.appendChild(li);
         });
       }
 
-      buildList('webList', webCourses);
-      buildList('jvList', jvCourses);
+      buildList('webList', 'webCount', webCourses);
+      buildList('jvList',  'jvCount',  jvCourses);
     })();
   </script>
 
