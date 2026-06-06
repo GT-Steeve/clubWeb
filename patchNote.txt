@@ -63,7 +63,8 @@ v1.25.1 = ajout utilisation réservé établissement scolaire
 v1.25.2 = correctif zoom photos intervenant
 v1.25.3 = amélioration zoom photos + update date intervenant
 v1.25.4 = Review code + correctif zoom photos responsive
-v1.26.0 = ajout onglet Realisation + un projet d'un élève
+v1.26.0 = ajout onglet Realisation + projet du 1er élève
+v1.27.0 = Parcours web où jeux vidéo
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/

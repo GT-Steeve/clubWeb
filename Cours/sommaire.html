@@ -264,19 +264,41 @@
       transform: translateX(0);
     }
 
-    .card-num {
+    .card-nums {
       position: absolute;
       top: 14px;
       right: 14px;
-      font-size: 0.68rem;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .card-num-web,
+    .card-num-jv {
+      font-size: 0.65rem;
       font-weight: 800;
-      color: var(--ink-soft);
-      background: var(--bg);
-      border: 1px solid var(--border);
       border-radius: 6px;
       padding: 1px 7px;
       letter-spacing: 0.02em;
       line-height: 1.6;
+      white-space: nowrap;
+    }
+
+    .card-num-web {
+      color: #0369a1;
+      background: #e0f2fe;
+      border: 1px solid #7dd3fc;
+    }
+
+    .card-num-jv {
+      color: #9a3412;
+      background: #ffedd5;
+      border: 1px solid #fdba74;
+    }
+
+    .card-num-web:empty,
+    .card-num-jv:empty {
+      display: none;
     }
 
     /* Color themes */
@@ -506,7 +528,10 @@
 
     <div class="theme-teal">
       <a class="course-card" href="General/mind_set/cours-mind-set.html">
-        <div class="card-num">01</div>
+        <div class="card-nums">
+          <div class="card-num-web">01</div>
+          <div class="card-num-jv">01</div>
+        </div>
         <div class="card-icon">💡</div>
         <div class="card-title">Comprendre le monde informatique</div>
         <div class="card-desc">
@@ -523,7 +548,10 @@
 
     <div class="theme-teal">
       <a class="course-card" href="General/vscode/cours-vscode.html">
-        <div class="card-num">02</div>
+        <div class="card-nums">
+          <div class="card-num-web">02</div>
+          <div class="card-num-jv">02</div>
+        </div>
         <div class="card-icon">💻</div>
         <div class="card-title">IDE & VS Code, Ton environnement de travail</div>
         <div class="card-desc">
@@ -540,7 +568,10 @@
 
     <div class="theme-teal">
       <a class="course-card" href="General/raccourcis-clavier/cours-raccourcis-clavier.html">
-        <div class="card-num">03</div>
+        <div class="card-nums">
+          <div class="card-num-web">03</div>
+          <div class="card-num-jv">03</div>
+        </div>
         <div class="card-icon">⌨️</div>
         <div class="card-title">Raccourcis clavier — Travaille plus vite</div>
         <div class="card-desc">
@@ -560,7 +591,10 @@
 
     <div class="theme-rose">
       <a class="course-card" href="General/Architecture/cours-architecture.html">
-        <div class="card-num">03</div>
+        <div class="card-nums">
+          <div class="card-num-web">03</div>
+          <div class="card-num-jv">03</div>
+        </div>
         <div class="card-icon">🗂️</div>
         <div class="card-title">Architecture de projet &amp; chemins de fichiers</div>
         <div class="card-desc">Organise tes dossiers proprement et maîtrise les chemins relatifs et absolus.</div>
@@ -574,7 +608,10 @@
 
     <div class="theme-rose">
       <a class="course-card" href="General/terminal/cours-terminal.html">
-        <div class="card-num">04</div>
+        <div class="card-nums">
+          <div class="card-num-web">04</div>
+          <div class="card-num-jv">04</div>
+        </div>
         <div class="card-icon">🖥️</div>
         <div class="card-title">Le Terminal CMD <br> L'invite de commandes</div>
         <div class="card-desc">Navigue dans tes fichiers, exécute des commandes et prends le contrôle de ton
@@ -589,7 +626,10 @@
 
     <div class="theme-rose">
       <a class="course-card" href="General/auto_entrainement/cours-auto-entrainement.html">
-        <div class="card-num">05</div>
+        <div class="card-nums">
+          <div class="card-num-web">05</div>
+          <div class="card-num-jv">05</div>
+        </div>
         <div class="card-icon">🧠</div>
         <div class="card-title">Auto-entraînement — Deviens meilleur chaque jour</div>
         <div class="card-desc">
@@ -609,7 +649,10 @@
 
     <div class="theme-purple">
       <a class="course-card" href="General/vibecoding-html/cours-vibecoding-html.html">
-        <div class="card-num">06</div>
+        <div class="card-nums">
+          <div class="card-num-web">06</div>
+          <div class="card-num-jv">06</div>
+        </div>
         <div class="card-icon">🎨</div>
         <div class="card-title">HTML / CSS / JS <br> Sites web par vibe coding</div>
         <div class="card-desc">Crée des interfaces web complètes avec l’IA : structure HTML, mise en forme CSS et
@@ -624,7 +667,10 @@
 
     <div class="theme-purple">
       <a class="course-card" href="General/vibecoding-canvas/cours-vibecoding-canvas.html">
-        <div class="card-num">07</div>
+        <div class="card-nums">
+          <div class="card-num-web">07</div>
+          <div class="card-num-jv">07</div>
+        </div>
         <div class="card-icon">🕹️</div>
         <div class="card-title">Canvas & Jeu navigateur <br> Par vibe coding</div>
         <div class="card-desc">Construis un jeu 2D dans le navigateur avec l’IA : boucle de jeu, déplacements,
@@ -643,7 +689,10 @@
 
     <div class="theme-sky">
       <a class="course-card" href="General/html/cours-html.html">
-        <div class="card-num">08</div>
+        <div class="card-nums">
+          <div class="card-num-web">08</div>
+          <div class="card-num-jv">08</div>
+        </div>
         <div class="card-icon">&lt; / &gt;</div>
         <div class="card-title">Structure avec le HTML</div>
         <div class="card-desc">Le langage de base pour créer des pages web. Balises, structure, formulaires et bien
@@ -658,7 +707,10 @@
 
     <div class="theme-sky">
       <a class="course-card" href="General/css/cours-css.html">
-        <div class="card-num">09</div>
+        <div class="card-nums">
+          <div class="card-num-web">09</div>
+          <div class="card-num-jv">09</div>
+        </div>
         <div class="card-icon">🎨</div>
         <div class="card-title">Décoration avec CSS</div>
         <div class="card-desc">Mets en forme tes pages : couleurs, polices, mises en page flexbox et animations.</div>
@@ -672,7 +724,10 @@
 
     <div class="theme-sky">
       <a class="course-card" href="General/html-avance/cours-html-avance.html">
-        <div class="card-num">10</div>
+        <div class="card-nums">
+          <div class="card-num-web">10</div>
+          <div class="card-num-jv">10</div>
+        </div>
         <div class="card-icon">&lt; / &gt;</div>
         <div class="card-title">HTML avancé</div>
         <div class="card-desc">
@@ -688,7 +743,10 @@
 
     <div class="theme-sky">
       <a class="course-card" href="General/javascript-web/cours-javascript-web.html">
-        <div class="card-num">11</div>
+        <div class="card-nums">
+          <div class="card-num-web">11</div>
+          <div class="card-num-jv">11</div>
+        </div>
         <div class="card-icon">⚡</div>
         <div class="card-title">Interaction avec le JavaScript</div>
         <div class="card-desc">Rends tes pages vivantes ! Variables, fonctions, événements et manipulation du DOM.</div>
@@ -702,7 +760,10 @@
 
     <div class="theme-sky">
       <a class="course-card" href="General/templates/cours-templates.html">
-        <div class="card-num">12</div>
+        <div class="card-nums">
+          <div class="card-num-web">12</div>
+          <div class="card-num-jv">12</div>
+        </div>
         <div class="card-icon">🎨</div>
         <div class="card-title">Lire & utiliser des templates HTML/CSS</div>
         <div class="card-desc">
@@ -718,7 +779,10 @@
 
     <div class="theme-sky">
       <a class="course-card" href="General/resume-global/cours-resume-global.html">
-        <div class="card-num">13</div>
+        <div class="card-nums">
+          <div class="card-num-web">13</div>
+          <div class="card-num-jv">13</div>
+        </div>
         <div class="card-icon">📖</div>
         <div class="card-title">Révision basique Dev Web</div>
         <div class="card-desc">
@@ -742,7 +806,10 @@
     <div class="theme-orange">
 
       <a class="course-card" href="General/web123/cours-web123.html">
-        <div class="card-num">14</div>
+        <div class="card-nums">
+          <div class="card-num-web">14</div>
+          <div class="card-num-jv">14</div>
+        </div>
         <div class="card-icon">🌐</div>
         <div class="card-title">Web 1, Web 2, Web 3 <br> L’évolution d’Internet</div>
         <div class="card-desc">
@@ -761,7 +828,10 @@
     <div class="theme-orange">
 
       <a class="course-card" href="General/php/cours-php.html">
-        <div class="card-num">15</div>
+        <div class="card-nums">
+          <div class="card-num-web">15</div>
+          <div class="card-num-jv">15</div>
+        </div>
         <div class="card-icon">🐘</div>
         <div class="card-title">PHP <br> Language web dynamique</div>
         <div class="card-desc">
@@ -781,7 +851,10 @@
     <div class="theme-orange">
 
       <a class="course-card" href="General/python/cours-python.html">
-        <div class="card-num">16</div>
+        <div class="card-nums">
+          <div class="card-num-web">16</div>
+          <div class="card-num-jv">16</div>
+        </div>
         <div class="card-icon">🐍</div>
         <div class="card-title">Python & Django <br> Applications web</div>
         <div class="card-desc">
@@ -802,7 +875,10 @@
     <div class="theme-orange">
 
       <a class="course-card" href="General/bdd/cours-bdd.html">
-        <div class="card-num">17</div>
+        <div class="card-nums">
+          <div class="card-num-web">17</div>
+          <div class="card-num-jv">17</div>
+        </div>
         <div class="card-icon">🗄️</div>
         <div class="card-title">Bases de données <br> SQL & NoSQL</div>
         <div class="card-desc">
@@ -822,7 +898,10 @@
     <div class="theme-orange">
 
       <a class="course-card" href="General/frameworks/cours-frameworks.html">
-        <div class="card-num">18</div>
+        <div class="card-nums">
+          <div class="card-num-web">18</div>
+          <div class="card-num-jv">18</div>
+        </div>
         <div class="card-icon">⚙️</div>
 
         <div class="card-title">
@@ -849,7 +928,10 @@
     <div class="theme-orange">
 
       <a class="course-card" href="General/deploiement/cours-deploiement.html">
-        <div class="card-num">19</div>
+        <div class="card-nums">
+          <div class="card-num-web">19</div>
+          <div class="card-num-jv">19</div>
+        </div>
         <div class="card-icon">🚀</div>
 
         <div class="card-title">
@@ -875,7 +957,10 @@
 
     <div class="theme-green">
       <a class="course-card" href="General/django-start/cours-django-start.html">
-        <div class="card-num">20</div>
+        <div class="card-nums">
+          <div class="card-num-web">20</div>
+          <div class="card-num-jv">20</div>
+        </div>
         <div class="card-icon">🐍</div>
         <div class="card-title">Premiers pas avec Django</div>
         <div class="card-desc">
@@ -891,7 +976,10 @@
 
     <div class="theme-green">
       <a class="course-card" href="General/django-structure/cours-django-structure.html">
-        <div class="card-num">21</div>
+        <div class="card-nums">
+          <div class="card-num-web">21</div>
+          <div class="card-num-jv">21</div>
+        </div>
         <div class="card-icon">📁</div>
 
         <div class="card-title">
@@ -915,7 +1003,10 @@
 
     <div class="theme-green">
       <a class="course-card" href="General/vibecoding-django/cours-vibecoding-django.html">
-        <div class="card-num">22</div>
+        <div class="card-nums">
+          <div class="card-num-web">22</div>
+          <div class="card-num-jv">22</div>
+        </div>
         <div class="card-icon">🐍</div>
         <div class="card-title">Python & Django <br>Vibe Coding</div>
         <div class="card-desc">Réaliser un projet Django conçu avec l’appui de l’IA.
@@ -930,7 +1021,10 @@
 
     <div class="theme-green">
       <a class="course-card" href="General/django-templates/cours-django-templates.html">
-        <div class="card-num">23</div>
+        <div class="card-nums">
+          <div class="card-num-web">23</div>
+          <div class="card-num-jv">23</div>
+        </div>
         <div class="card-icon">&lt; / &gt;</div>
 
         <div class="card-title">
@@ -954,7 +1048,10 @@
 
     <div class="theme-green">
       <a class="course-card" href="General/django-crud/cours-django-crud.html">
-        <div class="card-num">24</div>
+        <div class="card-nums">
+          <div class="card-num-web">24</div>
+          <div class="card-num-jv">24</div>
+        </div>
         <div class="card-icon">📝</div>
 
         <div class="card-title">
@@ -978,7 +1075,10 @@
 
     <div class="theme-green">
       <a class="course-card" href="General/django-auth/cours-django-auth.html">
-        <div class="card-num">25</div>
+        <div class="card-nums">
+          <div class="card-num-web">25</div>
+          <div class="card-num-jv">25</div>
+        </div>
         <div class="card-icon">🔐</div>
 
         <div class="card-title">
@@ -1003,7 +1103,10 @@
     <div class="theme-green">
 
       <a class="course-card" href="General/django/cours-django.html">
-        <div class="card-num">26</div>
+        <div class="card-nums">
+          <div class="card-num-web">26</div>
+          <div class="card-num-jv">26</div>
+        </div>
         <div class="card-icon">🐍</div>
 
         <div class="card-title">
@@ -1031,7 +1134,10 @@
 
     <div class="theme-amber">
       <a class="course-card" href="General/javascript/cours-javascript.html">
-        <div class="card-num">27</div>
+        <div class="card-nums">
+          <div class="card-num-web">27</div>
+          <div class="card-num-jv">27</div>
+        </div>
         <div class="card-icon">⚡</div>
         <div class="card-title">JavaScript <br> Les bases &amp; intégration HTML</div>
         <div class="card-desc">Notion de programmation avant de créer ton 1er jeu</div>
@@ -1045,7 +1151,10 @@
 
     <div class="theme-amber">
       <a class="course-card" href="General/canvas/cours-canvas.html">
-        <div class="card-num">28</div>
+        <div class="card-nums">
+          <div class="card-num-web">28</div>
+          <div class="card-num-jv">28</div>
+        </div>
         <div class="card-icon">🕹️</div>
         <div class="card-title">Canvas &amp; Jeu vidéo <br> L'algo derrière les jeux</div>
         <div class="card-desc">Dessine sur le Canvas HTML5 et découvre les notions d'algorithmique pour créer des jeux
@@ -1060,7 +1169,10 @@
 
     <div class="theme-amber">
       <a class="course-card" href="General/graphisme/cours-graphisme.html">
-        <div class="card-num">29</div>
+        <div class="card-nums">
+          <div class="card-num-web">29</div>
+          <div class="card-num-jv">29</div>
+        </div>
         <div class="card-icon">🎨</div>
         <div class="card-title">Graphisme &amp; Sprites <br> Animer un personnage</div>
         <div class="card-desc">Spritesheet, animation frame par frame, états du personnage (marche, saut, course), décor en parallaxe et sons.</div>
@@ -1075,7 +1187,10 @@
 
     <div class="theme-amber">
       <a class="course-card" href="General/game-design/cours-game-design.html">
-        <div class="card-num">30</div>
+        <div class="card-nums">
+          <div class="card-num-web">30</div>
+          <div class="card-num-jv">30</div>
+        </div>
         <div class="card-icon">🎯</div>
         <div class="card-title">Game Design <br> Architecture d'un jeu complet</div>
         <div class="card-desc">États du jeu, écran titre, menu, sélecteur de niveaux, tableau de scores et sauvegarde localStorage.</div>
@@ -1089,7 +1204,10 @@
 
     <div class="theme-amber">
       <a class="course-card" href="General/clone-game/cours-clone-game.html">
-        <div class="card-num">31</div>
+        <div class="card-nums">
+          <div class="card-num-web">31</div>
+          <div class="card-num-jv">31</div>
+        </div>
         <div class="card-icon">🐦</div>
         <div class="card-title">Recréer Flappy Bird <br> Inspire et Personnalise</div>
         <div class="card-desc">Analyse la mécanique centrale de ton jeu favori et construis-en un clone brique par brique, jusqu'à y ajouter ta propre variante.</div>
@@ -1106,7 +1224,10 @@
 
     <div class="theme-indigo">
       <a class="course-card" href="General/langage-moteur-jeu/cours-langage-moteur-jeu.html">
-        <div class="card-num">32</div>
+        <div class="card-nums">
+          <div class="card-num-web">32</div>
+          <div class="card-num-jv">32</div>
+        </div>
         <div class="card-icon">⚖️</div>
         <div class="card-title">Langage natif &amp; Moteur de jeu <br> Comprendre et comparer</div>
         <div class="card-desc">Du canvas brut aux moteurs AAA : comprends les niveaux d'abstraction du développement de jeux vidéo et sais quand utiliser quoi.</div>
@@ -1121,7 +1242,10 @@
 
     <div class="theme-indigo">
       <a class="course-card" href="General/moteurs-jeu/cours-moteurs-jeu.html">
-        <div class="card-num">33</div>
+        <div class="card-nums">
+          <div class="card-num-web">33</div>
+          <div class="card-num-jv">33</div>
+        </div>
         <div class="card-icon">🏗️</div>
         <div class="card-title">Moteurs de jeu <br> Unreal, Unity &amp; Godot</div>
         <div class="card-desc">Découvre les grands moteurs de jeu vidéo : comment ils fonctionnent, leurs différences, et lequel choisir selon ton projet.</div>
@@ -1135,7 +1259,10 @@
 
     <div class="theme-indigo">
       <a class="course-card" href="General/moteurs-2d/cours-moteurs-2d.html">
-        <div class="card-num">34</div>
+        <div class="card-nums">
+          <div class="card-num-web">34</div>
+          <div class="card-num-jv">34</div>
+        </div>
         <div class="card-icon">🕹️</div>
         <div class="card-title">Moteurs jeu 2D <br> Phaser.js &amp; Solar2D</div>
         <div class="card-desc">Explore les frameworks dédiés aux jeux 2D : Phaser.js pour le web et Solar2D pour mobile — deux outils puissants, deux philosophies différentes.</div>
@@ -1153,7 +1280,10 @@
 
     <div class="theme-blue">
       <a class="course-card" href="General/git/cours-git.html">
-        <div class="card-num">35</div>
+        <div class="card-nums">
+          <div class="card-num-web">35</div>
+          <div class="card-num-jv">35</div>
+        </div>
         <div class="card-icon">🌿</div>
         <div class="card-title">Git &amp; GitHub <br> Sauvegarde ton code !</div>
         <div class="card-desc">Versionne ton projet, crée des branches et collabore avec d'autres développeurs.</div>
@@ -1167,7 +1297,10 @@
 
     <div class="theme-blue">
       <a class="course-card" href="General/github-pages/cours-github-pages.html">
-        <div class="card-num">36</div>
+        <div class="card-nums">
+          <div class="card-num-web">36</div>
+          <div class="card-num-jv">36</div>
+        </div>
         <div class="card-icon">🚀</div>
         <div class="card-title">GitHub Pages <br> Héberge ton site gratuitement !</div>
         <div class="card-desc">Publie ton site sur internet en quelques clics grâce à GitHub Pages, sans payer
@@ -1182,7 +1315,10 @@
 
     <div class="theme-blue">
       <a class="course-card" href="General/patchnote/cours-patchnote.html">
-        <div class="card-num">37</div>
+        <div class="card-nums">
+          <div class="card-num-web">37</div>
+          <div class="card-num-jv">37</div>
+        </div>
         <div class="card-icon">📝</div>
         <div class="card-title">Patch-notes &amp; Versioning <br> Documenter ses commits</div>
         <div class="card-desc">Écris des messages de commit clairs, rédige des patch-notes et gère le versioning
@@ -1197,7 +1333,10 @@
 
     <div class="theme-blue">
       <a class="course-card" href="General/readme/cours-readme.html">
-        <div class="card-num">38</div>
+        <div class="card-nums">
+          <div class="card-num-web">38</div>
+          <div class="card-num-jv">38</div>
+        </div>
         <div class="card-icon">📄</div>
         <div class="card-title">Le README.md — La carte d'identité de ton projet</div>
         <div class="card-desc">Présente ton projet en Markdown : badges, captures d'écran, installation et contribution.
@@ -1215,7 +1354,10 @@
 
     <div class="theme-lime">
       <a class="course-card" href="General/mes-creations/cours-mes-creations.html">
-        <div class="card-num">39</div>
+        <div class="card-nums">
+          <div class="card-num-web">39</div>
+          <div class="card-num-jv">39</div>
+        </div>
         <div class="card-icon">🛠️</div>
         <div class="card-title">Mes créations <br> Mets tes connaissances à profit</div>
         <div class="card-desc">Tu as appris — maintenant crée. Outils, jeux, énigmes : organise tes idées, planifie et réalise tes propres projets de A à Z.</div>
@@ -1229,7 +1371,10 @@
 
     <div class="theme-lime">
       <a class="course-card" href="General/portfolio/cours-portfolio.html">
-        <div class="card-num">40</div>
+        <div class="card-nums">
+          <div class="card-num-web">40</div>
+          <div class="card-num-jv">40</div>
+        </div>
         <div class="card-icon">🌐</div>
         <div class="card-title">Mon portfolio <br> Expose &amp; partage tes créations</div>
         <div class="card-desc">Présente tes projets au monde : structure ton portfolio, soigne ta présentation et démontre tes compétences à des recruteurs ou collaborateurs.</div>
@@ -1243,7 +1388,10 @@
 
     <div class="theme-lime">
       <a class="course-card" href="General/voie-pro/cours-voie-pro.html">
-        <div class="card-num">41</div>
+        <div class="card-nums">
+          <div class="card-num-web">41</div>
+          <div class="card-num-jv">41</div>
+        </div>
         <div class="card-icon">🎓</div>
         <div class="card-title">Ma voie professionnelle <br> Études, diplômes &amp; avenir</div>
         <div class="card-desc">Explore les formations, diplômes et métiers du numérique pour planifier ton parcours et choisir la voie qui te correspond.</div>
