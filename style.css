@@ -227,10 +227,41 @@ nav {
     position: absolute;
     width: 200px;
     height: 200px;
-    border: 3px solid var(--jaune);
     bottom: 2rem;
-    right: 2rem;
+    right: 2rem; /* ← ajuster pour l'espace avec le bord droit */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-deco::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 3px solid var(--jaune);
     opacity: 0.15;
+}
+
+.qr-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    position: relative;
+    z-index: 1;
+}
+
+.qr-block img {
+    display: block;
+    width: 160px;  /* ← ajuster ici (max recommandé : 190px pour le carré de 200px) */
+    height: 160px; /* ← même valeur que width */
+}
+
+.qr-label {
+    font-size: 0.55rem;
+    color: #888;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 /* STAT BAR */

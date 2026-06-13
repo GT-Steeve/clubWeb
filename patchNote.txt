@@ -68,6 +68,7 @@ v1.27.0 = ajout notif web où jeux vidéo
 v1.27.1 = ajout parcour web et jeux vidéo
 v1.27.2 = amélioration position des asides parcours + rework badge parcours web et jeux vidéo
 v1.27.3 = ajout Game Vlog en BONUS jeux vidéo 
+v1.28.0 = ajout QR Code 
 
 
 Lien du projet
