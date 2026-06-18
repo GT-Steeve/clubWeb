@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puzzle Game</title>
+
+<style>
+
+body{
+    margin:0;
+    background:#00ffc8;
+    color:white;
+    font-family:Arial;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+h1{
+    margin-top:20px;
+}
+
+#message{
+    font-size:28px;
+    color:#000000;
+    height:40px;
+    margin-bottom:15px;
+}
+
+#puzzle{
+    width:600px;
+    height:600px;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    grid-template-rows:repeat(4, 1fr);
+    gap:2px;
+}
+
+.piece{
+    width:150px;
+    height:150px;
+    background-size:600px 600px;
+    border:1px solid black;
+    cursor:grab;
+}
+
+button{
+    margin:20px;
+    padding:12px 25px;
+    border:none;
+    border-radius:10px;
+    background:#00ccff;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#0099cc;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🧩 Puzzle Game</h1>
+
+<div id="message"></div>
+
+<div id="puzzle"></div>
+
+<button onclick="newPuzzle()">
+Changer d'image
+</button>
+
+<script>
+
+const puzzle = document.getElementById("puzzle");
+const message = document.getElementById("message");
+
+/*
+Images :
+chat, chien, lion, voiture, clavier, casque
+*/
+
+const images = [
+
+"https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=600",
+"https://images.unsplash.com/photo-1517849845537-4d257902454a?w=600",
+"https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=600",
+"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600",
+"https://images.unsplash.com/photo-1517336714739-489689fd1ca8?w=600",
+"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600"
+
+];
+
+let currentImage = images[0];
+
+let positions = [];
+
+for(let i=0;i<16;i++){
+    positions.push(i);
+}
+
+function createPuzzle(){
+
+    puzzle.innerHTML = "";
+
+    positions.forEach((pos,index)=>{
+
+        const piece = document.createElement("div");
+
+        piece.className = "piece";
+
+        let x = (pos % 4) * 150;
+        let y = Math.floor(pos / 4) * 150;
+
+        piece.style.backgroundImage =
+        `url(${currentImage})`;
+
+        piece.style.backgroundPosition =
+        `-${x}px -${y}px`;
+
+        piece.draggable = true;
+
+        piece.dataset.index = index;
+
+        piece.addEventListener("dragstart", dragStart);
+        piece.addEventListener("dragover", dragOver);
+        piece.addEventListener("drop", drop);
+
+        puzzle.appendChild(piece);
+
+    });
+}
+
+let dragged;
+
+function dragStart(){
+
+    dragged = this.dataset.index;
+}
+
+function dragOver(e){
+
+    e.preventDefault();
+}
+
+function drop(){
+
+    let target = this.dataset.index;
+
+    [positions[dragged], positions[target]] =
+    [positions[target], positions[dragged]];
+
+    createPuzzle();
+
+    checkWin();
+}
+
+function shuffle(){
+
+    positions.sort(()=> Math.random() - 0.5);
+
+    createPuzzle();
+}
+
+function checkWin(){
+
+    let win = true;
+
+    for(let i=0;i<positions.length;i++){
+
+        if(positions[i] != i){
+
+            win = false;
+        }
+    }
+
+    if(win){
+
+        message.innerHTML =
+        "🎉 TU AS RÉUSSI LE PUZZLE ! 🎉";
+    }
+}
+
+function newPuzzle(){
+
+    message.innerHTML = "";
+
+    currentImage =
+    images[Math.floor(Math.random()*images.length)];
+
+    shuffle();
+}
+
+shuffle();
+
+</script>
+
+</body>
+</html>
