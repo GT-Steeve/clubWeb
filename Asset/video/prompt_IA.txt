@@ -1,0 +1,28 @@
+Bonjour, je suis Rachna. Je suis ingénieure logiciel chez Google. Je fais partie d'une équipe appelée
+Gestion centrale des connaissances. Nous sommes chargés
+de nous assurer que les développeurs ont accès à toutes les informations
+dont ils ont besoin. L'une des choses les plus importantes à apprendre avec l’IA
+est la formulation de prompts, qui consiste simplement
+à déterminer le texte à saisir pour obtenir la réponse souhaitée. Pour trouver les prompts
+les plus efficaces pour les LLM, ou grands modèles de langage, il suffit d'itérer rapidement et d’essayer différents prompts. Si le résultat n’est pas assez drôle, la prochaine fois,
+essayez de demander au LLM de le rendre plus drôle. S’il est trop vague, vous pouvez utiliser un prompt qui demande spécifiquement à l'IA
+de ne pas l’être. Essayer différentes choses
+de cette manière permet généralement d'obtenir de bons résultats. Lorsque vous utilisez un LLM,
+pensez à lui permettre d'être
+plus créatif ou plus spécifique en fonction du degré de contexte
+que vous lui donnez. Aussi, si vous souhaitez qu'un LLM vous propose une réponse plutôt créative, optez pour un prompt très court. Si vous souhaitez
+une réponse très précise, fournissez-lui de nombreux exemples, et il s'y conformera davantage. Le prompt en chaîne de pensée
+constitue également une technique très intéressante. Vous demandez au modèle
+de développer sa propre réponse. Ainsi, si vous lui demandez
+de faire des calculs, une équation mathématique, vous pouvez lui dire
+de la décomposer en plusieurs étapes, d'effectuer la première, puis la deuxième et ainsi de suite. Demander au LLM de procéder par étapes peut parfois améliorer
+considérablement sa précision. Nous utilisons également
+une technique de prompt plus surprenante qui consiste à demander au modèle
+de réagir à ses propres réponses. Il m'arrive donc de demander
+une réponse au modèle, puis de lui demander :
+"Cette réponse est-elle vague ?". S'il répond que oui, je peux choisir
+de ne pas tenir compte de ce résultat. Je le laisse donc faire
+une partie du travail à ma place. Plus vous expérimentez
+et faites preuve de créativité, meilleur sera le résultat. Suivre l'évolution de l'IA peut parfois donner l'impression
+de courir sur un tapis roulant. Cela va toujours de plus en plus vite, tant de choses évoluent, mais je pense que c'est aussi ce qui rend ça
+particulièrement intéressant.

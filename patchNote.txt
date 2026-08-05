@@ -73,6 +73,7 @@ v1.29.0 = ajout projet 2 + renommé projet 1
 
 v2.00.0 = Préparation de la prochaine version d'apprentissage
 v2.00.1 = rework structure du dossier Cours
+v2.00.2 = structure arbre des talent
 
 
 Lien du projet
@@ -80,6 +81,7 @@ https://gt-steeve.github.io/clubWeb/
 
 ** Next step ** 
 préparer une V3 avec des vidéo résumé comme google acamedy
+Revoir l'affichage des cours non-prêt
 Checker les bug sur les exercice graphisme et gameplay, 
 prévoir jeu shoot, rpg, MAP
 complément du cours révision dev web, le front et back préférer l'apparence où le fonctionnement 

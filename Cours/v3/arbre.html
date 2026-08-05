@@ -12,60 +12,14 @@
 <body>
 <div class="wrap">
 
-  <div class="nav-bar">
-    <a class="nav-prev" href="../sommaire.html">← Sommaire</a>
-  </div>
-
-  <div class="hero">
-    <div style="font-size:2.2rem;margin-bottom:0.4rem;">🧩</div>
-    <h1>Arbre d'apprentissage — V3</h1>
-    <p>Vidéo résumée, cours en Pop-up, et un puzzle qui prend vie au fil de tes compétences.</p>
-    <div class="badge-row">
-      <span class="badge b-teal">Nouvelle version</span>
-      <span class="badge b-purple">Style académie vidéo</span>
-      <span class="badge b-amber">En préparation</span>
-    </div>
-  </div>
-
-  <!-- LÉGENDE -->
-  <div class="card">
-    <div class="legend-grid">
-      <div>
-        <div class="legend-title">Comment lire l'arbre</div>
-        <div class="legend-row">
-          <span class="legend-dot-line"><span class="d"></span><span class="l"></span></span>
-          Vidéo de navigation — résumé entre deux cours
-        </div>
-        <div class="legend-row">
-          <span class="legend-box"></span>
-          Contient un cours pour obtenir une pièce du puzzle du projet final (en format Pop-up)
-        </div>
-      </div>
-      <div>
-        <div class="legend-title">Niveau d'apprentissage</div>
-        <div class="legend-row"><span class="star facile">✦</span> Facile</div>
-        <div class="legend-row"><span class="star moyen">✦</span> Moyen</div>
-        <div class="legend-row"><span class="star difficile">✦</span> Difficile</div>
-      </div>
-    </div>
-  </div>
-
   <!-- ARBRE -->
-  <h2 class="tree-heading">🌳 Arbre de Talent — où Arbre d'apprentissage</h2>
+  <h2 class="tree-heading">🌳 Arbre d'apprentissage</h2>
 
   <div class="tree-scroll">
     <ul class="ctree">
       <li>
-        <div class="root-chain">
-          <div class="skill-node root-node">
-            <div class="n-title">Bienvenue dans l'aventure</div>
-            <div class="n-meta">Vidéo · Résumé écrit</div>
-          </div>
-          <div class="connector"><span class="dot"></span></div>
-          <div class="skill-node root-node">
-            <div class="n-title">Choisis ta voie</div>
-            <div class="n-meta">Vidéo · Résumé écrit</div>
-          </div>
+        <div class="root-chain" id="root-chain">
+          <div class="branch-header base">💡 Comprendre l'informatique</div>
         </div>
         <ul>
           <li><div class="branch-col" data-branch="web"></div></li>
@@ -73,15 +27,6 @@
         </ul>
       </li>
     </ul>
-  </div>
-
-  <div class="planning-wrap">
-    <div class="planning-arrow">↓</div>
-    <button class="skill-node planning-node" id="planning-node" type="button">
-      <div class="n-title">📋 Planning &amp; Projet final</div>
-      <div class="n-meta">Assemble le puzzle avec tes compétences</div>
-    </button>
-    <p>Chaque compétence acquise débloque une pièce du puzzle du projet, sur la voie Web ou Jeu vidéo.</p>
   </div>
 
   <!-- PUZZLE DU PROJET -->
@@ -119,20 +64,33 @@
       <button class="modal-close" id="modal-close" type="button">✕</button>
     </div>
     <div class="modal-body">
+      <div class="modal-block not-ready" id="modal-not-ready-banner">
+        <span>🚧</span><span>Ce cours est encore en préparation — contenu à venir prochainement.</span>
+      </div>
       <div class="modal-block video">
         <div class="mb-label">🎬 Vidéo</div>
+        <div class="video-embed" id="modal-video-embed">
+          <iframe id="modal-video-frame" src="" title="Vidéo YouTube" loading="lazy" allowfullscreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+          <div class="video-embed-placeholder" id="modal-video-placeholder">🎬 Vidéo à venir</div>
+        </div>
         <p id="modal-video"></p>
       </div>
-      <div class="modal-block explain">
-        <div class="mb-label">📖 Cours — explication</div>
+      <div class="modal-block explain" id="modal-explain-block">
+        <div class="mb-label" id="modal-explain-label">📖 Cours — explication</div>
         <p id="modal-explain"></p>
       </div>
-      <div class="modal-block apply">
+      <div class="modal-block apply" id="modal-apply-block">
         <div class="mb-label">🛠️ Cours — application &amp; astuce</div>
         <p id="modal-apply"></p>
       </div>
+      <button class="ready-btn" id="modal-ready-btn" type="button">Prêt ?</button>
+      <div class="piece-prompt" id="modal-piece-prompt">
+        <p class="piece-prompt-main">Voici une pièce du puzzle !<br>Ne la prends que si tu as vraiment compris le cours. 😉</p>
+        <p class="piece-prompt-sub">Si ce n'est pas encore le cas, aucun souci ! <br>Prends ton temps et reviens quand tout sera clair.<br> Personne ne termine un puzzle en mettant les pièces au hasard ! 😄</p>
+      </div>
       <button class="piece-btn" id="modal-piece-btn" type="button">
-        <span>🧩</span><span id="modal-piece-label">Obtenir la pièce du puzzle</span>
+        <span id="modal-piece-icon">🧩</span><span id="modal-piece-label">Obtenir la pièce du puzzle</span>
       </button>
     </div>
   </div>
