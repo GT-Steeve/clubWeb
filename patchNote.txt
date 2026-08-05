@@ -72,6 +72,7 @@ v1.28.0 = ajout QR Code
 v1.29.0 = ajout projet 2 + renommé projet 1
 
 v2.00.0 = Préparation de la prochaine version d'apprentissage
+v2.00.1 = rework structure du dossier Cours
 
 
 Lien du projet

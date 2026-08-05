@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arbre d'apprentissage — V3</title>
+<link rel="icon"
+  href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%A9%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../Asset/css/arbre.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="nav-bar">
+    <a class="nav-prev" href="../sommaire.html">← Sommaire</a>
+  </div>
+
+  <div class="hero">
+    <div style="font-size:2.2rem;margin-bottom:0.4rem;">🧩</div>
+    <h1>Arbre d'apprentissage — V3</h1>
+    <p>Vidéo résumée, cours en Pop-up, et un puzzle qui prend vie au fil de tes compétences.</p>
+    <div class="badge-row">
+      <span class="badge b-teal">Nouvelle version</span>
+      <span class="badge b-purple">Style académie vidéo</span>
+      <span class="badge b-amber">En préparation</span>
+    </div>
+  </div>
+
+  <!-- LÉGENDE -->
+  <div class="card">
+    <div class="legend-grid">
+      <div>
+        <div class="legend-title">Comment lire l'arbre</div>
+        <div class="legend-row">
+          <span class="legend-dot-line"><span class="d"></span><span class="l"></span></span>
+          Vidéo de navigation — résumé entre deux cours
+        </div>
+        <div class="legend-row">
+          <span class="legend-box"></span>
+          Contient un cours pour obtenir une pièce du puzzle du projet final (en format Pop-up)
+        </div>
+      </div>
+      <div>
+        <div class="legend-title">Niveau d'apprentissage</div>
+        <div class="legend-row"><span class="star facile">✦</span> Facile</div>
+        <div class="legend-row"><span class="star moyen">✦</span> Moyen</div>
+        <div class="legend-row"><span class="star difficile">✦</span> Difficile</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARBRE -->
+  <h2 class="tree-heading">🌳 Arbre de Talent — où Arbre d'apprentissage</h2>
+
+  <div class="tree-scroll">
+    <ul class="ctree">
+      <li>
+        <div class="root-chain">
+          <div class="skill-node root-node">
+            <div class="n-title">Bienvenue dans l'aventure</div>
+            <div class="n-meta">Vidéo · Résumé écrit</div>
+          </div>
+          <div class="connector"><span class="dot"></span></div>
+          <div class="skill-node root-node">
+            <div class="n-title">Choisis ta voie</div>
+            <div class="n-meta">Vidéo · Résumé écrit</div>
+          </div>
+        </div>
+        <ul>
+          <li><div class="branch-col" data-branch="web"></div></li>
+          <li><div class="branch-col" data-branch="jeu"></div></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="planning-wrap">
+    <div class="planning-arrow">↓</div>
+    <button class="skill-node planning-node" id="planning-node" type="button">
+      <div class="n-title">📋 Planning &amp; Projet final</div>
+      <div class="n-meta">Assemble le puzzle avec tes compétences</div>
+    </button>
+    <p>Chaque compétence acquise débloque une pièce du puzzle du projet, sur la voie Web ou Jeu vidéo.</p>
+  </div>
+
+  <!-- PUZZLE DU PROJET -->
+  <div id="puzzle-section">
+    <h2 class="puzzle-heading">🧩 Puzzle du projet</h2>
+    <p class="puzzle-sub">Animation qui montre l'avancement du projet selon les connaissances acquises via chaque pièce de puzzle.</p>
+
+    <div class="card puzzle-grid">
+      <div class="puzzle-panel" data-branch-panel="web">
+        <h4 style="color:var(--blue);">💻 Web</h4>
+        <div class="progress-track"><div class="progress-fill web" id="progress-web" style="width:0%"></div></div>
+        <div class="piece-tiles" id="tiles-web"></div>
+        <ul class="puzzle-list" id="list-web"></ul>
+      </div>
+      <div class="puzzle-panel" data-branch-panel="jeu">
+        <h4 style="color:var(--purple);">🎮 Jeu vidéo</h4>
+        <div class="progress-track"><div class="progress-fill jeu" id="progress-jeu" style="width:0%"></div></div>
+        <div class="piece-tiles" id="tiles-jeu"></div>
+        <ul class="puzzle-list" id="list-jeu"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="reset-row">
+    <button class="reset-link" id="reset-btn" type="button">Réinitialiser ma progression</button>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="modal-title">Titre</h3>
+      <button class="modal-close" id="modal-close" type="button">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-block video">
+        <div class="mb-label">🎬 Vidéo</div>
+        <p id="modal-video"></p>
+      </div>
+      <div class="modal-block explain">
+        <div class="mb-label">📖 Cours — explication</div>
+        <p id="modal-explain"></p>
+      </div>
+      <div class="modal-block apply">
+        <div class="mb-label">🛠️ Cours — application &amp; astuce</div>
+        <p id="modal-apply"></p>
+      </div>
+      <button class="piece-btn" id="modal-piece-btn" type="button">
+        <span>🧩</span><span id="modal-piece-label">Obtenir la pièce du puzzle</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="../../Asset/js/arbre.js"></script>
+</body>
+</html>
