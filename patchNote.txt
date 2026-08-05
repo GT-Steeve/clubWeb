@@ -70,14 +70,20 @@ v1.27.2 = amélioration position des asides parcours + rework badge parcours web
 v1.27.3 = ajout Game Vlog en BONUS jeux vidéo 
 v1.28.0 = ajout QR Code 
 
+v2.00.0 = Préparation de la prochaine version d'apprentissage
+
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
 
 ** Next step ** 
+préparer une V3 avec des vidéo résumé comme google acamedy
 Checker les bug sur les exercice graphisme et gameplay, 
 prévoir jeu shoot, rpg, MAP
 complément du cours révision dev web, le front et back préférer l'apparence où le fonctionnement 
+
+** MAP d'apprentissage **
+Vidéo d'explication -> petite résumé détail -> Jeu apprentissage -> Quizz -> Projet batti cours par cours comme un puzzle
 
 ** Mind Set **
 Savoir que tu as besoin (ce que tu veux)
@@ -86,6 +92,31 @@ QUand le code IA est bon
 quand ce n'est pas bon, non adapté
 coder sans IA puis comme prof à la comme outil
 
+** Engagement ** 
+Je commence mon apprentissage en programmation informatique
+Je sais qu'apprendre peut être difficile, mais j'ai la patience, la détermination et la discipline nécessaires pour atteindre mes objectifs.
+Quand je suis bloqué, je trouverai une solution, comme...
+prendrai une grande inspiration
+fractionnerai mon travail
+demanderai de l’aide
+recherche
+resterai positif(ve)
+parlerai de ce qui me pose problème
+Je m'engage à terminer ce cours
+
 ** objectif final **
 Fondamentaux solide
 Maîtrise de l'IA
+Le mot de la fin : Commencer simplement en choisissant une tâche récurrente de votre semaine
+(rédiger un mail, résumer une réunion, analyser un tableau Excel) et expérimentez avec Claude.
+La meilleure pratique vient du terrain !
+
+Le Workflow clé : Explore $\rightarrow$ Plan $\rightarrow$ Code $\rightarrow$ Commit (analyser la tâche, planifier la solution, coder, puis valider).
+
+** Certication ** 
+
+- Google 
+https://www.coursera.org/learn/google-introduction-to-ai/assignment-submission/tsquh/course-1-challenge
+
+- Claude
+Claude 101 -> https://verify.skilljar.com/c/pbvqpjux5a5p
