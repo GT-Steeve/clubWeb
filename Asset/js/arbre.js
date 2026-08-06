@@ -79,6 +79,49 @@
         video:"Ajoute des images, sprites et sons pour habiller ton jeu.",
         explain:"Les assets donnent une identité visuelle et sonore à ton jeu : personnages, décors, musiques, effets.",
         apply:"Astuce : reste cohérent sur le style graphique, même avec des assets simples." },
+      { id:'jeu-projet', title:'Projet', difficulty:'moyen',
+        youtubeId:'', ready:true,
+        video:"Il est temps de choisir le type de jeu que tu vas construire pour ton projet.",
+        explain:"Un projet concret te fait progresser bien plus vite que des exercices isolés. Choisis un genre qui te motive vraiment.",
+        apply:"Astuce : pars sur un genre simple à prototyper si c'est ton premier vrai projet." }
+    ],
+    plateforme: [
+      { id:'jeu-plateforme-intro', title:'Introduction', difficulty:'facile',
+        youtubeId:'', ready:true,
+        video:"Découvre les bases du jeu de plateforme : sauts, gravité, collisions avec le décor.",
+        explain:"Un jeu de plateforme repose sur un déplacement précis du personnage et une gestion soignée des sauts et des collisions.",
+        apply:"Astuce : peaufine d'abord le saut de ton personnage, c'est le cœur de la sensation de jeu." },
+      { id:'jeu-plateforme-app', title:'Application', difficulty:'moyen',
+        youtubeId:'', ready:true,
+        video:"Construis un petit niveau de plateforme jouable, avec obstacles et objectif final.",
+        explain:"Passer de la théorie à la pratique : un personnage qui court, saute et évite des obstacles jusqu'à la fin du niveau.",
+        apply:"Astuce : teste ton niveau souvent, un plateformer se règle surtout en le rejouant." }
+    ],
+    shoot: [
+      { id:'jeu-shoot-intro', title:'Introduction', difficulty:'facile',
+        youtubeId:'', ready:true,
+        video:"Découvre les bases du shoot them up : tirs, ennemis, patterns et esquive.",
+        explain:"Un shoot repose sur des réflexes et des patterns d'ennemis lisibles, avec une difficulté qui monte progressivement.",
+        apply:"Astuce : commence avec un seul type d'ennemi et un seul pattern avant d'en ajouter d'autres." },
+      { id:'jeu-shoot-app', title:'Application', difficulty:'moyen',
+        youtubeId:'', ready:true,
+        video:"Construis une petite vague d'ennemis avec tirs, score et game over.",
+        explain:"Passer de la théorie à la pratique : un vaisseau qui tire, des ennemis qui arrivent en vague, et un score qui grimpe.",
+        apply:"Astuce : équilibre la cadence de tir et la vitesse des ennemis pour garder le jeu juste assez difficile." }
+    ],
+    rpg: [
+      { id:'jeu-rpg-intro', title:'Introduction', difficulty:'moyen',
+        youtubeId:'', ready:true,
+        video:"Découvre les bases du RPG : statistiques, combats au tour par tour, progression du personnage.",
+        explain:"Un RPG repose sur des systèmes qui s'articulent entre eux : statistiques, combat, inventaire et progression du joueur.",
+        apply:"Astuce : commence par un seul système (le combat, par exemple) avant d'ajouter l'inventaire ou les quêtes." },
+      { id:'jeu-rpg-app', title:'Application', difficulty:'difficile',
+        youtubeId:'', ready:true,
+        video:"Construis un combat au tour par tour jouable, avec points de vie et victoire/défaite.",
+        explain:"Passer de la théorie à la pratique : un combat où le joueur et l'ennemi s'affrontent tour par tour jusqu'à la victoire.",
+        apply:"Astuce : affiche toujours clairement les points de vie, c'est ce qui rend un combat RPG lisible." }
+    ],
+    polish: [
       { id:'jeu-polish', title:'Polish — la touche finale', difficulty:'moyen',
         youtubeId:'', ready:false,
         video:"Les petits détails qui rendent un jeu agréable à jouer.",
@@ -89,30 +132,46 @@
 
   // Regroupements utilisés pour la section "Puzzle du projet" : toutes les
   // compétences Web (tronc commun + Front-End + Back-End) comptent pour la
-  // colonne Web, comme les compétences Jeu vidéo pour la colonne Jeu vidéo.
+  // colonne Web, comme toutes les compétences Jeu vidéo (tronc commun +
+  // Plateforme/Shoot/RPG + Polish) comptent pour la colonne Jeu vidéo.
   var PUZZLE_GROUPS = {
     web: NODES.web.concat(NODES.frontend, NODES.backend),
-    jeu: NODES.jeu
+    jeu: NODES.jeu.concat(NODES.plateforme, NODES.shoot, NODES.rpg, NODES.polish)
   };
 
   // Vidéo de transition affichée dans le rond situé juste avant le nœud débloqué
   var EVENT_VIDEOS = {
-    'root-choose':      "Petit résumé pour faire le pont entre l'intro et le choix de ta voie.",
-    'web-css':          "Résumé vidéo : pourquoi styliser sa page juste après l'avoir structurée.",
-    'web-js':           "Résumé vidéo : comment rendre une page vivante grâce à l'interaction.",
-    'web-frontend-app': "Résumé vidéo : passer de la théorie Front-End à la pratique.",
-    'web-backend-app':  "Résumé vidéo : passer de la théorie Back-End à la pratique.",
-    'jeu-mecanisme':    "Résumé vidéo : transformer du code en règles de jeu amusantes.",
-    'jeu-asset':        "Résumé vidéo : habiller ton jeu avec des visuels et des sons.",
-    'jeu-polish':       "Résumé vidéo : les petits détails qui font toute la différence."
+    'root-choose':        "Petit résumé pour faire le pont entre l'intro et le choix de ta voie.",
+    'web-css':             "Résumé vidéo : pourquoi styliser sa page juste après l'avoir structurée.",
+    'web-js':              "Résumé vidéo : comment rendre une page vivante grâce à l'interaction.",
+    'web-frontend-app':    "Résumé vidéo : passer de la théorie Front-End à la pratique.",
+    'web-backend-app':     "Résumé vidéo : passer de la théorie Back-End à la pratique.",
+    'jeu-mecanisme':       "Résumé vidéo : transformer du code en règles de jeu amusantes.",
+    'jeu-asset':           "Résumé vidéo : habiller ton jeu avec des visuels et des sons.",
+    'jeu-projet':          "Résumé vidéo : place au projet, il est temps de construire un vrai jeu.",
+    'jeu-plateforme-app':  "Résumé vidéo : passer de la théorie plateforme à la pratique.",
+    'jeu-shoot-app':       "Résumé vidéo : passer de la théorie shoot them up à la pratique.",
+    'jeu-rpg-app':         "Résumé vidéo : passer de la théorie RPG à la pratique."
   };
 
-  // Certaines fourches ne sont pas précédées d'un rond (choix visuel, pas de
-  // vidéo de transition) : les franchir débloque directement les nœuds visés.
-  var FORKS = [
-    { source:'root-choose', targets:['web-html', 'jeu-code'] },
-    { source:'web-js', targets:['web-frontend-intro', 'web-backend-intro'] }
+  // Quand une branche se sépare en plusieurs, un unique rond (avant la fourche)
+  // débloque tous les nœuds visés une fois sa vidéo de transition regardée.
+  var FORK_EVENTS = [
+    { id:'fork-web-jeu', prev:'root-choose', targets:['web-html', 'jeu-code'],
+      video:"Dernier résumé avant de choisir : Développement Web ou Jeu vidéo ?" },
+    { id:'fork-frontend-backend', prev:'web-js', targets:['web-frontend-intro', 'web-backend-intro'],
+      video:"Résumé vidéo : approfondir le Front-End ou démarrer le Back-End ?" },
+    { id:'fork-plateforme-shoot-rpg', prev:'jeu-projet', targets:['jeu-plateforme-intro', 'jeu-shoot-intro', 'jeu-rpg-intro'],
+      video:"Résumé vidéo : quel genre de jeu veux-tu construire pour ton projet ?" }
   ];
+
+  // À l'inverse d'une fourche, un rond "jonction" attend qu'AU MOINS UNE des
+  // branches sources soit terminée pour débloquer le nœud commun qui suit.
+  var JOIN_EVENTS = [
+    { id:'join-polish', prevs:['jeu-plateforme-app', 'jeu-shoot-app', 'jeu-rpg-app'], target:'jeu-polish',
+      video:"Résumé vidéo : peu importe le type de jeu choisi, place maintenant à la touche finale." }
+  ];
+
   var DEFAULT_UNLOCKED = ['root-welcome'];
 
   var STAR_LABEL = { facile:'Facile', moyen:'Moyen', difficile:'Difficile' };
@@ -145,9 +204,6 @@
       arr.push(nodeId);
       setUnlocked(arr);
     }
-    FORKS.forEach(function(fork){
-      if(fork.source === nodeId){ fork.targets.forEach(unlockNode); }
-    });
   }
 
   function watchEvent(nextNodeId){
@@ -157,6 +213,40 @@
       setWatched(arr);
     }
     unlockNode(nextNodeId);
+  }
+
+  function findForkEvent(id){
+    var found = null;
+    FORK_EVENTS.forEach(function(f){ if(f.id === id) found = f; });
+    return found;
+  }
+
+  function watchForkEvent(forkId){
+    var fork = findForkEvent(forkId);
+    if(!fork) return;
+    var arr = getWatched();
+    if(arr.indexOf(forkId) === -1){
+      arr.push(forkId);
+      setWatched(arr);
+    }
+    fork.targets.forEach(unlockNode);
+  }
+
+  function findJoinEvent(id){
+    var found = null;
+    JOIN_EVENTS.forEach(function(j){ if(j.id === id) found = j; });
+    return found;
+  }
+
+  function watchJoinEvent(joinId){
+    var join = findJoinEvent(joinId);
+    if(!join) return;
+    var arr = getWatched();
+    if(arr.indexOf(joinId) === -1){
+      arr.push(joinId);
+      setWatched(arr);
+    }
+    unlockNode(join.target);
   }
 
   function buildChain(container, nodes){
@@ -203,32 +293,106 @@
     buildChain(container, nodes);
   }
 
+  // Construit une fourche à N branches (2 ou plus) à l'intérieur de `container`,
+  // avec son rond de transition posé au croisement des lignes. Retourne les
+  // colonnes créées, dans le même ordre que `branches`.
+  function buildFork(container, branches){
+    var forkWrap = document.createElement('div');
+    forkWrap.className = 'fork-wrap';
+    var fork = document.createElement('ul');
+    fork.className = 'sub-fork';
+    var cols = branches.map(function(){
+      var li = document.createElement('li');
+      var col = document.createElement('div');
+      col.className = 'branch-col';
+      li.appendChild(col);
+      fork.appendChild(li);
+      return col;
+    });
+    forkWrap.appendChild(fork);
+    container.appendChild(forkWrap);
+    branches.forEach(function(b, i){
+      buildBranchColumn(cols[i], b.headerHtml, b.headerClass, b.nodes);
+    });
+    return forkWrap;
+  }
+
+  // Ajoute, sous chaque colonne d'une fourche déjà construite (buildFork),
+  // les lignes qui convergent vers un point unique en dessous (miroir de la
+  // fourche du dessus) — utilisé quand plusieurs branches rejoignent un même
+  // nœud (ex: Plateforme/Shoot/RPG qui rejoignent Polish).
+  function addMergeLines(forkWrap){
+    forkWrap.classList.add('merges');
+    var lis = forkWrap.querySelectorAll('ul.sub-fork > li');
+    lis.forEach(function(li){
+      li.classList.add('merge-col');
+      var segA = document.createElement('span');
+      segA.className = 'merge-seg merge-a';
+      var segB = document.createElement('span');
+      segB.className = 'merge-seg merge-b';
+      li.appendChild(segA);
+      li.appendChild(segB);
+    });
+  }
+
+  // forkWrap : conteneur position:relative englobant le <ul> de la fourche.
+  // Le rond est un frère du <ul> (jamais un enfant) pour ne pas fausser les
+  // sélecteurs CSS li:first-child/:last-child qui dessinent les lignes de fourche.
+  function buildForkConnector(forkWrap, forkEvent){
+    var conn = document.createElement('div');
+    conn.className = 'connector fork-dot';
+    conn.id = 'evt-' + forkEvent.id;
+    conn.dataset.prevNode = forkEvent.prev;
+    conn.dataset.forkId = forkEvent.id;
+    conn.innerHTML = '<span class="dot"></span>';
+    conn.addEventListener('click', function(){ onForkConnectorClick(conn, forkEvent); });
+    forkWrap.appendChild(conn);
+  }
+
+  // Rond "jonction" : plusieurs branches sources convergent vers un seul nœud.
+  // Posé pile au point où les traits de convergence se rejoignent (comme le
+  // rond de fourche, mais en bas du forkWrap au lieu du haut). Accessible dès
+  // qu'au moins une des branches sources est débloquée.
+  function buildJoinConnector(forkWrap, joinEvent){
+    var conn = document.createElement('div');
+    conn.className = 'connector merge-dot';
+    conn.id = 'evt-' + joinEvent.id;
+    conn.dataset.joinId = joinEvent.id;
+    conn.dataset.joinPrevs = joinEvent.prevs.join(',');
+    conn.innerHTML = '<span class="dot"></span>';
+    conn.addEventListener('click', function(){ onJoinConnectorClick(conn, joinEvent); });
+    forkWrap.appendChild(conn);
+  }
+
   function buildTree(){
     buildChain(document.getElementById('root-chain'), ROOT_NODES);
+    buildForkConnector(document.getElementById('root-fork-wrap'), FORK_EVENTS[0]);
 
     var webCol = document.querySelector('.branch-col[data-branch="web"]');
     buildBranchColumn(webCol, '💻 Web', 'web', NODES.web);
 
     // Fourche Front-End / Back-End juste après le nœud JavaScript
-    var fork = document.createElement('ul');
-    fork.className = 'sub-fork';
-    var frontLi = document.createElement('li');
-    var frontCol = document.createElement('div');
-    frontCol.className = 'branch-col';
-    frontLi.appendChild(frontCol);
-    var backLi = document.createElement('li');
-    var backCol = document.createElement('div');
-    backCol.className = 'branch-col';
-    backLi.appendChild(backCol);
-    fork.appendChild(frontLi);
-    fork.appendChild(backLi);
-    webCol.appendChild(fork);
-
-    buildBranchColumn(frontCol, '🎨 Front-End', 'frontend', NODES.frontend);
-    buildBranchColumn(backCol, '🛠️ Back-End', 'backend', NODES.backend);
+    var webForkWrap = buildFork(webCol, [
+      { headerHtml:'🎨 Front-End', headerClass:'frontend', nodes:NODES.frontend },
+      { headerHtml:'🛠️ Back-End', headerClass:'backend', nodes:NODES.backend }
+    ]);
+    buildForkConnector(webForkWrap, FORK_EVENTS[1]);
 
     var jeuCol = document.querySelector('.branch-col[data-branch="jeu"]');
     buildBranchColumn(jeuCol, '🎮 Jeu vidéo', 'jeu', NODES.jeu);
+
+    // Fourche Plateforme / Shoot / RPG juste après le nœud Projet
+    var jeuForkWrap = buildFork(jeuCol, [
+      { headerHtml:'🕹️ Plateforme', headerClass:'plateforme', nodes:NODES.plateforme },
+      { headerHtml:'🎯 Shoot', headerClass:'shoot', nodes:NODES.shoot },
+      { headerHtml:'⚔️ RPG', headerClass:'rpg', nodes:NODES.rpg }
+    ]);
+    buildForkConnector(jeuForkWrap, FORK_EVENTS[2]);
+    addMergeLines(jeuForkWrap);
+
+    // Jonction : n'importe laquelle des 3 branches suffit à débloquer Polish
+    buildJoinConnector(jeuForkWrap, JOIN_EVENTS[0]);
+    buildChain(jeuCol, NODES.polish);
   }
 
   function buildPuzzlePanels(){
@@ -260,8 +424,8 @@
     return found;
   }
 
-  var currentMode = null; // 'summary' | 'course' | 'event'
-  var currentId = null;   // node id (summary/course) or unlocked-node id (event)
+  var currentMode = null; // 'summary' | 'course' | 'event' | 'fork-event' | 'join-event'
+  var currentId = null;   // node id (summary/course) or event/fork/join id
   var overlay = document.getElementById('modal-overlay');
   var explainBlock = document.getElementById('modal-explain-block');
   var explainLabel = document.getElementById('modal-explain-label');
@@ -275,6 +439,9 @@
   var pieceLabel = document.getElementById('modal-piece-label');
   var piecePrompt = document.getElementById('modal-piece-prompt');
 
+  // Fonction à appeler pour "regarder" chaque type de rond de transition.
+  var WATCH_TRANSITION = { event:watchEvent, 'fork-event':watchForkEvent, 'join-event':watchJoinEvent };
+
   function onNodeClick(nodeId){
     openSummaryModal(nodeId);
   }
@@ -284,6 +451,17 @@
     var nextId = conn.dataset.nextNode;
     if(!isUnlocked(prevId)) return;
     openEventModal(nextId);
+  }
+
+  function onForkConnectorClick(conn, forkEvent){
+    if(!isUnlocked(forkEvent.prev)) return;
+    openForkEventModal(forkEvent);
+  }
+
+  function onJoinConnectorClick(conn, joinEvent){
+    var accessible = joinEvent.prevs.some(function(id){ return isUnlocked(id); });
+    if(!accessible) return;
+    openJoinEventModal(joinEvent);
   }
 
   function populateVideo(node){
@@ -341,11 +519,13 @@
     overlay.classList.add('open');
   }
 
-  function openEventModal(nextId){
-    currentMode = 'event';
-    currentId = nextId;
+  // Coquille commune aux trois types de pop-up "vidéo de transition"
+  // (rond simple, rond de fourche, rond de jonction).
+  function openTransitionModal(mode, id, videoText){
+    currentMode = mode;
+    currentId = id;
     document.getElementById('modal-title').textContent = '🎬 Vidéo de transition';
-    document.getElementById('modal-video').textContent = EVENT_VIDEOS[nextId] || '';
+    document.getElementById('modal-video').textContent = videoText;
     explainBlock.style.display = 'none';
     applyBlock.style.display = 'none';
     videoEmbed.classList.remove('shown');
@@ -358,6 +538,18 @@
     piecePrompt.style.display = 'none';
     refreshModalFooter();
     overlay.classList.add('open');
+  }
+
+  function openEventModal(nextId){
+    openTransitionModal('event', nextId, EVENT_VIDEOS[nextId] || '');
+  }
+
+  function openForkEventModal(forkEvent){
+    openTransitionModal('fork-event', forkEvent.id, forkEvent.video);
+  }
+
+  function openJoinEventModal(joinEvent){
+    openTransitionModal('join-event', joinEvent.id, joinEvent.video);
   }
 
   function closeModal(){
@@ -373,7 +565,7 @@
   });
 
   function refreshModalFooter(){
-    if(currentMode === 'event'){
+    if(WATCH_TRANSITION[currentMode]){
       pieceBtn.disabled = false;
       pieceBtn.classList.remove('notready');
       pieceIcon.textContent = '▶️';
@@ -419,8 +611,8 @@
 
   pieceBtn.addEventListener('click', function(){
     if(!currentId || pieceBtn.disabled) return;
-    if(currentMode === 'event'){
-      watchEvent(currentId);
+    if(WATCH_TRANSITION[currentMode]){
+      WATCH_TRANSITION[currentMode](currentId);
       refreshModalFooter();
       renderLockState();
       return;
@@ -495,10 +687,39 @@
       var dot = conn.querySelector('.dot');
       dot.textContent = isLocked ? '🔒' : '';
     });
+
+    document.querySelectorAll('.connector[data-fork-id]').forEach(function(conn){
+      var forkId = conn.dataset.forkId;
+      var prevId = conn.dataset.prevNode;
+      var isLocked = unlocked.indexOf(prevId) === -1;
+      conn.classList.toggle('watched', watched.indexOf(forkId) !== -1);
+      conn.classList.toggle('locked', isLocked);
+      var dot = conn.querySelector('.dot');
+      dot.textContent = isLocked ? '🔒' : '';
+    });
+
+    document.querySelectorAll('.connector[data-join-id]').forEach(function(conn){
+      var joinId = conn.dataset.joinId;
+      var prevIds = conn.dataset.joinPrevs.split(',');
+      var isLocked = !prevIds.some(function(id){ return unlocked.indexOf(id) !== -1; });
+      conn.classList.toggle('watched', watched.indexOf(joinId) !== -1);
+      conn.classList.toggle('locked', isLocked);
+      var dot = conn.querySelector('.dot');
+      dot.textContent = isLocked ? '🔒' : '';
+    });
+  }
+
+  // Si l'arbre est plus large que l'écran, on centre le défilement horizontal
+  // au chargement pour éviter qu'une branche (ex: RPG) parte hors champ.
+  function centerTreeScroll(){
+    var scroller = document.querySelector('.tree-scroll');
+    if(!scroller) return;
+    scroller.scrollLeft = (scroller.scrollWidth - scroller.clientWidth) / 2;
   }
 
   buildTree();
   buildPuzzlePanels();
   renderProgress();
   renderLockState();
+  centerTreeScroll();
 })();

@@ -7,6 +7,9 @@
     --amber:#633806; --amber-bg:#FAEEDA;
     --green:#27500A; --green-bg:#EAF3DE;
     --coral:#9A3412; --coral-bg:#FFEDD5;
+    --sky:#0369A1; --sky-bg:#E0F2FE;
+    --rose:#BE123C; --rose-bg:#FFE4E6;
+    --indigo:#4338CA; --indigo-bg:#E0E7FF;
     --facile:#2E8B47; --moyen:#C99A1F; --difficile:#C0521B;
   }
   * { box-sizing:border-box; }
@@ -15,7 +18,7 @@
     background:var(--bg); color:var(--ink);
     margin:0; padding:1.5rem 1rem 4rem;
   }
-  .wrap{ max-width:1000px; margin:0 auto; }
+  .wrap{ max-width:1300px; margin:0 auto; }
 
   .nav-bar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; gap:8px; flex-wrap:wrap; }
   .nav-prev{
@@ -59,8 +62,8 @@
   .tree-scroll{ overflow-x:auto; padding-bottom:0.5rem; }
 
   .root-chain{ display:flex; flex-direction:column; align-items:center; }
-  .connector{ height:28px; position:relative; display:flex; justify-content:center; align-items:center; width:100%; cursor:pointer; }
-  .connector::before{ content:''; position:absolute; top:0; bottom:0; left:50%; width:0; border-left:2px dashed var(--line); }
+  .connector{ height:calc(28px + 1cm); position:relative; display:flex; justify-content:center; align-items:center; width:100%; cursor:pointer; }
+  .connector::before{ content:''; position:absolute; top:0; bottom:0; left:50%; width:0; border-left:2px solid var(--line); }
   .connector .dot{
     width:8px; height:8px; border-radius:50%; background:var(--ink); z-index:1;
     display:flex; align-items:center; justify-content:center;
@@ -74,6 +77,22 @@
     width:22px; height:22px; background:var(--sub); color:#fff; font-size:11px;
     box-shadow:0 2px 4px rgba(0,0,0,0.15);
   }
+
+  /* Rond de fourche : posé pile au croisement des lignes (Web/Jeu vidéo, Front-End/Back-End) */
+  .connector.fork-dot{
+    position:absolute; top:26px; left:50%; transform:translate(-50%,-50%);
+    height:auto; width:auto; z-index:2;
+  }
+  .connector.fork-dot::before{ display:none; }
+
+  /* Rond de jonction : posé pile au point où les traits de convergence se rejoignent
+     (miroir du rond de fourche : bottom:26px = jonction entre le padding propre
+     des colonnes et le "tronc" du fork-wrap, comme top:26px pour la fourche) */
+  .connector.merge-dot{
+    position:absolute; bottom:26px; left:50%; transform:translate(-50%,50%);
+    height:auto; width:auto; z-index:2;
+  }
+  .connector.merge-dot::before{ display:none; }
 
   .skill-node{
     font-family:inherit; background:var(--card); border:2px solid var(--border);
@@ -106,12 +125,28 @@
   .ctree li:first-child::after{ border-radius:8px 0 0 0; }
   .ctree ul::before{ content:''; position:absolute; top:0; left:50%; border-left:2px solid var(--line); width:0; height:26px; }
 
+  /* Lignes de convergence : miroir de la fourche, pour les branches qui
+     rejoignent un même nœud plus bas (ex: Plateforme/Shoot/RPG -> Polish) */
+  .fork-wrap.merges{ padding-bottom:26px; }
+  .fork-wrap.merges::after{ content:''; position:absolute; bottom:0; left:50%; border-left:2px solid var(--line); width:0; height:26px; }
+  .ctree li.merge-col{ padding-bottom:26px; }
+  .merge-seg{ position:absolute; bottom:0; width:50%; height:26px; border-bottom:2px solid var(--line); }
+  .merge-a{ right:50%; }
+  .merge-b{ left:50%; border-left:2px solid var(--line); }
+  .merge-col:first-child .merge-a{ border:0 none; }
+  .merge-col:last-child .merge-b{ border:0 none; }
+  .merge-col:last-child .merge-a{ border-right:2px solid var(--line); border-radius:0 0 8px 0; }
+  .merge-col:first-child .merge-b{ border-radius:0 0 0 8px; }
+
   @media (max-width:700px){
     .ctree, .ctree ul{ display:block; padding-top:0; }
     .ctree li{ padding:16px 0 0; }
     .ctree li::before, .ctree li::after, .ctree ul::before{ display:none; }
+    .merge-seg, .fork-wrap.merges::after{ display:none; }
+    .ctree li.merge-col, .fork-wrap.merges{ padding-bottom:0; }
   }
 
+  .fork-wrap{ position:relative; }
   .branch-col{ display:flex; flex-direction:column; align-items:center; }
   .branch-header{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:1rem; margin-bottom:1rem; }
   .branch-header.web{ color:var(--blue); }
@@ -119,8 +154,10 @@
   .branch-header.base{ color:var(--amber); justify-content:center; }
   .branch-header.frontend{ color:var(--teal); font-size:0.92rem; }
   .branch-header.backend{ color:var(--coral); font-size:0.92rem; }
+  .branch-header.plateforme{ color:var(--sky); font-size:0.92rem; }
+  .branch-header.shoot{ color:var(--rose); font-size:0.92rem; }
+  .branch-header.rpg{ color:var(--indigo); font-size:0.92rem; }
 
-  .sub-fork{ margin-top:6px; }
 
   /* ---- Modal ---- */
   .modal-overlay{ display:none; position:fixed; inset:0; background:rgba(30,28,24,0.55); z-index:50; align-items:center; justify-content:center; padding:1rem; }
