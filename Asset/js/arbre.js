@@ -139,36 +139,38 @@
     jeu: NODES.jeu.concat(NODES.plateforme, NODES.shoot, NODES.rpg, NODES.polish)
   };
 
-  // Vidéo de transition affichée dans le rond situé juste avant le nœud débloqué
+  // Vidéo de transition affichée dans le rond situé juste avant le nœud débloqué.
+  // youtubeId : identifiant de la vidéo YouTube (ex: "dQw4w9WgXcQ"), à renseigner
+  // manuellement une fois la vidéo tournée — vide par défaut -> affiche un placeholder.
   var EVENT_VIDEOS = {
-    'root-choose':        "Petit résumé pour faire le pont entre l'intro et le choix de ta voie.",
-    'web-css':             "Résumé vidéo : pourquoi styliser sa page juste après l'avoir structurée.",
-    'web-js':              "Résumé vidéo : comment rendre une page vivante grâce à l'interaction.",
-    'web-frontend-app':    "Résumé vidéo : passer de la théorie Front-End à la pratique.",
-    'web-backend-app':     "Résumé vidéo : passer de la théorie Back-End à la pratique.",
-    'jeu-mecanisme':       "Résumé vidéo : transformer du code en règles de jeu amusantes.",
-    'jeu-asset':           "Résumé vidéo : habiller ton jeu avec des visuels et des sons.",
-    'jeu-projet':          "Résumé vidéo : place au projet, il est temps de construire un vrai jeu.",
-    'jeu-plateforme-app':  "Résumé vidéo : passer de la théorie plateforme à la pratique.",
-    'jeu-shoot-app':       "Résumé vidéo : passer de la théorie shoot them up à la pratique.",
-    'jeu-rpg-app':         "Résumé vidéo : passer de la théorie RPG à la pratique."
+    'root-choose':        { youtubeId:'', video:"Petit résumé pour faire le pont entre l'intro et le choix de ta voie." },
+    'web-css':             { youtubeId:'', video:"Résumé vidéo : pourquoi styliser sa page juste après l'avoir structurée." },
+    'web-js':              { youtubeId:'', video:"Résumé vidéo : comment rendre une page vivante grâce à l'interaction." },
+    'web-frontend-app':    { youtubeId:'', video:"Résumé vidéo : passer de la théorie Front-End à la pratique." },
+    'web-backend-app':     { youtubeId:'', video:"Résumé vidéo : passer de la théorie Back-End à la pratique." },
+    'jeu-mecanisme':       { youtubeId:'', video:"Résumé vidéo : transformer du code en règles de jeu amusantes." },
+    'jeu-asset':           { youtubeId:'', video:"Résumé vidéo : habiller ton jeu avec des visuels et des sons." },
+    'jeu-projet':          { youtubeId:'', video:"Résumé vidéo : place au projet, il est temps de construire un vrai jeu." },
+    'jeu-plateforme-app':  { youtubeId:'', video:"Résumé vidéo : passer de la théorie plateforme à la pratique." },
+    'jeu-shoot-app':       { youtubeId:'', video:"Résumé vidéo : passer de la théorie shoot them up à la pratique." },
+    'jeu-rpg-app':         { youtubeId:'', video:"Résumé vidéo : passer de la théorie RPG à la pratique." }
   };
 
   // Quand une branche se sépare en plusieurs, un unique rond (avant la fourche)
   // débloque tous les nœuds visés une fois sa vidéo de transition regardée.
   var FORK_EVENTS = [
-    { id:'fork-web-jeu', prev:'root-choose', targets:['web-html', 'jeu-code'],
+    { id:'fork-web-jeu', prev:'root-choose', targets:['web-html', 'jeu-code'], youtubeId:'',
       video:"Dernier résumé avant de choisir : Développement Web ou Jeu vidéo ?" },
-    { id:'fork-frontend-backend', prev:'web-js', targets:['web-frontend-intro', 'web-backend-intro'],
+    { id:'fork-frontend-backend', prev:'web-js', targets:['web-frontend-intro', 'web-backend-intro'], youtubeId:'',
       video:"Résumé vidéo : approfondir le Front-End ou démarrer le Back-End ?" },
-    { id:'fork-plateforme-shoot-rpg', prev:'jeu-projet', targets:['jeu-plateforme-intro', 'jeu-shoot-intro', 'jeu-rpg-intro'],
+    { id:'fork-plateforme-shoot-rpg', prev:'jeu-projet', targets:['jeu-plateforme-intro', 'jeu-shoot-intro', 'jeu-rpg-intro'], youtubeId:'',
       video:"Résumé vidéo : quel genre de jeu veux-tu construire pour ton projet ?" }
   ];
 
   // À l'inverse d'une fourche, un rond "jonction" attend qu'AU MOINS UNE des
   // branches sources soit terminée pour débloquer le nœud commun qui suit.
   var JOIN_EVENTS = [
-    { id:'join-polish', prevs:['jeu-plateforme-app', 'jeu-shoot-app', 'jeu-rpg-app'], target:'jeu-polish',
+    { id:'join-polish', prevs:['jeu-plateforme-app', 'jeu-shoot-app', 'jeu-rpg-app'], target:'jeu-polish', youtubeId:'',
       video:"Résumé vidéo : peu importe le type de jeu choisi, place maintenant à la touche finale." }
   ];
 
@@ -520,16 +522,15 @@
   }
 
   // Coquille commune aux trois types de pop-up "vidéo de transition"
-  // (rond simple, rond de fourche, rond de jonction).
-  function openTransitionModal(mode, id, videoText){
+  // (rond simple, rond de fourche, rond de jonction). videoNode : objet
+  // { youtubeId, video } — réutilise populateVideo(), comme pour les cours.
+  function openTransitionModal(mode, id, videoNode){
     currentMode = mode;
     currentId = id;
     document.getElementById('modal-title').textContent = '🎬 Vidéo de transition';
-    document.getElementById('modal-video').textContent = videoText;
+    populateVideo(videoNode);
     explainBlock.style.display = 'none';
     applyBlock.style.display = 'none';
-    videoEmbed.classList.remove('shown');
-    videoFrame.src = '';
     notReadyBanner.classList.remove('show');
     readyBtn.classList.remove('show');
     pieceBtn.style.display = 'flex';
@@ -541,15 +542,15 @@
   }
 
   function openEventModal(nextId){
-    openTransitionModal('event', nextId, EVENT_VIDEOS[nextId] || '');
+    openTransitionModal('event', nextId, EVENT_VIDEOS[nextId] || { youtubeId:'', video:'' });
   }
 
   function openForkEventModal(forkEvent){
-    openTransitionModal('fork-event', forkEvent.id, forkEvent.video);
+    openTransitionModal('fork-event', forkEvent.id, forkEvent);
   }
 
   function openJoinEventModal(joinEvent){
-    openTransitionModal('join-event', joinEvent.id, joinEvent.video);
+    openTransitionModal('join-event', joinEvent.id, joinEvent);
   }
 
   function closeModal(){

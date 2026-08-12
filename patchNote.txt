@@ -75,6 +75,7 @@ v2.00.0 = Préparation de la prochaine version d'apprentissage
 v2.00.1 = rework structure du dossier Cours
 v2.00.2 = structure arbre des talent
 v2.00.3 = Polish Design arbre des talent ajout projet jeu vidéo
+v2.00.4 = support vidéo YouTube sur les points de transition
 
 
 Lien du projet
