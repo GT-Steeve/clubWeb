@@ -207,6 +207,18 @@
   .ready-btn.locked{ background:#EDEBE3; color:var(--sub); cursor:not-allowed; }
   .ready-btn.locked:hover{ background:#EDEBE3; }
 
+  /* Ligne bouton retour + bouton principal (proportion ~30/70) */
+  .btn-row{ display:none; gap:0.5rem; margin-top:0.4rem; }
+  .btn-row.show{ display:flex; }
+  .btn-row .ready-btn{ display:block; width:auto; flex:7 1 0; margin-top:0; }
+  .btn-row .back-btn{ display:block; }
+  .back-btn{
+    display:none; flex:3 1 0; margin-top:0; border:1.5px solid #85B7EB; border-radius:10px; padding:0.75rem;
+    font-weight:800; font-size:0.92rem; cursor:pointer; background:var(--blue-bg); color:var(--blue);
+    transition:background .15s, border-color .15s;
+  }
+  .back-btn:hover{ background:#B5D4F4; }
+
   .piece-prompt{ text-align:center; margin:0.6rem 0 0.9rem; }
   .piece-prompt-main{ font-size:0.9rem; font-weight:800; color:var(--ink); line-height:1.4; margin:0 0 0.5rem; }
   .piece-prompt-sub{ font-size:0.8rem; font-weight:600; color:var(--sub); line-height:1.45; margin:0; }
@@ -242,6 +254,21 @@
   @media (prefers-reduced-motion: reduce){
     .piece-btn.icon-only{ animation:none; }
   }
+
+  /* ---- Parcours de vérification (prototype) ---- */
+  .verify-flow{ display:none; }
+  .verify-flow.show{ display:block; }
+  #verify-magicword-input{
+    font-family:inherit; font-size:0.9rem; padding:8px 10px; border:1.5px solid var(--border);
+    border-radius:8px; background:#fff; color:var(--ink); width:100%;
+  }
+  #verify-magicword-input:focus{ outline:2px solid var(--blue); outline-offset:1px; }
+  .verify-consignes{ margin:4px 0 0; padding-left:1.2rem; font-size:0.88rem; line-height:1.7; }
+  .verify-error{ color:var(--difficile); font-size:0.82rem; font-weight:700; margin-top:0.6rem; }
+
+  /* Étapes 2 et 3 : boîtes simples, sans barre de titre ni bouton fermer */
+  .modal-head.hidden{ display:none; }
+  .verify-plain .modal-block{ margin-top:0; }
 
   /* ---- Puzzle du projet ---- */
   .puzzle-heading{ text-align:center; font-weight:800; font-size:1.3rem; margin:2.5rem 0 0.4rem; }

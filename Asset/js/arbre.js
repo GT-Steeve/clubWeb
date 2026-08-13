@@ -3,6 +3,13 @@
   var UNLOCKED_KEY = 'v3-unlocked-nodes';
   var WATCHED_KEY = 'v3-watched-events';
 
+  // Le rond "Vidéo de transition" après Bienvenue n'est plus accessible dès le
+  // départ (alors que root-welcome, lui, l'est) : son statut par défaut dépend
+  // de cette clé virtuelle, débloquée uniquement en réussissant le mot magique.
+  // Une fois franchi normalement (bouton "J'ai regardé"), il débloque toujours
+  // root-choose comme n'importe quel rond simple.
+  var ROOT_CHOOSE_GATE = 'root-welcome-verified';
+
   // youtubeId : identifiant de la vidéo YouTube (ex: "dQw4w9WgXcQ"), à renseigner
   // manuellement une fois la vidéo tournée. Vide par défaut -> affiche un placeholder.
   // ready : passe à false si le contenu du cours (vidéo + explication + astuce)
@@ -173,6 +180,22 @@
     { id:'join-polish', prevs:['jeu-plateforme-app', 'jeu-shoot-app', 'jeu-rpg-app'], target:'jeu-polish', youtubeId:'',
       video:"Résumé vidéo : peu importe le type de jeu choisi, place maintenant à la touche finale." }
   ];
+
+  // PROTOTYPE — parcours de vérification en 2 étapes (exercice -> mot magique),
+  // proposé après le contenu d'un cours en plus du bouton "Obtenir la pièce".
+  // Réussir le mot magique débloque `unlocks`.
+  // Clé = id du nœud (badge) concerné.
+  var VERIFICATION = {
+    'root-welcome': {
+      consignes: [
+        "Relis une nouvelle fois les règles du club.",
+        "Prépare une question à poser à ton formateur si quelque chose n'est pas clair.",
+        "Décide déjà si tu penses plutôt partir vers le Web ou le Jeu vidéo — tu pourras changer d'avis plus tard."
+      ],
+      magicWord: 'Ibracadabra',
+      unlocks: ROOT_CHOOSE_GATE
+    }
+  };
 
   var DEFAULT_UNLOCKED = ['root-welcome'];
 
@@ -368,6 +391,9 @@
 
   function buildTree(){
     buildChain(document.getElementById('root-chain'), ROOT_NODES);
+    // Ce rond n'est plus débloqué par défaut avec root-welcome : il attend la
+    // clé virtuelle posée par le parcours de vérification (mot magique).
+    document.getElementById('evt-root-choose').dataset.prevNode = ROOT_CHOOSE_GATE;
     buildForkConnector(document.getElementById('root-fork-wrap'), FORK_EVENTS[0]);
 
     var webCol = document.querySelector('.branch-col[data-branch="web"]');
@@ -440,6 +466,15 @@
   var pieceIcon = document.getElementById('modal-piece-icon');
   var pieceLabel = document.getElementById('modal-piece-label');
   var piecePrompt = document.getElementById('modal-piece-prompt');
+  var modalHead = document.getElementById('modal-head');
+  var continueRow = document.getElementById('continue-row');
+  var continueBtn = document.getElementById('modal-continue-btn');
+  var verifyFlow = document.getElementById('verify-flow');
+  var currentVerify = null;
+
+  function setContinueVisible(visible){
+    continueRow.classList.toggle('show', visible);
+  }
 
   // Fonction à appeler pour "regarder" chaque type de rond de transition.
   var WATCH_TRANSITION = { event:watchEvent, 'fork-event':watchForkEvent, 'join-event':watchJoinEvent };
@@ -478,6 +513,7 @@
     if(!node) return;
     currentMode = 'summary';
     currentId = id;
+    modalHead.classList.remove('hidden');
     document.getElementById('modal-title').textContent = node.title.replace(/&lt;/g,'<');
     populateVideo(node);
 
@@ -489,6 +525,8 @@
 
     pieceBtn.style.display = 'none';
     piecePrompt.style.display = 'none';
+    setContinueVisible(false);
+    verifyFlow.classList.remove('show');
 
     var unlocked = isUnlocked(id);
     readyBtn.classList.add('show');
@@ -502,6 +540,7 @@
     if(!node) return;
     currentMode = 'course';
     currentId = id;
+    modalHead.classList.remove('hidden');
     document.getElementById('modal-title').textContent = node.title.replace(/&lt;/g,'<');
     populateVideo(node);
 
@@ -517,8 +556,51 @@
     pieceBtn.classList.add('icon-only');
     pieceLabel.classList.add('sr-only');
     piecePrompt.style.display = node.noPiece ? 'none' : '';
+    verifyFlow.classList.remove('show');
+    setContinueVisible(!!VERIFICATION[id]);
     refreshModalFooter();
     overlay.classList.add('open');
+  }
+
+  // PROTOTYPE — ouvre le parcours de vérification pour le nœud en cours.
+  // Étape 1 (exercice) : consignes affichées, pas de validation automatique
+  // (l'élève travaille hors pop-up). Étape 2 (mot magique) : seule étape
+  // réellement vérifiée — la réussir débloque le nœud visé par `unlocks`.
+  // Les étapes mot magique et merci n'ont ni barre de titre ni bouton fermer
+  // (boîtes simples).
+  function openVerifyFlow(id){
+    var verify = VERIFICATION[id];
+    if(!verify) return;
+    currentVerify = verify;
+    explainBlock.style.display = 'none';
+    applyBlock.style.display = 'none';
+    pieceBtn.style.display = 'none';
+    piecePrompt.style.display = 'none';
+    setContinueVisible(false);
+    modalHead.classList.remove('hidden');
+    document.getElementById('modal-title').textContent = '🔑 Vérifie ta compréhension';
+    verifyFlow.classList.add('show');
+    showVerifyStep('exercise');
+  }
+
+  function showVerifyStep(step){
+    ['exercise', 'magicword', 'merci'].forEach(function(s){
+      document.getElementById('verify-' + s).style.display = (s === step) ? '' : 'none';
+    });
+    modalHead.classList.toggle('hidden', step === 'magicword' || step === 'merci');
+    if(step === 'exercise'){
+      var list = document.getElementById('verify-consignes-list');
+      list.innerHTML = '';
+      currentVerify.consignes.forEach(function(c){
+        var li = document.createElement('li');
+        li.textContent = c;
+        list.appendChild(li);
+      });
+    }
+    if(step === 'magicword'){
+      document.getElementById('verify-magicword-input').value = '';
+      document.getElementById('verify-magicword-error').style.display = 'none';
+    }
   }
 
   // Coquille commune aux trois types de pop-up "vidéo de transition"
@@ -527,6 +609,7 @@
   function openTransitionModal(mode, id, videoNode){
     currentMode = mode;
     currentId = id;
+    modalHead.classList.remove('hidden');
     document.getElementById('modal-title').textContent = '🎬 Vidéo de transition';
     populateVideo(videoNode);
     explainBlock.style.display = 'none';
@@ -537,6 +620,8 @@
     pieceBtn.classList.remove('icon-only');
     pieceLabel.classList.remove('sr-only');
     piecePrompt.style.display = 'none';
+    setContinueVisible(false);
+    verifyFlow.classList.remove('show');
     refreshModalFooter();
     overlay.classList.add('open');
   }
@@ -556,14 +641,54 @@
   function closeModal(){
     overlay.classList.remove('open');
     videoFrame.src = '';
+    modalHead.classList.remove('hidden');
+    verifyFlow.classList.remove('show');
     currentMode = null;
     currentId = null;
+    currentVerify = null;
   }
 
   readyBtn.addEventListener('click', function(){
     if(readyBtn.disabled || !currentId) return;
     openCourseModal(currentId);
   });
+
+  continueBtn.addEventListener('click', function(){
+    if(!currentId) return;
+    openVerifyFlow(currentId);
+  });
+
+  document.getElementById('modal-back-btn').addEventListener('click', function(){
+    if(!currentId) return;
+    openSummaryModal(currentId);
+  });
+
+  document.getElementById('verify-exercise-btn').addEventListener('click', function(){
+    showVerifyStep('magicword');
+  });
+
+  document.getElementById('verify-exercise-back-btn').addEventListener('click', function(){
+    if(!currentId) return;
+    openCourseModal(currentId);
+  });
+
+  document.getElementById('verify-magicword-btn').addEventListener('click', function(){
+    var input = document.getElementById('verify-magicword-input');
+    var val = input.value.trim().toLowerCase();
+    if(currentVerify && val === currentVerify.magicWord.toLowerCase()){
+      unlockNode(currentVerify.unlocks);
+      renderLockState();
+      showVerifyStep('merci');
+    } else {
+      document.getElementById('verify-magicword-error').style.display = '';
+    }
+  });
+
+  document.getElementById('verify-magicword-back-btn').addEventListener('click', function(){
+    showVerifyStep('exercise');
+  });
+
+  document.getElementById('verify-merci-btn').addEventListener('click', closeModal);
 
   function refreshModalFooter(){
     if(WATCH_TRANSITION[currentMode]){

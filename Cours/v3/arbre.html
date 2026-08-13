@@ -61,7 +61,7 @@
 <!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal-box">
-    <div class="modal-head">
+    <div class="modal-head" id="modal-head">
       <h3 id="modal-title">Titre</h3>
       <button class="modal-close" id="modal-close" type="button">✕</button>
     </div>
@@ -94,6 +94,46 @@
       <button class="piece-btn" id="modal-piece-btn" type="button">
         <span id="modal-piece-icon">🧩</span><span id="modal-piece-label">Obtenir la pièce du puzzle</span>
       </button>
+      <div class="btn-row" id="continue-row">
+        <button class="back-btn" id="modal-back-btn" type="button">Retour</button>
+        <button class="ready-btn" id="modal-continue-btn" type="button">Continuer →</button>
+      </div>
+
+      <!-- PARCOURS DE VÉRIFICATION (prototype) : exercice -> mot magique -> merci -->
+      <div class="verify-flow" id="verify-flow">
+        <!-- Étape 1 : garde la barre de titre + ✕ -->
+        <div class="verify-step" id="verify-exercise">
+          <div class="modal-block apply">
+            <div class="mb-label">📝 Exercice</div>
+            <ol class="verify-consignes" id="verify-consignes-list"></ol>
+          </div>
+          <div class="btn-row show">
+            <button class="back-btn show" id="verify-exercise-back-btn" type="button">Retour</button>
+            <button class="ready-btn show" id="verify-exercise-btn" type="button">Faire valider</button>
+          </div>
+        </div>
+
+        <!-- Étape 2 : boîte simple, pas de barre de titre ni de ✕ -->
+        <div class="verify-step verify-plain" id="verify-magicword" style="display:none;">
+          <div class="modal-block video">
+            <div class="mb-label">🔐 Mot magique</div>
+            <input type="password" id="verify-magicword-input" placeholder="Mot magique…">
+            <p class="verify-error" id="verify-magicword-error" style="display:none;">Ce n'est pas le bon mot, réessaie !</p>
+          </div>
+          <div class="btn-row show">
+            <button class="back-btn show" id="verify-magicword-back-btn" type="button">Retour</button>
+            <button class="ready-btn show" id="verify-magicword-btn" type="button">Valider</button>
+          </div>
+        </div>
+
+        <!-- Étape 3 : boîte simple, pas de barre de titre ni de ✕ -->
+        <div class="verify-step verify-plain" id="verify-merci" style="display:none;">
+          <div class="modal-block explain" style="text-align:center;">
+            <p style="font-weight:800;font-size:1.05rem;">🎉 Merci, l'élève passe au cours suivant !</p>
+          </div>
+          <button class="ready-btn show" id="verify-merci-btn" type="button">Fermer</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
