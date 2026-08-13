@@ -270,6 +270,43 @@
   .modal-head.hidden{ display:none; }
   .verify-plain .modal-block{ margin-top:0; }
 
+  /* ---- QCM de transition (prototype) ---- */
+  .quiz-flow{ display:none; }
+  .quiz-flow.show{ display:block; }
+  .quiz-q-text{ font-weight:700; font-size:0.92rem; margin:4px 0 10px; }
+  .quiz-options{ display:flex; flex-direction:column; gap:5px; }
+  .quiz-options label{ display:flex; align-items:center; gap:8px; font-size:0.85rem; cursor:pointer; }
+  .quiz-instr{ font-size:0.85rem; margin:2px 0 10px; }
+
+  /* Jeu 2 : association terme / définition */
+  .quiz-match-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .quiz-match-item{
+    background:#fff; border:1.5px solid var(--border); border-radius:8px;
+    padding:7px 10px; font-size:0.82rem; margin-bottom:6px; cursor:pointer;
+    transition:background .12s, border-color .12s;
+  }
+  .quiz-match-item:hover{ background:#F5F3ED; }
+  .quiz-match-item.selected{ background:var(--purple-bg); border-color:var(--purple); color:var(--purple); }
+  .quiz-match-item.matched{ background:var(--green-bg); border-color:var(--green); color:var(--green); cursor:default; }
+  .quiz-match-item.wrong{ background:var(--rose-bg); border-color:var(--rose); color:var(--rose); }
+  .quiz-match-feedback{ font-size:0.85rem; font-weight:700; min-height:1.3em; margin:4px 0 0; }
+
+  /* Jeu 3 : remise dans l'ordre */
+  .quiz-seq-builder{
+    min-height:2.4rem; border:1.5px dashed var(--border); border-radius:8px;
+    padding:8px 10px; display:flex; flex-wrap:wrap; align-items:center; gap:6px;
+    font-size:0.82rem; color:var(--sub); margin-bottom:0.7rem;
+  }
+  .quiz-seq-pieces{ display:flex; flex-wrap:wrap; gap:6px; }
+  .quiz-seq-piece{
+    background:#fff; border:1.5px solid var(--border); border-radius:8px;
+    padding:5px 10px; font-size:0.82rem; cursor:pointer; transition:background .12s;
+  }
+  .quiz-seq-piece:hover{ background:#F5F3ED; }
+  .quiz-seq-piece.placed{ opacity:0.35; cursor:default; pointer-events:none; }
+  .quiz-seq-builder .quiz-seq-piece{ opacity:1; cursor:pointer; pointer-events:auto; background:var(--blue-bg); border-color:#85B7EB; }
+  .quiz-seq-arrow{ color:var(--sub); font-weight:700; }
+
   /* ---- Puzzle du projet ---- */
   .puzzle-heading{ text-align:center; font-weight:800; font-size:1.3rem; margin:2.5rem 0 0.4rem; }
   .puzzle-sub{ text-align:center; color:var(--sub); font-size:0.9rem; margin-bottom:1.5rem; }

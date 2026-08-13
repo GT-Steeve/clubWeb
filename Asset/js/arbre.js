@@ -197,6 +197,33 @@
     }
   };
 
+  // PROTOTYPE — QCM générique (5 questions) affiché après la vidéo de transition,
+  // avant de débloquer la suite. Même questionnaire pour tous les ronds de
+  // transition (événement, fourche, jonction) ; contenu à personnaliser plus tard.
+  var QUIZ_QUESTIONS = [
+    { question:"Question 1 — à propos de la vidéo que tu viens de regarder.", options:["Réponse A", "Réponse B", "Réponse C"], correct:0 },
+    { question:"Question 2 — à propos de la vidéo que tu viens de regarder.", options:["Réponse A", "Réponse B", "Réponse C"], correct:0 },
+    { question:"Question 3 — à propos de la vidéo que tu viens de regarder.", options:["Réponse A", "Réponse B", "Réponse C"], correct:0 },
+    { question:"Question 4 — à propos de la vidéo que tu viens de regarder.", options:["Réponse A", "Réponse B", "Réponse C"], correct:0 },
+    { question:"Question 5 — à propos de la vidéo que tu viens de regarder.", options:["Réponse A", "Réponse B", "Réponse C"], correct:0 }
+  ];
+
+  // PROTOTYPE — jeu 2 : association terme / définition (générique, contenu à
+  // personnaliser plus tard). Même paire pour tous les ronds de transition.
+  var QUIZ_MATCH_PAIRS = [
+    { term:'Terme A', def:'Définition A' },
+    { term:'Terme B', def:'Définition B' },
+    { term:'Terme C', def:'Définition C' },
+    { term:'Terme D', def:'Définition D' }
+  ];
+
+  // PROTOTYPE — jeu 3 : remettre une séquence d'étapes dans le bon ordre.
+  var QUIZ_SEQUENCE = {
+    mission: "Remets ces étapes dans le bon ordre pour terminer la mission.",
+    solution: ['Étape 1', 'Étape 2', 'Étape 3', 'Étape 4'],
+    distractors: ['Étape inutile A', 'Étape inutile B']
+  };
+
   var DEFAULT_UNLOCKED = ['root-welcome'];
 
   var STAR_LABEL = { facile:'Facile', moyen:'Moyen', difficile:'Difficile' };
@@ -471,6 +498,8 @@
   var continueBtn = document.getElementById('modal-continue-btn');
   var verifyFlow = document.getElementById('verify-flow');
   var currentVerify = null;
+  var videoBlock = document.getElementById('modal-video-block');
+  var quizFlow = document.getElementById('quiz-flow');
 
   function setContinueVisible(visible){
     continueRow.classList.toggle('show', visible);
@@ -612,6 +641,7 @@
     modalHead.classList.remove('hidden');
     document.getElementById('modal-title').textContent = '🎬 Vidéo de transition';
     populateVideo(videoNode);
+    videoBlock.style.display = '';
     explainBlock.style.display = 'none';
     applyBlock.style.display = 'none';
     notReadyBanner.classList.remove('show');
@@ -622,8 +652,233 @@
     piecePrompt.style.display = 'none';
     setContinueVisible(false);
     verifyFlow.classList.remove('show');
+    quizFlow.classList.remove('show');
     refreshModalFooter();
     overlay.classList.add('open');
+  }
+
+  // PROTOTYPE — ouvre le QCM (5 questions) intercalé entre la vidéo de
+  // transition et le déblocage de la suite. Remplace l'ancien déblocage
+  // immédiat au clic sur "J'ai regardé".
+  function openQuiz(){
+    videoBlock.style.display = 'none';
+    pieceBtn.style.display = 'none';
+    document.getElementById('modal-title').textContent = '🧠 Quiz';
+    resetQuiz();
+    quizFlow.classList.add('show');
+  }
+
+  function backToTransitionVideo(){
+    quizFlow.classList.remove('show');
+    videoBlock.style.display = '';
+    pieceBtn.style.display = 'flex';
+    document.getElementById('modal-title').textContent = '🎬 Vidéo de transition';
+    refreshModalFooter();
+  }
+
+  function showQuizStep(step){
+    ['questions', 'match', 'sequence', 'result'].forEach(function(s){
+      document.getElementById('quiz-' + s).style.display = (s === step) ? '' : 'none';
+    });
+  }
+
+  // Affiche une question du QCM à la fois, avec navigation Suivant/Précédent.
+  var quizIndex = 0;
+  var quizAnswers = [];
+
+  function renderQuizQuestion(i){
+    quizIndex = i;
+    var q = QUIZ_QUESTIONS[i];
+    document.getElementById('quiz-progress').textContent = '🧠 Question ' + (i + 1) + ' / ' + QUIZ_QUESTIONS.length;
+    document.getElementById('quiz-q-text').textContent = q.question;
+    var optsWrap = document.getElementById('quiz-options');
+    optsWrap.innerHTML = '';
+    q.options.forEach(function(opt, oi){
+      var label = document.createElement('label');
+      var input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'quiz-current';
+      input.value = String(oi);
+      if(quizAnswers[i] === oi) input.checked = true;
+      input.addEventListener('change', function(){ quizAnswers[i] = oi; });
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(opt));
+      optsWrap.appendChild(label);
+    });
+    document.getElementById('quiz-error').style.display = 'none';
+    document.getElementById('quiz-next-btn').textContent = 'Suivant';
+  }
+
+  var quizQcmScore = 0;
+  var quizSuccess = false;
+
+  // Jeu 2 : association terme / définition (clique un terme, puis sa définition).
+  // Chaque paire n'a droit qu'à un seul essai (comme le QCM) : une mauvaise
+  // association reste marquée comme fausse, ce qui permet un vrai score.
+  var quizMatchSelectedTerm = null;
+  var quizMatchSelectedDef = null;
+  var quizMatchScore = 0;
+  var quizMatchDone = 0;
+
+  function updateMatchNextBtn(){
+    var btn = document.getElementById('quiz-match-next-btn');
+    var complete = quizMatchDone === QUIZ_MATCH_PAIRS.length;
+    btn.disabled = !complete;
+    btn.classList.toggle('locked', !complete);
+  }
+
+  // Chaque terme n'a droit qu'à un seul essai : s'il se trompe, seul le terme
+  // est verrouillé (faux) — la définition reste disponible pour le terme qui
+  // la possède vraiment, sinon une erreur rendrait la partie infaisable.
+  function tryMatch(){
+    var termItem = quizMatchSelectedTerm, defItem = quizMatchSelectedDef;
+    var pair = QUIZ_MATCH_PAIRS.filter(function(p){ return p.term === termItem.key; })[0];
+    var fb = document.getElementById('quiz-match-feedback');
+    var correct = pair.def === defItem.key;
+    termItem.el.classList.remove('selected');
+    defItem.el.classList.remove('selected');
+    if(correct){
+      termItem.el.classList.add('matched');
+      defItem.el.classList.add('matched');
+      quizMatchScore++;
+      fb.textContent = 'Bravo, bonne association ! ✓';
+      fb.style.color = 'var(--green)';
+    } else {
+      termItem.el.classList.add('matched', 'wrong');
+      fb.textContent = "Ce n'est pas la bonne définition.";
+      fb.style.color = 'var(--rose)';
+    }
+    quizMatchDone++;
+    quizMatchSelectedTerm = null;
+    quizMatchSelectedDef = null;
+    updateMatchNextBtn();
+  }
+
+  function resetQuizMatch(){
+    quizMatchSelectedTerm = null;
+    quizMatchSelectedDef = null;
+    quizMatchScore = 0;
+    quizMatchDone = 0;
+    var grid = document.getElementById('quiz-match-grid');
+    grid.innerHTML = '';
+    var termsCol = document.createElement('div');
+    var defsCol = document.createElement('div');
+    var shuffledDefs = QUIZ_MATCH_PAIRS.map(function(p){ return p.def; }).sort(function(){ return Math.random() - 0.5; });
+    QUIZ_MATCH_PAIRS.forEach(function(p){
+      var el = document.createElement('div');
+      el.className = 'quiz-match-item';
+      el.textContent = p.term;
+      var item = { el:el, key:p.term };
+      el.addEventListener('click', function(){
+        if(el.classList.contains('matched')) return;
+        termsCol.querySelectorAll('.quiz-match-item').forEach(function(e){ e.classList.remove('selected'); });
+        el.classList.add('selected');
+        quizMatchSelectedTerm = item;
+        if(quizMatchSelectedDef) tryMatch();
+      });
+      termsCol.appendChild(el);
+    });
+    shuffledDefs.forEach(function(def){
+      var el = document.createElement('div');
+      el.className = 'quiz-match-item';
+      el.textContent = def;
+      var item = { el:el, key:def };
+      el.addEventListener('click', function(){
+        if(el.classList.contains('matched')) return;
+        defsCol.querySelectorAll('.quiz-match-item').forEach(function(e){ e.classList.remove('selected'); });
+        el.classList.add('selected');
+        quizMatchSelectedDef = item;
+        if(quizMatchSelectedTerm) tryMatch();
+      });
+      defsCol.appendChild(el);
+    });
+    grid.appendChild(termsCol);
+    grid.appendChild(defsCol);
+    document.getElementById('quiz-match-feedback').textContent = '';
+    updateMatchNextBtn();
+  }
+
+  // Jeu 3 : remettre une séquence d'étapes dans le bon ordre en cliquant les
+  // morceaux dans l'ordre (clique un morceau déjà placé pour le retirer, ainsi
+  // que tous ceux placés après lui).
+  var quizSeqBuilt = [];
+
+  function updateSeqNextBtn(){
+    var btn = document.getElementById('quiz-seq-next-btn');
+    var sol = QUIZ_SEQUENCE.solution;
+    var allPlaced = quizSeqBuilt.length === sol.length;
+    var correct = allPlaced && quizSeqBuilt.every(function(v, i){ return v === sol[i]; });
+    document.getElementById('quiz-seq-error').style.display = (allPlaced && !correct) ? '' : 'none';
+    btn.disabled = !allPlaced;
+    btn.classList.toggle('locked', !allPlaced);
+  }
+
+  function renderSeqBuilder(){
+    var builder = document.getElementById('quiz-seq-builder');
+    builder.innerHTML = '';
+    if(quizSeqBuilt.length === 0){
+      builder.textContent = "Clique sur les étapes dans l'ordre…";
+      return;
+    }
+    quizSeqBuilt.forEach(function(label, i){
+      if(i > 0){
+        var arrow = document.createElement('span');
+        arrow.className = 'quiz-seq-arrow';
+        arrow.textContent = '→';
+        builder.appendChild(arrow);
+      }
+      var chip = document.createElement('span');
+      chip.className = 'quiz-seq-piece';
+      chip.textContent = label;
+      chip.addEventListener('click', function(){
+        quizSeqBuilt = quizSeqBuilt.slice(0, i);
+        renderSeqBuilder();
+        syncSeqPiecesAvailability();
+        updateSeqNextBtn();
+      });
+      builder.appendChild(chip);
+    });
+  }
+
+  function syncSeqPiecesAvailability(){
+    document.querySelectorAll('#quiz-seq-pieces .quiz-seq-piece').forEach(function(el){
+      el.classList.toggle('placed', quizSeqBuilt.indexOf(el.dataset.label) !== -1);
+    });
+  }
+
+  function resetQuizSequence(){
+    quizSeqBuilt = [];
+    document.getElementById('quiz-seq-mission').textContent = QUIZ_SEQUENCE.mission;
+    var wrap = document.getElementById('quiz-seq-pieces');
+    wrap.innerHTML = '';
+    var all = QUIZ_SEQUENCE.solution.concat(QUIZ_SEQUENCE.distractors || []);
+    var shuffled = all.slice().sort(function(){ return Math.random() - 0.5; });
+    shuffled.forEach(function(label){
+      var span = document.createElement('span');
+      span.className = 'quiz-seq-piece';
+      span.textContent = label;
+      span.dataset.label = label;
+      span.addEventListener('click', function(){
+        if(span.classList.contains('placed')) return;
+        span.classList.add('placed');
+        quizSeqBuilt.push(label);
+        renderSeqBuilder();
+        updateSeqNextBtn();
+      });
+      wrap.appendChild(span);
+    });
+    renderSeqBuilder();
+    updateSeqNextBtn();
+  }
+
+  function resetQuiz(){
+    quizAnswers = [];
+    quizQcmScore = 0;
+    quizSuccess = false;
+    resetQuizMatch();
+    resetQuizSequence();
+    showQuizStep('questions');
+    renderQuizQuestion(0);
   }
 
   function openEventModal(nextId){
@@ -643,6 +898,8 @@
     videoFrame.src = '';
     modalHead.classList.remove('hidden');
     verifyFlow.classList.remove('show');
+    quizFlow.classList.remove('show');
+    videoBlock.style.display = '';
     currentMode = null;
     currentId = null;
     currentVerify = null;
@@ -690,17 +947,86 @@
 
   document.getElementById('verify-merci-btn').addEventListener('click', closeModal);
 
+  document.getElementById('quiz-prev-btn').addEventListener('click', function(){
+    if(quizIndex === 0){
+      backToTransitionVideo();
+    } else {
+      renderQuizQuestion(quizIndex - 1);
+    }
+  });
+
+  document.getElementById('quiz-next-btn').addEventListener('click', function(){
+    if(quizIndex < QUIZ_QUESTIONS.length - 1){
+      renderQuizQuestion(quizIndex + 1);
+      return;
+    }
+    var allAnswered = QUIZ_QUESTIONS.every(function(q, i){ return typeof quizAnswers[i] !== 'undefined'; });
+    if(!allAnswered){
+      document.getElementById('quiz-error').style.display = '';
+      return;
+    }
+    quizQcmScore = 0;
+    QUIZ_QUESTIONS.forEach(function(q, i){ if(quizAnswers[i] === q.correct) quizQcmScore++; });
+    showQuizStep('match');
+  });
+
+  document.getElementById('quiz-match-back-btn').addEventListener('click', function(){
+    showQuizStep('questions');
+    renderQuizQuestion(QUIZ_QUESTIONS.length - 1);
+  });
+
+  document.getElementById('quiz-match-next-btn').addEventListener('click', function(){
+    if(quizMatchDone !== QUIZ_MATCH_PAIRS.length) return;
+    showQuizStep('sequence');
+  });
+
+  document.getElementById('quiz-seq-back-btn').addEventListener('click', function(){
+    showQuizStep('match');
+  });
+
+  document.getElementById('quiz-seq-next-btn').addEventListener('click', function(){
+    var sol = QUIZ_SEQUENCE.solution;
+    var allPlaced = quizSeqBuilt.length === sol.length;
+    if(!allPlaced) return;
+    var seqPassed = quizSeqBuilt.every(function(v, i){ return v === sol[i]; });
+
+    var qcmPassed = quizQcmScore >= Math.ceil(QUIZ_QUESTIONS.length / 2);
+    var matchPassed = quizMatchScore >= Math.ceil(QUIZ_MATCH_PAIRS.length / 2);
+    var passCount = [qcmPassed, matchPassed, seqPassed].filter(Boolean).length;
+    quizSuccess = passCount >= 2;
+
+    document.getElementById('quiz-score').textContent =
+      (quizSuccess ? '🎉 Quiz réussi ! ' : '😕 Quiz non réussi. ') +
+      'QCM : ' + quizQcmScore + '/' + QUIZ_QUESTIONS.length + (qcmPassed ? ' ✅' : ' ❌') +
+      ' · Association : ' + quizMatchScore + '/' + QUIZ_MATCH_PAIRS.length + (matchPassed ? ' ✅' : ' ❌') +
+      ' · Séquence : ' + (seqPassed ? 'réussie ✅' : 'ratée ❌');
+    document.getElementById('quiz-unlock-btn').textContent = quizSuccess ? 'Accédez au prochain cours' : 'Refaire le quizz';
+    showQuizStep('result');
+  });
+
+  document.getElementById('quiz-unlock-btn').addEventListener('click', function(){
+    if(!quizSuccess){
+      resetQuiz();
+      return;
+    }
+    if(!currentId || !WATCH_TRANSITION[currentMode]) return;
+    WATCH_TRANSITION[currentMode](currentId);
+    renderLockState();
+    backToTransitionVideo();
+  });
+
   function refreshModalFooter(){
     if(WATCH_TRANSITION[currentMode]){
       pieceBtn.disabled = false;
       pieceBtn.classList.remove('notready');
-      pieceIcon.textContent = '▶️';
       if(getWatched().indexOf(currentId) !== -1){
         pieceBtn.classList.add('done');
+        pieceIcon.textContent = '✅';
         pieceLabel.textContent = 'Suite débloquée ✓';
       } else {
         pieceBtn.classList.remove('done');
-        pieceLabel.textContent = "J'ai regardé, débloquer la suite";
+        pieceIcon.textContent = '🧠';
+        pieceLabel.textContent = 'Accédez au Quizz';
       }
       return;
     }
@@ -738,9 +1064,7 @@
   pieceBtn.addEventListener('click', function(){
     if(!currentId || pieceBtn.disabled) return;
     if(WATCH_TRANSITION[currentMode]){
-      WATCH_TRANSITION[currentMode](currentId);
-      refreshModalFooter();
-      renderLockState();
+      openQuiz();
       return;
     }
     var acquired = getAcquired();

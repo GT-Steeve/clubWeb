@@ -69,7 +69,7 @@
       <div class="modal-block not-ready" id="modal-not-ready-banner">
         <span>🚧</span><span>Ce cours est encore en préparation — contenu à venir prochainement.</span>
       </div>
-      <div class="modal-block video">
+      <div class="modal-block video" id="modal-video-block">
         <div class="mb-label">🎬 Vidéo</div>
         <div class="video-embed" id="modal-video-embed">
           <iframe id="modal-video-frame" src="" title="Vidéo YouTube" loading="lazy" allowfullscreen
@@ -94,6 +94,59 @@
       <button class="piece-btn" id="modal-piece-btn" type="button">
         <span id="modal-piece-icon">🧩</span><span id="modal-piece-label">Obtenir la pièce du puzzle</span>
       </button>
+
+      <!-- QCM (prototype) intercalé entre la vidéo de transition et le déblocage -->
+      <div class="quiz-flow" id="quiz-flow">
+        <div class="quiz-step" id="quiz-questions">
+          <div class="modal-block apply">
+            <div class="mb-label" id="quiz-progress">🧠 Question 1 / 5</div>
+            <div class="quiz-q-text" id="quiz-q-text"></div>
+            <div class="quiz-options" id="quiz-options"></div>
+            <p class="verify-error" id="quiz-error" style="display:none;">Réponds à toutes les questions avant de valider.</p>
+          </div>
+          <div class="btn-row show">
+            <button class="back-btn show" id="quiz-prev-btn" type="button">Précédent</button>
+            <button class="ready-btn show" id="quiz-next-btn" type="button">Suivant</button>
+          </div>
+        </div>
+
+        <!-- Jeu 2 : association terme / définition -->
+        <div class="quiz-step" id="quiz-match" style="display:none;">
+          <div class="modal-block apply">
+            <div class="mb-label">🔗 Jeu 2 — Associe chaque élément à sa définition</div>
+            <p class="quiz-instr">Clique sur un élément à gauche, puis sur sa définition à droite.</p>
+            <div class="quiz-match-grid" id="quiz-match-grid"></div>
+            <p class="quiz-match-feedback" id="quiz-match-feedback"></p>
+          </div>
+          <div class="btn-row show">
+            <button class="back-btn show" id="quiz-match-back-btn" type="button">Précédent</button>
+            <button class="ready-btn show locked" id="quiz-match-next-btn" type="button" disabled>Suivant</button>
+          </div>
+        </div>
+
+        <!-- Jeu 3 : remettre les étapes dans l'ordre -->
+        <div class="quiz-step" id="quiz-sequence" style="display:none;">
+          <div class="modal-block apply">
+            <div class="mb-label">🧩 Jeu 3 — Remets les étapes dans le bon ordre</div>
+            <p class="quiz-instr" id="quiz-seq-mission"></p>
+            <div class="quiz-seq-builder" id="quiz-seq-builder"></div>
+            <div class="quiz-seq-pieces" id="quiz-seq-pieces"></div>
+            <p class="verify-error" id="quiz-seq-error" style="display:none;">Pas tout à fait dans le bon ordre — clique sur une étape placée pour revenir en arrière.</p>
+          </div>
+          <div class="btn-row show">
+            <button class="back-btn show" id="quiz-seq-back-btn" type="button">Précédent</button>
+            <button class="ready-btn show locked" id="quiz-seq-next-btn" type="button" disabled>Finir le quizz</button>
+          </div>
+        </div>
+
+        <div class="quiz-step" id="quiz-result" style="display:none;">
+          <div class="modal-block explain" style="text-align:center;">
+            <p id="quiz-score" style="font-weight:800;font-size:1.05rem;"></p>
+          </div>
+          <button class="ready-btn show" id="quiz-unlock-btn" type="button">Débloquer la suite</button>
+        </div>
+      </div>
+
       <div class="btn-row" id="continue-row">
         <button class="back-btn" id="modal-back-btn" type="button">Retour</button>
         <button class="ready-btn" id="modal-continue-btn" type="button">Continuer →</button>

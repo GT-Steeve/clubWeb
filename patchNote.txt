@@ -77,6 +77,7 @@ v2.00.2 = structure arbre des talent
 v2.00.3 = Polish Design arbre des talent ajout projet jeu vidéo
 v2.00.4 = support vidéo YouTube sur les points de transition
 v2.00.5 = rework badge Cours
+v2.00.6 = rework vidéo de transition avec quizz intégré (appliqué uniqument sur le 1er comme le badge)
 
 Lien du projet
 https://gt-steeve.github.io/clubWeb/
