@@ -133,7 +133,58 @@
         youtubeId:'', ready:false,
         video:"Les petits détails qui rendent un jeu agréable à jouer.",
         explain:"Le polish, ce sont les animations, les retours visuels et sonores qui font qu'un jeu \"répond\" bien au joueur.",
-        apply:"Astuce : garde du temps à la fin de ton projet uniquement pour le polish, il change tout." }
+        apply:"Astuce : garde du temps à la fin de ton projet uniquement pour le polish, il change tout." },
+      { id:'jeu-partage', title:'Partage ton jeu', difficulty:'facile',
+        youtubeId:'', ready:true,
+        video:"Découvre comment publier ton jeu pour que d'autres puissent y jouer.",
+        explain:"Un jeu terminé mérite d'être partagé : itch.io, un post sur les réseaux, ou simplement le montrer à tes proches.",
+        apply:"Astuce : accompagne ton jeu d'une courte description et d'une capture d'écran, ça donne envie d'y jouer." },
+      { id:'jeu-roadmap', title:'Roadmap', difficulty:'facile',
+        youtubeId:'', ready:true,
+        video:"Apprends à planifier les prochaines évolutions de ton jeu.",
+        explain:"Une roadmap liste les idées et améliorations à venir, pour savoir où aller après la première version.",
+        apply:"Astuce : note toutes tes idées, même les plus folles, puis classe-les par ordre de priorité." }
+    ],
+    rpg2: [
+      { id:'jeu-rpg2-intro', title:'Introduction', difficulty:'facile',
+        youtubeId:'', ready:true,
+        video:"Plonge dans l'univers du RPG : statistiques, combats et progression du héros.",
+        explain:"Un RPG s'appuie sur des systèmes liés entre eux : statistiques, combat, inventaire et montée en niveau du joueur.",
+        apply:"Astuce : commence par un seul système, comme le combat, avant d'ajouter l'inventaire ou les quêtes." },
+      { id:'jeu-rpg2-app', title:'Application', difficulty:'difficile',
+        youtubeId:'', ready:true,
+        video:"Construis un combat au tour par tour jouable, avec points de vie et victoire/défaite.",
+        explain:"Passer de la théorie à la pratique : un combat où le joueur et l'ennemi s'affrontent tour par tour jusqu'à la victoire.",
+        apply:"Astuce : affiche toujours clairement les points de vie, c'est ce qui rend un combat RPG lisible." }
+    ],
+    action: [
+      { id:'jeu-action-intro', title:'Introduction', difficulty:'facile',
+        youtubeId:'', ready:true,
+        video:"Découvre les bases du jeu d'action : réflexes, esquive et combats en temps réel.",
+        explain:"Un jeu d'action mise sur des réactions rapides du joueur : déplacements, attaques et esquives en temps réel.",
+        apply:"Astuce : garde des contrôles simples et réactifs, c'est ce qui rend l'action agréable à jouer." },
+      { id:'jeu-action-app', title:'Application', difficulty:'moyen',
+        youtubeId:'', ready:true,
+        video:"Construis un petit combat en temps réel avec attaque, esquive et ennemi réactif.",
+        explain:"Passer de la théorie à la pratique : un personnage qui attaque et esquive face à un ennemi qui réagit à ses mouvements.",
+        apply:"Astuce : ajoute un léger temps de récupération après chaque attaque, ça rend les combats plus lisibles." }
+    ],
+    moteur: [
+      { id:'jeu-clean-code', title:'Clean Code', difficulty:'moyen',
+        youtubeId:'', ready:true,
+        video:"Découvre les bonnes pratiques pour écrire un code lisible et facile à faire évoluer.",
+        explain:"Un code propre se lit presque comme une phrase : des noms clairs, des fonctions courtes et pas de répétition inutile.",
+        apply:"Astuce : si tu dois relire ta fonction deux fois pour comprendre ce qu'elle fait, c'est qu'il faut la simplifier." },
+      { id:'jeu-poo', title:'POO', difficulty:'difficile',
+        youtubeId:'', ready:true,
+        video:"Découvre la programmation orientée objet : classes, objets et encapsulation.",
+        explain:"La POO organise ton code autour d'objets qui regroupent leurs propres données et actions, comme un ennemi ou un joueur.",
+        apply:"Astuce : commence par transformer un seul élément de ton jeu (le joueur, par exemple) en classe avant les autres." },
+      { id:'jeu-moteur', title:'Moteur de jeu', difficulty:'moyen',
+        youtubeId:'', ready:true,
+        video:"Découvre ce qu'un moteur de jeu (Unity, Godot...) t'apporte par rapport à tout coder à la main.",
+        explain:"Un moteur de jeu fournit déjà la physique, l'affichage et bien d'autres outils, pour te concentrer sur ton jeu plutôt que sur la technique.",
+        apply:"Astuce : choisis un moteur simple pour débuter, mieux vaut un petit jeu terminé qu'un gros projet abandonné." }
     ]
   };
 
@@ -143,7 +194,7 @@
   // Plateforme/Shoot/RPG + Polish) comptent pour la colonne Jeu vidéo.
   var PUZZLE_GROUPS = {
     web: NODES.web.concat(NODES.frontend, NODES.backend),
-    jeu: NODES.jeu.concat(NODES.plateforme, NODES.shoot, NODES.rpg, NODES.polish)
+    jeu: NODES.jeu.concat(NODES.plateforme, NODES.shoot, NODES.rpg, NODES.polish, NODES.rpg2, NODES.action, NODES.moteur)
   };
 
   // Vidéo de transition affichée dans le rond situé juste avant le nœud débloqué.
@@ -160,7 +211,13 @@
     'jeu-projet':          { youtubeId:'', video:"Résumé vidéo : place au projet, il est temps de construire un vrai jeu." },
     'jeu-plateforme-app':  { youtubeId:'', video:"Résumé vidéo : passer de la théorie plateforme à la pratique." },
     'jeu-shoot-app':       { youtubeId:'', video:"Résumé vidéo : passer de la théorie shoot them up à la pratique." },
-    'jeu-rpg-app':         { youtubeId:'', video:"Résumé vidéo : passer de la théorie RPG à la pratique." }
+    'jeu-rpg-app':         { youtubeId:'', video:"Résumé vidéo : passer de la théorie RPG à la pratique." },
+    'jeu-partage':         { youtubeId:'', video:"Résumé vidéo : la touche finale posée, place au partage de ton jeu." },
+    'jeu-roadmap':         { youtubeId:'', video:"Résumé vidéo : ton jeu est partagé, pensons maintenant à la suite." },
+    'jeu-rpg2-app':        { youtubeId:'', video:"Résumé vidéo : direction la pratique pour ton combat RPG." },
+    'jeu-action-app':      { youtubeId:'', video:"Résumé vidéo : direction la pratique pour ton combat en temps réel." },
+    'jeu-poo':             { youtubeId:'', video:"Résumé vidéo : ton code est propre, passons à l'organisation en objets." },
+    'jeu-moteur':          { youtubeId:'', video:"Résumé vidéo : la POO en poche, découvrons ce qu'un moteur de jeu t'apporte." }
   };
 
   // Quand une branche se sépare en plusieurs, un unique rond (avant la fourche)
@@ -171,14 +228,18 @@
     { id:'fork-frontend-backend', prev:'web-js', targets:['web-frontend-intro', 'web-backend-intro'], youtubeId:'',
       video:"Résumé vidéo : approfondir le Front-End ou démarrer le Back-End ?" },
     { id:'fork-plateforme-shoot-rpg', prev:'jeu-projet', targets:['jeu-plateforme-intro', 'jeu-shoot-intro', 'jeu-rpg-intro'], youtubeId:'',
-      video:"Résumé vidéo : quel genre de jeu veux-tu construire pour ton projet ?" }
+      video:"Résumé vidéo : quel genre de jeu veux-tu construire pour ton projet ?" },
+    { id:'fork-rpg2-action', prev:'jeu-roadmap', targets:['jeu-rpg2-intro', 'jeu-action-intro'], youtubeId:'',
+      video:"Résumé vidéo : et si tu testais un nouveau genre — RPG ou Action ?" }
   ];
 
   // À l'inverse d'une fourche, un rond "jonction" attend qu'AU MOINS UNE des
   // branches sources soit terminée pour débloquer le nœud commun qui suit.
   var JOIN_EVENTS = [
     { id:'join-polish', prevs:['jeu-plateforme-app', 'jeu-shoot-app', 'jeu-rpg-app'], target:'jeu-polish', youtubeId:'',
-      video:"Résumé vidéo : peu importe le type de jeu choisi, place maintenant à la touche finale." }
+      video:"Résumé vidéo : peu importe le type de jeu choisi, place maintenant à la touche finale." },
+    { id:'join-clean-code', prevs:['jeu-rpg2-app', 'jeu-action-app'], target:'jeu-clean-code', youtubeId:'',
+      video:"Résumé vidéo : peu importe le genre choisi, place maintenant à un code propre et bien organisé." }
   ];
 
   // PROTOTYPE — parcours de vérification en 2 étapes (exercice -> mot magique),
@@ -440,7 +501,7 @@
     var jeuForkWrap = buildFork(jeuCol, [
       { headerHtml:'🕹️ Plateforme', headerClass:'plateforme', nodes:NODES.plateforme },
       { headerHtml:'🎯 Shoot', headerClass:'shoot', nodes:NODES.shoot },
-      { headerHtml:'⚔️ RPG', headerClass:'rpg', nodes:NODES.rpg }
+      { headerHtml:'🏎️ Course', headerClass:'rpg', nodes:NODES.rpg }
     ]);
     buildForkConnector(jeuForkWrap, FORK_EVENTS[2]);
     addMergeLines(jeuForkWrap);
@@ -448,6 +509,18 @@
     // Jonction : n'importe laquelle des 3 branches suffit à débloquer Polish
     buildJoinConnector(jeuForkWrap, JOIN_EVENTS[0]);
     buildChain(jeuCol, NODES.polish);
+
+    // Fourche RPG / Action après la Roadmap
+    var genreForkWrap = buildFork(jeuCol, [
+      { headerHtml:'⚔️ RPG', headerClass:'rpg2', nodes:NODES.rpg2 },
+      { headerHtml:'💥 Action', headerClass:'action', nodes:NODES.action }
+    ]);
+    buildForkConnector(genreForkWrap, FORK_EVENTS[3]);
+    addMergeLines(genreForkWrap);
+
+    // Jonction : les deux branches se rejoignent pour Clean Code / POO / Moteur de jeu
+    buildJoinConnector(genreForkWrap, JOIN_EVENTS[1]);
+    buildChain(jeuCol, NODES.moteur);
   }
 
   function buildPuzzlePanels(){
